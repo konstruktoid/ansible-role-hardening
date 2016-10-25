@@ -28,14 +28,18 @@ None.
 Example Playbook
 ----------------
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```
+---
+- hosts: all
+  serial: 50%
+    - { role: konstruktoid.hardening, sshd_admin_net: [10.0.0.0/24] }
+...
+```
 
 License
 -------
 
-MIT
+Apache License Version 2.0
 
 Author Information
 ------------------
