@@ -7,17 +7,7 @@
     state: latest
     install_recommends: no
   with_items:
-    - acct
-    - aide-common
-    - apparmor-profiles
-    - apparmor-utils
-    - auditd
-    - debsums
-    - haveged
-    - libpam-cracklib
-    - libpam-tmpdir
-    - openssh-server
-    - rkhunter
+    - "{{ packages }}"
   tags:
     - apt
     - packages
