@@ -1,5 +1,5 @@
 ---
 - hosts: test
   roles:
-    - security
+    - konstruktoid.hardening
 ...
