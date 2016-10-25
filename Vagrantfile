@@ -9,6 +9,8 @@ Vagrant.configure(2) do |config|
     config.vm.define "node#{i}" do |node|
     config.vm.network "private_network", ip:"10.2.3.4#{i}"
     config.vm.hostname = "node#{i}"
+    config.vm.provision "shell",
+      inline: "apt-get update && apt-get -y install ansible aptitude python --no-install-recommends"
     node.vm.provision "ansible" do |p|
       p.playbook = "hardening-test.yml"
       p.groups = {
