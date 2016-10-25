@@ -1,0 +1,17 @@
+---
+- name: resolved.conf
+  become: yes
+  become_method: sudo
+  template:
+    src: resolved.conf.j2
+    dest: /etc/systemd/resolved.conf
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - reload systemd
+  tags:
+    - resolved.conf
+    - security
+...

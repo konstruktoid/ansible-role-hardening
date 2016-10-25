@@ -1,0 +1,29 @@
+---
+- name: access.conf
+  become: yes
+  become_method: sudo
+  template:
+    src: access.conf.j2
+    dest: /etc/security/access.conf
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+    - access.conf
+    - security
+
+- name: securetty
+  become: yes
+  become_method: sudo
+  template:
+    src: securetty.j2
+    dest: /etc/securetty
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+    - securetty
+    - security
+...

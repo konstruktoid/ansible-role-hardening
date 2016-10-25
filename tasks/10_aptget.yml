@@ -1,0 +1,23 @@
+---
+- name: apt update
+  become: yes
+  become_method: sudo
+  apt:
+    update_cache: yes
+    cache_valid_time: 1800
+  tags:
+    - apt
+    - security
+
+- name: apt upgrade
+  become: yes
+  become_method: sudo
+  apt:
+    upgrade: safe
+  notify:
+    - apt-get clean
+    - apt-get autoremove
+  tags:
+    - apt
+    - security
+...

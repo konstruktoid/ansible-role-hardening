@@ -1,0 +1,15 @@
+---
+- name: disable misc kernel modules
+  become: yes
+  become_method: sudo
+  template:
+    src: disablemod.conf.j2
+    dest: /etc/modprobe.d/disablemod.conf
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+    - modprobe
+    - security
+...

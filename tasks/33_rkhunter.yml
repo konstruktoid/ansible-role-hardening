@@ -1,0 +1,18 @@
+---
+- name: rkhunter
+  become: yes
+  become_method: sudo
+  template:
+    src: rkhunter.j2
+    dest: /etc/default/rkhunter
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - rkhunter propupd
+  tags:
+    - packages
+    - rkhunter
+    - security
+...

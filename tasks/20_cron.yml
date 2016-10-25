@@ -1,0 +1,36 @@
+---
+- name: remove cron.deny and at.deny
+  become: yes
+  become_method: sudo
+  file:
+    path: "{{ item }}"
+    state: absent
+  ignore_errors: true
+  with_items:
+    - /etc/cron.deny
+    - /etc/at.deny
+    - /etc/cron.allow
+    - /etc/at.allow
+  tags:
+    - cron
+    - security
+
+- name: allow root cron and at
+  become: yes
+  become_method: sudo
+  lineinfile:
+    line: "root"
+    dest: "{{ item }}"
+    mode: 0600
+    state: present
+    create: yes
+  with_items:
+    - /etc/cron.allow
+    - /etc/at.allow
+  notify:
+    - mask atd
+    - reload systemd
+  tags:
+    - cron
+    - security
+...

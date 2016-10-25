@@ -1,0 +1,18 @@
+---
+- name: systemd journald.conf
+  become: yes
+  become_method: sudo
+  template:
+    src: journald.conf.j2
+    dest: /etc/systemd/journald.conf
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - reload systemd
+  tags:
+    - systemd
+    - journald
+    - security
+...

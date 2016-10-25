@@ -1,0 +1,9 @@
+---
+- name: disable ctrl-alt-del
+  become: yes
+  become_method: sudo
+  command: systemctl mask ctrl-alt-del.target
+  tags:
+    - ctrl-alt-del
+    - security
+...

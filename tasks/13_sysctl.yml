@@ -1,0 +1,17 @@
+---
+- name: sysctl
+  become: yes
+  become_method: sudo
+  template:
+    src: sysctl.conf.j2
+    dest: /etc/sysctl.conf
+    backup: yes
+    mode: 0600
+    owner: root
+    group: root
+  notify:
+    - restart sysctl
+  tags:
+    - sysctl
+    - security
+...

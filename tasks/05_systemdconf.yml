@@ -1,0 +1,35 @@
+---
+- name: systemd system.conf
+  become: yes
+  become_method: sudo
+  template:
+    src: system.conf.j2
+    dest: /etc/systemd/system.conf
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - reload systemd
+  tags:
+    - systemd
+    - system.conf
+    - security
+
+- name: systemd user.conf
+  become: yes
+  become_method: sudo
+  template:
+    src: user.conf.j2
+    dest: /etc/systemd/user.conf
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - reload systemd
+  tags:
+    - systemd
+    - user.conf
+    - security
+...

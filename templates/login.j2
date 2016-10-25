@@ -1,0 +1,23 @@
+# {{ ansible_managed }}
+
+auth       optional   pam_faildelay.so  delay=4000000
+auth [success=ok new_authtok_reqd=ok ignore=ignore user_unknown=bad default=die] pam_securetty.so
+auth       requisite  pam_nologin.so
+
+session [success=ok ignore=ignore module_unknown=ignore default=bad] pam_selinux.so close
+session       required   pam_env.so readenv=1 envfile=/etc/default/locale
+
+@include common-auth
+
+auth       optional   pam_group.so
+
+session    required   pam_limits.so
+session    optional   pam_lastlog.so showfailed
+session    optional   pam_motd.so  motd=/run/motd.dynamic noupdate
+session    optional   pam_mail.so standard
+
+@include common-account
+@include common-session
+@include common-password
+
+session [success=ok ignore=ignore module_unknown=ignore default=bad] pam_selinux.so open

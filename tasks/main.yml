@@ -1,0 +1,33 @@
+---
+- include: 02_ufw.yml
+- include: 03_disablenet.yml
+- include: 04_disablemnt.yml
+- include: 05_systemdconf.yml
+- include: 06_journalconf.yml
+- include: 07_timesyncd.yml
+- include: 10_aptget.yml
+- include: 11_hosts.yml
+- include: 12_logindefs.yml
+- include: 13_sysctl.yml
+- include: 14_limits.yml
+- include: 15_adduser.yml
+- include: 16_rootaccess.yml
+- include: 17_packages.yml
+- include: 18_sshdconfig.yml
+- include: 19_password.yml
+- include: 20_cron.yml
+- include: 21_ctrlaltdel.yml
+- include: 22_auditd.yml
+- include: 23_disablemod.yml
+- include: 24_aide.yml
+- include: 26_users.yml
+- include: 27_suid.yml
+- include: 28_rc.yml
+- include: 30_path.yml
+- include: 31_logindconf.yml
+- include: 32_resolvedconf.yml
+- include: 33_rkhunter.yml
+- include: 34_issue.yml
+- include: 35_apport.yml
+- include: 36_lockroot.yml
+...

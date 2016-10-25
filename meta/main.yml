@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: Thomas Sjögren
+  description: Ubuntu server hardening.
+  license: apache
+  min_ansible_version: 2.1
+  platforms:
+    - name: Ubuntu
+  versions:
+    - wily
+    - xenial
+    - yakkety
+  galaxy_tags:
+    - ubuntu
+    - security
+    - hardening
+    - system

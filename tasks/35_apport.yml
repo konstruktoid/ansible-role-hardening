@@ -1,0 +1,19 @@
+---
+- name: disable apport
+  become: yes
+  become_method: sudo
+  lineinfile:
+    regexp: "^enabled="
+    line: "enabled=0"
+    dest: /etc/default/apport
+    mode: 0644
+    state: present
+    create: no
+    backrefs: yes
+  ignore_errors: true
+  notify:
+    - mask apport
+  tags:
+    - apport
+    - security
+...

@@ -1,0 +1,18 @@
+---
+- name: sshd_config
+  become: yes
+  become_method: sudo
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - restart sshd
+  tags:
+    - sshd_config
+    - sshd
+    - security
+...

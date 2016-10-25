@@ -1,0 +1,18 @@
+---
+- name: systemd logind
+  become: yes
+  become_method: sudo
+  template:
+    src: logind.conf.j2
+    dest: /etc/systemd/logind.conf
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - reload systemd
+  tags:
+    - systemd
+    - logind
+    - security
+...

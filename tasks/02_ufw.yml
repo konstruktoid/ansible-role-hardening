@@ -1,0 +1,36 @@
+---
+- name: reset ufw
+  become: yes
+  become_method: sudo
+  ufw:
+    state: reset
+  tags:
+    - ufw
+    - security
+
+- name: allow ssh ufw
+  become: yes
+  become_method: sudo
+  ufw:
+    rule: allow
+    src: "{{ item }}"
+    port: 22
+    proto: tcp
+  with_items:
+    - "{{ sshd_admin_net }}"
+  tags:
+    - ufw
+    - ssh
+    - security
+
+- name: enable ufw
+  become: yes
+  become_method: sudo
+  ufw:
+    state: enabled
+    policy: deny
+    logging: low
+  tags:
+    - ufw
+    - security
+...

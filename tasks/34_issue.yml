@@ -1,0 +1,19 @@
+---
+- name: add notice
+  become: yes
+  become_method: sudo
+  template:
+    src: issue.j2
+    dest: "{{ item }}"
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  with_items:
+    - /etc/issue
+    - /etc/issue.net
+    - /etc/motd
+  tags:
+    - motd
+    - security
+...

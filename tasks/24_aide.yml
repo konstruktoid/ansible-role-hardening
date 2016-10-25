@@ -1,0 +1,68 @@
+---
+- name: aide service
+  become: yes
+  become_method: sudo
+  template:
+    src: aidecheck.service.j2
+    dest: /lib/systemd/system/aidecheck.service
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+    - aide
+    - security
+
+- name: aide timer
+  become: yes
+  become_method: sudo
+  template:
+    src: aidecheck.timer.j2
+    dest: /lib/systemd/system/aidecheck.timer
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - reload systemd
+    - enable aidecheck
+    - start aidecheck
+  tags:
+    - aide
+    - security
+
+- name: /etc/systemd/system/aidecheck.timer
+  become: yes
+  become_method: sudo
+  file:
+    path: /etc/systemd/system/aidecheck.timer
+    state: absent
+  when: ansible_bios_version == "VirtualBox"
+  tags:
+    - aide
+    - security
+
+- name: remove /etc/systemd/system/aidecheck.service
+  become: yes
+  become_method: sudo
+  file:
+    path: /etc/systemd/system/aidecheck.service
+    state: absent
+  when: ansible_bios_version == "VirtualBox"
+  tags:
+    - aide
+    - security
+
+- name: mask virtualbox aidecheck
+  shell: echo 'disabling aide timer on VirtualBox'
+  become: yes
+  become_method: sudo
+  when: ansible_bios_version == "VirtualBox"
+  notify:
+    - mask aidecheck
+    - disable aidecheck
+    - reload systemd
+  tags:
+    - aide
+    - security
+...

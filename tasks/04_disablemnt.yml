@@ -1,0 +1,15 @@
+---
+- name: disable file system modules
+  become: yes
+  become_method: sudo
+  template:
+    src: disablemnt.conf.j2
+    dest: /etc/modprobe.d/disablemnt.conf
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+    - modprobe
+    - security
+...

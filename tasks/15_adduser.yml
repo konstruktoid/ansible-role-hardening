@@ -1,0 +1,29 @@
+---
+- name: adduser.conf
+  become: yes
+  become_method: sudo
+  template:
+    src: adduser.conf.j2
+    dest: /etc/adduser.conf
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+    - adduser.conf
+    - security
+
+- name: useradd
+  become: yes
+  become_method: sudo
+  template:
+    src: useradd.j2
+    dest: /etc/default/useradd
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+    - useradd
+    - security
+...

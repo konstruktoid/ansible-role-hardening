@@ -1,0 +1,16 @@
+---
+- name: set default rc umask
+  become: yes
+  become_method: sudo
+  lineinfile:
+    regexp: "^umask "
+    line: "umask 027"
+    dest: /etc/init.d/rc
+    mode: 0755
+    state: present
+    create: no
+    backrefs: yes
+  tags:
+    - rc
+    - security
+...

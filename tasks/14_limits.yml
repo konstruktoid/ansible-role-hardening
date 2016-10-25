@@ -1,0 +1,15 @@
+---
+- name: limits.conf
+  become: yes
+  become_method: sudo
+  template:
+    src: limits.conf.j2
+    dest: /etc/security/limits.conf
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+    - limits.conf
+    - security
+...
