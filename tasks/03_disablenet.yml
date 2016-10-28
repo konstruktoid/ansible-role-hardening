@@ -1,14 +1,22 @@
 ---
+- name: disablenet.conf
+  become: yes
+  become_method: sudo
+  file:
+    state: touch
+    path: /etc/modprobe.d/disablenet.conf
+    owner: root
+    group: root
+    mode: 0644
+
 - name: disable net modules
   become: yes
   become_method: sudo
-  template:
-    src: disablenet.conf.j2
+  lineinfile:
     dest: /etc/modprobe.d/disablenet.conf
-    backup: yes
-    mode: 0644
-    owner: root
-    group: root
+    line: "install {{ item }} /bin/true"
+  with_items:
+    - "{{ disable_net_modules }}"
   tags:
     - modprobe
     - security
