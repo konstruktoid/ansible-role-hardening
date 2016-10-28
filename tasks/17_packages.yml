@@ -43,4 +43,20 @@
     - packages
     - virtualbox
     - security
+
+- name: vmware package installation
+  become: yes
+  become_method: sudo
+  apt:
+    name: "{{ item }}"
+    state: latest
+    install_recommends: no
+  with_items:
+    - open-vm-tools
+  when: ansible_bios_version == "VMWare" and ansible_distribution == "Ubuntu"
+  tags:
+    - apt
+    - packages
+    - vmware
+    - security
 ...
