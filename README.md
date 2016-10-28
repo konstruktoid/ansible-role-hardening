@@ -20,6 +20,41 @@ suid_sgid_blacklist: [/bin/fusermount, /bin/mount, /bin/ping, /bin/ping6, /bin/s
 random_ack_limit: "{{ 1000000 | random(start=1000) }}"
 packages: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-cracklib, libpam-tmpdir, openssh-server, rkhunter]
 packages_blacklist: [rsh-*, telnet*]
+disable_net_modules: [dccp, sctp, rds, tipc]
+```
+
+Templates:
+
+```
+templates/access.conf.j2
+templates/adduser.conf.j2
+templates/aidecheck.service.j2
+templates/aidecheck.timer.j2
+templates/audit.rules.j2
+templates/common-account.j2
+templates/common-auth.j2
+templates/common-password.j2
+templates/disablemnt.conf.j2
+templates/disablemod.conf.j2
+templates/hosts.allow.j2
+templates/hosts.deny.j2
+templates/initpath.sh.j2
+templates/issue.j2
+templates/journald.conf.j2
+templates/limits.conf.j2
+templates/login.defs.j2
+templates/login.j2
+templates/logind.conf.j2
+templates/logrotate.conf.j2
+templates/resolved.conf.j2
+templates/rkhunter.j2
+templates/securetty.j2
+templates/sshd_config.j2
+templates/sysctl.conf.j2
+templates/system.conf.j2
+templates/timesyncd.conf.j2
+templates/user.conf.j2
+templates/useradd.j2
 ```
 
 Dependencies
