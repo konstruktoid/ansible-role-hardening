@@ -13,6 +13,20 @@
     - packages
     - security
 
+- name: package removal
+  become: yes
+  become_method: sudo
+  apt:
+    name: "{{ item }}"
+    state: absent
+    purge: yes
+  with_items:
+    - "{{ packages_blacklist }}"
+  tags:
+    - apt
+    - packages
+    - security
+
 - name: virtualbox package installation
   become: yes
   become_method: sudo
