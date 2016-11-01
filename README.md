@@ -8,7 +8,7 @@ Role Variables
 
 Current role variables, along with default values:
 
-```
+```shell
 ntp: 0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org
 fallback_ntp: 2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org
 ssh_allow_groups: sudo
@@ -30,7 +30,7 @@ limit_nproc_hard: 150
 
 Templates:
 
-```
+```shell
 templates/access.conf.j2
 templates/adduser.conf.j2
 templates/aidecheck.service.j2
@@ -70,13 +70,19 @@ None.
 Example Playbook
 ----------------
 
-```
+```shell
 ---
 - hosts: all
   serial: 50%
     - { role: konstruktoid.hardening, sshd_admin_net: [10.0.0.0/24] }
 ...
 ```
+
+Testing
+-------
+
+The repository contains a [Vagrant](https://www.vagrantup.com/ "Vagrant")
+configuration file, which will run the `konstruktoid.hardening` role.
 
 License
 -------
