@@ -39,8 +39,6 @@ templates/audit.rules.j2
 templates/common-account.j2
 templates/common-auth.j2
 templates/common-password.j2
-templates/disablemnt.conf.j2
-templates/disablemod.conf.j2
 templates/hosts.allow.j2
 templates/hosts.deny.j2
 templates/initpath.sh.j2
