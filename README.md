@@ -20,7 +20,7 @@ suid_sgid_blacklist: [/bin/fusermount, /bin/mount, /bin/ping, /bin/ping6, /bin/s
 random_ack_limit: "{{ 1000000 | random(start=1000) }}"
 packages: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-cracklib, libpam-tmpdir, openssh-server, rkhunter]
 packages_blacklist: [rsh-*, telnet*]
-disable_net_modules: [dccp, sctp, rds, tipc]
+net_modules_blacklist: [dccp, sctp, rds, tipc]
 ```
 
 Templates:
