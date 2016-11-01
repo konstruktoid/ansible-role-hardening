@@ -21,6 +21,11 @@ random_ack_limit: "{{ 1000000 | random(start=1000) }}"
 packages: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-cracklib, libpam-tmpdir, openssh-server, rkhunter]
 packages_blacklist: [rsh-*, telnet*]
 net_modules_blacklist: [dccp, sctp, rds, tipc]
+mnt_modules_blacklist: [cramfs, freevxfs, hfs, hfsplus, jffs2, squashfs, udf, vfat]
+limit_nofile_soft: 100
+limit_nofile_hard: 150
+limit_nproc_soft: 100
+limit_nproc_hard: 150
 ```
 
 Templates:
