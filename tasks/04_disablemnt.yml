@@ -1,14 +1,22 @@
 ---
+- name: disablemnt.conf
+  become: yes
+  become_method: sudo
+  file:
+    state: touch
+    path: /etc/modprobe.d/disablemnt.conf
+    owner: root
+    group: root
+    mode: 0644
+
 - name: disable file system modules
   become: yes
   become_method: sudo
-  template:
-    src: disablemnt.conf.j2
+  lineinfile:
     dest: /etc/modprobe.d/disablemnt.conf
-    backup: yes
-    mode: 0644
-    owner: root
-    group: root
+    line: "install {{ item }} /bin/true"
+  with_items:
+    - "{{ mnt_modules_blacklist }}"
   tags:
     - modprobe
     - security
