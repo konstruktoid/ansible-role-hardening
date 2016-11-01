@@ -1,14 +1,22 @@
 ---
+- name: disablemod.conf
+  become: yes
+  become_method: sudo
+  file:
+    state: touch
+    path: /etc/modprobe.d/disablemod.conf
+    owner: root
+    group: root
+    mode: 0644
+
 - name: disable misc kernel modules
   become: yes
   become_method: sudo
-  template:
-    src: disablemod.conf.j2
+  lineinfile:
     dest: /etc/modprobe.d/disablemod.conf
-    backup: yes
-    mode: 0644
-    owner: root
-    group: root
+    line: "install {{ item }} /bin/true"
+  with_items:
+    - "{{ misc_modules_blacklist }}"
   tags:
     - modprobe
     - security
