@@ -9,7 +9,7 @@
     group: root
     mode: 0644
 
-- name: disable net modules
+- name: disable kernel network modules
   become: yes
   become_method: sudo
   lineinfile:
