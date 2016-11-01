@@ -1,22 +1,22 @@
 ---
-- name: disablemnt.conf
+- name: disablefs.conf
   become: yes
   become_method: sudo
   file:
     state: touch
-    path: /etc/modprobe.d/disablemnt.conf
+    path: /etc/modprobe.d/disablefs.conf
     owner: root
     group: root
     mode: 0644
 
-- name: disable file system modules
+- name: disable file system kernel modules
   become: yes
   become_method: sudo
   lineinfile:
-    dest: /etc/modprobe.d/disablemnt.conf
+    dest: /etc/modprobe.d/disablefs.conf
     line: "install {{ item }} /bin/true"
   with_items:
-    - "{{ mnt_modules_blacklist }}"
+    - "{{ fs_modules_blacklist }}"
   tags:
     - modprobe
     - security

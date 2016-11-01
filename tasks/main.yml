@@ -1,7 +1,7 @@
 ---
 - include: 02_ufw.yml
 - include: 03_disablenet.yml
-- include: 04_disablemnt.yml
+- include: 04_disablefs.yml
 - include: 05_systemdconf.yml
 - include: 06_journalconf.yml
 - include: 07_timesyncd.yml
