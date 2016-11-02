@@ -5,6 +5,7 @@
   apt:
     update_cache: yes
     cache_valid_time: 1800
+  when: ansible_distribution == "Ubuntu"
   tags:
     - apt
     - security
@@ -17,7 +18,22 @@
   notify:
     - apt-get clean
     - apt-get autoremove
+  when: ansible_distribution == "Ubuntu"
   tags:
     - apt
+    - security
+
+- name: yum update
+  become: yes
+  become_method: sudo
+  yum:
+    name: '*'
+    state: latest
+    update_cache: yes
+  notify:
+    - yum clean
+  when: ansible_distribution == "CentOS"
+  tags:
+    - yum
     - security
 ...

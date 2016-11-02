@@ -1,5 +1,5 @@
 ---
-- name: package installation
+- name: ubuntu package installation
   become: yes
   become_method: sudo
   apt:
@@ -7,13 +7,28 @@
     state: latest
     install_recommends: no
   with_items:
-    - "{{ packages }}"
+    - "{{ packages_ubuntu }}"
+  when: ansible_distribution == "Ubuntu"
   tags:
     - apt
     - packages
     - security
 
-- name: package removal
+- name: centos package installation
+  become: yes
+  become_method: sudo
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - "{{ packages_centos }}"
+  when: ansible_distribution == "CentOS"
+  tags:
+    - yum
+    - packages
+    - security
+
+- name: ubuntu package removal
   become: yes
   become_method: sudo
   apt:
@@ -22,8 +37,23 @@
     purge: yes
   with_items:
     - "{{ packages_blacklist }}"
+  when: ansible_distribution == "Ubuntu"
   tags:
     - apt
+    - packages
+    - security
+
+- name: centos package removal
+  become: yes
+  become_method: sudo
+  yum:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ packages_blacklist }}"
+  when: ansible_distribution == "CentOS"
+  tags:
+    - yum
     - packages
     - security
 
@@ -53,9 +83,10 @@
     install_recommends: no
   with_items:
     - open-vm-tools
-  when: ansible_bios_version == "VMWare" and ansible_distribution == "Ubuntu"
+  when: ansible_bios_version == "VMWare"
   tags:
     - apt
+    - yum
     - packages
     - vmware
     - security

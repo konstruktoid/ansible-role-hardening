@@ -10,8 +10,8 @@
     owner: root
     group: root
   notify:
-      - generate auditd
-      - restart auditd
+    - generate auditd
+    - restart auditd
   tags:
     - auditd
     - audit.rules

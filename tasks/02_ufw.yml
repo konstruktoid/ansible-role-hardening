@@ -4,6 +4,7 @@
   become_method: sudo
   ufw:
     state: reset
+  when: ansible_distribution == "Ubuntu"
   tags:
     - ufw
     - security
@@ -18,6 +19,7 @@
     proto: tcp
   with_items:
     - "{{ sshd_admin_net }}"
+  when: ansible_distribution == "Ubuntu"
   tags:
     - ufw
     - ssh
@@ -30,6 +32,7 @@
     state: enabled
     policy: deny
     logging: low
+  when: ansible_distribution == "Ubuntu"
   tags:
     - ufw
     - security

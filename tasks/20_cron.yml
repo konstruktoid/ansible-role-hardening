@@ -12,6 +12,7 @@
     - /etc/cron.allow
     - /etc/at.allow
   tags:
+    - at
     - cron
     - security
 
@@ -27,10 +28,22 @@
   with_items:
     - /etc/cron.allow
     - /etc/at.allow
-  notify:
-    - mask atd
-    - reload systemd
   tags:
+    - at
     - cron
+    - security
+
+- name: mask atd
+  become: yes
+  become_method: sudo
+  systemd:
+    name: atd
+    state: stopped
+    masked: yes
+    daemon_reload: yes
+  ignore_errors: yes
+  tags:
+    - at
+    - systemd
     - security
 ...

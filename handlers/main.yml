@@ -65,13 +65,13 @@
   become_method: sudo
   command: apt-get -y clean
 
-- name: mask atd
-  become: yes
-  become_method: sudo
-  command: systemctl mask atd.service
-
 - name: mask apport
   become: yes
   become_method: sudo
   command: systemctl mask apport.service
+
+- name: yum clean
+  become: yes
+  become_method: sudo
+  command: yum -y clean all
 ...

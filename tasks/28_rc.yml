@@ -10,6 +10,7 @@
     state: present
     create: no
     backrefs: yes
+  ignore_errors: true
   tags:
     - rc
     - security

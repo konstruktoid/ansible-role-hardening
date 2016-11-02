@@ -9,6 +9,7 @@
     mode: 0644
     owner: root
     group: root
+  when: ansible_distribution == "Ubuntu"
   notify:
     - rkhunter propupd
   tags:
