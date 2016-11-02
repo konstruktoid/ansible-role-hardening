@@ -1,5 +1,5 @@
 ---
-- include: 02_ufw.yml
+- include: 02_firewall.yml
 - include: 03_disablenet.yml
 - include: 04_disablefs.yml
 - include: 05_systemdconf.yml

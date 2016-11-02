@@ -36,4 +36,28 @@
   tags:
     - ufw
     - security
+
+- name: enable firewalld
+  become: yes
+  become_method: sudo
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+  when: ansible_distribution == "CentOS"
+  tags:
+    - firewalld
+    - security
+
+- name: allow firewalld ssh
+  become: yes
+  become_method: sudo
+  firewalld:
+    service: ssh
+    permanent: true
+    state: enabled
+  when: ansible_distribution == "CentOS"
+  tags:
+    - firewalld
+    - security
 ...
