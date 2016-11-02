@@ -2,6 +2,7 @@ ansible-role-hardening
 =========
 
 Ansible role to make a Ubuntu server a bit more secure.
+CentOS 7 is a work in progress.
 
 Role Variables
 --------------
@@ -18,8 +19,9 @@ fallback_dns: 8.8.8.8 8.8.4.4
 dnssec: allow-downgrade
 suid_sgid_blacklist: [/bin/fusermount, /bin/mount, /bin/ping, /bin/ping6, /bin/su, /bin/umount, /sbin/mount.nfs, /usr/bin/bsd-write, /usr/bin/chage, /usr/bin/chfn, /usr/bin/chsh, /usr/bin/mlocate, /usr/bin/mtr, /usr/bin/newgrp, /usr/bin/pkexec, /usr/bin/traceroute6.iputils, /usr/bin/wall, /usr/sbin/pppd]
 random_ack_limit: "{{ 1000000 | random(start=1000) }}"
-packages: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-cracklib, libpam-tmpdir, openssh-server, rkhunter]
-packages_blacklist: [rsh-*, telnet*]
+packages_ubuntu: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-cracklib, libpam-tmpdir, openssh-server, rkhunter, rsyslog]
+packages_centos: [aide, audit, openssh-server, rsyslog]
+packages_blacklist: [rsh*, talk*, telnet*, tftp*, yp-tools, ypbind, xinetd]
 net_modules_blacklist: [dccp, sctp, rds, tipc]
 fs_modules_blacklist: [cramfs, freevxfs, hfs, hfsplus, jffs2, squashfs, udf, vfat]
 misc_modules_blacklist: [bluetooth, firewire-core, net-pf-31, soundcore, thunderbolt, usb-midi, usb-storage]
@@ -46,9 +48,9 @@ templates/initpath.sh.j2
 templates/issue.j2
 templates/journald.conf.j2
 templates/limits.conf.j2
+templates/logind.conf.j2
 templates/login.defs.j2
 templates/login.j2
-templates/logind.conf.j2
 templates/logrotate.conf.j2
 templates/resolved.conf.j2
 templates/rkhunter.j2
@@ -57,8 +59,8 @@ templates/sshd_config.j2
 templates/sysctl.conf.j2
 templates/system.conf.j2
 templates/timesyncd.conf.j2
-templates/user.conf.j2
 templates/useradd.j2
+templates/user.conf.j2
 ```
 
 Dependencies
