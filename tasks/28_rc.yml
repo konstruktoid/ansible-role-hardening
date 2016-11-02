@@ -10,8 +10,25 @@
     state: present
     create: no
     backrefs: yes
-  ignore_errors: true
+  when: ansible_distribution == "Ubuntu"
   tags:
     - rc
     - security
+
+- name: set default init umask
+  become: yes
+  become_method: sudo
+  lineinfile:
+    regexp: "^umask "
+    line: "umask 027"
+    dest: /etc/sysconfig/init
+    mode: 0755
+    state: present
+    create: no
+    backrefs: yes
+  when: ansible_distribution == "CentOS"
+  tags:
+    - rc
+    - security
+...
 ...
