@@ -65,4 +65,17 @@
   tags:
     - aide
     - security
+
+- name: stat aide.db
+  become: yes
+  become_method: sudo
+  stat:
+    path: /var/lib/aide/aide.db.gz
+  register: aidedb
+
+- name: initialize aide
+  become: yes
+  become_method: sudo
+  shell: /usr/sbin/aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
+  when: not aidedb.stat.exists
 ...
