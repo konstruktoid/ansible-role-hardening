@@ -40,7 +40,8 @@ Vagrant.configure("2") do |censev|
       p.limit = "all"
       p.playbook = "hardening-test.yml"
       p.extra_vars = {
-        "sshd_admin_net" => "0.0.0.0/0"
+        "sshd_admin_net" => "0.0.0.0/0",
+        "ssh_allow_groups" => "vagrant"
       }
     end
   end
