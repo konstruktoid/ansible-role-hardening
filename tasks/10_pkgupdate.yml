@@ -23,6 +23,22 @@
     - apt
     - security
 
+- name: set yum.conf gpgcheck
+  become: yes
+  become_method: sudo
+  lineinfile:
+    regexp: "^gpgcheck="
+    line: "gpgcheck=1"
+    dest: /etc/yum.conf
+    mode: 0644
+    state: present
+    create: no
+    backrefs: yes
+  when: ansible_distribution == "CentOS"
+  tags:
+    - rc
+    - security
+
 - name: yum update
   become: yes
   become_method: sudo
