@@ -9,6 +9,7 @@
     mode: 0644
     owner: root
     group: root
+  when: not ansible_bios_version == "VirtualBox"
   tags:
     - aide
     - security
@@ -27,41 +28,7 @@
     - reload systemd
     - enable aidecheck
     - start aidecheck
-  tags:
-    - aide
-    - security
-
-- name: /etc/systemd/system/aidecheck.timer
-  become: yes
-  become_method: sudo
-  file:
-    path: /etc/systemd/system/aidecheck.timer
-    state: absent
-  when: ansible_bios_version == "VirtualBox"
-  tags:
-    - aide
-    - security
-
-- name: remove /etc/systemd/system/aidecheck.service
-  become: yes
-  become_method: sudo
-  file:
-    path: /etc/systemd/system/aidecheck.service
-    state: absent
-  when: ansible_bios_version == "VirtualBox"
-  tags:
-    - aide
-    - security
-
-- name: mask virtualbox aidecheck
-  shell: echo 'disabling aide timer on VirtualBox'
-  become: yes
-  become_method: sudo
-  when: ansible_bios_version == "VirtualBox"
-  notify:
-    - mask aidecheck
-    - disable aidecheck
-    - reload systemd
+  when: not ansible_bios_version == "VirtualBox"
   tags:
     - aide
     - security
@@ -76,6 +43,6 @@
 - name: initialize aide
   become: yes
   become_method: sudo
-  shell: /usr/sbin/aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
+  shell: aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
   when: not aidedb.stat.exists
 ...
