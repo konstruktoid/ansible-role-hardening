@@ -48,10 +48,11 @@ templates/initpath.sh.j2
 templates/issue.j2
 templates/journald.conf.j2
 templates/limits.conf.j2
-templates/logind.conf.j2
 templates/login.defs.j2
 templates/login.j2
+templates/logind.conf.j2
 templates/logrotate.conf.j2
+templates/pwquality.conf.j2
 templates/resolved.conf.j2
 templates/rkhunter.j2
 templates/securetty.j2
@@ -59,8 +60,8 @@ templates/sshd_config.j2
 templates/sysctl.conf.j2
 templates/system.conf.j2
 templates/timesyncd.conf.j2
-templates/useradd.j2
 templates/user.conf.j2
+templates/useradd.j2
 ```
 
 Dependencies
