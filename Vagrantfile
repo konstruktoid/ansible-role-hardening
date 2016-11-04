@@ -13,6 +13,7 @@ Vagrant.configure("2") do |config|
       p.playbook = "hardening-test.yml"
       p.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
+        "ssh_allow_groups" => "vagrant sudo ubuntu"
      }
     end
   end
@@ -28,7 +29,7 @@ Vagrant.configure("2") do |config|
       p.playbook = "hardening-test.yml"
       p.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
-        "ssh_allow_groups" => "vagrant"
+        "ssh_allow_groups" => "vagrant sudo ubuntu"
       }
     end
   end
