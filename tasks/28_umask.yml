@@ -1,0 +1,52 @@
+---
+- name: set default rc umask
+  become: yes
+  become_method: sudo
+  replace:
+    regexp: 'umask(\s+.*)'
+    replace: "umask 027"
+    dest: /etc/init.d/rc
+    mode: 0755
+  when: ansible_distribution == "Ubuntu"
+  tags:
+    - rc
+    - security
+
+- name: set default init umask
+  become: yes
+  become_method: sudo
+  replace:
+    regexp: 'umask(\s+.*)'
+    replace: "umask 027"
+    dest: /etc/sysconfig/init
+    mode: 0755
+  when: ansible_distribution == "CentOS"
+  tags:
+    - rc
+    - security
+
+- name: set default bashrc umask
+  become: yes
+  become_method: sudo
+  replace:
+    regexp: 'umask(\s+.*)'
+    replace: "umask 027"
+    dest: /etc/bashrc
+    mode: 0644
+  when: ansible_distribution == "CentOS"
+  tags:
+    - rc
+    - security
+
+- name: set default profile umask
+  become: yes
+  become_method: sudo
+  replace:
+    regexp: 'umask(\s+.*)'
+    replace: "umask 027"
+    dest: /etc/profile
+    mode: 0644
+  tags:
+    - rc
+    - security
+...
