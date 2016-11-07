@@ -16,4 +16,40 @@
     - packages
     - rkhunter
     - security
+
+- name: rkhunter ssh root user
+  become: yes
+  become_method: sudo
+  lineinfile:
+    regexp: "ALLOW_SSH_ROOT_USER"
+    line: "ALLOW_SSH_ROOT_USER=no"
+    dest: /etc/rkhunter.conf
+    mode: 0640
+    state: present
+    create: no
+    backrefs: yes
+  notify:
+    - rkhunter propupd
+  tags:
+    - packages
+    - rkhunter
+    - security
+
+- name: rkhunter ssh proto
+  become: yes
+  become_method: sudo
+  lineinfile:
+    regexp: "ALLOW_SSH_PROT_V1"
+    line: "ALLOW_SSH_PROT_V1=0"
+    dest: /etc/rkhunter.conf
+    mode: 0640
+    state: present
+    create: no
+    backrefs: yes
+  notify:
+    - rkhunter propupd
+  tags:
+    - packages
+    - rkhunter
+    - security
 ...
