@@ -74,4 +74,9 @@
   become: yes
   become_method: sudo
   command: yum -y clean all
+
+- name: enable haveged
+  become: yes
+  become_method: sudo
+  command: systemctl enable haveged
 ...

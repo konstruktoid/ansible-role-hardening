@@ -14,6 +14,18 @@
     - packages
     - security
 
+- name: centos epel installation
+  become: yes
+  become_method: sudo
+  yum:
+    name: "epel-release"
+    state: latest
+  when: ansible_distribution == "CentOS"
+  tags:
+    - yum
+    - packages
+    - security
+
 - name: centos package installation
   become: yes
   become_method: sudo
@@ -23,6 +35,8 @@
   with_items:
     - "{{ packages_centos }}"
   when: ansible_distribution == "CentOS"
+  notify:
+    - enable haveged
   tags:
     - yum
     - packages
