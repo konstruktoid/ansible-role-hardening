@@ -6,10 +6,13 @@ galaxy_info:
   min_ansible_version: 2.1
   platforms:
     - name: Ubuntu
-  versions:
-    - wily
-    - xenial
-    - yakkety
+      versions:
+        - wily
+        - xenial
+        - yakkety
+    - name: CentOS
+      versions:
+        - 7
   galaxy_tags:
     - ubuntu
     - security
