@@ -5,14 +5,14 @@ galaxy_info:
   license: apache
   min_ansible_version: 2.1
   platforms:
+    - name: EL
+      versions:
+        - 7
     - name: Ubuntu
       versions:
         - wily
         - xenial
-        - yakkety
-    - name: CentOS
-      versions:
-        - 7
+        # - yakkety
   galaxy_tags:
     - ubuntu
     - security
