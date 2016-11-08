@@ -10,7 +10,7 @@ suid_sgid_blacklist: [/bin/fusermount, /bin/mount, /bin/ping, /bin/ping6, /bin/s
 random_ack_limit: "{{ 1000000 | random(start=1000) }}"
 packages_ubuntu: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-cracklib, libpam-tmpdir, openssh-server, rkhunter, rsyslog]
 packages_centos: [aide, audit, haveged, openssh-server, rkhunter, rsyslog]
-packages_blacklist: [rsh*, talk*, telnet*, tftp*, yp-tools, ypbind, xinetd]
+packages_blacklist: [avahi-*, rsh*, talk*, telnet*, tftp*, yp-tools, ypbind, xinetd]
 net_modules_blacklist: [dccp, sctp, rds, tipc]
 fs_modules_blacklist: [cramfs, freevxfs, hfs, hfsplus, jffs2, squashfs, udf, vfat]
 misc_modules_blacklist: [bluetooth, firewire-core, net-pf-31, soundcore, thunderbolt, usb-midi, usb-storage]
