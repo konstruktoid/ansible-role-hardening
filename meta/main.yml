@@ -15,6 +15,7 @@ galaxy_info:
         # - yakkety
   galaxy_tags:
     - ubuntu
+    - centos
     - security
     - hardening
     - system
