@@ -1,8 +1,7 @@
 ansible-role-hardening
 =========
 
-Ansible role to make a Ubuntu server a bit more secure.
-CentOS 7 is a work in progress.
+Ansible role to make a Ubuntu or CentoOS 7 server a bit more secure.
 
 Role Variables
 --------------
