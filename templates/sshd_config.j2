@@ -1,5 +1,21 @@
 # {{ ansible_managed }}
 # https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29
+# CCE-27320-1
+# CCE-80220-7
+# CCE-80221-5
+# CCE-80222-3
+# CCE-80223-1
+# CCE-80224-9
+# CCE-80225-6
+# CCE-27433-2
+# CCE-27082-7
+# CCE-27377-1
+# CCE-27413-4
+# CCE-80226-4
+# CCE-27445-6
+# CCE-27471-2
+# CCE-27314-4
+# CCE-27363-1
 
 Port 22
 Protocol 2
@@ -15,6 +31,8 @@ ServerKeyBits 1024
 
 SyslogFacility AUTH
 LogLevel VERBOSE
+
+Compression delayed
 
 LoginGraceTime 20
 PermitRootLogin no
@@ -40,6 +58,9 @@ TCPKeepAlive yes
 AcceptEnv LANG LC_*
 
 Subsystem sftp /usr/lib/ssh/sftp-server -f AUTHPRIV -l INFO
+
+GSSAPIAuthentication no
+KerberosAuthentication no
 
 UsePAM yes
 AllowGroups {{ ssh_allow_groups }}
