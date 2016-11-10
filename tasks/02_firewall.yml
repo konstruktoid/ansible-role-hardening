@@ -37,6 +37,29 @@
     - ufw
     - security
 
+- name: stat firewalld conf
+  become: yes
+  become_method: sudo
+  stat:
+    path: /etc/firewalld/firewalld.conf
+  register: firewalldconf
+
+- name: set firewalld DefaultZone
+  become: yes
+  become_method: sudo
+  lineinfile:
+    regexp: "^DefaultZone="
+    line: "DefaultZone=public"
+    dest: /etc/firewalld/firewalld.conf
+    mode: 0640
+    state: present
+    create: no
+    backrefs: yes
+  when: firewalldconf.stat.exists
+  tags:
+    - firewalld
+    - security
+
 - name: enable firewalld
   become: yes
   become_method: sudo
@@ -56,6 +79,7 @@
     service: ssh
     permanent: true
     state: enabled
+    zone: public
   when: ansible_distribution == "CentOS"
   tags:
     - firewalld
