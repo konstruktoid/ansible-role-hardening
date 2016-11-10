@@ -29,6 +29,13 @@
     - rc
     - security
 
+- name: stat bashrc
+  become: yes
+  become_method: sudo
+  stat:
+    path: /etc/bashrc
+  register: bashrc
+
 - name: set default bashrc umask
   become: yes
   become_method: sudo
@@ -37,7 +44,27 @@
     replace: "umask 027"
     dest: /etc/bashrc
     mode: 0644
-  when: ansible_distribution == "CentOS"
+  when: bashrc.stat.exists
+  tags:
+    - rc
+    - security
+
+- name: stat csh.cshrc
+  become: yes
+  become_method: sudo
+  stat:
+    path: /etc/csh.cshrc
+  register: cshrc
+
+- name: set default csh.cshrc umask
+  become: yes
+  become_method: sudo
+  replace:
+    regexp: 'umask(\s+.*)'
+    replace: "umask 027"
+    dest: /etc/csh.cshrc
+    mode: 0644
+  when: cshrc.stat.exists
   tags:
     - rc
     - security
