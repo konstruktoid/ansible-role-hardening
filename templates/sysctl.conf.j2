@@ -1,4 +1,28 @@
 # {{ ansible_managed }}
+# CCE-26900-1
+# CCE-27127-0
+# CCE-80156-3
+# CCE-80156-3
+# CCE-80157-1
+# CCE-27434-0
+# CCE-80158-9
+# CCE-80159-7
+# CCE-80160-5
+# CCE-80161-3
+# CCE-80162-1
+# CCE-80163-9
+# CCE-80164-7
+# CCE-80165-4
+# CCE-80166-2
+# CCE-27495-1
+# CCE-80167-0
+# CCE-80168-8
+# CCE-80180-3
+# CCE-80181-1
+# CCE-80182-9
+# CCE-80183-7
+# CCE-80335-1
+# CCE-80356-9
 
 fs.protected_hardlinks = 1
 fs.protected_symlinks = 1
@@ -35,12 +59,14 @@ net.ipv4.tcp_syn_retries = 5
 net.ipv4.tcp_timestamps = 0
 net.ipv6.conf.all.accept_ra = 0
 net.ipv6.conf.all.accept_redirects = 0
+net.ipv6.conf.all.forwarding = 0
 net.ipv6.conf.all.use_tempaddr = 2
 net.ipv6.conf.{{ ansible_default_ipv4.interface }}.accept_ra_rtr_pref = 0
 net.ipv6.conf.default.accept_ra = 0
 net.ipv6.conf.default.accept_ra_defrtr = 0
 net.ipv6.conf.default.accept_ra_pinfo = 0
 net.ipv6.conf.default.accept_redirects = 0
+net.ipv6.conf.default.accept_source_route = 0
 net.ipv6.conf.default.autoconf = 0
 net.ipv6.conf.default.dad_transmits = 0
 net.ipv6.conf.default.max_addresses = 1
