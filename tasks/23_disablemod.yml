@@ -1,4 +1,7 @@
 ---
+# usb-storage: CCE-27277-3
+# bluetooth: CCE-27327-6
+
 - name: disablemod.conf
   become: yes
   become_method: sudo

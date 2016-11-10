@@ -1,4 +1,8 @@
 ---
+# CCE-27068-6
+# CCE-80202-5
+# CCE-80204-1
+
 - name: set default rc umask
   become: yes
   become_method: sudo

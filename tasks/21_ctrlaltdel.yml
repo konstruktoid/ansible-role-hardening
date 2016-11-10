@@ -1,4 +1,6 @@
 ---
+# CCE-27511-5
+
 - name: disable ctrl-alt-del
   become: yes
   become_method: sudo

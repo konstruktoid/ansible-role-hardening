@@ -1,4 +1,7 @@
 ---
+# DCCP: CCE-26828-4
+# SCTP: CCE-27106-4
+
 - name: disablenet.conf
   become: yes
   become_method: sudo

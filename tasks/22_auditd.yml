@@ -1,4 +1,6 @@
 ---
+# CCE-27407-6
+
 - name: audit.rules
   become: yes
   become_method: sudo

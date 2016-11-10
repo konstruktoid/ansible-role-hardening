@@ -1,4 +1,12 @@
 ---
+# cramfs: CCE-80137-3
+# freevxfs: CCE-80138-1
+# jffs2: CCE-80139-9
+# hfs: CCE-80140-7
+# hfsplus: CCE-80141-5
+# squashfs: CCE-80142-3
+# udf: CCE-80143-1
+
 - name: disablefs.conf
   become: yes
   become_method: sudo

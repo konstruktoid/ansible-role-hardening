@@ -14,6 +14,7 @@
     - aide
     - security
 
+# CCE-26952-2
 - name: aide timer
   become: yes
   become_method: sudo
@@ -40,6 +41,7 @@
     path: /var/lib/aide/aide.db.gz
   register: aidedb
 
+# CCE-27220-3
 - name: initialize aide
   become: yes
   become_method: sudo

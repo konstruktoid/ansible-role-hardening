@@ -33,6 +33,7 @@
     - cron
     - security
 
+# CCE-80345-2
 - name: mask atd
   become: yes
   become_method: sudo

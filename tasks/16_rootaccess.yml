@@ -13,6 +13,8 @@
     - access.conf
     - security
 
+# CCE-27318-5
+# CCE-27268-2
 - name: securetty
   become: yes
   become_method: sudo

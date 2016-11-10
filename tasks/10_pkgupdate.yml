@@ -23,6 +23,7 @@
     - apt
     - security
 
+# CCE-26989-4
 - name: set yum.conf gpgcheck
   become: yes
   become_method: sudo
@@ -36,9 +37,61 @@
     backrefs: yes
   when: ansible_distribution == "CentOS"
   tags:
-    - rc
+    - yum
     - security
 
+# CCE-80346-0
+- name: set yum.conf clean_requirements
+  become: yes
+  become_method: sudo
+  lineinfile:
+    regexp: "clean_requirements_on_remove="
+    line: "clean_requirements_on_remove=1"
+    dest: /etc/yum.conf
+    mode: 0644
+    state: present
+    create: no
+    backrefs: yes
+  when: ansible_distribution == "CentOS"
+  tags:
+    - yum
+    - security
+
+# CCE-80347-8
+- name: set yum.conf localpkg_gpgcheck
+  become: yes
+  become_method: sudo
+  lineinfile:
+    regexp: "localpkg_gpgcheck="
+    line: "localpkg_gpgcheck=1"
+    dest: /etc/yum.conf
+    mode: 0644
+    state: present
+    create: no
+    backrefs: yes
+  when: ansible_distribution == "CentOS"
+  tags:
+    - yum
+    - security
+
+# CCE-80348-6
+- name: set yum.conf repo_gpgcheck
+  become: yes
+  become_method: sudo
+  lineinfile:
+    regexp: "repo_gpgcheck="
+    line: "repo_gpgcheck=1"
+    dest: /etc/yum.conf
+    mode: 0644
+    state: present
+    create: no
+    backrefs: yes
+  when: ansible_distribution == "CentOS"
+  tags:
+    - yum
+    - security
+
+# CCE-26895-3
 - name: yum update
   become: yes
   become_method: sudo
