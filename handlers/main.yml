@@ -79,4 +79,9 @@
   become: yes
   become_method: sudo
   command: systemctl enable haveged
+
+- name: update authconfig
+  become: yes
+  become_method: sudo
+  command: authconfig --updateall
 ...
