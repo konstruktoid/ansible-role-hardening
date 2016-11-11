@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Thomas Sjögren
-  description: Ubuntu server hardening.
+  description: Ubuntu and CentOS server hardening
   license: apache
   min_ansible_version: 2.1
   platforms:
