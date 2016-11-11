@@ -3,5 +3,5 @@
   remote_user: root
   become: true
   roles:
-    - ansible-role-hardening
+    - konstruktoid.hardening
 ...
