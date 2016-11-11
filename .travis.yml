@@ -9,7 +9,7 @@ sudo: false
 addons:
   apt:
     packages:
-    - python-pip
+      - python-pip
 
 install:
   # Install ansible
@@ -24,6 +24,9 @@ install:
 script:
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+
+  # Run role
+  - ansible-playbook tests/test.yml -i tests/inventory --connection=local
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

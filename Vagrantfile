@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
     xenial.vm.provision "ansible" do |p|
       p.verbose = "v"
       p.limit = "all"
-      p.playbook = "hardening-test.yml"
+      p.playbook = "tests/test.yml"
       p.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
         "ssh_allow_groups" => "vagrant sudo ubuntu"
@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
     centos.vm.provision "ansible" do |p|
       p.verbose = "v"
       p.limit = "all"
-      p.playbook = "hardening-test.yml"
+      p.playbook = "tests/test.yml"
       p.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
         "ssh_allow_groups" => "vagrant sudo ubuntu"
