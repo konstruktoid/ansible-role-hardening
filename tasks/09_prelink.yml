@@ -1,0 +1,24 @@
+---
+- name: disable prelinking
+  become: yes
+  become_method: sudo
+  lineinfile:
+    line: "PRELINKING=no"
+    dest: /etc/sysconfig/prelink
+    mode: 0644
+    state: present
+    create: yes
+  when: ansible_distribution == "CentOS"
+  tags:
+    - prelink
+    - security
+
+- name: return to non-prelinked state
+  become: yes
+  become_method: sudo
+  command: prelink -ua
+  ignore_errors: true
+  tags:
+    - prelink
+    - security
+...
