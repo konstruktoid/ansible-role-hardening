@@ -23,6 +23,19 @@
     - apt
     - security
 
+- name: import RedHat RPM key
+  become: yes
+  become_method: sudo
+  rpm_key:
+    state: present
+    key: https://sks-keyservers.net/pks/lookup?op=get&search=0x{{ item }}
+  with_items:
+    - "{{ redhat_rpm_key }}"
+  when: ansible_distribution == "CentOS"
+  tags:
+    - yum
+    - security
+
 # CCE-26989-4
 - name: set yum.conf gpgcheck
   become: yes
@@ -45,13 +58,12 @@
   become: yes
   become_method: sudo
   lineinfile:
-    regexp: "clean_requirements_on_remove="
     line: "clean_requirements_on_remove=1"
     dest: /etc/yum.conf
     mode: 0644
     state: present
-    create: no
-    backrefs: yes
+    create: yes
+    insertafter: "[main]"
   when: ansible_distribution == "CentOS"
   tags:
     - yum
@@ -62,30 +74,28 @@
   become: yes
   become_method: sudo
   lineinfile:
-    regexp: "localpkg_gpgcheck="
     line: "localpkg_gpgcheck=1"
     dest: /etc/yum.conf
     mode: 0644
     state: present
-    create: no
-    backrefs: yes
+    create: yes
+    insertafter: "[main]"
   when: ansible_distribution == "CentOS"
   tags:
     - yum
     - security
 
 # CCE-80348-6
-- name: set yum.conf repo_gpgcheck
+- name: comment yum.conf repo_gpgcheck
   become: yes
   become_method: sudo
   lineinfile:
-    regexp: "repo_gpgcheck="
-    line: "repo_gpgcheck=1"
+    line: "# repo_gpgcheck=1"
     dest: /etc/yum.conf
     mode: 0644
     state: present
-    create: no
-    backrefs: yes
+    create: yes
+    insertafter: "[main]"
   when: ansible_distribution == "CentOS"
   tags:
     - yum
