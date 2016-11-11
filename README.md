@@ -9,6 +9,8 @@ Role Variables
 Current role variables, along with default values:
 
 ```shell
+auditd_arch: b64
+redhat_rpm_key: [567E347AD0044ADE55BA8A5F199E2F91FD431D51, 47DB287789B21722B6D95DDE5326810137017186]
 ntp: 0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org
 fallback_ntp: 2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org
 ssh_allow_groups: sudo
@@ -85,6 +87,17 @@ Testing
 
 The repository contains a [Vagrant](https://www.vagrantup.com/ "Vagrant")
 configuration file, which will run the `konstruktoid.hardening` role.
+
+OpenSCAP test on a CentOS 7 host:
+
+```shell
+sudo yum install -y openscap-scanner scap-security-guide
+sudo oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel7-server-upstream --results-arf centos7_stig-arf.xml --report centos7_stig-report.html /usr/share/xml/scap/ssg/content/ssg-centos7-ds.xml
+```
+
+Please note that the [OpenSCAP Evaluation Report](centos7_stig-report.html)
+contains multiple false negatives, specially in the "System Accounting with
+auditd" section.
 
 Recommended Reading
 -------------------
