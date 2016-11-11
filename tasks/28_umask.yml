@@ -2,6 +2,7 @@
 # CCE-27068-6
 # CCE-80202-5
 # CCE-80204-1
+# CCE-27557-8
 
 - name: set default rc umask
   become: yes
@@ -13,7 +14,7 @@
     mode: 0755
   when: ansible_distribution == "Ubuntu"
   tags:
-    - rc
+    - umask
     - security
 
 - name: set default init umask
@@ -26,7 +27,7 @@
     mode: 0755
   when: ansible_distribution == "CentOS"
   tags:
-    - rc
+    - umask
     - security
 
 - name: stat bashrc
@@ -46,7 +47,7 @@
     mode: 0644
   when: bashrc.stat.exists
   tags:
-    - rc
+    - umask
     - security
 
 - name: stat csh.cshrc
@@ -66,7 +67,7 @@
     mode: 0644
   when: cshrc.stat.exists
   tags:
-    - rc
+    - umask
     - security
 
 - name: set default profile umask
@@ -78,6 +79,21 @@
     dest: /etc/profile
     mode: 0644
   tags:
-    - rc
+    - umask
+    - security
+
+
+- name: export TMOUT
+  become: yes
+  become_method: sudo
+  lineinfile:
+    line: "export TMOUT=900"
+    dest: /etc/profile
+    mode: 0644
+    state: present
+    create: no
+    insertbefore: "^export"
+  tags:
+    - tmout
     - security
 ...
