@@ -9,10 +9,13 @@
 ## Buffer Size
 -b 8192
 
+## Ignore errors
+-i
+
 ## Failure Mode
 -f 2
 
-## Audit the audit logs 
+## Audit the audit logs
 -w /var/log/audit/ -k auditlog
 
 ## Auditd configuration
@@ -40,16 +43,18 @@
 
 ## Monitor usage of systemd tools
 -w /bin/systemctl -p x -k systemd_tools
--w /bin/journalctl -p x -k systemd_tools 
+-w /bin/journalctl -p x -k systemd_tools
 
 ## Special files
--a always,exit -F arch=x86_64 -S mknod -S mknodat -k specialfiles
+-a always,exit -F arch={{ auditd_arch }} -S mknod -S mknodat -k specialfiles
 
 ## Mount operations
--a always,exit -F arch=x86_64 -S mount -S umount2 -k mount 
+-a always,exit -F arch={{ auditd_arch }} -S mount -F auid>=1000 -F auid!=4294967295 -k export
 
 ## Changes to the time
--a always,exit -F arch=x86_64 -S adjtimex -S settimeofday -S clock_settime -k time
+-a always,exit -F arch={{ auditd_arch }} -S settimeofday -k audit_time_rules
+-a always,exit -F arch={{ auditd_arch }} -S adjtimex -k audit_time_rules
+-a always,exit -F arch={{ auditd_arch }} -S clock_settime -k audit_time_rules
 
 ## Cron configuration & scheduled jobs
 -w /etc/cron.allow -p wa -k cron
@@ -63,11 +68,14 @@
 -w /var/spool/cron/crontabs/ -k cron
 
 ## User, group, password databases
--w /etc/group -p wa -k etcgroup
--w /etc/passwd -p wa -k etcpasswd
--w /etc/gshadow -k etcgroup
--w /etc/shadow -k etcpasswd
--w /etc/security/opasswd -k opasswd
+-w /etc/group -p wa -k audit_rules_usergroup_modification
+-w /etc/passwd -p wa -k audit_rules_usergroup_modification
+-w /etc/gshadow -p wa -k audit_rules_usergroup_modification
+-w /etc/shadow -p wa -k audit_rules_usergroup_modification
+-w /etc/security/opasswd -p wa -k audit_rules_usergroup_modification
+
+## MAC-policy
+-w /etc/selinux/ -p wa -k MAC-policy
 
 ## Monitor usage of passwd
 -w /usr/bin/passwd -p x -k passwd_modification
@@ -84,6 +92,9 @@
 -w /sbin/insmod -p x -k modules
 -w /sbin/rmmod -p x -k modules
 -w /sbin/modprobe -p x -k modules
+-w /usr/sbin/insmod -p x -k modules
+-w /usr/sbin/rmmod -p x -k modules
+-w /usr/sbin/modprobe -p x -k modules
 
 ## Login configuration and information
 -w /etc/login.defs -p wa -k login
@@ -93,8 +104,9 @@
 -w /var/log/tallylog -p wa -k login
 
 ## Network configuration
--w /etc/hosts -p wa -k hosts
--w /etc/network/ -p wa -k network
+-w /etc/hosts -p wa -k audit_rules_networkconfig_modification
+-w /etc/network/ -p wa -k audit_rules_networkconfig_modification
+-w /etc/sysconfig/network -p wa -k audit_rules_networkconfig_modification
 
 ## System startup scripts
 -w /etc/inittab -p wa -k init
@@ -108,7 +120,7 @@
 -w /etc/localtime -p wa -k localtime
 
 ## Time zone configuration
--w /etc/timezone -p wa -k timezone
+-w /etc/timezone -p wa -k audit_time_ruleszone
 
 ## Kernel parameters
 -w /etc/sysctl.conf -p wa -k sysctl
@@ -118,8 +130,11 @@
 -w /etc/modprobe.d/ -p wa -k modprobe
 -w /etc/modules -p wa -k modprobe
 
-# Module manipulations.
--a always,exit -F arch=x86_64 -S init_module -S delete_module -k modules
+# Module manipulations
+-a always,exit -F arch={{ auditd_arch }} -S init_module -S delete_module -k modules
+
+## File deletions
+-a always,exit -F arch={{ auditd_arch }} -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete
 
 ## PAM configuration
 -w /etc/pam.d/ -p wa -k pam
@@ -136,28 +151,32 @@
 -w /etc/ssh/sshd_config -k sshd
 
 ## Changes to hostname
--a exit,always -F arch=x86_64 -S sethostname -k hostname
+-a always,exit -F arch={{ auditd_arch }} -S sethostname -S setdomainname -k audit_rules_networkconfig_modification
 
 ## Changes to issue
--w /etc/issue -p wa -k etcissue
--w /etc/issue.net -p wa -k etcissue
+-w /etc/issue -p wa -k audit_rules_networkconfig_modification
+-w /etc/issue.net -p wa -k audit_rules_networkconfig_modification
+
+## Capture all unauthorized file accesses
+-a always,exit -F arch={{ auditd_arch }} -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch={{ auditd_arch }} -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
 
 ## Capture all failures to access on critical elements
--a exit,always -F arch=x86_64 -S open -F dir=/etc -F success=0 -k unauthedfileaccess
--a exit,always -F arch=x86_64 -S open -F dir=/bin -F success=0 -k unauthedfileaccess
--a exit,always -F arch=x86_64 -S open -F dir=/sbin -F success=0 -k unauthedfileaccess
--a exit,always -F arch=x86_64 -S open -F dir=/usr/bin -F success=0 -k unauthedfileaccess
--a exit,always -F arch=x86_64 -S open -F dir=/usr/sbin -F success=0 -k unauthedfileaccess
--a exit,always -F arch=x86_64 -S open -F dir=/var -F success=0 -k unauthedfileaccess
--a exit,always -F arch=x86_64 -S open -F dir=/home -F success=0 -k unauthedfileaccess
--a exit,always -F arch=x86_64 -S open -F dir=/root -F success=0 -k unauthedfileaccess
--a exit,always -F arch=x86_64 -S open -F dir=/srv -F success=0 -k unauthedfileaccess
--a exit,always -F arch=x86_64 -S open -F dir=/tmp -F success=0 -k unauthedfileaccess
+-a exit,always -F arch={{ auditd_arch }} -S open -F dir=/etc -F success=0 -k unauthedfileaccess
+-a exit,always -F arch={{ auditd_arch }} -S open -F dir=/bin -F success=0 -k unauthedfileaccess
+-a exit,always -F arch={{ auditd_arch }} -S open -F dir=/sbin -F success=0 -k unauthedfileaccess
+-a exit,always -F arch={{ auditd_arch }} -S open -F dir=/usr/bin -F success=0 -k unauthedfileaccess
+-a exit,always -F arch={{ auditd_arch }} -S open -F dir=/usr/sbin -F success=0 -k unauthedfileaccess
+-a exit,always -F arch={{ auditd_arch }} -S open -F dir=/var -F success=0 -k unauthedfileaccess
+-a exit,always -F arch={{ auditd_arch }} -S open -F dir=/home -F success=0 -k unauthedfileaccess
+-a exit,always -F arch={{ auditd_arch }} -S open -F dir=/root -F success=0 -k unauthedfileaccess
+-a exit,always -F arch={{ auditd_arch }} -S open -F dir=/srv -F success=0 -k unauthedfileaccess
+-a exit,always -F arch={{ auditd_arch }} -S open -F dir=/tmp -F success=0 -k unauthedfileaccess
 
 ## Monitor for use of process ID change (switching accounts) applications
--w /bin/su -p x -k priv_esc
--w /usr/bin/sudo -p x -k priv_esc
--w /etc/sudoers -p rw -k priv_esc
+-w /bin/su -p x -k actions
+-w /usr/bin/sudo -p x -k actions
+-w /etc/sudoers -p aw -k actions
 
 ## Monitor usage of commands to change power state
 -w /sbin/shutdown -p x -k power
@@ -171,6 +190,11 @@
 ## Monitor changes and executions in /tmp and /var/tmp.
 -w /tmp/ -p wxa -k tmp
 -w /var/tmp/ -p wxa -k tmp
+
+## Permissions
+-a always,exit -F arch={{ auditd_arch }} -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch={{ auditd_arch }} -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch={{ auditd_arch }} -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
 
 ## Make the configuration immutable
 -e 2
