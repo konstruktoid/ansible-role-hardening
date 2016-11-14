@@ -8,7 +8,8 @@ Role Variables
 
 Current role variables, along with default values:
 
-```shell
+```yaml
+---
 auditd_arch: b64
 redhat_rpm_key: [567E347AD0044ADE55BA8A5F199E2F91FD431D51, 47DB287789B21722B6D95DDE5326810137017186]
 ntp: 0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org
@@ -18,7 +19,7 @@ sshd_admin_net: [192.168.0.0/24, 192.168.1.0/24]
 dns: 127.0.0.1
 fallback_dns: 8.8.8.8 8.8.4.4
 dnssec: allow-downgrade
-suid_sgid_blacklist: [/bin/fusermount, /bin/mount, /bin/ping, /bin/ping6, /bin/su, /bin/umount, /sbin/mount.nfs, /usr/bin/bsd-write, /usr/bin/chage, /usr/bin/chfn, /usr/bin/chsh, /usr/bin/mlocate, /usr/bin/mtr, /usr/bin/newgrp, /usr/bin/pkexec, /usr/bin/traceroute6.iputils, /usr/bin/wall, /usr/sbin/pppd]
+suid_sgid_blacklist: [/bin/ntfs-3g, /usr/bin/at, /bin/fusermount, /bin/mount, /bin/ping, /bin/ping6, /bin/su, /bin/umount, /sbin/mount.nfs, /usr/bin/bsd-write, /usr/bin/chage, /usr/bin/chfn, /usr/bin/chsh, /usr/bin/mlocate, /usr/bin/mtr, /usr/bin/newgrp, /usr/bin/pkexec, /usr/bin/traceroute6.iputils, /usr/bin/wall, /usr/bin/write, /usr/sbin/pppd]
 random_ack_limit: "{{ 1000000 | random(start=1000) }}"
 packages_ubuntu: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-cracklib, libpam-tmpdir, openssh-server, rkhunter, rsyslog]
 packages_centos: [aide, audit, haveged, openssh-server, rkhunter, rsyslog]
@@ -30,6 +31,7 @@ limit_nofile_soft: 100
 limit_nofile_hard: 150
 limit_nproc_soft: 100
 limit_nproc_hard: 150
+...
 ```
 
 Templates:
@@ -88,7 +90,7 @@ Testing
 The repository contains a [Vagrant](https://www.vagrantup.com/ "Vagrant")
 configuration file, which will run the `konstruktoid.hardening` role.
 
-OpenSCAP test on a CentOS 7 host:
+OpenSCAP test on a CentOS 7 host using the included Vagrantfile:
 
 ```shell
 sudo yum install -y openscap-scanner scap-security-guide
@@ -97,7 +99,19 @@ sudo oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel7-
 
 Please note that the [OpenSCAP Evaluation Report](centos7_stig-report.html)
 contains multiple false negatives, specially in the "System Accounting with
-auditd" section.
+auditd" section, and it doesn't take `systemd` configuration into
+account at all.
+
+```shell
+for a in adjtimex settimeofday clock_settime fchmod fremovexattr EACCES EPERM ; do sudo auditctl -l | grep $a; done
+-a always,exit -F arch=b64 -S adjtimex -F key=audit_time_rules
+-a always,exit -F arch=b64 -S settimeofday -F key=audit_time_rules
+-a always,exit -F arch=b64 -S clock_settime -F key=audit_time_rules
+-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=-1 -F key=perm_mod
+-a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=-1 -F key=perm_mod
+-a always,exit -F arch=b64 -S open,truncate,ftruncate,creat,openat,open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=-1 -F key=access
+-a always,exit -F arch=b64 -S open,truncate,ftruncate,creat,openat,open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=-1 -F key=access
+```
 
 Recommended Reading
 -------------------
