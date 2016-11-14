@@ -25,7 +25,9 @@ UMASK		  077
 PASS_MAX_DAYS		30
 PASS_MIN_DAYS		7
 PASS_WARN_AGE	  7
+{% if ansible_distribution == "CentOS" %}
 PASS_MIN_LEN    15
+{% endif %}
 UID_MIN			 1000
 UID_MAX			60000
 GID_MIN			 1000
