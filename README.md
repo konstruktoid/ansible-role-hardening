@@ -87,6 +87,10 @@ Example Playbook
 Testing
 -------
 
+```shell
+ansible-playbook tests/test.yml --extra-vars "sshd_admin_net=192.168.1.0/24" -c local -i 'localhost,' -K
+```
+
 The repository contains a [Vagrant](https://www.vagrantup.com/ "Vagrant")
 configuration file, which will run the `konstruktoid.hardening` role.
 
