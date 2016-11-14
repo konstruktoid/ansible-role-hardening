@@ -18,4 +18,18 @@
     - auditd
     - audit.rules
     - security
+
+- name: set audit grub cmdline
+  become: yes
+  become_method: sudo
+  lineinfile:
+    regexp: '^GRUB_CMDLINE_LINUX='
+    line: 'GRUB_CMDLINE_LINUX="{{ grub_cmdline }}"'
+    dest: /etc/default/grub
+    state: present
+  when: ansible_distribution == "Ubuntu"
+  tags:
+    - auditd
+    - grub
+    - security
 ...
