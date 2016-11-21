@@ -4,6 +4,13 @@
 # CCE-80204-1
 # CCE-27557-8
 
+- name: stat init.d/rc
+  become: yes
+  become_method: sudo
+  stat:
+    path: /etc/init.d/rc
+  register: initdrc
+
 - name: set default rc umask
   become: yes
   become_method: sudo
@@ -12,7 +19,7 @@
     replace: "umask 027"
     dest: /etc/init.d/rc
     mode: 0755
-  when: ansible_distribution == "Ubuntu"
+  when: initdrc.stat.exists
   tags:
     - umask
     - security
