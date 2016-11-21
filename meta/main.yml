@@ -12,7 +12,7 @@ galaxy_info:
       versions:
         - wily
         - xenial
-        # - yakkety
+        - yakkety
   galaxy_tags:
     - ubuntu
     - centos
