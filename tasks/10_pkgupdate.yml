@@ -31,7 +31,7 @@
     key: https://sks-keyservers.net/pks/lookup?op=get&search=0x{{ item }}
   with_items:
     - "{{ redhat_rpm_key }}"
-  when: ansible_distribution == "CentOS"
+  when: ansible_distribution == "Red Hat Enterprise Linux"
   tags:
     - yum
     - security
