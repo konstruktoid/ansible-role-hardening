@@ -31,6 +31,7 @@ limit_nofile_soft: 100
 limit_nofile_hard: 150
 limit_nproc_soft: 100
 limit_nproc_hard: 150
+grub_cmdline: audit=1
 ...
 ```
 
