@@ -6,7 +6,51 @@ Ansible role to make a Ubuntu or CentoOS 7 server a bit more secure.
 Role Variables
 --------------
 
-Current role variables, along with default values:
+`auditd_arch` Architecture to use with auditd. Use `getconf LONG_BIT`.
+
+`redhat_rpm_key` [Red Hat RPM keys](https://access.redhat.com/security/team/key/) for use when `ansible_distribution == "RedHat"`.
+
+`ntp` NTP server host names or IP addresses. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdtimesyncdconf) option.
+
+`fallback_ntp` NTP server host names or IP addresses to be used as the fallback NTP servers. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdtimesyncdconf) option.
+
+`ssh_allow_groups` OpenSSH login is allowed only for users whose primary group or supplementary group list matches one of the patterns.
+
+`sshd_admin_net` By default only the network(s) defined here are allowed to connect to the host using port 22. Note that additional rules need to be set up in order to allow access to additional services.
+
+`dns` IPv4 and IPv6 addresses to use as system DNS servers. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf) option.
+
+`fallback_dns` IPv4 and IPv6 addresses to use as the fallback DNS servers. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf) option.
+
+`dnssec` If set to "allow-downgrade" DNSSEC validation is attempted, but if the server does not support DNSSEC properly, DNSSEC mode is automatically disabled. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf) option.
+
+`suid_sgid_blacklist` Which binaries that should have SUID/SGID removed.
+
+`random_ack_limit` net.ipv4.tcp_challenge_ack_limit, see [tcp: make challenge acks less predictable](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=75ff39ccc1bd5d3c455b6822ab09e533c551f758).
+
+`packages_ubuntu` Packages to be installed on a Ubuntu host.
+
+`packages_centos` Packages to be installed on a CentOS host.
+
+`packages_blacklist` Packages to be removed.
+
+`net_modules_blacklist` Blacklisted kernel modules.
+
+`fs_modules_blacklist` Blacklisted kernel modules.
+
+`misc_modules_blacklist` Blacklisted kernel modules.
+
+`limit_nofile_soft` Maximum number of open files. Soft limit.
+
+`limit_nofile_hard` Maximum number of open files. Hard limit.
+
+`limit_nproc_soft` Maximum number of processes. Soft limit.
+
+`limit_nproc_hard` Maximum number of processes. Hard limit.
+
+`grub_cmdline` Additional Grub options.
+
+Default values:
 
 ```yaml
 ---
