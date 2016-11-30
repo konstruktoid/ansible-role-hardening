@@ -120,13 +120,15 @@ for a in adjtimex settimeofday clock_settime fchmod fremovexattr EACCES EPERM ; 
 Recommended Reading
 -------------------
 
-[Rules with PCI DSS Reference in Guide to the Secure Configuration of Red Hat Enterprise Linux 7](https://people.redhat.com/swells/scap-security-guide/RHEL/7/output/table-rhel7-pcidss.html)
-
 [CCE Identifiers in Guide to the Secure Configuration of Red Hat Enterprise Linux 7](https://people.redhat.com/swells/scap-security-guide/RHEL/7/output/table-rhel7-cces.html)
 
 [CIS Distribution Independent Linux Benchmark v1.0.0](https://benchmarks.cisecurity.org/downloads/show-single/index.cfm?file=independentlinux.100)
 
+[Common Configuration Enumeration](https://nvd.nist.gov/cce/index.cfm)
+
 [Draft Red Hat 7 STIG Version 1, Release 0.1](http://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx)
+
+[Rules with PCI DSS Reference in Guide to the Secure Configuration of Red Hat Enterprise Linux 7](https://people.redhat.com/swells/scap-security-guide/RHEL/7/output/table-rhel7-pcidss.html)
 
 [Security focused systemd configuration](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc)
 
