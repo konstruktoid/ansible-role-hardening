@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Thomas Sjögren
-  description: Ubuntu and CentOS server hardening
+  description: Ubuntu and CentOS server hardening, systemd edition
   license: apache
   min_ansible_version: 2.1
   platforms:
