@@ -51,4 +51,22 @@ Vagrant.configure("2") do |config|
       }
     end
   end
+
+  config.vm.define "fedora" do |fedora|
+    fedora.vm.box = "fedora/25-cloud-base"
+    fedora.ssh.insert_key = true
+    fedora.vm.network "private_network", ip:"10.2.3.44"
+    fedora.vm.hostname = "fedora"
+    fedora.vm.provision "shell",
+      inline: "dnf -y install ansible"
+    fedora.vm.provision "ansible" do |p|
+      p.verbose = "v"
+      p.limit = "all"
+      p.playbook = "tests/test.yml"
+      p.extra_vars = {
+        "sshd_admin_net" => "0.0.0.0/0",
+        "ssh_allow_groups" => "vagrant sudo ubuntu"
+      }
+    end
+  end
 end
