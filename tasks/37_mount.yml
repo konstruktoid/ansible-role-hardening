@@ -1,0 +1,13 @@
+---
+- name: mount /proc
+  mount:
+    name: /proc
+    src: none
+    fstype: proc
+    opts: rw,nosuid,nodev,noexec,relatime,hidepid=2
+    state: present
+  tags:
+    - mount
+    - proc
+    - security
+...
