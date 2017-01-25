@@ -31,4 +31,5 @@
 - include: 34_issue.yml
 - include: 35_apport.yml
 - include: 36_lockroot.yml
+- include: 37_mount.yml
 ...
