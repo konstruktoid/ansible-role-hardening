@@ -36,6 +36,24 @@ Vagrant.configure("2") do |config|
     end
   end
 
+ config.vm.define "zesty" do |zesty|
+    zesty.vm.box = "ubuntu/zesty64"
+    zesty.ssh.insert_key = true
+    zesty.vm.network "private_network", ip:"10.2.3.45"
+    zesty.vm.hostname = "zesty"
+    zesty.vm.provision "shell",
+      inline: "apt-get update && apt-get -y install ansible aptitude python --no-install-recommends"
+    zesty.vm.provision "ansible" do |p|
+      p.verbose = "v"
+      p.limit = "all"
+      p.playbook = "tests/test.yml"
+      p.extra_vars = {
+        "sshd_admin_net" => "0.0.0.0/0",
+        "ssh_allow_groups" => "vagrant sudo ubuntu"
+     }
+    end
+  end
+
   config.vm.define "centos" do |centos|
     centos.vm.box = "centos/7"
     centos.ssh.insert_key = true
