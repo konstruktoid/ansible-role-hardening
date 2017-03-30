@@ -5,7 +5,7 @@
   become: yes
   become_method: sudo
   template:
-    src: issue.j2
+    src: etc/issue.j2
     dest: "{{ item }}"
     backup: yes
     mode: 0644

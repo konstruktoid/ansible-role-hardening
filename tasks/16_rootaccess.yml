@@ -3,7 +3,7 @@
   become: yes
   become_method: sudo
   template:
-    src: access.conf.j2
+    src: etc/security/access.conf.j2
     dest: /etc/security/access.conf
     backup: yes
     mode: 0644
@@ -19,7 +19,7 @@
   become: yes
   become_method: sudo
   template:
-    src: securetty.j2
+    src: etc/securetty.j2
     dest: /etc/securetty
     backup: yes
     mode: 0644

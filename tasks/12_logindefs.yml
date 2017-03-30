@@ -3,7 +3,7 @@
   become: yes
   become_method: sudo
   template:
-    src: login.defs.j2
+    src: etc/login.defs.j2
     dest: /etc/login.defs
     backup: yes
     mode: 0644

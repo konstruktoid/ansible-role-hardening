@@ -20,7 +20,7 @@
   become: yes
   become_method: sudo
   template:
-    src: initpath.sh.j2
+    src: etc/profile.d/initpath.sh.j2
     dest: /etc/profile.d/initpath.sh
     backup: yes
     mode: 0644
