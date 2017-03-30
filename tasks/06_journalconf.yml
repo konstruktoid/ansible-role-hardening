@@ -3,7 +3,7 @@
   become: yes
   become_method: sudo
   template:
-    src: journald.conf.j2
+    src: etc/systemd/journald.conf.j2
     dest: /etc/systemd/journald.conf
     backup: yes
     mode: 0644

@@ -3,7 +3,7 @@
   become: yes
   become_method: sudo
   template:
-    src: adduser.conf.j2
+    src: etc/adduser.conf.j2
     dest: /etc/adduser.conf
     backup: yes
     mode: 0644
@@ -17,7 +17,7 @@
   become: yes
   become_method: sudo
   template:
-    src: useradd.j2
+    src: etc/default/useradd.j2
     dest: /etc/default/useradd
     backup: yes
     mode: 0644

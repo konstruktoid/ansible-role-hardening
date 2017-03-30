@@ -4,7 +4,7 @@
   become: yes
   become_method: sudo
   template:
-    src: limits.conf.j2
+    src: etc/security/limits.conf.j2
     dest: /etc/security/limits.conf
     backup: yes
     mode: 0644
@@ -18,7 +18,7 @@
   become: yes
   become_method: sudo
   template:
-    src: coredump.conf.j2
+    src: etc/systemd/coredump.conf.j2
     dest: /etc/systemd/coredump.conf
     backup: yes
     mode: 0644

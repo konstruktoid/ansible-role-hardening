@@ -3,7 +3,7 @@
   become: yes
   become_method: sudo
   template:
-    src: hosts.allow.j2
+    src: etc/hosts.allow.j2
     dest: /etc/hosts.allow
     backup: yes
     mode: 0644
@@ -17,7 +17,7 @@
   become: yes
   become_method: sudo
   template:
-    src: hosts.deny.j2
+    src: etc/hosts.deny.j2
     dest: /etc/hosts.deny
     backup: yes
     mode: 0644

@@ -3,7 +3,7 @@
   become: yes
   become_method: sudo
   template:
-    src: system.conf.j2
+    src: etc/systemd/system.conf.j2
     dest: /etc/systemd/system.conf
     backup: yes
     mode: 0644
@@ -20,7 +20,7 @@
   become: yes
   become_method: sudo
   template:
-    src: user.conf.j2
+    src: etc/systemd/user.conf.j2
     dest: /etc/systemd/user.conf
     backup: yes
     mode: 0644

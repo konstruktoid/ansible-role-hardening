@@ -81,35 +81,35 @@ since there currently are [no complete list of identifiers for CentOS or Ubuntu]
 [CIS identifiers](https://benchmarks.cisecurity.org/downloads/show-single/index.cfm?file=independentlinux.100) will be added in the future.
 
 ```shell
-templates/access.conf.j2
-templates/adduser.conf.j2
-templates/aidecheck.service.j2
-templates/aidecheck.timer.j2
-templates/audit.rules.j2
-templates/common-account.j2
-templates/common-auth.j2
-templates/common-password.j2
-templates/coredump.conf.j2
-templates/hosts.allow.j2
-templates/hosts.deny.j2
-templates/initpath.sh.j2
-templates/issue.j2
-templates/journald.conf.j2
-templates/limits.conf.j2
-templates/login.defs.j2
-templates/login.j2
-templates/logind.conf.j2
-templates/logrotate.conf.j2
-templates/pwquality.conf.j2
-templates/resolved.conf.j2
-templates/rkhunter.j2
-templates/securetty.j2
-templates/sshd_config.j2
-templates/sysctl.conf.j2
-templates/system.conf.j2
-templates/timesyncd.conf.j2
-templates/user.conf.j2
-templates/useradd.j2
+templates/etc/security/access.conf.j2
+templates/etc/adduser.conf.j2
+templates/lib/systemd/system/aidecheck.service.j2
+templates/lib/systemd/system/aidecheck.timer.j2
+templates/etc/audit/rules.d/hardening.rules.j2
+templates/etc/pam.d/common-account.j2
+templates/etc/pam.d/common-auth.j2
+templates/etc/pam.d/common-password.j2
+templates/etc/systemd/coredump.conf.j2
+templates/etc/hosts.allow.j2
+templates/etc/hosts.deny.j2
+templates/etc/profile.d/initpath.sh.j2
+templates/etc/issue.j2
+templates/etc/systemd/journald.conf.j2
+templates/etc/security/limits.conf.j2
+templates/etc/login.defs.j2
+templates/etc/pam.d/login.j2
+templates/etc/systemd/logind.conf.j2
+templates/etc/logrotate.conf.j2
+templates/etc/security/pwquality.conf.j2
+templates/etc/systemd/resolved.conf.j2
+templates/etc/default/rkhunter.j2
+templates/etc/securetty.j2
+templates/etc/ssh/sshd_config.j2
+templates/etc/sysctl.conf.j2
+templates/etc/systemd/system.conf.j2
+templates/etc/systemd/timesyncd.conf.j2
+templates/etc/systemd/user.conf.j2
+templates/etc/default/useradd.j2
 ```
 
 Dependencies
@@ -133,10 +133,7 @@ Testing
 
 ```shell
 ansible-playbook tests/test.yml --extra-vars "sshd_admin_net=192.168.1.0/24" -c local -i 'localhost,' -K
-```
-
-The repository contains a [Vagrant](https://www.vagrantup.com/ "Vagrant")
-configuration file, which will run the `konstruktoid.hardening` role.
+```ole.
 
 OpenSCAP test on a CentOS 7 host using the included Vagrantfile:
 
@@ -185,4 +182,3 @@ Author Information
 ------------------
 
 [https://github.com/konstruktoid](https://github.com/konstruktoid "github.com/konstruktoid")
-

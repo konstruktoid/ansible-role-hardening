@@ -3,7 +3,7 @@
   become: yes
   become_method: sudo
   template:
-    src: rkhunter.j2
+    src: etc/default/rkhunter.j2
     dest: /etc/default/rkhunter
     backup: yes
     mode: 0644

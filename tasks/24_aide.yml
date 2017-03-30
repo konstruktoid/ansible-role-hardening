@@ -3,7 +3,7 @@
   become: yes
   become_method: sudo
   template:
-    src: aidecheck.service.j2
+    src: lib/systemd/system/aidecheck.service.j2
     dest: /lib/systemd/system/aidecheck.service
     backup: yes
     mode: 0644
@@ -19,7 +19,7 @@
   become: yes
   become_method: sudo
   template:
-    src: aidecheck.timer.j2
+    src: lib/systemd/system/aidecheck.timer.j2
     dest: /lib/systemd/system/aidecheck.timer
     backup: yes
     mode: 0644

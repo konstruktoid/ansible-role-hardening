@@ -5,7 +5,7 @@
   become: yes
   become_method: sudo
   template:
-    src: audit.rules.j2
+    src: etc/audit/rules.d/hardening.rules.j2
     dest: /etc/audit/rules.d/hardening.rules
     backup: yes
     mode: 0600
