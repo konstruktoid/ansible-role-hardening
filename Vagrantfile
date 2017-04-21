@@ -65,7 +65,7 @@ Vagrant.configure("2") do |config|
       p.playbook = "tests/test.yml"
       p.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
-        "ssh_allow_groups" => "vagrant sudo ubuntu"
+        "ssh_allow_groups" => "vagrant sudo"
       }
     end
   end
@@ -83,7 +83,7 @@ Vagrant.configure("2") do |config|
       p.playbook = "tests/test.yml"
       p.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
-        "ssh_allow_groups" => "vagrant sudo ubuntu"
+        "ssh_allow_groups" => "vagrant sudo"
       }
     end
   end
