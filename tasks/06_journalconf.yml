@@ -15,4 +15,18 @@
     - systemd
     - journald
     - security
+
+- name: logrotate.conf
+  become: yes
+  become_method: sudo
+  template:
+    src: etc/logrotate.conf.j2
+    dest: /etc/logrotate.conf
+    backup: yes
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+    - logrotate
+    - security
 ...
