@@ -80,36 +80,49 @@ since there currently are [no complete list of identifiers for CentOS or Ubuntu]
 
 [CIS identifiers](https://benchmarks.cisecurity.org/downloads/show-single/index.cfm?file=independentlinux.100) will be added in the future.
 
-```shell
-templates/etc/security/access.conf.j2
-templates/etc/adduser.conf.j2
-templates/lib/systemd/system/aidecheck.service.j2
-templates/lib/systemd/system/aidecheck.timer.j2
-templates/etc/audit/rules.d/hardening.rules.j2
-templates/etc/pam.d/common-account.j2
-templates/etc/pam.d/common-auth.j2
-templates/etc/pam.d/common-password.j2
-templates/etc/systemd/coredump.conf.j2
-templates/etc/hosts.allow.j2
-templates/etc/hosts.deny.j2
-templates/etc/profile.d/initpath.sh.j2
-templates/etc/issue.j2
-templates/etc/systemd/journald.conf.j2
-templates/etc/security/limits.conf.j2
-templates/etc/login.defs.j2
-templates/etc/pam.d/login.j2
-templates/etc/systemd/logind.conf.j2
-templates/etc/logrotate.conf.j2
-templates/etc/security/pwquality.conf.j2
-templates/etc/systemd/resolved.conf.j2
-templates/etc/default/rkhunter.j2
-templates/etc/securetty.j2
-templates/etc/ssh/sshd_config.j2
-templates/etc/sysctl.conf.j2
-templates/etc/systemd/system.conf.j2
-templates/etc/systemd/timesyncd.conf.j2
-templates/etc/systemd/user.conf.j2
-templates/etc/default/useradd.j2
+```sh
+templates/
+├── etc
+│   ├── adduser.conf.j2
+│   ├── audit
+│   │   └── rules.d
+│   │       └── hardening.rules.j2
+│   ├── default
+│   │   ├── rkhunter.j2
+│   │   └── useradd.j2
+│   ├── hosts.allow.j2
+│   ├── hosts.deny.j2
+│   ├── issue.j2
+│   ├── login.defs.j2
+│   ├── logrotate.conf.j2
+│   ├── pam.d
+│   │   ├── common-account.j2
+│   │   ├── common-auth.j2
+│   │   ├── common-password.j2
+│   │   └── login.j2
+│   ├── profile.d
+│   │   └── initpath.sh.j2
+│   ├── securetty.j2
+│   ├── security
+│   │   ├── access.conf.j2
+│   │   ├── limits.conf.j2
+│   │   └── pwquality.conf.j2
+│   ├── ssh
+│   │   └── sshd_config.j2
+│   ├── sysctl.conf.j2
+│   └── systemd
+│       ├── coredump.conf.j2
+│       ├── journald.conf.j2
+│       ├── logind.conf.j2
+│       ├── resolved.conf.j2
+│       ├── system.conf.j2
+│       ├── timesyncd.conf.j2
+│       └── user.conf.j2
+└── lib
+    └── systemd
+        └── system
+            ├── aidecheck.service.j2
+            └── aidecheck.timer.j2
 ```
 
 Dependencies
