@@ -6,7 +6,7 @@ Vagrant.configure("2") do |config|
     xenial.vm.network "private_network", ip:"10.2.3.41"
     xenial.vm.hostname = "xenial"
     xenial.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible aptitude python --no-install-recommends"
+      inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python --no-install-recommends"
     xenial.vm.provision "ansible" do |p|
       p.verbose = "v"
       p.limit = "all"
@@ -24,7 +24,7 @@ Vagrant.configure("2") do |config|
     yakkety.vm.network "private_network", ip:"10.2.3.42"
     yakkety.vm.hostname = "yakkety"
     yakkety.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible aptitude python --no-install-recommends"
+      inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python --no-install-recommends"
     yakkety.vm.provision "ansible" do |p|
       p.verbose = "v"
       p.limit = "all"
@@ -42,7 +42,7 @@ Vagrant.configure("2") do |config|
     zesty.vm.network "private_network", ip:"10.2.3.45"
     zesty.vm.hostname = "zesty"
     zesty.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible aptitude python --no-install-recommends"
+      inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python --no-install-recommends"
     zesty.vm.provision "ansible" do |p|
       p.verbose = "v"
       p.limit = "all"
