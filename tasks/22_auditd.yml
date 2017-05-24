@@ -27,7 +27,7 @@
     line: 'GRUB_CMDLINE_LINUX="{{ grub_cmdline }}"'
     dest: /etc/default/grub
     state: present
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
   tags:
     - auditd
     - grub

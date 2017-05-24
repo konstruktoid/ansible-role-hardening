@@ -8,7 +8,7 @@
     mode: 0644
     state: present
     create: yes
-  when: ansible_distribution == "CentOS"
+  when: ansible_os_family == "RedHat"
   tags:
     - prelink
     - security

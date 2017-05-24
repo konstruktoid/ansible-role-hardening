@@ -15,7 +15,7 @@
   ignore_errors: true
   notify:
     - mask apport
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
   tags:
     - apport
     - security

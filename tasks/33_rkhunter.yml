@@ -9,7 +9,7 @@
     mode: 0644
     owner: root
     group: root
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
   notify:
     - rkhunter propupd
   tags:

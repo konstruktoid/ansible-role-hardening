@@ -9,7 +9,7 @@
 # sshd: CCE-80215-7
 # avahi: CCE-80338-7
 
-- name: ubuntu package installation
+- name: debian family package installation
   become: yes
   become_method: sudo
   apt:
@@ -17,34 +17,34 @@
     state: latest
     install_recommends: no
   with_items:
-    - "{{ packages_ubuntu }}"
-  when: ansible_distribution == "Ubuntu"
+    - "{{ packages_debian }}"
+  when: ansible_os_family == "Debian"
   tags:
     - apt
     - packages
     - security
 
-- name: centos epel installation
+- name: redhat family epel installation
   become: yes
   become_method: sudo
   yum:
     name: "epel-release"
     state: latest
-  when: ansible_distribution == "CentOS"
+  when: ansible_os_family == "RedHat"
   tags:
     - yum
     - packages
     - security
 
-- name: centos package installation
+- name: redhat family package installation
   become: yes
   become_method: sudo
   yum:
     name: "{{ item }}"
     state: latest
   with_items:
-    - "{{ packages_centos }}"
-  when: ansible_distribution == "CentOS"
+    - "{{ packages_redhat }}"
+  when: ansible_os_family == "RedHat"
   notify:
     - enable haveged
   tags:
@@ -52,7 +52,7 @@
     - packages
     - security
 
-- name: ubuntu package removal
+- name: debian family package removal
   become: yes
   become_method: sudo
   apt:
@@ -61,13 +61,13 @@
     purge: yes
   with_items:
     - "{{ packages_blacklist }}"
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
   tags:
     - apt
     - packages
     - security
 
-- name: centos package removal
+- name: redhat family package removal
   become: yes
   become_method: sudo
   yum:
@@ -75,7 +75,7 @@
     state: absent
   with_items:
     - "{{ packages_blacklist }}"
-  when: ansible_distribution == "CentOS"
+  when: ansible_os_family == "RedHat"
   tags:
     - yum
     - packages

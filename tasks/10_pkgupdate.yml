@@ -5,7 +5,7 @@
   apt:
     update_cache: yes
     cache_valid_time: 1800
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
   tags:
     - apt
     - security
@@ -18,7 +18,7 @@
   notify:
     - apt-get clean
     - apt-get autoremove
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
   tags:
     - apt
     - security
@@ -48,7 +48,7 @@
     state: present
     create: no
     backrefs: yes
-  when: ansible_distribution == "CentOS"
+  when: ansible_os_family == "RedHat"
   tags:
     - yum
     - security
@@ -64,7 +64,7 @@
     state: present
     create: yes
     insertafter: "[main]"
-  when: ansible_distribution == "CentOS"
+  when: ansible_os_family == "RedHat"
   tags:
     - yum
     - security
@@ -80,7 +80,7 @@
     state: present
     create: yes
     insertafter: "[main]"
-  when: ansible_distribution == "CentOS"
+  when: ansible_os_family == "RedHat"
   tags:
     - yum
     - security
@@ -96,7 +96,7 @@
     state: present
     create: yes
     insertafter: "[main]"
-  when: ansible_distribution == "CentOS"
+  when: ansible_os_family == "RedHat"
   tags:
     - yum
     - security
@@ -111,7 +111,7 @@
     update_cache: yes
   notify:
     - yum clean
-  when: ansible_distribution == "CentOS"
+  when: ansible_os_family == "RedHat"
   tags:
     - yum
     - security

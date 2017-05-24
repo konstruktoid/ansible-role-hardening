@@ -1,10 +1,49 @@
 ---
+- name: ufw installation
+  become: yes
+  become_method: sudo
+  package:
+    name: "ufw"
+    state: latest
+    install_recommends: no
+  when: ansible_os_family == "Debian"
+  tags:
+    - apt
+    - packages
+    - security
+    - ufw
+
+- name: redhat family epel installation
+  become: yes
+  become_method: sudo
+  package:
+    name: "epel-release"
+    state: latest
+  when: ansible_os_family == "RedHat"
+  tags:
+    - yum
+    - packages
+    - security
+
+- name: firewalld installation
+  become: yes
+  become_method: sudo
+  package:
+    name: "firewalld"
+    state: latest
+  when: ansible_os_family == "RedHat"
+  tags:
+    - yum
+    - packages
+    - security
+    - firewalld
+
 - name: reset ufw
   become: yes
   become_method: sudo
   ufw:
     state: reset
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
   tags:
     - ufw
     - security
@@ -19,7 +58,7 @@
     proto: tcp
   with_items:
     - "{{ sshd_admin_net }}"
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
   tags:
     - ufw
     - ssh
@@ -32,7 +71,7 @@
     state: enabled
     policy: deny
     logging: low
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
   tags:
     - ufw
     - security
@@ -67,7 +106,7 @@
     name: firewalld
     state: started
     enabled: yes
-  when: ansible_distribution == "CentOS"
+  when: firewalldconf.stat.exists
   tags:
     - firewalld
     - security
@@ -80,7 +119,7 @@
     permanent: true
     state: enabled
     zone: public
-  when: ansible_distribution == "CentOS"
+  when: ansible_os_family == "RedHat"
   tags:
     - firewalld
     - security
