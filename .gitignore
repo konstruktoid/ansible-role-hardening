@@ -1,2 +1,4 @@
 *.retry
 *.log
+*.rpm
+*.deb
