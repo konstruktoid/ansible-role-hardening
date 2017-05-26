@@ -94,12 +94,26 @@
   become: yes
   become_method: sudo
   lineinfile:
-    line: "export TMOUT=900"
+    line: "TMOUT=600"
     dest: /etc/profile
     mode: 0644
     state: present
     create: no
     insertbefore: "^export"
+  tags:
+    - tmout
+    - security
+
+- name: export TMOUT
+  become: yes
+  become_method: sudo
+  lineinfile:
+    line: "export TMOUT"
+    dest: /etc/profile
+    mode: 0644
+    state: present
+    create: no
+    insertafter: "^TMOUT="
   tags:
     - tmout
     - security
