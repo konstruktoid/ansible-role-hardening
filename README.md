@@ -6,9 +6,6 @@ Ansible role to make a Ubuntu or CentoOS 7 server a bit more secure, systemd edi
 Role Variables
 --------------
 
-    auditd_arch: b64
-Architecture to use with auditd. Use `getconf LONG_BIT`.
-
     redhat_rpm_key: [567E347AD0044ADE55BA8A5F199E2F91FD431D51, 47DB287789B21722B6D95DDE5326810137017186]
 [Red Hat RPM keys](https://access.redhat.com/security/team/key/) for use when `ansible_distribution == "RedHat"`.
 
@@ -39,10 +36,10 @@ Which binaries that should have SUID/SGID removed.
     random_ack_limit: "{{ 1000000 | random(start=1000) }}"
 net.ipv4.tcp_challenge_ack_limit, see [tcp: make challenge acks less predictable](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=75ff39ccc1bd5d3c455b6822ab09e533c551f758).
 
-    packages_ubuntu: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-cracklib, libpam-tmpdir, openssh-server, rkhunter, rsyslog]
+    packages_debian: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-cracklib, libpam-tmpdir, openssh-server, rkhunter, rsyslog]
 Packages to be installed on a Ubuntu host.
 
-    packages_centos: [aide, audit, haveged, openssh-server, rkhunter, rsyslog]
+    packages_redhat: [aide, audit, haveged, openssh-server, rkhunter, rsyslog]
 Packages to be installed on a CentOS host.
 
     packages_blacklist: [avahi-*, rsh*, talk*, telnet*, tftp*, yp-tools, ypbind, xinetd]
@@ -70,7 +67,7 @@ Maximum number of processes. Soft limit.
 Maximum number of processes. Hard limit.
 
     grub_cmdline: audit=1
-Additional Grub options, currently only `ansible_distribution == "Ubuntu"`
+Additional Grub options, currently only `ansible_os_family == "Debian"`
 
 Templates
 ---------
@@ -156,22 +153,6 @@ OpenSCAP test on a CentOS 7 host using the included Vagrantfile:
 ```shell
 sudo yum install -y openscap-scanner scap-security-guide
 sudo oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel7-server-upstream --results-arf centos7_stig-arf.xml --report centos7_stig-report.html /usr/share/xml/scap/ssg/content/ssg-centos7-ds.xml
-```
-
-Please note that the [OpenSCAP Evaluation Report](centos7_stig-report.html)
-contains multiple false negatives, specially in the "System Accounting with
-auditd" section, and it doesn't take `systemd` configuration into
-account at all.
-
-```shell
-for a in adjtimex settimeofday clock_settime fchmod fremovexattr EACCES EPERM ; do sudo auditctl -l | grep $a; done
--a always,exit -F arch=b64 -S adjtimex -F key=audit_time_rules
--a always,exit -F arch=b64 -S settimeofday -F key=audit_time_rules
--a always,exit -F arch=b64 -S clock_settime -F key=audit_time_rules
--a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=-1 -F key=perm_mod
--a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=-1 -F key=perm_mod
--a always,exit -F arch=b64 -S open,truncate,ftruncate,creat,openat,open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=-1 -F key=access
--a always,exit -F arch=b64 -S open,truncate,ftruncate,creat,openat,open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=-1 -F key=access
 ```
 
 Recommended Reading
