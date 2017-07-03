@@ -1,0 +1,21 @@
+---
+
+- name: disable motd-news
+  become: yes
+  become_method: sudo
+  lineinfile:
+    regexp: "^ENABLED="
+    line: "ENABLED=0"
+    dest: /etc/default/motd-news
+    mode: 0644
+    state: present
+    create: no
+    backrefs: yes
+  ignore_errors: true
+  notify:
+    - mask motdnews
+  when: ansible_os_family == "Debian"
+  tags:
+    - motd
+    - security
+...
