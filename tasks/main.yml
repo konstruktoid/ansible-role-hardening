@@ -32,4 +32,5 @@
 - include: 35_apport.yml
 - include: 36_lockroot.yml
 - include: 37_mount.yml
+- include: 38_motdnews.yml
 ...

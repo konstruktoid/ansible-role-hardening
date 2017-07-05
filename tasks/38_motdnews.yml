@@ -1,5 +1,4 @@
 ---
-
 - name: disable motd-news
   become: yes
   become_method: sudo

@@ -70,6 +70,11 @@
   become_method: sudo
   command: systemctl mask apport.service
 
+- name: mask motdnews
+  become: yes
+  become_method: sudo
+  command: systemctl disable motd-news.timer
+
 - name: yum clean
   become: yes
   become_method: sudo
