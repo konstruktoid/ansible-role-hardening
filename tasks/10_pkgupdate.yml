@@ -23,6 +23,7 @@
     - apt
     - security
 
+# CCE-26957-1
 - name: import RedHat RPM key
   become: yes
   become_method: sudo

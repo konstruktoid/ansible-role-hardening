@@ -1,4 +1,5 @@
 ---
+# CCE-27078-5
 - name: disable prelinking
   become: yes
   become_method: sudo
