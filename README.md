@@ -72,8 +72,7 @@ Additional Grub options, currently only `ansible_os_family == "Debian"`
 Templates
 ---------
 
-The CCE identifiers are taken from [Secure Configuration of Red Hat Enterprise Linux 7](https://people.redhat.com/swells/scap-security-guide/RHEL/7/output/table-rhel7-cces.html)
-since there currently are [no complete list of identifiers for CentOS or Ubuntu](https://static.open-scap.org/).
+The CCE identifiers are taken from [CCE Identifiers in Guide to the Secure Configuration of Red Hat Enterprise Linux 7](https://people.redhat.com/swells/scap-security-guide/tables/table-rhel7-cces.html) since there currently are [no complete list of identifiers for CentOS or Ubuntu](https://static.open-scap.org/).
 
 [CIS identifiers](https://benchmarks.cisecurity.org/downloads/show-single/index.cfm?file=independentlinux.100) will be added in the future.
 
