@@ -9,7 +9,6 @@
     mode: 0644
     owner: root
     group: root
-  when: not ansible_bios_version == "VirtualBox"
   tags:
     - aide
     - security
@@ -28,7 +27,6 @@
   notify:
     - reload systemd
     - enable aidecheck
-  when: not ansible_bios_version == "VirtualBox"
   tags:
     - aide
     - security
