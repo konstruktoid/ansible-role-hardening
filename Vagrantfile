@@ -54,6 +54,24 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define "artful" do |artful|
+    artful.vm.box = "ubuntu/artful64"
+    artful.ssh.insert_key = true
+    artful.vm.network "private_network", ip:"10.2.3.47"
+    artful.vm.hostname = "artful"
+    artful.vm.provision "shell",
+      inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python --no-install-recommends"
+    artful.vm.provision "ansible" do |p|
+      p.verbose = "v"
+      p.limit = "all"
+      p.playbook = "tests/test.yml"
+      p.extra_vars = {
+        "sshd_admin_net" => "0.0.0.0/0",
+        "ssh_allow_groups" => "vagrant sudo ubuntu"
+     }
+    end
+  end
+
   config.vm.define "jessie" do |jessie|
     jessie.vm.box = "debian/jessie64"
     jessie.ssh.insert_key = true
