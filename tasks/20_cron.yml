@@ -37,7 +37,11 @@
 - name: mask atd
   become: yes
   become_method: sudo
-  command: systemctl mask atd.service
+  systemd:
+    name: atd
+    masked: yes
+    enabled: no
+    state: stopped
   ignore_errors: yes
   tags:
     - at

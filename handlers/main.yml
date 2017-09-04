@@ -1,10 +1,9 @@
 ---
+# https://github.com/ansible/ansible/issues/22171
 - name: restart auditd
   become: yes
   become_method: sudo
-  service:
-    name: auditd
-    state: restarted
+  command: service auditd restart
 
 - name: generate auditd
   become: yes
@@ -31,22 +30,27 @@
 - name: enable aidecheck
   become: yes
   become_method: sudo
-  command: systemctl reenable aidecheck.timer
-
-- name: start aidecheck
-  become: yes
-  become_method: sudo
-  command: systemctl start aidecheck.timer
+  systemd:
+    name: aidecheck.timer
+    enabled: yes
+    state: started
 
 - name: disable aidecheck
   become: yes
   become_method: sudo
-  command: systemctl disable aidecheck.timer
+  systemd:
+    name: aidecheck.timer
+    state: stopped
+    enabled: no
 
 - name: mask aidecheck
   become: yes
   become_method: sudo
-  command: systemctl mask aidecheck.timer
+  systemd:
+    name: aidecheck.timer
+    masked: yes
+    stated: stopped
+    enabled: no
 
 - name: restart sshd
   become: yes
@@ -68,12 +72,20 @@
 - name: mask apport
   become: yes
   become_method: sudo
-  command: systemctl mask apport.service
+  systemd:
+    name: apport.service
+    masked: yes
+    enabled: no
+    state: stopped
 
 - name: mask motdnews
   become: yes
   become_method: sudo
-  command: systemctl disable motd-news.timer
+  systemd:
+    name: motd-news.timer
+    masked: yes
+    enabled: no
+    state: stopped
 
 - name: yum clean
   become: yes
@@ -83,7 +95,10 @@
 - name: enable haveged
   become: yes
   become_method: sudo
-  command: systemctl enable haveged
+  systemd:
+    name: haveged
+    enabled: yes
+    state: started
 
 - name: update authconfig
   become: yes

@@ -28,7 +28,6 @@
   notify:
     - reload systemd
     - enable aidecheck
-    - start aidecheck
   when: not ansible_bios_version == "VirtualBox"
   tags:
     - aide
