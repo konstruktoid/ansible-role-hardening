@@ -107,12 +107,12 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "fedora" do |fedora|
-    fedora.vm.box = "fedora/25-cloud-base"
+    fedora.vm.box = "fedora/26-cloud-base"
     fedora.ssh.insert_key = true
     fedora.vm.network "private_network", ip:"10.2.3.44"
     fedora.vm.hostname = "fedora"
     fedora.vm.provision "shell",
-      inline: "dnf install -y python26 ansible python2-dnf"
+      inline: "dnf install -y ansible"
     fedora.vm.provision "ansible" do |p|
       p.verbose = "v"
       p.limit = "all"
