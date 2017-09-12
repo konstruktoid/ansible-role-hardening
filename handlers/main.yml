@@ -62,7 +62,8 @@
 - name: apt-get autoremove
   become: yes
   become_method: sudo
-  command: apt-get -y autoremove
+  apt:
+    autoremove: yes
 
 - name: apt-get clean
   become: yes
