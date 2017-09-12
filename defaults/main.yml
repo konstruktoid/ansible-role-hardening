@@ -14,7 +14,7 @@ packages_redhat: [aide, audit, haveged, openssh-server, rkhunter, rsyslog]
 packages_blacklist: [avahi-*, rsh*, talk*, telnet*, tftp*, yp-tools, ypbind, xinetd]
 net_modules_blacklist: [dccp, sctp, rds, tipc]
 fs_modules_blacklist: [cramfs, freevxfs, hfs, hfsplus, jffs2, squashfs, udf, vfat]
-misc_modules_blacklist: [bluetooth, firewire-core, n_hdlc, net-pf-31, soundcore, thunderbolt, usb-midi, usb-storage]
+misc_modules_blacklist: [bluetooth, bnep, btusb, firewire-core, n_hdlc, net-pf-31, soundcore, thunderbolt, usb-midi, usb-storage]
 limit_nofile_soft: 100
 limit_nofile_hard: 150
 limit_nproc_soft: 100

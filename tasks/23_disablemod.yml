@@ -1,6 +1,7 @@
 ---
 # usb-storage: CCE-27277-3
 # bluetooth: CCE-27327-6
+# bluetooth, bnep, btusb: CVE-2017-1000251
 
 - name: disablemod.conf
   become: yes

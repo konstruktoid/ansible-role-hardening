@@ -66,7 +66,7 @@ Blacklisted kernel modules.
     fs_modules_blacklist: [cramfs, freevxfs, hfs, hfsplus, jffs2, squashfs, udf, vfat]
 Blacklisted kernel modules.
 
-    misc_modules_blacklist: [bluetooth, firewire-core, n_hdlc, net-pf-31, soundcore, thunderbolt, usb-midi, usb-storage]
+    misc_modules_blacklist: [bluetooth, bnep, btusb, firewire-core, n_hdlc, net-pf-31, soundcore, thunderbolt, usb-midi, usb-storage]
 Blacklisted kernel modules.
 
     limit_nofile_soft: 100
