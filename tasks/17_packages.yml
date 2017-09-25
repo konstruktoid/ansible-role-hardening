@@ -8,6 +8,8 @@
 # talk: CCE-27432-4
 # sshd: CCE-80215-7
 # avahi: CCE-80338-7
+# UBTU-16-010010
+# UBTU-16-010050
 
 - name: debian family package installation
   become: yes
