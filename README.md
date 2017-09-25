@@ -51,10 +51,10 @@ Which binaries that should have SUID/SGID removed.
     random_ack_limit: "{{ 1000000 | random(start=1000) }}"
 net.ipv4.tcp_challenge_ack_limit, see [tcp: make challenge acks less predictable](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=75ff39ccc1bd5d3c455b6822ab09e533c551f758).
 
-    packages_debian: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-cracklib, libpam-tmpdir, openssh-server, rkhunter, rsyslog]
+    packages_debian: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-cracklib, libpam-tmpdir, openssh-server, rkhunter, rsyslog, vlock]
 Packages to be installed on a Ubuntu host.
 
-    packages_redhat: [aide, audit, haveged, openssh-server, rkhunter, rsyslog]
+    packages_redhat: [aide, audit, haveged, openssh-server, rkhunter, rsyslog, vlock]
 Packages to be installed on a CentOS host.
 
     packages_blacklist: [avahi-*, rsh*, talk*, telnet*, tftp*, yp-tools, ypbind, xinetd]
