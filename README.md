@@ -180,6 +180,8 @@ Recommended Reading
 
 [Draft Red Hat 7 STIG Version 1, Release 0.1](http://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx)
 
+[Canonical Ubuntu 16.04 STIG Ver 1, Rel 1](http://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx)
+
 [Security focused systemd configuration](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc)
 
 License
