@@ -90,17 +90,30 @@
     - umask
     - security
 
-
-- name: export TMOUT
+- name: readonly TMOUT
   become: yes
   become_method: sudo
   lineinfile:
-    line: "TMOUT=600"
+    line: "readonly TMOUT"
     dest: /etc/profile
     mode: 0644
     state: present
     create: no
     insertbefore: "^export"
+  tags:
+    - tmout
+    - security
+
+- name: set TMOUT
+  become: yes
+  become_method: sudo
+  lineinfile:
+    line: "TMOUT=900"
+    dest: /etc/profile
+    mode: 0644
+    state: present
+    create: no
+    insertbefore: "^readonly TMOUT"
   tags:
     - tmout
     - security
@@ -114,7 +127,7 @@
     mode: 0644
     state: present
     create: no
-    insertafter: "^TMOUT="
+    insertafter: "^readonly TMOUT"
   tags:
     - tmout
     - security
