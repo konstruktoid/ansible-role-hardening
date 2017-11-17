@@ -72,6 +72,24 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define "bionic" do |bionic|
+    bionic.vm.box = "ubuntu/bionic64"
+    bionic.ssh.insert_key = true
+    bionic.vm.network "private_network", ip:"10.2.3.48"
+    bionic.vm.hostname = "bionic"
+    bionic.vm.provision "shell",
+      inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python --no-install-recommends"
+    bionic.vm.provision "ansible" do |p|
+      p.verbose = "v"
+      p.limit = "all"
+      p.playbook = "tests/test.yml"
+      p.extra_vars = {
+        "sshd_admin_net" => "0.0.0.0/0",
+        "ssh_allow_groups" => "vagrant sudo ubuntu"
+     }
+    end
+  end
+
   config.vm.define "jessie" do |jessie|
     jessie.vm.box = "debian/jessie64"
     jessie.ssh.insert_key = true
