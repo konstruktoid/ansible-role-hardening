@@ -1,0 +1,85 @@
+---
+- name: create /tmp
+  become: 'yes'
+  become_method: sudo
+  template:
+    src: etc/systemd/tmp.mount.j2
+    dest: /etc/systemd/system/tmp.mount
+    backup: 'yes'
+    mode: 0644
+    owner: root
+    group: root
+  when: ansible_os_family == "RedHat" and ansible_distribution == "Ubuntu"
+  tags:
+    - systemd
+    - tmp
+    - security
+
+- name: create /var/tmp
+  become: 'yes'
+  become_method: sudo
+  template:
+    src: etc/systemd/tmp.mount.j2
+    dest: /etc/systemd/system/var-tmp.mount
+    backup: 'yes'
+    mode: 0644
+    owner: root
+    group: root
+  when: ansible_os_family == "RedHat" and ansible_distribution == "Ubuntu"
+  tags:
+    - systemd
+    - tmp
+    - security
+
+- name: set /var/tmp in var-tmp.mount
+  become: 'yes'
+  become_method: sudo
+  replace:
+    regexp: '^Where=/tmp$'
+    replace: "Where=/var/tmp"
+    dest: /etc/systemd/system/var-tmp.mount
+  when: ansible_os_family == "RedHat" and ansible_distribution == "Ubuntu"
+  tags:
+    - systemd
+    - tmp
+    - security
+
+- name: remove /tmp from fstab
+  become: 'yes'
+  become_method: sudo
+  lineinfile:
+    path: /etc/fstab
+    state: absent
+    regexp: '^(.*)tmp(.*)$'
+  when: ansible_os_family == "RedHat" and ansible_distribution == "Ubuntu"
+
+- name: remove floppy from fstab
+  become: 'yes'
+  become_method: sudo
+  lineinfile:
+    path: /etc/fstab
+    state: absent
+    regexp: '^(.*)floppy(.*)$'
+
+- name: var-tmp.mount
+  become: 'yes'
+  become_method: sudo
+  file:
+    src: /etc/systemd/system/var-tmp.mount
+    dest: /etc/systemd/system/default.target.wants/var-tmp.mount
+    owner: root
+    group: root
+    state: link
+  when: ansible_os_family == "RedHat" and ansible_distribution == "Ubuntu"
+
+- name: tmp.mount
+  become: 'yes'
+  become_method: sudo
+  file:
+    src: /etc/systemd/system/tmp.mount
+    dest: /etc/systemd/system/default.target.wants/tmp.mount
+    owner: root
+    group: root
+    state: link
+  when: ansible_os_family == "RedHat" and ansible_distribution == "Ubuntu"
+...
