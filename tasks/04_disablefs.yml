@@ -8,7 +8,7 @@
 # udf: CCE-80143-1
 
 - name: disablefs.conf
-  become: yes
+  become: 'yes'
   become_method: sudo
   file:
     state: touch
@@ -18,7 +18,7 @@
     mode: 0644
 
 - name: disable file system kernel modules
-  become: yes
+  become: 'yes'
   become_method: sudo
   lineinfile:
     dest: /etc/modprobe.d/disablefs.conf

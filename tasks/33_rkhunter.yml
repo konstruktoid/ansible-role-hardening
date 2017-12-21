@@ -1,11 +1,11 @@
 ---
 - name: rkhunter
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: etc/default/rkhunter.j2
     dest: /etc/default/rkhunter
-    backup: yes
+    backup: 'yes'
     mode: 0644
     owner: root
     group: root
@@ -18,7 +18,7 @@
     - security
 
 - name: rkhunter ssh root user
-  become: yes
+  become: 'yes'
   become_method: sudo
   lineinfile:
     regexp: "ALLOW_SSH_ROOT_USER"
@@ -26,8 +26,8 @@
     dest: /etc/rkhunter.conf
     mode: 0640
     state: present
-    create: no
-    backrefs: yes
+    create: 'no'
+    backrefs: 'yes'
   notify:
     - rkhunter propupd
   tags:
@@ -36,7 +36,7 @@
     - security
 
 - name: rkhunter ssh proto
-  become: yes
+  become: 'yes'
   become_method: sudo
   lineinfile:
     regexp: "ALLOW_SSH_PROT_V1"
@@ -44,8 +44,8 @@
     dest: /etc/rkhunter.conf
     mode: 0640
     state: present
-    create: no
-    backrefs: yes
+    create: 'no'
+    backrefs: 'yes'
   notify:
     - rkhunter propupd
   tags:

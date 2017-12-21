@@ -1,6 +1,6 @@
 ---
 - name: mount /proc
-  become: yes
+  become: 'yes'
   become_method: sudo
   mount:
     name: /proc

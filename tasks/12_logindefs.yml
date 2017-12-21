@@ -1,11 +1,11 @@
 ---
 - name: login.defs
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: etc/login.defs.j2
     dest: /etc/login.defs
-    backup: yes
+    backup: 'yes'
     mode: 0644
     owner: root
     group: root

@@ -3,7 +3,7 @@
 # SCTP: CCE-27106-4
 
 - name: disablenet.conf
-  become: yes
+  become: 'yes'
   become_method: sudo
   file:
     state: touch
@@ -13,7 +13,7 @@
     mode: 0644
 
 - name: disable kernel network modules
-  become: yes
+  become: 'yes'
   become_method: sudo
   lineinfile:
     dest: /etc/modprobe.d/disablenet.conf

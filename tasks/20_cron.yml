@@ -1,6 +1,6 @@
 ---
 - name: remove cron.deny and at.deny
-  become: yes
+  become: 'yes'
   become_method: sudo
   file:
     path: "{{ item }}"
@@ -17,14 +17,14 @@
     - security
 
 - name: allow root cron and at
-  become: yes
+  become: 'yes'
   become_method: sudo
   lineinfile:
     line: "root"
     dest: "{{ item }}"
     mode: 0600
     state: present
-    create: yes
+    create: 'yes'
   with_items:
     - /etc/cron.allow
     - /etc/at.allow
@@ -35,14 +35,14 @@
 
 # CCE-80345-2
 - name: mask atd
-  become: yes
+  become: 'yes'
   become_method: sudo
   systemd:
     name: atd
-    masked: yes
-    enabled: no
+    masked: 'yes'
+    enabled: 'no'
     state: stopped
-  ignore_errors: yes
+  ignore_errors: 'yes'
   tags:
     - at
     - systemd

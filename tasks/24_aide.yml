@@ -1,11 +1,11 @@
 ---
 - name: aide service
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: lib/systemd/system/aidecheck.service.j2
     dest: /lib/systemd/system/aidecheck.service
-    backup: yes
+    backup: 'yes'
     mode: 0644
     owner: root
     group: root
@@ -15,12 +15,12 @@
 
 # CCE-26952-2
 - name: aide timer
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: lib/systemd/system/aidecheck.timer.j2
     dest: /lib/systemd/system/aidecheck.timer
-    backup: yes
+    backup: 'yes'
     mode: 0644
     owner: root
     group: root
@@ -32,7 +32,7 @@
     - security
 
 - name: stat aide.db
-  become: yes
+  become: 'yes'
   become_method: sudo
   stat:
     path: /var/lib/aide/aide.db.gz
@@ -40,7 +40,7 @@
 
 # CCE-27220-3
 - name: initialize aide
-  become: yes
+  become: 'yes'
   become_method: sudo
   shell: aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
   when: not aidedb.stat.exists

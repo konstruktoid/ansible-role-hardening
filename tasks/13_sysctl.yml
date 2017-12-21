@@ -1,11 +1,11 @@
 ---
 - name: sysctl
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: etc/sysctl.conf.j2
     dest: /etc/sysctl.conf
-    backup: yes
+    backup: 'yes'
     mode: 0600
     owner: root
     group: root

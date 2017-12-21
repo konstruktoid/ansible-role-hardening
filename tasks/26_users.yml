@@ -1,11 +1,11 @@
 ---
 - name: remove users
-  become: yes
+  become: 'yes'
   become_method: sudo
   user:
     name: "{{ item }}"
     state: absent
-    remove: yes
+    remove: 'yes'
   with_items:
     - games
     - gnats
@@ -13,7 +13,7 @@
     - list
     - news
     - uucp
-  ignore_errors: yes
+  ignore_errors: 'yes'
   tags:
     - users
     - security

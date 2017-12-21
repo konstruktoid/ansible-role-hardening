@@ -6,14 +6,14 @@
 # UBTU-16-010060
 
 - name: stat init.d/rc
-  become: yes
+  become: 'yes'
   become_method: sudo
   stat:
     path: /etc/init.d/rc
   register: initdrc
 
 - name: set default rc umask
-  become: yes
+  become: 'yes'
   become_method: sudo
   replace:
     regexp: 'umask(\s+.*)'
@@ -26,7 +26,7 @@
     - security
 
 - name: set default init umask
-  become: yes
+  become: 'yes'
   become_method: sudo
   replace:
     regexp: 'umask(\s+.*)'
@@ -39,14 +39,14 @@
     - security
 
 - name: stat bashrc
-  become: yes
+  become: 'yes'
   become_method: sudo
   stat:
     path: /etc/bashrc
   register: bashrc
 
 - name: set default bashrc umask
-  become: yes
+  become: 'yes'
   become_method: sudo
   replace:
     regexp: 'umask(\s+.*)'
@@ -59,14 +59,14 @@
     - security
 
 - name: stat csh.cshrc
-  become: yes
+  become: 'yes'
   become_method: sudo
   stat:
     path: /etc/csh.cshrc
   register: cshrc
 
 - name: set default csh.cshrc umask
-  become: yes
+  become: 'yes'
   become_method: sudo
   replace:
     regexp: 'umask(\s+.*)'
@@ -79,7 +79,7 @@
     - security
 
 - name: set default profile umask
-  become: yes
+  become: 'yes'
   become_method: sudo
   replace:
     regexp: 'umask(\s+.*)'
@@ -91,42 +91,42 @@
     - security
 
 - name: readonly TMOUT
-  become: yes
+  become: 'yes'
   become_method: sudo
   lineinfile:
     line: "readonly TMOUT"
     dest: /etc/profile
     mode: 0644
     state: present
-    create: no
+    create: 'no'
     insertbefore: "^export"
   tags:
     - tmout
     - security
 
 - name: set TMOUT
-  become: yes
+  become: 'yes'
   become_method: sudo
   lineinfile:
     line: "TMOUT=900"
     dest: /etc/profile
     mode: 0644
     state: present
-    create: no
+    create: 'no'
     insertbefore: "^readonly TMOUT"
   tags:
     - tmout
     - security
 
 - name: export TMOUT
-  become: yes
+  become: 'yes'
   become_method: sudo
   lineinfile:
     line: "export TMOUT"
     dest: /etc/profile
     mode: 0644
     state: present
-    create: no
+    create: 'no'
     insertafter: "^readonly TMOUT"
   tags:
     - tmout

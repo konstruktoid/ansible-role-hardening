@@ -4,7 +4,7 @@
 # bluetooth, bnep, btusb: CVE-2017-1000251
 
 - name: disablemod.conf
-  become: yes
+  become: 'yes'
   become_method: sudo
   file:
     state: touch
@@ -14,7 +14,7 @@
     mode: 0644
 
 - name: disable misc kernel modules
-  become: yes
+  become: 'yes'
   become_method: sudo
   lineinfile:
     dest: /etc/modprobe.d/disablemod.conf

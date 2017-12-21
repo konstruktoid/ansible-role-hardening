@@ -1,12 +1,12 @@
 ---
 - name: remove suid/sgid
-  become: yes
+  become: 'yes'
   become_method: sudo
   file:
     path: "{{ item }}"
     mode: 'a-s'
     state: file
-    follow: yes
+    follow: 'yes'
   ignore_errors: true
   with_items:
     - "{{ suid_sgid_blacklist }}"

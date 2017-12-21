@@ -1,11 +1,11 @@
 ---
 - name: access.conf
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: etc/security/access.conf.j2
     dest: /etc/security/access.conf
-    backup: yes
+    backup: 'yes'
     mode: 0644
     owner: root
     group: root
@@ -16,12 +16,12 @@
 # CCE-27318-5
 # CCE-27268-2
 - name: securetty
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: etc/securetty.j2
     dest: /etc/securetty
-    backup: yes
+    backup: 'yes'
     mode: 0644
     owner: root
     group: root

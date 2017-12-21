@@ -1,11 +1,11 @@
 ---
 - name: adduser.conf
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: etc/adduser.conf.j2
     dest: /etc/adduser.conf
-    backup: yes
+    backup: 'yes'
     mode: 0644
     owner: root
     group: root
@@ -14,12 +14,12 @@
     - security
 
 - name: useradd
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: etc/default/useradd.j2
     dest: /etc/default/useradd
-    backup: yes
+    backup: 'yes'
     mode: 0644
     owner: root
     group: root
