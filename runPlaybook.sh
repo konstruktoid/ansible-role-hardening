@@ -15,7 +15,7 @@ if pwd | grep 'ansible-role-hardening' && grep 'konstruktoid/ansible-role-harden
 fi
 
 vagrant box update
-vagrant box destroy -f
+vagrant destroy -f
 
 vagrant status | grep virtualbox | awk '{print $1}' | while IFS= read -r VM; do
   vagrant up "$VM"
