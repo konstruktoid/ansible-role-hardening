@@ -9,13 +9,14 @@ Distributions Tested
 --------------------
 
 ```
- centos/7
- debian/jessie64
- fedora/26-cloud-base (FAILS)
- ubuntu/artful64
- ubuntu/xenial64
- ubuntu/yakkety64
- ubuntu/zesty64
+centos/7
+debian/jessie64
+fedora/26-cloud-base
+ubuntu/artful64
+ubuntu/bionic64
+ubuntu/xenial64
+ubuntu/yakkety64
+ubuntu/zesty64
 ```
 
 Role Variables
@@ -92,48 +93,101 @@ The CCE identifiers are taken from [CCE Identifiers in Guide to the Secure Confi
 [CIS identifiers](https://benchmarks.cisecurity.org/downloads/show-single/index.cfm?file=independentlinux.100) will be added in the future.
 
 ```sh
-templates/
-├── etc
-│   ├── adduser.conf.j2
-│   ├── audit
-│   │   └── rules.d
-│   │       └── hardening.rules.j2
-│   ├── default
-│   │   ├── rkhunter.j2
-│   │   └── useradd.j2
-│   ├── hosts.allow.j2
-│   ├── hosts.deny.j2
-│   ├── issue.j2
-│   ├── login.defs.j2
-│   ├── logrotate.conf.j2
-│   ├── pam.d
-│   │   ├── common-account.j2
-│   │   ├── common-auth.j2
-│   │   ├── common-password.j2
-│   │   └── login.j2
-│   ├── profile.d
-│   │   └── initpath.sh.j2
-│   ├── securetty.j2
-│   ├── security
-│   │   ├── access.conf.j2
-│   │   ├── limits.conf.j2
-│   │   └── pwquality.conf.j2
-│   ├── ssh
-│   │   └── sshd_config.j2
-│   ├── sysctl.conf.j2
-│   └── systemd
-│       ├── coredump.conf.j2
-│       ├── journald.conf.j2
-│       ├── logind.conf.j2
-│       ├── resolved.conf.j2
-│       ├── system.conf.j2
-│       ├── timesyncd.conf.j2
-│       └── user.conf.j2
-└── lib
-    └── systemd
-        └── system
-            ├── aidecheck.service.j2
-            └── aidecheck.timer.j2
+.
+├── LICENSE
+├── README.md
+├── Vagrantfile
+├── defaults
+│   └── main.yml
+├── handlers
+│   └── main.yml
+├── meta
+│   └── main.yml
+├── runPlaybook.sh
+├── tasks
+│   ├── 02_firewall.yml
+│   ├── 03_disablenet.yml
+│   ├── 04_disablefs.yml
+│   ├── 05_systemdconf.yml
+│   ├── 06_journalconf.yml
+│   ├── 07_timesyncd.yml
+│   ├── 08_fstab.yml
+│   ├── 09_prelink.yml
+│   ├── 10_pkgupdate.yml
+│   ├── 11_hosts.yml
+│   ├── 12_logindefs.yml
+│   ├── 13_sysctl.yml
+│   ├── 14_limits.yml
+│   ├── 15_adduser.yml
+│   ├── 16_rootaccess.yml
+│   ├── 17_packages.yml
+│   ├── 18_sshdconfig.yml
+│   ├── 19_password.yml
+│   ├── 20_cron.yml
+│   ├── 21_ctrlaltdel.yml
+│   ├── 22_auditd.yml
+│   ├── 23_disablemod.yml
+│   ├── 24_aide.yml
+│   ├── 26_users.yml
+│   ├── 27_suid.yml
+│   ├── 28_umask.yml
+│   ├── 30_path.yml
+│   ├── 31_logindconf.yml
+│   ├── 32_resolvedconf.yml
+│   ├── 33_rkhunter.yml
+│   ├── 34_issue.yml
+│   ├── 35_apport.yml
+│   ├── 36_lockroot.yml
+│   ├── 37_mount.yml
+│   ├── 38_motdnews.yml
+│   └── main.yml
+├── templates
+│   ├── etc
+│   │   ├── adduser.conf.j2
+│   │   ├── audit
+│   │   │   └── rules.d
+│   │   │       └── hardening.rules.j2
+│   │   ├── default
+│   │   │   ├── rkhunter.j2
+│   │   │   └── useradd.j2
+│   │   ├── hosts.allow.j2
+│   │   ├── hosts.deny.j2
+│   │   ├── issue.j2
+│   │   ├── login.defs.j2
+│   │   ├── logrotate.conf.j2
+│   │   ├── pam.d
+│   │   │   ├── common-account.j2
+│   │   │   ├── common-auth.j2
+│   │   │   ├── common-password.j2
+│   │   │   └── login.j2
+│   │   ├── profile.d
+│   │   │   └── initpath.sh.j2
+│   │   ├── securetty.j2
+│   │   ├── security
+│   │   │   ├── access.conf.j2
+│   │   │   ├── limits.conf.j2
+│   │   │   └── pwquality.conf.j2
+│   │   ├── ssh
+│   │   │   └── sshd_config.j2
+│   │   ├── sysctl.conf.j2
+│   │   └── systemd
+│   │       ├── coredump.conf.j2
+│   │       ├── journald.conf.j2
+│   │       ├── logind.conf.j2
+│   │       ├── resolved.conf.j2
+│   │       ├── system.conf.j2
+│   │       ├── timesyncd.conf.j2
+│   │       ├── tmp.mount.j2
+│   │       └── user.conf.j2
+│   └── lib
+│       └── systemd
+│           └── system
+│               ├── aidecheck.service.j2
+│               └── aidecheck.timer.j2
+├── tests
+│   ├── inventory
+│   ├── test.retry
+│   └── test.yml
 ```
 
 Dependencies
