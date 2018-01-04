@@ -4,12 +4,11 @@
   become_method: sudo
   template:
     src: etc/systemd/tmp.mount.j2
-    dest: /etc/systemd/system/tmp.mount
+    dest: /lib/systemd/system/tmp.mount
     backup: 'yes'
     mode: 0644
     owner: root
     group: root
-  when: ansible_os_family == "RedHat" and ansible_distribution == "Ubuntu"
   tags:
     - systemd
     - tmp
@@ -20,12 +19,11 @@
   become_method: sudo
   template:
     src: etc/systemd/tmp.mount.j2
-    dest: /etc/systemd/system/var-tmp.mount
+    dest: /lib/systemd/system/var-tmp.mount
     backup: 'yes'
     mode: 0644
     owner: root
     group: root
-  when: ansible_os_family == "RedHat" and ansible_distribution == "Ubuntu"
   tags:
     - systemd
     - tmp
@@ -37,8 +35,7 @@
   replace:
     regexp: '^Where=/tmp$'
     replace: "Where=/var/tmp"
-    dest: /etc/systemd/system/var-tmp.mount
-  when: ansible_os_family == "RedHat" and ansible_distribution == "Ubuntu"
+    dest: /lib/systemd/system/var-tmp.mount
   tags:
     - systemd
     - tmp
@@ -51,7 +48,6 @@
     path: /etc/fstab
     state: absent
     regexp: '^(.*)tmp(.*)$'
-  when: ansible_os_family == "RedHat" and ansible_distribution == "Ubuntu"
 
 - name: remove floppy from fstab
   become: 'yes'
@@ -61,25 +57,19 @@
     state: absent
     regexp: '^(.*)floppy(.*)$'
 
-- name: var-tmp.mount
+- name: enable /tmp
   become: 'yes'
   become_method: sudo
-  file:
-    src: /etc/systemd/system/var-tmp.mount
-    dest: /etc/systemd/system/default.target.wants/var-tmp.mount
-    owner: root
-    group: root
-    state: link
-  when: ansible_os_family == "RedHat" and ansible_distribution == "Ubuntu"
+  service:
+    name: tmp.mount
+    enabled: 'yes'
+    masked: 'no'
 
-- name: tmp.mount
+- name: enable /var/tmp
   become: 'yes'
   become_method: sudo
-  file:
-    src: /etc/systemd/system/tmp.mount
-    dest: /etc/systemd/system/default.target.wants/tmp.mount
-    owner: root
-    group: root
-    state: link
-  when: ansible_os_family == "RedHat" and ansible_distribution == "Ubuntu"
+  service:
+    name: var-tmp.mount
+    enabled: 'yes'
+    masked: 'no'
 ...
