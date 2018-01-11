@@ -10,13 +10,11 @@ Distributions Tested
 
 ```
 centos/7
-debian/jessie64
-fedora/26-cloud-base
+debian/stretch64
+fedora/27-cloud-base
 ubuntu/artful64
 ubuntu/bionic64
 ubuntu/xenial64
-ubuntu/yakkety64
-ubuntu/zesty64
 ```
 
 Role Variables
