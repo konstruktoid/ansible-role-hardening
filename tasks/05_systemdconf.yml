@@ -1,11 +1,11 @@
 ---
 - name: systemd system.conf
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: etc/systemd/system.conf.j2
     dest: /etc/systemd/system.conf
-    backup: yes
+    backup: 'yes'
     mode: 0644
     owner: root
     group: root
@@ -17,12 +17,12 @@
     - security
 
 - name: systemd user.conf
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: etc/systemd/user.conf.j2
     dest: /etc/systemd/user.conf
-    backup: yes
+    backup: 'yes'
     mode: 0644
     owner: root
     group: root

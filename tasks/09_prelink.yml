@@ -1,21 +1,21 @@
 ---
 # CCE-27078-5
 - name: disable prelinking
-  become: yes
+  become: 'yes'
   become_method: sudo
   lineinfile:
     line: "PRELINKING=no"
     dest: /etc/sysconfig/prelink
     mode: 0644
     state: present
-    create: yes
+    create: 'yes'
   when: ansible_os_family == "RedHat"
   tags:
     - prelink
     - security
 
 - name: return to non-prelinked state
-  become: yes
+  become: 'yes'
   become_method: sudo
   command: prelink -ua
   ignore_errors: true

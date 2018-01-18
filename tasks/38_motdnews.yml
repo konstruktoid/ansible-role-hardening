@@ -1,6 +1,6 @@
 ---
 - name: disable motd-news
-  become: yes
+  become: 'yes'
   become_method: sudo
   lineinfile:
     regexp: "^ENABLED="
@@ -8,8 +8,8 @@
     dest: /etc/default/motd-news
     mode: 0644
     state: present
-    create: no
-    backrefs: yes
+    create: 'no'
+    backrefs: 'yes'
   ignore_errors: true
   notify:
     - mask motdnews

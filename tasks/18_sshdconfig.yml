@@ -1,11 +1,11 @@
 ---
 - name: sshd_config
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: etc/ssh/sshd_config.j2
     dest: /etc/ssh/sshd_config
-    backup: yes
+    backup: 'yes'
     mode: 0644
     owner: root
     group: root

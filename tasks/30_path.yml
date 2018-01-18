@@ -2,7 +2,7 @@
 # CCE-80199-3
 
 - name: set path
-  become: yes
+  become: 'yes'
   become_method: sudo
   lineinfile:
     regexp: "^PATH="
@@ -10,19 +10,19 @@
     dest: /etc/environment
     mode: 0644
     state: present
-    create: no
-    backrefs: yes
+    create: 'no'
+    backrefs: 'yes'
   tags:
     - path
     - security
 
 - name: path script
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: etc/profile.d/initpath.sh.j2
     dest: /etc/profile.d/initpath.sh
-    backup: yes
+    backup: 'yes'
     mode: 0644
     owner: root
     group: root

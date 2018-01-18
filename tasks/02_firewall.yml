@@ -1,11 +1,11 @@
 ---
 - name: ufw installation
-  become: yes
+  become: 'yes'
   become_method: sudo
   package:
     name: "ufw"
     state: latest
-    install_recommends: no
+    install_recommends: 'no'
   when: ansible_os_family == "Debian"
   tags:
     - apt
@@ -14,19 +14,19 @@
     - ufw
 
 - name: redhat family epel installation
-  become: yes
+  become: 'yes'
   become_method: sudo
   package:
     name: "epel-release"
     state: latest
-  when: ansible_os_family == "RedHat"
+  when: ansible_distribution == "RedHat"
   tags:
     - yum
     - packages
     - security
 
 - name: firewalld installation
-  become: yes
+  become: 'yes'
   become_method: sudo
   package:
     name: "firewalld"
@@ -38,8 +38,37 @@
     - security
     - firewalld
 
+- name: firewalld-python installation
+  become: 'yes'
+  become_method: sudo
+  package:
+    name: "python-firewall"
+    state: latest
+  when: ansible_os_family == "RedHat"
+  tags:
+    - yum
+    - packages
+    - security
+    - firewalld
+
+- name: set ufw IPT_SYSCTL
+  become: 'yes'
+  become_method: sudo
+  lineinfile:
+    regexp: "^IPT_SYSCTL="
+    line: "IPT_SYSCTL=/etc/sysctl.conf"
+    dest: /etc/default/ufw
+    mode: 0640
+    state: present
+    create: 'no'
+    backrefs: 'yes'
+  tags:
+    - ufw
+    - security
+  when: ansible_os_family == "Debian"
+
 - name: reset ufw
-  become: yes
+  become: 'yes'
   become_method: sudo
   ufw:
     state: reset
@@ -49,7 +78,7 @@
     - security
 
 - name: allow ssh ufw
-  become: yes
+  become: 'yes'
   become_method: sudo
   ufw:
     rule: allow
@@ -65,7 +94,7 @@
     - security
 
 - name: enable ufw
-  become: yes
+  become: 'yes'
   become_method: sudo
   ufw:
     state: enabled
@@ -77,14 +106,14 @@
     - security
 
 - name: stat firewalld conf
-  become: yes
+  become: 'yes'
   become_method: sudo
   stat:
     path: /etc/firewalld/firewalld.conf
   register: firewalldconf
 
 - name: set firewalld DefaultZone
-  become: yes
+  become: 'yes'
   become_method: sudo
   lineinfile:
     regexp: "^DefaultZone="
@@ -92,27 +121,27 @@
     dest: /etc/firewalld/firewalld.conf
     mode: 0640
     state: present
-    create: no
-    backrefs: yes
+    create: 'no'
+    backrefs: 'yes'
   when: firewalldconf.stat.exists
   tags:
     - firewalld
     - security
 
 - name: enable firewalld
-  become: yes
+  become: 'yes'
   become_method: sudo
   service:
     name: firewalld
     state: started
-    enabled: yes
+    enabled: 'yes'
   when: firewalldconf.stat.exists
   tags:
     - firewalld
     - security
 
 - name: allow firewalld ssh
-  become: yes
+  become: 'yes'
   become_method: sudo
   firewalld:
     service: ssh

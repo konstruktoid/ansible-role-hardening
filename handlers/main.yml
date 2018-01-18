@@ -1,109 +1,114 @@
 ---
 # https://github.com/ansible/ansible/issues/22171
 - name: restart auditd
-  become: yes
+  become: 'yes'
   become_method: sudo
   command: service auditd restart
 
 - name: generate auditd
-  become: yes
+  become: 'yes'
   become_method: sudo
   command: augenrules
 
 - name: restart sysctl
-  become: yes
+  become: 'yes'
   become_method: sudo
   service:
     name: systemd-sysctl
     state: restarted
 
 - name: reload systemd
-  become: yes
+  become: 'yes'
   become_method: sudo
   command: systemctl daemon-reload
 
 - name: rkhunter propupd
-  become: yes
+  become: 'yes'
   become_method: sudo
   command: rkhunter --propupd
 
 - name: enable aidecheck
-  become: yes
+  become: 'yes'
   become_method: sudo
   systemd:
     name: aidecheck.timer
-    enabled: yes
+    enabled: 'yes'
     state: started
 
 - name: disable aidecheck
-  become: yes
+  become: 'yes'
   become_method: sudo
   systemd:
     name: aidecheck.timer
     state: stopped
-    enabled: no
+    enabled: 'no'
 
 - name: mask aidecheck
-  become: yes
+  become: 'yes'
   become_method: sudo
   systemd:
     name: aidecheck.timer
-    masked: yes
+    masked: 'yes'
     stated: stopped
-    enabled: no
+    enabled: 'no'
 
 - name: restart sshd
-  become: yes
+  become: 'yes'
   become_method: sudo
   service:
     name: sshd
     state: restarted
 
 - name: apt-get autoremove
-  become: yes
+  become: 'yes'
   become_method: sudo
   apt:
-    autoremove: yes
+    autoremove: 'yes'
 
 - name: apt-get clean
-  become: yes
+  become: 'yes'
   become_method: sudo
   apt:
-    autoclean: yes
+    autoclean: 'yes'
 
 - name: mask apport
-  become: yes
+  become: 'yes'
   become_method: sudo
   systemd:
     name: apport.service
-    masked: yes
-    enabled: no
+    masked: 'yes'
+    enabled: 'no'
     state: stopped
 
 - name: mask motdnews
-  become: yes
+  become: 'yes'
   become_method: sudo
   systemd:
     name: motd-news.timer
-    masked: yes
-    enabled: no
+    masked: 'yes'
+    enabled: 'no'
     state: stopped
 
 - name: yum clean
-  become: yes
+  become: 'yes'
   become_method: sudo
   command: yum -y clean all
 
+- name: yum makecache
+  become: 'yes'
+  become_method: sudo
+  command: yum -y makecache
+
 - name: enable haveged
-  become: yes
+  become: 'yes'
   become_method: sudo
   systemd:
     name: haveged
-    enabled: yes
+    enabled: 'yes'
     state: started
 
 - name: update authconfig
-  become: yes
+  become: 'yes'
   become_method: sudo
   command: authconfig --updateall
 ...

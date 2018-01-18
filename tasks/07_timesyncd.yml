@@ -1,11 +1,11 @@
 ---
 - name: timesyncd.conf
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: etc/systemd/timesyncd.conf.j2
     dest: /etc/systemd/timesyncd.conf
-    backup: yes
+    backup: 'yes'
     mode: 0644
     owner: root
     group: root

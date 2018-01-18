@@ -8,14 +8,16 @@
 # talk: CCE-27432-4
 # sshd: CCE-80215-7
 # avahi: CCE-80338-7
+# UBTU-16-010010
+# UBTU-16-010050
 
 - name: debian family package installation
-  become: yes
+  become: 'yes'
   become_method: sudo
   apt:
     name: "{{ item }}"
     state: latest
-    install_recommends: no
+    install_recommends: 'no'
   with_items:
     - "{{ packages_debian }}"
   when: ansible_os_family == "Debian"
@@ -24,22 +26,22 @@
     - packages
     - security
 
-- name: redhat family epel installation
-  become: yes
+- name: fedora epel installation
+  become: 'yes'
   become_method: sudo
-  yum:
+  package:
     name: "epel-release"
     state: latest
-  when: ansible_os_family == "RedHat"
+  when: ansible_os_family == "RedHat" and (not ansible_distribution == "Fedora")
   tags:
     - yum
     - packages
     - security
 
 - name: redhat family package installation
-  become: yes
+  become: 'yes'
   become_method: sudo
-  yum:
+  package:
     name: "{{ item }}"
     state: latest
   with_items:
@@ -53,12 +55,12 @@
     - security
 
 - name: debian family package removal
-  become: yes
+  become: 'yes'
   become_method: sudo
   apt:
     name: "{{ item }}"
     state: absent
-    purge: yes
+    purge: 'yes'
   with_items:
     - "{{ packages_blacklist }}"
   when: ansible_os_family == "Debian"
@@ -68,9 +70,9 @@
     - security
 
 - name: redhat family package removal
-  become: yes
+  become: 'yes'
   become_method: sudo
-  yum:
+  package:
     name: "{{ item }}"
     state: absent
   with_items:
@@ -82,12 +84,12 @@
     - security
 
 - name: virtualbox package installation
-  become: yes
+  become: 'yes'
   become_method: sudo
   apt:
     name: "{{ item }}"
     state: latest
-    install_recommends: no
+    install_recommends: 'no'
   with_items:
     - virtualbox-guest-dkms
     - virtualbox-guest-utils
@@ -99,12 +101,12 @@
     - security
 
 - name: vmware package installation
-  become: yes
+  become: 'yes'
   become_method: sudo
   apt:
     name: "{{ item }}"
     state: latest
-    install_recommends: no
+    install_recommends: 'no'
   with_items:
     - open-vm-tools
   when: ansible_bios_version == "VMWare"

@@ -1,0 +1,75 @@
+---
+- name: create /tmp
+  become: 'yes'
+  become_method: sudo
+  template:
+    src: etc/systemd/tmp.mount.j2
+    dest: /lib/systemd/system/tmp.mount
+    backup: 'yes'
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+    - systemd
+    - tmp
+    - security
+
+- name: create /var/tmp
+  become: 'yes'
+  become_method: sudo
+  template:
+    src: etc/systemd/tmp.mount.j2
+    dest: /lib/systemd/system/var-tmp.mount
+    backup: 'yes'
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+    - systemd
+    - tmp
+    - security
+
+- name: set /var/tmp in var-tmp.mount
+  become: 'yes'
+  become_method: sudo
+  replace:
+    regexp: '^Where=/tmp$'
+    replace: "Where=/var/tmp"
+    dest: /lib/systemd/system/var-tmp.mount
+  tags:
+    - systemd
+    - tmp
+    - security
+
+- name: remove /tmp from fstab
+  become: 'yes'
+  become_method: sudo
+  lineinfile:
+    path: /etc/fstab
+    state: absent
+    regexp: '^(.*)tmp(.*)$'
+
+- name: remove floppy from fstab
+  become: 'yes'
+  become_method: sudo
+  lineinfile:
+    path: /etc/fstab
+    state: absent
+    regexp: '^(.*)floppy(.*)$'
+
+- name: enable /tmp
+  become: 'yes'
+  become_method: sudo
+  service:
+    name: tmp.mount
+    enabled: 'yes'
+    masked: 'no'
+
+- name: enable /var/tmp
+  become: 'yes'
+  become_method: sudo
+  service:
+    name: var-tmp.mount
+    enabled: 'yes'
+    masked: 'no'
+...

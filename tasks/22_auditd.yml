@@ -2,12 +2,12 @@
 # CCE-27407-6
 
 - name: audit.rules
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: etc/audit/rules.d/hardening.rules.j2
     dest: /etc/audit/rules.d/hardening.rules
-    backup: yes
+    backup: 'yes'
     mode: 0600
     owner: root
     group: root
@@ -20,7 +20,7 @@
     - security
 
 - name: set audit grub cmdline
-  become: yes
+  become: 'yes'
   become_method: sudo
   lineinfile:
     regexp: '^GRUB_CMDLINE_LINUX='

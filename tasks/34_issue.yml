@@ -2,12 +2,12 @@
 # CCE-27303-7
 
 - name: add notice
-  become: yes
+  become: 'yes'
   become_method: sudo
   template:
     src: etc/issue.j2
     dest: "{{ item }}"
-    backup: yes
+    backup: 'yes'
     mode: 0644
     owner: root
     group: root
