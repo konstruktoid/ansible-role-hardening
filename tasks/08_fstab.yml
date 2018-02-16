@@ -57,14 +57,6 @@
     state: absent
     regexp: '^(.*)floppy(.*)$'
 
-- name: enable /tmp
-  become: 'yes'
-  become_method: sudo
-  service:
-    name: tmp.mount
-    enabled: 'yes'
-    masked: 'no'
-
 - name: enable /var/tmp
   become: 'yes'
   become_method: sudo
