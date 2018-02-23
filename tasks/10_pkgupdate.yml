@@ -18,6 +18,8 @@
   notify:
     - apt-get clean
     - apt-get autoremove
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   when: ansible_os_family == "Debian"
   tags:
     - apt

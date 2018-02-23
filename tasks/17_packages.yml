@@ -18,6 +18,8 @@
     name: "{{ item }}"
     state: latest
     install_recommends: 'no'
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   with_items:
     - "{{ packages_debian }}"
   when: ansible_os_family == "Debian"
@@ -63,6 +65,8 @@
     purge: 'yes'
   with_items:
     - "{{ packages_blacklist }}"
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   when: ansible_os_family == "Debian"
   tags:
     - apt
