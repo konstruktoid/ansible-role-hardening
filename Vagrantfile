@@ -1,23 +1,5 @@
 Vagrant.configure("2") do |config|
 
-  config.vm.define "xenial" do |xenial|
-    xenial.vm.box = "bento/ubuntu-16.04"
-    xenial.ssh.insert_key = true
-    xenial.vm.network "private_network", ip:"10.2.3.41"
-    xenial.vm.hostname = "xenial"
-    xenial.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python --no-install-recommends"
-    xenial.vm.provision "ansible" do |p|
-      p.verbose = "v"
-      p.limit = "all"
-      p.playbook = "tests/test.yml"
-      p.extra_vars = {
-        "sshd_admin_net" => "0.0.0.0/0",
-        "ssh_allow_groups" => "vagrant sudo ubuntu"
-     }
-    end
-  end
-
   config.vm.define "artful" do |artful|
     artful.vm.box = "bento/ubuntu-17.10"
     artful.ssh.insert_key = true

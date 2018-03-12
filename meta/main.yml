@@ -11,7 +11,6 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - wily
-        - xenial
         - yakkety
         - artful
     - name: Debian
