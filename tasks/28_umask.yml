@@ -25,19 +25,6 @@
     - umask
     - security
 
-- name: set default init umask
-  become: 'yes'
-  become_method: sudo
-  replace:
-    regexp: 'umask(\s+.*)'
-    replace: "umask 027"
-    dest: /etc/sysconfig/init
-    mode: 0755
-  when: ansible_os_family == "RedHat"
-  tags:
-    - umask
-    - security
-
 - name: stat bashrc
   become: 'yes'
   become_method: sudo

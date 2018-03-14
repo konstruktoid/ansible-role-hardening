@@ -14,7 +14,6 @@ debian/stretch64
 fedora/27-cloud-base
 ubuntu/artful64
 ubuntu/bionic64
-ubuntu/xenial64
 ```
 
 Role Variables

@@ -3,6 +3,8 @@
   become: 'yes'
   become_method: sudo
   command: usermod -L root
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   tags:
     - users
     - lock_root
