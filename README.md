@@ -211,13 +211,15 @@ ansible-playbook tests/test.yml --extra-vars "sshd_admin_net=192.168.1.0/24" -c 
 ```
 
 The repository contains a [Vagrant](https://www.vagrantup.com/ "Vagrant")
-configuration file, which will run the `konstruktoid.hardening` role.
+configuration file, which will run the `konstruktoid.hardening` role. The
+[runPlaybook.sh](runPlaybook.sh) script may be used to automatically update and
+run the role on all configured Vagrant boxes.
 
 OpenSCAP test on a CentOS 7 host using the included Vagrantfile:
 
 ```shell
 sudo yum install -y openscap-scanner scap-security-guide
-sudo oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel7-disa --results-arf centos7_stig-arf.xml --report centos7_stig-report.html /usr/share/xml/scap/ssg/content/ssg-centos7-ds.xml
+sudo oscap xccdf eval --fetch-remote-resources --profile xccdf_org.ssgproject.content_profile_stig-rhel7-disa --results-arf centos7_stig-arf.xml --report centos7_stig-report.html /usr/share/xml/scap/ssg/content/ssg-centos7-ds.xml
 ```
 
 Recommended Reading
