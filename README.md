@@ -37,7 +37,7 @@ By default only the network(s) defined here are allowed to connect to the host u
     dns: 127.0.0.1
 IPv4 and IPv6 addresses to use as system DNS servers. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf) option.
 
-    fallback_dns: 185.121.177.177 130.255.73.90
+    fallback_dns: 1.1.1.1 9.9.9.9
 IPv4 and IPv6 addresses to use as the fallback DNS servers. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf) option.
 
     dnssec: allow-downgrade
