@@ -10,9 +10,7 @@ galaxy_info:
         - 7
     - name: Ubuntu
       versions:
-        - wily
-        - yakkety
-        - artful
+        - bionic
     - name: Debian
       versions:
         - jessie

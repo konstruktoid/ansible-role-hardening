@@ -12,7 +12,6 @@ Distributions Tested
 centos/7
 debian/stretch64
 fedora/27-cloud-base
-ubuntu/artful64
 ubuntu/bionic64
 ```
 
