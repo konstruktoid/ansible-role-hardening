@@ -1,18 +1,18 @@
 ansible-role-hardening
 =========
 
-Ansible role to make a Debian, Ubuntu or CentoOS 7 server a bit more secure, systemd edition.
+Ansible role to make a Debian, Ubuntu or CentoOS server a bit more secure, systemd edition.
 
 Requires [Ansible](https://www.ansible.com/) >= 2.2.
 
-Distributions Tested
+Distributions Tested using Vagrant
 --------------------
 
 ```
-centos/7
-debian/stretch64
-fedora/27-cloud-base
-ubuntu/bionic64
+bento/centos-7
+bento/debian-9
+bento/fedora-27
+bento/ubuntu-18.04
 ```
 
 Role Variables
