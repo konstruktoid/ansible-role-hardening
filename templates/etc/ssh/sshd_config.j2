@@ -17,61 +17,36 @@
 # CCE-27314-4
 # CCE-27363-1
 
-Port 22
-Protocol 2
-
-HostKey /etc/ssh/ssh_host_ed25519_key
-HostKey /etc/ssh/ssh_host_rsa_key
-HostKey /etc/ssh/ssh_host_ecdsa_key
-
-UsePrivilegeSeparation sandbox
-
-KeyRegenerationInterval 1800
-ServerKeyBits 1024
-
-SyslogFacility AUTH
 LogLevel VERBOSE
-
-Compression no
 
 LoginGraceTime 20
 PermitRootLogin no
-StrictModes yes
-
-RSAAuthentication yes
-PubkeyAuthentication yes
-
-IgnoreRhosts yes
-IgnoreUserKnownHosts yes
-RhostsRSAAuthentication no
-HostbasedAuthentication no
-
-PermitEmptyPasswords no
 
 ChallengeResponseAuthentication no
 
+PermitRootLogin no
+UsePAM yes
+
 X11Forwarding no
-X11DisplayOffset 10
 PrintMotd no
-PrintLastLog yes
-TCPKeepAlive yes
+Compression no
+
+Banner /etc/issue.net
 
 AcceptEnv LANG LC_*
 
-Subsystem sftp /usr/lib/ssh/sftp-server -f AUTHPRIV -l INFO
+Subsystem sftp /usr/lib/openssh/sftp-server -f AUTHPRIV -l INFO
 
+X11Forwarding no
+UseDNS yes
 GSSAPIAuthentication no
-KerberosAuthentication no
 
-UsePAM yes
 AllowGroups {{ ssh_allow_groups }}
+MaxAuthTries 2
 ClientAliveInterval 300
 ClientAliveCountMax 0
 PermitUserEnvironment no
 KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr
 Macs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
-MaxAuthTries 4
 MaxSessions 2
-UseDNS yes
-Banner /etc/issue.net
