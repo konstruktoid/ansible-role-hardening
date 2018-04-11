@@ -54,7 +54,7 @@ Packages to be installed on a Ubuntu host.
     packages_redhat: [aide, audit, haveged, openssh-server, rkhunter, rsyslog, vlock]
 Packages to be installed on a CentOS host.
 
-    packages_blacklist: [avahi-*, rsh*, talk*, telnet*, tftp*, yp-tools, ypbind, xinetd]
+    packages_blacklist: [avahi-*, beep, popularity-contest, rsh*, talk*, telnet*, tftp*, yp-tools, ypbind, xinetd]
 Packages to be removed.
 
     net_modules_blacklist: [dccp, sctp, rds, tipc]
@@ -63,7 +63,7 @@ Blacklisted kernel modules.
     fs_modules_blacklist: [cramfs, freevxfs, hfs, hfsplus, jffs2, squashfs, udf, vfat]
 Blacklisted kernel modules.
 
-    misc_modules_blacklist: [bluetooth, bnep, btusb, firewire-core, n_hdlc, net-pf-31, soundcore, thunderbolt, usb-midi, usb-storage]
+    misc_modules_blacklist: [bluetooth, bnep, btusb, firewire-core, n_hdlc, net-pf-31, pcspkr, soundcore, thunderbolt, usb-midi, usb-storage]
 Blacklisted kernel modules.
 
     limit_nofile_soft: 100
