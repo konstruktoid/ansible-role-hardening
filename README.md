@@ -12,7 +12,7 @@ Distributions Tested using Vagrant
 bento/centos-7
 bento/debian-9
 bento/fedora-27
-bento/ubuntu-18.04
+ubuntu/bionic64
 ```
 
 Role Variables
