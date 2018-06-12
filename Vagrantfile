@@ -1,7 +1,7 @@
 Vagrant.configure("2") do |config|
 
   config.vm.define "bionic" do |bionic|
-    bionic.vm.box = "bento/ubuntu-18.04"
+    bionic.vm.box = "ubuntu/bionic64"
     bionic.ssh.insert_key = true
     bionic.vm.network "private_network", ip:"10.2.3.48"
     bionic.vm.hostname = "bionic"

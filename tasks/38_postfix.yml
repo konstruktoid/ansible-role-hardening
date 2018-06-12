@@ -1,0 +1,12 @@
+---
+- name: postfix disable_vrfy_command
+  become: 'yes'
+  become_method: sudo
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  shell: postconf -e disable_vrfy_command=yes
+  tags:
+    - packages
+    - postfix
+    - security
+...

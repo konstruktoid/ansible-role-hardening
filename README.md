@@ -1,17 +1,17 @@
 ansible-role-hardening
 =========
 
-Ansible role to make a Debian, Ubuntu or CentoOS 7 server a bit more secure, systemd edition.
+Ansible role to make a Debian, Ubuntu or CentoOS server a bit more secure, systemd edition.
 
 Requires [Ansible](https://www.ansible.com/) >= 2.2.
 
-Distributions Tested
+Distributions Tested using Vagrant
 --------------------
 
 ```
-centos/7
-debian/stretch64
-fedora/27-cloud-base
+bento/centos-7
+bento/debian-9
+bento/fedora-27
 ubuntu/bionic64
 ```
 
@@ -48,13 +48,13 @@ Which binaries that should have SUID/SGID removed.
     random_ack_limit: "{{ 1000000 | random(start=1000) }}"
 net.ipv4.tcp_challenge_ack_limit, see [tcp: make challenge acks less predictable](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=75ff39ccc1bd5d3c455b6822ab09e533c551f758).
 
-    packages_debian: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-cracklib, libpam-tmpdir, openssh-server, rkhunter, rsyslog, vlock]
+    packages_debian: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-cracklib, libpam-tmpdir, openssh-server, postfix, rkhunter, rsyslog, vlock]
 Packages to be installed on a Ubuntu host.
 
-    packages_redhat: [aide, audit, haveged, openssh-server, rkhunter, rsyslog, vlock]
+    packages_redhat: [aide, audit, haveged, openssh-server, postfix, rkhunter, rsyslog, vlock]
 Packages to be installed on a CentOS host.
 
-    packages_blacklist: [avahi-*, rsh*, talk*, telnet*, tftp*, yp-tools, ypbind, xinetd]
+    packages_blacklist: [avahi-*, beep, popularity-contest, rsh*, talk*, telnet*, tftp*, yp-tools, ypbind, xinetd]
 Packages to be removed.
 
     net_modules_blacklist: [dccp, sctp, rds, tipc]
@@ -63,7 +63,7 @@ Blacklisted kernel modules.
     fs_modules_blacklist: [cramfs, freevxfs, hfs, hfsplus, jffs2, squashfs, udf, vfat]
 Blacklisted kernel modules.
 
-    misc_modules_blacklist: [bluetooth, bnep, btusb, firewire-core, n_hdlc, net-pf-31, soundcore, thunderbolt, usb-midi, usb-storage]
+    misc_modules_blacklist: [bluetooth, bnep, btusb, firewire-core, n_hdlc, net-pf-31, pcspkr, soundcore, thunderbolt, usb-midi, usb-storage]
 Blacklisted kernel modules.
 
     limit_nofile_soft: 100
@@ -135,7 +135,8 @@ The CCE identifiers are taken from [CCE Identifiers in Guide to the Secure Confi
 │   ├── 35_apport.yml
 │   ├── 36_lockroot.yml
 │   ├── 37_mount.yml
-│   ├── 38_motdnews.yml
+│   ├── 38_postfix.yml
+│   ├── 39_motdnews.yml
 │   └── main.yml
 ├── templates
 │   ├── etc
@@ -226,7 +227,7 @@ Recommended Reading
 
 [Rules In DISA STIG for Red Hat Enterprise Linux 7](https://people.redhat.com/swells/scap-security-guide/tables/table-rhel7-stig.html)
 
-[CIS Distribution Independent Linux Benchmark v1.0.0](https://benchmarks.cisecurity.org/downloads/show-single/index.cfm?file=independentlinux.100)
+[CIS Distribution Independent Linux Benchmark v1.0.0](https://www.cisecurity.org/cis-benchmarks/)
 
 [Common Configuration Enumeration](https://nvd.nist.gov/cce/index.cfm)
 
