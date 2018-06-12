@@ -1,5 +1,5 @@
 # {{ ansible_managed }}
-# https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29
+# https://wiki.mozilla.org/Security/Guidelines/OpenSSH
 # CCE-27320-1
 # CCE-80220-7
 # CCE-80221-5
@@ -22,6 +22,8 @@ LogLevel VERBOSE
 LoginGraceTime 20
 PermitRootLogin no
 
+PasswordAuthentication no
+
 ChallengeResponseAuthentication no
 
 PermitRootLogin no
@@ -38,9 +40,10 @@ AcceptEnv LANG LC_*
 Subsystem sftp /usr/lib/openssh/sftp-server -f AUTHPRIV -l INFO
 
 X11Forwarding no
-UseDNS yes
-GSSAPIAuthentication no
 
+PrintLastLog yes
+IgnoreUserKnownHosts yes
+PermitEmptyPasswords no
 AllowGroups {{ ssh_allow_groups }}
 MaxAuthTries 2
 ClientAliveInterval 300
@@ -50,3 +53,4 @@ KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr
 Macs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
 MaxSessions 2
+UseDNS no
