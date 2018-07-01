@@ -227,7 +227,8 @@
 # Monitor for use of process ID change (switching accounts) applications
 -w /bin/su -p x -k actions
 -w /usr/bin/sudo -p x -k actions
--w /etc/sudoers -p aw -k actions
+-w /etc/sudoers -p wa -k actions
+-w /etc/sudoers.d -p wa -k actions
 
 # Monitor usage of commands to change power state
 -w /sbin/shutdown -p x -k power
@@ -338,11 +339,12 @@
 -w /lib/systemd/system/docker-registry.service -k docker
 -w /lib/systemd/system/docker.service -k docker
 -w /lib/systemd/system/docker.socket -k docker
--w /usr/bin/docker-containerd-ctr -k docker
--w /usr/bin/docker-containerd -k docker
--w /usr/bin/docker-containerd-shim -k docker
 -w /usr/bin/docker -k docker
+-w /usr/bin/docker-containerd -k docker
+-w /usr/bin/docker-containerd-ctr -k docker
+-w /usr/bin/docker-containerd-shim -k docker
 -w /usr/bin/docker-runc -k docker
+-w /usr/bin/dockerd -k docker
 -w /usr/lib/systemd/system/docker-registry.service -k docker
 -w /usr/lib/systemd/system/docker.service -k docker
 -w /var/lib/docker -k docker
