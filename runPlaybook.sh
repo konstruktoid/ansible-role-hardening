@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if ! [ -x "$(which vagrant)" ]; then
+if ! [ -x "$(command -v vagrant)" ]; then
   echo 'Vagrant is required.'
 fi
 
@@ -16,11 +16,6 @@ if pwd | grep 'ansible-role-hardening' && grep 'konstruktoid/ansible-role-harden
   fi
 fi
 
-vagrant box update
+vagrant box update --insecure
 vagrant destroy -f
-
-vagrant status | grep virtualbox | awk '{print $1}' | while IFS= read -r VM; do
-  vagrant up "$VM"
-  vagrant provision "$VM"
-  vagrant reload "$VM"
-done
+vagrant up
