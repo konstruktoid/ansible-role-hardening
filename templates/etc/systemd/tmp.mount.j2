@@ -7,7 +7,7 @@ Before=local-fs.target
 What=tmpfs
 Where=/tmp
 Type=tmpfs
-Options=mode=1777,strictatime,nodev,nosuid
+Options=mode=1777,strictatime,noexec,nodev,nosuid
 
 [Install]
 WantedBy=multi-user.target
