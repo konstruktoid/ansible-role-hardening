@@ -19,3 +19,7 @@ fi
 vagrant box update --insecure
 vagrant destroy -f
 vagrant up
+
+vagrant status | grep virtualbox | awk '{print $1}' | while IFS= read -r VM; do
+  vagrant ssh "$VM" -c 'sudo reboot'
+done
