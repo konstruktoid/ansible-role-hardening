@@ -1,0 +1,20 @@
+---
+- name: configure dpkg noexec
+  become: 'yes'
+  become_method: sudo
+  lineinfile:
+    dest: /etc/apt/apt.conf.d/99noexec-tmp
+    mode: 0644
+    state: present
+    create: 'yes'
+    line: "{{ item }}"
+  with_items:
+    - 'DPkg::Pre-Invoke {"mount -o remount,exec,nodev,nosuid /tmp";};'
+    - 'DPkg::Pre-Invoke {"mount -o remount,exec,nodev,nosuid /var/tmp";};'
+    - 'DPkg::Post-Invoke {"mount -o remount,mode=1777,strictatime,noexec,nodev,nosuid /tmp";};'
+    - 'DPkg::Post-Invoke {"mount -o remount,mode=1777,strictatime,noexec,nodev,nosuid /var/tmp";};'
+  when: ansible_os_family == "Debian"
+  tags:
+    - apt
+    - security
+...

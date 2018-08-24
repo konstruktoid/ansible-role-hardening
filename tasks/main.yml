@@ -35,4 +35,5 @@
 - include: 37_mount.yml
 - include: 38_postfix.yml
 - include: 39_motdnews.yml
+- include: 99_extras.yml
 ...
