@@ -55,7 +55,7 @@ Packages to be installed on a Ubuntu host.
     packages_redhat: [aide, audit, haveged, openssh-server, postfix, rkhunter, rsyslog, vlock]
 Packages to be installed on a CentOS host.
 
-    packages_blacklist: [avahi-*, beep, popularity-contest, rsh*, talk*, telnet*, tftp*, yp-tools, ypbind, xinetd]
+    packages_blacklist: [avahi-*, beep, popularity-contest, rsh*, talk*, telnet*, tftp*, whoopsie, yp-tools, ypbind, xinetd]
 Packages to be removed.
 
     net_modules_blacklist: [dccp, sctp, rds, tipc]
@@ -79,7 +79,7 @@ Maximum number of processes. Soft limit.
     limit_nproc_hard: 150
 Maximum number of processes. Hard limit.
 
-    grub_cmdline: audit=1
+    grub_cmdline: audit=1 audit_backlog_limit=8192
 Additional Grub options, currently only `ansible_os_family == "Debian"`
 
 Templates
@@ -138,10 +138,14 @@ The CCE identifiers are taken from [CCE Identifiers in Guide to the Secure Confi
 │   ├── 37_mount.yml
 │   ├── 38_postfix.yml
 │   ├── 39_motdnews.yml
+│   ├── 99_extras.yml
 │   └── main.yml
 ├── templates
 │   ├── etc
 │   │   ├── adduser.conf.j2
+│   │   ├── apt
+│   │   │   └── apt.conf.d
+│   │   │       └── 99noexec-tmp.j2
 │   │   ├── audit
 │   │   │   └── rules.d
 │   │   │       └── hardening.rules.j2
