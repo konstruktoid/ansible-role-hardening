@@ -17,8 +17,8 @@ if pwd | grep 'ansible-role-hardening' && grep 'konstruktoid/ansible-role-harden
 fi
 
 vagrant box update --insecure
-vagrant destroy -f
-vagrant up
+vagrant destroy --force
+vagrant up --parallel
 
 vagrant status | grep virtualbox | awk '{print $1}' | while IFS= read -r VM; do
   vagrant ssh "$VM" -c 'sudo reboot'
