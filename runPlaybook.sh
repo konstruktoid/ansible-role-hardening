@@ -4,10 +4,6 @@ if ! [ -x "$(command -v vagrant)" ]; then
   echo 'Vagrant is required.'
 fi
 
-find ./ -type f -name '*.y*ml' | while IFS= read -r FILE; do yamllint "$FILE"; done
-
-rm ./*lynis.log
-
 if pwd | grep 'ansible-role-hardening' && grep 'konstruktoid/ansible-role-hardening.git' .git/config 2>/dev/null 1>&2; then
   if [ -d '/etc/ansible/roles/konstruktoid.hardening/' ]; then
     sudo rm -rf /etc/ansible/roles/konstruktoid.hardening/
@@ -17,6 +13,10 @@ if pwd | grep 'ansible-role-hardening' && grep 'konstruktoid/ansible-role-harden
     exit 1
   fi
 fi
+
+find ./ -name '*lynis.log' -exec rm {} \;
+
+find ./ -type f -name '*.y*ml' | while IFS= read -r FILE; do yamllint "$FILE"; done
 
 vagrant box update --insecure
 vagrant destroy --force
