@@ -15,13 +15,11 @@
   become: 'yes'
   become_method: sudo
   apt:
-    name: "{{ item }}"
+    name: "{{ packages_debian }}"
     state: latest
     install_recommends: 'no'
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  with_items:
-    - "{{ packages_debian }}"
   when: ansible_os_family == "Debian"
   tags:
     - apt
@@ -60,11 +58,9 @@
   become: 'yes'
   become_method: sudo
   apt:
-    name: "{{ item }}"
+    name: "{{ packages_blacklist }}"
     state: absent
     purge: 'yes'
-  with_items:
-    - "{{ packages_blacklist }}"
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   when: ansible_os_family == "Debian"
@@ -91,12 +87,13 @@
   become: 'yes'
   become_method: sudo
   apt:
-    name: "{{ item }}"
+    name: "{{ packages }}"
     state: latest
     install_recommends: 'no'
-  with_items:
-    - virtualbox-guest-dkms
-    - virtualbox-guest-utils
+  vars:
+    packages:
+      - virtualbox-guest-dkms
+      - virtualbox-guest-utils
   when: ansible_bios_version == "VirtualBox" and ansible_distribution == "Ubuntu"
   tags:
     - apt
@@ -108,11 +105,9 @@
   become: 'yes'
   become_method: sudo
   apt:
-    name: "{{ item }}"
+    name: open-vm-tools
     state: latest
     install_recommends: 'no'
-  with_items:
-    - open-vm-tools
   when: ansible_bios_version == "VMWare"
   tags:
     - apt
