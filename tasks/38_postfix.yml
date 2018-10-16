@@ -9,4 +9,37 @@
     - packages
     - postfix
     - security
+
+- name: postfix smtpd_banner
+  become: 'yes'
+  become_method: sudo
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  shell: postconf -e smtpd_banner="\$myhostname ESMTP"
+  tags:
+    - packages
+    - postfix
+    - security
+
+- name: postfix smtpd_client_restrictions
+  become: 'yes'
+  become_method: sudo
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  shell: postconf -e smtpd_client_restrictions=permit_mynetworks,reject
+  tags:
+    - packages
+    - postfix
+    - security
+
+- name: postfix inet_interfaces
+  become: 'yes'
+  become_method: sudo
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  shell: postconf -e inet_interfaces=loopback-only
+  tags:
+    - packages
+    - postfix
+    - security
 ...
