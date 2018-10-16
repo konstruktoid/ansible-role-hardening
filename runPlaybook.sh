@@ -15,7 +15,6 @@ if pwd | grep 'ansible-role-hardening' && grep 'konstruktoid/ansible-role-harden
 fi
 
 find ./ -name '*lynis.log' -exec rm {} \;
-
 find ./ -type f -name '*.y*ml' | while IFS= read -r FILE; do yamllint "$FILE"; done
 
 vagrant box update --insecure
@@ -24,9 +23,10 @@ vagrant up --parallel
 
 vagrant status | grep virtualbox | awk '{print $1}' | while IFS= read -r VM; do
   vagrant ssh "$VM" -c 'sudo reboot'
+  wait
 done
 
-find ./ -name '*lynis.log' -type f | while read -r f; do
+find ./ -name '*-lynis.log' -type f | while read -r f; do
   if test -s "$f"; then
     echo "$f: $(grep '^hardening_index' "$f")"
   else
