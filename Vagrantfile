@@ -75,8 +75,7 @@ Vagrant.configure("2") do |config|
     cosmic.ssh.insert_key = true
     cosmic.vm.network "private_network", ip:"10.2.3.45"
     cosmic.vm.hostname = "cosmic"
-    cosmic.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python --no-install-recommends"
+    cosmic.vm.provision "shell", path: "provision/setup.sh"
     cosmic.vm.provision "ansible" do |p|
       p.verbose = "v"
       p.limit = "all"
