@@ -44,4 +44,6 @@
   become_method: sudo
   shell: aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
   when: not aidedb.stat.exists
+  tags:
+    - skip_ansible_lint
 ...
