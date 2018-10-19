@@ -1,5 +1,15 @@
 ---
 # CCE-27078-5
+- name: sysconfig prelink
+  stat:
+    path: /etc/sysconfig/prelink
+  register: sysconfig_prelink_exists
+
+- name: etc prelink config
+  stat:
+    path: /etc/prelink.conf
+  register: etc_prelink_exists
+
 - name: disable prelinking
   become: 'yes'
   become_method: sudo
@@ -18,6 +28,7 @@
   become: 'yes'
   become_method: sudo
   command: prelink -ua
+  when: sysconfig_prelink_exists == True or etc_prelink_exists == True
   ignore_errors: true
   tags:
     - prelink
