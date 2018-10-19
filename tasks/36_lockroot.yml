@@ -1,4 +1,16 @@
 ---
+# ansible 2.6
+# - name: lock root account
+#   become: 'yes'
+#   become_method: sudo
+#   user:
+#     name: root
+#     password_lock: 'yes'
+#   tags:
+#     - users
+#     - lock_root
+#     - security
+
 - name: lock root account
   become: 'yes'
   become_method: sudo
@@ -9,4 +21,5 @@
     - users
     - lock_root
     - security
+    - skip_ansible_lint
 ...
