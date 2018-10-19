@@ -4,6 +4,8 @@
   become: 'yes'
   become_method: sudo
   command: service auditd restart
+  args:
+    warn: false
 
 - name: generate auditd
   become: 'yes'
@@ -20,7 +22,8 @@
 - name: reload systemd
   become: 'yes'
   become_method: sudo
-  command: systemctl daemon-reload
+  systemd:
+    daemon_reload: 'yes'
 
 - name: rkhunter propupd
   become: 'yes'
@@ -89,15 +92,19 @@
     enabled: 'no'
     state: stopped
 
+# https://github.com/ansible/ansible/pull/31450#issuecomment-352889579
 - name: yum clean
   become: 'yes'
   become_method: sudo
   command: yum -y clean all
+  args:
+    warn: false
 
 - name: yum makecache
   become: 'yes'
   become_method: sudo
-  command: yum -y makecache
+  yum:
+    update_cache: 'yes'
 
 - name: enable haveged
   become: 'yes'
