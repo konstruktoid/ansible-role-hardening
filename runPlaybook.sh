@@ -6,29 +6,82 @@ fi
 
 if pwd | grep 'ansible-role-hardening' && grep 'konstruktoid/ansible-role-hardening.git' .git/config 2>/dev/null 1>&2; then
   if [ -d '/etc/ansible/roles/konstruktoid.hardening/' ]; then
-    sudo rm -rf /etc/ansible/roles/konstruktoid.hardening/
-    sudo mkdir -p /etc/ansible/roles/konstruktoid.hardening/
-    sudo cp -R . /etc/ansible/roles/konstruktoid.hardening/
+    if ! sudo rm -rf /etc/ansible/roles/konstruktoid.hardening/; then
+      exit 1
+    else
+      sudo mkdir -p /etc/ansible/roles/konstruktoid.hardening/
+      sudo cp -R . /etc/ansible/roles/konstruktoid.hardening/
+    fi
   else
     exit 1
   fi
 fi
 
-find ./ -name '*lynis.log' -exec rm {} \;
-find ./ -type f -name '*.y*ml' | while IFS= read -r FILE; do yamllint "$FILE"; done
+export ANSIBLE_NOCOWS=1
+ANSIBLE_MAJ="2"
+ANSIBLE_MIN="$(shuf -i3-7 -n1)"
+ANSIBLE_V="$ANSIBLE_MAJ.$ANSIBLE_MIN"
+
+if [ -z "$ANSIBLE_V" ]; then
+  pip install --quiet ansible
+else
+  pip install --quiet ansible=="$ANSIBLE_V"
+fi
+
+echo "Using $(ansible --version | grep '^ansible')"
+
+if ! find ./ -type f -name '*.y*ml' ! -name '.*' -print0 | \
+  xargs -0L1 ansible-lint -x 403; then
+    echo 'ansible-lint failed.'
+    exit 1
+fi
+
+if ! find ./ -type f -name '*.y*ml' ! -name '.*' -print0 | xargs -0L1 yamllint; then
+  echo 'yamllint failed.'
+  exit 1
+fi
+
 
 vagrant box update --insecure
 vagrant destroy --force
-vagrant up --parallel
 
-vagrant status | grep virtualbox | awk '{print $1}' | while IFS= read -r VM; do
+if [ -z "$1" ]; then
+  vagrant up
+else
+  vagrant up "$1"
+fi
+
+wait
+
+VMFILE="$(mktemp)"
+vagrant status | grep 'running.*virtualbox' | awk '{print $1}' >> "$VMFILE"
+
+grep -v '^#' "$VMFILE" | while read -r VM; do
+  vagrant ssh "$VM" -c 'cp /vagrant/checkScore.sh ~/'
+  echo "Copying checkScore.sh on $VM."
+  wait
   vagrant ssh "$VM" -c 'sudo reboot'
   wait
 done
 
+grep -v '^#' "$VMFILE" | while read -r VM; do
+  while ! vagrant ssh "$VM" -c 'id'; do
+    echo "Waiting for $VM."
+    sleep 10
+  done
+
+  vagrant ssh "$VM" -c "sh ~/checkScore.sh"
+  wait
+  vagrant ssh "$VM" -c 'cat ~/lynis-report.dat' > "$VM-$(date +%y%m%d)-lynis.log"
+  wait
+done
+
+rm "$VMFILE"
+
 find ./ -name '*-lynis.log' -type f | while read -r f; do
   if test -s "$f"; then
-    echo "$f: $(grep '^hardening_index' "$f")"
+    echo "$f:"
+    grep -E '^hardening_index|^ansible_version' "$f"
   else
     echo "$f is empty, a test stage failed."
   fi
