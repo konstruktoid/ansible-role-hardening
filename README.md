@@ -3,7 +3,7 @@ ansible-role-hardening
 
 Ansible role to make a Debian, Ubuntu or CentoOS server a bit more secure, systemd edition.
 
-Requires [Ansible](https://www.ansible.com/) >= 2.2.
+Requires [Ansible](https://www.ansible.com/) >= 2.3.
 
 Distributions Tested using Vagrant
 --------------------
@@ -94,12 +94,15 @@ The CCE identifiers are taken from [CCE Identifiers in Guide to the Secure Confi
 ├── LICENSE
 ├── README.md
 ├── Vagrantfile
+├── checkScore.sh
 ├── defaults
 │   └── main.yml
 ├── handlers
 │   └── main.yml
 ├── meta
 │   └── main.yml
+├── provision
+│   └── setup.sh
 ├── runPlaybook.sh
 ├── tasks
 │   ├── 02_firewall.yml

@@ -3,7 +3,7 @@ galaxy_info:
   author: Thomas Sjögren
   description: Debian, Ubuntu and CentOS server hardening, systemd edition
   license: apache
-  min_ansible_version: 2.2
+  min_ansible_version: 2.3
   platforms:
     - name: EL
       versions:
