@@ -41,6 +41,8 @@ Vagrant.configure("2") do |config|
     centos.ssh.insert_key = true
     centos.vm.network "private_network", ip:"10.2.3.43"
     centos.vm.hostname = "centos"
+    centos.vm.provision "shell",
+      inline: "yum install -y ansible"
     centos.vm.provision "ansible" do |p|
       p.verbose = "v"
       p.limit = "all"
