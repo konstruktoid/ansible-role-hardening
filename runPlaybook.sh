@@ -19,7 +19,7 @@ fi
 
 export ANSIBLE_NOCOWS=1
 ANSIBLE_MAJ="2"
-ANSIBLE_MIN="$(shuf -i3-7 -n1)"
+ANSIBLE_MIN="$(shuf -i4-7 -n1)"
 ANSIBLE_V="$ANSIBLE_MAJ.$ANSIBLE_MIN"
 
 if [ -z "$ANSIBLE_V" ]; then
