@@ -100,12 +100,6 @@
   args:
     warn: false
 
-- name: yum makecache
-  become: 'yes'
-  become_method: sudo
-  yum:
-    update_cache: 'yes'
-
 - name: enable haveged
   become: 'yes'
   become_method: sudo

@@ -137,8 +137,6 @@
     create: 'yes'
     insertafter: "[main]"
   when: ansible_os_family == "RedHat"
-  notify:
-    - yum makecache
   tags:
     - yum
     - security
