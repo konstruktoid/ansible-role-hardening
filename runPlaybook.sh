@@ -18,9 +18,7 @@ if pwd | grep 'ansible-role-hardening' && grep 'konstruktoid/ansible-role-harden
 fi
 
 export ANSIBLE_NOCOWS=1
-ANSIBLE_MAJ="2"
-ANSIBLE_MIN="$(shuf -i4-7 -n1)"
-ANSIBLE_V="$ANSIBLE_MAJ.$ANSIBLE_MIN"
+ANSIBLE_V=2.5
 
 if [ -z "$ANSIBLE_V" ]; then
   pip install --quiet ansible
@@ -48,7 +46,7 @@ vagrant destroy --force
 if [ -z "$1" ]; then
   vagrant up
 else
-  vagrant up "$1"
+  vagrant up "$@"
 fi
 
 wait
@@ -59,24 +57,20 @@ vagrant status | grep 'running.*virtualbox' | awk '{print $1}' >> "$VMFILE"
 grep -v '^#' "$VMFILE" | while read -r VM; do
   vagrant ssh "$VM" -c 'cp /vagrant/checkScore.sh ~/'
   echo "Copying checkScore.sh on $VM."
-  wait
   vagrant ssh "$VM" -c 'sudo reboot'
-  wait
-done
+  echo "Rebooting $VM."
 
-grep -v '^#' "$VMFILE" | while read -r VM; do
   while ! vagrant ssh "$VM" -c 'id'; do
     echo "Waiting for $VM."
     sleep 10
   done
 
-  vagrant ssh "$VM" -c "sh ~/checkScore.sh"
-  wait
-  vagrant ssh "$VM" -c 'cat ~/lynis-report.dat' > "$VM-$(date +%y%m%d)-lynis.log"
-  wait
+  vagrant ssh "$VM" -c 'sh ~/checkScore.sh || exit 1 && cat ~/lynis-report.dat' > "$VM-$(date +%y%m%d)-lynis.log"
 done
 
 rm "$VMFILE"
+
+printf '\n\n'
 
 find ./ -name '*-lynis.log' -type f | while read -r f; do
   if test -s "$f"; then
