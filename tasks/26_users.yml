@@ -13,7 +13,7 @@
     - list
     - news
     - uucp
-  ignore_errors: 'yes'
+  ignore_errors: true
   tags:
     - users
     - security

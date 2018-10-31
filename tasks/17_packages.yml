@@ -64,6 +64,7 @@
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   when: ansible_os_family == "Debian"
+  ignore_errors: true
   tags:
     - apt
     - packages
@@ -78,6 +79,7 @@
   with_items:
     - "{{ packages_blacklist }}"
   when: ansible_os_family == "RedHat"
+  ignore_errors: true
   tags:
     - yum
     - packages
