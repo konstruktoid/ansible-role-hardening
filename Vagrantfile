@@ -7,11 +7,11 @@ Vagrant.configure("2") do |config|
     bionic.vm.hostname = "bionic"
     bionic.vm.provision "shell",
       inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python --no-install-recommends"
-    bionic.vm.provision "ansible" do |p|
-      p.verbose = "v"
-      p.limit = "all"
-      p.playbook = "tests/test.yml"
-      p.extra_vars = {
+    bionic.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.limit = "all"
+      a.playbook = "tests/test.yml"
+      a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
         "ssh_allow_groups" => "vagrant sudo ubuntu"
      }
@@ -25,11 +25,11 @@ Vagrant.configure("2") do |config|
     stretch.vm.hostname = "stretch"
     stretch.vm.provision "shell",
       inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python --no-install-recommends"
-    stretch.vm.provision "ansible" do |p|
-      p.verbose = "v"
-      p.limit = "all"
-      p.playbook = "tests/test.yml"
-      p.extra_vars = {
+    stretch.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.limit = "all"
+      a.playbook = "tests/test.yml"
+      a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
         "ssh_allow_groups" => "vagrant sudo debian ubuntu"
      }
@@ -43,31 +43,50 @@ Vagrant.configure("2") do |config|
     centos.vm.hostname = "centos"
     centos.vm.provision "shell",
       inline: "yum install -y ansible"
-    centos.vm.provision "ansible" do |p|
-      p.verbose = "v"
-      p.limit = "all"
-      p.playbook = "tests/test.yml"
-      p.extra_vars = {
+    centos.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.limit = "all"
+      a.playbook = "tests/test.yml"
+      a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
         "ssh_allow_groups" => "vagrant sudo"
       }
     end
   end
 
-  config.vm.define "fedora" do |fedora|
-    fedora.vm.box = "bento/fedora-27"
-    fedora.ssh.insert_key = true
-    fedora.vm.network "private_network", ip:"10.2.3.44"
-    fedora.vm.hostname = "fedora"
-    fedora.vm.provision "shell",
+  config.vm.define "fedora27" do |fedora27|
+    fedora27.vm.box = "bento/fedora-27"
+    fedora27.ssh.insert_key = true
+    fedora27.vm.network "private_network", ip:"10.2.3.44"
+    fedora27.vm.hostname = "fedora27"
+    fedora27.vm.provision "shell",
       inline: "dnf install -y ansible"
-    fedora.vm.provision "ansible" do |p|
-      p.verbose = "v"
-      p.limit = "all"
-      p.playbook = "tests/test.yml"
-      p.extra_vars = {
+    fedora27.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.limit = "all"
+      a.playbook = "tests/test.yml"
+      a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
         "ssh_allow_groups" => "vagrant sudo"
+      }
+    end
+  end
+
+  config.vm.define "fedora29" do |fedora29|
+    fedora29.vm.box = "k10d/fedora-29"
+    fedora29.ssh.insert_key = true
+    fedora29.vm.network "private_network", ip:"10.2.3.44"
+    fedora29.vm.hostname = "fedora29"
+    fedora29.vm.provision "shell",
+      inline: "dnf install -y ansible"
+    fedora29.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.limit = "all"
+      a.playbook = "tests/test.yml"
+      a.extra_vars = {
+        "sshd_admin_net" => "0.0.0.0/0",
+        "ssh_allow_groups" => "vagrant sudo",
+        "ansible_python_interpreter" => "/usr/bin/python3"
       }
     end
   end
@@ -77,12 +96,12 @@ Vagrant.configure("2") do |config|
     cosmic.ssh.insert_key = true
     cosmic.vm.network "private_network", ip:"10.2.3.45"
     cosmic.vm.hostname = "cosmic"
-    cosmic.vm.provision "shell", path: "provision/setup.sh"
-    cosmic.vm.provision "ansible" do |p|
-      p.verbose = "v"
-      p.limit = "all"
-      p.playbook = "tests/test.yml"
-      p.extra_vars = {
+    cosmic.vm.provision "shell", path: "provision/setua.sh"
+    cosmic.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.limit = "all"
+      a.playbook = "tests/test.yml"
+      a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
         "ssh_allow_groups" => "vagrant sudo ubuntu"
      }
