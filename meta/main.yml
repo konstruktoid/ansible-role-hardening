@@ -15,6 +15,10 @@ galaxy_info:
     - name: Debian
       versions:
         - stretch
+    - name: Fedora
+      versions:
+        - 27
+        - 29
   galaxy_tags:
     - centos
     - debian
