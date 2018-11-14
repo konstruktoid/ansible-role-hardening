@@ -38,13 +38,26 @@
     - security
     - firewalld
 
-- name: firewalld-python installation
+- name: python-firewall installation
   become: 'yes'
   become_method: sudo
   package:
     name: "python-firewall"
     state: latest
-  when: ansible_os_family == "RedHat"
+  when: ansible_os_family == "RedHat" and ansible_python.version.major <= 2
+  tags:
+    - yum
+    - packages
+    - security
+    - firewalld
+
+- name: python3-firewall installation
+  become: 'yes'
+  become_method: sudo
+  package:
+    name: "python3-firewall"
+    state: latest
+  when: ansible_os_family == "RedHat" and ansible_python.version.major >= 3
   tags:
     - yum
     - packages
