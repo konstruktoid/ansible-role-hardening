@@ -96,7 +96,7 @@ Vagrant.configure("2") do |config|
     cosmic.ssh.insert_key = true
     cosmic.vm.network "private_network", ip:"10.2.3.45"
     cosmic.vm.hostname = "cosmic"
-    cosmic.vm.provision "shell", path: "provision/setua.sh"
+    cosmic.vm.provision "shell", path: "provision/setup.sh"
     cosmic.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -104,6 +104,26 @@ Vagrant.configure("2") do |config|
       a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
         "ssh_allow_groups" => "vagrant sudo ubuntu"
+     }
+    end
+  end
+
+  config.vm.define "disco" do |disco|
+    disco.vm.box = "ubuntu/disco64"
+    disco.ssh.insert_key = true
+    disco.vm.network "private_network", ip:"10.2.3.47"
+    disco.vm.hostname = "disco"
+    disco.vm.provision "shell",
+      inline: "apt-get update && apt-get -y install ansible --no-install-recommends"
+    # disco.vm.provision "shell", path: "provision/setup.sh"
+    disco.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.limit = "all"
+      a.playbook = "tests/test.yml"
+      a.extra_vars = {
+        "sshd_admin_net" => "0.0.0.0/0",
+        "ssh_allow_groups" => "vagrant sudo ubuntu",
+        "ansible_python_interpreter" => "/usr/bin/python3"
      }
     end
   end
