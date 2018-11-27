@@ -14,6 +14,7 @@ bento/debian-9
 bento/fedora-27
 ubuntu/bionic64
 ubuntu/cosmic64
+ubuntu/disco64
 ```
 
 Role Variables
