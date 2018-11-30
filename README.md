@@ -91,6 +91,9 @@ The CCE identifiers are taken from [CCE Identifiers in Guide to the Secure Confi
 
 [CIS identifiers](https://benchmarks.cisecurity.org/downloads/show-single/index.cfm?file=independentlinux.100) will be added in the future.
 
+Structure
+---------
+
 ```sh
 .
 ├── LICENSE
