@@ -12,6 +12,7 @@ Distributions Tested using Vagrant
 bento/centos-7
 bento/debian-9
 bento/fedora-27
+generic/fedora29
 ubuntu/bionic64
 ubuntu/cosmic64
 ubuntu/disco64
@@ -190,10 +191,10 @@ The CCE identifiers are taken from [CCE Identifiers in Guide to the Secure Confi
 │           └── system
 │               ├── aidecheck.service.j2
 │               └── aidecheck.timer.j2
-├── tests
-│   ├── inventory
-│   ├── test.retry
-│   └── test.yml
+└── tests
+    ├── inventory
+    ├── test.retry
+    └── test.yml
 ```
 
 Dependencies
