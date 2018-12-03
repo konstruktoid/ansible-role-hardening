@@ -28,6 +28,8 @@ fi
 
 echo "Using $(ansible --version | grep '^ansible')"
 
+find ./ -name '*.log' -exec rm {} \;
+
 if ! find ./ -type f -name '*.y*ml' ! -name '.*' -print0 | \
   xargs -0L1 ansible-lint -x 403; then
     echo 'ansible-lint failed.'

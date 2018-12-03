@@ -57,24 +57,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "fedora27" do |fedora27|
-    fedora27.vm.box = "bento/fedora-27"
-    fedora27.ssh.insert_key = true
-    fedora27.vm.network "private_network", ip: "10.2.3.44"
-    fedora27.vm.hostname = "fedora27"
-    fedora27.vm.provision "shell",
-      inline: "dnf install -y ansible"
-    fedora27.vm.provision "ansible" do |a|
-      a.verbose = "v"
-      a.limit = "all"
-      a.playbook = "tests/test.yml"
-      a.extra_vars = {
-        "sshd_admin_net" => "0.0.0.0/0",
-        "ssh_allow_groups" => "vagrant sudo"
-      }
-    end
-  end
-
   config.vm.define "fedora29" do |fedora29|
     fedora29.vm.box = "generic/fedora29"
     fedora29.ssh.insert_key = true

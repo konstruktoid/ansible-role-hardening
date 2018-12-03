@@ -11,7 +11,6 @@ Distributions Tested using Vagrant
 ```
 bento/centos-7
 bento/debian-9
-bento/fedora-27
 generic/fedora29
 ubuntu/bionic64
 ubuntu/cosmic64

@@ -18,7 +18,6 @@ galaxy_info:
         - stretch
     - name: Fedora
       versions:
-        - 27
         - 29
   galaxy_tags:
     - centos
