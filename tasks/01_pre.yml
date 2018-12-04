@@ -1,0 +1,42 @@
+---
+- name: create custom facts directory
+  file:
+    path: /etc/ansible/facts.d
+    recurse: true
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: systemd version fact
+  become: 'yes'
+  become_method: sudo
+  template:
+    src: etc/ansible/facts.d/systemd_version.fact
+    dest: /etc/ansible/facts.d/systemd_version.fact
+    backup: 'yes'
+    mode: 0755
+    owner: root
+    group: root
+  tags:
+    - systemd
+    - fact
+
+- name: cpuinfo rdrand fact
+  become: 'yes'
+  become_method: sudo
+  template:
+    src: etc/ansible/facts.d/cpuinfo_rdrand.fact
+    dest: /etc/ansible/facts.d/cpuinfo_rdrand.fact
+    backup: 'yes'
+    mode: 0755
+    owner: root
+    group: root
+  tags:
+    - cpuinfo
+    - rdrand
+    - fact
+
+- name: use custom facts
+  setup: ~
+...
