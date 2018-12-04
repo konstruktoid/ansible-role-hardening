@@ -1,0 +1,6 @@
+#!/bin/sh
+if grep -sqo rdrand /proc/cpuinfo; then
+  echo 'true'
+else
+  echo 'false'
+fi
