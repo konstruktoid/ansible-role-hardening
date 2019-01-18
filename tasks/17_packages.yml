@@ -124,7 +124,7 @@
   package:
     name: rng-tools
     state: latest
-  when: ansible_local.cpuinfo_rdrand == true
+  when: ansible_local.cpuinfo_rdrand
   tags:
     - rng-tools
     - packages
