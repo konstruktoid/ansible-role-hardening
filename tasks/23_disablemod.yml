@@ -12,6 +12,8 @@
     owner: root
     group: root
     mode: 0644
+  tags:
+    - modprobe    
 
 - name: disable misc kernel modules
   become: 'yes'
