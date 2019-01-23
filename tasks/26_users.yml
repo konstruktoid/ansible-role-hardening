@@ -12,6 +12,7 @@
     - irc
     - list
     - news
+    - sync
     - uucp
   ignore_errors: true
   tags:
