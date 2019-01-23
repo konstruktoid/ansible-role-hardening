@@ -13,4 +13,6 @@
     - systemd
     - ctrl-alt-del
     - security
+  when:
+    no_restart is not defined
 ...
