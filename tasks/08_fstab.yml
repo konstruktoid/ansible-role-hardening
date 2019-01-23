@@ -63,6 +63,6 @@
     name: var-tmp.mount
     enabled: 'yes'
     masked: 'no'
-  tags:
-    - tmp
+  when:
+    no_restart is not defined
 ...
