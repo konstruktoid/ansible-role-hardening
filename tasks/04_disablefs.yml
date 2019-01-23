@@ -16,7 +16,8 @@
     owner: root
     group: root
     mode: 0644
-
+  tags:
+    - modprobe
 - name: disable file system kernel modules
   become: 'yes'
   become_method: sudo
