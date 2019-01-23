@@ -64,4 +64,6 @@
     name: var-tmp.mount
     enabled: 'yes'
     masked: 'no'
+  tags:
+    - tmp
 ...
