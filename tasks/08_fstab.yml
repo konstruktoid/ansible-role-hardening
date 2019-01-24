@@ -36,8 +36,9 @@
     regexp: '^Where=/tmp$'
     replace: "Where=/var/tmp"
     dest: /lib/systemd/system/var-tmp.mount
-  when:
-    no_restart is not defined
+  tags:
+    - systemd
+    - tmp
     - security
 
 - name: remove /tmp from fstab
