@@ -13,7 +13,7 @@
 -i
 
 # Failure Mode
--f 2
+-f {{ auditd_mode }}
 
 # Audit the audit logs
 -w /var/log/audit/ -k auditlog

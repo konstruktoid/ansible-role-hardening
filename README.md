@@ -83,6 +83,9 @@ Maximum number of processes. Hard limit.
     grub_cmdline: audit=1 audit_backlog_limit=8192
 Additional Grub options, currently only `ansible_os_family == "Debian"`
 
+    auditd_mode: 1
+Auditd failure mode. 0=silent 1=printk 2=panic.
+
 Templates
 ---------
 

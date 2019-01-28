@@ -20,4 +20,5 @@ limit_nofile_hard: 150
 limit_nproc_soft: 100
 limit_nproc_hard: 150
 grub_cmdline: audit=1 audit_backlog_limit=8192
+auditd_mode: 1
 ...
