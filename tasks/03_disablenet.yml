@@ -12,7 +12,7 @@
     group: root
     mode: 0644
   tags:
-    - modprob
+    - modprobe
 
 - name: disable kernel network modules
   become: 'yes'
