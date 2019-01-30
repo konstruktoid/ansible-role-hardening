@@ -58,7 +58,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "fedora29" do |fedora29|
-    fedora29.vm.box = "generic/fedora29"
+    fedora29.vm.box = "bento/fedora-29"
     fedora29.ssh.insert_key = true
     fedora29.vm.network "private_network", ip: "10.2.3.44"
     fedora29.vm.hostname = "fedora29"
