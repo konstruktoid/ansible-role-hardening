@@ -31,18 +31,37 @@
     - aide
     - security
 
+- name: add aide dir exclusions
+  become: 'yes'
+  blockinfile:
+    path: /etc/aide/aide.conf
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    backup: yes
+    insertafter: EOF
+    block: |
+      !/var/lib/lxcfs
+      !/var/lib/private/systemd
+      !/var/log/journal
+      !/var/log/audit
+
 - name: stat aide.db
   become: 'yes'
   become_method: sudo
   stat:
-    path: /var/lib/aide/aide.db.gz
+    path: /var/lib/aide/aide.db
   register: aidedb
 
 # CCE-27220-3
 - name: initialize aide
   become: 'yes'
   become_method: sudo
-  shell: aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
+  expect:
+    command: aideinit
+    timeout: null
+    responses:
+      Question:
+        - 'Overwrite /var/lib/aide/aide.db [yN]?': 'y'
+  shell:
   when: not aidedb.stat.exists
   tags:
     - skip_ansible_lint
