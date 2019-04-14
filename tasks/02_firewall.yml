@@ -111,6 +111,7 @@
   become_method: sudo
   ufw:
     state: enabled
+    direction: incoming
     policy: deny
     logging: low
   when: ansible_os_family == "Debian"
