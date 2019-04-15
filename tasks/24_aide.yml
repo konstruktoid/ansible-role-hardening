@@ -61,7 +61,6 @@
     responses:
       Question:
         - 'Overwrite /var/lib/aide/aide.db [yN]?': 'y'
-  shell:
   when: not aidedb.stat.exists
   tags:
     - skip_ansible_lint
