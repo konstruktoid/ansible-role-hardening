@@ -99,7 +99,7 @@ Vagrant.configure("2") do |config|
     disco.vm.network "private_network", ip: "10.2.3.47"
     disco.vm.hostname = "disco"
     disco.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible python-pexpect --no-install-recommends"
+      inline: "apt-get update && apt-get -y install ansible python3-pexpect --no-install-recommends"
     # disco.vm.provision "shell", path: "provision/setup.sh"
     disco.vm.provision "ansible" do |a|
       a.verbose = "v"
