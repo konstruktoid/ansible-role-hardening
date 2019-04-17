@@ -36,7 +36,7 @@
   blockinfile:
     path: /etc/aide/aide.conf
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
-    backup: yes
+    backup: 'yes'
     insertafter: EOF
     block: |
       !/var/lib/lxcfs
