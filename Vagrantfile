@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
     bionic.vm.network "private_network", ip: "10.2.3.41"
     bionic.vm.hostname = "bionic"
     bionic.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python --no-install-recommends"
+      inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python python-pexpect --no-install-recommends"
     bionic.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
     stretch.vm.network "private_network", ip: "10.2.3.42"
     stretch.vm.hostname = "stretch"
     stretch.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python --no-install-recommends"
+      inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python python-pexpect --no-install-recommends"
     stretch.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -99,7 +99,7 @@ Vagrant.configure("2") do |config|
     disco.vm.network "private_network", ip: "10.2.3.47"
     disco.vm.hostname = "disco"
     disco.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible --no-install-recommends"
+      inline: "apt-get update && apt-get -y install ansible python-pexpect --no-install-recommends"
     # disco.vm.provision "shell", path: "provision/setup.sh"
     disco.vm.provision "ansible" do |a|
       a.verbose = "v"
