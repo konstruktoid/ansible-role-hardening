@@ -246,9 +246,9 @@ Recommended Reading
 
 [Common Configuration Enumeration](https://nvd.nist.gov/cce/index.cfm)
 
-[Draft Red Hat 7 STIG Version 1, Release 0.1](http://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx)
+[Canonical Ubuntu 16.04 LTS STIG - Ver 1, Rel 2](https://public.cyber.mil/stigs/downloads/?_dl_facet_stigs=operating-systems%2Cunix-linux)
 
-[Canonical Ubuntu 16.04 STIG Ver 1, Rel 1](http://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx)
+[Red Hat Enterprise Linux 7 - Ver 2, Rel 3 STIG](https://public.cyber.mil/stigs/downloads/?_dl_facet_stigs=operating-systems%2Cunix-linux)
 
 [Security focused systemd configuration](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc)
 
