@@ -7,8 +7,18 @@ else
   exit 1
 fi
 
+if grep -iRE '^deb.*redir' /etc/apt/*; then
+echo "deb http://ftp.debian.org/debian stretch main
+deb http://ftp.debian.org/debian stretch-updates main
+deb http://security.debian.org/debian-security stretch/updates main
+deb-src http://ftp.debian.org/debian stretch main
+deb-src http://ftp.debian.org/debian stretch-updates main
+deb-src http://security.debian.org/debian-security stretch/updates main" | sudo tee /etc/apt/sources.list
+fi
+
 cd ~ || exit 1
 
+sudo "$PKG" -y update
 sudo "$PKG" -y install git
 
 git clone https://github.com/CISOFy/lynis
