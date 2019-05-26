@@ -31,7 +31,7 @@
     - aide
     - security
 
-- name: add aide dir exclusions
+- name: add aide Debian dir exclusions
   become: 'yes'
   blockinfile:
     path: /etc/aide/aide.conf
@@ -43,16 +43,61 @@
       !/var/lib/private/systemd
       !/var/log/journal
       !/var/log/audit
+  when: ansible_os_family == "Debian"
+  tags:
+    - aide
+    - security
 
-- name: stat aide.db
+- name: stat Debian aide.db
   become: 'yes'
   become_method: sudo
   stat:
     path: /var/lib/aide/aide.db
-  register: aidedb
+  register: ubuaidedb
+  when: ansible_os_family == "Debian"
+  tags:
+    - aide
+    - security
+
+- name: add aide RedHat dir exclusions
+  become: 'yes'
+  blockinfile:
+    path: /etc/aide.conf
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    backup: 'yes'
+    insertafter: EOF
+    block: |
+      !/var/lib/lxcfs
+      !/var/lib/private/systemd
+      !/var/log/journal
+      !/var/log/audit
+  when: ansible_os_family == "RedHat"
+  tags:
+    - aide
+    - security
+
+- name: stat RedHat aide.db
+  become: 'yes'
+  become_method: sudo
+  stat:
+    path: /var/lib/aide/aide.db.gz
+  register: rhelaidedb
+  when: ansible_os_family == "RedHat"
+  tags:
+    - aide
+    - security
 
 # CCE-27220-3
-- name: initialize aide
+- name: initialize RedHat aide
+  become: 'yes'
+  become_method: sudo
+  command: aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
+  when: ansible_os_family == "RedHat" and not rhelaidedb.stat.exists
+  tags:
+    - aide
+    - security
+
+- name: initialize Debian aide
   become: 'yes'
   become_method: sudo
   expect:
@@ -61,7 +106,9 @@
     responses:
       Question:
         - 'Overwrite /var/lib/aide/aide.db [yN]?': 'y'
-  when: not aidedb.stat.exists
+  when: ansible_os_family == "Debian" and not ubuaidedb.stat.exists
   tags:
     - skip_ansible_lint
+    - aide
+    - security
 ...
