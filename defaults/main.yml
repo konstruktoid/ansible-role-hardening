@@ -15,10 +15,10 @@ packages_blacklist: [apport*, avahi*, avahi-*, beep, git, popularity-contest, rs
 net_modules_blacklist: [dccp, sctp, rds, tipc]
 fs_modules_blacklist: [cramfs, freevxfs, hfs, hfsplus, jffs2, squashfs, udf, vfat]
 misc_modules_blacklist: [bluetooth, bnep, btusb, firewire-core, n_hdlc, net-pf-31, pcspkr, soundcore, thunderbolt, usb-midi, usb-storage]
-limit_nofile_soft: 100
-limit_nofile_hard: 150
-limit_nproc_soft: 100
-limit_nproc_hard: 150
+limit_nofile_soft: 512
+limit_nofile_hard: 1024
+limit_nproc_soft: 512
+limit_nproc_hard: 1024
 grub_cmdline: audit=1 audit_backlog_limit=8192
 auditd_mode: 1
 ...
