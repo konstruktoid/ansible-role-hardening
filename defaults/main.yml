@@ -11,7 +11,7 @@ suid_sgid_blacklist: [/bin/ntfs-3g, /usr/bin/at, /bin/fusermount, /bin/mount, /b
 random_ack_limit: "{{ 1000000 | random(start=1000) }}"
 packages_debian: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-apparmor, libpam-cracklib, libpam-tmpdir, openssh-server, postfix, rkhunter, rsyslog, vlock]
 packages_redhat: [aide, audit, haveged, openssh-server, postfix, psacct, rkhunter, rsyslog, vlock]
-packages_blacklist: [apport*, avahi*, avahi-*, beep, git, popularity-contest, rsh*, talk*, telnet*, tftp*, whoopsie, xinetd, yp-tools, ypbind]
+packages_blacklist: [apport*, avahi*, avahi-*, beep, git, pastebinit, popularity-contest, rsh*, talk*, telnet*, tftp*, whoopsie, xinetd, yp-tools, ypbind]
 net_modules_blacklist: [dccp, sctp, rds, tipc]
 fs_modules_blacklist: [cramfs, freevxfs, hfs, hfsplus, jffs2, squashfs, udf, vfat]
 misc_modules_blacklist: [bluetooth, bnep, btusb, firewire-core, n_hdlc, net-pf-31, pcspkr, soundcore, thunderbolt, usb-midi, usb-storage]
