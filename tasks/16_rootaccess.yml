@@ -28,4 +28,17 @@
   tags:
     - securetty
     - security
+
+- name: mask debug-shell
+  become: 'yes'
+  become_method: sudo
+  systemd:
+    name: debug-shell.service
+    masked: 'yes'
+    enabled: 'no'
+    state: stopped
+  tags:
+    - systemd
+    - debug-shell
+    - security
 ...
