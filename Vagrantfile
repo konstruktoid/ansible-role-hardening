@@ -21,14 +21,14 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "stretch" do |stretch|
-    stretch.vm.box = "bento/debian-9"
-    stretch.ssh.insert_key = true
-    stretch.vm.network "private_network", ip: "10.2.3.42"
-    stretch.vm.hostname = "stretch"
-    stretch.vm.provision "shell",
+  config.vm.define "buster" do |buster|
+    buster.vm.box = "bento/debian-10"
+    buster.ssh.insert_key = true
+    buster.vm.network "private_network", ip: "10.2.3.42"
+    buster.vm.hostname = "buster"
+    buster.vm.provision "shell",
       inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python python-pexpect --no-install-recommends"
-    stretch.vm.provision "ansible" do |a|
+    buster.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
       a.playbook = "tests/test.yml"
