@@ -1,5 +1,5 @@
-on: push
-name: New workflow
+on: [push, pull_request]
+name: YAML lint
 jobs:
   konstruktoidYAMLLint:
     name: Konstruktoid YAML lint
