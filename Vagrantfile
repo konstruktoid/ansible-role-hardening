@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "buster" do |buster|
-    buster.vm.box = "bento/debian-10"
+    buster.vm.box = "debian/buster64"
     buster.ssh.insert_key = true
     buster.vm.network "private_network", ip: "10.2.3.42"
     buster.vm.hostname = "buster"

@@ -10,8 +10,8 @@ Distributions Tested using Vagrant
 
 ```
 bento/centos-7
-bento/debian-10
 bento/fedora-29
+debian/buster64
 ubuntu/bionic64
 ubuntu/cosmic64
 ubuntu/disco64
