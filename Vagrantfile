@@ -57,14 +57,14 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "fedora29" do |fedora29|
-    fedora29.vm.box = "bento/fedora-29"
-    fedora29.ssh.insert_key = true
-    fedora29.vm.network "private_network", ip: "10.2.3.44"
-    fedora29.vm.hostname = "fedora29"
-    fedora29.vm.provision "shell",
+  config.vm.define "fedora" do |fedora|
+    fedora.vm.box = "bento/fedora-30"
+    fedora.ssh.insert_key = true
+    fedora.vm.network "private_network", ip: "10.2.3.44"
+    fedora.vm.hostname = "fedora"
+    fedora.vm.provision "shell",
       inline: "dnf install -y ansible"
-    fedora29.vm.provision "ansible" do |a|
+    fedora.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
       a.playbook = "tests/test.yml"
@@ -73,23 +73,6 @@ Vagrant.configure("2") do |config|
         "ssh_allow_groups" => "vagrant sudo",
         "ansible_python_interpreter" => "/usr/bin/python3"
       }
-    end
-  end
-
-  config.vm.define "cosmic" do |cosmic|
-    cosmic.vm.box = "ubuntu/cosmic64"
-    cosmic.ssh.insert_key = true
-    cosmic.vm.network "private_network", ip: "10.2.3.45"
-    cosmic.vm.hostname = "cosmic"
-    cosmic.vm.provision "shell", path: "provision/setup.sh"
-    cosmic.vm.provision "ansible" do |a|
-      a.verbose = "v"
-      a.limit = "all"
-      a.playbook = "tests/test.yml"
-      a.extra_vars = {
-        "sshd_admin_net" => "0.0.0.0/0",
-        "ssh_allow_groups" => "vagrant sudo ubuntu"
-     }
     end
   end
 

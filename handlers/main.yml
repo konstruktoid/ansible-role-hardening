@@ -4,6 +4,7 @@
   become: 'yes'
   become_method: sudo
   command: service auditd restart
+  ignore_errors: true
   args:
     warn: false
 

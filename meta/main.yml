@@ -11,14 +11,13 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - bionic
-        - cosmic
         - disco
     - name: Debian
       versions:
         - buster
     - name: Fedora
       versions:
-        - 29
+        - 30
   galaxy_tags:
     - centos
     - debian
