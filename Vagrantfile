@@ -40,19 +40,23 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "centos" do |centos|
-    centos.vm.box = "bento/centos-7"
+    centos.vm.box = "bento/centos-8"
     centos.ssh.insert_key = true
     centos.vm.network "private_network", ip: "10.2.3.43"
+    centos.vm.provider "virtualbox" do |c|
+      c.default_nic_type = "82543GC"
+    end
     centos.vm.hostname = "centos"
     centos.vm.provision "shell",
-      inline: "yum install -y ansible"
+      inline: "dnf install -y epel-release && dnf install -y ansible python3"
     centos.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
       a.playbook = "tests/test.yml"
       a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
-        "ssh_allow_groups" => "vagrant sudo"
+        "ssh_allow_groups" => "vagrant sudo",
+        "ansible_python_interpreter" => "/usr/bin/python3"
       }
     end
   end

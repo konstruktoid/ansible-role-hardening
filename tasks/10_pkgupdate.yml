@@ -38,19 +38,6 @@
     - security
     - firewalld
 
-- name: rpm-python installation
-  become: 'yes'
-  become_method: sudo
-  package:
-    name: "rpm-python"
-    state: latest
-  when: ansible_distribution == "CentOS"
-  tags:
-    - yum
-    - packages
-    - security
-    - firewalld
-
 - name: link dnf.conf
   become: 'yes'
   become_method: sudo
