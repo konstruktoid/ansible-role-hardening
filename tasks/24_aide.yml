@@ -1,4 +1,9 @@
 ---
+- name: check cron.daily aide
+  stat:
+    path: /etc/cron.daily/aide
+  register: aidecron
+
 - name: aide service
   become: 'yes'
   become_method: sudo
@@ -9,6 +14,7 @@
     mode: 0644
     owner: root
     group: root
+  when: not aidecron.stat.exists
   tags:
     - aide
     - security
@@ -24,6 +30,7 @@
     mode: 0644
     owner: root
     group: root
+  when: not aidecron.stat.exists
   notify:
     - reload systemd
     - enable aidecheck
