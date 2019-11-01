@@ -47,6 +47,7 @@
   with_items:
     - "{{ packages_redhat }}"
   when: ansible_os_family == "RedHat"
+  ignore_errors: true
   notify:
     - enable haveged
   tags:
