@@ -26,6 +26,20 @@
     - packages
     - security
 
+- name: ubuntu update-notifier-common package installation
+  become: 'yes'
+  become_method: sudo
+  apt:
+    name: "update-notifier-common"
+    state: latest
+    install_recommends: 'no'
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  when: ansible_distribution == "Ubuntu"
+  tags:
+    - apt
+    - packages
+
 - name: fedora epel installation
   become: 'yes'
   become_method: sudo
