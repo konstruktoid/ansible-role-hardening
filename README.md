@@ -35,6 +35,12 @@ OpenSSH login is allowed only for users whose primary group or supplementary gro
     sshd_admin_net: [192.168.0.0/24, 192.168.1.0/24]
 By default only the network(s) defined here are allowed to connect to the host using port 22. Note that additional rules need to be set up in order to allow access to additional services.
 
+    ssh_max_auth_tries: 2
+Specifies the maximum number of SSH authentication attempts permitted per connection.
+
+    ssh_max_sessions: 2
+Specifies the maximum number of open shell, login or subsystem (e.g. sftp) sessions permitted per network connection.
+
     dns: 127.0.0.1
 IPv4 and IPv6 addresses to use as system DNS servers. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf) option.
 

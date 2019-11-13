@@ -4,6 +4,8 @@ ntp: 0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org
 fallback_ntp: 2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org
 ssh_allow_groups: sudo
 sshd_admin_net: [192.168.0.0/24, 192.168.1.0/24]
+ssh_max_auth_tries: 2
+ssh_max_sessions: 2
 dns: 127.0.0.1
 fallback_dns: 1.1.1.1 9.9.9.9
 dnssec: allow-downgrade

@@ -1,5 +1,7 @@
 ---
 - name: create custom facts directory
+  become: 'yes'
+  become_method: sudo
   file:
     path: /etc/ansible/facts.d
     recurse: true
