@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
       a.playbook = "tests/test.yml"
       a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
-        "ssh_allow_groups" => "vagrant sudo ubuntu"
+        "sshd_allow_groups" => "vagrant sudo ubuntu"
      }
     end
   end
@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
       a.playbook = "tests/test.yml"
       a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
-        "ssh_allow_groups" => "vagrant sudo debian ubuntu"
+        "sshd_allow_groups" => "vagrant sudo debian ubuntu"
      }
     end
   end
@@ -55,7 +55,7 @@ Vagrant.configure("2") do |config|
       a.playbook = "tests/test.yml"
       a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
-        "ssh_allow_groups" => "vagrant sudo",
+        "sshd_allow_groups" => "vagrant sudo",
         "ansible_python_interpreter" => "/usr/bin/python3"
       }
     end
@@ -74,7 +74,7 @@ Vagrant.configure("2") do |config|
       a.playbook = "tests/test.yml"
       a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
-        "ssh_allow_groups" => "vagrant sudo",
+        "sshd_allow_groups" => "vagrant sudo",
         "ansible_python_interpreter" => "/usr/bin/python3"
       }
     end
@@ -94,7 +94,7 @@ Vagrant.configure("2") do |config|
       a.playbook = "tests/test.yml"
       a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
-        "ssh_allow_groups" => "vagrant sudo ubuntu",
+        "sshd_allow_groups" => "vagrant sudo ubuntu",
         "ansible_python_interpreter" => "/usr/bin/python3"
      }
     end
@@ -114,7 +114,7 @@ Vagrant.configure("2") do |config|
        a.playbook = "tests/test.yml"
        a.extra_vars = {
          "sshd_admin_net" => "0.0.0.0/0",
-         "ssh_allow_groups" => "vagrant sudo ubuntu",
+         "sshd_allow_groups" => "vagrant sudo ubuntu",
          "ansible_python_interpreter" => "/usr/bin/python3"
       }
      end
