@@ -96,7 +96,7 @@
   ufw:
     rule: allow
     src: "{{ item }}"
-    port: 22
+    port: "{{ sshd_port|int }}"
     proto: tcp
   with_items:
     - "{{ sshd_admin_net }}"

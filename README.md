@@ -29,16 +29,19 @@ NTP server host names or IP addresses. [systemd](https://github.com/konstruktoid
     fallback_ntp: 2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org
 NTP server host names or IP addresses to be used as the fallback NTP servers. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdtimesyncdconf) option.
 
-    ssh_allow_groups: sudo
+    sshd_port: 22
+Specifies the port number that sshd(8) listens on.
+
+    sshd_allow_groups: sudo
 OpenSSH login is allowed only for users whose primary group or supplementary group list matches one of the patterns.
 
     sshd_admin_net: [192.168.0.0/24, 192.168.1.0/24]
 By default only the network(s) defined here are allowed to connect to the host using port 22. Note that additional rules need to be set up in order to allow access to additional services.
 
-    ssh_max_auth_tries: 2
+    sshd_max_auth_tries: 2
 Specifies the maximum number of SSH authentication attempts permitted per connection.
 
-    ssh_max_sessions: 2
+    sshd_max_sessions: 2
 Specifies the maximum number of open shell, login or subsystem (e.g. sftp) sessions permitted per network connection.
 
     dns: 127.0.0.1

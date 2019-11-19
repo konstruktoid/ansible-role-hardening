@@ -35,8 +35,6 @@
   systemd:
     name: debug-shell.service
     masked: 'yes'
-    enabled: 'no'
-    state: stopped
   tags:
     - systemd
     - debug-shell
