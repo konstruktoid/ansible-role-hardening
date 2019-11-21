@@ -7,7 +7,7 @@ else
   exit 1
 fi
 
-if grep -iRE '^deb.*redir' /etc/apt/*; then
+if lsb_release -a 2>/dev/null | grep -qi debian && grep -qiRE '^deb.*redir' /etc/apt/*; then
 echo "deb http://ftp.debian.org/debian buster main
 deb http://ftp.debian.org/debian buster-updates main
 deb http://security.debian.org/debian-security buster/updates main
