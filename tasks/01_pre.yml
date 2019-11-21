@@ -9,6 +9,8 @@
     mode: 0755
     owner: root
     group: root
+  tags:
+    - fact
 
 - name: systemd version fact
   become: 'yes'
@@ -39,6 +41,8 @@
     - rdrand
     - fact
 
-- name: use custom facts
+- name: update facts
   setup: ~
+  tags:
+    - fact
 ...
