@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -l
 
 if ! [ -x "$(command -v vagrant)" ]; then
   echo 'Vagrant is required.'
@@ -29,8 +29,6 @@ fi
 echo "Using $(ansible --version | grep '^ansible')"
 
 find ./ -name '*.log' -exec rm {} \;
-
-#!/bin/sh -l
 
 if ! find ./ -type f -name '*.y*ml' ! -name '.*' -print0 | \
   xargs -0 ansible-lint -x 403 -x 204; then
