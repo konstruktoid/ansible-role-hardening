@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
     bionic.vm.network "private_network", ip: "10.2.3.41"
     bionic.vm.hostname = "bionic"
     bionic.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python python-pexpect --no-install-recommends"
+      inline: "apt-get update && apt-get -y install ansible python-pexpect --no-install-recommends"
     bionic.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
     buster.vm.network "private_network", ip: "10.2.3.42"
     buster.vm.hostname = "buster"
     buster.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python python-pexpect --no-install-recommends"
+      inline: "apt-get update && apt-get -y install ansible python-pexpect --no-install-recommends"
     buster.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -87,7 +87,6 @@ Vagrant.configure("2") do |config|
     disco.vm.hostname = "disco"
     disco.vm.provision "shell",
       inline: "apt-get update && apt-get -y install ansible python3-pexpect --no-install-recommends"
-    # disco.vm.provision "shell", path: "provision/setup.sh"
     disco.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -107,7 +106,7 @@ Vagrant.configure("2") do |config|
      eoan.vm.hostname = "eoan"
      eoan.vm.boot_timeout = 600
      eoan.vm.provision "shell",
-       inline: "apt-get update && apt-get -y install ansible aptitude dnsmasq python3 python3-pexpect --no-install-recommends"
+       inline: "apt-get update && apt-get -y install ansible python3-pexpect --no-install-recommends"
      eoan.vm.provision "ansible" do |a|
        a.verbose = "v"
        a.limit = "all"
