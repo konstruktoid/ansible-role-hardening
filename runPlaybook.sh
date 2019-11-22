@@ -1,20 +1,10 @@
 #!/bin/bash -l
 
+# sudo mkdir -p /etc/ansible/roles/konstruktoid.hardening/
+# sudo cp -R . /etc/ansible/roles/konstruktoid.hardening/
+
 if ! [ -x "$(command -v vagrant)" ]; then
   echo 'Vagrant is required.'
-fi
-
-if pwd | grep 'ansible-role-hardening' && grep 'konstruktoid/ansible-role-hardening.git' .git/config 2>/dev/null 1>&2; then
-  if [ -d '/etc/ansible/roles/konstruktoid.hardening/' ]; then
-    if ! sudo rm -rf /etc/ansible/roles/konstruktoid.hardening/; then
-      exit 1
-    else
-      sudo mkdir -p /etc/ansible/roles/konstruktoid.hardening/
-      sudo cp -R . /etc/ansible/roles/konstruktoid.hardening/
-    fi
-  else
-    exit 1
-  fi
 fi
 
 export ANSIBLE_NOCOWS=1
@@ -27,8 +17,6 @@ else
 fi
 
 echo "Using $(ansible --version | grep '^ansible')"
-
-find ./ -name '*.log' -exec rm {} \;
 
 if ! find ./ -type f -name '*.y*ml' ! -name '.*' -print0 | \
   xargs -0 ansible-lint -x 403 -x 204; then
