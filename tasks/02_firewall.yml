@@ -158,10 +158,11 @@
   become: 'yes'
   become_method: sudo
   firewalld:
-    service: ssh
-    permanent: true
-    state: enabled
+    port: "{{ sshd_port }}/tcp"
     zone: public
+    immediate: 'yes'
+    permanent: 'true'
+    state: enabled
   when: ansible_os_family == "RedHat"
   tags:
     - firewalld
