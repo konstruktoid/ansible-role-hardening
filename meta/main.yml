@@ -12,6 +12,7 @@ galaxy_info:
       versions:
         - bionic
         - disco
+        - eoan
     - name: Debian
       versions:
         - buster
