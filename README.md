@@ -249,11 +249,13 @@ configuration file, which will run the `konstruktoid.hardening` role. The
 [runPlaybook.sh](runPlaybook.sh) script may be used to automatically update and
 run the role on all configured Vagrant boxes.
 
-OpenSCAP test on a CentOS 7 host using the included Vagrantfile:
+[OpenSCAP](https://github.com/ComplianceAsCode/content) test on a CentOS 8 host using the included Vagrantfile:
 
 ```shell
+sudo wget http://copr.fedoraproject.org/coprs/openscapmaint/openscap-latest/repo/epel-7/openscapmaint-openscap-latest-epel-7.repo -O /etc/yum.repos.d/openscapmaint-openscap-latest-epel-7.repo
 sudo yum install -y openscap-scanner scap-security-guide
-sudo oscap xccdf eval --fetch-remote-resources --profile xccdf_org.ssgproject.content_profile_stig-rhel7-disa --results-arf centos7_stig-arf.xml --report centos7_stig-report.html /usr/share/xml/scap/ssg/content/ssg-centos7-ds.xml
+oscap info --fetch-remote-resources /usr/share/xml/scap/ssg/content/ssg-centos8-ds.xml
+sudo oscap xccdf eval --fetch-remote-resources --profile xccdf_org.ssgproject.content_profile_standard --report centos8_stig-report.html /usr/share/xml/scap/ssg/content/ssg-centos8-ds.xml
 ```
 
 Recommended Reading
