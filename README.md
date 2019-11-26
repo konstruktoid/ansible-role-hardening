@@ -9,12 +9,12 @@ Distributions Tested using Vagrant
 --------------------
 
 ```
-bento/centos-7
-bento/fedora-29
-debian/buster64
+bento/centos-8
+bento/debian-10
+bento/fedora-30
 ubuntu/bionic64
-ubuntu/cosmic64
 ubuntu/disco64
+ubuntu/eoan64
 ```
 
 Role Variables
