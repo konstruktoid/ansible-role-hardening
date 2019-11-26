@@ -109,6 +109,10 @@ Structure
 ├── LICENSE
 ├── README.md
 ├── Vagrantfile
+├── action-lint
+│   ├── Dockerfile
+│   ├── README.md
+│   └── entrypoint.sh
 ├── checkScore.sh
 ├── defaults
 │   └── main.yml
@@ -118,8 +122,10 @@ Structure
 │   └── main.yml
 ├── provision
 │   └── setup.sh
+├── renovate.json
 ├── runPlaybook.sh
 ├── tasks
+│   ├── 01_pre.yml
 │   ├── 02_firewall.yml
 │   ├── 03_disablenet.yml
 │   ├── 04_disablefs.yml
@@ -161,6 +167,10 @@ Structure
 ├── templates
 │   ├── etc
 │   │   ├── adduser.conf.j2
+│   │   ├── ansible
+│   │   │   └── facts.d
+│   │   │       ├── cpuinfo_rdrand.fact
+│   │   │       └── systemd_version.fact
 │   │   ├── apt
 │   │   │   └── apt.conf.d
 │   │   │       └── 99noexec-tmp.j2
