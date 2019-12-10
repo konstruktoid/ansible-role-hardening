@@ -39,4 +39,15 @@
   tags:
     - apt
     - security
+
+- name: reboot if required
+  become: 'yes'
+  become_method: sudo
+  setup: ~
+  notify:
+    - reboot node
+  when: ansible_distribution == "Ubuntu" and ansible_local.reboot_required and reboot_ubuntu
+  tags:
+    - reboot
+    - ubuntu
 ...

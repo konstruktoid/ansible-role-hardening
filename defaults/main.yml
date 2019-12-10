@@ -24,4 +24,5 @@ limit_nproc_soft: 512
 limit_nproc_hard: 1024
 grub_cmdline: audit=1 audit_backlog_limit=8192
 auditd_mode: 1
+reboot_ubuntu: false
 ...

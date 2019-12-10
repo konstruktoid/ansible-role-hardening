@@ -95,6 +95,9 @@ Additional Grub options, currently only `ansible_os_family == "Debian"`
     auditd_mode: 1
 Auditd failure mode. 0=silent 1=printk 2=panic.
 
+    reboot_ubuntu: false
+If true an Ubuntu node will be rebooted if required. `pre_reboot_delay: "{{ 3600 | random(start=1) }}"`.
+
 Templates
 ---------
 
