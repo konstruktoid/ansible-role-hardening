@@ -8,7 +8,7 @@ if ! [ -x "$(command -v vagrant)" ]; then
 fi
 
 export ANSIBLE_NOCOWS=1
-ANSIBLE_V=2.5
+ANSIBLE_V=2.7
 
 if [ -z "$ANSIBLE_V" ]; then
   pip install --quiet ansible
