@@ -38,10 +38,10 @@ Specifies the port number that sshd(8) listens on.
     sshd_admin_net: [192.168.0.0/24, 192.168.1.0/24]
 By default only the network(s) defined here are allowed to connect to the host using port 22. Note that additional rules need to be set up in order to allow access to additional services.
 
-    sshd_max_auth_tries: 2
+    sshd_max_auth_tries: 4
 Specifies the maximum number of SSH authentication attempts permitted per connection.
 
-    sshd_max_sessions: 2
+    sshd_max_sessions: 4
 Specifies the maximum number of open shell, login or subsystem (e.g. sftp) sessions permitted per network connection.
 
     dns: 127.0.0.1

@@ -1,0 +1,6 @@
+[vagrant]
+bionic ansible_host=127.0.0.1 ansible_user=vagrant ansible_port=2222 ansible_private_key_file=/Users/tabd/Git/tabd_local/Github/ansible-role-hardening/.vagrant/machines/bionic/virtualbox/private_key
+buster ansible_host=127.0.0.1 ansible_user=vagrant ansible_port=2201 ansible_private_key_file=/Users/tabd/Git/tabd_local/Github/ansible-role-hardening/.vagrant/machines/buster/virtualbox/private_key
+centos ansible_host=127.0.0.1 ansible_user=vagrant ansible_port=2203 ansible_private_key_file=/Users/tabd/Git/tabd_local/Github/ansible-role-hardening/.vagrant/machines/centos/virtualbox/private_key
+fedora ansible_host=127.0.0.1 ansible_user=vagrant ansible_port=2202 ansible_private_key_file=/Users/tabd/Git/tabd_local/Github/ansible-role-hardening/.vagrant/machines/fedora/virtualbox/private_key
+disco ansible_host=127.0.0.1 ansible_user=vagrant ansible_port=2200 ansible_private_key_file=/Users/tabd/Git/tabd_local/Github/ansible-role-hardening/.vagrant/machines/disco/virtualbox/private_key
