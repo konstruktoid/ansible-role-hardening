@@ -3,3 +3,5 @@
 *.rpm
 *.deb
 *.html
+hosts
+.vagrant
