@@ -1,0 +1,14 @@
+---
+- name: sudo use_pty
+  become: 'yes'
+  become_method: sudo
+  lineinfile:
+    line: "Defaults use_pty"
+    dest: /etc/sudoers.d/011_use_pty
+    mode: 0644
+    state: present
+    create: 'yes'
+  tags:
+    - sudo
+    - security
+...

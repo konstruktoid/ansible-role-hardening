@@ -167,6 +167,7 @@ Structure
 │   ├── 37_mount.yml
 │   ├── 38_postfix.yml
 │   ├── 39_motdnews.yml
+│   ├── 43_sudo.yml
 │   ├── 99_extras.yml
 │   └── main.yml
 ├── templates
@@ -175,6 +176,7 @@ Structure
 │   │   ├── ansible
 │   │   │   └── facts.d
 │   │   │       ├── cpuinfo_rdrand.fact
+│   │   │       ├── reboot_required.fact
 │   │   │       └── systemd_version.fact
 │   │   ├── apt
 │   │   │   └── apt.conf.d
@@ -221,8 +223,9 @@ Structure
 │               └── aidecheck.timer.j2
 └── tests
     ├── inventory
-    ├── test.retry
     └── test.yml
+
+24 directories, 89 files
 ```
 
 Dependencies
