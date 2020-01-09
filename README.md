@@ -11,10 +11,11 @@ Distributions Tested using Vagrant
 ```
 bento/centos-8
 bento/debian-10
-bento/fedora-30
+bento/fedora-31
 ubuntu/bionic64
 ubuntu/disco64
 ubuntu/eoan64
+ubuntu/focal64
 ```
 
 Role Variables

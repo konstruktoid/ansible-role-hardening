@@ -13,12 +13,14 @@ galaxy_info:
         - bionic
         - disco
         - eoan
+        - focal
     - name: Debian
       versions:
         - buster
     - name: Fedora
       versions:
         - 30
+        - 31
   galaxy_tags:
     - centos
     - debian
