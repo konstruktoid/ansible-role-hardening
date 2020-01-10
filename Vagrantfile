@@ -80,25 +80,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "disco" do |disco|
-    disco.vm.box = "ubuntu/disco64"
-    disco.ssh.insert_key = true
-    disco.vm.network "private_network", ip: "10.2.3.45"
-    disco.vm.hostname = "disco"
-    disco.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible python3-pexpect --no-install-recommends"
-    disco.vm.provision "ansible" do |a|
-      a.verbose = "v"
-      a.limit = "all"
-      a.playbook = "tests/test.yml"
-      a.extra_vars = {
-        "sshd_admin_net" => "0.0.0.0/0",
-        "sshd_allow_groups" => "vagrant sudo ubuntu",
-        "ansible_python_interpreter" => "/usr/bin/python3"
-     }
-    end
-  end
-
    config.vm.define "eoan" do |eoan|
      eoan.vm.box = "ubuntu/eoan64"
      eoan.ssh.insert_key = true
