@@ -1,14 +1,15 @@
 ansible-role-hardening
 =========
 
-Ansible role to make a Debian, Ubuntu or CentoOS server a bit more secure, systemd edition.
+Ansible role to make a Debian, Ubuntu or CentoOS server a bit more secure,
+[systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
 Requires [Ansible](https://www.ansible.com/) >= 2.7.
 
 Distributions Tested using Vagrant
 --------------------
 
-```
+```yaml
 bento/centos-8
 bento/debian-10
 bento/fedora-31
@@ -20,90 +21,226 @@ ubuntu/focal64
 Role Variables
 --------------
 
-    redhat_rpm_key: [567E347AD0044ADE55BA8A5F199E2F91FD431D51, 47DB287789B21722B6D95DDE5326810137017186]
-[Red Hat RPM keys](https://access.redhat.com/security/team/key/) for use when `ansible_distribution == "RedHat"`.
+```yaml
+auditd_mode: 1
+```
 
-    ntp: 0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org
-NTP server host names or IP addresses. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdtimesyncdconf) option.
-
-    fallback_ntp: 2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org
-NTP server host names or IP addresses to be used as the fallback NTP servers. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdtimesyncdconf) option.
-
-    sshd_allow_groups: sudo
-OpenSSH login is allowed only for users whose primary group or supplementary group list matches one of the patterns.
-
-    sshd_port: 22
-Specifies the port number that sshd(8) listens on.
-
-    sshd_admin_net: [192.168.0.0/24, 192.168.1.0/24]
-By default only the network(s) defined here are allowed to connect to the host using port 22. Note that additional rules need to be set up in order to allow access to additional services.
-
-    sshd_max_auth_tries: 4
-Specifies the maximum number of SSH authentication attempts permitted per connection.
-
-    sshd_max_sessions: 4
-Specifies the maximum number of open shell, login or subsystem (e.g. sftp) sessions permitted per network connection.
-
-    dns: 127.0.0.1
-IPv4 and IPv6 addresses to use as system DNS servers. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf) option.
-
-    fallback_dns: 1.1.1.1 9.9.9.9
-IPv4 and IPv6 addresses to use as the fallback DNS servers. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf) option.
-
-    dnssec: allow-downgrade
-If set to "allow-downgrade" DNSSEC validation is attempted, but if the server does not support DNSSEC properly, DNSSEC mode is automatically disabled. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf) option.
-
-    suid_sgid_blacklist: [/bin/ntfs-3g, /usr/bin/at, /bin/fusermount, /bin/mount, /bin/ping, /bin/ping6, /bin/su, /bin/umount, /sbin/mount.nfs, /usr/bin/bsd-write, /usr/bin/chage, /usr/bin/chfn, /usr/bin/chsh, /usr/bin/mlocate, /usr/bin/mtr, /usr/bin/newgrp, /usr/bin/pkexec, /usr/bin/traceroute6.iputils, /usr/bin/wall, /usr/bin/write, /usr/sbin/pppd]
-Which binaries that should have SUID/SGID removed.
-
-    random_ack_limit: "{{ 1000000 | random(start=1000) }}"
-net.ipv4.tcp_challenge_ack_limit, see [tcp: make challenge acks less predictable](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=75ff39ccc1bd5d3c455b6822ab09e533c551f758).
-
-    packages_debian: [acct, aide-common, apparmor-profiles, apparmor-utils, auditd, debsums, haveged, libpam-apparmor, libpam-cracklib, libpam-tmpdir, needrestart, openssh-server, postfix, rkhunter, rsyslog, tcpd, vlock]
-Packages to be installed on a Ubuntu or Debian host.
-
-    packages_redhat: [aide, audit, haveged, openssh-server, needrestart, postfix, psacct, rkhunter, rsyslog, tcp_wrappers, vlock]
-Packages to be installed on a RedHat host.
-
-    packages_blacklist: [apport*, avahi*, avahi-*, beep, git, pastebinit, popularity-contest, rsh*, talk*, telnet*, tftp*, whoopsie, xinetd, yp-tools, ypbind]
-Packages to be removed.
-
-    net_modules_blacklist: [dccp, sctp, rds, tipc]
-Blacklisted kernel modules.
-
-    fs_modules_blacklist: [cramfs, freevxfs, hfs, hfsplus, jffs2, squashfs, udf, vfat]
-Blacklisted kernel modules.
-
-    misc_modules_blacklist: [bluetooth, bnep, btusb, firewire-core, floppy, n_hdlc, net-pf-31, pcspkr, soundcore, thunderbolt, usb-midi, usb-storage]
-Blacklisted kernel modules.
-
-    limit_nofile_soft: 512
-Maximum number of open files. Soft limit.
-
-    limit_nofile_hard: 1024
-Maximum number of open files. Hard limit.
-
-    limit_nproc_soft: 512
-Maximum number of processes. Soft limit.
-
-    limit_nproc_hard: 1024
-Maximum number of processes. Hard limit.
-
-    grub_cmdline: audit=1 audit_backlog_limit=8192
-Additional Grub options, currently only `ansible_os_family == "Debian"`
-
-    auditd_mode: 1
 Auditd failure mode. 0=silent 1=printk 2=panic.
 
-    reboot_ubuntu: false
-If true an Ubuntu node will be rebooted if required. `pre_reboot_delay: "{{ 3600 | random(start=1) }}"`.
+```yaml
+dns: "127.0.0.1"
+dnssec: allow-downgrade
+fallback_dns: "1.1.1.1 9.9.9.9"
+```
 
-Templates
----------
+IPv4 and IPv6 addresses to use as system and fallback DNS servers.
+If `dnssec` is set to "allow-downgrade" DNSSEC validation is attempted, but if
+the server does not support DNSSEC properly, DNSSEC mode is automatically
+disabled.[systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf)
+option.
 
-The CCE identifiers are taken from [CCE Identifiers in Guide to the Secure Configuration of Red Hat Enterprise Linux 7](https://people.redhat.com/swells/scap-security-guide/tables/table-rhel7-cces.html) since there currently are [no complete list of identifiers for CentOS or Ubuntu](https://static.open-scap.org/).
+```yaml
+fs_modules_blacklist:
+  - cramfs
+  - freevxfs
+  - hfs
+  - hfsplus
+  - jffs2
+  - squashfs
+  - udf
+  - vfat
+```
 
-[CIS identifiers](https://benchmarks.cisecurity.org/downloads/show-single/index.cfm?file=independentlinux.100) will be added in the future.
+Blacklisted file system kernel modules.
+
+```yaml
+grub_cmdline: "audit=1 audit_backlog_limit=8192"
+```
+
+Additional Grub options, currently only `ansible_os_family == "Debian"`
+
+```yaml
+limit_nofile_hard: 1024
+limit_nofile_soft: 512
+limit_nproc_hard: 1024
+limit_nproc_soft: 512
+```
+
+Maximum number of processes and open files.
+
+```yaml
+misc_modules_blacklist:
+  - bluetooth
+  - bnep
+  - btusb
+  - cpia2
+  - firewire-core
+  - floppy
+  - n_hdlc
+  - net-pf-31
+  - pcspkr
+  - soundcore
+  - thunderbolt
+  - usb-midi
+  - usb-storage
+  - uvcvideo
+  - v4l2_common
+```
+
+Blacklisted kernel modules.
+
+```yaml
+net_modules_blacklist:
+  - dccp
+  - sctp
+  - rds
+  - tipc
+```
+
+Blacklisted kernel network modules.
+
+```yaml
+ntp: "0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org"
+fallback_ntp: "2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org"
+```
+
+NTP server host names or IP addresses. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdtimesyncdconf)
+option.
+
+```yaml
+packages_blacklist:
+  - apport*
+  - avahi*
+  - avahi-*
+  - beep
+  - git
+  - pastebinit
+  - popularity-contest
+  - rsh*
+  - talk*
+  - telnet*
+  - tftp*
+  - whoopsie
+  - xinetd
+  - yp-tools
+  - ypbind
+```
+
+Packages to be removed.
+
+```yaml
+packages_debian:
+  - acct
+  - aide-common
+  - apparmor-profiles
+  - apparmor-utils
+  - auditd
+  - debsums
+  - haveged
+  - libpam-apparmor
+  - libpam-cracklib
+  - libpam-tmpdir
+  - needrestart
+  - openssh-server
+  - postfix
+  - rkhunter
+  - rsyslog
+  - tcpd
+  - vlock
+```
+
+Packages to be installed on a Debian OS family host.
+
+```yaml
+packages_redhat:
+  - aide
+  - audit
+  - haveged
+  - openssh-server
+  - needrestart
+  - postfix
+  - psacct
+  - rkhunter
+  - rsyslog
+  - tcp_wrappers
+  - vlock
+```
+
+Packages to be installed on a RedHat OS family host.
+
+```yaml
+random_ack_limit: "{{ 1000000 | random(start=1000) }}"
+```
+
+net.ipv4.tcp_challenge_ack_limit, see
+[tcp: make challenge acks less predictable](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=75ff39ccc1bd5d3c455b6822ab09e533c551f758).
+
+```yaml
+reboot_ubuntu: false
+```
+
+If true an Ubuntu node will be rebooted if required, using
+`pre_reboot_delay: "{{ 3600 | random(start=1) }}"`.
+
+```yaml
+redhat_rpm_key:
+  - 567E347AD0044ADE55BA8A5F199E2F91FD431D51
+  - 47DB287789B21722B6D95DDE5326810137017186
+```
+
+[Red Hat RPM keys](https://access.redhat.com/security/team/key/)
+for use when `ansible_distribution == "RedHat"`.
+
+```yaml
+sshd_admin_net:
+  - 192.168.0.0/24
+  - 192.168.1.0/24
+sshd_allow_groups: sudo
+sshd_max_auth_tries: 4
+sshd_max_sessions: 4
+sshd_port: 22
+```
+
+OpenSSH login is allowed only for users whose primary group or supplementary
+group list matches one of the patterns in `sshd_allow_groups`.
+
+`sshd_port` specifies the port number that sshd(8) listens on.
+
+Only the network(s) defined in `sshd_admin_net` are allowed to
+connect. Note that additional rules need to be set up in order to allow access
+to additional services.
+
+`sshd_max_auth_tries` and `sshd_max_sessions` specifies the maximum number of
+SSH authentication attempts permitted per connection and the maximum number of
+open shell, login or subsystem (e.g. sftp) sessions permitted per network
+connection.
+
+```yaml
+suid_sgid_blacklist:
+  - /bin/ntfs-3g
+  - /usr/bin/at
+  - /bin/fusermount
+  - /bin/mount
+  - /bin/ping
+  - /bin/ping6
+  - /bin/su
+  - /bin/umount
+  - /sbin/mount.nfs
+  - /usr/bin/bsd-write
+  - /usr/bin/chage
+  - /usr/bin/chfn
+  - /usr/bin/chsh
+  - /usr/bin/mlocate
+  - /usr/bin/mtr
+  - /usr/bin/newgrp
+  - /usr/bin/pkexec
+  - /usr/bin/traceroute6.iputils
+  - /usr/bin/wall
+  - /usr/bin/write
+  - /usr/sbin/pppd
+```
+
+Which binaries that should have SUID/SGID removed.
 
 Structure
 ---------
@@ -247,7 +384,8 @@ Testing
 -------
 
 ```shell
-ansible-playbook tests/test.yml --extra-vars "sshd_admin_net=192.168.1.0/24" -c local -i 'localhost,' -K
+ansible-playbook tests/test.yml --extra-vars "sshd_admin_net=192.168.1.0/24" \
+  -c local -i 'localhost,' -K
 ```
 
 The repository contains a [Vagrant](https://www.vagrantup.com/ "Vagrant")
@@ -255,19 +393,33 @@ configuration file, which will run the `konstruktoid.hardening` role. The
 [runPlaybook.sh](runPlaybook.sh) script may be used to automatically update and
 run the role on all configured Vagrant boxes.
 
-[OpenSCAP](https://github.com/ComplianceAsCode/content) test on a CentOS 8 host using the included Vagrantfile:
+To run a [OpenSCAP](https://github.com/ComplianceAsCode/content) test on a
+CentOS 8 host using the included Vagrantfile follow the instructions on
+[https://copr.fedorainfracloud.org/coprs/openscapmaint/openscap-latest/](https://copr.fedorainfracloud.org/coprs/openscapmaint/openscap-latest/).
 
 ```shell
-sudo wget http://copr.fedoraproject.org/coprs/openscapmaint/openscap-latest/repo/epel-7/openscapmaint-openscap-latest-epel-7.repo -O /etc/yum.repos.d/openscapmaint-openscap-latest-epel-7.repo
+sudo yum update
 sudo yum install -y openscap-scanner scap-security-guide
 oscap info --fetch-remote-resources /usr/share/xml/scap/ssg/content/ssg-centos8-ds.xml
-sudo oscap xccdf eval --fetch-remote-resources --profile xccdf_org.ssgproject.content_profile_standard --report centos8_stig-report.html /usr/share/xml/scap/ssg/content/ssg-centos8-ds.xml
+sudo oscap xccdf eval --fetch-remote-resources \
+  --profile xccdf_org.ssgproject.content_profile_standard \
+  --report centos8_stig-report.html /usr/share/xml/scap/ssg/content/ssg-centos8-ds.xml
+```
+
+To run a [OpenSCAP](https://github.com/ComplianceAsCode/content) test on a
+Ubuntu 18.04 host:
+
+```shell
+sudo apt-get -y install libopenscap8 unzip
+wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.48/scap-security-guide-0.1.48-oval-510.zip
+unzip scap-security-guide-0.1.48-oval-510.zip
+cd scap-security-guide-0.1.48-oval-5.10
+oscap info --fetch-remote-resources ./ssg-ubuntu1804-ds.xml
+sudo oscap xccdf eval --fetch-remote-resources --profile xccdf_org.ssgproject.content_profile_anssi_np_nt28_high --report ../bionic_stig-report.html ./ssg-ubuntu1804-ds.xml
 ```
 
 Recommended Reading
 -------------------
-
-[Rules In DISA STIG for Red Hat Enterprise Linux 7](https://people.redhat.com/swells/scap-security-guide/tables/table-rhel7-stig.html)
 
 [CIS Distribution Independent Linux Benchmark v1.0.0](https://www.cisecurity.org/cis-benchmarks/)
 
@@ -275,9 +427,19 @@ Recommended Reading
 
 [Canonical Ubuntu 16.04 LTS STIG - Ver 1, Rel 2](https://public.cyber.mil/stigs/downloads/?_dl_facet_stigs=operating-systems%2Cunix-linux)
 
+[Guide to the Secure Configuration of Red Hat Enterprise Linux 8](https://static.open-scap.org/ssg-guides/ssg-rhel8-guide-default.html)
+
 [Red Hat Enterprise Linux 7 - Ver 2, Rel 3 STIG](https://public.cyber.mil/stigs/downloads/?_dl_facet_stigs=operating-systems%2Cunix-linux)
 
 [Security focused systemd configuration](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc)
+
+Contributing
+------------
+
+Do you want to contribute? That's great! Contributions are always welcome,
+no matter how large or small. If you found something odd, feel free to submit a
+issue, improve the code by creating a pull request, or by
+[sponsoring this project](https://github.com/sponsors/konstruktoid).
 
 License
 -------
