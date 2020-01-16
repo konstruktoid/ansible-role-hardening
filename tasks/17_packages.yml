@@ -111,7 +111,8 @@
     packages:
       - virtualbox-guest-dkms
       - virtualbox-guest-utils
-  when: ansible_bios_version == "VirtualBox" and ansible_distribution == "Ubuntu"
+  when: ansible_bios_version == "VirtualBox" and
+        ansible_distribution == "Ubuntu"
   tags:
     - apt
     - packages
