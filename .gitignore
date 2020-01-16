@@ -1,7 +1,9 @@
-*.retry
-*.log
-*.rpm
 *.deb
 *.html
-hosts
+*.log
+*.retry
+*.rpm
+.scannerwork
+.sonar
 .vagrant
+hosts
