@@ -415,7 +415,9 @@ wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.48/scap-
 unzip scap-security-guide-0.1.48-oval-510.zip
 cd scap-security-guide-0.1.48-oval-5.10
 oscap info --fetch-remote-resources ./ssg-ubuntu1804-ds.xml
-sudo oscap xccdf eval --fetch-remote-resources --profile xccdf_org.ssgproject.content_profile_anssi_np_nt28_high --report ../bionic_stig-report.html ./ssg-ubuntu1804-ds.xml
+sudo oscap xccdf eval --fetch-remote-resources \
+  --profile xccdf_org.ssgproject.content_profile_anssi_np_nt28_high \
+  --report ../bionic_stig-report.html ./ssg-ubuntu1804-ds.xml
 ```
 
 Recommended Reading
