@@ -11,4 +11,17 @@
   tags:
     - sudo
     - security
+
+- name: sudo disable pwfeedback
+  become: 'yes'
+  become_method: sudo
+  lineinfile:
+    line: "Defaults !pwfeedback"
+    dest: /etc/sudoers.d/013_pwfeedback
+    mode: 0644
+    state: present
+    create: 'yes'
+  tags:
+    - sudo
+    - security
 ...
