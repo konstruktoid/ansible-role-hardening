@@ -24,4 +24,17 @@
   tags:
     - sudo
     - security
+
+- name: sudo disable visiblepw
+  become: 'yes'
+  become_method: sudo
+  lineinfile:
+    line: "Defaults !visiblepw"
+    dest: /etc/sudoers.d/014_visiblepw
+    mode: 0644
+    state: present
+    create: 'yes'
+  tags:
+    - sudo
+    - security
 ...
