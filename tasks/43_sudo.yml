@@ -5,7 +5,7 @@
   lineinfile:
     line: "Defaults use_pty"
     dest: /etc/sudoers.d/011_use_pty
-    mode: 0644
+    mode: 0440
     state: present
     create: 'yes'
   tags:
@@ -18,7 +18,7 @@
   lineinfile:
     line: "Defaults !pwfeedback"
     dest: /etc/sudoers.d/013_pwfeedback
-    mode: 0644
+    mode: 0440
     state: present
     create: 'yes'
   tags:
@@ -31,7 +31,7 @@
   lineinfile:
     line: "Defaults !visiblepw"
     dest: /etc/sudoers.d/014_visiblepw
-    mode: 0644
+    mode: 0440
     state: present
     create: 'yes'
   tags:
