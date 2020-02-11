@@ -1,61 +1,53 @@
 # {{ ansible_managed }}
 # https://wiki.mozilla.org/Security/Guidelines/OpenSSH
-# CCE-27320-1
-# CCE-80220-7
-# CCE-80221-5
 # CCE-80222-3
-# CCE-80223-1
-# CCE-80224-9
-# CCE-80225-6
-# CCE-27433-2
-# CCE-27082-7
-# CCE-27377-1
-# CCE-27413-4
-# CCE-80226-4
-# CCE-27445-6
 # CCE-27471-2
+# CCE-27082-7
 # CCE-27314-4
+# CCE-80221-5
+# CCE-27433-2
 # CCE-27363-1
-
-Port {{ sshd_port|int }}
-
-LogLevel VERBOSE
-
-LoginGraceTime 20
-PermitRootLogin no
-
-PasswordAuthentication no
-
-ChallengeResponseAuthentication no
-
-PermitRootLogin no
-UsePAM yes
-
-X11Forwarding no
-PrintMotd no
-Compression no
-
-Banner /etc/issue.net
+# CCE-27413-4
+# CCE-80223-1
+# CCE-80223-1
+# CCE-80225-6
+# CCE-80220-7
+# CCE-80224-9
+# CCE-27445-6
+# CCE-82177-7
 
 AcceptEnv LANG LC_*
-
-Subsystem sftp internal-sftp
-
-X11Forwarding no
-
-PrintLastLog yes
-IgnoreUserKnownHosts yes
-PermitEmptyPasswords no
 AllowGroups {{ sshd_allow_groups }}
-MaxAuthTries {{ sshd_max_auth_tries }}
-ClientAliveInterval 300
-ClientAliveCountMax 0
-PermitUserEnvironment no
-KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+AllowTcpForwarding no
+AllowAgentForwarding no
+Banner /etc/issue.net
+ChallengeResponseAuthentication no
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr
-Macs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
-MaxSessions {{ sshd_max_sessions }}
-UseDNS no
-StrictModes yes
-MaxStartups 10:30:60
+ClientAliveCountMax 0
+ClientAliveInterval 300
+Compression no
+GSSAPIAuthentication no
 HostbasedAuthentication no
+IgnoreUserKnownHosts yes
+KerberosAuthentication no
+KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+LogLevel VERBOSE
+LoginGraceTime 20
+Macs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
+MaxAuthTries {{ sshd_max_auth_tries }}
+MaxSessions {{ sshd_max_sessions }}
+MaxStartups 10:30:60
+PasswordAuthentication no
+PermitEmptyPasswords no
+PermitRootLogin no
+PermitUserEnvironment no
+Port {{ sshd_port|int }}
+PrintLastLog yes
+PrintMotd no
+RekeyLimit 512M 1h
+StrictModes yes
+Subsystem sftp internal-sftp
+TCPKeepAlive no
+UseDNS no
+UsePAM yes
+X11Forwarding no
