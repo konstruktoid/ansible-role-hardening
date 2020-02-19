@@ -99,25 +99,123 @@ sshd_max_auth_tries: 4
 sshd_max_sessions: 4
 sshd_port: 22
 suid_sgid_blacklist:
-  - /bin/ntfs-3g
+  - /usr/bin/apt
+  - /usr/bin/apt-get
   - /usr/bin/at
-  - /bin/fusermount
-  - /bin/mount
-  - /bin/ping
-  - /bin/ping6
-  - /bin/su
-  - /bin/umount
-  - /sbin/mount.nfs
+  - /usr/bin/awk
+  - /usr/bin/base64
+  - /usr/bin/bash
   - /usr/bin/bsd-write
+  - /usr/bin/busybox
+  - /usr/bin/cat
   - /usr/bin/chage
   - /usr/bin/chfn
+  - /usr/bin/chmod
+  - /usr/bin/chown
   - /usr/bin/chsh
-  - /usr/bin/mlocate
-  - /usr/bin/mtr
+  - /usr/bin/cp
+  - /usr/bin/cpan
+  - /usr/bin/crontab
+  - /usr/bin/curl
+  - /usr/bin/cut
+  - /usr/bin/dash
+  - /usr/bin/date
+  - /usr/bin/dd
+  - /usr/bin/diff
+  - /usr/bin/dmesg
+  - /usr/bin/dnf
+  - /usr/bin/dpkg
+  - /usr/bin/easy_install
+  - /usr/bin/ed
+  - /usr/bin/env
+  - /usr/bin/expand
+  - /usr/bin/file
+  - /usr/bin/find
+  - /usr/bin/flock
+  - /usr/bin/fmt
+  - /usr/bin/fold
+  - /usr/bin/ftp
+  - /usr/bin/fusermount
+  - /usr/bin/gawk
+  - /usr/bin/git
+  - /usr/bin/grep
+  - /usr/bin/head
+  - /usr/bin/ionice
+  - /usr/bin/ip
+  - /usr/bin/journalctl
+  - /usr/bin/less
+  - /usr/bin/ltrace
+  - /usr/bin/mail
+  - /usr/bin/make
+  - /usr/bin/man
+  - /usr/bin/mawk
+  - /usr/bin/more
+  - /usr/bin/mount
+  - /usr/bin/mv
+  - /usr/bin/nawk
+  - /usr/bin/nc
   - /usr/bin/newgrp
+  - /usr/bin/nice
+  - /usr/bin/nl
+  - /usr/bin/od
+  - /usr/bin/openssl
+  - /usr/bin/perl
+  - /usr/bin/pic
+  - /usr/bin/ping
+  - /usr/bin/ping6
+  - /usr/bin/pip
   - /usr/bin/pkexec
-  - /usr/bin/traceroute6.iputils
+  - /usr/bin/python
+  - /usr/bin/readelf
+  - /usr/bin/red
+  - /usr/bin/rlogin
+  - /usr/bin/rpm
+  - /usr/bin/rpmquery
+  - /usr/bin/rsync
+  - /usr/bin/run-mailcap
+  - /usr/bin/run-parts
+  - /usr/bin/rvim
+  - /usr/bin/scp
+  - /usr/bin/screen
+  - /usr/bin/script
+  - /usr/bin/sed
+  - /usr/bin/setarch
+  - /usr/bin/sftp
+  - /usr/bin/shuf
+  - /usr/bin/sort
+  - /usr/bin/ssh
+  - /usr/bin/stdbuf
+  - /usr/bin/strace
+  - /usr/bin/su
+  - /usr/bin/systemctl
+  - /usr/bin/tail
+  - /usr/bin/tar
+  - /usr/bin/taskset
+  - /usr/bin/tee
+  - /usr/bin/timeout
+  - /usr/bin/tmux
+  - /usr/bin/top
+  - /usr/bin/ul
+  - /usr/bin/umount
+  - /usr/bin/unexpand
+  - /usr/bin/uniq
+  - /usr/bin/unshare
+  - /usr/bin/vi
+  - /usr/bin/vim
   - /usr/bin/wall
+  - /usr/bin/watch
+  - /usr/bin/wget
   - /usr/bin/write
-  - /usr/sbin/pppd
+  - /usr/bin/xargs
+  - /usr/bin/xxd
+  - /usr/bin/yum
+  - /usr/bin/zip
+  - /usr/sbin/arp
+  - /usr/sbin/dmsetup
+  - /usr/sbin/ip
+  - /usr/sbin/ldconfig
+  - /usr/sbin/logsave
+  - /usr/sbin/mount.nfs
+  - /usr/sbin/ping6
+  - /usr/sbin/service
 ...
