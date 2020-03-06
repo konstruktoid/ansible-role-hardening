@@ -4,7 +4,7 @@ ansible-role-hardening
 Ansible role to make a Debian, Ubuntu or CentoOS server a bit more secure,
 [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
-Requires [Ansible](https://www.ansible.com/) >= 2.7.
+Requires [Ansible](https://www.ansible.com/) >= 2.8.
 
 Distributions Tested using Vagrant
 --------------------
