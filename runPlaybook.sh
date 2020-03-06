@@ -1,19 +1,19 @@
 #!/bin/bash -l
+# shellcheck disable=SC2013
 
-# sudo mkdir -p /etc/ansible/roles/konstruktoid.hardening/
-# sudo cp -R . /etc/ansible/roles/konstruktoid.hardening/
+set -u -o pipefail
 
 if ! [ -x "$(command -v vagrant)" ]; then
   echo 'Vagrant is required.'
 fi
 
 export ANSIBLE_NOCOWS=1
-ANSIBLE_V=2.7
+ANSIBLE_V=2.8
 
 if [ -z "$ANSIBLE_V" ]; then
-  pip install --quiet ansible
+  pip3 install ansible
 else
-  pip install --quiet ansible=="$ANSIBLE_V"
+  pip3 install ansible=="$ANSIBLE_V"
 fi
 
 echo "Using $(ansible --version | grep '^ansible')"
@@ -30,10 +30,17 @@ if ! find ./ -type f -name '*.y*ml' ! -name '.*' -print0 | \
     exit 1
 fi
 
-vagrant box update --insecure
-vagrant destroy --force
+if [ "$1" = "prep" ]; then
+  vagrant box update --insecure
+  vagrant destroy --force
 
-if [ -z "$1" ]; then
+  sudo mkdir -p /etc/ansible/roles/konstruktoid.hardening/
+  sudo cp -R . /etc/ansible/roles/konstruktoid.hardening/
+  echo "Finished basic preparations. Exiting."
+  exit
+fi
+
+if [ -z "$1" ] ; then
   vagrant up
 else
   vagrant up "$@"
@@ -44,7 +51,7 @@ wait
 VMFILE="$(mktemp)"
 vagrant status | grep 'running.*virtualbox' | awk '{print $1}' >> "$VMFILE"
 
-grep -v '^#' "$VMFILE" | while read -r VM; do
+for VM in $(grep -v '^#' "$VMFILE"); do
   vagrant ssh "$VM" -c 'cp /vagrant/checkScore.sh ~/'
   echo "Copying checkScore.sh on $VM."
   vagrant ssh "$VM" -c 'sudo reboot'
