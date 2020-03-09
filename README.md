@@ -407,7 +407,8 @@ sudo oscap xccdf eval --fetch-remote-resources \
 ```
 
 To run a [OpenSCAP](https://github.com/ComplianceAsCode/content) test on a
-Ubuntu 18.04 host:
+Ubuntu 18.04 host, where `v0.1.48` shoule be replaced with the latest available
+version:
 
 ```shell
 sudo apt-get -y install libopenscap8 unzip
