@@ -99,14 +99,41 @@ sshd_max_auth_tries: 4
 sshd_max_sessions: 4
 sshd_port: 22
 suid_sgid_blacklist:
+  - /bin/bash
+  - /bin/busybox
+  - /bin/cat
+  - /bin/chmod
+  - /bin/chown
+  - /bin/cp
+  - /bin/dash
+  - /bin/date
+  - /bin/dd
+  - /bin/dmesg
+  - /bin/ed
+  - /bin/grep
+  - /bin/ip
+  - /bin/journalctl
+  - /bin/more
+  - /bin/mount
+  - /bin/mv
+  - /bin/nano
+  - /bin/nc
+  - /bin/red
+  - /bin/run-parts
+  - /bin/sed
+  - /bin/systemctl
+  - /bin/tar
   - /usr/bin/apt
   - /usr/bin/apt-get
   - /usr/bin/at
   - /usr/bin/awk
+  - /usr/bin/base32
   - /usr/bin/base64
   - /usr/bin/bash
   - /usr/bin/bsd-write
+  - /usr/bin/busctl
   - /usr/bin/busybox
+  - /usr/bin/cancel
   - /usr/bin/cat
   - /usr/bin/chage
   - /usr/bin/chfn
@@ -128,6 +155,7 @@ suid_sgid_blacklist:
   - /usr/bin/easy_install
   - /usr/bin/ed
   - /usr/bin/env
+  - /usr/bin/eqn
   - /usr/bin/expand
   - /usr/bin/file
   - /usr/bin/find
@@ -137,13 +165,18 @@ suid_sgid_blacklist:
   - /usr/bin/ftp
   - /usr/bin/fusermount
   - /usr/bin/gawk
+  - /usr/bin/gcc
   - /usr/bin/git
   - /usr/bin/grep
+  - /usr/bin/hd
   - /usr/bin/head
+  - /usr/bin/hexdump
+  - /usr/bin/iconv
   - /usr/bin/ionice
   - /usr/bin/ip
   - /usr/bin/journalctl
   - /usr/bin/less
+  - /usr/bin/look
   - /usr/bin/ltrace
   - /usr/bin/mail
   - /usr/bin/make
@@ -151,16 +184,23 @@ suid_sgid_blacklist:
   - /usr/bin/mawk
   - /usr/bin/more
   - /usr/bin/mount
+  - /usr/bin/mtr
   - /usr/bin/mv
+  - /usr/bin/nano
   - /usr/bin/nawk
   - /usr/bin/nc
   - /usr/bin/newgrp
   - /usr/bin/nice
   - /usr/bin/nl
+  - /usr/bin/nohup
+  - /usr/bin/nroff
+  - /usr/bin/nsenter
   - /usr/bin/od
   - /usr/bin/openssl
+  - /usr/bin/pdb
   - /usr/bin/perl
   - /usr/bin/pic
+  - /usr/bin/pico
   - /usr/bin/ping
   - /usr/bin/ping6
   - /usr/bin/pip
@@ -182,16 +222,21 @@ suid_sgid_blacklist:
   - /usr/bin/setarch
   - /usr/bin/sftp
   - /usr/bin/shuf
+  - /usr/bin/soelim
   - /usr/bin/sort
   - /usr/bin/ssh
   - /usr/bin/stdbuf
   - /usr/bin/strace
+  - /usr/bin/strings
   - /usr/bin/su
   - /usr/bin/systemctl
+  - /usr/bin/tac
   - /usr/bin/tail
   - /usr/bin/tar
   - /usr/bin/taskset
   - /usr/bin/tee
+  - /usr/bin/telnet
+  - /usr/bin/time
   - /usr/bin/timeout
   - /usr/bin/tmux
   - /usr/bin/top
@@ -210,6 +255,7 @@ suid_sgid_blacklist:
   - /usr/bin/xxd
   - /usr/bin/yum
   - /usr/bin/zip
+  - /usr/bin/zsoelim
   - /usr/sbin/arp
   - /usr/sbin/dmsetup
   - /usr/sbin/ip
