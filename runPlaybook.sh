@@ -3,6 +3,20 @@
 
 set -u -o pipefail
 
+function lint {
+  if ! find ./ -type f -name '*.y*ml' ! -name '.*' -print0 | \
+    xargs -0 ansible-lint -x 403 -x 204; then
+      echo 'ansible-lint failed.'
+      exit 1
+  fi
+
+  if ! find ./ -type f -name '*.y*ml' ! -name '.*' -print0 | \
+    xargs -0 yamllint -d "{extends: default, rules: {line-length: {level: warning}}}"; then
+      echo 'yamllint failed.'
+      exit 1
+  fi
+}
+
 if ! [ -x "$(command -v vagrant)" ]; then
   echo 'Vagrant is required.'
 fi
@@ -18,17 +32,6 @@ fi
 
 echo "Using $(ansible --version | grep '^ansible')"
 
-if ! find ./ -type f -name '*.y*ml' ! -name '.*' -print0 | \
-  xargs -0 ansible-lint -x 403 -x 204; then
-    echo 'ansible-lint failed.'
-    exit 1
-fi
-
-if ! find ./ -type f -name '*.y*ml' ! -name '.*' -print0 | \
-  xargs -0 yamllint -d "{extends: default, rules: {line-length: {level: warning}}}"; then
-    echo 'yamllint failed.'
-    exit 1
-fi
 
 if [ "$1" = "prep" ]; then
   vagrant box update --insecure
@@ -36,9 +39,12 @@ if [ "$1" = "prep" ]; then
 
   sudo mkdir -p /etc/ansible/roles/konstruktoid.hardening/
   sudo cp -R . /etc/ansible/roles/konstruktoid.hardening/
+  lint
   echo "Finished basic preparations. Exiting."
   exit
 fi
+
+lint
 
 if [ -z "$1" ] ; then
   vagrant up
