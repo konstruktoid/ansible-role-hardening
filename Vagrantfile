@@ -80,26 +80,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-   config.vm.define "eoan" do |eoan|
-     eoan.vm.box = "ubuntu/eoan64"
-     eoan.ssh.insert_key = true
-     eoan.vm.network "private_network", ip: "10.2.3.46"
-     eoan.vm.hostname = "eoan"
-     eoan.vm.boot_timeout = 600
-     eoan.vm.provision "shell",
-       inline: "apt-get update && apt-get -y install ansible python3-pexpect --no-install-recommends"
-     eoan.vm.provision "ansible" do |a|
-       a.verbose = "v"
-       a.limit = "all"
-       a.playbook = "tests/test.yml"
-       a.extra_vars = {
-         "sshd_admin_net" => "0.0.0.0/0",
-         "sshd_allow_groups" => "vagrant sudo ubuntu",
-         "ansible_python_interpreter" => "/usr/bin/python3"
-      }
-     end
-   end
-
    config.vm.define "focal" do |focal|
      focal.vm.box = "ubuntu/focal64"
      focal.ssh.insert_key = true

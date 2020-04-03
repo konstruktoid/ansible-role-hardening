@@ -14,7 +14,6 @@ bento/centos-8
 bento/debian-10
 bento/fedora-31
 ubuntu/bionic64
-ubuntu/eoan64
 ubuntu/focal64
 ```
 
