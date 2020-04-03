@@ -11,6 +11,40 @@
 # UBTU-16-010010
 # UBTU-16-010050
 
+- name: merge package lists
+  set_fact:
+    packages_merged: "{{ packages_debian + packages_redhat }}"
+
+- name: create needrestart directory
+  file:
+    path: /etc/needrestart/conf.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+    recurse: 'yes'
+  when: '"needrestart" in packages_merged'
+  tags:
+    - packages
+    - security
+
+- name: stat needrestart configuration directory
+  become: 'yes'
+  become_method: sudo
+  stat:
+    path: /etc/needrestart/conf.d
+  register: needrestart_directory
+
+- name: configure needrestart
+  lineinfile:
+    path: /etc/needrestart/conf.d/00-restart.conf
+    line: "$nrconf{restart} = 'l';"
+    create: 'yes'
+    owner: root
+    group: root
+    mode: '0644'
+  when: needrestart_directory.stat.exists
+
 - name: debian family package installation
   become: 'yes'
   become_method: sudo
