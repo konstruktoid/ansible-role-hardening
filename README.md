@@ -195,8 +195,8 @@ sshd_admin_net:
   - 192.168.0.0/24
   - 192.168.1.0/24
 sshd_allow_groups: sudo
-sshd_max_auth_tries: 4
-sshd_max_sessions: 4
+sshd_max_auth_tries: 3
+sshd_max_sessions: 3
 sshd_port: 22
 ```
 
