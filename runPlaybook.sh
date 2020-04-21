@@ -1,9 +1,12 @@
 #!/bin/bash -l
 # shellcheck disable=SC2013
 
-set -u -o pipefail
+set -e -o pipefail
 
 function lint {
+  echo "Linting."
+  set -x
+
   if ! find ./ -type f -name '*.y*ml' ! -name '.*' -print0 | \
     xargs -0 ansible-lint -x 403 -x 204; then
       echo 'ansible-lint failed.'
@@ -15,6 +18,7 @@ function lint {
       echo 'yamllint failed.'
       exit 1
   fi
+  set +x
 }
 
 if ! [ -x "$(command -v vagrant)" ]; then
@@ -32,9 +36,9 @@ fi
 
 echo "Using $(ansible --version | grep '^ansible')"
 
-
 if [ "$1" = "prep" ]; then
-  vagrant box update --insecure
+  echo "Starting basic preparations."
+  vagrant box update --insecure || true
   vagrant destroy --force
 
   sudo mkdir -p /etc/ansible/roles/konstruktoid.hardening/
