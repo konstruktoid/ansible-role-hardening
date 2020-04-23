@@ -17,4 +17,29 @@
   tags:
     - motd
     - security
+
+- name: motd updates permissions
+  become: 'yes'
+  become_method: sudo
+  file:
+    dest: /etc/update-motd.d
+    mode: 0444
+    recurse: 'yes'
+  ignore_errors: true
+  when: ansible_os_family == "Debian"
+  tags:
+    - motd
+    - security
+
+- name: /etc/update-motd.d permission
+  become: 'yes'
+  become_method: sudo
+  file:
+    dest: /etc/update-motd.d
+    mode: 0755
+  ignore_errors: true
+  when: ansible_os_family == "Debian"
+  tags:
+    - motd
+    - security
 ...
