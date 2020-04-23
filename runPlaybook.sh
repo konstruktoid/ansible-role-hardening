@@ -1,7 +1,7 @@
 #!/bin/bash -l
 # shellcheck disable=SC2013
 
-set -e -o pipefail
+set -o pipefail
 
 function lint {
   echo "Linting."
@@ -62,10 +62,10 @@ VMFILE="$(mktemp)"
 vagrant status | grep 'running.*virtualbox' | awk '{print $1}' >> "$VMFILE"
 
 for VM in $(grep -v '^#' "$VMFILE"); do
+  echo "Copying checkScore.sh to $VM."
   vagrant ssh "$VM" -c 'cp /vagrant/checkScore.sh ~/'
-  echo "Copying checkScore.sh on $VM."
-  vagrant ssh "$VM" -c 'sudo reboot'
   echo "Rebooting $VM."
+  vagrant ssh "$VM" -c 'sudo reboot'
 
   while ! vagrant ssh "$VM" -c 'id'; do
     echo "Waiting for $VM."
