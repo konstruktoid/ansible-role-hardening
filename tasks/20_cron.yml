@@ -47,4 +47,33 @@
     - at
     - systemd
     - security
+
+- name: cron permissions
+  file:
+    path: "{{ item }}"
+    mode: 0700
+    owner: root
+    group: root
+  with_items:
+    - /etc/cron.d
+    - /etc/cron.daily
+    - /etc/cron.hourly
+    - /etc/cron.weekly
+    - /etc/cron.monthly
+  ignore_errors: true
+  tags:
+    - cron
+    - security
+
+- name: crontab permissions
+  file:
+    path: /etc/crontab
+    mode: 0600
+    owner: root
+    group: root
+  ignore_errors: true
+  tags:
+    - cron
+    - crontab
+    - security
 ...
