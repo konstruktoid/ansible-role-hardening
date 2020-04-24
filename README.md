@@ -6,6 +6,8 @@ Ansible role to make a Debian, Ubuntu or CentoOS server a bit more secure,
 
 Requires [Ansible](https://www.ansible.com/) >= 2.8.
 
+Available on [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
+
 Distributions Tested using Vagrant
 --------------------
 
