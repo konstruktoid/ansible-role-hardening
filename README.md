@@ -409,14 +409,14 @@ sudo oscap xccdf eval --fetch-remote-resources \
 ```
 
 To run a [OpenSCAP](https://github.com/ComplianceAsCode/content) test on a
-Ubuntu 18.04 host, where `v0.1.48` shoule be replaced with the latest available
+Ubuntu 18.04 host, where `v0.1.49` should be replaced with the latest available
 version:
 
 ```shell
 sudo apt-get -y install libopenscap8 unzip
-wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.48/scap-security-guide-0.1.48-oval-510.zip
-unzip scap-security-guide-0.1.48-oval-510.zip
-cd scap-security-guide-0.1.48-oval-5.10
+wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.48/scap-security-guide-0.1.49-oval-510.zip
+unzip scap-security-guide-0.1.49-oval-510.zip
+cd scap-security-guide-0.1.49-oval-5.10
 oscap info --fetch-remote-resources ./ssg-ubuntu1804-ds.xml
 sudo oscap xccdf eval --fetch-remote-resources \
   --profile xccdf_org.ssgproject.content_profile_anssi_np_nt28_high \
