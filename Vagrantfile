@@ -40,7 +40,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "centos" do |centos|
-    centos.vm.box = "bento/centos-8"
+    centos.vm.box = "centos/8"
     centos.ssh.insert_key = true
     centos.vm.network "private_network", ip: "10.2.3.43"
     centos.vm.provider "virtualbox" do |c|
