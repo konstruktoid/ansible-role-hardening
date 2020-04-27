@@ -1,8 +1,8 @@
 ansible-role-hardening
 =========
 
-Ansible role to make a Debian, Ubuntu or CentoOS server a bit more secure,
-[systemd edition](https://freedesktop.org/wiki/Software/systemd/).
+Ansible role to make a CentOS, Debian, Fedora or Ubuntu server a bit more
+secure, [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
 Requires [Ansible](https://www.ansible.com/) >= 2.8.
 
@@ -12,9 +12,9 @@ Distributions Tested using Vagrant
 --------------------
 
 ```yaml
-bento/centos-8
 bento/debian-10
 bento/fedora-31
+centos/8
 ubuntu/bionic64
 ubuntu/focal64
 ```
