@@ -30,7 +30,7 @@
   become_method: sudo
   package:
     name: "python2-rpm"
-    state: latest
+    state: present
   when: ansible_distribution == "RedHat"
   tags:
     - yum
@@ -134,7 +134,7 @@
   become_method: sudo
   package:
     name: '*'
-    state: latest
+    state: present
   notify:
     - yum clean
   when: ansible_os_family == "RedHat"

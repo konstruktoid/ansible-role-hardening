@@ -50,7 +50,7 @@
   become_method: sudo
   apt:
     name: "{{ packages_debian }}"
-    state: latest
+    state: present
     install_recommends: 'no'
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -65,7 +65,7 @@
   become_method: sudo
   apt:
     name: "update-notifier-common"
-    state: latest
+    state: present
     install_recommends: 'no'
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -79,7 +79,7 @@
   become_method: sudo
   package:
     name: "epel-release"
-    state: latest
+    state: present
   when: ansible_os_family == "RedHat" and (not ansible_distribution == "Fedora")
   tags:
     - yum
@@ -91,7 +91,7 @@
   become_method: sudo
   package:
     name: "{{ item }}"
-    state: latest
+    state: present
   with_items:
     - "{{ packages_redhat }}"
   when: ansible_os_family == "RedHat"
@@ -139,7 +139,7 @@
   become_method: sudo
   apt:
     name: "{{ packages }}"
-    state: latest
+    state: present
     install_recommends: 'no'
   vars:
     packages:
@@ -158,7 +158,7 @@
   become_method: sudo
   apt:
     name: open-vm-tools
-    state: latest
+    state: present
     install_recommends: 'no'
   when: ansible_bios_version == "VMWare"
   tags:
@@ -173,7 +173,7 @@
   become_method: sudo
   package:
     name: rng-tools
-    state: latest
+    state: present
   when: ansible_local.cpuinfo_rdrand
   tags:
     - rng-tools

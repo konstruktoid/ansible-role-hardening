@@ -4,7 +4,7 @@
   become_method: sudo
   package:
     name: "ufw"
-    state: latest
+    state: present
     install_recommends: 'no'
   when: ansible_os_family == "Debian"
   tags:
@@ -18,7 +18,7 @@
   become_method: sudo
   package:
     name: "epel-release"
-    state: latest
+    state: present
   when: ansible_distribution == "RedHat"
   tags:
     - yum
@@ -30,7 +30,7 @@
   become_method: sudo
   package:
     name: "firewalld"
-    state: latest
+    state: present
   when: ansible_os_family == "RedHat"
   tags:
     - yum
@@ -43,7 +43,7 @@
   become_method: sudo
   package:
     name: "python-firewall"
-    state: latest
+    state: present
   when: ansible_os_family == "RedHat" and ansible_python.version.major <= 2
   tags:
     - yum
@@ -56,7 +56,7 @@
   become_method: sudo
   package:
     name: "python3-firewall"
-    state: latest
+    state: present
   when: ansible_os_family == "RedHat" and ansible_python.version.major >= 3
   tags:
     - yum

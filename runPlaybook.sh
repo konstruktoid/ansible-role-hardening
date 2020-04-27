@@ -8,7 +8,7 @@ function lint {
   set -x
 
   if ! find ./ -type f -name '*.y*ml' ! -name '.*' -print0 | \
-    xargs -0 ansible-lint -x 403 -x 204; then
+    xargs -0 ansible-lint; then
       echo 'ansible-lint failed.'
       exit 1
   fi
