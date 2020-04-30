@@ -110,6 +110,7 @@ suid_sgid_blacklist:
   - /bin/dd
   - /bin/dmesg
   - /bin/ed
+  - /bin/fusermount
   - /bin/grep
   - /bin/ip
   - /bin/journalctl
@@ -118,11 +119,17 @@ suid_sgid_blacklist:
   - /bin/mv
   - /bin/nano
   - /bin/nc
+  - /bin/ntfs-3g
+  - /bin/ping
+  - /bin/ping6
   - /bin/red
   - /bin/run-parts
   - /bin/sed
+  - /bin/sh
+  - /bin/su
   - /bin/systemctl
   - /bin/tar
+  - /bin/umount
   - /usr/bin/apt
   - /usr/bin/apt-get
   - /usr/bin/at
@@ -178,10 +185,13 @@ suid_sgid_blacklist:
   - /usr/bin/less
   - /usr/bin/look
   - /usr/bin/ltrace
+  - /usr/bin/lwp-download
+  - /usr/bin/lwp-request
   - /usr/bin/mail
   - /usr/bin/make
   - /usr/bin/man
   - /usr/bin/mawk
+  - /usr/bin/mlocate
   - /usr/bin/more
   - /usr/bin/mount
   - /usr/bin/mtr
@@ -195,6 +205,7 @@ suid_sgid_blacklist:
   - /usr/bin/nohup
   - /usr/bin/nroff
   - /usr/bin/nsenter
+  - /usr/bin/ntfs-3g
   - /usr/bin/od
   - /usr/bin/openssl
   - /usr/bin/pdb
@@ -221,9 +232,11 @@ suid_sgid_blacklist:
   - /usr/bin/sed
   - /usr/bin/setarch
   - /usr/bin/sftp
+  - /usr/bin/sh
   - /usr/bin/shuf
   - /usr/bin/soelim
   - /usr/bin/sort
+  - /usr/bin/sqlite3
   - /usr/bin/ssh
   - /usr/bin/stdbuf
   - /usr/bin/strace
@@ -240,6 +253,7 @@ suid_sgid_blacklist:
   - /usr/bin/timeout
   - /usr/bin/tmux
   - /usr/bin/top
+  - /usr/bin/traceroute6.iputils
   - /usr/bin/ul
   - /usr/bin/umount
   - /usr/bin/unexpand
