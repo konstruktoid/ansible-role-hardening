@@ -93,13 +93,14 @@
     enabled: 'no'
     state: stopped
 
-# https://github.com/ansible/ansible/pull/31450#issuecomment-352889579
-- name: yum clean
-  become: 'yes'
-  become_method: sudo
-  command: yum -y clean all
-  args:
-    warn: false
+- name: dnf clean
+  dnf:
+    autoremove: 'yes'
+  when: ansible_os_family == "RedHat"
+  tags:
+    - dnf
+    - packages
+    - security
 
 - name: enable haveged
   become: 'yes'
