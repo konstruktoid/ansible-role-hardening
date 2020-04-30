@@ -110,11 +110,6 @@
     enabled: 'yes'
     state: started
 
-- name: update authconfig
-  become: 'yes'
-  become_method: sudo
-  command: authconfig --updateall
-
 - name: reboot node
   become: 'yes'
   become_method: sudo
