@@ -218,27 +218,185 @@ connection.
 
 ```yaml
 suid_sgid_blacklist:
-  - /bin/ntfs-3g
-  - /usr/bin/at
+  - /bin/bash
+  - /bin/busybox
+  - /bin/cat
+  - /bin/chmod
+  - /bin/chown
+  - /bin/cp
+  - /bin/dash
+  - /bin/date
+  - /bin/dd
+  - /bin/dmesg
+  - /bin/ed
   - /bin/fusermount
+  - /bin/grep
+  - /bin/ip
+  - /bin/journalctl
+  - /bin/more
   - /bin/mount
+  - /bin/mv
+  - /bin/nano
+  - /bin/nc
+  - /bin/ntfs-3g
   - /bin/ping
   - /bin/ping6
+  - /bin/red
+  - /bin/run-parts
+  - /bin/sed
+  - /bin/sh
   - /bin/su
+  - /bin/systemctl
+  - /bin/tar
   - /bin/umount
-  - /sbin/mount.nfs
+  - /usr/bin/apt
+  - /usr/bin/apt-get
+  - /usr/bin/at
+  - /usr/bin/awk
+  - /usr/bin/base32
+  - /usr/bin/base64
+  - /usr/bin/bash
   - /usr/bin/bsd-write
+  - /usr/bin/busctl
+  - /usr/bin/busybox
+  - /usr/bin/cancel
+  - /usr/bin/cat
   - /usr/bin/chage
   - /usr/bin/chfn
+  - /usr/bin/chmod
+  - /usr/bin/chown
   - /usr/bin/chsh
+  - /usr/bin/cp
+  - /usr/bin/cpan
+  - /usr/bin/crontab
+  - /usr/bin/curl
+  - /usr/bin/cut
+  - /usr/bin/dash
+  - /usr/bin/date
+  - /usr/bin/dd
+  - /usr/bin/diff
+  - /usr/bin/dmesg
+  - /usr/bin/dnf
+  - /usr/bin/dpkg
+  - /usr/bin/easy_install
+  - /usr/bin/ed
+  - /usr/bin/env
+  - /usr/bin/eqn
+  - /usr/bin/expand
+  - /usr/bin/file
+  - /usr/bin/find
+  - /usr/bin/flock
+  - /usr/bin/fmt
+  - /usr/bin/fold
+  - /usr/bin/ftp
+  - /usr/bin/fusermount
+  - /usr/bin/gawk
+  - /usr/bin/gcc
+  - /usr/bin/git
+  - /usr/bin/grep
+  - /usr/bin/hd
+  - /usr/bin/head
+  - /usr/bin/hexdump
+  - /usr/bin/iconv
+  - /usr/bin/ionice
+  - /usr/bin/ip
+  - /usr/bin/journalctl
+  - /usr/bin/less
+  - /usr/bin/look
+  - /usr/bin/ltrace
+  - /usr/bin/lwp-download
+  - /usr/bin/lwp-request
+  - /usr/bin/mail
+  - /usr/bin/make
+  - /usr/bin/man
+  - /usr/bin/mawk
   - /usr/bin/mlocate
+  - /usr/bin/more
+  - /usr/bin/mount
   - /usr/bin/mtr
+  - /usr/bin/mv
+  - /usr/bin/nano
+  - /usr/bin/nawk
+  - /usr/bin/nc
   - /usr/bin/newgrp
+  - /usr/bin/nice
+  - /usr/bin/nl
+  - /usr/bin/nohup
+  - /usr/bin/nroff
+  - /usr/bin/nsenter
+  - /usr/bin/ntfs-3g
+  - /usr/bin/od
+  - /usr/bin/openssl
+  - /usr/bin/pdb
+  - /usr/bin/perl
+  - /usr/bin/pic
+  - /usr/bin/pico
+  - /usr/bin/ping
+  - /usr/bin/ping6
+  - /usr/bin/pip
   - /usr/bin/pkexec
+  - /usr/bin/python
+  - /usr/bin/readelf
+  - /usr/bin/red
+  - /usr/bin/rlogin
+  - /usr/bin/rpm
+  - /usr/bin/rpmquery
+  - /usr/bin/rsync
+  - /usr/bin/run-mailcap
+  - /usr/bin/run-parts
+  - /usr/bin/rvim
+  - /usr/bin/scp
+  - /usr/bin/screen
+  - /usr/bin/script
+  - /usr/bin/sed
+  - /usr/bin/setarch
+  - /usr/bin/sftp
+  - /usr/bin/sh
+  - /usr/bin/shuf
+  - /usr/bin/soelim
+  - /usr/bin/sort
+  - /usr/bin/sqlite3
+  - /usr/bin/ssh
+  - /usr/bin/stdbuf
+  - /usr/bin/strace
+  - /usr/bin/strings
+  - /usr/bin/su
+  - /usr/bin/systemctl
+  - /usr/bin/tac
+  - /usr/bin/tail
+  - /usr/bin/tar
+  - /usr/bin/taskset
+  - /usr/bin/tee
+  - /usr/bin/telnet
+  - /usr/bin/time
+  - /usr/bin/timeout
+  - /usr/bin/tmux
+  - /usr/bin/top
   - /usr/bin/traceroute6.iputils
+  - /usr/bin/ul
+  - /usr/bin/umount
+  - /usr/bin/unexpand
+  - /usr/bin/uniq
+  - /usr/bin/unshare
+  - /usr/bin/vi
+  - /usr/bin/vim
   - /usr/bin/wall
+  - /usr/bin/watch
+  - /usr/bin/wget
   - /usr/bin/write
-  - /usr/sbin/pppd
+  - /usr/bin/xargs
+  - /usr/bin/xxd
+  - /usr/bin/yum
+  - /usr/bin/zip
+  - /usr/bin/zsoelim
+  - /usr/sbin/arp
+  - /usr/sbin/dmsetup
+  - /usr/sbin/ip
+  - /usr/sbin/ldconfig
+  - /usr/sbin/logsave
+  - /usr/sbin/mount.nfs
+  - /usr/sbin/ping6
+  - /usr/sbin/service
 ```
 
 Which binaries that should have SUID/SGID removed.
@@ -255,13 +413,13 @@ Structure
 │   ├── Dockerfile
 │   ├── README.md
 │   └── entrypoint.sh
-├── checkScore.sh
 ├── defaults
 │   └── main.yml
 ├── handlers
 │   └── main.yml
 ├── meta
 │   └── main.yml
+├── postChecks.sh
 ├── provision
 │   └── setup.sh
 ├── renovate.json
@@ -402,8 +560,10 @@ CentOS 8 host using the included Vagrantfile follow the instructions on
 [https://copr.fedorainfracloud.org/coprs/openscapmaint/openscap-latest/](https://copr.fedorainfracloud.org/coprs/openscapmaint/openscap-latest/).
 
 ```shell
-sudo yum update
-sudo yum install -y openscap-scanner scap-security-guide
+curl -SsL http://copr.fedoraproject.org/coprs/openscapmaint/openscap-latest/repo/epel-7/openscapmaint-openscap-latest-epel-7.repo | \
+  sudo tee -a /etc/yum.repos.d/openscapmaint-openscap-latest-epel-7.repo
+sudo dnf update
+sudo dnf install -y openscap-scanner scap-security-guide
 oscap info --fetch-remote-resources /usr/share/xml/scap/ssg/content/ssg-centos8-ds.xml
 sudo oscap xccdf eval --fetch-remote-resources \
   --profile xccdf_org.ssgproject.content_profile_standard \
