@@ -41,6 +41,7 @@ if [ "$1" = "prep" ]; then
   vagrant box update --insecure || true
   vagrant destroy --force
 
+  echo "Copying the role."
   sudo mkdir -p /etc/ansible/roles/konstruktoid.hardening/
   sudo cp -R . /etc/ansible/roles/konstruktoid.hardening/
   lint
@@ -62,8 +63,8 @@ VMFILE="$(mktemp)"
 vagrant status | grep 'running.*virtualbox' | awk '{print $1}' >> "$VMFILE"
 
 for VM in $(grep -v '^#' "$VMFILE"); do
-  echo "Copying checkScore.sh to $VM."
-  vagrant ssh "$VM" -c 'cp /vagrant/checkScore.sh ~/'
+  echo "Copying postChecks.sh to $VM."
+  vagrant ssh "$VM" -c 'cp /vagrant/postChecks.sh ~/'
   echo "Rebooting $VM."
   vagrant ssh "$VM" -c 'sudo reboot'
 
@@ -72,7 +73,8 @@ for VM in $(grep -v '^#' "$VMFILE"); do
     sleep 10
   done
 
-  vagrant ssh "$VM" -c 'sh ~/checkScore.sh || exit 1 && cat ~/lynis-report.dat' > "$VM-$(date +%y%m%d)-lynis.log"
+  vagrant ssh "$VM" -c 'sh ~/postChecks.sh || exit 1 && cat ~/lynis-report.dat' > "$VM-$(date +%y%m%d)-lynis.log"
+  vagrant ssh "$VM" -c 'cat ~/suid.list' >> "$(date +%y%m%d)-suid.list"
 done
 
 rm "$VMFILE"
