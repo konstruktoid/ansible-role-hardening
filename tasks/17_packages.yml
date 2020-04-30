@@ -74,18 +74,6 @@
     - apt
     - packages
 
-- name: fedora epel installation
-  become: 'yes'
-  become_method: sudo
-  package:
-    name: "epel-release"
-    state: present
-  when: ansible_os_family == "RedHat" and (not ansible_distribution == "Fedora")
-  tags:
-    - yum
-    - packages
-    - security
-
 - name: redhat family package installation
   become: 'yes'
   become_method: sudo

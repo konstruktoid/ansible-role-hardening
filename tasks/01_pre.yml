@@ -60,4 +60,17 @@
   setup: ~
   tags:
     - fact
+
+- name: redhat family epel installation
+  become: 'yes'
+  become_method: sudo
+  dnf:
+    name: "epel-release"
+    state: present
+    update_cache: 'yes'
+  when: ansible_os_family == "RedHat" and (not ansible_distribution == "Fedora")
+  tags:
+    - dnf
+    - packages
+    - security
 ...
