@@ -1,4 +1,5 @@
 Vagrant.configure("2") do |config|
+  config.vbguest.installer_options = { allow_kernel_upgrade: true }
   config.vm.provider "virtualbox" do |v|
     v.default_nic_type = "Am79C973"
   end
@@ -26,6 +27,7 @@ Vagrant.configure("2") do |config|
     buster.ssh.insert_key = true
     buster.vm.network "private_network", ip: "10.2.3.42"
     buster.vm.hostname = "buster"
+    buster.vm.boot_timeout = 600
     buster.vm.provision "shell",
       inline: "apt-get update && apt-get -y install ansible python-pexpect --no-install-recommends"
     buster.vm.provision "ansible" do |a|
