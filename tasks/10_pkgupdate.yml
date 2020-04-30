@@ -85,7 +85,7 @@
   become: 'yes'
   become_method: sudo
   lineinfile:
-    line: "clean_requirements_on_remove=1"
+    line: "clean_requirements_on_remove=True"
     dest: /etc/yum.conf
     mode: 0644
     state: present
@@ -128,16 +128,17 @@
     - yum
     - security
 
-# CCE-26895-3
-- name: yum update
+- name: enable centos PowerTools repo
   become: 'yes'
   become_method: sudo
-  package:
-    name: '*'
+  lineinfile:
+    regexp: "^enabled="
+    line: "enabled=1"
+    dest: /etc/yum.repos.d/CentOS-PowerTools.repo
+    mode: 0644
     state: present
-  notify:
-    - yum clean
-  when: ansible_os_family == "RedHat"
+    create: 'no'
+  when: ansible_distribution == "CentOS"
   tags:
     - yum
     - security
