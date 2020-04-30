@@ -87,7 +87,7 @@
   notify:
     - enable haveged
   tags:
-    - yum
+    - dnf
     - packages
     - security
 
@@ -118,7 +118,7 @@
   when: ansible_os_family == "RedHat"
   ignore_errors: true
   tags:
-    - yum
+    - dnf
     - packages
     - security
 
@@ -151,7 +151,7 @@
   when: ansible_bios_version == "VMWare"
   tags:
     - apt
-    - yum
+    - dnf
     - packages
     - vmware
     - security
@@ -165,6 +165,17 @@
   when: ansible_local.cpuinfo_rdrand
   tags:
     - rng-tools
+    - packages
+    - security
+
+- name: remove unneeded debian dependency packages
+  apt:
+    autoclean: 'yes'
+    autoremove: 'yes'
+  when: ansible_os_family == "Debian"
+  ignore_errors: true
+  tags:
+    - apt
     - packages
     - security
 ...
