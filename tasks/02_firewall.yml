@@ -2,7 +2,7 @@
 - name: ufw installation
   become: 'yes'
   become_method: sudo
-  package:
+  apt:
     name: "ufw"
     state: present
     install_recommends: 'no'
@@ -13,27 +13,15 @@
     - security
     - ufw
 
-- name: redhat family epel installation
-  become: 'yes'
-  become_method: sudo
-  package:
-    name: "epel-release"
-    state: present
-  when: ansible_distribution == "RedHat"
-  tags:
-    - yum
-    - packages
-    - security
-
 - name: firewalld installation
   become: 'yes'
   become_method: sudo
-  package:
+  dnf:
     name: "firewalld"
     state: present
   when: ansible_os_family == "RedHat"
   tags:
-    - yum
+    - dnf
     - packages
     - security
     - firewalld
@@ -41,12 +29,12 @@
 - name: python-firewall installation
   become: 'yes'
   become_method: sudo
-  package:
+  dnf:
     name: "python-firewall"
     state: present
   when: ansible_os_family == "RedHat" and ansible_python.version.major <= 2
   tags:
-    - yum
+    - dnf
     - packages
     - security
     - firewalld
@@ -54,12 +42,12 @@
 - name: python3-firewall installation
   become: 'yes'
   become_method: sudo
-  package:
+  dnf:
     name: "python3-firewall"
     state: present
   when: ansible_os_family == "RedHat" and ansible_python.version.major >= 3
   tags:
-    - yum
+    - dnf
     - packages
     - security
     - firewalld
