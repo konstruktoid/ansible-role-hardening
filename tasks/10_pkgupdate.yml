@@ -28,7 +28,7 @@
 - name: python-rpm installation
   become: 'yes'
   become_method: sudo
-  package:
+  dnf:
     name: "python2-rpm"
     state: present
   when: ansible_distribution == "RedHat"
