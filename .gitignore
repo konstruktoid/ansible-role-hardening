@@ -3,6 +3,7 @@
 *.log
 *.retry
 *.rpm
+*suid.list
 .scannerwork
 .sonar
 .vagrant
