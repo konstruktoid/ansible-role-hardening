@@ -16,6 +16,8 @@
     packages_merged: "{{ packages_debian + packages_redhat }}"
 
 - name: create needrestart directory
+  become: 'yes'
+  become_method: sudo
   file:
     path: /etc/needrestart/conf.d
     state: directory
@@ -36,6 +38,8 @@
   register: needrestart_directory
 
 - name: configure needrestart
+  become: 'yes'
+  become_method: sudo
   lineinfile:
     path: /etc/needrestart/conf.d/00-restart.conf
     line: "$nrconf{restart} = 'l';"
