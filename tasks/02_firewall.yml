@@ -1,7 +1,6 @@
 ---
 - name: ufw installation
   become: 'yes'
-  become_method: sudo
   apt:
     name: "ufw"
     state: present
@@ -15,7 +14,6 @@
 
 - name: firewalld installation
   become: 'yes'
-  become_method: sudo
   dnf:
     name: "firewalld"
     state: present
@@ -28,7 +26,6 @@
 
 - name: python-firewall installation
   become: 'yes'
-  become_method: sudo
   dnf:
     name: "python-firewall"
     state: present
@@ -41,7 +38,6 @@
 
 - name: python3-firewall installation
   become: 'yes'
-  become_method: sudo
   dnf:
     name: "python3-firewall"
     state: present
@@ -54,7 +50,6 @@
 
 - name: set ufw IPT_SYSCTL
   become: 'yes'
-  become_method: sudo
   lineinfile:
     regexp: "^IPT_SYSCTL="
     line: "IPT_SYSCTL=/etc/sysctl.conf"
@@ -70,7 +65,6 @@
 
 - name: reset ufw
   become: 'yes'
-  become_method: sudo
   ufw:
     state: reset
   when: ansible_os_family == "Debian"
@@ -80,7 +74,6 @@
 
 - name: allow ssh ufw
   become: 'yes'
-  become_method: sudo
   ufw:
     rule: allow
     src: "{{ item }}"
@@ -96,7 +89,6 @@
 
 - name: enable ufw
   become: 'yes'
-  become_method: sudo
   ufw:
     state: enabled
     direction: incoming
@@ -109,14 +101,12 @@
 
 - name: stat firewalld conf
   become: 'yes'
-  become_method: sudo
   stat:
     path: /etc/firewalld/firewalld.conf
   register: firewalldconf
 
 - name: set firewalld DefaultZone
   become: 'yes'
-  become_method: sudo
   lineinfile:
     regexp: "^DefaultZone="
     line: "DefaultZone=public"
@@ -132,7 +122,6 @@
 
 - name: enable firewalld
   become: 'yes'
-  become_method: sudo
   service:
     name: firewalld
     state: started
@@ -144,7 +133,6 @@
 
 - name: allow firewalld ssh
   become: 'yes'
-  become_method: sudo
   firewalld:
     port: "{{ sshd_port }}/tcp"
     zone: public

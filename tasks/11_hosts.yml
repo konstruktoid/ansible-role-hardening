@@ -1,7 +1,6 @@
 ---
 - name: hosts.allow
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/hosts.allow.j2
     dest: /etc/hosts.allow
@@ -15,7 +14,6 @@
 
 - name: hosts.deny
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/hosts.deny.j2
     dest: /etc/hosts.deny

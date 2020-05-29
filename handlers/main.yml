@@ -2,7 +2,6 @@
 # https://github.com/ansible/ansible/issues/22171
 - name: restart auditd
   become: 'yes'
-  become_method: sudo
   command: service auditd restart
   ignore_errors: true
   args:
@@ -10,30 +9,25 @@
 
 - name: generate auditd
   become: 'yes'
-  become_method: sudo
   command: augenrules
 
 - name: restart sysctl
   become: 'yes'
-  become_method: sudo
   service:
     name: systemd-sysctl
     state: restarted
 
 - name: reload systemd
   become: 'yes'
-  become_method: sudo
   systemd:
     daemon_reload: 'yes'
 
 - name: rkhunter propupd
   become: 'yes'
-  become_method: sudo
   command: rkhunter --propupd
 
 - name: enable aidecheck
   become: 'yes'
-  become_method: sudo
   systemd:
     name: aidecheck.timer
     enabled: 'yes'
@@ -41,7 +35,6 @@
 
 - name: disable aidecheck
   become: 'yes'
-  become_method: sudo
   systemd:
     name: aidecheck.timer
     state: stopped
@@ -49,7 +42,6 @@
 
 - name: mask aidecheck
   become: 'yes'
-  become_method: sudo
   systemd:
     name: aidecheck.timer
     masked: 'yes'
@@ -58,26 +50,22 @@
 
 - name: restart sshd
   become: 'yes'
-  become_method: sudo
   service:
     name: sshd
     state: restarted
 
 - name: apt-get autoremove
   become: 'yes'
-  become_method: sudo
   apt:
     autoremove: 'yes'
 
 - name: apt-get clean
   become: 'yes'
-  become_method: sudo
   apt:
     autoclean: 'yes'
 
 - name: mask apport
   become: 'yes'
-  become_method: sudo
   systemd:
     name: apport.service
     masked: 'yes'
@@ -86,7 +74,6 @@
 
 - name: mask motdnews
   become: 'yes'
-  become_method: sudo
   systemd:
     name: motd-news.timer
     masked: 'yes'
@@ -104,7 +91,6 @@
 
 - name: enable haveged
   become: 'yes'
-  become_method: sudo
   systemd:
     name: haveged
     enabled: 'yes'
@@ -112,7 +98,6 @@
 
 - name: reboot node
   become: 'yes'
-  become_method: sudo
   reboot:
     pre_reboot_delay: "{{ 3600 | random(start=1) }}"
 ...

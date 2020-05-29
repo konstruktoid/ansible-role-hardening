@@ -3,7 +3,6 @@
 
 - name: add notice
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/issue.j2
     dest: "{{ item }}"

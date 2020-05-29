@@ -1,7 +1,6 @@
 ---
 - name: remove suid/sgid
   become: 'yes'
-  become_method: sudo
   file:
     path: "{{ item }}"
     mode: 'a-s'

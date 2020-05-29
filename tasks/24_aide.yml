@@ -1,12 +1,12 @@
 ---
 - name: check cron.daily aide
+  become: 'yes'
   stat:
     path: /etc/cron.daily/aide
   register: aidecron
 
 - name: aide service
   become: 'yes'
-  become_method: sudo
   template:
     src: lib/systemd/system/aidecheck.service.j2
     dest: /lib/systemd/system/aidecheck.service
@@ -22,7 +22,6 @@
 # CCE-26952-2
 - name: aide timer
   become: 'yes'
-  become_method: sudo
   template:
     src: lib/systemd/system/aidecheck.timer.j2
     dest: /lib/systemd/system/aidecheck.timer
@@ -57,7 +56,6 @@
 
 - name: stat Debian aide.db
   become: 'yes'
-  become_method: sudo
   stat:
     path: /var/lib/aide/aide.db
   register: ubuaidedb
@@ -85,7 +83,6 @@
 
 - name: stat RedHat aide.db
   become: 'yes'
-  become_method: sudo
   stat:
     path: /var/lib/aide/aide.db.gz
   register: rhelaidedb
@@ -97,7 +94,6 @@
 # CCE-27220-3
 - name: initialize RedHat aide
   become: 'yes'
-  become_method: sudo
   command: aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
   when: ansible_os_family == "RedHat" and not rhelaidedb.stat.exists
   tags:
@@ -106,7 +102,6 @@
 
 - name: initialize Debian aide
   become: 'yes'
-  become_method: sudo
   expect:
     command: aideinit
     timeout: null

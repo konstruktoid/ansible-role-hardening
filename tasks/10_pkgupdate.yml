@@ -1,7 +1,6 @@
 ---
 - name: apt update
   become: 'yes'
-  become_method: sudo
   apt:
     update_cache: 'yes'
     cache_valid_time: 1800
@@ -12,7 +11,6 @@
 
 - name: apt upgrade
   become: 'yes'
-  become_method: sudo
   apt:
     upgrade: safe
   notify:
@@ -27,7 +25,6 @@
 
 - name: python-rpm installation
   become: 'yes'
-  become_method: sudo
   dnf:
     name: "python2-rpm"
     state: present
@@ -40,7 +37,6 @@
 
 - name: link dnf.conf
   become: 'yes'
-  become_method: sudo
   file:
     src: /etc/dnf/dnf.conf
     dest: /etc/yum.conf
@@ -52,7 +48,6 @@
 # CCE-26957-1
 - name: import RedHat RPM key
   become: 'yes'
-  become_method: sudo
   rpm_key:
     state: present
     key: https://sks-keyservers.net/pks/lookup?op=get&search=0x{{ item }}
@@ -66,7 +61,6 @@
 # CCE-26989-4
 - name: set yum.conf gpgcheck
   become: 'yes'
-  become_method: sudo
   lineinfile:
     regexp: "^gpgcheck="
     line: "gpgcheck=1"
@@ -83,7 +77,6 @@
 # CCE-80346-0
 - name: set yum.conf clean_requirements
   become: 'yes'
-  become_method: sudo
   lineinfile:
     line: "clean_requirements_on_remove=True"
     dest: /etc/yum.conf
@@ -99,7 +92,6 @@
 # CCE-80347-8
 - name: set yum.conf localpkg_gpgcheck
   become: 'yes'
-  become_method: sudo
   lineinfile:
     line: "localpkg_gpgcheck=1"
     dest: /etc/yum.conf
@@ -115,7 +107,6 @@
 # CCE-80348-6
 - name: comment yum.conf repo_gpgcheck
   become: 'yes'
-  become_method: sudo
   lineinfile:
     line: "# repo_gpgcheck=1"
     dest: /etc/yum.conf
@@ -130,7 +121,6 @@
 
 - name: enable centos PowerTools repo
   become: 'yes'
-  become_method: sudo
   lineinfile:
     regexp: "^enabled="
     line: "enabled=1"

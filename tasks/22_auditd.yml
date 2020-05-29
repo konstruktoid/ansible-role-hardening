@@ -3,7 +3,6 @@
 
 - name: audit.rules
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/audit/rules.d/hardening.rules.j2
     dest: /etc/audit/rules.d/hardening.rules
@@ -21,7 +20,6 @@
 
 - name: set audit grub cmdline
   become: 'yes'
-  become_method: sudo
   lineinfile:
     regexp: '^GRUB_CMDLINE_LINUX='
     line: 'GRUB_CMDLINE_LINUX="{{ grub_cmdline }}"'

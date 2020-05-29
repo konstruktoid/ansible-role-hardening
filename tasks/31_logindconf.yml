@@ -1,7 +1,6 @@
 ---
 - name: systemd logind
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/systemd/logind.conf.j2
     dest: /etc/systemd/logind.conf

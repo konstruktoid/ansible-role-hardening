@@ -1,7 +1,6 @@
 ---
 - name: create custom facts directory
   become: 'yes'
-  become_method: sudo
   file:
     path: /etc/ansible/facts.d
     recurse: true
@@ -14,7 +13,6 @@
 
 - name: systemd version fact
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/ansible/facts.d/systemd_version.fact
     dest: /etc/ansible/facts.d/systemd_version.fact
@@ -28,7 +26,6 @@
 
 - name: cpuinfo rdrand fact
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/ansible/facts.d/cpuinfo_rdrand.fact
     dest: /etc/ansible/facts.d/cpuinfo_rdrand.fact
@@ -43,7 +40,6 @@
 
 - name: reboot required fact
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/ansible/facts.d/reboot_required.fact
     dest: /etc/ansible/facts.d/reboot_required.fact
@@ -63,7 +59,6 @@
 
 - name: redhat family epel installation
   become: 'yes'
-  become_method: sudo
   dnf:
     name: "epel-release"
     state: present

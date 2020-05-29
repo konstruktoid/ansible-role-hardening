@@ -1,7 +1,6 @@
 ---
 - name: remove users
   become: 'yes'
-  become_method: sudo
   user:
     name: "{{ item }}"
     state: absent

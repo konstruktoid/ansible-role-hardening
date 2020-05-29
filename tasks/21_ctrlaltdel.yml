@@ -3,7 +3,6 @@
 
 - name: disable ctrl-alt-del
   become: 'yes'
-  become_method: sudo
   systemd:
     name: ctrl-alt-del.target
     masked: 'yes'

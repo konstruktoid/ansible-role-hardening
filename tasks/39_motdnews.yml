@@ -1,7 +1,6 @@
 ---
 - name: disable motd-news
   become: 'yes'
-  become_method: sudo
   lineinfile:
     regexp: "^ENABLED="
     line: "ENABLED=0"
@@ -20,7 +19,6 @@
 
 - name: motd updates permissions
   become: 'yes'
-  become_method: sudo
   file:
     dest: /etc/update-motd.d
     mode: 0444
@@ -33,7 +31,6 @@
 
 - name: /etc/update-motd.d permission
   become: 'yes'
-  become_method: sudo
   file:
     dest: /etc/update-motd.d
     mode: 0755

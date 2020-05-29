@@ -1,7 +1,6 @@
 ---
 - name: create /tmp
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/systemd/tmp.mount.j2
     dest: /lib/systemd/system/tmp.mount
@@ -16,7 +15,6 @@
 
 - name: create /var/tmp
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/systemd/tmp.mount.j2
     dest: /lib/systemd/system/var-tmp.mount
@@ -31,7 +29,6 @@
 
 - name: set /var/tmp in var-tmp.mount
   become: 'yes'
-  become_method: sudo
   replace:
     regexp: '^Where=/tmp$'
     replace: "Where=/var/tmp"
@@ -43,7 +40,6 @@
 
 - name: remove /tmp from fstab
   become: 'yes'
-  become_method: sudo
   lineinfile:
     path: /etc/fstab
     state: absent
@@ -51,7 +47,6 @@
 
 - name: remove floppy from fstab
   become: 'yes'
-  become_method: sudo
   lineinfile:
     path: /etc/fstab
     state: absent
@@ -59,7 +54,6 @@
 
 - name: enable /var/tmp
   become: 'yes'
-  become_method: sudo
   service:
     name: var-tmp.mount
     enabled: 'yes'

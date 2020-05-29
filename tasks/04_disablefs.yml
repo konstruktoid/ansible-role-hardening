@@ -9,7 +9,6 @@
 
 - name: disablefs.conf
   become: 'yes'
-  become_method: sudo
   file:
     state: touch
     path: /etc/modprobe.d/disablefs.conf
@@ -19,7 +18,6 @@
 
 - name: disable file system kernel modules
   become: 'yes'
-  become_method: sudo
   lineinfile:
     dest: /etc/modprobe.d/disablefs.conf
     line: "install {{ item }} /bin/true"

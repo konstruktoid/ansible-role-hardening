@@ -1,7 +1,6 @@
 ---
 - name: mount /proc
   become: 'yes'
-  become_method: sudo
   mount:
     name: /proc
     src: none

@@ -1,7 +1,6 @@
 ---
 - name: sysctl
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/sysctl.conf.j2
     dest: /etc/sysctl.conf

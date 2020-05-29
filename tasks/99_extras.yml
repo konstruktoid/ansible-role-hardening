@@ -1,7 +1,6 @@
 ---
 - name: configure apt
   become: 'yes'
-  become_method: sudo
   lineinfile:
     dest: /etc/apt/apt.conf.d/98-hardening-ubuntu
     mode: 0644
@@ -25,7 +24,6 @@
 
 - name: configure dpkg noexec
   become: 'yes'
-  become_method: sudo
   lineinfile:
     dest: /etc/apt/apt.conf.d/99noexec-tmp
     mode: 0644
@@ -44,7 +42,6 @@
 
 - name: reboot if required
   become: 'yes'
-  become_method: sudo
   setup: ~
   notify:
     - reboot node

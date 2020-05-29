@@ -1,7 +1,6 @@
 ---
 - name: adduser.conf
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/adduser.conf.j2
     dest: /etc/adduser.conf
@@ -15,7 +14,6 @@
 
 - name: useradd
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/default/useradd.j2
     dest: /etc/default/useradd

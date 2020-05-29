@@ -7,14 +7,12 @@
 
 - name: stat init.d/rc
   become: 'yes'
-  become_method: sudo
   stat:
     path: /etc/init.d/rc
   register: initdrc
 
 - name: set default rc umask
   become: 'yes'
-  become_method: sudo
   replace:
     regexp: 'umask(\s+.*)'
     replace: "umask 027"
@@ -27,14 +25,12 @@
 
 - name: stat bashrc
   become: 'yes'
-  become_method: sudo
   stat:
     path: /etc/bashrc
   register: bashrc
 
 - name: set default bashrc umask
   become: 'yes'
-  become_method: sudo
   replace:
     regexp: 'umask(\s+.*)'
     replace: "umask 027"
@@ -47,14 +43,12 @@
 
 - name: stat csh.cshrc
   become: 'yes'
-  become_method: sudo
   stat:
     path: /etc/csh.cshrc
   register: cshrc
 
 - name: set default csh.cshrc umask
   become: 'yes'
-  become_method: sudo
   replace:
     regexp: 'umask(\s+.*)'
     replace: "umask 027"
@@ -67,7 +61,6 @@
 
 - name: set default profile umask
   become: 'yes'
-  become_method: sudo
   replace:
     regexp: 'umask(\s+.*)'
     replace: "umask 027"
@@ -79,7 +72,6 @@
 
 - name: readonly TMOUT
   become: 'yes'
-  become_method: sudo
   lineinfile:
     line: "readonly TMOUT"
     dest: /etc/profile
@@ -93,7 +85,6 @@
 
 - name: set TMOUT
   become: 'yes'
-  become_method: sudo
   lineinfile:
     line: "TMOUT=900"
     dest: /etc/profile
@@ -107,7 +98,6 @@
 
 - name: export TMOUT
   become: 'yes'
-  become_method: sudo
   lineinfile:
     line: "export TMOUT"
     dest: /etc/profile

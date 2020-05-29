@@ -12,7 +12,6 @@
 
 - name: disable prelinking
   become: 'yes'
-  become_method: sudo
   lineinfile:
     line: "PRELINKING=no"
     dest: /etc/sysconfig/prelink
@@ -26,7 +25,6 @@
 
 - name: return to non-prelinked state
   become: 'yes'
-  become_method: sudo
   command: prelink -ua
   when: sysconfig_prelink_exists or etc_prelink_exists
   ignore_errors: true

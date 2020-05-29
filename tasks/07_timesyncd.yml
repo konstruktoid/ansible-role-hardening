@@ -1,7 +1,6 @@
 ---
 - name: timesyncd.conf
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/systemd/timesyncd.conf.j2
     dest: /etc/systemd/timesyncd.conf

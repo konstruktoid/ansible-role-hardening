@@ -1,7 +1,6 @@
 ---
 - name: systemd journald.conf
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/systemd/journald.conf.j2
     dest: /etc/systemd/journald.conf
@@ -18,7 +17,6 @@
 
 - name: logrotate.conf
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/logrotate.conf.j2
     dest: /etc/logrotate.conf

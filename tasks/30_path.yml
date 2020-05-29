@@ -3,7 +3,6 @@
 
 - name: set path
   become: 'yes'
-  become_method: sudo
   lineinfile:
     regexp: "^PATH="
     line: 'PATH="/usr/local/bin:/usr/bin:/bin/"'
@@ -18,7 +17,6 @@
 
 - name: path script
   become: 'yes'
-  become_method: sudo
   template:
     src: etc/profile.d/initpath.sh.j2
     dest: /etc/profile.d/initpath.sh

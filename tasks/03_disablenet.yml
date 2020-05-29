@@ -4,7 +4,6 @@
 
 - name: disablenet.conf
   become: 'yes'
-  become_method: sudo
   file:
     state: touch
     path: /etc/modprobe.d/disablenet.conf
@@ -14,7 +13,6 @@
 
 - name: disable kernel network modules
   become: 'yes'
-  become_method: sudo
   lineinfile:
     dest: /etc/modprobe.d/disablenet.conf
     line: "install {{ item }} /bin/true"
