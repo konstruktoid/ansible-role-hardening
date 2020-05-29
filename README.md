@@ -386,6 +386,7 @@ suid_sgid_blacklist:
   - /usr/bin/write
   - /usr/bin/xargs
   - /usr/bin/xxd
+  - /usr/bin/xz
   - /usr/bin/yum
   - /usr/bin/zip
   - /usr/bin/zsoelim
