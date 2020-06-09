@@ -98,7 +98,22 @@
   when: ansible_os_family == "RedHat" and not rhelaidedb.stat.exists
   tags:
     - aide
-    - security
+
+- name: stat RedHat aide.db.new.gz
+  become: 'yes'
+  stat:
+    path: /var/lib/aide/aide.db.new.gz
+  register: rhelaidedbnew
+  when: ansible_os_family == "RedHat"
+  tags:
+    - aide
+
+- name: copy RedHat aide db
+  become: 'yes'
+  command: cp /var/lib/aide/aide.db.gz /var/lib/aide/aide.db.new.gz
+  when: ansible_os_family == "RedHat" and not rhelaidedbnew.stat.exists
+  tags:
+    - aide
 
 - name: initialize Debian aide
   become: 'yes'
