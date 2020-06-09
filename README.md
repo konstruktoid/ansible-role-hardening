@@ -41,7 +41,7 @@ disabled.[systemd](https://github.com/konstruktoid/hardening/blob/master/systemd
 option.
 
 ```yaml
-fs_modules_blacklist:
+fs_modules_blocklist:
   - cramfs
   - freevxfs
   - hfs
@@ -52,7 +52,7 @@ fs_modules_blacklist:
   - vfat
 ```
 
-Blacklisted file system kernel modules.
+Blocked file system kernel modules.
 
 ```yaml
 grub_cmdline: "audit=1 audit_backlog_limit=8192"
@@ -70,7 +70,7 @@ limit_nproc_soft: 512
 Maximum number of processes and open files.
 
 ```yaml
-misc_modules_blacklist:
+misc_modules_blocklist:
   - bluetooth
   - bnep
   - btusb
@@ -88,17 +88,17 @@ misc_modules_blacklist:
   - v4l2_common
 ```
 
-Blacklisted kernel modules.
+Blocked kernel modules.
 
 ```yaml
-net_modules_blacklist:
+net_modules_blocklist:
   - dccp
   - sctp
   - rds
   - tipc
 ```
 
-Blacklisted kernel network modules.
+Blocked kernel network modules.
 
 ```yaml
 ntp: "0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org"
@@ -109,7 +109,7 @@ NTP server host names or IP addresses. [systemd](https://github.com/konstruktoid
 option.
 
 ```yaml
-packages_blacklist:
+packages_blocklist:
   - apport*
   - avahi*
   - avahi-*
@@ -217,7 +217,7 @@ open shell, login or subsystem (e.g. sftp) sessions permitted per network
 connection.
 
 ```yaml
-suid_sgid_blacklist:
+suid_sgid_blocklist:
   - /bin/bash
   - /bin/busybox
   - /bin/cat

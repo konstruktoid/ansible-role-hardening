@@ -89,7 +89,7 @@
 - name: debian family package removal
   become: 'yes'
   apt:
-    name: "{{ packages_blacklist }}"
+    name: "{{ packages_blocklist }}"
     state: absent
     purge: 'yes'
   environment:
@@ -106,7 +106,7 @@
     name: "{{ item }}"
     state: absent
   with_items:
-    - "{{ packages_blacklist }}"
+    - "{{ packages_blocklist }}"
   when: ansible_os_family == "RedHat"
   ignore_errors: true
   tags:

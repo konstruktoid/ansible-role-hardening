@@ -8,7 +8,7 @@
     follow: 'yes'
   ignore_errors: true
   with_items:
-    - "{{ suid_sgid_blacklist }}"
+    - "{{ suid_sgid_blocklist }}"
   tags:
     - suid
 ...

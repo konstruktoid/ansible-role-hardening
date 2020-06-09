@@ -22,7 +22,7 @@
     dest: /etc/modprobe.d/disablefs.conf
     line: "install {{ item }} /bin/true"
   with_items:
-    - "{{ fs_modules_blacklist }}"
+    - "{{ fs_modules_blocklist }}"
   tags:
     - modprobe
 ...

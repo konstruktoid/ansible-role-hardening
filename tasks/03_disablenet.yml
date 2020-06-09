@@ -17,7 +17,7 @@
     dest: /etc/modprobe.d/disablenet.conf
     line: "install {{ item }} /bin/true"
   with_items:
-    - "{{ net_modules_blacklist }}"
+    - "{{ net_modules_blocklist }}"
   tags:
     - modprobe
 ...

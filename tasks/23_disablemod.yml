@@ -18,7 +18,7 @@
     dest: /etc/modprobe.d/disablemod.conf
     line: "install {{ item }} /bin/true"
   with_items:
-    - "{{ misc_modules_blacklist }}"
+    - "{{ misc_modules_blocklist }}"
   tags:
     - modprobe
 ...
