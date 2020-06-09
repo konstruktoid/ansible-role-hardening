@@ -73,7 +73,11 @@ for VM in $(grep -v '^#' "$VMFILE"); do
     sleep 10
   done
 
+
+  echo "Running postChecks.sh."
   vagrant ssh "$VM" -c 'sh ~/postChecks.sh || exit 1 && cat ~/lynis-report.dat' > "$VM-$(date +%y%m%d)-lynis.log"
+
+  echo "Saving suid.list."
   vagrant ssh "$VM" -c 'cat ~/suid.list' >> "$(date +%y%m%d)-suid.list"
 done
 
