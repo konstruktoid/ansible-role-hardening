@@ -3,7 +3,11 @@ Description=Aide Check
 
 [Service]
 Type=simple
+{% if ansible_os_family == 'Debian' %}
 ExecStart=/usr/bin/aide.wrapper --check
+{% else %}
+ExecStart=/usr/sbin/aide --check
+{% endif %}
 
 [Install]
 WantedBy=multi-user.target
