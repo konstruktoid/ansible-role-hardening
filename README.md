@@ -557,33 +557,32 @@ applied, [Lynis](https://github.com/CISOFy/lynis) will be downloaded and the
 configurationen tested.
 
 To run a [OpenSCAP](https://github.com/ComplianceAsCode/content) test on a
-CentOS 8 host using the included Vagrantfile follow the instructions on
+Fedora host using the included Vagrantfile follow the instructions on
 [https://copr.fedorainfracloud.org/coprs/openscapmaint/openscap-latest/](https://copr.fedorainfracloud.org/coprs/openscapmaint/openscap-latest/).
 
 ```shell
 curl -SsL http://copr.fedoraproject.org/coprs/openscapmaint/openscap-latest/repo/epel-7/openscapmaint-openscap-latest-epel-7.repo | \
   sudo tee -a /etc/yum.repos.d/openscapmaint-openscap-latest-epel-7.repo
-sudo dnf update
 sudo dnf install -y openscap-scanner scap-security-guide
-oscap info --fetch-remote-resources /usr/share/xml/scap/ssg/content/ssg-centos8-ds.xml
+oscap info --fetch-remote-resources /usr/share/xml/scap/ssg/content/ssg-fedora-ds.xml
 sudo oscap xccdf eval --fetch-remote-resources \
-  --profile xccdf_org.ssgproject.content_profile_standard \
-  --report centos8_stig-report.html /usr/share/xml/scap/ssg/content/ssg-centos8-ds.xml
+  --profile xccdf_org.ssgproject.content_profile_pci-dss \
+  --report fedora_pci-report.html /usr/share/xml/scap/ssg/content/ssg-fedora-ds.xml
 ```
 
 To run a [OpenSCAP](https://github.com/ComplianceAsCode/content) test on a
-Ubuntu 18.04 host, where `v0.1.49` should be replaced with the latest available
+Ubuntu 18.04 host, where `v0.1.50` should be replaced with the latest available
 version:
 
 ```shell
 sudo apt-get -y install libopenscap8 unzip
-wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.49/scap-security-guide-0.1.49-oval-510.zip
-unzip scap-security-guide-0.1.49-oval-510.zip
-cd scap-security-guide-0.1.49-oval-5.10
+wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.50/scap-security-guide-0.1.50.zip
+unzip scap-security-guide-0.1.50.zip
+cd scap-security-guide-0.1.50
 oscap info --fetch-remote-resources ./ssg-ubuntu1804-ds.xml
 sudo oscap xccdf eval --fetch-remote-resources \
   --profile xccdf_org.ssgproject.content_profile_anssi_np_nt28_high \
-  --report ../bionic_stig-report.html ./ssg-ubuntu1804-ds.xml
+  --report ../bionic_anssi-report.html ./ssg-ubuntu1804-ds.xml
 ```
 
 Recommended Reading
