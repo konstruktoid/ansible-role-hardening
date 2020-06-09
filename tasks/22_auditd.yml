@@ -1,6 +1,59 @@
 ---
-# CCE-27407-6
+- name: get RedHat kernel parameters
+  become: 'yes'
+  command: /usr/bin/grub2-editenv - list
+  register: kernelopts
+  changed_when: false
+  when: ansible_os_family == "RedHat"
+  tags:
+    - auditd
+    - grub
 
+- name: add RedHat audit grub cmdline
+  become: 'yes'
+  command: /usr/bin/grub2-editenv - set "{{ item }} {{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
+  with_items: '{{ kernelopts.stdout_lines | select(''match'', ''^kernelopts.*'') | list }}'
+  when: ansible_os_family == "RedHat"
+  tags:
+    - auditd
+    - grub
+
+- name: enable syslog plugin
+  become: 'yes'
+  lineinfile:
+    dest: /etc/audit/plugins.d/syslog.conf
+    regexp: ^active
+    line: active = yes
+    create: true
+  when: ansible_os_family == "RedHat"
+  tags:
+    - auditd
+    - grub
+
+- name: set Debian audit grub cmdline
+  become: 'yes'
+  lineinfile:
+    regexp: '^GRUB_CMDLINE_LINUX='
+    line: 'GRUB_CMDLINE_LINUX="{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"'
+    dest: /etc/default/grub
+    state: present
+  when: ansible_os_family == "Debian"
+  tags:
+    - auditd
+    - grub
+
+- name: set audit service execstartpost
+  become: 'yes'
+  lineinfile:
+    regexp: '#ExecStartPost=-/sbin/auditctl -R /etc/audit/audit.rules'
+    line: 'ExecStartPost=-/sbin/auditctl -R /etc/audit/audit.rules'
+    dest: /usr/lib/systemd/system/auditd.service
+    state: present
+  when: ansible_os_family == "RedHat"
+  tags:
+    - auditd
+
+# CCE-27407-6
 - name: audit.rules
   become: 'yes'
   template:
@@ -16,18 +69,4 @@
   tags:
     - auditd
     - audit.rules
-    - security
-
-- name: set audit grub cmdline
-  become: 'yes'
-  lineinfile:
-    regexp: '^GRUB_CMDLINE_LINUX='
-    line: 'GRUB_CMDLINE_LINUX="{{ grub_cmdline }}"'
-    dest: /etc/default/grub
-    state: present
-  when: ansible_os_family == "Debian"
-  tags:
-    - auditd
-    - grub
-    - security
 ...
