@@ -13,7 +13,6 @@
   tags:
     - at
     - cron
-    - security
 
 - name: allow root cron and at
   become: 'yes'
@@ -29,7 +28,6 @@
   tags:
     - at
     - cron
-    - security
 
 # CCE-80345-2
 - name: mask atd
@@ -43,7 +41,6 @@
   tags:
     - at
     - systemd
-    - security
 
 - name: cron permissions
   become: 'yes'
@@ -61,7 +58,6 @@
   ignore_errors: true
   tags:
     - cron
-    - security
 
 - name: crontab permissions
   become: 'yes'
@@ -74,5 +70,4 @@
   tags:
     - cron
     - crontab
-    - security
 ...

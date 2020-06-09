@@ -12,5 +12,4 @@
     - reload systemd
   tags:
     - resolved.conf
-    - security
 ...

@@ -16,5 +16,4 @@
     - /etc/motd
   tags:
     - motd
-    - security
 ...

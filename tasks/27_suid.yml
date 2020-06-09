@@ -11,5 +11,4 @@
     - "{{ suid_sgid_blacklist }}"
   tags:
     - suid
-    - security
 ...

@@ -13,7 +13,6 @@
   tags:
     - systemd
     - journald
-    - security
 
 - name: logrotate.conf
   become: 'yes'

@@ -31,7 +31,6 @@
     create: 'yes'
   tags:
     - sudo
-    - security
 
 - name: sudo disable visiblepw
   become: 'yes'
@@ -43,5 +42,4 @@
     create: 'yes'
   tags:
     - sudo
-    - security
 ...

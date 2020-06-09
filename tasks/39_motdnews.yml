@@ -15,7 +15,6 @@
   when: ansible_os_family == "Debian"
   tags:
     - motd
-    - security
 
 - name: motd updates permissions
   become: 'yes'
@@ -27,7 +26,6 @@
   when: ansible_os_family == "Debian"
   tags:
     - motd
-    - security
 
 - name: /etc/update-motd.d permission
   become: 'yes'
@@ -38,5 +36,4 @@
   when: ansible_os_family == "Debian"
   tags:
     - motd
-    - security
 ...

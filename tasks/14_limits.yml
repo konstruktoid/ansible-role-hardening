@@ -13,7 +13,6 @@
     group: root
   tags:
     - limits.conf
-    - security
 
 - name: coredump.conf
   become: 'yes'
@@ -27,5 +26,4 @@
   tags:
     - coredump.conf
     - systemd
-    - security
 ...

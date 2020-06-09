@@ -10,7 +10,6 @@
     group: root
   tags:
     - adduser.conf
-    - security
 
 - name: useradd
   become: 'yes'
@@ -23,5 +22,4 @@
     group: root
   tags:
     - useradd
-    - security
 ...

@@ -17,7 +17,6 @@
   when: not aidecron.stat.exists
   tags:
     - aide
-    - security
 
 # CCE-26952-2
 - name: aide timer
@@ -35,7 +34,6 @@
     - enable aidecheck
   tags:
     - aide
-    - security
 
 - name: add aide Debian dir exclusions
   become: 'yes'
@@ -52,7 +50,6 @@
   when: ansible_os_family == "Debian"
   tags:
     - aide
-    - security
 
 - name: stat Debian aide.db
   become: 'yes'
@@ -62,7 +59,6 @@
   when: ansible_os_family == "Debian"
   tags:
     - aide
-    - security
 
 - name: add aide RedHat dir exclusions
   become: 'yes'
@@ -79,7 +75,6 @@
   when: ansible_os_family == "RedHat"
   tags:
     - aide
-    - security
 
 - name: stat RedHat aide.db
   become: 'yes'
@@ -89,7 +84,6 @@
   when: ansible_os_family == "RedHat"
   tags:
     - aide
-    - security
 
 # CCE-27220-3
 - name: initialize RedHat aide
@@ -127,5 +121,4 @@
   tags:
     - skip_ansible_lint
     - aide
-    - security
 ...

@@ -7,7 +7,6 @@
   when: ansible_os_family == "Debian"
   tags:
     - apt
-    - security
 
 - name: apt upgrade
   become: 'yes'
@@ -21,7 +20,6 @@
   when: ansible_os_family == "Debian"
   tags:
     - apt
-    - security
 
 - name: python-rpm installation
   become: 'yes'
@@ -32,7 +30,6 @@
   tags:
     - yum
     - packages
-    - security
     - firewalld
 
 - name: link dnf.conf
@@ -56,7 +53,6 @@
   when: ansible_distribution == "RedHat"
   tags:
     - yum
-    - security
 
 # CCE-26989-4
 - name: set yum.conf gpgcheck
@@ -72,7 +68,6 @@
   when: ansible_os_family == "RedHat"
   tags:
     - yum
-    - security
 
 # CCE-80346-0
 - name: set yum.conf clean_requirements
@@ -87,7 +82,6 @@
   when: ansible_os_family == "RedHat"
   tags:
     - yum
-    - security
 
 # CCE-80347-8
 - name: set yum.conf localpkg_gpgcheck
@@ -102,7 +96,6 @@
   when: ansible_os_family == "RedHat"
   tags:
     - yum
-    - security
 
 # CCE-80348-6
 - name: comment yum.conf repo_gpgcheck
@@ -117,7 +110,6 @@
   when: ansible_os_family == "RedHat"
   tags:
     - yum
-    - security
 
 - name: enable centos PowerTools repo
   become: 'yes'
@@ -131,5 +123,4 @@
   when: ansible_distribution == "CentOS"
   tags:
     - yum
-    - security
 ...

@@ -7,7 +7,6 @@
   tags:
     - packages
     - postfix
-    - security
     - skip_ansible_lint
 
 - name: postfix smtpd_banner
@@ -18,7 +17,6 @@
   tags:
     - packages
     - postfix
-    - security
     - skip_ansible_lint
 
 - name: postfix smtpd_client_restrictions
@@ -29,7 +27,6 @@
   tags:
     - packages
     - postfix
-    - security
     - skip_ansible_lint
 
 - name: postfix inet_interfaces
@@ -40,6 +37,5 @@
   tags:
     - packages
     - postfix
-    - security
     - skip_ansible_lint
 ...

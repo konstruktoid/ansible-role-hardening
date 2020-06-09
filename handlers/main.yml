@@ -87,7 +87,6 @@
   tags:
     - dnf
     - packages
-    - security
 
 - name: enable haveged
   become: 'yes'

@@ -13,7 +13,6 @@
   tags:
     - systemd
     - system.conf
-    - security
 
 - name: systemd user.conf
   become: 'yes'
@@ -29,5 +28,4 @@
   tags:
     - systemd
     - user.conf
-    - security
 ...

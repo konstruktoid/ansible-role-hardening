@@ -27,7 +27,6 @@
   when: '"needrestart" in packages_merged'
   tags:
     - packages
-    - security
 
 - name: stat needrestart configuration directory
   become: 'yes'
@@ -58,7 +57,6 @@
   tags:
     - apt
     - packages
-    - security
 
 - name: ubuntu update-notifier-common package installation
   become: 'yes'
@@ -87,7 +85,6 @@
   tags:
     - dnf
     - packages
-    - security
 
 - name: debian family package removal
   become: 'yes'
@@ -102,7 +99,6 @@
   tags:
     - apt
     - packages
-    - security
 
 - name: redhat family package removal
   become: 'yes'
@@ -116,7 +112,6 @@
   tags:
     - dnf
     - packages
-    - security
 
 - name: virtualbox package installation
   become: 'yes'
@@ -134,7 +129,6 @@
     - apt
     - packages
     - virtualbox
-    - security
 
 - name: vmware package installation
   become: 'yes'
@@ -148,7 +142,6 @@
     - dnf
     - packages
     - vmware
-    - security
 
 - name: rng-tools package installation
   become: 'yes'
@@ -159,7 +152,6 @@
   tags:
     - rng-tools
     - packages
-    - security
 
 - name: remove unneeded debian dependency packages
   become: 'yes'
@@ -170,5 +162,4 @@
   tags:
     - apt
     - packages
-    - security
 ...

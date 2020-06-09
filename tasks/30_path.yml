@@ -13,7 +13,6 @@
     backrefs: 'yes'
   tags:
     - path
-    - security
 
 - name: path script
   become: 'yes'
@@ -26,5 +25,4 @@
     group: root
   tags:
     - path
-    - security
 ...

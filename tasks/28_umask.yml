@@ -21,7 +21,6 @@
   when: initdrc.stat.exists
   tags:
     - umask
-    - security
 
 - name: stat bashrc
   become: 'yes'
@@ -39,7 +38,6 @@
   when: bashrc.stat.exists
   tags:
     - umask
-    - security
 
 - name: stat csh.cshrc
   become: 'yes'
@@ -57,7 +55,6 @@
   when: cshrc.stat.exists
   tags:
     - umask
-    - security
 
 - name: set default profile umask
   become: 'yes'
@@ -68,7 +65,6 @@
     mode: 0644
   tags:
     - umask
-    - security
 
 - name: readonly TMOUT
   become: 'yes'
@@ -81,7 +77,6 @@
     insertbefore: "^export"
   tags:
     - tmout
-    - security
 
 - name: set TMOUT
   become: 'yes'
@@ -94,7 +89,6 @@
     insertbefore: "^readonly TMOUT"
   tags:
     - tmout
-    - security
 
 - name: export TMOUT
   become: 'yes'
@@ -107,5 +101,4 @@
     insertafter: "^readonly TMOUT"
   tags:
     - tmout
-    - security
 ...

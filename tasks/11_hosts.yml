@@ -10,7 +10,6 @@
     group: root
   tags:
     - hosts.allow
-    - security
 
 - name: hosts.deny
   become: 'yes'
@@ -23,5 +22,4 @@
     group: root
   tags:
     - hosts.deny
-    - security
 ...

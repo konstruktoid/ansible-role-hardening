@@ -25,5 +25,4 @@
     - "{{ fs_modules_blacklist }}"
   tags:
     - modprobe
-    - security
 ...

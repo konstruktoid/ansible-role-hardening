@@ -20,5 +20,4 @@
     - "{{ net_modules_blacklist }}"
   tags:
     - modprobe
-    - security
 ...

@@ -21,7 +21,6 @@
   when: ansible_os_family == "RedHat"
   tags:
     - prelink
-    - security
 
 - name: return to non-prelinked state
   become: 'yes'
@@ -30,5 +29,4 @@
   ignore_errors: true
   tags:
     - prelink
-    - security
 ...

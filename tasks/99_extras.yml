@@ -20,7 +20,6 @@
   when: ansible_os_family == "Debian"
   tags:
     - apt
-    - security
 
 - name: configure dpkg noexec
   become: 'yes'
@@ -38,7 +37,6 @@
   when: ansible_os_family == "Debian"
   tags:
     - apt
-    - security
 
 - name: reboot if required
   become: 'yes'
