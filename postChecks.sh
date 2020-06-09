@@ -10,8 +10,6 @@ else
 fi
 
 if lsb_release -a 2>/dev/null | grep -qi debian; then
-  sudo "$PKG" -y update
-
   if grep -qiRE '^deb.*redir' /etc/apt/*; then
 echo "deb http://ftp.debian.org/debian buster main
 deb http://ftp.debian.org/debian buster-updates main
@@ -20,6 +18,8 @@ deb-src http://ftp.debian.org/debian buster main
 deb-src http://ftp.debian.org/debian buster-updates main
 deb-src http://security.debian.org/debian-security buster/updates main" | sudo tee /etc/apt/sources.list
   fi
+
+  sudo "$PKG" -y update
 fi
 
 cd ~ || exit 1
@@ -31,6 +31,10 @@ grep -E '^[a-zA-Z0-9]' /tmp/suid.list | while read -r suid; do
   if [ -x "$file" ]; then
     echo "  - $file" >> "suid.list"
   fi
+done
+
+grep -vE '^#|^$' /etc/shells | while read -r S; do
+  echo "  - $S" >> "suid.list"
 done
 
 echo "Running Lynis."
