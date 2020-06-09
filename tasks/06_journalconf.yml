@@ -26,5 +26,33 @@
     group: root
   tags:
     - logrotate
-    - security
+
+- name: cron.daily logrotate
+  become: 'yes'
+  lineinfile:
+    line: "/usr/sbin/logrotate /etc/logrotate.conf"
+    dest: /etc/cron.daily/logrotate
+    mode: 0750
+    state: present
+    create: 'yes'
+  tags:
+    - logrotate
+
+- name: stat rsyslog.conf
+  become: 'yes'
+  stat:
+    path: /etc/rsyslog.conf
+  register: rsyslogconf
+
+- name: set rsyslog.conf FileCreateMode
+  become: 'yes'
+  lineinfile:
+    regexp: '^\$FileCreateMode'
+    line: '$FileCreateMode 0600'
+    dest: /etc/rsyslog.conf
+    state: present
+    create: 'no'
+  when: rsyslogconf.stat.exists
+  tags:
+    - rsyslog
 ...
