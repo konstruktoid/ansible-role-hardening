@@ -1,32 +1,29 @@
 ---
 galaxy_info:
   author: Thomas Sjögren
-  description: CentOS, Debian, Fedora and Ubuntu hardening, systemd edition
+  description: CentOS, Debian, Fedora and Ubuntu hardening. systemd edition.
   license: apache
   min_ansible_version: 2.8
   platforms:
     - name: EL
       versions:
         - 8
-    - name: Ubuntu
-      versions:
-        - bionic
-        - focal
-    - name: Debian
-      versions:
-        - buster
     - name: Fedora
       versions:
         - 30
         - 31
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
   galaxy_tags:
     - centos
+    - cis
     - debian
+    - disa
     - fedora
-    - ubuntu
-    - security
     - hardening
+    - security
     - system
     - systemd
-    - disa
-    - cis
+    - ubuntu
