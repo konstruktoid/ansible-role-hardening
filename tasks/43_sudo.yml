@@ -9,7 +9,17 @@
     create: 'yes'
   tags:
     - sudo
-    - security
+
+- name: sudo configure logfile
+  become: 'yes'
+  lineinfile:
+    line: 'Defaults logfile="/var/log/sudo.log"'
+    dest: /etc/sudoers.d/012_logfile
+    mode: 0440
+    state: present
+    create: 'yes'
+  tags:
+    - sudo
 
 - name: sudo disable pwfeedback
   become: 'yes'
