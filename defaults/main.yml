@@ -4,7 +4,7 @@ dns: "127.0.0.1"
 dnssec: allow-downgrade
 fallback_dns: "1.1.1.1 9.9.9.9"
 fallback_ntp: "2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org"
-fs_modules_blacklist:
+fs_modules_blocklist:
   - cramfs
   - freevxfs
   - hfs
@@ -13,12 +13,13 @@ fs_modules_blacklist:
   - squashfs
   - udf
   - vfat
-grub_cmdline: "audit=1 audit_backlog_limit=8192"
+grub_audit_backlog_cmdline: "audit_backlog_limit=8192"
+grub_audit_cmdline: "audit=1"
 limit_nofile_hard: 1024
 limit_nofile_soft: 512
 limit_nproc_hard: 1024
 limit_nproc_soft: 512
-misc_modules_blacklist:
+misc_modules_blocklist:
   - bluetooth
   - bnep
   - btusb
@@ -34,13 +35,13 @@ misc_modules_blacklist:
   - usb-storage
   - uvcvideo
   - v4l2_common
-net_modules_blacklist:
+net_modules_blocklist:
   - dccp
   - sctp
   - rds
   - tipc
 ntp: "0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org"
-packages_blacklist:
+packages_blocklist:
   - apport*
   - avahi*
   - avahi-*
@@ -95,10 +96,12 @@ sshd_admin_net:
   - 192.168.0.0/24
   - 192.168.1.0/24
 sshd_allow_groups: sudo
+sshd_authentication_methods: any
+sshd_log_level: VERBOSE
 sshd_max_auth_tries: 3
 sshd_max_sessions: 3
 sshd_port: 22
-suid_sgid_blacklist:
+suid_sgid_blocklist:
   - /bin/bash
   - /bin/busybox
   - /bin/cat
