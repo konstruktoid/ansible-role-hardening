@@ -1,26 +1,14 @@
 ---
-# cramfs: CCE-80137-3
-# freevxfs: CCE-80138-1
-# jffs2: CCE-80139-9
-# hfs: CCE-80140-7
-# hfsplus: CCE-80141-5
-# squashfs: CCE-80142-3
-# udf: CCE-80143-1
-
-- name: disablefs.conf
-  become: 'yes'
-  file:
-    state: touch
-    path: /etc/modprobe.d/disablefs.conf
-    owner: root
-    group: root
-    mode: 0644
-
 - name: disable file system kernel modules
   become: 'yes'
   lineinfile:
     dest: /etc/modprobe.d/disablefs.conf
     line: "install {{ item }} /bin/true"
+    mode: 0644
+    owner: root
+    group: root
+    state: present
+    create: 'yes'
   with_items:
     - "{{ fs_modules_blocklist }}"
   tags:

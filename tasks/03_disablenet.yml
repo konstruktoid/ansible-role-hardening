@@ -1,21 +1,14 @@
 ---
-# DCCP: CCE-26828-4
-# SCTP: CCE-27106-4
-
-- name: disablenet.conf
-  become: 'yes'
-  file:
-    state: touch
-    path: /etc/modprobe.d/disablenet.conf
-    owner: root
-    group: root
-    mode: 0644
-
 - name: disable kernel network modules
   become: 'yes'
   lineinfile:
     dest: /etc/modprobe.d/disablenet.conf
     line: "install {{ item }} /bin/true"
+    mode: 0644
+    owner: root
+    group: root
+    state: present
+    create: 'yes'
   with_items:
     - "{{ net_modules_blocklist }}"
   tags:
