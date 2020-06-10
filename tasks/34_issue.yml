@@ -1,6 +1,4 @@
 ---
-# CCE-27303-7
-
 - name: add notice
   become: 'yes'
   template:

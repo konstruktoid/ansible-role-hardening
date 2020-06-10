@@ -41,8 +41,10 @@
     group: root
     state: link
   when: ansible_distribution == "Fedora"
+  tags:
+    - dnf
+    - yum
 
-# CCE-26957-1
 - name: import RedHat RPM key
   become: 'yes'
   rpm_key:
@@ -52,9 +54,9 @@
     - "{{ redhat_rpm_key }}"
   when: ansible_distribution == "RedHat"
   tags:
+    - dnf
     - yum
 
-# CCE-26989-4
 - name: set yum.conf gpgcheck
   become: 'yes'
   lineinfile:
@@ -67,9 +69,9 @@
     backrefs: 'yes'
   when: ansible_os_family == "RedHat"
   tags:
+    - dnf
     - yum
 
-# CCE-80346-0
 - name: set yum.conf clean_requirements
   become: 'yes'
   lineinfile:
@@ -81,9 +83,9 @@
     insertafter: "[main]"
   when: ansible_os_family == "RedHat"
   tags:
+    - dnf
     - yum
 
-# CCE-80347-8
 - name: set yum.conf localpkg_gpgcheck
   become: 'yes'
   lineinfile:
@@ -95,9 +97,9 @@
     insertafter: "[main]"
   when: ansible_os_family == "RedHat"
   tags:
+    - dnf
     - yum
 
-# CCE-80348-6
 - name: comment yum.conf repo_gpgcheck
   become: 'yes'
   lineinfile:
@@ -109,6 +111,7 @@
     insertafter: "[main]"
   when: ansible_os_family == "RedHat"
   tags:
+    - dnf
     - yum
 
 - name: enable centos PowerTools repo
@@ -122,5 +125,6 @@
     create: 'no'
   when: ansible_distribution == "CentOS"
   tags:
+    - dnf
     - yum
 ...

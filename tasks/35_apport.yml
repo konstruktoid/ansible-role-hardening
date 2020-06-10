@@ -1,6 +1,4 @@
 ---
-# CVE-2016-9949
-
 - name: disable apport
   become: 'yes'
   lineinfile:

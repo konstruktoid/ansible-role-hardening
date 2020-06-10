@@ -96,6 +96,8 @@
   stat:
     path: /etc/firewalld/firewalld.conf
   register: firewalldconf
+  tags:
+    - firewalld
 
 - name: set firewalld DefaultZone
   become: 'yes'

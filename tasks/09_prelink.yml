@@ -1,14 +1,17 @@
 ---
-# CCE-27078-5
 - name: sysconfig prelink
   stat:
     path: /etc/sysconfig/prelink
   register: sysconfig_prelink_exists
+  tags:
+    - prelink
 
 - name: etc prelink config
   stat:
     path: /etc/prelink.conf
   register: etc_prelink_exists
+  tags:
+    - prelink
 
 - name: disable prelinking
   become: 'yes'

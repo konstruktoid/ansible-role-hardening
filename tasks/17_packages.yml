@@ -1,19 +1,9 @@
 ---
-# aide: CCE-27096-7
-# xinetd: CCE-27354-0
-# telnet: CCE-27401-9
-# rsh: CCE-27342-5
-# yp*: CCE-27385-4
-# tftp: CCE-80213-2
-# talk: CCE-27432-4
-# sshd: CCE-80215-7
-# avahi: CCE-80338-7
-# UBTU-16-010010
-# UBTU-16-010050
-
 - name: merge package lists
   set_fact:
     packages_merged: "{{ packages_debian + packages_redhat }}"
+  tags:
+    - packages
 
 - name: create needrestart directory
   become: 'yes'

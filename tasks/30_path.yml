@@ -1,6 +1,4 @@
 ---
-# CCE-80199-3
-
 - name: set path
   become: 'yes'
   lineinfile:

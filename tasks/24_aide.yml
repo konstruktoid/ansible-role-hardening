@@ -18,7 +18,6 @@
   tags:
     - aide
 
-# CCE-26952-2
 - name: aide timer
   become: 'yes'
   template:
@@ -85,7 +84,6 @@
   tags:
     - aide
 
-# CCE-27220-3
 - name: initialize RedHat aide
   become: 'yes'
   command: aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'

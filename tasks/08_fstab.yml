@@ -41,6 +41,8 @@
     path: /etc/fstab
     state: absent
     regexp: '^(.*)tmp(.*)$'
+  tags:
+    - fstab
 
 - name: remove floppy from fstab
   become: 'yes'
@@ -48,6 +50,8 @@
     path: /etc/fstab
     state: absent
     regexp: '^(.*)floppy(.*)$'
+  tags:
+    - fstab
 
 - name: enable /var/tmp
   become: 'yes'

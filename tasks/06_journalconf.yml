@@ -42,6 +42,8 @@
   stat:
     path: /etc/rsyslog.conf
   register: rsyslogconf
+  tags:
+    - rsyslog
 
 - name: set rsyslog.conf FileCreateMode
   become: 'yes'
