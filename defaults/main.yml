@@ -125,6 +125,7 @@ suid_sgid_blocklist:
   - /bin/ntfs-3g
   - /bin/ping
   - /bin/ping6
+  - /bin/rbash
   - /bin/red
   - /bin/run-parts
   - /bin/sed
@@ -220,6 +221,7 @@ suid_sgid_blocklist:
   - /usr/bin/pip
   - /usr/bin/pkexec
   - /usr/bin/python
+  - /usr/bin/rbash
   - /usr/bin/readelf
   - /usr/bin/red
   - /usr/bin/rlogin
@@ -275,6 +277,7 @@ suid_sgid_blocklist:
   - /usr/bin/zip
   - /usr/bin/zsoelim
   - /usr/sbin/arp
+  - /usr/sbin/chroot
   - /usr/sbin/dmsetup
   - /usr/sbin/ip
   - /usr/sbin/ldconfig
