@@ -102,38 +102,125 @@ sshd_max_auth_tries: 3
 sshd_max_sessions: 3
 sshd_port: 22
 suid_sgid_blocklist:
+  - /bin/awk
+  - /bin/base32
+  - /bin/base64
   - /bin/bash
+  - /bin/busctl
   - /bin/busybox
   - /bin/cat
+  - /bin/chage
   - /bin/chmod
   - /bin/chown
   - /bin/cp
+  - /bin/cpan
+  - /bin/crontab
+  - /bin/curl
+  - /bin/cut
   - /bin/dash
   - /bin/date
   - /bin/dd
+  - /bin/diff
   - /bin/dmesg
+  - /bin/dnf
   - /bin/ed
+  - /bin/env
+  - /bin/eqn
+  - /bin/expand
+  - /bin/file
+  - /bin/find
+  - /bin/flock
+  - /bin/fmt
+  - /bin/fold
   - /bin/fusermount
+  - /bin/gawk
+  - /bin/gcc
   - /bin/grep
+  - /bin/head
+  - /bin/hexdump
+  - /bin/iconv
+  - /bin/ionice
   - /bin/ip
   - /bin/journalctl
+  - /bin/less
+  - /bin/look
+  - /bin/mail
+  - /bin/make
+  - /bin/man
   - /bin/more
   - /bin/mount
   - /bin/mv
   - /bin/nano
   - /bin/nc
+  - /bin/newgrp
+  - /bin/nice
+  - /bin/nl
+  - /bin/nohup
+  - /bin/nroff
+  - /bin/nsenter
   - /bin/ntfs-3g
+  - /bin/od
+  - /bin/openssl
+  - /bin/perl
+  - /bin/pic
   - /bin/ping
   - /bin/ping6
+  - /bin/pkexec
   - /bin/rbash
+  - /bin/readelf
   - /bin/red
+  - /bin/rpm
+  - /bin/rpmquery
+  - /bin/rsync
   - /bin/run-parts
+  - /bin/scp
+  - /bin/script
   - /bin/sed
+  - /bin/setarch
+  - /bin/sftp
   - /bin/sh
+  - /bin/shuf
+  - /bin/soelim
+  - /bin/sort
+  - /bin/sqlite3
+  - /bin/ssh
+  - /bin/stdbuf
+  - /bin/strings
   - /bin/su
   - /bin/systemctl
+  - /bin/tac
+  - /bin/tail
   - /bin/tar
+  - /bin/taskset
+  - /bin/tee
+  - /bin/timeout
+  - /bin/top
+  - /bin/ul
   - /bin/umount
+  - /bin/unexpand
+  - /bin/uniq
+  - /bin/unshare
+  - /bin/vi
+  - /bin/wall
+  - /bin/watch
+  - /bin/wget
+  - /bin/write
+  - /bin/xargs
+  - /bin/xz
+  - /bin/yum
+  - /bin/zip
+  - /bin/zsoelim
+  - /sbin/chroot
+  - /sbin/dmsetup
+  - /sbin/ip
+  - /sbin/ldconfig
+  - /sbin/logsave
+  - /sbin/mount.nfs
+  - /sbin/ping
+  - /sbin/ping6
+  - /sbin/service
+  - /sbin/start-stop-daemon
+  - /sbin/sysctl
   - /usr/bin/apt
   - /usr/bin/apt-get
   - /usr/bin/at
@@ -283,6 +370,10 @@ suid_sgid_blocklist:
   - /usr/sbin/ldconfig
   - /usr/sbin/logsave
   - /usr/sbin/mount.nfs
+  - /usr/sbin/ping
   - /usr/sbin/ping6
   - /usr/sbin/service
+  - /usr/sbin/start-stop-daemon
+  - /usr/sbin/sysctl
+  - /usr/sbin/tcpdump
 ...
