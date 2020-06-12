@@ -4,12 +4,20 @@
   modprobe:
     name: nf_conntrack
     state: present
-  when: ansible_os_family == "Debian"
   tags:
+    - conntrack
     - sysctl
-    - ufw
 
-- name: keep connections alive when enabling ufw
+- name: stat nf_conntrack_tcp_be_liberal
+  become: 'yes'
+  stat:
+    path: /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal
+  register: conntrackliberal
+  tags:
+    - conntrack
+    - sysctl
+
+- name: enable nf_conntrack_tcp_be_liberal to keep connections alive
   become: 'yes'
   sysctl:
     name: net.netfilter.nf_conntrack_tcp_be_liberal
@@ -17,10 +25,10 @@
     state: present
     sysctl_set: 'yes'
     reload: 'yes'
-  when: ansible_os_family == "Debian"
+  when: conntrackliberal.stat.exists
   tags:
+    - conntrack
     - sysctl
-    - ufw
 
 - name: ufw installation
   become: 'yes'
