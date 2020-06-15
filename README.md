@@ -1,5 +1,4 @@
-ansible-role-hardening
-=========
+# ansible-role-hardening
 
 Ansible role to make a CentOS, Debian, Fedora or Ubuntu server a bit more
 secure, [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
@@ -8,8 +7,7 @@ Requires [Ansible](https://www.ansible.com/) >= 2.8.
 
 Available on [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
 
-Distributions Tested using Vagrant
---------------------
+## Distributions Tested using Vagrant
 
 ```yaml
 bento/debian-10
@@ -19,14 +17,24 @@ ubuntu/bionic64
 ubuntu/focal64
 ```
 
-Role Variables with defaults
---------------
+## Role Variables with defaults
+
+### auditd
 
 ```yaml
 auditd_mode: 1
 ```
 
 Auditd failure mode. 0=silent 1=printk 2=panic.
+
+```yaml
+grub_audit_backlog_cmdline: "audit_backlog_limit=8192"
+grub_audit_cmdline: "audit=1"
+```
+
+Enable `auditd` at boot using Grub.
+
+### DNS
 
 ```yaml
 dns: "127.0.0.1"
@@ -39,6 +47,8 @@ If `dnssec` is set to "allow-downgrade" DNSSEC validation is attempted, but if
 the server does not support DNSSEC properly, DNSSEC mode is automatically
 disabled.[systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf)
 option.
+
+### Disabled File System kernel modules
 
 ```yaml
 fs_modules_blocklist:
@@ -54,12 +64,7 @@ fs_modules_blocklist:
 
 Blocked file system kernel modules.
 
-```yaml
-grub_audit_backlog_cmdline: "audit_backlog_limit=8192"
-grub_audit_cmdline: "audit=1"
-```
-
-Enable `auditd` at boot using Grub.
+### File and Process limits
 
 ```yaml
 limit_nofile_hard: 1024
@@ -69,6 +74,8 @@ limit_nproc_soft: 512
 ```
 
 Maximum number of processes and open files.
+
+### Misc Disabled kernel modules
 
 ```yaml
 misc_modules_blocklist:
@@ -91,6 +98,8 @@ misc_modules_blocklist:
 
 Blocked kernel modules.
 
+### Disabled Network kernel modules
+
 ```yaml
 net_modules_blocklist:
   - dccp
@@ -101,6 +110,8 @@ net_modules_blocklist:
 
 Blocked kernel network modules.
 
+### NTP
+
 ```yaml
 ntp: "0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org"
 fallback_ntp: "2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org"
@@ -108,6 +119,8 @@ fallback_ntp: "2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org"
 
 NTP server host names or IP addresses. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdtimesyncdconf)
 option.
+
+### Blocked packages
 
 ```yaml
 packages_blocklist:
@@ -129,6 +142,8 @@ packages_blocklist:
 ```
 
 Packages to be removed.
+
+### Recommended packages
 
 ```yaml
 packages_debian:
@@ -170,6 +185,8 @@ packages_redhat:
 
 Packages to be installed on a RedHat OS family host.
 
+### tcp_challenge_ack_limit kernel configuration
+
 ```yaml
 random_ack_limit: "{{ 1000000 | random(start=1000) }}"
 ```
@@ -177,12 +194,16 @@ random_ack_limit: "{{ 1000000 | random(start=1000) }}"
 net.ipv4.tcp_challenge_ack_limit, see
 [tcp: make challenge acks less predictable](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=75ff39ccc1bd5d3c455b6822ab09e533c551f758).
 
+### Ubuntu reboot
+
 ```yaml
 reboot_ubuntu: false
 ```
 
 If true an Ubuntu node will be rebooted if required, using
 `pre_reboot_delay: "{{ 3600 | random(start=1) }}"`.
+
+### RedHat RPM keys
 
 ```yaml
 redhat_rpm_key:
@@ -192,6 +213,8 @@ redhat_rpm_key:
 
 [Red Hat RPM keys](https://access.redhat.com/security/team/key/)
 for use when `ansible_distribution == "RedHat"`.
+
+### OpenSSH daemon configuration
 
 ```yaml
 sshd_admin_net:
@@ -224,6 +247,8 @@ connection.
 
 `sshd_port` specifies the port number that sshd(8) listens on.
 
+### SUID/SGID binaries
+
 ```yaml
 suid_sgid_blocklist:
   - /bin/bash
@@ -240,10 +265,9 @@ suid_sgid_blocklist:
 ```
 
 Which binaries that should have SUID/SGID removed, a complete list is available
-at <https://github.com/konstruktoid/ansible-role-hardening/blob/master/defaults/main.yml#L101-L281>.
+at <https://github.com/konstruktoid/ansible-role-hardening/blob/master/defaults/main.yml#L104-L378>
 
-Structure
----------
+## Structure
 
 ```sh
 .
@@ -364,13 +388,11 @@ Structure
 24 directories, 89 files
 ```
 
-Dependencies
-------------
+## Dependencies
 
 None.
 
-Example Playbook
-----------------
+## Example Playbook
 
 ```shell
 ---
@@ -380,8 +402,7 @@ Example Playbook
 ...
 ```
 
-Testing
--------
+## Testing
 
 ```shell
 ansible-playbook tests/test.yml --extra-vars "sshd_admin_net=192.168.1.0/24" \
@@ -425,8 +446,7 @@ sudo oscap xccdf eval --fetch-remote-resources \
   --report ../bionic_anssi-report.html ./ssg-ubuntu1804-ds.xml
 ```
 
-Recommended Reading
--------------------
+## Recommended Reading
 
 [CIS Distribution Independent Linux Benchmark v1.0.0](https://www.cisecurity.org/cis-benchmarks/)
 
@@ -440,20 +460,17 @@ Recommended Reading
 
 [Security focused systemd configuration](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc)
 
-Contributing
-------------
+## Contributing
 
 Do you want to contribute? That's great! Contributions are always welcome,
 no matter how large or small. If you found something odd, feel free to submit a
 issue, improve the code by creating a pull request, or by
 [sponsoring this project](https://github.com/sponsors/konstruktoid).
 
-License
--------
+## License
 
 Apache License Version 2.0
 
-Author Information
-------------------
+## Author Information
 
 [https://github.com/konstruktoid](https://github.com/konstruktoid "github.com/konstruktoid")
