@@ -19,7 +19,7 @@ ubuntu/bionic64
 ubuntu/focal64
 ```
 
-Role Variables
+Role Variables with defaults
 --------------
 
 ```yaml
@@ -55,10 +55,11 @@ fs_modules_blocklist:
 Blocked file system kernel modules.
 
 ```yaml
-grub_cmdline: "audit=1 audit_backlog_limit=8192"
+grub_audit_backlog_cmdline: "audit_backlog_limit=8192"
+grub_audit_cmdline: "audit=1"
 ```
 
-Additional Grub options, currently only `ansible_os_family == "Debian"`
+Enable `auditd` at boot using Grub.
 
 ```yaml
 limit_nofile_hard: 1024
@@ -197,6 +198,8 @@ sshd_admin_net:
   - 192.168.0.0/24
   - 192.168.1.0/24
 sshd_allow_groups: sudo
+sshd_authentication_methods: any
+sshd_log_level: VERBOSE
 sshd_max_auth_tries: 3
 sshd_max_sessions: 3
 sshd_port: 22
@@ -205,16 +208,21 @@ sshd_port: 22
 OpenSSH login is allowed only for users whose primary group or supplementary
 group list matches one of the patterns in `sshd_allow_groups`.
 
-`sshd_port` specifies the port number that sshd(8) listens on.
-
 Only the network(s) defined in `sshd_admin_net` are allowed to
 connect. Note that additional rules need to be set up in order to allow access
 to additional services.
+
+`sshd_authentication_methods` specifies the authentication methods that must
+be successfully completed in order to grant access to a user.
+
+`sshd_log_level` gives the verbosity level that is used when logging messages.
 
 `sshd_max_auth_tries` and `sshd_max_sessions` specifies the maximum number of
 SSH authentication attempts permitted per connection and the maximum number of
 open shell, login or subsystem (e.g. sftp) sessions permitted per network
 connection.
+
+`sshd_port` specifies the port number that sshd(8) listens on.
 
 ```yaml
 suid_sgid_blocklist:
@@ -228,179 +236,11 @@ suid_sgid_blocklist:
   - /bin/date
   - /bin/dd
   - /bin/dmesg
-  - /bin/ed
-  - /bin/fusermount
-  - /bin/grep
-  - /bin/ip
-  - /bin/journalctl
-  - /bin/more
-  - /bin/mount
-  - /bin/mv
-  - /bin/nano
-  - /bin/nc
-  - /bin/ntfs-3g
-  - /bin/ping
-  - /bin/ping6
-  - /bin/red
-  - /bin/run-parts
-  - /bin/sed
-  - /bin/sh
-  - /bin/su
-  - /bin/systemctl
-  - /bin/tar
-  - /bin/umount
-  - /usr/bin/apt
-  - /usr/bin/apt-get
-  - /usr/bin/at
-  - /usr/bin/awk
-  - /usr/bin/base32
-  - /usr/bin/base64
-  - /usr/bin/bash
-  - /usr/bin/bsd-write
-  - /usr/bin/busctl
-  - /usr/bin/busybox
-  - /usr/bin/cancel
-  - /usr/bin/cat
-  - /usr/bin/chage
-  - /usr/bin/chfn
-  - /usr/bin/chmod
-  - /usr/bin/chown
-  - /usr/bin/chsh
-  - /usr/bin/cp
-  - /usr/bin/cpan
-  - /usr/bin/crontab
-  - /usr/bin/curl
-  - /usr/bin/cut
-  - /usr/bin/dash
-  - /usr/bin/date
-  - /usr/bin/dd
-  - /usr/bin/diff
-  - /usr/bin/dmesg
-  - /usr/bin/dnf
-  - /usr/bin/dpkg
-  - /usr/bin/easy_install
-  - /usr/bin/ed
-  - /usr/bin/env
-  - /usr/bin/eqn
-  - /usr/bin/expand
-  - /usr/bin/file
-  - /usr/bin/find
-  - /usr/bin/flock
-  - /usr/bin/fmt
-  - /usr/bin/fold
-  - /usr/bin/ftp
-  - /usr/bin/fusermount
-  - /usr/bin/gawk
-  - /usr/bin/gcc
-  - /usr/bin/git
-  - /usr/bin/grep
-  - /usr/bin/hd
-  - /usr/bin/head
-  - /usr/bin/hexdump
-  - /usr/bin/iconv
-  - /usr/bin/ionice
-  - /usr/bin/ip
-  - /usr/bin/journalctl
-  - /usr/bin/less
-  - /usr/bin/look
-  - /usr/bin/ltrace
-  - /usr/bin/lwp-download
-  - /usr/bin/lwp-request
-  - /usr/bin/mail
-  - /usr/bin/make
-  - /usr/bin/man
-  - /usr/bin/mawk
-  - /usr/bin/mlocate
-  - /usr/bin/more
-  - /usr/bin/mount
-  - /usr/bin/mtr
-  - /usr/bin/mv
-  - /usr/bin/nano
-  - /usr/bin/nawk
-  - /usr/bin/nc
-  - /usr/bin/newgrp
-  - /usr/bin/nice
-  - /usr/bin/nl
-  - /usr/bin/nohup
-  - /usr/bin/nroff
-  - /usr/bin/nsenter
-  - /usr/bin/ntfs-3g
-  - /usr/bin/od
-  - /usr/bin/openssl
-  - /usr/bin/pdb
-  - /usr/bin/perl
-  - /usr/bin/pic
-  - /usr/bin/pico
-  - /usr/bin/ping
-  - /usr/bin/ping6
-  - /usr/bin/pip
-  - /usr/bin/pkexec
-  - /usr/bin/python
-  - /usr/bin/readelf
-  - /usr/bin/red
-  - /usr/bin/rlogin
-  - /usr/bin/rpm
-  - /usr/bin/rpmquery
-  - /usr/bin/rsync
-  - /usr/bin/run-mailcap
-  - /usr/bin/run-parts
-  - /usr/bin/rvim
-  - /usr/bin/scp
-  - /usr/bin/screen
-  - /usr/bin/script
-  - /usr/bin/sed
-  - /usr/bin/setarch
-  - /usr/bin/sftp
-  - /usr/bin/sh
-  - /usr/bin/shuf
-  - /usr/bin/soelim
-  - /usr/bin/sort
-  - /usr/bin/sqlite3
-  - /usr/bin/ssh
-  - /usr/bin/stdbuf
-  - /usr/bin/strace
-  - /usr/bin/strings
-  - /usr/bin/su
-  - /usr/bin/systemctl
-  - /usr/bin/tac
-  - /usr/bin/tail
-  - /usr/bin/tar
-  - /usr/bin/taskset
-  - /usr/bin/tee
-  - /usr/bin/telnet
-  - /usr/bin/time
-  - /usr/bin/timeout
-  - /usr/bin/tmux
-  - /usr/bin/top
-  - /usr/bin/traceroute6.iputils
-  - /usr/bin/ul
-  - /usr/bin/umount
-  - /usr/bin/unexpand
-  - /usr/bin/uniq
-  - /usr/bin/unshare
-  - /usr/bin/vi
-  - /usr/bin/vim
-  - /usr/bin/wall
-  - /usr/bin/watch
-  - /usr/bin/wget
-  - /usr/bin/write
-  - /usr/bin/xargs
-  - /usr/bin/xxd
-  - /usr/bin/xz
-  - /usr/bin/yum
-  - /usr/bin/zip
-  - /usr/bin/zsoelim
-  - /usr/sbin/arp
-  - /usr/sbin/dmsetup
-  - /usr/sbin/ip
-  - /usr/sbin/ldconfig
-  - /usr/sbin/logsave
-  - /usr/sbin/mount.nfs
-  - /usr/sbin/ping6
-  - /usr/sbin/service
+[...]
 ```
 
-Which binaries that should have SUID/SGID removed.
+Which binaries that should have SUID/SGID removed, a complete list is available
+at <https://github.com/konstruktoid/ansible-role-hardening/blob/master/defaults/main.yml#L101-L281>.
 
 Structure
 ---------
@@ -411,112 +251,112 @@ Structure
 ├── README.md
 ├── Vagrantfile
 ├── action-lint
-│   ├── Dockerfile
-│   ├── README.md
-│   └── entrypoint.sh
+│   ├── Dockerfile
+│   ├── README.md
+│   └── entrypoint.sh
 ├── defaults
-│   └── main.yml
+│   └── main.yml
 ├── handlers
-│   └── main.yml
+│   └── main.yml
 ├── meta
-│   └── main.yml
+│   └── main.yml
 ├── postChecks.sh
 ├── provision
-│   └── setup.sh
+│   └── setup.sh
 ├── renovate.json
 ├── runPlaybook.sh
 ├── tasks
-│   ├── 01_pre.yml
-│   ├── 02_firewall.yml
-│   ├── 03_disablenet.yml
-│   ├── 04_disablefs.yml
-│   ├── 05_systemdconf.yml
-│   ├── 06_journalconf.yml
-│   ├── 07_timesyncd.yml
-│   ├── 08_fstab.yml
-│   ├── 09_prelink.yml
-│   ├── 10_pkgupdate.yml
-│   ├── 11_hosts.yml
-│   ├── 12_logindefs.yml
-│   ├── 13_sysctl.yml
-│   ├── 14_limits.yml
-│   ├── 15_adduser.yml
-│   ├── 16_rootaccess.yml
-│   ├── 17_packages.yml
-│   ├── 18_sshdconfig.yml
-│   ├── 19_password.yml
-│   ├── 20_cron.yml
-│   ├── 21_ctrlaltdel.yml
-│   ├── 22_auditd.yml
-│   ├── 23_disablemod.yml
-│   ├── 24_aide.yml
-│   ├── 26_users.yml
-│   ├── 27_suid.yml
-│   ├── 28_umask.yml
-│   ├── 30_path.yml
-│   ├── 31_logindconf.yml
-│   ├── 32_resolvedconf.yml
-│   ├── 33_rkhunter.yml
-│   ├── 34_issue.yml
-│   ├── 35_apport.yml
-│   ├── 36_lockroot.yml
-│   ├── 37_mount.yml
-│   ├── 38_postfix.yml
-│   ├── 39_motdnews.yml
-│   ├── 43_sudo.yml
-│   ├── 99_extras.yml
-│   └── main.yml
+│   ├── 01_pre.yml
+│   ├── 02_firewall.yml
+│   ├── 03_disablenet.yml
+│   ├── 04_disablefs.yml
+│   ├── 05_systemdconf.yml
+│   ├── 06_journalconf.yml
+│   ├── 07_timesyncd.yml
+│   ├── 08_fstab.yml
+│   ├── 09_prelink.yml
+│   ├── 10_pkgupdate.yml
+│   ├── 11_hosts.yml
+│   ├── 12_logindefs.yml
+│   ├── 13_sysctl.yml
+│   ├── 14_limits.yml
+│   ├── 15_adduser.yml
+│   ├── 16_rootaccess.yml
+│   ├── 17_packages.yml
+│   ├── 18_sshdconfig.yml
+│   ├── 19_password.yml
+│   ├── 20_cron.yml
+│   ├── 21_ctrlaltdel.yml
+│   ├── 22_auditd.yml
+│   ├── 23_disablemod.yml
+│   ├── 24_aide.yml
+│   ├── 26_users.yml
+│   ├── 27_suid.yml
+│   ├── 28_umask.yml
+│   ├── 30_path.yml
+│   ├── 31_logindconf.yml
+│   ├── 32_resolvedconf.yml
+│   ├── 33_rkhunter.yml
+│   ├── 34_issue.yml
+│   ├── 35_apport.yml
+│   ├── 36_lockroot.yml
+│   ├── 37_mount.yml
+│   ├── 38_postfix.yml
+│   ├── 39_motdnews.yml
+│   ├── 43_sudo.yml
+│   ├── 99_extras.yml
+│   └── main.yml
 ├── templates
-│   ├── etc
-│   │   ├── adduser.conf.j2
-│   │   ├── ansible
-│   │   │   └── facts.d
-│   │   │       ├── cpuinfo_rdrand.fact
-│   │   │       ├── reboot_required.fact
-│   │   │       └── systemd_version.fact
-│   │   ├── apt
-│   │   │   └── apt.conf.d
-│   │   │       └── 99noexec-tmp.j2
-│   │   ├── audit
-│   │   │   └── rules.d
-│   │   │       └── hardening.rules.j2
-│   │   ├── default
-│   │   │   ├── rkhunter.j2
-│   │   │   └── useradd.j2
-│   │   ├── hosts.allow.j2
-│   │   ├── hosts.deny.j2
-│   │   ├── issue.j2
-│   │   ├── login.defs.j2
-│   │   ├── logrotate.conf.j2
-│   │   ├── pam.d
-│   │   │   ├── common-account.j2
-│   │   │   ├── common-auth.j2
-│   │   │   ├── common-password.j2
-│   │   │   └── login.j2
-│   │   ├── profile.d
-│   │   │   └── initpath.sh.j2
-│   │   ├── securetty.j2
-│   │   ├── security
-│   │   │   ├── access.conf.j2
-│   │   │   ├── limits.conf.j2
-│   │   │   └── pwquality.conf.j2
-│   │   ├── ssh
-│   │   │   └── sshd_config.j2
-│   │   ├── sysctl.conf.j2
-│   │   └── systemd
-│   │       ├── coredump.conf.j2
-│   │       ├── journald.conf.j2
-│   │       ├── logind.conf.j2
-│   │       ├── resolved.conf.j2
-│   │       ├── system.conf.j2
-│   │       ├── timesyncd.conf.j2
-│   │       ├── tmp.mount.j2
-│   │       └── user.conf.j2
-│   └── lib
-│       └── systemd
-│           └── system
-│               ├── aidecheck.service.j2
-│               └── aidecheck.timer.j2
+│   ├── etc
+│   │   ├── adduser.conf.j2
+│   │   ├── ansible
+│   │   │   └── facts.d
+│   │   │       ├── cpuinfo_rdrand.fact
+│   │   │       ├── reboot_required.fact
+│   │   │       └── systemd_version.fact
+│   │   ├── apt
+│   │   │   └── apt.conf.d
+│   │   │       └── 99noexec-tmp.j2
+│   │   ├── audit
+│   │   │   └── rules.d
+│   │   │       └── hardening.rules.j2
+│   │   ├── default
+│   │   │   ├── rkhunter.j2
+│   │   │   └── useradd.j2
+│   │   ├── hosts.allow.j2
+│   │   ├── hosts.deny.j2
+│   │   ├── issue.j2
+│   │   ├── login.defs.j2
+│   │   ├── logrotate.conf.j2
+│   │   ├── pam.d
+│   │   │   ├── common-account.j2
+│   │   │   ├── common-auth.j2
+│   │   │   ├── common-password.j2
+│   │   │   └── login.j2
+│   │   ├── profile.d
+│   │   │   └── initpath.sh.j2
+│   │   ├── securetty.j2
+│   │   ├── security
+│   │   │   ├── access.conf.j2
+│   │   │   ├── limits.conf.j2
+│   │   │   └── pwquality.conf.j2
+│   │   ├── ssh
+│   │   │   └── sshd_config.j2
+│   │   ├── sysctl.conf.j2
+│   │   └── systemd
+│   │       ├── coredump.conf.j2
+│   │       ├── journald.conf.j2
+│   │       ├── logind.conf.j2
+│   │       ├── resolved.conf.j2
+│   │       ├── system.conf.j2
+│   │       ├── timesyncd.conf.j2
+│   │       ├── tmp.mount.j2
+│   │       └── user.conf.j2
+│   └── lib
+│       └── systemd
+│           └── system
+│               ├── aidecheck.service.j2
+│               └── aidecheck.timer.j2
 └── tests
     ├── inventory
     └── test.yml
