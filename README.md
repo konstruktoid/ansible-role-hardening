@@ -221,6 +221,7 @@ for use when `ansible_distribution == "RedHat"`.
 sshd_admin_net:
   - 192.168.0.0/24
   - 192.168.1.0/24
+sshd_allow_agent_forwarding: 'no'
 sshd_allow_groups: sudo
 sshd_authentication_methods: any
 sshd_log_level: VERBOSE
@@ -229,12 +230,15 @@ sshd_max_sessions: 3
 sshd_port: 22
 ```
 
+Only the network(s) defined in `sshd_admin_net` are allowed to
+connect to `sshd_port`. Note that additional rules need to be set up in order
+to allow access to additional services.
+
 OpenSSH login is allowed only for users whose primary group or supplementary
 group list matches one of the patterns in `sshd_allow_groups`.
 
-Only the network(s) defined in `sshd_admin_net` are allowed to
-connect. Note that additional rules need to be set up in order to allow access
-to additional services.
+`sshd_allow_agent_forwarding` specifies whether ssh-agent(1) forwarding is
+permitted.
 
 `sshd_authentication_methods` specifies the authentication methods that must
 be successfully completed in order to grant access to a user.
