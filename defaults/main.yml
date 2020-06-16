@@ -43,6 +43,7 @@ net_modules_blocklist:
 ntp: "0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org"
 packages_blocklist:
   - apport*
+  - autofs
   - avahi*
   - avahi-*
   - beep

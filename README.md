@@ -125,6 +125,7 @@ option.
 ```yaml
 packages_blocklist:
   - apport*
+  - autofs
   - avahi*
   - avahi-*
   - beep
