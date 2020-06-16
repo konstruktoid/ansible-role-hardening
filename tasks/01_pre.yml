@@ -14,8 +14,8 @@
 - name: systemd version fact
   become: 'yes'
   template:
-    src: etc/ansible/facts.d/systemd_version.fact
-    dest: /etc/ansible/facts.d/systemd_version.fact
+    src: etc/ansible/facts.d/systemd.fact
+    dest: /etc/ansible/facts.d/systemd.fact
     backup: 'yes'
     mode: 0755
     owner: root
@@ -27,8 +27,8 @@
 - name: cpuinfo rdrand fact
   become: 'yes'
   template:
-    src: etc/ansible/facts.d/cpuinfo_rdrand.fact
-    dest: /etc/ansible/facts.d/cpuinfo_rdrand.fact
+    src: etc/ansible/facts.d/cpuinfo.fact
+    dest: /etc/ansible/facts.d/cpuinfo.fact
     backup: 'yes'
     mode: 0755
     owner: root
@@ -41,8 +41,8 @@
 - name: reboot required fact
   become: 'yes'
   template:
-    src: etc/ansible/facts.d/reboot_required.fact
-    dest: /etc/ansible/facts.d/reboot_required.fact
+    src: etc/ansible/facts.d/reboot.fact
+    dest: /etc/ansible/facts.d/reboot.fact
     backup: 'yes'
     mode: 0755
     owner: root

@@ -138,7 +138,7 @@
   package:
     name: rng-tools
     state: present
-  when: ansible_local.cpuinfo_rdrand
+  when: ansible_local.cpuinfo.rdrand
   tags:
     - rng-tools
     - packages

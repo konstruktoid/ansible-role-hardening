@@ -1,0 +1,6 @@
+#!/bin/sh
+if grep -sqo rdrand /proc/cpuinfo; then
+  echo "{ \"rdrand\" : true }"
+else
+  echo "{ \"rdrand\" : false }"
+fi

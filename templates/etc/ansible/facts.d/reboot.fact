@@ -1,0 +1,6 @@
+#!/bin/sh
+if [ -f /var/run/reboot-required ]; then
+  echo "{ \"required\" : true }"
+else
+  echo "{ \"required\" : false }"
+fi

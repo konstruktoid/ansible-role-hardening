@@ -3,6 +3,6 @@
 [Time]
 NTP={{ ntp }}
 FallbackNTP={{ fallback_ntp }}
-{% if ansible_local.systemd_version|int >= 236 %}
+{% if ansible_local.systemd.version >= 236 %}
 RootDistanceMaxSec=1
 {% endif %}

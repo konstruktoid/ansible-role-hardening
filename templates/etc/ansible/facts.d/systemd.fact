@@ -1,0 +1,6 @@
+#!/bin/sh
+if command -v systemctl 1>/dev/null; then
+  echo "{ \"version\" : $(systemctl --version | grep '^systemd\s' | awk '{print $2}') }"
+else
+  echo "{ \"version\" : false }"
+fi
