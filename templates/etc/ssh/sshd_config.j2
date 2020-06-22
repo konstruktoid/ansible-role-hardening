@@ -18,8 +18,8 @@
 
 AcceptEnv LANG LC_*
 AllowGroups {{ sshd_allow_groups }}
-AllowTcpForwarding no
 AllowAgentForwarding {{ sshd_allow_agent_forwarding }}
+AllowTcpForwarding {{ sshd_allow_tcp_forwarding }}
 AuthenticationMethods {{ sshd_authentication_methods }}
 Banner /etc/issue.net
 ChallengeResponseAuthentication no

@@ -222,6 +222,7 @@ sshd_admin_net:
   - 192.168.0.0/24
   - 192.168.1.0/24
 sshd_allow_agent_forwarding: 'no'
+sshd_allow_tcp_forwarding: 'no'
 sshd_allow_groups: sudo
 sshd_authentication_methods: any
 sshd_log_level: VERBOSE
@@ -239,6 +240,11 @@ group list matches one of the patterns in `sshd_allow_groups`.
 
 `sshd_allow_agent_forwarding` specifies whether ssh-agent(1) forwarding is
 permitted.
+
+`sshd_allow_tcp_forwarding` specifies whether TCP forwarding is permitted.
+The available options are `yes` or all to allow TCP forwarding, `no` to prevent
+all TCP forwarding, `local` to allow local (from the perspective of ssh(1))
+forwarding only or `remote` to allow remote forwarding only.
 
 `sshd_authentication_methods` specifies the authentication methods that must
 be successfully completed in order to grant access to a user.
