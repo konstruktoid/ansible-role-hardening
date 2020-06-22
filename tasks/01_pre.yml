@@ -16,7 +16,6 @@
   template:
     src: etc/ansible/facts.d/systemd.fact
     dest: /etc/ansible/facts.d/systemd.fact
-    backup: 'yes'
     mode: 0755
     owner: root
     group: root
@@ -29,7 +28,6 @@
   template:
     src: etc/ansible/facts.d/cpuinfo.fact
     dest: /etc/ansible/facts.d/cpuinfo.fact
-    backup: 'yes'
     mode: 0755
     owner: root
     group: root
@@ -43,7 +41,6 @@
   template:
     src: etc/ansible/facts.d/reboot.fact
     dest: /etc/ansible/facts.d/reboot.fact
-    backup: 'yes'
     mode: 0755
     owner: root
     group: root
