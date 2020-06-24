@@ -7,4 +7,5 @@
 .scannerwork
 .sonar
 .vagrant
+.yamllint
 hosts
