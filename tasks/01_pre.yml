@@ -54,6 +54,20 @@
   tags:
     - fact
 
+- name: install python-pexpect
+  become: 'yes'
+  apt:
+    name: python-pexpect
+    state: present
+  when: ansible_os_family == "Debian" and ansible_python.version.major <= 2
+
+- name: install python3-pexpect
+  become: 'yes'
+  apt:
+    name: python3-pexpect
+    state: present
+  when: ansible_os_family == "Debian" and ansible_python.version.major >= 3
+
 - name: redhat family epel installation
   become: 'yes'
   dnf:

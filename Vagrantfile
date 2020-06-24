@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
     bionic.vm.network "private_network", ip: "10.2.3.41"
     bionic.vm.hostname = "bionic"
     bionic.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible python-pexpect --no-install-recommends"
+      inline: "apt-get update && apt-get -y install ansible --no-install-recommends"
     bionic.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
     buster.vm.hostname = "buster"
     buster.vm.boot_timeout = 600
     buster.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible python-pexpect --no-install-recommends"
+      inline: "apt-get update && apt-get -y install ansible --no-install-recommends"
     buster.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -91,7 +91,7 @@ Vagrant.configure("2") do |config|
      focal.vm.hostname = "focal"
      focal.vm.boot_timeout = 600
      focal.vm.provision "shell",
-       inline: "apt-get update && apt-get -y install ansible python3-pexpect --no-install-recommends"
+       inline: "apt-get update && apt-get -y install ansible --no-install-recommends"
      focal.vm.provision "ansible" do |a|
        a.verbose = "v"
        a.limit = "all"
