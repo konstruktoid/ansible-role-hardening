@@ -1,0 +1,45 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: VBox
+provisioner:
+  name: ansible
+  inventory:
+    host_vars:
+      bionic:
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
+      buster:
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
+      fedora:
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
+platforms:
+  - name: bionic
+    box: ubuntu/bionic64
+  - name: buster
+    box: bento/debian-10
+  - name: fedora
+    box: bento/fedora-32
+# The following platform fails due molecule configuration issues:
+#
+#  - name: centos
+#    box: centos/8
+#    provider_options:
+#      vbguest.installer_options: "{ allow_kernel_upgrade: true }"
+#      default_nic_type: "82543GC"
+#  - name: focal
+#    box: ubuntu/focal64
+#    provider_raw_config_args:
+#      - "customize [ 'modifyvm', :id, '--uart1', '0x3F8', '4']"
+#      - "customize [ 'modifyvm', :id, '--uartmode1', 'file', File::NULL]"
+verifier:
+  name: ansible
+lint: |
+  set -e
+  ansible-lint .
+  yamllint -d "{extends: default, rules: {line-length: {level: warning}}}" .
