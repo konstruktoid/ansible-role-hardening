@@ -1,7 +1,12 @@
 ---
 - hosts: all
-  remote_user: root
   become: true
-  roles:
-    - konstruktoid.hardening
+  tasks:
+    - include_role:
+        name: konstruktoid.hardening
+
+- hosts: all
+  become: true
+  tasks:
+    - include: debug_facts.yml
 ...
