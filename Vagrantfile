@@ -52,7 +52,7 @@ Vagrant.configure("2") do |config|
     end
     centos.vm.hostname = "centos"
     centos.vm.provision "shell",
-      inline: "dnf install -y epel-release && dnf install -y ansible python3"
+      inline: "dnf clean all && dnf install -y epel-release && dnf install -y ansible python3"
     centos.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -93,6 +93,26 @@ Vagrant.configure("2") do |config|
      focal.vm.provision "shell",
        inline: "apt-get update && apt-get -y install ansible --no-install-recommends"
      focal.vm.provision "ansible" do |a|
+       a.verbose = "v"
+       a.limit = "all"
+       a.playbook = "tests/test.yml"
+       a.extra_vars = {
+         "sshd_admin_net" => "0.0.0.0/0",
+         "sshd_allow_groups" => "vagrant sudo ubuntu",
+         "ansible_python_interpreter" => "/usr/bin/python3"
+      }
+     end
+   end
+
+   config.vm.define "groovy" do |groovy|
+     groovy.vm.box = "ubuntu/groovy64"
+     groovy.ssh.insert_key = true
+     groovy.vm.network "private_network", ip: "10.2.3.48"
+     groovy.vm.hostname = "groovy"
+     groovy.vm.boot_timeout = 600
+     groovy.vm.provision "shell",
+       inline: "apt-get update && apt-get -y install ansible --no-install-recommends"
+     groovy.vm.provision "ansible" do |a|
        a.verbose = "v"
        a.limit = "all"
        a.playbook = "tests/test.yml"
