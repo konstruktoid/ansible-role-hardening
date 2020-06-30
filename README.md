@@ -133,6 +133,7 @@ packages_blocklist:
   - pastebinit
   - popularity-contest
   - rsh*
+  - rsync
   - talk*
   - telnet*
   - tftp*
@@ -152,8 +153,10 @@ packages_debian:
   - aide-common
   - apparmor-profiles
   - apparmor-utils
+  - audispd-plugins
   - auditd
   - debsums
+  - gnupg2
   - haveged
   - libpam-apparmor
   - libpam-cracklib
@@ -172,8 +175,10 @@ Packages to be installed on a Debian OS family host.
 ```yaml
 packages_redhat:
   - aide
+  - audispd-plugins
   - audit
   - haveged
+  - gnugpg2
   - openssh-server
   - needrestart
   - postfix
