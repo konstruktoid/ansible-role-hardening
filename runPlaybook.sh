@@ -27,11 +27,20 @@ fi
 
 export ANSIBLE_NOCOWS=1
 ANSIBLE_V=2.8
+OLD_LOG_PATH=0
 
-if [ -z "$ANSIBLE_V" ]; then
+if [ -n "${ANSIBLE_LOG_PATH}" ]; then
+  ANSIBLE_LOG_PATH_OLD="${ANSIBLE_LOG_PATH}"
+  OLD_LOG_PATH=1
+fi
+
+logpath="$(mktemp)"
+ANSIBLE_LOG_PATH="${logpath}"
+
+if [ -z "${ANSIBLE_V}" ]; then
   pip3 install ansible
 else
-  pip3 install ansible=="$ANSIBLE_V"
+  pip3 install ansible=="${ANSIBLE_V}"
 fi
 
 echo "Using $(ansible --version | grep '^ansible')"
@@ -60,28 +69,31 @@ fi
 wait
 
 VMFILE="$(mktemp)"
-vagrant status | grep 'running.*virtualbox' | awk '{print $1}' >> "$VMFILE"
+vagrant status | grep 'running.*virtualbox' | awk '{print $1}' >> "${VMFILE}"
 
-for VM in $(grep -v '^#' "$VMFILE"); do
-  echo "Copying postChecks.sh to $VM."
-  vagrant ssh "$VM" -c 'cp /vagrant/postChecks.sh ~/'
-  echo "Rebooting $VM."
-  vagrant ssh "$VM" -c 'sudo reboot'
+for VM in $(grep -v '^#' "${VMFILE}"); do
+  echo "Copying postChecks.sh to ${VM}."
+  vagrant ssh "${VM}" -c 'cp /vagrant/postChecks.sh ~/'
+  echo "Rebooting ${VM}."
+  vagrant ssh "${VM}" -c 'sudo reboot'
 
-  while ! vagrant ssh "$VM" -c 'id'; do
-    echo "Waiting for $VM."
+  while ! vagrant ssh "${VM}" -c 'id'; do
+    echo "Waiting for ${VM}."
     sleep 10
   done
 
 
   echo "Running postChecks.sh."
-  vagrant ssh "$VM" -c 'sh ~/postChecks.sh || exit 1 && cat ~/lynis-report.dat' > "$VM-$(date +%y%m%d)-lynis.log"
+  vagrant ssh "${VM}" -c 'sh ~/postChecks.sh || exit 1 && cat ~/lynis-report.dat' > "${VM}-$(date +%y%m%d)-lynis.log"
 
   echo "Saving suid.list."
-  vagrant ssh "$VM" -c 'cat ~/suid.list' >> "$(date +%y%m%d)-suid.list"
+  vagrant ssh "${VM}" -c 'cat ~/suid.list' >> "$(date +%y%m%d)-suid.list"
+
+  echo "Saving bats results."
+  vagrant ssh "${VM}" -c 'cat ~/bats.log' | grep 'not ok'  > "${VM}-$(date +%y%m%d)-bats.log"
 done
 
-rm "$VMFILE"
+rm "${VMFILE}"
 
 printf '\n\n'
 
@@ -93,3 +105,9 @@ find ./ -name '*-lynis.log' -type f | while read -r f; do
     echo "$f is empty, a test stage failed."
   fi
 done
+
+echo "ANSIBLE LOG IS AVAILABLE AT: ${ANSIBLE_LOG_PATH}"
+
+if [ "${OLD_LOG_PATH}" = "1" ]; then
+  ANSIBLE_LOG_PATH=${ANSIBLE_LOG_PATH_OLD}
+fi
