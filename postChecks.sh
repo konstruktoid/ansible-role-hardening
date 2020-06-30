@@ -41,11 +41,27 @@ grep -vE '^#|^$' /etc/shells | while read -r S; do
   echo "  - $S" >> "suid.list"
 done
 
-echo "Running Lynis."
+cd ~ || exit 1
+
 sudo "$PKG" -y install git
 
 git clone https://github.com/CISOFy/lynis
+git clone https://github.com/konstruktoid/hardening.git
 
+sudo "$PKG" -y remove git
+
+if lsb_release -a 2>/dev/null | grep -qi ubuntu; then
+  echo "Running bats tests."
+  sudo "$PKG" -y install bats
+  cd ~/hardening/tests || exit 1
+  sudo bats . | tee  ~/bats.log
+  sudo chown vagrant:vagrant ~/bats.log
+else
+  echo "not ok: not ubuntu" > ~/bats.log
+fi
+
+echo "Running Lynis."
+cd ~ || exit 1
 sudo chown -R root:root lynis
 sudo chmod a+rx lynis
 cd lynis || exit 1
@@ -53,4 +69,5 @@ cd lynis || exit 1
 LANG=C sudo ./lynis audit system
 sudo cp '/var/log/lynis-report.dat' ~/
 sudo chown vagrant:vagrant ~/lynis-report.dat
+
 echo "ansible_version=$(ansible --version | grep '^ansible')" >> ~/lynis-report.dat
