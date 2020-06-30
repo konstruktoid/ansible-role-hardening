@@ -24,7 +24,9 @@
 # CCE-80335-1
 # CCE-80356-9
 
+{% if ansible_kernel is version('5','>') %}
 dev.tty.ldisc_autoload = 0
+{% endif %}
 fs.protected_hardlinks = 1
 fs.protected_symlinks = 1
 fs.suid_dumpable = 0
@@ -72,6 +74,7 @@ net.ipv6.conf.all.use_tempaddr = 2
 net.ipv6.conf.default.accept_ra = 0
 net.ipv6.conf.default.accept_ra_defrtr = 0
 net.ipv6.conf.default.accept_ra_pinfo = 0
+net.ipv6.conf.default.accept_ra_rtr_pref = 0
 net.ipv6.conf.default.accept_redirects = 0
 net.ipv6.conf.default.accept_source_route = 0
 net.ipv6.conf.default.autoconf = 0
