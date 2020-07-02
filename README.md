@@ -233,6 +233,7 @@ sshd_authentication_methods: any
 sshd_log_level: VERBOSE
 sshd_max_auth_tries: 3
 sshd_max_sessions: 3
+sshd_password_authentication: 'no'
 sshd_port: 22
 ```
 
@@ -260,6 +261,8 @@ be successfully completed in order to grant access to a user.
 SSH authentication attempts permitted per connection and the maximum number of
 open shell, login or subsystem (e.g. sftp) sessions permitted per network
 connection.
+
+`sshd_password_authentication` specifies whether password authentication is allowed.
 
 `sshd_port` specifies the port number that sshd(8) listens on.
 
