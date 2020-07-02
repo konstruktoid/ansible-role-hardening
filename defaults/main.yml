@@ -108,6 +108,7 @@ sshd_authentication_methods: any
 sshd_log_level: VERBOSE
 sshd_max_auth_tries: 3
 sshd_max_sessions: 3
+sshd_password_authentication: 'no'
 sshd_port: 22
 suid_sgid_blocklist:
   - /bin/awk
