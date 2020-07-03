@@ -3,42 +3,60 @@
   debug:
     msg: "cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}, true"
   when: ansible_local.cpuinfo.rdrand
+  tags:
+    - debug
 
 - name: "cpuinfo_rdrand handling, false"
   debug:
     msg: "cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}, false"
   when: not ansible_local.cpuinfo.rdrand
+  tags:
+    - debug
 
 - name: "ansible_local['cpuinfo']['rdrand'], true"
   debug:
     msg: "cpuinfo_rdrand is {{ ansible_local['cpuinfo']['rdrand'] }}, true"
   when: ansible_local['cpuinfo']['rdrand']
+  tags:
+    - debug
 
 - name: "ansible_local['cpuinfo']['rdrand'], false"
   debug:
     msg: "cpuinfo_rdrand is {{ ansible_local['cpuinfo']['rdrand'] }}, false"
   when: not ansible_local['cpuinfo']['rdrand']
+  tags:
+    - debug
 
 - name: "cpuinfo_rdrand handling, info"
   debug:
     msg: "cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}"
+  tags:
+    - debug
 
 - name: "reboot_required handling, info"
   debug:
     msg: "reboot_required is {{ ansible_local.reboot.required }}"
   ignore_errors: true
+  tags:
+    - debug
 
 - name: "systemd_version handling, <= 100"
   debug:
     msg: "systemd version is {{ ansible_local.systemd.version }}, <= 100"
   when: ansible_local.systemd.version <= 100
+  tags:
+    - debug
 
 - name: "systemd_version handling, >= 100"
   debug:
     msg: "systemd version is {{ ansible_local.systemd.version }}, >= 100"
   when: ansible_local.systemd.version >= 100
+  tags:
+    - debug
 
 - name: "systemd_version handling, info"
   debug:
     msg: "systemd version is {{ ansible_local.systemd.version }}"
+  tags:
+    - debug
 ...
