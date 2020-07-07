@@ -111,7 +111,8 @@
     - ufw
     - ssh
 
-- name: enable ufw
+# https://github.com/ansible/ansible/issues/45446
+- name: enable ufw and set default deny incoming
   become: 'yes'
   ufw:
     state: enabled
