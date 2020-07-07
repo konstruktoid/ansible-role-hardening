@@ -273,6 +273,7 @@ suid_sgid_blocklist:
   - /usr/bin/fusermount
   - /usr/bin/gawk
   - /usr/bin/gcc
+  - /usr/bin/gem
   - /usr/bin/git
   - /usr/bin/grep
   - /usr/bin/hd
@@ -281,7 +282,9 @@ suid_sgid_blocklist:
   - /usr/bin/iconv
   - /usr/bin/ionice
   - /usr/bin/ip
+  - /usr/bin/irb
   - /usr/bin/journalctl
+  - /usr/bin/jq
   - /usr/bin/less
   - /usr/bin/look
   - /usr/bin/ltrace
@@ -317,6 +320,7 @@ suid_sgid_blocklist:
   - /usr/bin/pip
   - /usr/bin/pkexec
   - /usr/bin/python
+  - /usr/bin/rake
   - /usr/bin/rbash
   - /usr/bin/readelf
   - /usr/bin/red
@@ -324,6 +328,7 @@ suid_sgid_blocklist:
   - /usr/bin/rpm
   - /usr/bin/rpmquery
   - /usr/bin/rsync
+  - /usr/bin/ruby
   - /usr/bin/run-mailcap
   - /usr/bin/run-parts
   - /usr/bin/rvim
