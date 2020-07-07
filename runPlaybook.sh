@@ -53,6 +53,7 @@ if [ "$1" = "prep" ]; then
   echo "Copying the role."
   sudo mkdir -p /etc/ansible/roles/konstruktoid.hardening/
   sudo cp -R . /etc/ansible/roles/konstruktoid.hardening/
+  sudo rm /etc/ansible/roles/konstruktoid.hardening/{*.log,*.html,*.list}
   lint
   echo "Finished basic preparations. Exiting."
   exit
@@ -82,6 +83,12 @@ for VM in $(grep -v '^#' "${VMFILE}"); do
     sleep 10
   done
 
+  vagrant reload "${VM}"
+
+  while ! vagrant ssh "${VM}" -c 'id'; do
+    echo "Waiting for ${VM}."
+    sleep 10
+  done
 
   echo "Running postChecks.sh."
   vagrant ssh "${VM}" -c 'sh ~/postChecks.sh || exit 1 && cat ~/lynis-report.dat' > "${VM}-$(date +%y%m%d)-lynis.log"
