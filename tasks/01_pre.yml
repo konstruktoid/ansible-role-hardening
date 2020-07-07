@@ -49,6 +49,18 @@
     - reboot
     - fact
 
+- name: ssh keys fact
+  become: 'yes'
+  template:
+    src: etc/ansible/facts.d/sshkeys.fact
+    dest: /etc/ansible/facts.d/sshkeys.fact
+    mode: 0755
+    owner: root
+    group: root
+  tags:
+    - reboot
+    - fact
+
 - name: update facts
   setup: ~
   tags:
