@@ -42,10 +42,11 @@
     backup: 'yes'
     insertafter: EOF
     block: |
+      !/var/lib/docker
       !/var/lib/lxcfs
       !/var/lib/private/systemd
-      !/var/log/journal
       !/var/log/audit
+      !/var/log/journal
   when: ansible_os_family == "Debian"
   tags:
     - aide
@@ -67,10 +68,11 @@
     backup: 'yes'
     insertafter: EOF
     block: |
+      !/var/lib/docker
       !/var/lib/lxcfs
       !/var/lib/private/systemd
-      !/var/log/journal
       !/var/log/audit
+      !/var/log/journal
   when: ansible_os_family == "RedHat"
   tags:
     - aide
