@@ -45,7 +45,7 @@ fallback_dns: "1.1.1.1 9.9.9.9"
 IPv4 and IPv6 addresses to use as system and fallback DNS servers.
 If `dnssec` is set to "allow-downgrade" DNSSEC validation is attempted, but if
 the server does not support DNSSEC properly, DNSSEC mode is automatically
-disabled.[systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf)
+disabled. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf)
 option.
 
 ### Disabled File System kernel modules
@@ -284,7 +284,7 @@ suid_sgid_blocklist:
 ```
 
 Which binaries that should have SUID/SGID removed, a complete list is available
-at <https://github.com/konstruktoid/ansible-role-hardening/blob/master/defaults/main.yml#L104-L378>
+at <https://github.com/konstruktoid/ansible-role-hardening/blob/master/defaults/main.yml#L112>
 
 ## Structure
 
@@ -433,8 +433,8 @@ configuration file, which will run the `konstruktoid.hardening` role.
 
 The [runPlaybook.sh](runPlaybook.sh) script may be used to automatically update
 and run the role on all configured Vagrant boxes. After the role has been
-applied, [Lynis](https://github.com/CISOFy/lynis) will be downloaded and the
-configurationen tested.
+applied, [Lynis](https://github.com/CISOFy/lynis) and various [bats tests](https://github.com/konstruktoid/hardening/tree/master/tests)
+will be downloaded and the configurationen tested.
 
 To run a [OpenSCAP](https://github.com/ComplianceAsCode/content) test on a
 Fedora host using the included Vagrantfile follow the instructions on
