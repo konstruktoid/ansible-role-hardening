@@ -59,4 +59,38 @@
     msg: "systemd version is {{ ansible_local.systemd.version }}"
   tags:
     - debug
+
+- name: get DSA keys
+  debug:
+    msg: "{{ item }}"
+  with_items:
+    - "{{ ansible_local['sshkeys'] | json_query('keys.*') }}"
+  vars:
+    - keys: "{{ item }}"
+  when: keys.type == "DSA"
+  tags:
+    - debug
+
+- name: get short RSA keys
+  vars:
+    - keys: "{{ item }}"
+  debug:
+    msg: "{{ item }}"
+  with_items:
+    - "{{ ansible_local['sshkeys'] | json_query('keys.*') }}"
+  when: (keys.type == "RSA" and keys.size <= 2048)
+  tags:
+    - debug
+
+- name: get owner of old keys
+  vars:
+    - keys: "{{ item }}"
+    - old_key: "{{ ansible_date_time.epoch|int - 3600 }}"
+  debug:
+    msg: "{{ keys.owner }}: {{ keys.file }} - {{ keys.modified_human }}"
+  with_items:
+    - "{{ ansible_local['sshkeys'] | json_query('keys.*') }}"
+  when: keys.modified_epoch|int <= old_key|int and keys.owner != "root"
+  tags:
+    - debug
 ...

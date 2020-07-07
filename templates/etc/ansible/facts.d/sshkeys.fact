@@ -1,0 +1,37 @@
+#!/bin/sh
+set -u
+
+ssh_keys() {
+  HOST="$(hostname -s)"
+  TMPFILE="$(mktemp)"
+  I=0
+
+  {
+    echo "{ \"keys\": {"
+    find -L /etc/ssh /home/*/.ssh /root /Users/*/.ssh \( -name '*.pub' -o -name 'authorized_keys' \) -type f 2>/dev/null |\
+      while read -r SSHFILE; do
+        grep -vE '^#|^$' "${SSHFILE}" | while read -r SSHKEY; do
+          KEYINFO="$(echo "${SSHKEY}" | ssh-keygen -lf -)"
+          KEYSTAT="$(stat -c "%Y %U %G %a" "${SSHFILE}")"
+          KEYFILE="\"file\" : \"${SSHFILE}\""
+          KEYSIZE="\"size\" : $(echo "${KEYINFO}" | awk '{print $1}')"
+          KEYHASH="\"hash\" : \"$(echo "${KEYINFO}" | awk '{print $2}')\""
+          KEYTYPE="\"type\" : \"$(echo "${KEYINFO}" | awk '{print $NF}' | tr -d '()')\""
+          KEYCOMMENT="\"comment\" : \"$(echo "${KEYINFO}" | awk '{$1=$2=$NF="";print}' | sed -e "s/^ *//" -e "s/ *$//")\""
+          FILEMODEPOCH="\"modified_epoch\" : $(echo "${KEYSTAT}" | awk '{print $1}')"
+          FILEMODHUMAN="\"modified_human\" : \"$(stat -c "%y" "${SSHFILE}")\""
+          FILEOWNER="\"owner\" : \"$(echo "${KEYSTAT}" | awk '{print $2}')\""
+          FILEGROUP="\"group\" : \"$(echo "${KEYSTAT}" | awk '{print $3}')\""
+          FILEPERM="\"permissions\": $(echo "${KEYSTAT}" | awk '{print $4}')"
+          echo "\"${HOST}_${I}\": { ${KEYFILE}, ${KEYSIZE}, ${KEYHASH}, ${KEYCOMMENT}, ${KEYTYPE}, ${FILEMODEPOCH}, ${FILEMODHUMAN}, ${FILEOWNER}, ${FILEGROUP}, ${FILEPERM} },"
+        done
+        I=$((I + 1))
+    done
+    echo "} }"
+  } > "${TMPFILE}"
+
+  grep -v '^#' "${TMPFILE}" | tr  '\n' ' ' | sed 's/ }, } }/ } } }/g'
+  rm "${TMPFILE}"
+}
+
+ssh_keys
