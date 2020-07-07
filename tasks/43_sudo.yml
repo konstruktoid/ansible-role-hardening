@@ -42,4 +42,15 @@
     create: 'yes'
   tags:
     - sudo
+
+- name: sudo passwd_timeout
+  become: 'yes'
+  lineinfile:
+    line: "Defaults passwd_timeout=5"
+    dest: /etc/sudoers.d/15_timeout
+    mode: 0440
+    state: present
+    create: 'yes'
+  tags:
+    - sudo
 ...
