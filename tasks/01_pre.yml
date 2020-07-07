@@ -71,6 +71,7 @@
   apt:
     name: python-pexpect
     state: present
+    update_cache: 'yes'
   when: ansible_os_family == "Debian" and ansible_python.version.major <= 2
 
 - name: install python3-pexpect
@@ -78,6 +79,7 @@
   apt:
     name: python3-pexpect
     state: present
+    update_cache: 'yes'
   when: ansible_os_family == "Debian" and ansible_python.version.major >= 3
 
 - name: redhat family epel installation
