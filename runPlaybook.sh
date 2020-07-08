@@ -35,7 +35,7 @@ if [ -n "${ANSIBLE_LOG_PATH}" ]; then
 fi
 
 logpath="$(mktemp)"
-ANSIBLE_LOG_PATH="${logpath}"
+export ANSIBLE_LOG_PATH="${logpath}"
 
 if [ -z "${ANSIBLE_V}" ]; then
   pip3 install ansible
