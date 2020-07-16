@@ -58,7 +58,7 @@
     owner: root
     group: root
   tags:
-    - reboot
+    - sshd
     - fact
 
 - name: update facts
