@@ -166,6 +166,7 @@ packages_debian:
   - postfix
   - rkhunter
   - rsyslog
+  - secureboot-db
   - tcpd
   - vlock
 ```
