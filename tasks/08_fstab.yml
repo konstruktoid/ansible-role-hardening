@@ -12,29 +12,6 @@
     - systemd
     - tmp
 
-- name: create /var/tmp
-  become: 'yes'
-  template:
-    src: etc/systemd/tmp.mount.j2
-    dest: /lib/systemd/system/var-tmp.mount
-    backup: 'yes'
-    mode: 0644
-    owner: root
-    group: root
-  tags:
-    - systemd
-    - tmp
-
-- name: set /var/tmp in var-tmp.mount
-  become: 'yes'
-  replace:
-    regexp: '^Where=/tmp$'
-    replace: "Where=/var/tmp"
-    dest: /lib/systemd/system/var-tmp.mount
-  tags:
-    - systemd
-    - tmp
-
 - name: remove /tmp from fstab
   become: 'yes'
   lineinfile:
@@ -52,11 +29,4 @@
     regexp: '^(.*)floppy(.*)$'
   tags:
     - fstab
-
-- name: enable /var/tmp
-  become: 'yes'
-  service:
-    name: var-tmp.mount
-    enabled: 'yes'
-    masked: 'no'
 ...
