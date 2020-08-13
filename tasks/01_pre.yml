@@ -1,4 +1,9 @@
 ---
+- name: install pexpect
+  become: 'yes'
+  pip:
+    name: pexpect
+
 - name: create custom facts directory
   become: 'yes'
   file:
