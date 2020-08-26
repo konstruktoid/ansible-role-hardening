@@ -1,6 +1,6 @@
 #!/bin/sh -l
 
-if ! ansible-lint -v ; then
+if ! ansible-lint -v ./tests/test.yml; then
     echo 'ansible-lint failed.'
     exit 1
 fi
