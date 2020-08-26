@@ -1,7 +1,7 @@
 ---
 - name: merge package lists
   set_fact:
-    packages_merged: "{{ packages_debian + packages_redhat }}"
+    packages_merged: "{{ packages_debian + packages_redhat + packages_ubuntu }}"
   tags:
     - packages
 
@@ -44,6 +44,19 @@
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   when: ansible_os_family == "Debian"
+  tags:
+    - apt
+    - packages
+
+- name: ubuntu package installation
+  become: 'yes'
+  apt:
+    name: "{{ packages_ubuntu }}"
+    state: present
+    install_recommends: 'no'
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  when: ansible_distribution == "Ubuntu"
   tags:
     - apt
     - packages
