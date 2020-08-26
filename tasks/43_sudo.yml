@@ -43,11 +43,28 @@
   tags:
     - sudo
 
+- name: remove inconsistently named sudoer file
+  become: 'yes'
+  file:
+    path: /etc/sudoers.d/15_timeout
+    state: absent
+
 - name: sudo passwd_timeout
   become: 'yes'
   lineinfile:
-    line: "Defaults passwd_timeout=5"
-    dest: /etc/sudoers.d/15_timeout
+    line: "Defaults passwd_timeout=1"
+    dest: /etc/sudoers.d/015_passwdtimeout
+    mode: 0440
+    state: present
+    create: 'yes'
+  tags:
+    - sudo
+
+- name: sudo timestamp_timeout
+  become: 'yes'
+  lineinfile:
+    line: "Defaults timestamp_timeout=5"
+    dest: /etc/sudoers.d/016_timestamptimeout
     mode: 0440
     state: present
     create: 'yes'
