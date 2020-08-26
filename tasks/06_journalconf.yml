@@ -53,6 +53,7 @@
     dest: /etc/rsyslog.conf
     state: present
     create: 'no'
+    mode: preserve
   when: rsyslogconf.stat.exists
   tags:
     - rsyslog
