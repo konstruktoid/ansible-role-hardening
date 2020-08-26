@@ -77,7 +77,6 @@ packages_debian:
   - postfix
   - rkhunter
   - rsyslog
-  - secureboot-db
   - tcpd
   - vlock
 packages_redhat:
@@ -94,6 +93,9 @@ packages_redhat:
   - rsyslog
   - tcp_wrappers
   - vlock
+packages_ubuntu:
+  - fwupd
+  - secureboot-db
 random_ack_limit: "{{ 1000000 | random(start=1000) }}"
 reboot_ubuntu: false
 redhat_rpm_key:
