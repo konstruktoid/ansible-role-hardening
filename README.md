@@ -166,12 +166,19 @@ packages_debian:
   - postfix
   - rkhunter
   - rsyslog
-  - secureboot-db
   - tcpd
   - vlock
 ```
 
 Packages to be installed on a Debian OS family host.
+
+```yaml
+packages_ubuntu:
+  - fwupd
+  - secureboot-db
+```
+
+Packages to be installed on a Ubuntu distribution host.
 
 ```yaml
 packages_redhat:
