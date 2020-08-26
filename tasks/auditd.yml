@@ -25,7 +25,6 @@
     regexp: ^active
     line: active = yes
     create: true
-    mode: preserve
   when: ansible_os_family == "RedHat"
   tags:
     - auditd

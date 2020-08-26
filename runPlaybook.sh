@@ -7,7 +7,7 @@ function lint {
   echo "Linting."
   set -x
 
-  if ! ansible-lint -vv tests/test.yml; then
+  if ! ansible-lint -v tests/test.yml; then
       echo 'ansible-lint failed.'
       exit 1
   fi
