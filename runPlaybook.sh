@@ -7,13 +7,7 @@ function lint {
   echo "Linting."
   set -x
 
-  cd ./action-lint || exit 1
-  docker build --tag action-lint -f Dockerfile .
-
-  cd .. | exit 1
-  docker run --rm --workdir /github/workspace -v "/var/run/docker.sock:/var/run/docker.sock" -v "$(pwd):/github/workspace" action-lint
-
-  if ! ansible-lint -v; then
+  if ! ansible-lint -vv tests/test.yml; then
       echo 'ansible-lint failed.'
       exit 1
   fi
