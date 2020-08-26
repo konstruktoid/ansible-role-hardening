@@ -311,60 +311,67 @@ at <https://github.com/konstruktoid/ansible-role-hardening/blob/master/defaults/
 │   └── main.yml
 ├── meta
 │   └── main.yml
+├── molecule
+│   └── default
+│       ├── INSTALL.rst
+│       ├── converge.yml
+│       ├── molecule.yml
+│       └── verify.yml
 ├── postChecks.sh
 ├── provision
 │   └── setup.sh
 ├── renovate.json
 ├── runPlaybook.sh
 ├── tasks
-│   ├── 01_pre.yml
-│   ├── 02_firewall.yml
-│   ├── 03_disablenet.yml
-│   ├── 04_disablefs.yml
-│   ├── 05_systemdconf.yml
-│   ├── 06_journalconf.yml
-│   ├── 07_timesyncd.yml
-│   ├── 08_fstab.yml
-│   ├── 09_prelink.yml
-│   ├── 10_pkgupdate.yml
-│   ├── 11_hosts.yml
-│   ├── 12_logindefs.yml
-│   ├── 13_sysctl.yml
-│   ├── 14_limits.yml
-│   ├── 15_adduser.yml
-│   ├── 16_rootaccess.yml
-│   ├── 17_packages.yml
-│   ├── 18_sshdconfig.yml
-│   ├── 19_password.yml
-│   ├── 20_cron.yml
-│   ├── 21_ctrlaltdel.yml
-│   ├── 22_auditd.yml
-│   ├── 23_disablemod.yml
-│   ├── 24_aide.yml
-│   ├── 26_users.yml
-│   ├── 27_suid.yml
-│   ├── 28_umask.yml
-│   ├── 30_path.yml
-│   ├── 31_logindconf.yml
-│   ├── 32_resolvedconf.yml
-│   ├── 33_rkhunter.yml
-│   ├── 34_issue.yml
-│   ├── 35_apport.yml
-│   ├── 36_lockroot.yml
-│   ├── 37_mount.yml
-│   ├── 38_postfix.yml
-│   ├── 39_motdnews.yml
-│   ├── 43_sudo.yml
-│   ├── 99_extras.yml
-│   └── main.yml
+│   ├── adduser.yml
+│   ├── aide.yml
+│   ├── apport.yml
+│   ├── auditd.yml
+│   ├── cron.yml
+│   ├── ctrlaltdel.yml
+│   ├── disablefs.yml
+│   ├── disablemod.yml
+│   ├── disablenet.yml
+│   ├── extras.yml
+│   ├── firewall.yml
+│   ├── fstab.yml
+│   ├── hosts.yml
+│   ├── issue.yml
+│   ├── journalconf.yml
+│   ├── limits.yml
+│   ├── lockroot.yml
+│   ├── logindconf.yml
+│   ├── logindefs.yml
+│   ├── main.yml
+│   ├── motdnews.yml
+│   ├── mount.yml
+│   ├── packages.yml
+│   ├── password.yml
+│   ├── path.yml
+│   ├── pkgupdate.yml
+│   ├── postfix.yml
+│   ├── pre.yml
+│   ├── prelink.yml
+│   ├── resolvedconf.yml
+│   ├── rkhunter.yml
+│   ├── rootaccess.yml
+│   ├── sshdconfig.yml
+│   ├── sudo.yml
+│   ├── suid.yml
+│   ├── sysctl.yml
+│   ├── systemdconf.yml
+│   ├── timesyncd.yml
+│   ├── umask.yml
+│   └── users.yml
 ├── templates
 │   ├── etc
 │   │   ├── adduser.conf.j2
 │   │   ├── ansible
 │   │   │   └── facts.d
-│   │   │       ├── cpuinfo_rdrand.fact
-│   │   │       ├── reboot_required.fact
-│   │   │       └── systemd_version.fact
+│   │   │       ├── cpuinfo.fact
+│   │   │       ├── reboot.fact
+│   │   │       ├── sshkeys.fact
+│   │   │       └── systemd.fact
 │   │   ├── apt
 │   │   │   └── apt.conf.d
 │   │   │       └── 99noexec-tmp.j2
@@ -409,10 +416,11 @@ at <https://github.com/konstruktoid/ansible-role-hardening/blob/master/defaults/
 │               ├── aidecheck.service.j2
 │               └── aidecheck.timer.j2
 └── tests
+    ├── debug_facts.yml
     ├── inventory
     └── test.yml
 
-24 directories, 89 files
+26 directories, 95 files
 ```
 
 ## Dependencies

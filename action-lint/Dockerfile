@@ -9,12 +9,13 @@ LABEL "repository"="https://github.com/konstruktoid/ansible-role-hardening"
 LABEL "homepage"="https://github.com/konstruktoid/ansible-role-hardening"
 LABEL "maintainer"="Thomas Sjögren <konstruktoid@users.noreply.github.com>"
 
-RUN apk --update --no-cache add gcc libffi-dev linux-headers make musl-dev \
+RUN apk --update --no-cache add gcc git libffi-dev linux-headers make musl-dev \
     openssl-dev python3-dev && \
     if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi && \
     pip3 install --no-cache-dir --upgrade pip && \
-    pip3 install --no-cache-dir ansible-lint yamllint && \
-    apk del gcc libffi-dev linux-headers make musl-dev openssl-dev && \
+    pip3 install --no-cache-dir yamllint && \
+    pip3 install git+https://github.com/ansible/ansible-lint.git && \
+    apk del gcc git libffi-dev linux-headers make musl-dev openssl-dev && \
     rm -rf /var/cache/*
 
 COPY entrypoint.sh /entrypoint.sh
