@@ -135,14 +135,11 @@
 
 - name: vmware package installation
   become: 'yes'
-  apt:
+  package:
     name: open-vm-tools
     state: present
-    install_recommends: 'no'
   when: ansible_bios_version == "VMWare"
   tags:
-    - apt
-    - dnf
     - packages
     - vmware
 
