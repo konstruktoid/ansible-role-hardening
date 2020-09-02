@@ -25,6 +25,7 @@
     regexp: ^active
     line: active = yes
     create: true
+    mode: 0600
   when: ansible_os_family == "RedHat"
   tags:
     - auditd
@@ -33,10 +34,15 @@
 - name: set Debian audit grub cmdline
   become: 'yes'
   lineinfile:
-    regexp: '^GRUB_CMDLINE_LINUX='
-    line: 'GRUB_CMDLINE_LINUX="{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"'
-    dest: /etc/default/grub
+    line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX {{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"'
+    dest: /etc/default/grub.d/99-hardening-audit.cfg
     state: present
+    create: 'yes'
+    mode: 0755
+    owner: root
+    group: root
+  notify:
+    - update grub
   when: ansible_os_family == "Debian"
   tags:
     - auditd

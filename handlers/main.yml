@@ -99,4 +99,8 @@
   become: 'yes'
   reboot:
     pre_reboot_delay: "{{ 3600 | random(start=1) }}"
+
+- name: update grub
+  become: 'yes'
+  command: update-grub
 ...
