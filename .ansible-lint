@@ -1,3 +1,5 @@
+exclude_paths:
+  - .git/
+  - tests/
 warn_list:
-  - '106'  # Role name {} does not match ``^[a-z][a-z0-9_]+$`` pattern', but Ansible Galaxy still uses them
   - '208'  # File permissions not mentioned', https://github.com/ansible/ansible/issues/56839
