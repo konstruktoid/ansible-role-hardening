@@ -21,6 +21,7 @@
 - include: cron.yml
 - include: ctrlaltdel.yml
 - include: auditd.yml
+- include: apparmor.yml
 - include: disablemod.yml
 - include: aide.yml
 - include: users.yml

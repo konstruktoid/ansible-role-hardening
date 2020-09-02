@@ -66,11 +66,12 @@ packages_debian:
   - apparmor-utils
   - audispd-plugins
   - auditd
+  - cracklib-runtime
   - debsums
   - gnupg2
   - haveged
   - libpam-apparmor
-  - libpam-cracklib
+  - libpam-pwquality
   - libpam-tmpdir
   - needrestart
   - openssh-server
@@ -85,6 +86,7 @@ packages_redhat:
   - audit
   - gnupg2
   - haveged
+  - libpam-pwquality
   - openssh-server
   - needrestart
   - postfix
