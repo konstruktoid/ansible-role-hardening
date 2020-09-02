@@ -3,10 +3,7 @@
 echo "# Running ansible-lint"
 ansible-lint --version
 
-mkdir -p /etc/ansible/roles/
-ln -s "$(pwd)" /etc/ansible/roles/konstruktoid.hardening
-
-if ! ansible-lint -vv ./tests/test.yml; then
+if ! ansible-lint -vv .; then
     echo 'ansible-lint failed.'
     exit 1
 fi

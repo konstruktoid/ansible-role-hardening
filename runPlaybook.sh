@@ -7,7 +7,7 @@ function lint {
   echo "Linting."
   set -x
 
-  if ! ansible-lint -v tests/test.yml; then
+  if ! ansible-lint -vv .; then
       echo 'ansible-lint failed.'
       exit 1
   fi
@@ -49,12 +49,14 @@ if [ "$1" = "prep" ]; then
   vagrant box update --insecure || true
   vagrant destroy --force
 
+  set -x
   echo "Copying the role."
   sudo mkdir -p /etc/ansible/roles/konstruktoid.hardening/
   sudo cp -R . /etc/ansible/roles/konstruktoid.hardening/
   sudo rm /etc/ansible/roles/konstruktoid.hardening/{*.log,*.html,*.list}
   lint
   echo "Finished basic preparations. Exiting."
+  set +x
   exit
 fi
 
