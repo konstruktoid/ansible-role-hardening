@@ -155,11 +155,12 @@ packages_debian:
   - apparmor-utils
   - audispd-plugins
   - auditd
+  - cracklib-runtime
   - debsums
   - gnupg2
   - haveged
   - libpam-apparmor
-  - libpam-cracklib
+  - libpam-pwquality
   - libpam-tmpdir
   - needrestart
   - openssh-server
@@ -187,6 +188,7 @@ packages_redhat:
   - audit
   - haveged
   - gnugpg2
+  - libpam-pwquality
   - openssh-server
   - needrestart
   - postfix
@@ -325,6 +327,7 @@ at <https://github.com/konstruktoid/ansible-role-hardening/blob/master/defaults/
 ├── tasks
 │   ├── adduser.yml
 │   ├── aide.yml
+│   ├── apparmor.yml
 │   ├── apport.yml
 │   ├── auditd.yml
 │   ├── cron.yml
@@ -420,7 +423,7 @@ at <https://github.com/konstruktoid/ansible-role-hardening/blob/master/defaults/
     ├── inventory
     └── test.yml
 
-26 directories, 95 files
+26 directories, 96 files
 ```
 
 ## Dependencies
