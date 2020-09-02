@@ -119,6 +119,6 @@
         - 'Overwrite /var/lib/aide/aide.db [yN]?': 'y'
   when: ansible_os_family == "Debian" and not ubuaidedb.stat.exists
   tags:
-    - skip_ansible_lint
     - aide
+    - skip_ansible_lint
 ...
