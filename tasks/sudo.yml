@@ -70,4 +70,15 @@
     create: 'yes'
   tags:
     - sudo
+
+- name: configure su group
+  become: 'yes'
+  lineinfile:
+    line: "auth required pam_wheel.so use_uid group=sudo"
+    dest: /etc/pam.d/su
+    mode: 0644
+    state: present
+    create: 'yes'
+  tags:
+    - sudo
 ...
