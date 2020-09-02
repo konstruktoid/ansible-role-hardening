@@ -1,0 +1,50 @@
+---
+- name: set Debian family apparmor grub cmdline
+  become: 'yes'
+  lineinfile:
+    line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX apparmor=1 security=apparmor"'
+    dest: /etc/default/grub.d/99-hardening-apparmor.cfg
+    state: present
+    create: 'yes'
+    mode: 0755
+    owner: root
+    group: root
+  when: ansible_os_family == "Debian"
+  notify:
+    - update grub
+  tags:
+    - apparmor
+    - grub
+
+- name: configure pam_apparmor
+  become: 'yes'
+  lineinfile:
+    line: 'session optional pam_apparmor.so order=user,group,default'
+    dest: /etc/pam.d/apparmor
+    state: present
+    create: 'yes'
+    mode: 0755
+    owner: root
+    group: root
+  when: ansible_os_family == "Debian"
+  notify:
+    - update grub
+  tags:
+    - apparmor
+    - grub
+
+- name: enforce apparmor profiles
+  become: 'yes'
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  command: find /etc/apparmor.d/ -maxdepth 1 -type f -exec aa-enforce {} \;
+  when: ansible_os_family == "Debian"
+
+- name: enable apparmor
+  become: 'yes'
+  systemd:
+    name: apparmor
+    enabled: 'yes'
+    state: started
+  when: ansible_os_family == "Debian"
+...
