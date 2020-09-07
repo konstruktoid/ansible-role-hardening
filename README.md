@@ -28,8 +28,8 @@ auditd_mode: 1
 Auditd failure mode. 0=silent 1=printk 2=panic.
 
 ```yaml
-grub_audit_backlog_cmdline: "audit_backlog_limit=8192"
-grub_audit_cmdline: "audit=1"
+grub_audit_backlog_cmdline: audit_backlog_limit=8192
+grub_audit_cmdline: audit=1
 ```
 
 Enable `auditd` at boot using Grub.
@@ -37,9 +37,9 @@ Enable `auditd` at boot using Grub.
 ### DNS
 
 ```yaml
-dns: "127.0.0.1"
+dns: 127.0.0.1
 dnssec: allow-downgrade
-fallback_dns: "1.1.1.1 9.9.9.9"
+fallback_dns: 1.1.1.1 9.9.9.9
 ```
 
 IPv4 and IPv6 addresses to use as system and fallback DNS servers.
@@ -113,8 +113,8 @@ Blocked kernel network modules.
 ### NTP
 
 ```yaml
-ntp: "0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org"
-fallback_ntp: "2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org"
+ntp: 0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org
+fallback_ntp: 2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org
 ```
 
 NTP server host names or IP addresses. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdtimesyncdconf)
@@ -236,16 +236,46 @@ for use when `ansible_distribution == "RedHat"`.
 sshd_admin_net:
   - 192.168.0.0/24
   - 192.168.1.0/24
+sshd_accept_env: LANG LC_*
 sshd_allow_agent_forwarding: 'no'
-sshd_allow_tcp_forwarding: 'no'
 sshd_allow_groups: sudo
+sshd_allow_tcp_forwarding: 'no'
 sshd_authentication_methods: any
+sshd_banner: /etc/issue.net
+sshd_challenge_response_authentication: 'no'
+sshd_ciphers: chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr
+sshd_client_alive_count_max: 0
+sshd_client_alive_interval: 300
+sshd_compression: 'no'
+sshd_gssapi_authentication: 'no'
+sshd_hostbased_authentication: 'no'
+sshd_ignore_user_known_hosts: 'yes'
+sshd_kerberos_authentication: 'no'
+sshd_kex_algorithms: curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
 sshd_log_level: VERBOSE
+sshd_login_grace_time: 20
+sshd_macs: hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
 sshd_max_auth_tries: 3
 sshd_max_sessions: 3
+sshd_max_startups: 10:30:60
 sshd_password_authentication: 'no'
+sshd_permit_empty_passwords: 'no'
+sshd_permit_root_login: 'no'
+sshd_permit_user_environment: 'no'
 sshd_port: 22
+sshd_print_last_log: 'yes'
+sshd_print_motd: 'no'
+sshd_rekey_limit: 512M 1h
+sshd_strict_modes: 'yes'
+sshd_subsystem: sftp internal-sftp
+sshd_tcp_keep_alive: 'no'
+sshd_use_dns: 'no'
+sshd_use_pam: 'yes'
+sshd_x11_forwarding: 'no'
 ```
+
+For a explanation of the options not described below, please read
+[https://man.openbsd.org/sshd_config](https://man.openbsd.org/sshd_config).
 
 Only the network(s) defined in `sshd_admin_net` are allowed to
 connect to `sshd_port`. Note that additional rules need to be set up in order
