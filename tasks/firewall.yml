@@ -97,6 +97,34 @@
   tags:
     - ufw
 
+- name: allow loopback traffic in
+  ufw:
+    rule: allow
+    interface: lo
+    direction: in
+  when: ansible_os_family == "Debian"
+  tags:
+    - ufw
+
+- name: allow loopback traffic out
+  ufw:
+    rule: allow
+    interface: lo
+    direction: out
+  when: ansible_os_family == "Debian"
+  tags:
+    - ufw
+
+- name: deny rpcbind ufw
+  become: 'yes'
+  ufw:
+    rule: deny
+    port: "111"
+  when: ansible_os_family == "Debian"
+  tags:
+    - ufw
+    - rpcbind
+
 - name: allow ssh ufw
   become: 'yes'
   ufw:
@@ -110,6 +138,17 @@
   tags:
     - ufw
     - ssh
+
+- name: deny loopback network traffic
+  ufw:
+    rule: deny
+    src: '{{ item }}'
+  loop:
+    - 127.0.0.0/8
+    - ::1
+  when: ansible_os_family == "Debian"
+  tags:
+    - ufw
 
 # https://github.com/ansible/ansible/issues/45446
 - name: enable ufw and set default deny incoming
