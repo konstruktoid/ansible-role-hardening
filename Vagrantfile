@@ -66,9 +66,12 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "fedora" do |fedora|
-    fedora.vm.box = "bento/fedora-31"
+    fedora.vm.box = "bento/fedora-32"
     fedora.ssh.insert_key = true
     fedora.vm.network "private_network", ip: "10.2.3.44"
+    fedora.vm.provider "virtualbox" do |f|
+      f.default_nic_type = "virtio"
+    end
     fedora.vm.hostname = "fedora"
     fedora.vm.provision "shell",
       inline: "dnf install -y ansible"
