@@ -116,7 +116,7 @@ sshd_banner: /etc/issue.net
 sshd_challenge_response_authentication: 'no'
 sshd_ciphers: chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr
 sshd_client_alive_count_max: 3
-sshd_client_alive_interval: 300
+sshd_client_alive_interval: 200
 sshd_compression: 'no'
 sshd_gssapi_authentication: 'no'
 sshd_hostbased_authentication: 'no'
