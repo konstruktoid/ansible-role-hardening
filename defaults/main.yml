@@ -72,6 +72,7 @@ packages_debian:
   - gnupg2
   - haveged
   - libpam-apparmor
+  - libpam-modules
   - libpam-pwquality
   - libpam-tmpdir
   - needrestart
