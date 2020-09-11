@@ -247,6 +247,7 @@
 -a always,exit -S all -F path=/usr/bin/chfn -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/bin/chsh -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
+-a always,exit -S all -F path=/usr/bin/dotlockfile -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/bin/expiry -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/bin/locate -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
@@ -269,8 +270,6 @@
 -a always,exit -S all -F path=/usr/bin/wall -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/bin/write -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/lib/dbus-1.0/dbus-daemon-launch-helper -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
--a always,exit -S all -F path=/usr/lib/dbus-1.0/dbus-daemon-launch-helper -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
--a always,exit -S all -F path=/usr/lib/eject/dmcrypt-get-device -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/lib/eject/dmcrypt-get-device -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/lib/openssh/ssh-keysign -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/lib/policykit-1/polkit-agent-helper-1 -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
@@ -278,14 +277,18 @@
 -a always,exit -S all -F path=/usr/lib/snapd/snap-confine -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/lib/x86_64-linux-gnu/utempter/utempter -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/libexec/abrt-action-install-debuginfo-to-abrt-cache -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
+-a always,exit -S all -F path=/usr/libexec/dbus-1/dbus-daemon-launch-helper -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/libexec/pt_chown -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/libexec/utempter/utempter -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/sbin/fping -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/sbin/fping6 -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/sbin/grub2-set-bootflag -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
+-a always,exit -S all -F path=/usr/sbin/mount.cifs -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/sbin/netreport -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
+-a always,exit -S all -F path=/usr/sbin/pam_extrausers_chkpwd -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/sbin/pam_timestamp_check -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
+-a always,exit -S all -F path=/usr/sbin/pam-tmpdir-helper -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/sbin/postdrop -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/sbin/postqueue -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/sbin/restorecon -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
@@ -295,6 +298,7 @@
 -a always,exit -S all -F path=/usr/sbin/userhelper -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/sbin/usernetct -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 -a always,exit -S all -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
+-a always,exit -S all -F path=/usr/sbin/vlock-main -F perm=x -F auid>=1000 -F auid!=-1 -k privileged
 
 #
 -w /var/log/btmp -p wa -k session
