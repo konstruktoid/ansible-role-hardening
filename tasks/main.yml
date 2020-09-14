@@ -39,4 +39,5 @@
 - include: motdnews.yml
 - include: sudo.yml
 - include: extras.yml
+- include: post.yml
 ...

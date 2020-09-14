@@ -1,0 +1,22 @@
+---
+- name: run all notified handlers
+  meta: flush_handlers
+
+- name: find grub config files
+  become: 'yes'
+  find:
+    paths: /boot
+    patterns: "*.cfg,grubenv"
+    recurse: 'yes'
+  register: grub_cfg
+  tags:
+    - grub
+
+- name: set grub config permissions
+  become: 'yes'
+  file:
+    path: "{{ item.path }}"
+    mode: 0400
+  with_items:
+    - "{{ grub_cfg.files }}"
+...
