@@ -22,10 +22,31 @@ ubuntu/focal64
 ### auditd
 
 ```yaml
+auditd_action_mail_acct: root
+auditd_admin_space_left_action: suspend
+auditd_max_log_file_action: keep_logs
 auditd_mode: 1
+auditd_space_left_action: email
 ```
 
-Auditd failure mode. 0=silent 1=printk 2=panic.
+`auditd_action_mail_acct` should be a valid email address or alias.
+
+`auditd_admin_space_left_action` defines what action to take when the system has
+detected that it is low on disk space. `suspend` will cause the audit daemon to
+stop writing records to the disk.
+
+`auditd_max_log_file_action` sets what action to take when the system has
+detected that the max file size limit has been reached. `keep_logs` causes the
+audit daemon to rotate the logs.
+
+`auditd_space_left_action` tells the system what action to take when the system
+has detected that it is low on disk space. `email` means that it will send a
+warning to the email account specified in `action_mail_acct` as well as
+sending the message to syslog.
+
+`auditd_mode` sets `auditd` failure mode, 0=silent 1=printk 2=panic.
+
+[auditd.conf(5)](https://man7.org/linux/man-pages/man5/auditd.conf.5.html)
 
 ```yaml
 grub_audit_backlog_cmdline: audit_backlog_limit=8192
@@ -382,6 +403,7 @@ at <https://github.com/konstruktoid/ansible-role-hardening/blob/master/defaults/
 │   ├── password.yml
 │   ├── path.yml
 │   ├── pkgupdate.yml
+│   ├── post.yml
 │   ├── postfix.yml
 │   ├── pre.yml
 │   ├── prelink.yml
@@ -453,7 +475,7 @@ at <https://github.com/konstruktoid/ansible-role-hardening/blob/master/defaults/
     ├── inventory
     └── test.yml
 
-26 directories, 96 files
+26 directories, 97 files
 ```
 
 ## Dependencies

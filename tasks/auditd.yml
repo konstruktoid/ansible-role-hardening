@@ -59,6 +59,53 @@
   tags:
     - auditd
 
+- name: set audit action_mail_acct
+  become: 'yes'
+  lineinfile:
+    regexp: "^action_mail_acct"
+    line: "action_mail_acct = {{ auditd_action_mail_acct }}"
+    dest: /etc/audit/auditd.conf
+    mode: 0640
+    state: present
+    create: 'no'
+  tags:
+    - auditd
+
+- name: set audit admin_space_left_action
+  become: 'yes'
+  lineinfile:
+    regexp: "^admin_space_left_action"
+    line: "admin_space_left_action = {{ auditd_admin_space_left_action }}"
+    dest: /etc/audit/auditd.conf
+    mode: 0640
+    state: present
+    create: 'no'
+  tags:
+    - auditd
+- name: set audit max_log_file_action
+  become: 'yes'
+  lineinfile:
+    regexp: "^max_log_file_action"
+    line: "max_log_file_action = {{ auditd_max_log_file_action }}"
+    dest: /etc/audit/auditd.conf
+    mode: 0640
+    state: present
+    create: 'no'
+  tags:
+    - auditd
+
+- name: set audit space_left_action
+  become: 'yes'
+  lineinfile:
+    regexp: "^space_left_action"
+    line: "space_left_action = {{ auditd_space_left_action }}"
+    dest: /etc/audit/auditd.conf
+    mode: 0640
+    state: present
+    create: 'no'
+  tags:
+    - auditd
+
 - name: audit.rules
   become: 'yes'
   template:
