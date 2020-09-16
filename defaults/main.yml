@@ -104,7 +104,7 @@ packages_redhat:
 packages_ubuntu:
   - fwupd
   - secureboot-db
-random_ack_limit: "{{ 1000000 | random(start=1000) }}"
+random_ack_limit: "{{ 2147483647 | random(start=10000) }}"
 reboot_ubuntu: false
 redhat_rpm_key:
   - 567E347AD0044ADE55BA8A5F199E2F91FD431D51

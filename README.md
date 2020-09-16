@@ -225,7 +225,7 @@ Packages to be installed on a RedHat OS family host.
 ### tcp_challenge_ack_limit kernel configuration
 
 ```yaml
-random_ack_limit: "{{ 1000000 | random(start=1000) }}"
+random_ack_limit: "{{ 2147483647 | random(start=10000) }}"
 ```
 
 net.ipv4.tcp_challenge_ack_limit, see
