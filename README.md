@@ -374,7 +374,7 @@ at <https://github.com/konstruktoid/ansible-role-hardening/blob/master/defaults/
 ├── provision
 │   └── setup.sh
 ├── renovate.json
-├── runPlaybook.sh
+├── runTests.sh
 ├── tasks
 │   ├── adduser.yml
 │   ├── aide.yml
@@ -502,10 +502,9 @@ ansible-playbook tests/test.yml --extra-vars "sshd_admin_net=192.168.1.0/24" \
 The repository contains a [Vagrant](https://www.vagrantup.com/ "Vagrant")
 configuration file, which will run the `konstruktoid.hardening` role.
 
-The [runPlaybook.sh](runPlaybook.sh) script may be used to automatically update
-and run the role on all configured Vagrant boxes. After the role has been
-applied, [Lynis](https://github.com/CISOFy/lynis) and various [bats tests](https://github.com/konstruktoid/hardening/tree/master/tests)
-will be downloaded and the configurationen tested.
+The [runTests.sh](runTests.sh) script may be used to automatically update
+current Vagrant boxes and then use [Ansible Molecule](https://molecule.readthedocs.io)
+to test the playbook.
 
 To run a [OpenSCAP](https://github.com/ComplianceAsCode/content) test on a
 Fedora host using the included Vagrantfile follow the instructions on

@@ -1,6 +1,6 @@
 ---
 dependency:
-  name: galaxy
+  enabled: False
 driver:
   name: vagrant
   provider:
@@ -10,12 +10,20 @@ provisioner:
   inventory:
     host_vars:
       bionic:
+        random_ack_limit: 10000
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
       buster:
+        ansible_python_interpreter: "/usr/bin/python3"
+        random_ack_limit: 10000
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
       fedora:
+        random_ack_limit: 10000
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
+      focal:
+        random_ack_limit: 10000
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
 platforms:
@@ -23,23 +31,54 @@ platforms:
     box: ubuntu/bionic64
   - name: buster
     box: bento/debian-10
-  - name: fedora
-    box: bento/fedora-32
-# The following platform fails due molecule configuration issues:
-#
+  - name: focal
+    box: bento/ubuntu-20.04
+# The following platforms fail due to molecule or vagrant issues
 #  - name: centos
 #    box: centos/8
-#    provider_options:
-#      vbguest.installer_options: "{ allow_kernel_upgrade: true }"
-#      default_nic_type: "82543GC"
-#  - name: focal
-#    box: ubuntu/focal64
-#    provider_raw_config_args:
-#      - "customize [ 'modifyvm', :id, '--uart1', '0x3F8', '4']"
-#      - "customize [ 'modifyvm', :id, '--uartmode1', 'file', File::NULL]"
+#  - name: fedora
+#    box: bento/fedora-32
 verifier:
   name: ansible
 lint: |
   set -e
   ansible-lint .
   yamllint -d "{extends: default, rules: {line-length: {level: warning}}}" .
+scenario:
+  name: default
+  create_sequence:
+    - dependency
+    - create
+    - prepare
+  check_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - create
+    - prepare
+    - converge
+    - check
+    - destroy
+  converge_sequence:
+    - dependency
+    - create
+    - prepare
+    - converge
+  destroy_sequence:
+    - dependency
+    - cleanup
+    - destroy
+  test_sequence:
+    - dependency
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    # - idempotence disabled due to firewall resets, random sysctl settings et al
+    - side_effect
+    - verify
+    - cleanup
+    - destroy

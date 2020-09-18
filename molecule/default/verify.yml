@@ -1,9 +1,195 @@
 ---
-# This is an example playbook to execute Ansible tests.
-
 - name: Verify
   hosts: all
+  any_errors_fatal: true
+  vars:
+    auditd_action_mail_acct: root
+    auditd_admin_space_left_action: suspend
+    auditd_max_log_file_action: keep_logs
+    auditd_mode: 1
+    auditd_space_left_action: email
+    sshd_allow_agent_forwarding: 'no'
+    sshd_allow_tcp_forwarding: 'no'
+    sshd_authentication_methods: any
+    sshd_banner: /etc/issue.net
+    sshd_challenge_response_authentication: 'no'
+    sshd_ciphers: chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr
+    sshd_client_alive_count_max: 3
+    sshd_client_alive_interval: 200
+    sshd_compression: 'no'
+    sshd_gssapi_authentication: 'no'
+    sshd_hostbased_authentication: 'no'
+    sshd_ignore_user_known_hosts: 'yes'
+    sshd_kerberos_authentication: 'no'
+    sshd_kex_algorithms: curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+    sshd_log_level: VERBOSE
+    sshd_login_grace_time: 20
+    sshd_macs: hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
+    sshd_max_auth_tries: 3
+    sshd_max_sessions: 3
+    sshd_max_startups: 10:30:60
+    sshd_password_authentication: 'no'
+    sshd_permit_empty_passwords: 'no'
+    sshd_permit_root_login: 'no'
+    sshd_permit_user_environment: 'no'
+    sshd_port: 22
+    sshd_print_last_log: 'yes'
+    sshd_print_motd: 'no'
+    sshd_rekey_limit: 512M 1h
+    sshd_strict_modes: 'yes'
+    sshd_subsystem: sftp internal-sftp
+    sshd_tcp_keep_alive: 'no'
+    sshd_use_dns: 'no'
+    sshd_use_pam: 'yes'
+    sshd_x11_forwarding: 'no'
+
   tasks:
-  - name: Example assertion
-    assert:
-      that: true
+    - name: verify auditd configuration
+      become: 'yes'
+      shell: grep "^{{ item }}$" /etc/audit/auditd.conf
+      register: auditd_conf
+      failed_when: auditd_conf.rc != 0
+      with_items:
+        - action_mail_acct = {{ auditd_action_mail_acct }}
+        - admin_space_left_action = {{ auditd_admin_space_left_action }}
+        - max_log_file_action = {{ auditd_max_log_file_action }}
+        - space_left_action = {{ auditd_space_left_action }}
+
+    - name: stat /boot/grub/grub.cfg
+      stat:
+        path: '/boot/grub/grub.cfg'
+      register: perm_grub_cfg
+
+    - name: assert /boot/grub/grub.cfg permissions
+      assert:
+        that:
+          - perm_grub_cfg.stat.mode == "0400"
+        success_msg: "{{ perm_grub_cfg.stat.path }} has correct permissions: {{ perm_grub_cfg.stat.mode }}"
+        fail_msg: "{{ perm_grub_cfg.stat.path }} permissions are incorrect: {{ perm_grub_cfg.stat.mode }}"
+
+    - name: stat /etc/ssh/sshd_config
+      stat:
+        path: '/etc/ssh/sshd_config'
+      register: perm_sshd_config
+
+    - name: assert /etc/ssh/sshd_config permissions
+      assert:
+        that:
+          - perm_sshd_config.stat.mode == "0600"
+        success_msg: "{{ perm_sshd_config.stat.path }} has correct permissions: {{ perm_sshd_config.stat.mode }}"
+        fail_msg: "{{ perm_sshd_config.stat.path }} permissions are incorrect: {{ perm_sshd_config.stat.mode }}"
+
+    - name: verify sshd_config PermitRootLogin configuration
+      become: 'yes'
+      shell: grep "^{{ item }}$" /etc/ssh/sshd_config
+      register: sshd_config
+      failed_when: sshd_config.rc == 0
+      with_items:
+        - PermitRootLogin yes
+
+    - name: verify sshd_config configuration
+      become: 'yes'
+      shell: grep "^{{ item }}$" /etc/ssh/sshd_config
+      register: sshd_config
+      failed_when: sshd_config.rc != 0
+      with_items:
+        - AllowGroups vagrant sudo
+        - AllowAgentForwarding {{ sshd_allow_agent_forwarding }}
+        - AllowTcpForwarding {{ sshd_allow_tcp_forwarding }}
+        - AuthenticationMethods {{ sshd_authentication_methods }}
+        - Banner {{ sshd_banner }}
+        - ChallengeResponseAuthentication {{ sshd_challenge_response_authentication }}
+        - Ciphers {{ sshd_ciphers }}
+        - ClientAliveCountMax {{ sshd_client_alive_count_max|int }}
+        - ClientAliveInterval {{ sshd_client_alive_interval|int }}
+        - Compression {{ sshd_compression }}
+        - GSSAPIAuthentication {{ sshd_gssapi_authentication }}
+        - HostbasedAuthentication {{ sshd_hostbased_authentication }}
+        - IgnoreUserKnownHosts {{ sshd_ignore_user_known_hosts }}
+        - KerberosAuthentication {{ sshd_kerberos_authentication }}
+        - KexAlgorithms {{ sshd_kex_algorithms }}
+        - LogLevel {{ sshd_log_level }}
+        - LoginGraceTime {{ sshd_login_grace_time|int }}
+        - Macs {{ sshd_macs }}
+        - MaxAuthTries {{ sshd_max_auth_tries|int }}
+        - MaxSessions {{ sshd_max_sessions|int }}
+        - MaxStartups {{ sshd_max_startups }}
+        - PasswordAuthentication {{ sshd_password_authentication }}
+        - PermitEmptyPasswords {{ sshd_permit_empty_passwords }}
+        - PermitRootLogin {{ sshd_permit_root_login }}
+        - PermitUserEnvironment {{ sshd_permit_user_environment }}
+        - Port {{ sshd_port|int }}
+        - PrintLastLog {{ sshd_print_last_log }}
+        - PrintMotd {{ sshd_print_motd }}
+        - RekeyLimit {{ sshd_rekey_limit }}
+        - StrictModes {{ sshd_strict_modes }}
+        - Subsystem {{ sshd_subsystem }}
+        - TCPKeepAlive {{ sshd_tcp_keep_alive }}
+        - UseDNS {{ sshd_use_dns }}
+        - UsePAM {{ sshd_use_pam }}
+        - X11Forwarding {{ sshd_x11_forwarding }}
+
+    - name: verify sysctl.conf configuration
+      become: 'yes'
+      shell: grep "^{{ item }}$" /etc/sysctl.conf
+      register: sysctl_conf
+      failed_when: sysctl_conf.rc != 0
+      with_items:
+        - fs.protected_hardlinks = 1
+        - fs.protected_symlinks = 1
+        - fs.suid_dumpable = 0
+        - kernel.core_uses_pid = 1
+        - kernel.dmesg_restrict = 1
+        - kernel.kptr_restrict = 2
+        - kernel.panic = 60
+        - kernel.panic_on_oops = 60
+        - kernel.perf_event_paranoid = 2
+        - kernel.randomize_va_space = 2
+        - kernel.sysrq = 0
+        - kernel.unprivileged_bpf_disabled = 1
+        - kernel.yama.ptrace_scope = 2
+        - net.core.bpf_jit_harden = 2
+        - net.ipv4.conf.all.accept_redirects = 0
+        - net.ipv4.conf.all.accept_source_route = 0
+        - net.ipv4.conf.all.log_martians = 1
+        - net.ipv4.conf.all.rp_filter = 1
+        - net.ipv4.conf.all.secure_redirects = 0
+        - net.ipv4.conf.all.send_redirects = 0
+        - net.ipv4.conf.all.shared_media = 0
+        - net.ipv4.conf.default.accept_redirects = 0
+        - net.ipv4.conf.default.accept_source_route = 0
+        - net.ipv4.conf.default.log_martians = 1
+        - net.ipv4.conf.default.rp_filter = 1
+        - net.ipv4.conf.default.secure_redirects = 0
+        - net.ipv4.conf.default.send_redirects = 0
+        - net.ipv4.conf.default.shared_media = 0
+        - net.ipv4.icmp_echo_ignore_broadcasts = 1
+        - net.ipv4.icmp_ignore_bogus_error_responses = 1
+        - net.ipv4.ip_forward = 0
+        - net.ipv4.tcp_challenge_ack_limit = {{ random_ack_limit }}
+        - net.ipv4.tcp_invalid_ratelimit = 500
+        - net.ipv4.tcp_max_syn_backlog = 20480
+        - net.ipv4.tcp_rfc1337 = 1
+        - net.ipv4.tcp_syn_retries = 5
+        - net.ipv4.tcp_synack_retries = 2
+        - net.ipv4.tcp_syncookies = 1
+        - net.ipv4.tcp_timestamps = 0
+        - net.ipv6.conf.all.accept_ra = 0
+        - net.ipv6.conf.all.accept_redirects = 0
+        - net.ipv6.conf.all.accept_source_route = 0
+        - net.ipv6.conf.all.forwarding = 0
+        - net.ipv6.conf.all.use_tempaddr = 2
+        - net.ipv6.conf.default.accept_ra = 0
+        - net.ipv6.conf.default.accept_ra_defrtr = 0
+        - net.ipv6.conf.default.accept_ra_pinfo = 0
+        - net.ipv6.conf.default.accept_ra_rtr_pref = 0
+        - net.ipv6.conf.default.accept_redirects = 0
+        - net.ipv6.conf.default.accept_source_route = 0
+        - net.ipv6.conf.default.autoconf = 0
+        - net.ipv6.conf.default.dad_transmits = 0
+        - net.ipv6.conf.default.max_addresses = 1
+        - net.ipv6.conf.default.router_solicitations = 0
+        - net.ipv6.conf.default.use_tempaddr = 2
+        - net.netfilter.nf_conntrack_max = 2000000
+        - net.netfilter.nf_conntrack_tcp_loose = 0
+...
