@@ -98,6 +98,7 @@
     - ufw
 
 - name: allow loopback traffic in
+  become: 'yes'
   ufw:
     rule: allow
     interface: lo
@@ -107,6 +108,7 @@
     - ufw
 
 - name: allow loopback traffic out
+  become: 'yes'
   ufw:
     rule: allow
     interface: lo
@@ -140,6 +142,7 @@
     - ssh
 
 - name: deny loopback network traffic
+  become: 'yes'
   ufw:
     rule: deny
     src: '{{ item }}'
