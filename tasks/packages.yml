@@ -12,7 +12,7 @@
     state: directory
     owner: root
     group: root
-    mode: '0755'
+    mode: 0755
     recurse: 'yes'
   when: '"needrestart" in packages_merged'
   tags:
@@ -32,7 +32,7 @@
     create: 'yes'
     owner: root
     group: root
-    mode: '0644'
+    mode: 0644
   when: needrestart_directory.stat.exists
 
 - name: debian family package installation
