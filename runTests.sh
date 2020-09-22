@@ -16,6 +16,23 @@ else
   echo "Vagrant and Ansible Molecule installed."
 fi
 
+function lint {
+  echo "Linting."
+  set -x
+
+  if ! ansible-lint -vv .; then
+      echo 'ansible-lint failed.'
+      exit 1
+  fi
+
+  if ! find ./ -type f -name '*.y*ml' ! -name '.*' -print0 | \
+    xargs -0 yamllint -d "{extends: default, rules: {line-length: {level: warning}}}"; then
+      echo 'yamllint failed.'
+      exit 1
+  fi
+  set +x
+}
+
 echo "Starting basic preparations."
 vagrant box update --insecure || true
 
@@ -32,6 +49,8 @@ if [ -z "${ANSIBLE_V}" ]; then
 else
   pip3 install ansible=="${ANSIBLE_V}"
 fi
+
+lint
 
 ANSIBLE_V0="$(ansible --version | grep '^ansible' | awk '{print $NF}')"
 molecule test || exit 1
