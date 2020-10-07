@@ -54,6 +54,12 @@
     name: sshd
     state: restarted
 
+- name: restart postfix
+  become: 'yes'
+  service:
+    name: postfix
+    state: restarted
+
 - name: apt-get autoremove
   become: 'yes'
   apt:
@@ -80,7 +86,7 @@
     enabled: 'no'
     state: stopped
 
-- name: dnf clean
+- name: dnf autoremove
   dnf:
     autoremove: 'yes'
   when: ansible_os_family == "RedHat"
