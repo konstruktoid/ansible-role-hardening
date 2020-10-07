@@ -1,0 +1,41 @@
+---
+sshd_accept_env: LANG LC_*
+sshd_admin_net:
+  - 192.168.0.0/24
+  - 192.168.1.0/24
+sshd_allow_agent_forwarding: 'no'
+sshd_allow_groups: sudo
+sshd_allow_tcp_forwarding: 'no'
+sshd_authentication_methods: any
+sshd_banner: /etc/issue.net
+sshd_challenge_response_authentication: 'no'
+sshd_ciphers: chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr
+sshd_client_alive_count_max: 3
+sshd_client_alive_interval: 200
+sshd_compression: 'no'
+sshd_gssapi_authentication: 'no'
+sshd_hostbased_authentication: 'no'
+sshd_ignore_user_known_hosts: 'yes'
+sshd_kerberos_authentication: 'no'
+sshd_kex_algorithms: curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+sshd_log_level: VERBOSE
+sshd_login_grace_time: 20
+sshd_macs: hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
+sshd_max_auth_tries: 3
+sshd_max_sessions: 3
+sshd_max_startups: 10:30:60
+sshd_password_authentication: 'no'
+sshd_permit_empty_passwords: 'no'
+sshd_permit_root_login: 'no'
+sshd_permit_user_environment: 'no'
+sshd_port: 22
+sshd_print_last_log: 'yes'
+sshd_print_motd: 'no'
+sshd_rekey_limit: 512M 1h
+sshd_strict_modes: 'yes'
+sshd_subsystem: sftp internal-sftp
+sshd_tcp_keep_alive: 'no'
+sshd_use_dns: 'no'
+sshd_use_pam: 'yes'
+sshd_x11_forwarding: 'no'
+...

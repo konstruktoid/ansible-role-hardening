@@ -1,0 +1,62 @@
+---
+system_upgrade: 'yes'
+packages_blocklist:
+  - apport*
+  - autofs
+  - avahi*
+  - avahi-*
+  - beep
+  - git
+  - pastebinit
+  - popularity-contest
+  - rpcbind
+  - rsh*
+  - rsync
+  - talk*
+  - telnet*
+  - tftp*
+  - whoopsie
+  - xinetd
+  - yp-tools
+  - ypbind
+packages_debian:
+  - acct
+  - aide-common
+  - apparmor-profiles
+  - apparmor-utils
+  - audispd-plugins
+  - auditd
+  - cracklib-runtime
+  - debsums
+  - gnupg2
+  - haveged
+  - libpam-apparmor
+  - libpam-modules
+  - libpam-pwquality
+  - libpam-tmpdir
+  - needrestart
+  - openssh-server
+  - postfix
+  - rkhunter
+  - rsyslog
+  - tcpd
+  - vlock
+packages_redhat:
+  - aide
+  - audispd-plugins
+  - audit
+  - gnupg2
+  - haveged
+  - libpam-pwquality
+  - openssh-server
+  - needrestart
+  - postfix
+  - psacct
+  - rkhunter
+  - rsyslog
+  - tcp_wrappers
+  - vlock
+packages_ubuntu:
+  - fwupd
+  - secureboot-db
+...

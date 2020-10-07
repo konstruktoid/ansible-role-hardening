@@ -1,0 +1,32 @@
+---
+fs_modules_blocklist:
+  - cramfs
+  - freevxfs
+  - hfs
+  - hfsplus
+  - jffs2
+  - squashfs
+  - udf
+  - vfat
+misc_modules_blocklist:
+  - bluetooth
+  - bnep
+  - btusb
+  - cpia2
+  - firewire-core
+  - floppy
+  - n_hdlc
+  - net-pf-31
+  - pcspkr
+  - soundcore
+  - thunderbolt
+  - usb-midi
+  - usb-storage
+  - uvcvideo
+  - v4l2_common
+net_modules_blocklist:
+  - dccp
+  - sctp
+  - rds
+  - tipc
+...

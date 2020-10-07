@@ -1,0 +1,9 @@
+---
+auditd_action_mail_acct: root
+auditd_admin_space_left_action: suspend
+auditd_max_log_file_action: keep_logs
+auditd_mode: 1
+auditd_space_left_action: email
+grub_audit_backlog_cmdline: audit_backlog_limit=8192
+grub_audit_cmdline: audit=1
+...
