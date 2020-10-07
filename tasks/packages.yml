@@ -5,6 +5,12 @@
   tags:
     - packages
 
+- name: pre stat needrestart configuration directory
+  become: 'yes'
+  stat:
+    path: /etc/needrestart/conf.d
+  register: needrestart_directory_created
+
 - name: create needrestart directory
   become: 'yes'
   file:
@@ -14,7 +20,7 @@
     group: root
     mode: 0755
     recurse: 'yes'
-  when: '"needrestart" in packages_merged'
+  when: ("needrestart" in packages_merged) and not needrestart_directory_created.stat.exists
   tags:
     - packages
 
@@ -23,6 +29,15 @@
   stat:
     path: /etc/needrestart/conf.d
   register: needrestart_directory
+
+- name: get needrestart restart value
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  command: grep -Rqo "$nrconf{restart} = 'l';" /etc/needrestart/conf.d/
+  register: needrestart_restart_set
+  when: needrestart_directory.stat.exists
+  changed_when: needrestart_restart_set.rc != 0
+  failed_when: needrestart_restart_set.rc > 1
 
 - name: configure needrestart
   become: 'yes'
@@ -33,7 +48,7 @@
     owner: root
     group: root
     mode: 0644
-  when: needrestart_directory.stat.exists
+  when: needrestart_directory.stat.exists and needrestart_restart_set.rc != 0
 
 - name: debian family package installation
   become: 'yes'
