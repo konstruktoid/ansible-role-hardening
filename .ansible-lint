@@ -1,5 +1,3 @@
 exclude_paths:
   - .git/
   - tests/
-warn_list:
-  - '208'  # File permissions not mentioned', https://github.com/ansible/ansible/issues/56839
