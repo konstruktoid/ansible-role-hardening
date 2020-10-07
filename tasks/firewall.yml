@@ -25,7 +25,7 @@
     state: present
     sysctl_set: 'yes'
     reload: 'yes'
-  when: conntrackliberal.stat.exists
+  when: conntrackliberal.stat.exists and ansible_os_family == "Debian"
   tags:
     - conntrack
     - sysctl
@@ -91,11 +91,14 @@
 
 - name: reset ufw
   become: 'yes'
+  environment:
+    PATH: /usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:/bin
   ufw:
     state: reset
   when: ansible_os_family == "Debian"
   tags:
     - ufw
+    - molecule-idempotence-notest
 
 - name: allow loopback traffic in
   become: 'yes'
@@ -156,6 +159,8 @@
 # https://github.com/ansible/ansible/issues/45446
 - name: enable ufw and set default deny incoming
   become: 'yes'
+  environment:
+    PATH: /usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:/bin
   ufw:
     state: enabled
     direction: incoming
