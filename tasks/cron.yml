@@ -6,10 +6,21 @@
     state: absent
   ignore_errors: true
   with_items:
-    - /etc/cron.deny
     - /etc/at.deny
-    - /etc/cron.allow
+    - /etc/cron.deny
+  tags:
+    - at
+    - cron
+
+- name: clean cron and at
+  become: 'yes'
+  lineinfile:
+    path: "{{ item }}"
+    regexp: "^(?!root).*$"
+    state: absent
+  with_items:
     - /etc/at.allow
+    - /etc/cron.allow
   tags:
     - at
     - cron
@@ -17,14 +28,14 @@
 - name: allow root cron and at
   become: 'yes'
   lineinfile:
+    path: "{{ item }}"
     line: "root"
-    dest: "{{ item }}"
     mode: 0600
     state: present
     create: 'yes'
   with_items:
-    - /etc/cron.allow
     - /etc/at.allow
+    - /etc/cron.allow
   tags:
     - at
     - cron
