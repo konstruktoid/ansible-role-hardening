@@ -117,6 +117,7 @@
     responses:
       Question:
         - 'Overwrite /var/lib/aide/aide.db [yN]?': 'y'
+        - 'Overwrite existing /var/lib/aide/aide.db.new [Yn]?': 'y'
   when: ansible_os_family == "Debian" and not ubuaidedb.stat.exists
   tags:
     - aide
