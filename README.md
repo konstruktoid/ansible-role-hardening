@@ -1,25 +1,47 @@
 # ansible-role-hardening
 
-Ansible role to make a CentOS, Debian, Fedora or Ubuntu server a bit more
-secure, [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
+An [Ansible](https://www.ansible.com/) role to make a CentOS, Debian or Ubuntu
+server a bit more secure,
+[systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
-Requires [Ansible](https://www.ansible.com/) >= 2.8.
+Requires Ansible >= 2.9.
 
-Available on [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
+Available on
+[Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
 
-## Distributions Tested using Vagrant
+## Distribution boxes used by Molecule and Vagrant
 
 ```yaml
+bento/centos-8
 bento/debian-10
-bento/fedora-31
-centos/8
-ubuntu/bionic64
-ubuntu/focal64
+bento/ubuntu-20.04
 ```
+
+## Dependencies
+
+None.
+
+## Example Playbook
+
+```shell
+---
+- hosts: all
+  serial: 50%
+    - { role: konstruktoid.hardening, sshd_admin_net: [10.0.0.0/24] }
+...
+```
+
+## Structure
+
+See [STRUCTURE.md](STRUCTURE.md).
+
+## Role testing
+
+See [TESTING.md](TESTING.md).
 
 ## Role Variables with defaults
 
-### auditd
+### ./defaults/main/auditd.yml
 
 ```yaml
 auditd_action_mail_acct: root
@@ -27,7 +49,11 @@ auditd_admin_space_left_action: suspend
 auditd_max_log_file_action: keep_logs
 auditd_mode: 1
 auditd_space_left_action: email
+grub_audit_backlog_cmdline: audit_backlog_limit=8192
+grub_audit_cmdline: audit=1
 ```
+
+Enable `auditd` at boot using Grub.
 
 `auditd_action_mail_acct` should be a valid email address or alias.
 
@@ -48,14 +74,7 @@ sending the message to syslog.
 
 [auditd.conf(5)](https://man7.org/linux/man-pages/man5/auditd.conf.5.html)
 
-```yaml
-grub_audit_backlog_cmdline: audit_backlog_limit=8192
-grub_audit_cmdline: audit=1
-```
-
-Enable `auditd` at boot using Grub.
-
-### DNS
+### ./defaults/main/dns.yml
 
 ```yaml
 dns: 127.0.0.1
@@ -69,7 +88,31 @@ the server does not support DNSSEC properly, DNSSEC mode is automatically
 disabled. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf)
 option.
 
-### Disabled File System kernel modules
+### ./defaults/main/limits.yml
+
+```yaml
+limit_nofile_hard: 1024
+limit_nofile_soft: 512
+limit_nproc_hard: 1024
+limit_nproc_soft: 512
+```
+
+Maximum number of processes and open files.
+
+### ./defaults/main/misc.yml
+
+```yaml
+reboot_ubuntu: false
+redhat_rpm_key:
+  - 567E347AD0044ADE55BA8A5F199E2F91FD431D51
+  - 47DB287789B21722B6D95DDE5326810137017186
+```
+
+If `reboot_ubuntu: true` an Ubuntu node will be rebooted if required.
+
+`redhat_rpm_key` are [RedHat Product Signing Keys](https://access.redhat.com/security/team/key/)
+
+### ./defaults/main/module_blocklists.yml
 
 ```yaml
 fs_modules_blocklist:
@@ -81,24 +124,6 @@ fs_modules_blocklist:
   - squashfs
   - udf
   - vfat
-```
-
-Blocked file system kernel modules.
-
-### File and Process limits
-
-```yaml
-limit_nofile_hard: 1024
-limit_nofile_soft: 512
-limit_nproc_hard: 1024
-limit_nproc_soft: 512
-```
-
-Maximum number of processes and open files.
-
-### Misc Disabled kernel modules
-
-```yaml
 misc_modules_blocklist:
   - bluetooth
   - bnep
@@ -115,13 +140,6 @@ misc_modules_blocklist:
   - usb-storage
   - uvcvideo
   - v4l2_common
-```
-
-Blocked kernel modules.
-
-### Disabled Network kernel modules
-
-```yaml
 net_modules_blocklist:
   - dccp
   - sctp
@@ -129,21 +147,22 @@ net_modules_blocklist:
   - tipc
 ```
 
-Blocked kernel network modules.
+Blocked kernel modules.
 
-### NTP
+### ./defaults/main/ntp.yml
 
 ```yaml
-ntp: 0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org
 fallback_ntp: 2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org
+ntp: 0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org
 ```
 
 NTP server host names or IP addresses. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdtimesyncdconf)
 option.
 
-### Blocked packages
+### ./defaults/main/packages.yml
 
 ```yaml
+system_upgrade: 'yes'
 packages_blocklist:
   - apport*
   - autofs
@@ -153,6 +172,7 @@ packages_blocklist:
   - git
   - pastebinit
   - popularity-contest
+  - rpcbind
   - rsh*
   - rsync
   - talk*
@@ -162,13 +182,6 @@ packages_blocklist:
   - xinetd
   - yp-tools
   - ypbind
-```
-
-Packages to be removed.
-
-### Recommended packages
-
-```yaml
 packages_debian:
   - acct
   - aide-common
@@ -181,6 +194,7 @@ packages_debian:
   - gnupg2
   - haveged
   - libpam-apparmor
+  - libpam-modules
   - libpam-pwquality
   - libpam-tmpdir
   - needrestart
@@ -190,25 +204,12 @@ packages_debian:
   - rsyslog
   - tcpd
   - vlock
-```
-
-Packages to be installed on a Debian OS family host.
-
-```yaml
-packages_ubuntu:
-  - fwupd
-  - secureboot-db
-```
-
-Packages to be installed on a Ubuntu distribution host.
-
-```yaml
 packages_redhat:
   - aide
   - audispd-plugins
   - audit
+  - gnupg2
   - haveged
-  - gnugpg2
   - libpam-pwquality
   - openssh-server
   - needrestart
@@ -218,46 +219,24 @@ packages_redhat:
   - rsyslog
   - tcp_wrappers
   - vlock
+packages_ubuntu:
+  - fwupd
+  - secureboot-db
 ```
 
-Packages to be installed on a RedHat OS family host.
+`system_upgrade: 'yes'` will run `apt upgrade` or
+`dnf update` if required.
 
-### tcp_challenge_ack_limit kernel configuration
+Packages to be installed depending of distribution
+and packgages to be removed (`packages_blocklist`).
 
-```yaml
-random_ack_limit: "{{ 2147483647 | random(start=10000) }}"
-```
-
-net.ipv4.tcp_challenge_ack_limit, see
-[tcp: make challenge acks less predictable](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=75ff39ccc1bd5d3c455b6822ab09e533c551f758).
-
-### Ubuntu reboot
+### ./defaults/main/sshd.yml
 
 ```yaml
-reboot_ubuntu: false
-```
-
-If true an Ubuntu node will be rebooted if required, using
-`pre_reboot_delay: "{{ 3600 | random(start=1) }}"`.
-
-### RedHat RPM keys
-
-```yaml
-redhat_rpm_key:
-  - 567E347AD0044ADE55BA8A5F199E2F91FD431D51
-  - 47DB287789B21722B6D95DDE5326810137017186
-```
-
-[Red Hat RPM keys](https://access.redhat.com/security/team/key/)
-for use when `ansible_distribution == "RedHat"`.
-
-### OpenSSH daemon configuration
-
-```yaml
+sshd_accept_env: LANG LC_*
 sshd_admin_net:
   - 192.168.0.0/24
   - 192.168.1.0/24
-sshd_accept_env: LANG LC_*
 sshd_allow_agent_forwarding: 'no'
 sshd_allow_groups: sudo
 sshd_allow_tcp_forwarding: 'no'
@@ -327,231 +306,121 @@ connection.
 
 `sshd_port` specifies the port number that sshd(8) listens on.
 
-### SUID/SGID binaries
+### ./defaults/main/suid_sgid_blocklist.yml
 
 ```yaml
+suid_sgid_permissions: true
 suid_sgid_blocklist:
+  - /bin/awk
+  - /bin/base32
+  - /bin/base64
   - /bin/bash
+  - /bin/busctl
   - /bin/busybox
   - /bin/cat
+  - /bin/chage
   - /bin/chmod
   - /bin/chown
   - /bin/cp
+  - /bin/cpan
+  - /bin/crontab
+  - /bin/curl
+  - /bin/cut
   - /bin/dash
   - /bin/date
   - /bin/dd
-  - /bin/dmesg
-[...]
+  - /bin/diff
+  [...]
 ```
 
-Which binaries that should have SUID/SGID removed, a complete list is available
-at <https://github.com/konstruktoid/ansible-role-hardening/blob/master/defaults/main.yml#L112>
+If `suid_sgid_permissions: true` loop through `suid_sgid_blocklist` and remove
+SUID/SGID.
 
-## Structure
+A complete file list is available in
+[defaults/main/suid_sgid_blocklist.yml](defaults/main/suid_sgid_blocklist.yml).
 
-```sh
-.
-├── LICENSE
-├── README.md
-├── Vagrantfile
-├── action-lint
-│   ├── Dockerfile
-│   ├── README.md
-│   └── entrypoint.sh
-├── defaults
-│   └── main.yml
-├── handlers
-│   └── main.yml
-├── meta
-│   └── main.yml
-├── molecule
-│   └── default
-│       ├── INSTALL.rst
-│       ├── converge.yml
-│       ├── molecule.yml
-│       └── verify.yml
-├── postChecks.sh
-├── provision
-│   └── setup.sh
-├── renovate.json
-├── runTests.sh
-├── tasks
-│   ├── adduser.yml
-│   ├── aide.yml
-│   ├── apparmor.yml
-│   ├── apport.yml
-│   ├── auditd.yml
-│   ├── cron.yml
-│   ├── ctrlaltdel.yml
-│   ├── disablefs.yml
-│   ├── disablemod.yml
-│   ├── disablenet.yml
-│   ├── extras.yml
-│   ├── firewall.yml
-│   ├── fstab.yml
-│   ├── hosts.yml
-│   ├── issue.yml
-│   ├── journalconf.yml
-│   ├── limits.yml
-│   ├── lockroot.yml
-│   ├── logindconf.yml
-│   ├── logindefs.yml
-│   ├── main.yml
-│   ├── motdnews.yml
-│   ├── mount.yml
-│   ├── packages.yml
-│   ├── password.yml
-│   ├── path.yml
-│   ├── pkgupdate.yml
-│   ├── post.yml
-│   ├── postfix.yml
-│   ├── pre.yml
-│   ├── prelink.yml
-│   ├── resolvedconf.yml
-│   ├── rkhunter.yml
-│   ├── rootaccess.yml
-│   ├── sshdconfig.yml
-│   ├── sudo.yml
-│   ├── suid.yml
-│   ├── sysctl.yml
-│   ├── systemdconf.yml
-│   ├── timesyncd.yml
-│   ├── umask.yml
-│   └── users.yml
-├── templates
-│   ├── etc
-│   │   ├── adduser.conf.j2
-│   │   ├── ansible
-│   │   │   └── facts.d
-│   │   │       ├── cpuinfo.fact
-│   │   │       ├── reboot.fact
-│   │   │       ├── sshkeys.fact
-│   │   │       └── systemd.fact
-│   │   ├── apt
-│   │   │   └── apt.conf.d
-│   │   │       └── 99noexec-tmp.j2
-│   │   ├── audit
-│   │   │   └── rules.d
-│   │   │       └── hardening.rules.j2
-│   │   ├── default
-│   │   │   ├── rkhunter.j2
-│   │   │   └── useradd.j2
-│   │   ├── hosts.allow.j2
-│   │   ├── hosts.deny.j2
-│   │   ├── issue.j2
-│   │   ├── login.defs.j2
-│   │   ├── logrotate.conf.j2
-│   │   ├── pam.d
-│   │   │   ├── common-account.j2
-│   │   │   ├── common-auth.j2
-│   │   │   ├── common-password.j2
-│   │   │   └── login.j2
-│   │   ├── profile.d
-│   │   │   └── initpath.sh.j2
-│   │   ├── securetty.j2
-│   │   ├── security
-│   │   │   ├── access.conf.j2
-│   │   │   ├── limits.conf.j2
-│   │   │   └── pwquality.conf.j2
-│   │   ├── ssh
-│   │   │   └── sshd_config.j2
-│   │   ├── sysctl.conf.j2
-│   │   └── systemd
-│   │       ├── coredump.conf.j2
-│   │       ├── journald.conf.j2
-│   │       ├── logind.conf.j2
-│   │       ├── resolved.conf.j2
-│   │       ├── system.conf.j2
-│   │       ├── timesyncd.conf.j2
-│   │       ├── tmp.mount.j2
-│   │       └── user.conf.j2
-│   └── lib
-│       └── systemd
-│           └── system
-│               ├── aidecheck.service.j2
-│               └── aidecheck.timer.j2
-└── tests
-    ├── debug_facts.yml
-    ├── inventory
-    └── test.yml
+### ./defaults/main/sysctl.yml
 
-26 directories, 97 files
+```yaml
+sysctl_dev_tty_ldisc_autoload: 0
+sysctl_net_ipv6_conf_accept_ra_rtr_pref: 0
+sysctl_settings:
+  fs.protected_hardlinks: 1
+  fs.protected_symlinks: 1
+  fs.suid_dumpable: 0
+  kernel.core_uses_pid: 1
+  kernel.dmesg_restrict: 1
+  kernel.kptr_restrict: 2
+  kernel.panic: 60
+  kernel.panic_on_oops: 60
+  kernel.perf_event_paranoid: 2
+  kernel.randomize_va_space: 2
+  kernel.sysrq: 0
+  kernel.unprivileged_bpf_disabled: 1
+  kernel.yama.ptrace_scope: 2
+  net.core.bpf_jit_harden: 2
+  net.ipv4.conf.all.accept_redirects: 0
+  net.ipv4.conf.all.accept_source_route: 0
+  net.ipv4.conf.all.log_martians: 1
+  net.ipv4.conf.all.rp_filter: 1
+  net.ipv4.conf.all.secure_redirects: 0
+  net.ipv4.conf.all.send_redirects: 0
+  net.ipv4.conf.all.shared_media: 0
+  net.ipv4.conf.default.accept_redirects: 0
+  net.ipv4.conf.default.accept_source_route: 0
+  net.ipv4.conf.default.log_martians: 1
+  net.ipv4.conf.default.rp_filter: 1
+  net.ipv4.conf.default.secure_redirects: 0
+  net.ipv4.conf.default.send_redirects: 0
+  net.ipv4.conf.default.shared_media: 0
+  net.ipv4.icmp_echo_ignore_broadcasts: 1
+  net.ipv4.icmp_ignore_bogus_error_responses: 1
+  net.ipv4.ip_forward: 0
+  net.ipv4.tcp_challenge_ack_limit: 2147483647
+  net.ipv4.tcp_invalid_ratelimit: 500
+  net.ipv4.tcp_max_syn_backlog: 20480
+  net.ipv4.tcp_rfc1337: 1
+  net.ipv4.tcp_syn_retries: 5
+  net.ipv4.tcp_synack_retries: 2
+  net.ipv4.tcp_syncookies: 1
+  net.ipv4.tcp_timestamps: 0
+  net.ipv6.conf.all.accept_ra: 0
+  net.ipv6.conf.all.accept_redirects: 0
+  net.ipv6.conf.all.accept_source_route: 0
+  net.ipv6.conf.all.forwarding: 0
+  net.ipv6.conf.all.use_tempaddr: 2
+  net.ipv6.conf.default.accept_ra: 0
+  net.ipv6.conf.default.accept_ra_defrtr: 0
+  net.ipv6.conf.default.accept_ra_pinfo: 0
+  net.ipv6.conf.default.accept_ra_rtr_pref: 0
+  net.ipv6.conf.default.accept_redirects: 0
+  net.ipv6.conf.default.accept_source_route: 0
+  net.ipv6.conf.default.autoconf: 0
+  net.ipv6.conf.default.dad_transmits: 0
+  net.ipv6.conf.default.max_addresses: 1
+  net.ipv6.conf.default.router_solicitations: 0
+  net.ipv6.conf.default.use_tempaddr: 2
+  net.netfilter.nf_conntrack_max: 2000000
+  net.netfilter.nf_conntrack_tcp_loose: 0
 ```
 
-## Dependencies
-
-None.
-
-## Example Playbook
-
-```shell
----
-- hosts: all
-  serial: 50%
-    - { role: konstruktoid.hardening, sshd_admin_net: [10.0.0.0/24] }
-...
-```
-
-## Testing
-
-```shell
-ansible-playbook tests/test.yml --extra-vars "sshd_admin_net=192.168.1.0/24" \
-  -c local -i 'localhost,' -K
-```
-
-The repository contains a [Vagrant](https://www.vagrantup.com/ "Vagrant")
-configuration file, which will run the `konstruktoid.hardening` role.
-
-The [runTests.sh](runTests.sh) script may be used to automatically update
-current Vagrant boxes and then use [Ansible Molecule](https://molecule.readthedocs.io)
-to test the playbook.
-
-To run a [OpenSCAP](https://github.com/ComplianceAsCode/content) test on a
-Fedora host using the included Vagrantfile follow the instructions on
-[https://copr.fedorainfracloud.org/coprs/openscapmaint/openscap-latest/](https://copr.fedorainfracloud.org/coprs/openscapmaint/openscap-latest/).
-
-```shell
-curl -SsL http://copr.fedoraproject.org/coprs/openscapmaint/openscap-latest/repo/epel-7/openscapmaint-openscap-latest-epel-7.repo | \
-  sudo tee -a /etc/yum.repos.d/openscapmaint-openscap-latest-epel-7.repo
-sudo dnf install -y openscap-scanner scap-security-guide
-oscap info --fetch-remote-resources /usr/share/xml/scap/ssg/content/ssg-fedora-ds.xml
-sudo oscap xccdf eval --fetch-remote-resources \
-  --profile xccdf_org.ssgproject.content_profile_pci-dss \
-  --report fedora_pci-report.html /usr/share/xml/scap/ssg/content/ssg-fedora-ds.xml
-```
-
-To run a [OpenSCAP](https://github.com/ComplianceAsCode/content) test on a
-Ubuntu 18.04 host, where `v0.1.50` should be replaced with the latest available
-version:
-
-```shell
-sudo apt-get -y install libopenscap8 unzip
-wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.50/scap-security-guide-0.1.50.zip
-unzip scap-security-guide-0.1.50.zip
-cd scap-security-guide-0.1.50
-oscap info --fetch-remote-resources ./ssg-ubuntu1804-ds.xml
-sudo oscap xccdf eval --fetch-remote-resources \
-  --profile xccdf_org.ssgproject.content_profile_anssi_np_nt28_high \
-  --report ../bionic_anssi-report.html ./ssg-ubuntu1804-ds.xml
-```
+Configure `sysctl`.
 
 ## Recommended Reading
 
-[CIS Distribution Independent Linux Benchmark v1.0.0](https://www.cisecurity.org/cis-benchmarks/)
+[Center for Internet Security Linux Benchmarks](https://www.cisecurity.org/cis-benchmarks/)
 
 [Common Configuration Enumeration](https://nvd.nist.gov/cce/index.cfm)
 
-[Canonical Ubuntu 16.04 LTS STIG - Ver 1, Rel 2](https://public.cyber.mil/stigs/downloads/?_dl_facet_stigs=operating-systems%2Cunix-linux)
+[DISA Security Technical Implementation Guides](https://public.cyber.mil/stigs/downloads/?_dl_facet_stigs=operating-systems%2Cunix-linux)
 
-[Guide to the Secure Configuration of Red Hat Enterprise Linux 8](https://static.open-scap.org/ssg-guides/ssg-rhel8-guide-default.html)
-
-[Red Hat Enterprise Linux 7 - Ver 2, Rel 3 STIG](https://public.cyber.mil/stigs/downloads/?_dl_facet_stigs=operating-systems%2Cunix-linux)
+[SCAP Security Guides](https://static.open-scap.org/)
 
 [Security focused systemd configuration](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc)
 
 ## Contributing
 
-Do you want to contribute? That's great! Contributions are always welcome,
+Do you want to contribute? Great! Contributions are always welcome,
 no matter how large or small. If you found something odd, feel free to submit a
 issue, improve the code by creating a pull request, or by
 [sponsoring this project](https://github.com/sponsors/konstruktoid).
