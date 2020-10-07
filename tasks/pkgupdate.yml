@@ -15,14 +15,30 @@
   become: 'yes'
   apt:
     upgrade: safe
-  notify:
-    - apt-get clean
-    - apt-get autoremove
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  when: ansible_os_family == "Debian"
+  when: ansible_os_family == "Debian" and system_upgrade|bool
   tags:
     - apt
+
+- name: update dnf cache
+  become: 'yes'
+  dnf:
+    update_cache: 'yes'
+  when: ansible_os_family == "RedHat"
+  notify:
+    - dnf autoremove
+  tags:
+    - dnf
+    - yum
+
+- name: dnf upgrade
+  become: 'yes'
+  command: dnf --cacheonly --assumeyes upgrade-minimal
+  register: dnf_upgrade_response
+  changed_when: not dnf_upgrade_response.stdout.find('Nothing to do.') != -1
+  when: ansible_os_family == "RedHat" and system_upgrade|bool
+  tags:
+    - dnf
+    - yum
 
 - name: python-rpm installation
   become: 'yes'
@@ -31,6 +47,7 @@
     state: present
   when: ansible_distribution == "RedHat"
   tags:
+    - dnf
     - yum
     - packages
     - firewalld
