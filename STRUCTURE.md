@@ -1,6 +1,10 @@
-# Structure
+# Structure and Task Execution
+
+## Tasks
 
 ![Alt text](./images/ansible-role-hardening.svg)
+
+## Structure
 
 ```sh
 .
