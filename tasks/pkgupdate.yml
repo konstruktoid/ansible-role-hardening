@@ -4,6 +4,9 @@
   apt:
     update_cache: 'yes'
     cache_valid_time: 1800
+  notify:
+    - apt-get clean
+    - apt-get autoremove
   when: ansible_os_family == "Debian"
   tags:
     - apt
