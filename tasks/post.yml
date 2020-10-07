@@ -17,6 +17,8 @@
   file:
     path: "{{ item.path }}"
     mode: 0400
+  when: item.mode|int > 0400
+  changed_when: item.mode|int > 0400
   with_items:
     - "{{ grub_cfg.files }}"
 ...
