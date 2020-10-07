@@ -1,43 +1,50 @@
 ---
 dependency:
-  enabled: False
+  enabled: false
 driver:
   name: vagrant
   provider:
     name: VBox
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      callback_whitelist: profile_tasks
+  log: true
   inventory:
     host_vars:
-      bionic:
-        random_ack_limit: 10000
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
       buster:
         ansible_python_interpreter: "/usr/bin/python3"
-        random_ack_limit: 10000
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
-      fedora:
-        random_ack_limit: 10000
+      centos:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
       focal:
-        random_ack_limit: 10000
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
 platforms:
-  - name: bionic
-    box: ubuntu/bionic64
   - name: buster
     box: bento/debian-10
+    instance_raw_config_args:
+      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+    memory: 1024
+  - name: centos
+    provider_options:
+      nic_model_type: '"82543GC"'
+      vm.boot_timeout: 600
+    instance_raw_config_args:
+      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+    memory: 1024
+    box: bento/centos-8
   - name: focal
+    provider_options:
+      nic_model_type: '"Am79C973"'
+      vm.boot_timeout: 600
+    instance_raw_config_args:
+      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+    memory: 1024
     box: bento/ubuntu-20.04
-# The following platforms fail due to molecule or vagrant issues
-#  - name: centos
-#    box: centos/8
-#  - name: fedora
-#    box: bento/fedora-32
 verifier:
   name: ansible
 lint: |
@@ -77,7 +84,7 @@ scenario:
     - create
     - prepare
     - converge
-    # - idempotence disabled due to firewall resets, random sysctl settings et al
+    - idempotence
     - side_effect
     - verify
     - cleanup
