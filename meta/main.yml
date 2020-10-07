@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Thomas Sjögren
-  description: CentOS, Debian, Fedora and Ubuntu hardening. systemd edition.
+  description: CentOS, Debian and Ubuntu hardening. systemd edition.
   license: apache
   min_ansible_version: 2.9
   platforms:
