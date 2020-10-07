@@ -6,6 +6,7 @@ else
   ANSIBLE_V="${ANSIBLE_V}"
 fi
 
+{
 echo "# ansible-role-hardening
 
 An [Ansible](https://www.ansible.com/) role to make a CentOS, Debian or Ubuntu
@@ -83,3 +84,16 @@ Apache License Version 2.0
 ## Author Information
 
 [https://github.com/konstruktoid](https://github.com/konstruktoid \"github.com/konstruktoid\")"
+} > ./README.md
+
+{
+echo "# Structure
+
+![Alt text](./images/ansible-role-hardening.svg)
+<img src=\"./images/ansible-role-hardening.svg\">
+"
+
+echo '```sh'
+tree .
+echo '```'
+} > ./STRUCTURE.md
