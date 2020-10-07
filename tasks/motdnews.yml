@@ -16,13 +16,22 @@
   tags:
     - motd
 
+- name: find update-motd.d files
+  become: 'yes'
+  find:
+    paths: /etc/update-motd.d
+    file_type: file
+  register: update_motd_permissions
+  tags:
+    - motd
+
 - name: motd updates permissions
   become: 'yes'
   file:
-    dest: /etc/update-motd.d
+    dest: "{{ item.path }}"
     mode: 0444
-    recurse: 'yes'
-  ignore_errors: true
+  with_items:
+    - "{{ update_motd_permissions.files }}"
   when: ansible_os_family == "Debian"
   tags:
     - motd
@@ -32,7 +41,6 @@
   file:
     dest: /etc/update-motd.d
     mode: 0755
-  ignore_errors: true
   when: ansible_os_family == "Debian"
   tags:
     - motd
