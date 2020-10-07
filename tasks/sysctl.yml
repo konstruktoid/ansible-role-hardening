@@ -1,13 +1,35 @@
 ---
-- name: sysctl
+- name: set sysctl dev.tty.ldisc_autoload
   become: 'yes'
-  template:
-    src: etc/sysctl.conf.j2
-    dest: /etc/sysctl.conf
-    backup: 'yes'
-    mode: 0600
-    owner: root
-    group: root
+  sysctl:
+    name: dev.tty.ldisc_autoload
+    value: "{{ sysctl_dev_tty_ldisc_autoload|int }}"
+    state: present
+    sysctl_set: 'yes'
+  when: ansible_kernel is version("5",">=")
+  tags:
+    - sysctl
+
+- name: set sysctl net.ipv6.conf.accept_ra_rtr_pref
+  become: 'yes'
+  sysctl:
+    name: net.ipv6.conf.{{ ansible_default_ipv4.interface }}.accept_ra_rtr_pref
+    value: "{{ sysctl_net_ipv6_conf_accept_ra_rtr_pref|int }}"
+    state: present
+    sysctl_set: 'yes'
+  tags:
+    - sysctl
+
+- name: configure sysctl
+  become: 'yes'
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value|int }}"
+    state: present
+    sysctl_set: 'yes'
+  with_dict: "{{ sysctl_settings }}"
   notify:
     - restart sysctl
   tags:
