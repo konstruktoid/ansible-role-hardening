@@ -1,43 +1,125 @@
 ---
-- include: pre.yml
-- include: firewall.yml
-- include: disablenet.yml
-- include: disablefs.yml
-- include: systemdconf.yml
-- include: journalconf.yml
-- include: timesyncd.yml
-- include: fstab.yml
-- include: prelink.yml
-- include: pkgupdate.yml
-- include: hosts.yml
-- include: logindefs.yml
-- include: sysctl.yml
-- include: limits.yml
-- include: adduser.yml
-- include: rootaccess.yml
-- include: packages.yml
-- include: sshdconfig.yml
-- include: password.yml
-- include: cron.yml
-- include: ctrlaltdel.yml
-- include: auditd.yml
-- include: apparmor.yml
-- include: disablemod.yml
-- include: aide.yml
-- include: users.yml
-- include: suid.yml
-- include: umask.yml
-- include: path.yml
-- include: logindconf.yml
-- include: resolvedconf.yml
-- include: rkhunter.yml
-- include: issue.yml
-- include: apport.yml
-- include: lockroot.yml
-- include: mount.yml
-- include: postfix.yml
-- include: motdnews.yml
-- include: sudo.yml
-- include: extras.yml
-- include: post.yml
+- name: configure local facts, install pexpect and epel-release
+  include: pre.yml
+
+- name: install and configure firewalls
+  include: firewall.yml
+
+- name: configure sysctl
+  include: sysctl.yml
+
+- name: disable kernel network modules
+  include: disablenet.yml
+
+- name: disable file system kernel modules
+  include: disablefs.yml
+
+- name: configure systemd system and users
+  include: systemdconf.yml
+
+- name: configure systemd journald and logrotate
+  include: journalconf.yml
+
+- name: configure systemd timesyncd
+  include: timesyncd.yml
+
+- name: clean fstab and enable tmp.mount
+  include: fstab.yml
+
+- name: disable prelink
+  include: prelink.yml
+
+- name: update package caches and install updates
+  include: pkgupdate.yml
+
+- name: configure hosts.allow and hosts.deny
+  include: hosts.yml
+
+- name: configure login.defs
+  include: logindefs.yml
+
+- name: set limits
+  include: limits.yml
+
+- name: configure adduser and useradd
+  include: adduser.yml
+
+- name: restrict root access
+  include: rootaccess.yml
+
+- name: configure needrestart, install and remove various packages
+  include: packages.yml
+
+- name: configure sshd
+  include: sshdconfig.yml
+
+- name: configure pam
+  include: password.yml
+
+- name: configure and clean at and cron
+  include: cron.yml
+
+- name: disable ctrl-alt-del.target
+  include: ctrlaltdel.yml
+
+- name: configure auditd
+  include: auditd.yml
+
+- name: configure apparmor
+  include: apparmor.yml
+
+- name: disable misc kernel modules
+  include: disablemod.yml
+
+- name: configure aide
+  include: aide.yml
+
+- name: remove users
+  include: users.yml
+
+- name: remove suid/sgid
+  include: suid.yml
+  when: suid_sgid_permissions|bool
+
+- name: set umask
+  include: umask.yml
+
+- name: configure paths
+  include: path.yml
+
+- name: configure systemd logindconf
+  include: logindconf.yml
+
+- name: configure systemd resolvedconf
+  include: resolvedconf.yml
+
+- name: configure rkhunter
+  include: rkhunter.yml
+
+- name: add issue message
+  include: issue.yml
+
+- name: disable apport
+  include: apport.yml
+
+- name: lock root account
+  include: lockroot.yml
+
+- name: configure /proc
+  include: mount.yml
+
+- name: configure postfic
+  include: postfix.yml
+
+- name: configure motdnews
+  include: motdnews.yml
+
+- name: configure sudo
+  include: sudo.yml
+
+- name: misc extra tasks
+  include: extras.yml
+
+- name: misc tasks after all handlers
+  include: post.yml
 ...
