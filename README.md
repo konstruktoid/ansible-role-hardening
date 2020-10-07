@@ -31,9 +31,10 @@ None.
 ...
 ```
 
-## Structure
+## Structure and Task execution
 
-See [STRUCTURE.md](STRUCTURE.md).
+See [STRUCTURE.md](STRUCTURE.md) for a detailed map regarding all tasks
+and the role directory structure.
 
 ## Role testing
 

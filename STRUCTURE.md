@@ -1,7 +1,6 @@
 # Structure
 
 ![Alt text](./images/ansible-role-hardening.svg)
-<img src="./images/ansible-role-hardening.svg">
 
 ```sh
 .
