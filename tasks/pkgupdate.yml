@@ -69,12 +69,13 @@
   become: 'yes'
   rpm_key:
     state: present
-    key: https://sks-keyservers.net/pks/lookup?op=get&search=0x{{ item }}
+    key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
   with_items:
     - "{{ redhat_rpm_key }}"
-  when: ansible_distribution == "RedHat"
+  when: ansible_os_family == "RedHat"
   tags:
     - dnf
+    - rpm
     - yum
 
 - name: set yum.conf gpgcheck
