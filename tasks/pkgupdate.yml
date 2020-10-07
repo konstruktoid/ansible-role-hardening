@@ -15,6 +15,8 @@
   become: 'yes'
   apt:
     upgrade: safe
+  register: apt_upgrade_response
+  changed_when: not apt_upgrade_response.stdout.find('0 upgraded') != -1
   when: ansible_os_family == "Debian" and system_upgrade|bool
   tags:
     - apt
