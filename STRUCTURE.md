@@ -120,14 +120,11 @@
 │   │   │   └── login.j2
 │   │   ├── profile.d
 │   │   │   └── initpath.sh.j2
-│   │   ├── securetty.j2
 │   │   ├── security
-│   │   │   ├── access.conf.j2
 │   │   │   ├── limits.conf.j2
 │   │   │   └── pwquality.conf.j2
 │   │   ├── ssh
 │   │   │   └── sshd_config.j2
-│   │   ├── sysctl.conf.j2
 │   │   └── systemd
 │   │       ├── coredump.conf.j2
 │   │       ├── journald.conf.j2
@@ -147,5 +144,5 @@
     ├── inventory
     └── test.yml
 
-28 directories, 110 files
+28 directories, 107 files
 ```
