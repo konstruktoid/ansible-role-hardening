@@ -1,25 +1,60 @@
 ---
-- name: access.conf
+- name: stat access.conf
   become: 'yes'
-  template:
-    src: etc/security/access.conf.j2
-    dest: /etc/security/access.conf
-    backup: 'yes'
-    mode: 0644
-    owner: root
-    group: root
+  stat:
+    path: /etc/security/access.conf
+  register: security_access_conf
   tags:
-    - access.conf
+    - access_conf
 
-- name: securetty
+- name: stat securetty
   become: 'yes'
-  template:
-    src: etc/securetty.j2
-    dest: /etc/securetty
-    backup: 'yes'
+  stat:
+    path: /etc/securetty
+  register: etc_securetty
+  tags:
+    - securetty
+
+- name: clean access.conf
+  become: 'yes'
+  lineinfile:
+    path: /etc/security/access.conf
+    regexp: '^(?!\+:root:127.0.0.1)$'
     mode: 0644
-    owner: root
-    group: root
+    state: absent
+  when: security_access_conf.stat.exists
+  tags:
+    - access_conf
+
+- name: allow localhost root access.conf
+  become: 'yes'
+  lineinfile:
+    path: /etc/security/access.conf
+    line: "+:root:127.0.0.1"
+    mode: 0644
+    state: present
+  when: security_access_conf.stat.exists
+  tags:
+    - access_conf
+
+- name: clean securetty
+  become: 'yes'
+  lineinfile:
+    path: /etc/securetty
+    regexp: "^(?!console).*$"
+    state: absent
+  when: etc_securetty.stat.exists
+  tags:
+    - securetty
+
+- name: allow console securetty
+  become: 'yes'
+  lineinfile:
+    path: /etc/securetty
+    line: "console"
+    mode: 0644
+    state: present
+  when: etc_securetty.stat.exists
   tags:
     - securetty
 
