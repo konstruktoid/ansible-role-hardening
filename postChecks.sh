@@ -54,7 +54,7 @@ if lsb_release -a 2>/dev/null | grep -qi ubuntu; then
   echo "Running bats tests."
   sudo "$PKG" -y install bats
   cd ~/hardening/tests || exit 1
-  sudo bats . | tee  ~/bats.log
+  PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin sudo bats . | tee  ~/bats.log
   sudo chown vagrant:vagrant ~/bats.log
 else
   echo "not ok: not ubuntu" > ~/bats.log
