@@ -21,21 +21,6 @@
   tags:
     - apt
 
-- name: configure dpkg noexec
-  become: 'yes'
-  lineinfile:
-    dest: /etc/apt/apt.conf.d/99noexec-tmp
-    mode: 0644
-    state: present
-    create: 'yes'
-    line: "{{ item }}"
-  with_items:
-    - 'DPkg::Pre-Invoke {"mount -o remount,exec,nodev,nosuid /tmp";};'
-    - 'DPkg::Post-Invoke {"mount -o remount,mode=1777,strictatime,noexec,nodev,nosuid /tmp";};'
-  when: ansible_os_family == "Debian"
-  tags:
-    - apt
-
 - name: reboot if required
   become: 'yes'
   setup: ~
