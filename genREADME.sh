@@ -88,10 +88,13 @@ Apache License Version 2.0
 } > ./README.md
 
 {
-echo "# Structure
+echo "# Structure and Task Execution
+
+## Tasks
 
 ![Alt text](./images/ansible-role-hardening.svg)
-<img src=\"./images/ansible-role-hardening.svg\">
+
+## Structure
 "
 
 echo '```sh'
