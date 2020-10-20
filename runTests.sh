@@ -79,7 +79,7 @@ if [ "$1" == "vagrant" ]; then
     echo "Copying postChecks.sh to ${VM}."
     vagrant ssh "${VM}" -c 'cp /vagrant/postChecks.sh ~/'
     echo "Rebooting ${VM}."
-    vagrant ssh "${VM}" -c 'sudo reboot'
+    vagrant ssh "${VM}" -c 'sudo -i reboot'
 
     while ! vagrant ssh "${VM}" -c 'id'; do
       echo "Waiting for ${VM}."
