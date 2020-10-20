@@ -1,0 +1,9 @@
+---
+compilers:
+  - /bin/as
+  - /bin/cc
+  - /bin/gcc
+  - /usr/bin/as
+  - /usr/bin/cc
+  - /usr/bin/gcc
+...

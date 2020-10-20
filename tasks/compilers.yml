@@ -1,0 +1,14 @@
+---
+- name: restrict compiler access
+  become: 'yes'
+  file:
+    path: "{{ item }}"
+    mode: 0750
+    state: file
+    follow: 'yes'
+  ignore_errors: true
+  with_items:
+    - "{{ compilers }}"
+  tags:
+    - suid
+...
