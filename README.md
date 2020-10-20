@@ -75,6 +75,20 @@ sending the message to syslog.
 
 [auditd.conf(5)](https://man7.org/linux/man-pages/man5/auditd.conf.5.html)
 
+### ./defaults/main/compilers.yml
+
+```yaml
+compilers:
+  - /bin/as
+  - /bin/cc
+  - /bin/gcc
+  - /usr/bin/as
+  - /usr/bin/cc
+  - /usr/bin/gcc
+```
+
+List of compilers that should be restricted to the root user.
+
 ### ./defaults/main/dns.yml
 
 ```yaml
@@ -188,6 +202,7 @@ packages_debian:
   - aide-common
   - apparmor-profiles
   - apparmor-utils
+  - apt-show-versions
   - audispd-plugins
   - auditd
   - cracklib-runtime
@@ -203,6 +218,7 @@ packages_debian:
   - postfix
   - rkhunter
   - rsyslog
+  - sysstat
   - tcpd
   - vlock
 packages_redhat:
@@ -229,7 +245,16 @@ packages_ubuntu:
 `dnf update` if required.
 
 Packages to be installed depending of distribution
-and packgages to be removed (`packages_blocklist`).
+and packages to be removed (`packages_blocklist`).
+
+### ./defaults/main/password.yml
+
+```yaml
+crypto_policy: FIPS
+```
+
+Set [cryptographic policies](https://access.redhat.aom/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/using-the-system-wide-cryptographic-policies_security-hardening)
+if `/etc/crypto-policies/config` exists.
 
 ### ./defaults/main/sshd.yml
 
@@ -322,15 +347,6 @@ suid_sgid_blocklist:
   - /bin/chage
   - /bin/chmod
   - /bin/chown
-  - /bin/cp
-  - /bin/cpan
-  - /bin/crontab
-  - /bin/curl
-  - /bin/cut
-  - /bin/dash
-  - /bin/date
-  - /bin/dd
-  - /bin/diff
   [...]
 ```
 
