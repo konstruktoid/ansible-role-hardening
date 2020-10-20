@@ -87,6 +87,8 @@ Apache License Version 2.0
 [https://github.com/konstruktoid](https://github.com/konstruktoid \"github.com/konstruktoid\")"
 } > ./README.md
 
+rm ./*.log ./*.html ./*.list
+
 {
 echo "# Structure and Task Execution
 
