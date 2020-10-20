@@ -1,4 +1,13 @@
 ---
+
+- name: python3-jmespath
+  become: 'yes'
+  package:
+    name: python3-jmespath
+    state: present
+  tags:
+    - debug
+
 - name: "cpuinfo_rdrand handling, true"
   debug:
     msg: "cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}, true"
@@ -36,7 +45,7 @@
 - name: "reboot_required handling, info"
   debug:
     msg: "reboot_required is {{ ansible_local.reboot.required }}"
-  ignore_errors: true
+  when: ansible_distribution == "Ubuntu"
   tags:
     - debug
 
