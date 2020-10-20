@@ -20,12 +20,14 @@
 ├── defaults
 │   └── main
 │       ├── auditd.yml
+│       ├── compilers.yml
 │       ├── dns.yml
 │       ├── limits.yml
 │       ├── misc.yml
 │       ├── module_blocklists.yml
 │       ├── ntp.yml
 │       ├── packages.yml
+│       ├── password.yml
 │       ├── sshd.yml
 │       ├── suid_sgid_blocklist.yml
 │       └── sysctl.yml
@@ -37,6 +39,8 @@
 ├── meta
 │   └── main.yml
 ├── molecule
+│   ├── benchmark
+│   │   └── molecule.yml
 │   └── default
 │       ├── INSTALL.rst
 │       ├── converge.yml
@@ -53,6 +57,7 @@
 │   ├── apparmor.yml
 │   ├── apport.yml
 │   ├── auditd.yml
+│   ├── compilers.yml
 │   ├── cron.yml
 │   ├── ctrlaltdel.yml
 │   ├── disablefs.yml
@@ -99,9 +104,6 @@
 │   │   │       ├── reboot.fact
 │   │   │       ├── sshkeys.fact
 │   │   │       └── systemd.fact
-│   │   ├── apt
-│   │   │   └── apt.conf.d
-│   │   │       └── 99noexec-tmp.j2
 │   │   ├── audit
 │   │   │   └── rules.d
 │   │   │       └── hardening.rules.j2
@@ -110,9 +112,9 @@
 │   │   │   └── useradd.j2
 │   │   ├── hosts.allow.j2
 │   │   ├── hosts.deny.j2
-│   │   ├── issue.j2
 │   │   ├── login.defs.j2
 │   │   ├── logrotate.conf.j2
+│   │   ├── motd.j2
 │   │   ├── pam.d
 │   │   │   ├── common-account.j2
 │   │   │   ├── common-auth.j2
@@ -144,5 +146,5 @@
     ├── inventory
     └── test.yml
 
-28 directories, 107 files
+27 directories, 110 files
 ```
