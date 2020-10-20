@@ -23,8 +23,11 @@
 - name: configure systemd timesyncd
   include: timesyncd.yml
 
-- name: clean fstab and enable tmp.mount
+- name: clean fstab
   include: fstab.yml
+
+- name: configure shm and tmp mounts
+  include: mount.yml
 
 - name: disable prelink
   include: prelink.yml
@@ -81,6 +84,9 @@
   include: suid.yml
   when: suid_sgid_permissions|bool
 
+- name: configure compiler permissions
+  include: compilers.yml
+
 - name: set umask
   include: umask.yml
 
@@ -105,10 +111,7 @@
 - name: lock root account
   include: lockroot.yml
 
-- name: configure /proc
-  include: mount.yml
-
-- name: configure postfic
+- name: configure postfix
   include: postfix.yml
 
 - name: configure motdnews
