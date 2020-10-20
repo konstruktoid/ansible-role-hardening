@@ -1,0 +1,88 @@
+---
+dependency:
+  enabled: false
+driver:
+  name: vagrant
+  provider:
+    name: VBox
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      callback_whitelist: profile_tasks
+  playbooks:
+    converge: ../default/converge.yml
+    verify: ../default/verify.yml
+  log: true
+  inventory:
+    host_vars:
+      buster:
+        ansible_python_interpreter: "/usr/bin/python3"
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
+      centos:
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
+      focal:
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
+platforms:
+  - name: buster
+    box: bento/debian-10
+    instance_raw_config_args:
+      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+    memory: 1024
+  - name: centos
+    provider_options:
+      nic_model_type: '"82543GC"'
+      vm.boot_timeout: 600
+    instance_raw_config_args:
+      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+    memory: 1024
+    box: bento/centos-8
+  - name: focal
+    provider_options:
+      nic_model_type: '"Am79C973"'
+      vm.boot_timeout: 600
+    instance_raw_config_args:
+      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+    memory: 1024
+    box: bento/ubuntu-20.04
+verifier:
+  name: ansible
+lint: |
+  set -e
+  ansible-lint .
+  yamllint -d "{extends: default, rules: {line-length: {level: warning}}}" .
+scenario:
+  name: benchmark
+  create_sequence:
+    - dependency
+    - create
+    - prepare
+  check_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - create
+    - prepare
+    - converge
+    - check
+    - destroy
+  converge_sequence:
+    - dependency
+    - create
+    - prepare
+    - converge
+  destroy_sequence:
+    - dependency
+    - cleanup
+    - destroy
+  test_sequence:
+    - lint
+    - dependency
+    - create
+    - prepare
+    - converge
+    - verify
+    - converge
