@@ -2,52 +2,25 @@
 - name: Verify
   hosts: all
   any_errors_fatal: true
-  vars:
-    auditd_action_mail_acct: root
-    auditd_admin_space_left_action: suspend
-    auditd_max_log_file_action: keep_logs
-    auditd_mode: 1
-    auditd_space_left_action: email
-    limit_nofile_hard: 1024
-    limit_nofile_soft: 512
-    limit_nproc_hard: 1024
-    limit_nproc_soft: 512
-    sshd_allow_agent_forwarding: 'no'
-    sshd_allow_tcp_forwarding: 'no'
-    sshd_authentication_methods: any
-    sshd_banner: /etc/issue.net
-    sshd_challenge_response_authentication: 'no'
-    sshd_ciphers: chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr
-    sshd_client_alive_count_max: 3
-    sshd_client_alive_interval: 200
-    sshd_compression: 'no'
-    sshd_gssapi_authentication: 'no'
-    sshd_hostbased_authentication: 'no'
-    sshd_ignore_user_known_hosts: 'yes'
-    sshd_kerberos_authentication: 'no'
-    sshd_kex_algorithms: curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
-    sshd_log_level: VERBOSE
-    sshd_login_grace_time: 20
-    sshd_macs: hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
-    sshd_max_auth_tries: 3
-    sshd_max_sessions: 3
-    sshd_max_startups: 10:30:60
-    sshd_password_authentication: 'no'
-    sshd_permit_empty_passwords: 'no'
-    sshd_permit_root_login: 'no'
-    sshd_permit_user_environment: 'no'
-    sshd_port: 22
-    sshd_print_last_log: 'yes'
-    sshd_print_motd: 'no'
-    sshd_rekey_limit: 512M 1h
-    sshd_strict_modes: 'yes'
-    sshd_subsystem: sftp internal-sftp
-    sshd_tcp_keep_alive: 'no'
-    sshd_use_dns: 'no'
-    sshd_use_pam: 'yes'
-    sshd_x11_forwarding: 'no'
 
   tasks:
+    - name: reboot host
+      become: 'yes'
+      reboot:
+
+    - name: wait for the host and reconnect
+      wait_for:
+        port: 22
+        host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
+        delay: 10
+        timeout: 120
+
+    - name: include default vars
+      include_vars:
+        dir: ../../defaults/
+        extensions:
+          - 'yml'
+
     - name: verify auditd configuration
       become: 'yes'
       shell: grep "^{{ item }}$" /etc/audit/auditd.conf
@@ -218,6 +191,32 @@
         - net.ipv6.conf.default.use_tempaddr=2
         - net.netfilter.nf_conntrack_max=2000000
         - net.netfilter.nf_conntrack_tcp_loose=0
+
+    - name: stat crypto-policies config
+      become: 'yes'
+      stat:
+        path: /etc/crypto-policies/config
+      register: crypto_policies_config
+
+    - name: get crypto-policies value
+      environment:
+        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      command: grep -qo "^{{ crypto_policy|upper }}$" /etc/crypto-policies/config
+      register: crypto_policy_set
+      when: crypto_policies_config.stat.exists
+      failed_when: crypto_policy_set.rc > 1
+
+    - name: verify noexec /dev/shm
+      become: 'yes'
+      shell: grep '^tmpfs\s/dev/shm.*noexec' /proc/mounts
+      register: dev_shm_noexec
+      failed_when: dev_shm_noexec.rc != 0
+
+    - name: verify /tmp
+      become: 'yes'
+      shell: grep '^tmpfs\s/tmp\s.*nosuid,nodev,noexec\s' /proc/mounts
+      register: mnt_tmp
+      failed_when: mnt_tmp.rc != 0
 
     - name: verify login.defs settings
       become: 'yes'
