@@ -13,4 +13,26 @@
   tags:
     - sshd_config
     - sshd
+
+- name: sshd host keys
+  become: 'yes'
+  find:
+    paths: /etc/ssh
+    file_type: file
+    patterns: 'ssh_host_*'
+    excludes: '*.pub'
+  register: ssh_host_keys
+  tags:
+    - sshd
+
+- name: sshd host key permissions
+  become: 'yes'
+  file:
+    owner: root
+    group: root
+    mode: 0600
+    path: "{{ item.path }}"
+  with_items: "{{ ssh_host_keys.files }}"
+  tags:
+    - sshd
 ...
