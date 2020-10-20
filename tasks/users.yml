@@ -16,4 +16,21 @@
   ignore_errors: true
   tags:
     - users
+
+- name: find user /home directories
+  find:
+    paths: /home
+    file_type: directory
+  register: home_directories
+  tags:
+    - users
+
+- name: user /home directory permissions
+  become: 'yes'
+  file:
+    mode: 0750
+    path: "{{ item.path }}"
+  with_items: "{{ home_directories.files }}"
+  tags:
+    - users
 ...
