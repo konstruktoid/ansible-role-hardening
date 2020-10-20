@@ -2,10 +2,12 @@
 - name: restrict compiler access
   become: 'yes'
   file:
-    path: "{{ item }}"
+    owner: root
+    group: root
     mode: 0750
     state: file
     follow: 'yes'
+    path: "{{ item }}"
   ignore_errors: true
   with_items:
     - "{{ compilers }}"
