@@ -168,6 +168,28 @@
     - rng-tools
     - packages
 
+- name: stat sysstat default
+  become: 'yes'
+  stat:
+    path: /etc/default/sysstat
+  register: default_sysstat
+  tags:
+    - sysstat
+
+- name: enable sysstat
+  become: 'yes'
+  lineinfile:
+    regexp: "^ENABLED"
+    line: 'ENABLED="true"'
+    dest: /etc/default/sysstat
+    mode: 0644
+    state: present
+    create: 'no'
+    backrefs: 'yes'
+  tags:
+    - sysstat
+  when: default_sysstat.stat.exists
+
 - name: remove unneeded debian dependency packages
   become: 'yes'
   apt:
