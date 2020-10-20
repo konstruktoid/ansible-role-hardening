@@ -24,6 +24,7 @@ packages_debian:
   - aide-common
   - apparmor-profiles
   - apparmor-utils
+  - apt-show-versions
   - audispd-plugins
   - auditd
   - cracklib-runtime
@@ -39,6 +40,7 @@ packages_debian:
   - postfix
   - rkhunter
   - rsyslog
+  - sysstat
   - tcpd
   - vlock
 packages_redhat:
