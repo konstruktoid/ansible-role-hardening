@@ -71,6 +71,18 @@
         path: '/etc/ssh/sshd_config'
       register: perm_sshd_config
 
+    - name: stat /etc/ssh/ssh_config
+      stat:
+        path: '/etc/ssh/ssh_config'
+      register: perm_ssh_config
+
+    - name: assert /etc/ssh/ssh_config permissions
+      assert:
+        that:
+          - perm_ssh_config.stat.mode == "0644"
+        success_msg: "{{ perm_ssh_config.stat.path }} has correct permissions: {{ perm_ssh_config.stat.mode }}"
+        fail_msg: "{{ perm_ssh_config.stat.path }} permissions are incorrect: {{ perm_ssh_config.stat.mode }}"
+
     - name: assert /etc/ssh/sshd_config permissions
       assert:
         that:
@@ -127,6 +139,18 @@
         - UseDNS {{ sshd_use_dns }}
         - UsePAM {{ sshd_use_pam }}
         - X11Forwarding {{ sshd_x11_forwarding }}
+
+    - name: verify ssh_config configuration
+      become: 'yes'
+      shell: grep "^    {{ item }}$" /etc/ssh/ssh_config
+      register: ssh_config
+      failed_when: ssh_config.rc != 0
+      with_items:
+        - Ciphers {{ sshd_ciphers }}
+        - GSSAPIAuthentication {{ sshd_gssapi_authentication }}
+        - HashKnownHosts yes
+        - MACs {{ sshd_macs }}
+        - RekeyLimit {{ sshd_rekey_limit }}
 
     - name: verify sysctl configuration
       become: 'yes'
