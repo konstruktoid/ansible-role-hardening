@@ -1,5 +1,5 @@
 ---
-- name: sshd_config
+- name: configure sshd
   become: 'yes'
   template:
     src: etc/ssh/sshd_config.j2
@@ -35,4 +35,17 @@
   with_items: "{{ ssh_host_keys.files }}"
   tags:
     - sshd
+
+- name: configure ssh client
+  become: 'yes'
+  template:
+    src: etc/ssh/ssh_config.j2
+    dest: /etc/ssh/ssh_config
+    backup: 'yes'
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+    - ssh_config
+    - ssh
 ...

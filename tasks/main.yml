@@ -53,8 +53,8 @@
 - name: configure needrestart, install and remove various packages
   include: packages.yml
 
-- name: configure sshd
-  include: sshdconfig.yml
+- name: configure ssh server and client
+  include: sshconfig.yml
 
 - name: configure pam
   include: password.yml
