@@ -1,4 +1,26 @@
 ---
+- name: configure apt
+  become: 'yes'
+  lineinfile:
+    dest: /etc/apt/apt.conf.d/98-hardening-ubuntu
+    mode: 0644
+    state: present
+    create: 'yes'
+    line: "{{ item }}"
+  with_items:
+    - 'Acquire::AllowDowngradeToInsecureRepositories "false";'
+    - 'Acquire::AllowInsecureRepositories "false";'
+    - 'Acquire::http::AllowRedirect "false";'
+    - 'APT::Get::AllowUnauthenticated "false";'
+    - 'APT::Get::AutomaticRemove "true";'
+    - 'APT::Install-Recommends "false";'
+    - 'APT::Install-Suggests "false";'
+    - 'APT::Periodic::AutocleanInterval "7";'
+    - 'Unattended-Upgrade::Remove-Unused-Dependencies "true";'
+  when: ansible_os_family == "Debian"
+  tags:
+    - apt
+
 - name: apt update
   become: 'yes'
   apt:
@@ -20,39 +42,6 @@
   when: ansible_os_family == "Debian" and system_upgrade|bool
   tags:
     - apt
-
-- name: update dnf cache
-  become: 'yes'
-  dnf:
-    update_cache: 'yes'
-  when: ansible_os_family == "RedHat"
-  notify:
-    - dnf autoremove
-  tags:
-    - dnf
-    - yum
-
-- name: dnf upgrade
-  become: 'yes'
-  command: dnf --cacheonly --assumeyes upgrade-minimal
-  register: dnf_upgrade_response
-  changed_when: not dnf_upgrade_response.stdout.find('Nothing to do.') != -1
-  when: ansible_os_family == "RedHat" and system_upgrade|bool
-  tags:
-    - dnf
-    - yum
-
-- name: python-rpm installation
-  become: 'yes'
-  dnf:
-    name: "python2-rpm"
-    state: present
-  when: ansible_distribution == "RedHat"
-  tags:
-    - dnf
-    - yum
-    - packages
-    - firewalld
 
 - name: link dnf.conf
   become: 'yes'
@@ -150,4 +139,37 @@
   tags:
     - dnf
     - yum
+
+- name: update dnf cache
+  become: 'yes'
+  dnf:
+    update_cache: 'yes'
+  when: ansible_os_family == "RedHat"
+  notify:
+    - dnf autoremove
+  tags:
+    - dnf
+    - yum
+
+- name: dnf upgrade
+  become: 'yes'
+  command: dnf --cacheonly --assumeyes upgrade-minimal
+  register: dnf_upgrade_response
+  changed_when: not dnf_upgrade_response.stdout.find('Nothing to do.') != -1
+  when: ansible_os_family == "RedHat" and system_upgrade|bool
+  tags:
+    - dnf
+    - yum
+
+- name: python-rpm installation
+  become: 'yes'
+  dnf:
+    name: "python2-rpm"
+    state: present
+  when: ansible_distribution == "RedHat"
+  tags:
+    - dnf
+    - yum
+    - packages
+    - firewalld
 ...

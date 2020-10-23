@@ -1,26 +1,4 @@
 ---
-- name: configure apt
-  become: 'yes'
-  lineinfile:
-    dest: /etc/apt/apt.conf.d/98-hardening-ubuntu
-    mode: 0644
-    state: present
-    create: 'yes'
-    line: "{{ item }}"
-  with_items:
-    - 'Acquire::AllowDowngradeToInsecureRepositories "false";'
-    - 'Acquire::AllowInsecureRepositories "false";'
-    - 'Acquire::http::AllowRedirect "false";'
-    - 'APT::Get::AllowUnauthenticated "false";'
-    - 'APT::Get::AutomaticRemove "true";'
-    - 'APT::Install-Recommends "false";'
-    - 'APT::Install-Suggests "false";'
-    - 'APT::Periodic::AutocleanInterval "7";'
-    - 'Unattended-Upgrade::Remove-Unused-Dependencies "true";'
-  when: ansible_os_family == "Debian"
-  tags:
-    - apt
-
 - name: reboot if required
   become: 'yes'
   setup: ~

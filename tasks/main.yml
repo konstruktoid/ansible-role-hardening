@@ -32,8 +32,8 @@
 - name: disable prelink
   include: prelink.yml
 
-- name: update package caches and install updates
-  include: pkgupdate.yml
+- name: configure package managers, update caches and install updates
+  include: packagemgmt.yml
 
 - name: configure hosts.allow and hosts.deny
   include: hosts.yml

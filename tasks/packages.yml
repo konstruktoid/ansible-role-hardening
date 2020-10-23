@@ -104,7 +104,7 @@
     - dnf
     - packages
 
-- name: debian family package removal
+- name: apt purge package removal
   become: 'yes'
   apt:
     name: "{{ packages_blocklist }}"
@@ -118,16 +118,16 @@
     - apt
     - packages
 
-- name: redhat family package removal
+- name: generic package removal
   become: 'yes'
   package:
     name: "{{ item }}"
     state: absent
+  ignore_errors: true
   with_items:
     - "{{ packages_blocklist }}"
-  when: ansible_os_family == "RedHat"
-  ignore_errors: true
   tags:
+    - apt
     - dnf
     - packages
 

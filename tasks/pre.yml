@@ -66,6 +66,17 @@
   tags:
     - fact
 
+- name: redhat family epel installation
+  become: 'yes'
+  dnf:
+    name: "epel-release"
+    state: present
+    update_cache: 'yes'
+  when: ansible_os_family == "RedHat" and (not ansible_distribution == "Fedora")
+  tags:
+    - dnf
+    - packages
+
 - name: install python-pexpect
   become: 'yes'
   apt:
@@ -82,14 +93,27 @@
     update_cache: 'yes'
   when: ansible_os_family == "Debian" and ansible_python.version.major >= 3
 
-- name: redhat family epel installation
+- name: python2-rpm installation
   become: 'yes'
   dnf:
-    name: "epel-release"
+    name: "python2-rpm"
     state: present
-    update_cache: 'yes'
-  when: ansible_os_family == "RedHat" and (not ansible_distribution == "Fedora")
+  when: ansible_distribution == "RedHat" and ansible_python.version.major <= 2
   tags:
     - dnf
+    - yum
     - packages
+    - firewalld
+
+- name: python3-rpm installation
+  become: 'yes'
+  dnf:
+    name: "python3-rpm"
+    state: present
+  when: ansible_distribution == "RedHat" and ansible_python.version.major <= 3
+  tags:
+    - dnf
+    - yum
+    - packages
+    - firewalld
 ...
