@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+{% if (ansible_distribution == "Ubuntu") and (ansible_distribution_major_version|int >= 20) %}
+Include /etc/ssh/ssh_config.d/*.conf
+{% endif %}
+
+Host *
+    Ciphers {{ sshd_ciphers }}
+    GSSAPIAuthentication {{ sshd_gssapi_authentication }}
+    HashKnownHosts yes
+    MACs {{ sshd_macs }}
+    RekeyLimit {{ sshd_rekey_limit }}
