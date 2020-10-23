@@ -39,10 +39,10 @@ None.
 ...
 \`\`\`
 
-## Structure and Task execution
+## Task Execution and Structure
 
 See [STRUCTURE.md](STRUCTURE.md) for a detailed map regarding all tasks
-and the role directory structure.
+and the role structure.
 
 ## Role testing
 
@@ -90,7 +90,7 @@ Apache License Version 2.0
 rm ./*.log ./*.html ./*.list
 
 {
-echo "# Structure and Task Execution
+echo "# Task Execution and Structure
 
 ## Tasks
 
