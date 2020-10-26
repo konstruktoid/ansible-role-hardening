@@ -45,6 +45,17 @@
   tags:
     - rsyslog
 
+- name: get rsyslog.conf FileCreateMode
+  become: 'yes'
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  shell: grep "^$FileCreateMode" /etc/rsyslog.conf
+  register: rsyslog_filecreatemode
+  changed_when: false
+  when: rsyslogconf.stat.exists
+  tags:
+    - rsyslog
+
 - name: set rsyslog.conf FileCreateMode
   become: 'yes'
   lineinfile:
@@ -54,7 +65,19 @@
     mode: 0640
     state: present
     create: 'no'
-  when: rsyslogconf.stat.exists
+  when: rsyslogconf.stat.exists and rsyslog_filecreatemode.stdout.find('FileCreateMode') != -1
+  tags:
+    - rsyslog
+
+- name: set rsyslog.d FileCreateMode
+  become: 'yes'
+  lineinfile:
+    regexp: '^\$FileCreateMode'
+    line: '$FileCreateMode 0600'
+    dest: /etc/rsyslog.d/99-filecreatemode.conf
+    mode: 0644
+    state: present
+    create: 'yes'
   tags:
     - rsyslog
 ...
