@@ -111,6 +111,7 @@ suid_sgid_blocklist:
   - /bin/yum
   - /bin/zip
   - /bin/zsoelim
+  - /sbin/arp
   - /sbin/chroot
   - /sbin/dmsetup
   - /sbin/ip
