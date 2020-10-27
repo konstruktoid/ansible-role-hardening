@@ -120,16 +120,6 @@
   tags:
     - ufw
 
-- name: deny rpcbind ufw
-  become: 'yes'
-  ufw:
-    rule: deny
-    port: "111"
-  when: ansible_os_family == "Debian"
-  tags:
-    - ufw
-    - rpcbind
-
 - name: allow ssh ufw
   become: 'yes'
   ufw:
