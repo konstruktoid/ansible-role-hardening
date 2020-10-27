@@ -109,4 +109,8 @@
 - name: update grub
   become: 'yes'
   command: update-grub
+
+- name: update grub2
+  become: 'yes'
+  command: grub2-mkconfig
 ...

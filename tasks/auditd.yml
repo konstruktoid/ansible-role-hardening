@@ -1,23 +1,4 @@
 ---
-- name: get RedHat kernel parameters
-  become: 'yes'
-  command: /usr/bin/grub2-editenv - list
-  register: kernelopts
-  changed_when: false
-  when: ansible_os_family == "RedHat"
-  tags:
-    - auditd
-    - grub
-
-- name: add RedHat audit grub cmdline
-  become: 'yes'
-  command: /usr/bin/grub2-editenv - set "{{ item }} {{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
-  with_items: '{{ kernelopts.stdout | select(''match'', ''^kernelopts.*'') | list }}'
-  when: ansible_os_family == "RedHat" and not grub_audit_cmdline|string in kernelopts.stdout
-  tags:
-    - auditd
-    - grub
-
 - name: set Debian audit grub cmdline
   become: 'yes'
   lineinfile:
@@ -31,6 +12,24 @@
   notify:
     - update grub
   when: ansible_os_family == "Debian"
+  tags:
+    - auditd
+    - grub
+
+- name: set RedHat audit grub cmdline
+  become: 'yes'
+  lineinfile:
+    line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX {{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"'
+    dest: /etc/default/grub
+    insertafter: '^GRUB_CMDLINE_LINUX="[a-z]+'
+    state: present
+    create: 'no'
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - update grub2
+  when: ansible_os_family == "RedHat"
   tags:
     - auditd
     - grub
