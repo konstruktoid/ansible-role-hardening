@@ -225,10 +225,10 @@
     - name: get crypto-policies value
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      command: grep -qo "^{{ crypto_policy|upper }}$" /etc/crypto-policies/config
+      command: grep "^{{ crypto_policy|upper }}$" /etc/crypto-policies/config
       register: crypto_policy_set
       when: crypto_policies_config.stat.exists
-      failed_when: crypto_policy_set.rc > 1
+      failed_when: crypto_policy_set.rc != 0
 
     - name: verify noexec /dev/shm
       become: 'yes'
@@ -260,4 +260,18 @@
         - SYSLOG_SG_ENAB yes
         - SYSLOG_SU_ENAB yes
         - UMASK 077
+
+    - name: verify audit grubenv
+      become: 'yes'
+      shell: grep "{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub2/grubenv
+      register: audit_grubenv
+      failed_when: audit_grubenv.rc != 0
+      when: ansible_os_family == "RedHat"
+
+    - name: verify audit grub.cfg
+      become: 'yes'
+      shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
+      register: audit_grub_cfg
+      failed_when: audit_grub_cfg.rc != 0
+      when: ansible_os_family == "Debian"
 ...

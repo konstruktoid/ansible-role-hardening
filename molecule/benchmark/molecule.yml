@@ -86,3 +86,4 @@ scenario:
     - converge
     - verify
     - converge
+    - verify
