@@ -49,14 +49,13 @@ packages_redhat:
   - audit
   - gnupg2
   - haveged
-  - libpam-pwquality
+  - libpwquality
   - openssh-server
   - needrestart
   - postfix
   - psacct
   - rkhunter
   - rsyslog
-  - tcp_wrappers
   - vlock
 packages_ubuntu:
   - fwupd
