@@ -1,0 +1,6 @@
+ansible>=2.9,<2.10
+ansible-lint
+ansible-playbook-grapher
+molecule>=3.0,<3.1
+molecule-vagrant
+pytest-molecule
