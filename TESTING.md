@@ -1,5 +1,13 @@
 # Testing
 
+## Distribution boxes used by Molecule and Vagrant
+
+```yaml
+bento/centos-8
+bento/debian-10
+bento/ubuntu-20.04
+```
+
 ```shell
 ansible-playbook tests/test.yml --extra-vars "sshd_admin_net=192.168.1.0/24" \
   -c local -i 'localhost,' -K
