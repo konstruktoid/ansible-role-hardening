@@ -35,8 +35,6 @@
 
 - name: get apparmor status
   become: 'yes'
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   command: aa-status --complaining
   register: get_apparmor_complaining
   changed_when: get_apparmor_complaining.stdout != "0"
@@ -44,8 +42,6 @@
 
 - name: enforce apparmor profiles
   become: 'yes'
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   command: find /etc/apparmor.d/ -maxdepth 1 -type f -exec aa-enforce {} \;
   when: ansible_os_family == "Debian" and (get_apparmor_complaining.stdout != "0")
 

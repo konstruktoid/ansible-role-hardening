@@ -31,8 +31,6 @@
   register: needrestart_directory
 
 - name: get needrestart restart value
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   command: grep -Rqo "$nrconf{restart} = 'l';" /etc/needrestart/conf.d/
   register: needrestart_restart_set
   when: needrestart_directory.stat.exists
@@ -56,8 +54,6 @@
     name: "{{ packages_debian }}"
     state: present
     install_recommends: 'no'
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   when: ansible_os_family == "Debian"
   tags:
     - apt
@@ -69,8 +65,6 @@
     name: "{{ packages_ubuntu }}"
     state: present
     install_recommends: 'no'
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   when: ansible_distribution == "Ubuntu"
   tags:
     - apt
@@ -82,8 +76,6 @@
     name: "update-notifier-common"
     state: present
     install_recommends: 'no'
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   when: ansible_distribution == "Ubuntu"
   tags:
     - apt
@@ -110,8 +102,6 @@
     name: "{{ packages_blocklist }}"
     state: absent
     purge: 'yes'
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   when: ansible_os_family == "Debian"
   ignore_errors: true
   tags:
