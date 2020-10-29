@@ -89,16 +89,23 @@
     - ufw
   when: ansible_os_family == "Debian"
 
-- name: reset ufw
+- name: register ufw rules
   become: 'yes'
-  environment:
-    PATH: /usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:/bin
-  ufw:
-    state: reset
-  when: ansible_os_family == "Debian"
-  tags:
-    - ufw
-    - molecule-idempotence-notest
+  shell: |
+    set -o pipefail
+    ufw show added | grep '^ufw' | grep -v "'ansible\smanaged'" | sed 's/ufw //g'
+  args:
+    executable: /bin/bash
+  failed_when: ufw_not_managed.rc > 1
+  changed_when: false
+  register: ufw_not_managed
+
+- name: delete unmanaged ufw rules
+  become: 'yes'
+  command: ufw delete {{ item }}
+  when: ufw_not_managed.stdout_lines | length > 0
+  with_items:
+    - "{{ ufw_not_managed.stdout_lines }}"
 
 - name: allow loopback traffic in
   become: 'yes'
@@ -106,6 +113,7 @@
     rule: allow
     interface: lo
     direction: in
+    comment: ansible managed
   when: ansible_os_family == "Debian"
   tags:
     - ufw
@@ -116,6 +124,7 @@
     rule: allow
     interface: lo
     direction: out
+    comment: ansible managed
   when: ansible_os_family == "Debian"
   tags:
     - ufw
@@ -123,10 +132,11 @@
 - name: allow ssh ufw
   become: 'yes'
   ufw:
-    rule: allow
+    rule: limit
     src: "{{ item }}"
     port: "{{ sshd_port|int }}"
     proto: tcp
+    comment: ansible managed
   with_items:
     - "{{ sshd_admin_net }}"
   when: ansible_os_family == "Debian"
@@ -134,14 +144,15 @@
     - ufw
     - ssh
 
-- name: deny loopback network traffic
+- name: allow outgoing specified ufw ports
   become: 'yes'
   ufw:
-    rule: deny
-    src: '{{ item }}'
-  loop:
-    - 127.0.0.0/8
-    - ::1
+    rule: allow
+    port: '{{ item|int }}'
+    direction: out
+    comment: ansible managed
+  with_items:
+    - "{{ ufw_outgoing_traffic }}"
   when: ansible_os_family == "Debian"
   tags:
     - ufw
@@ -149,13 +160,39 @@
 # https://github.com/ansible/ansible/issues/45446
 - name: enable ufw and set default deny incoming
   become: 'yes'
-  environment:
-    PATH: /usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:/bin
   ufw:
     state: enabled
     direction: incoming
     policy: deny
+    log: 'yes'
     logging: low
+    comment: ansible managed
+  when: ansible_os_family == "Debian"
+  tags:
+    - ufw
+
+- name: enable ufw and set default deny outgoing
+  become: 'yes'
+  ufw:
+    state: enabled
+    direction: outgoing
+    policy: deny
+    log: 'yes'
+    logging: low
+    comment: ansible managed
+  when: ansible_os_family == "Debian"
+  tags:
+    - ufw
+
+- name: deny loopback network traffic
+  become: 'yes'
+  ufw:
+    rule: deny
+    src: '{{ item }}'
+    comment: ansible managed
+  loop:
+    - 127.0.0.0/8
+    - ::1
   when: ansible_os_family == "Debian"
   tags:
     - ufw
