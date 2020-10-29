@@ -1,4 +1,4 @@
-# Structure and Task Execution
+# Task Execution and Structure
 
 ## Tasks
 
@@ -22,6 +22,7 @@
 │       ├── auditd.yml
 │       ├── compilers.yml
 │       ├── dns.yml
+│       ├── firewall.yml
 │       ├── limits.yml
 │       ├── misc.yml
 │       ├── module_blocklists.yml
@@ -50,6 +51,7 @@
 ├── provision
 │   └── setup.sh
 ├── renovate.json
+├── requirements-dev.txt
 ├── runTests.sh
 ├── tasks
 │   ├── adduser.yml
@@ -76,10 +78,10 @@
 │   ├── main.yml
 │   ├── motdnews.yml
 │   ├── mount.yml
+│   ├── packagemgmt.yml
 │   ├── packages.yml
 │   ├── password.yml
 │   ├── path.yml
-│   ├── pkgupdate.yml
 │   ├── post.yml
 │   ├── postfix.yml
 │   ├── pre.yml
@@ -87,7 +89,7 @@
 │   ├── resolvedconf.yml
 │   ├── rkhunter.yml
 │   ├── rootaccess.yml
-│   ├── sshdconfig.yml
+│   ├── sshconfig.yml
 │   ├── sudo.yml
 │   ├── suid.yml
 │   ├── sysctl.yml
@@ -126,6 +128,7 @@
 │   │   │   ├── limits.conf.j2
 │   │   │   └── pwquality.conf.j2
 │   │   ├── ssh
+│   │   │   ├── ssh_config.j2
 │   │   │   └── sshd_config.j2
 │   │   └── systemd
 │   │       ├── coredump.conf.j2
@@ -146,5 +149,5 @@
     ├── inventory
     └── test.yml
 
-27 directories, 110 files
+27 directories, 113 files
 ```

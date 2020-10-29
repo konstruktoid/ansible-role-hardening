@@ -9,14 +9,6 @@ Requires Ansible >= 2.9.
 Available on
 [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
 
-## Distribution boxes used by Molecule and Vagrant
-
-```yaml
-bento/centos-8
-bento/debian-10
-bento/ubuntu-20.04
-```
-
 ## Dependencies
 
 None.
@@ -31,10 +23,20 @@ None.
 ...
 ```
 
-## Structure and Task execution
+### Note regarding Debian family UFW firewall rules
+
+Instead of resetting `ufw` every run and by doing so causing network traffic
+disruption, the role deletes every `ufw` rule without
+`comment: ansible managed` task parameter and value.
+
+The role also sets default deny policies, which means that firewall rules
+needs to be created for any additional ports except those specified in
+the `sshd_port` and `ufw_outgoing_traffic` variables.
+
+## Task Execution and Structure
 
 See [STRUCTURE.md](STRUCTURE.md) for a detailed map regarding all tasks
-and the role directory structure.
+and the role structure.
 
 ## Role testing
 
@@ -82,12 +84,14 @@ compilers:
   - /bin/as
   - /bin/cc
   - /bin/gcc
+  - /bin/make
   - /usr/bin/as
   - /usr/bin/cc
   - /usr/bin/gcc
+  - /usr/bin/make
 ```
 
-List of compilers that should be restricted to the root user.
+List of compilers that will be restricted to the root user.
 
 ### ./defaults/main/dns.yml
 
@@ -102,6 +106,19 @@ If `dnssec` is set to "allow-downgrade" DNSSEC validation is attempted, but if
 the server does not support DNSSEC properly, DNSSEC mode is automatically
 disabled. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf)
 option.
+
+### ./defaults/main/firewall.yml
+
+```yaml
+ufw_outgoing_traffic:
+  - 53
+  - 80
+  - 123
+  - 443
+  - 853
+```
+
+Open `ufw` ports, allowing outgoing traffic.
 
 ### ./defaults/main/limits.yml
 
@@ -227,14 +244,13 @@ packages_redhat:
   - audit
   - gnupg2
   - haveged
-  - libpam-pwquality
+  - libpwquality
   - openssh-server
   - needrestart
   - postfix
   - psacct
   - rkhunter
   - rsyslog
-  - tcp_wrappers
   - vlock
 packages_ubuntu:
   - fwupd
@@ -351,7 +367,7 @@ suid_sgid_blocklist:
 ```
 
 If `suid_sgid_permissions: true` loop through `suid_sgid_blocklist` and remove
-SUID/SGID.
+any SUID/SGID permissions.
 
 A complete file list is available in
 [defaults/main/suid_sgid_blocklist.yml](defaults/main/suid_sgid_blocklist.yml).

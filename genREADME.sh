@@ -18,13 +18,6 @@ Requires Ansible >= ${ANSIBLE_V}.
 Available on
 [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
 
-## Distribution boxes used by Molecule and Vagrant
-
-\`\`\`yaml"
-grep -E 'box:|vm\.box' molecule/default/molecule.yml Vagrantfile |\
-  grep -vE '^#|^$' | awk '{print $NF}' | tr -d '"' | sort | uniq
-echo "\`\`\`
-
 ## Dependencies
 
 None.
@@ -38,6 +31,16 @@ None.
     - { role: konstruktoid.hardening, sshd_admin_net: [10.0.0.0/24] }
 ...
 \`\`\`
+
+### Note regarding Debian family UFW firewall rules
+
+Instead of resetting \`ufw\` every run and by doing so causing network traffic
+disruption, the role deletes every \`ufw\` rule without
+\`comment: ansible managed\` task parameter and value.
+
+The role also sets default deny policies, which means that firewall rules
+needs to be created for any additional ports except those specified in
+the \`sshd_port\` and \`ufw_outgoing_traffic\` variables.
 
 ## Task Execution and Structure
 
