@@ -111,6 +111,7 @@ option.
 
 ```yaml
 ufw_outgoing_traffic:
+  - 22
   - 53
   - 80
   - 123
