@@ -26,6 +26,9 @@ provisioner:
       focal:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
+      groovy:
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
 platforms:
   - name: buster
     box: bento/debian-10
@@ -48,6 +51,22 @@ platforms:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
     box: bento/ubuntu-20.04
+#   https://bugs.launchpad.net/ubuntu/+source/aide/+bug/1903298
+#   - name: groovy
+#     provider_options:
+#       nic_model_type: '"Am79C973"'
+#       vm.boot_timeout: 600
+#     config_options:
+#       synced_folder: false
+#     raw_ansible_args:
+#       - 'skip-tags aide'
+#     provider_raw_config_args:
+#       - "customize ['modifyvm', :id, '--uart1', '0x3F8', '4']"
+#       - "customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]"
+#     instance_raw_config_args:
+#       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+#     memory: 2048
+#     box: ubuntu/groovy64
 verifier:
   name: ansible
 lint: |
@@ -84,6 +103,5 @@ scenario:
     - create
     - prepare
     - converge
-    - verify
-    - converge
+    - idempotence
     - verify
