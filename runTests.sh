@@ -105,6 +105,8 @@ if [ "$1" == "vagrant" ]; then
 
   rm "${VMFILE}"
 
+  curl -sSL https://raw.githubusercontent.com/konstruktoid/ansible-role-hardening/master/defaults/main/suid_sgid_blocklist.yml | grep '  - ' >> "$(date +%y%m%d)-suid.list"
+
   printf '\n\n'
 
   find ./ -name '*-lynis.log' -type f | while read -r f; do
