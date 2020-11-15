@@ -11,6 +11,8 @@ suid_sgid_blocklist:
   - /bin/chage
   - /bin/chmod
   - /bin/chown
+  - /bin/cowsay
+  - /bin/cowthink
   - /bin/cp
   - /bin/cpan
   - /bin/crontab
@@ -122,6 +124,7 @@ suid_sgid_blocklist:
   - /sbin/service
   - /sbin/start-stop-daemon
   - /sbin/sysctl
+  - /sbin/tcpdump
   - /usr/bin/apt
   - /usr/bin/apt-get
   - /usr/bin/at
@@ -138,6 +141,8 @@ suid_sgid_blocklist:
   - /usr/bin/chmod
   - /usr/bin/chown
   - /usr/bin/chsh
+  - /usr/bin/cowsay
+  - /usr/bin/cowthink
   - /usr/bin/cp
   - /usr/bin/cpan
   - /usr/bin/crontab
