@@ -9,7 +9,7 @@
   become: 'yes'
   replace:
     regexp: 'umask(\s+.*)'
-    replace: "umask 027"
+    replace: "umask 077"
     dest: /etc/init.d/rc
     mode: 0755
   when: initdrc.stat.exists
@@ -26,7 +26,7 @@
   become: 'yes'
   replace:
     regexp: 'umask(\s+.*)'
-    replace: "umask 027"
+    replace: "umask 077"
     dest: /etc/bashrc
     mode: 0644
   when: bashrc.stat.exists
@@ -43,7 +43,7 @@
   become: 'yes'
   replace:
     regexp: 'umask(\s+.*)'
-    replace: "umask 027"
+    replace: "umask 077"
     dest: /etc/csh.cshrc
     mode: 0644
   when: cshrc.stat.exists
@@ -54,7 +54,7 @@
   become: 'yes'
   replace:
     regexp: 'umask(\s+.*)'
-    replace: "umask 027"
+    replace: "umask 077"
     dest: /etc/profile
     mode: 0644
   tags:
