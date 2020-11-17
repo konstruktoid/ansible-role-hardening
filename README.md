@@ -9,6 +9,10 @@ Requires Ansible >= 2.9.
 Available on
 [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
 
+```shell
+Do not use this playbook without first testing in a non-operational environment.
+```
+
 ## Dependencies
 
 None.
