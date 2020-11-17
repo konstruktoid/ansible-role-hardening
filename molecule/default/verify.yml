@@ -261,6 +261,23 @@
         - SYSLOG_SU_ENAB yes
         - UMASK 077
 
+    - name: verify pwquality.conf settings
+      become: 'yes'
+      shell: grep "^{{ item }}$" /etc/security/pwquality.conf
+      register: pwquality_conf
+      failed_when: pwquality_conf.rc != 0
+      with_items:
+        - difok = 15
+        - dictcheck = 1
+        - enforcing = 1
+        - maxrepeat = 3
+        - minclass = 3
+        - minlen = 15
+        - dcredit = -1
+        - lcredit = -1
+        - ocredit = -1
+        - ucredit = -1
+
     - name: verify audit grubenv
       become: 'yes'
       shell: grep "{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub2/grubenv
