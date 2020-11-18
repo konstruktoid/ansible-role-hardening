@@ -1,4 +1,4 @@
-# ansible-role-hardening
+# Hardening - the Ansible role
 
 An [Ansible](https://www.ansible.com/) role to make a CentOS, Debian or Ubuntu
 server a bit more secure,
@@ -10,7 +10,7 @@ Available on
 [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
 
 ```shell
-Do not use this playbook without first testing in a non-operational environment.
+Do not use this role without first testing in a non-operational environment.
 ```
 
 ## Dependencies
