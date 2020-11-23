@@ -6,6 +6,7 @@
 bento/centos-8
 bento/debian-10
 bento/ubuntu-20.04
+ubuntu/groovy64
 ```
 
 ```shell
@@ -44,14 +45,14 @@ sudo oscap xccdf eval --fetch-remote-resources \
 ```
 
 To run a [OpenSCAP](https://github.com/ComplianceAsCode/content) test on a
-Debian 10 host, where `v0.1.52` should be replaced with the latest available
+Debian 10 host, where `v0.1.53` should be replaced with the latest available
 version:
 
 ```shell
 sudo apt-get -y install libopenscap8 unzip
-wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.52/scap-security-guide-0.1.52.zip
-unzip scap-security-guide-0.1.52.zip
-cd scap-security-guide-0.1.52
+wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.53/scap-security-guide-0.1.53.zip
+unzip scap-security-guide-0.1.53.zip
+cd scap-security-guide-0.1.53
 oscap info --fetch-remote-resources ./ssg-debian10-ds.xml
 sudo oscap xccdf eval --fetch-remote-resources \
   --profile xccdf_org.ssgproject.content_profile_anssi_np_nt28_high
