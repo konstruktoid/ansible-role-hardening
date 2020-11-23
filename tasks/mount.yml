@@ -53,6 +53,17 @@
     - mount
     - tmp
 
+- name: unmask tmp.mount
+  become: 'yes'
+  systemd:
+    name: tmp.mount
+    masked: 'no'
+  when: tmp_mount.stat.exists
+  tags:
+    - mount
+    - systemd
+    - tmp
+
 - name: enable tmp.mount
   become: 'yes'
   systemd:
