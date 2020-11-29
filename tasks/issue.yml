@@ -1,26 +1,5 @@
 ---
-- name: stat issue file
-  stat:
-    path: "{{ item }}"
-  register: issue_files
-  with_items:
-    - /etc/issue
-    - /etc/issue.net
-  tags:
-    - motd
-
-- name: remove issue and issue.net
-  become: 'yes'
-  file:
-    path: "{{ item.stat.path }}"
-    state: absent
-  when: item.stat.exists and not item.stat.islnk
-  with_items:
-    - "{{ issue_files.results }}"
-  tags:
-    - motd
-
-- name: add notice
+- name: add motd
   become: 'yes'
   template:
     src: etc/motd.j2
@@ -32,17 +11,18 @@
   tags:
     - motd
 
-- name: link issue to motd
+- name: add issue and issue.net
   become: 'yes'
-  file:
-    src: /etc/motd
+  template:
+    src: etc/issue.j2
     dest: "{{ item }}"
+    backup: 'yes'
+    mode: 0644
     owner: root
     group: root
-    state: link
   with_items:
     - /etc/issue
     - /etc/issue.net
   tags:
-    - motd
+    - issue
 ...
