@@ -34,7 +34,6 @@ platforms:
     memory: 1024
   - name: centos
     provider_options:
-      nic_model_type: '"82543GC"'
       vm.boot_timeout: 600
     instance_raw_config_args:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
