@@ -291,4 +291,15 @@
       register: audit_grub_cfg
       failed_when: audit_grub_cfg.rc != 0
       when: ansible_os_family == "Debian"
+
+    - name: verify systemd resolved.conf
+      become: 'yes'
+      shell: grep "^{{ item }}$" /etc/systemd/resolved.conf
+      register: systemd_resolved_conf
+      failed_when: systemd_resolved_conf.rc != 0
+      with_items:
+        - DNS={{ dns }}
+        - FallbackDNS={{ fallback_dns }}
+        - DNSSEC={{ dnssec }}
+        - DNSOverTLS={{ dns_over_tls }}
 ...

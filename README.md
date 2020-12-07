@@ -100,15 +100,19 @@ List of compilers that will be restricted to the root user.
 ### ./defaults/main/dns.yml
 
 ```yaml
-dns: 127.0.0.1
+dns: 127.0.0.1 1.1.1.1
+fallback_dns: 9.9.9.9 1.0.0.1
 dnssec: allow-downgrade
-fallback_dns: 1.1.1.1 9.9.9.9
+dns_over_tls: opportunistic
 ```
 
 IPv4 and IPv6 addresses to use as system and fallback DNS servers.
 If `dnssec` is set to "allow-downgrade" DNSSEC validation is attempted, but if
 the server does not support DNSSEC properly, DNSSEC mode is automatically
-disabled. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf)
+disabled.
+If `dns_over_tls` is true, all connections to the server will be encrypted if
+the DNS server supports DNS-over-TLS and has a valid certificate.
+[systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf)
 option.
 
 ### ./defaults/main/firewall.yml

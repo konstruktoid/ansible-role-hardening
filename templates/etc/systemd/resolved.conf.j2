@@ -5,5 +5,5 @@ DNS={{ dns }}
 FallbackDNS={{ fallback_dns }}
 DNSSEC={{ dnssec }}
 {% if ansible_local.systemd.version|int >= 239 %}
-DNSOverTLS=opportunistic
+DNSOverTLS={{ dns_over_tls }}
 {% endif %}
