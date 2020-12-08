@@ -80,8 +80,10 @@
 - name: disable misc kernel modules
   include: disablemod.yml
 
+#   https://bugs.launchpad.net/ubuntu/+source/aide/+bug/1903298
 - name: configure aide
   include: aide.yml
+  when: not (ansible_distribution == "Ubuntu" and ansible_lsb.codename == "groovy")
 
 - name: remove users
   include: users.yml
