@@ -126,6 +126,22 @@
     - dnf
     - yum
 
+- name: stat centos PowerTools repo
+  stat:
+    path: /etc/yum.repos.d/CentOS-PowerTools.repo
+  register: centos_powertools
+  tags:
+    - dnf
+    - yum
+
+- name: stat centos stream PowerTools repo
+  stat:
+    path: /etc/yum.repos.d/CentOS-Stream-PowerTools.repo
+  register: centos_stream_powertools
+  tags:
+    - dnf
+    - yum
+
 - name: enable centos PowerTools repo
   become: 'yes'
   lineinfile:
@@ -135,7 +151,21 @@
     mode: 0644
     state: present
     create: 'no'
-  when: ansible_distribution == "CentOS"
+  when: centos_powertools.stat.exists
+  tags:
+    - dnf
+    - yum
+
+- name: enable centos stream PowerTools repo
+  become: 'yes'
+  lineinfile:
+    regexp: "^enabled="
+    line: "enabled=1"
+    dest: /etc/yum.repos.d/CentOS-Stream-PowerTools.repo
+    mode: 0644
+    state: present
+    create: 'no'
+  when: centos_stream_powertools.stat.exists
   tags:
     - dnf
     - yum
