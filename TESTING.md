@@ -6,6 +6,7 @@
 bento/centos-8
 bento/debian-10
 bento/ubuntu-20.04
+centos_stream/20201019
 ubuntu/groovy64
 ```
 
