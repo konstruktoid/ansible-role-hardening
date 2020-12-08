@@ -48,6 +48,29 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define "centos_stream" do |centos_stream|
+    centos_stream.vm.hostname = "centos_stream"
+    centos_stream.vm.box = "centos_stream/20201019"
+    centos_stream.vm.box_url = "https://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-Vagrant-8-20201019.1.x86_64.vagrant-virtualbox.box"
+    centos_stream.ssh.insert_key = true
+    centos_stream.vm.network "private_network", ip: "10.2.3.49"
+    centos_stream.vm.provider "virtualbox" do |c|
+      c.default_nic_type = "82543GC"
+    end
+    centos_stream.vm.hostname = "centos"
+    centos_stream.vm.provision "shell",
+      inline: "dnf clean all && dnf install -y epel-release && dnf install -y ansible"
+    centos_stream.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.limit = "all"
+      a.playbook = "tests/test.yml"
+      a.extra_vars = {
+        "sshd_admin_net" => "0.0.0.0/0",
+        "sshd_allow_groups" => "vagrant sudo",
+      }
+    end
+  end
+
   config.vm.define "focal" do |focal|
     focal.vm.box = "bento/ubuntu-20.04"
     focal.ssh.insert_key = true
