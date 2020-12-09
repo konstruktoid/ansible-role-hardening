@@ -38,7 +38,7 @@
   apt:
     upgrade: safe
   register: apt_upgrade_response
-  changed_when: not apt_upgrade_response.stdout.find('0 upgraded') != -1
+  changed_when: apt_upgrade_response.stdout.find('0 upgraded') == -1
   when: ansible_os_family == "Debian" and system_upgrade|bool
   tags:
     - apt
@@ -185,7 +185,7 @@
   become: 'yes'
   command: dnf --assumeyes upgrade-minimal
   register: dnf_upgrade_response
-  changed_when: not dnf_upgrade_response.stdout.find('Nothing to do.') != -1
+  changed_when: dnf_upgrade_response.stdout.find('Nothing to do.') == -1
   when: ansible_os_family == "RedHat" and system_upgrade|bool
   tags:
     - dnf
