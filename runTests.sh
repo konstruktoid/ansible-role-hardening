@@ -3,9 +3,6 @@
 
 set -o pipefail
 
-ANSIBLE_V=2.9
-ANSIBLE_LATEST_V=2.10
-
 export ANSIBLE_NOCOWS=1
 
 if ! [ -x "$(command -v vagrant)" ]; then
@@ -52,12 +49,6 @@ function prep {
   fi
 }
 
-if [ -z "${ANSIBLE_V}" ]; then
-  pip3 install ansible
-else
-  pip3 install --upgrade "ansible>=${ANSIBLE_V},<${ANSIBLE_LATEST_V}"
-fi
-
 if [ "$1" == "prep" ]; then
   prep
   exit
@@ -69,7 +60,10 @@ ANSIBLE_V0="$(ansible --version | grep '^ansible' | awk '{print $NF}')"
 
 if [ "$1" == "vagrant" ]; then
   prep
-  vagrant up
+  for VMUP in $(grep 'config\.vm\.define' Vagrantfile | awk '{print $2}' |\
+    tr -d '"' | tr '\n' ' ' | sed 's/\s$//g'); do
+      vagrant up "${VMUP}"
+  done
   wait
 
   VMFILE="$(mktemp)"
@@ -81,16 +75,20 @@ if [ "$1" == "vagrant" ]; then
     echo "Rebooting ${VM}."
     vagrant ssh "${VM}" -c 'sudo -i reboot'
 
-    while ! vagrant ssh "${VM}" -c 'id'; do
-      echo "Waiting for ${VM}."
-      sleep 10
+    SLEEP_COUNT=0
+    while ! vagrant ssh "${VM}" -c 'id' && [ ${SLEEP_COUNT} -le 9 ]; do
+        echo "Waiting for ${VM}."
+        sleep 10
+        ((SLEEP_COUNT++))
     done
 
     vagrant reload "${VM}"
 
-    while ! vagrant ssh "${VM}" -c 'id'; do
-      echo "Waiting for ${VM}."
-      sleep 10
+    SLEEP_COUNT=0
+    while ! vagrant ssh "${VM}" -c 'id' && [ ${SLEEP_COUNT} -le 9 ]; do
+        echo "Waiting for ${VM}."
+        sleep 10
+        ((SLEEP_COUNT++))
     done
 
     echo "Running postChecks.sh."
