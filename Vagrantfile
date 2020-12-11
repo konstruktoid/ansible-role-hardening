@@ -21,7 +21,29 @@ Vagrant.configure("2") do |config|
       a.playbook = "tests/test.yml"
       a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
-        "sshd_allow_groups" => "vagrant sudo debian ubuntu"
+        "sshd_allow_groups" => "vagrant sudo debian ubuntu",
+        "ansible_python_interpreter" => "/usr/bin/python3"
+     }
+    end
+  end
+
+  config.vm.define "bullseye" do |bullseye|
+    bullseye.vm.box = "debian/contrib-testing64"
+    bullseye.ssh.insert_key = true
+    bullseye.vm.network "private_network", ip: "10.2.3.50"
+    bullseye.vm.hostname = "bullseye"
+    bullseye.vm.boot_timeout = 600
+    bullseye.vm.provision "shell",
+      inline: "apt-get update && apt-get -y install ansible"
+    bullseye.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.limit = "all"
+      a.playbook = "tests/test.yml"
+      a.extra_vars = {
+        "sshd_admin_net" => "0.0.0.0/0",
+        "sshd_allow_groups" => "vagrant sudo debian ubuntu",
+        "system_upgrade" => "no",
+        "ansible_python_interpreter" => "/usr/bin/python3"
      }
     end
   end
@@ -50,7 +72,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "centos_stream" do |centos_stream|
     centos_stream.vm.hostname = "centos_stream"
-    centos_stream.vm.box = "centos_stream/20201019"
+    centos_stream.vm.box = "centos-stream/20201019"
     centos_stream.vm.box_url = "https://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-Vagrant-8-20201019.1.x86_64.vagrant-virtualbox.box"
     centos_stream.ssh.insert_key = true
     centos_stream.vm.network "private_network", ip: "10.2.3.49"
