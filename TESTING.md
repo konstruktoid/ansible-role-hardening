@@ -6,7 +6,8 @@
 bento/centos-8
 bento/debian-10
 bento/ubuntu-20.04
-centos_stream/20201019
+centos-stream/20201019
+debian/contrib-testing64
 ubuntu/groovy64
 ```
 
@@ -15,12 +16,18 @@ ansible-playbook tests/test.yml --extra-vars "sshd_admin_net=192.168.1.0/24" \
   -c local -i 'localhost,' -K
 ```
 
-For running a playbook cycle suitable for performing benchmark testing,
-`molecule test --scenario-name benchmark` should be used.
-
 The [runTests.sh](runTests.sh) script may be used to automatically update
 current Vagrant boxes and then use [Ansible Molecule](https://molecule.readthedocs.io)
 to test the default scenario on the playbook.
+
+The following Molecule scenarios are available:
+
+```
+centos
+debian
+default
+ubuntu
+```
 
 If the [runTests.sh](runTests.sh) is executed as `runTests.sh vagrant`,
 [Vagrant](https://www.vagrantup.com/ "Vagrant") will configure hosts and run the

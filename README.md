@@ -13,6 +13,14 @@ Available on
 Do not use this role without first testing in a non-operational environment.
 ```
 
+[CentOS 8](https://www.centos.org),
+[Debian 10](https://www.debian.org/) and
+[Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
+
+[CentOS Stream](https://www.centos.org/centos-stream/),
+[Debian 11](https://wiki.debian.org/DebianBullseye) and
+[Ubuntu 20.10](https://releases.ubuntu.com/20.10/) are in a testing phase.
+
 ## Dependencies
 
 None.
