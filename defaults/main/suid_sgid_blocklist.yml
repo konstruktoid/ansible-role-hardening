@@ -48,6 +48,8 @@ suid_sgid_blocklist:
   - /bin/mail
   - /bin/make
   - /bin/man
+  - /bin/mksh
+  - /bin/mksh-static
   - /bin/more
   - /bin/mount
   - /bin/mv
@@ -186,6 +188,7 @@ suid_sgid_blocklist:
   - /usr/bin/make
   - /usr/bin/man
   - /usr/bin/mawk
+  - /usr/bin/mksh
   - /usr/bin/mlocate
   - /usr/bin/more
   - /usr/bin/mount
@@ -270,6 +273,7 @@ suid_sgid_blocklist:
   - /usr/bin/yum
   - /usr/bin/zip
   - /usr/bin/zsoelim
+  - /usr/lib/klibc/bin/mksh-static
   - /usr/sbin/arp
   - /usr/sbin/chroot
   - /usr/sbin/dmsetup
