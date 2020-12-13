@@ -13,6 +13,7 @@ RUN apk --update --no-cache add gcc git libffi-dev linux-headers make musl-dev \
     openssl-dev python3-dev && \
     if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi && \
     pip3 install --no-cache-dir --upgrade pip && \
+    pip3 install --no-cache-dir ansible && \
     pip3 install --no-cache-dir yamllint && \
     pip3 install git+https://github.com/ansible/ansible-lint.git && \
     apk del gcc git libffi-dev linux-headers make musl-dev openssl-dev && \

@@ -4,8 +4,8 @@ echo "# Running ansible-lint"
 ansible-lint --version
 
 if ! ansible-lint -vv .; then
-    echo 'ansible-lint failed.'
-    exit 1
+  echo 'ansible-lint failed.'
+  exit 1
 fi
 
 echo "# Running yamllint"
