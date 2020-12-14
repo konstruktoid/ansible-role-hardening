@@ -4,7 +4,7 @@ dependency:
 driver:
   name: vagrant
   provider:
-    name: vbox
+    name: virtualbox
 provisioner:
   name: ansible
   config_options:
@@ -24,14 +24,14 @@ provisioner:
         sshd_allow_groups: "vagrant sudo"
 platforms:
   - name: centos
-    provider_options:
+    config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
     box: bento/centos-8
   - name: centos-stream
-    provider_options:
+    config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'

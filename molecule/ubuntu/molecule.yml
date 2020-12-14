@@ -4,7 +4,7 @@ dependency:
 driver:
   name: vagrant
   provider:
-    name: vbox
+    name: virtualbox
 provisioner:
   name: ansible
   config_options:
@@ -24,18 +24,15 @@ provisioner:
         sshd_allow_groups: "vagrant sudo"
 platforms:
   - name: focal
-    provider_options:
-      nic_model_type: '"Am79C973"'
+    config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
     box: bento/ubuntu-20.04
   - name: groovy
-    provider_options:
-      nic_model_type: '"Am79C973"'
-      vm.boot_timeout: 600
     config_options:
+      vm.boot_timeout: 600
       synced_folder: false
     provider_raw_config_args:
       - "customize ['modifyvm', :id, '--uart1', '0x3F8', '4']"
