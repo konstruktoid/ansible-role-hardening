@@ -57,7 +57,7 @@
 - name: set audit action_mail_acct
   become: 'yes'
   lineinfile:
-    regexp: "^action_mail_acct"
+    regexp: "^action_mail_acct ="
     line: "action_mail_acct = {{ auditd_action_mail_acct }}"
     dest: /etc/audit/auditd.conf
     mode: 0640
@@ -69,8 +69,44 @@
 - name: set audit admin_space_left_action
   become: 'yes'
   lineinfile:
-    regexp: "^admin_space_left_action"
+    regexp: "^admin_space_left_action = "
     line: "admin_space_left_action = {{ auditd_admin_space_left_action }}"
+    dest: /etc/audit/auditd.conf
+    mode: 0640
+    state: present
+    create: 'no'
+  tags:
+    - auditd
+
+- name: set audit disk_error_action
+  become: 'yes'
+  lineinfile:
+    regexp: "^disk_error_action ="
+    line: "disk_error_action = {{ auditd_disk_error_action }}"
+    dest: /etc/audit/auditd.conf
+    mode: 0640
+    state: present
+    create: 'no'
+  tags:
+    - auditd
+
+- name: set audit disk_full_action
+  become: 'yes'
+  lineinfile:
+    regexp: "^disk_full_action ="
+    line: "disk_full_action = {{ auditd_disk_full_action }}"
+    dest: /etc/audit/auditd.conf
+    mode: 0640
+    state: present
+    create: 'no'
+  tags:
+    - auditd
+
+- name: set audit max_log_file
+  become: 'yes'
+  lineinfile:
+    regexp: "^max_log_file ="
+    line: "max_log_file = {{ auditd_max_log_file }}"
     dest: /etc/audit/auditd.conf
     mode: 0640
     state: present
@@ -81,8 +117,32 @@
 - name: set audit max_log_file_action
   become: 'yes'
   lineinfile:
-    regexp: "^max_log_file_action"
+    regexp: "^max_log_file_action ="
     line: "max_log_file_action = {{ auditd_max_log_file_action }}"
+    dest: /etc/audit/auditd.conf
+    mode: 0640
+    state: present
+    create: 'no'
+  tags:
+    - auditd
+
+- name: set audit num_logs
+  become: 'yes'
+  lineinfile:
+    regexp: "^num_logs ="
+    line: "num_logs = {{ auditd_num_logs }}"
+    dest: /etc/audit/auditd.conf
+    mode: 0640
+    state: present
+    create: 'no'
+  tags:
+    - auditd
+
+- name: set audit space_left
+  become: 'yes'
+  lineinfile:
+    regexp: "^space_left ="
+    line: "space_left = {{ auditd_space_left }}"
     dest: /etc/audit/auditd.conf
     mode: 0640
     state: present
@@ -93,7 +153,7 @@
 - name: set audit space_left_action
   become: 'yes'
   lineinfile:
-    regexp: "^space_left_action"
+    regexp: "^space_left_action ="
     line: "space_left_action = {{ auditd_space_left_action }}"
     dest: /etc/audit/auditd.conf
     mode: 0640

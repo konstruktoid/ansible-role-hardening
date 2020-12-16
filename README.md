@@ -61,8 +61,13 @@ See [TESTING.md](TESTING.md).
 ```yaml
 auditd_action_mail_acct: root
 auditd_admin_space_left_action: suspend
+auditd_disk_error_action: suspend
+auditd_disk_full_action: suspend
+auditd_max_log_file: 8
 auditd_max_log_file_action: keep_logs
 auditd_mode: 1
+auditd_num_logs: 5
+auditd_space_left: 75
 auditd_space_left_action: email
 grub_audit_backlog_cmdline: audit_backlog_limit=8192
 grub_audit_cmdline: audit=1
@@ -77,8 +82,10 @@ detected that it is low on disk space. `suspend` will cause the audit daemon to
 stop writing records to the disk.
 
 `auditd_max_log_file_action` sets what action to take when the system has
-detected that the max file size limit has been reached. `keep_logs` causes the
-audit daemon to rotate the logs.
+detected that the max file size limit has been reached. E.g. the `rotate` option
+will cause the audit daemon to rotate the logs. The `keep_logs` option is
+similar to `rotate` except it does not use the `num_logs` setting. This prevents
+audit logs from being overwritten.
 
 `auditd_space_left_action` tells the system what action to take when the system
 has detected that it is low on disk space. `email` means that it will send a
