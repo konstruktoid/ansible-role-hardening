@@ -24,6 +24,9 @@ provisioner:
       groovy:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
+      hirsute:
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
 platforms:
   - name: focal
     config_options:
@@ -43,6 +46,17 @@ platforms:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 2048
     box: ubuntu/groovy64
+  - name: hirsute
+    config_options:
+      vm.boot_timeout: 600
+      synced_folder: false
+    provider_raw_config_args:
+      - "customize ['modifyvm', :id, '--uart1', '0x3F8', '4']"
+      - "customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]"
+    instance_raw_config_args:
+      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+    memory: 2048
+    box: ubuntu/hirsute64
 verifier:
   name: ansible
 lint: |

@@ -9,6 +9,7 @@ bento/ubuntu-20.04
 centos-stream/20201019
 debian/contrib-testing64
 ubuntu/groovy64
+ubuntu/hirsute64
 ```
 
 ```shell
