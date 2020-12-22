@@ -60,10 +60,17 @@ ANSIBLE_V0="$(ansible --version | grep '^ansible' | awk '{print $NF}')"
 
 if [ "$1" == "vagrant" ]; then
   prep
-  for VMUP in $(grep 'config\.vm\.define' Vagrantfile | awk '{print $2}' |\
-    tr -d '"' | tr '\n' ' ' | sed 's/\s$//g'); do
-      vagrant up "${VMUP}"
+
+  grep config.vm.define Vagrantfile | grep -o '".*"' | tr -d '"' | while read -r v; do
+    vagrant up "${v}"
   done
+
+  wait
+
+  grep config.vm.define Vagrantfile | grep -o '".*"' | tr -d '"' | while read -r v; do
+    vagrant reload "${v}"
+  done
+
   wait
 
   VMFILE="$(mktemp)"
