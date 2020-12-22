@@ -38,7 +38,7 @@ function prep {
   echo "Copying the role."
   set -x
   sudo mkdir -p /etc/ansible/roles/konstruktoid.hardening/
-  sudo cp -R . /etc/ansible/roles/konstruktoid.hardening/
+  sudo cp -R ./* /etc/ansible/roles/konstruktoid.hardening/
   sudo rm /etc/ansible/roles/konstruktoid.hardening/{*.log,*.html,*.list}
   set +x
   echo "Finished basic preparations."
