@@ -1,8 +1,6 @@
 Vagrant.configure("2") do |config|
   config.vbguest.installer_options = { allow_kernel_upgrade: true }
   config.vm.provider "virtualbox" do |vb|
-    vb.default_nic_type = "Am79C973"
-    vb.memory = 2048
     vb.customize ["modifyvm", :id, "--uart1", "0x3F8", "4"]
     vb.customize ["modifyvm", :id, "--uartmode1", "file", File::NULL]
   end
@@ -40,9 +38,9 @@ Vagrant.configure("2") do |config|
       a.limit = "all"
       a.playbook = "tests/test.yml"
       a.extra_vars = {
+        "system_upgrade" => "no",
         "sshd_admin_net" => "0.0.0.0/0",
         "sshd_allow_groups" => "vagrant sudo debian ubuntu",
-        "system_upgrade" => "no",
         "ansible_python_interpreter" => "/usr/bin/python3"
      }
     end
