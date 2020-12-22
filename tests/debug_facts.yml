@@ -1,5 +1,4 @@
 ---
-
 - name: python3-jmespath
   become: 'yes'
   package:
