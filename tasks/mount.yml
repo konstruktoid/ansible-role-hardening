@@ -74,4 +74,16 @@
     - mount
     - systemd
     - tmp
+
+- name: start tmp.mount
+  become: 'yes'
+  systemd:
+    name: tmp.mount
+    daemon_reload: 'yes'
+    state: started
+  when: ansible_os_family == "RedHat" and tmp_mount.stat.exists
+  tags:
+    - mount
+    - systemd
+    - tmp
 ...
