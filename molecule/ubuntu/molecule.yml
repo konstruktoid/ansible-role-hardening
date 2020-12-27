@@ -29,24 +29,14 @@ provisioner:
         sshd_allow_groups: "vagrant sudo"
 platforms:
   - name: focal
+    box: bento/ubuntu-20.04
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
-    box: bento/ubuntu-20.04
   - name: groovy
-    config_options:
-      vm.boot_timeout: 600
-      synced_folder: false
-    provider_raw_config_args:
-      - "customize ['modifyvm', :id, '--uart1', '0x3F8', '4']"
-      - "customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]"
-    instance_raw_config_args:
-      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
-    memory: 2048
     box: ubuntu/groovy64
-  - name: hirsute
     config_options:
       vm.boot_timeout: 600
       synced_folder: false
@@ -55,8 +45,18 @@ platforms:
       - "customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]"
     instance_raw_config_args:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
-    memory: 2048
+    memory: 1024
+  - name: hirsute
     box: ubuntu/hirsute64
+    config_options:
+      vm.boot_timeout: 600
+      synced_folder: false
+    provider_raw_config_args:
+      - "customize ['modifyvm', :id, '--uart1', '0x3F8', '4']"
+      - "customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]"
+    instance_raw_config_args:
+      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+    memory: 1024
 verifier:
   name: ansible
 lint: |
@@ -90,11 +90,14 @@ scenario:
   test_sequence:
     - dependency
     - lint
+    - cleanup
+    - destroy
     - syntax
     - create
     - prepare
     - converge
     - idempotence
+    - side_effect
     - verify
     - cleanup
     - destroy
