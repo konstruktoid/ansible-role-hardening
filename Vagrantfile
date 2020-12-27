@@ -70,8 +70,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "centos_stream" do |centos_stream|
     centos_stream.vm.hostname = "centos_stream"
-    centos_stream.vm.box = "centos-stream/20201019"
-    centos_stream.vm.box_url = "https://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-Vagrant-8-20201019.1.x86_64.vagrant-virtualbox.box"
+    centos_stream.vm.box = "centos-stream/20201217"
+    centos_stream.vm.box_url = "https://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-Vagrant-8-20201217.0.x86_64.vagrant-virtualbox.box"
     centos_stream.ssh.insert_key = true
     centos_stream.vm.network "private_network", ip: "10.2.3.49"
     centos_stream.vm.provider "virtualbox" do |c|
