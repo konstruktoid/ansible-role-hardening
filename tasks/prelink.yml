@@ -21,14 +21,14 @@
     mode: 0644
     state: present
     create: 'yes'
-  when: ansible_os_family == "RedHat"
+  when: ansible_os_family == "RedHat" and sysconfig_prelink_exists.stat.exists
   tags:
     - prelink
 
 - name: return to non-prelinked state
   become: 'yes'
   command: prelink -ua
-  when: sysconfig_prelink_exists or etc_prelink_exists
+  when: sysconfig_prelink_exists.stat.exists or etc_prelink_exists.stat.exists
   ignore_errors: true
   tags:
     - prelink
