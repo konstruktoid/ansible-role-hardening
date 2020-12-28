@@ -307,4 +307,9 @@
         - FallbackDNS={{ fallback_dns }}
         - DNSSEC={{ dnssec }}
         - DNSOverTLS={{ dns_over_tls }}
+
+    - name: verify /tmp mount
+      shell: mount | grep -oE '^tmpfs.*\s/tmp\s.*tmpfs.*(nosuid|nodev|noexec)'
+      register: tmp_mount
+      failed_when: tmp_mount.rc != 0
 ...
