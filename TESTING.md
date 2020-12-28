@@ -6,7 +6,7 @@
 bento/centos-8
 bento/debian-10
 bento/ubuntu-20.04
-centos-stream/20201019
+centos-stream/20201217
 debian/contrib-testing64
 ubuntu/groovy64
 ubuntu/hirsute64

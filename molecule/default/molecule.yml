@@ -32,19 +32,19 @@ platforms:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
   - name: centos
-    config_options:
-      vm.boot_timeout: 600
-    instance_raw_config_args:
-      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
-    memory: 1024
     box: bento/centos-8
-  - name: focal
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
+  - name: focal
     box: bento/ubuntu-20.04
+    config_options:
+      vm.boot_timeout: 600
+    instance_raw_config_args:
+      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+    memory: 1024
 verifier:
   name: ansible
 lint: |
