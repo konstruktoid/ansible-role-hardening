@@ -119,6 +119,7 @@
 -a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=-1 -k delete
 
 # Docker configuration and tools
+-a exit,always -F path=/var/lib/docker -F perm=war -k docker
 -w /etc/default/docker -p rwxa -k docker
 -w /etc/docker -p rwxa -k docker
 -w /etc/sysconfig/docker -p rwxa -k docker
@@ -145,7 +146,6 @@
 -w /usr/lib/systemd/system/docker-registry.service -p rwxa -k docker
 -w /usr/lib/systemd/system/docker.service -p rwxa -k docker
 -w /usr/sbin/runc -p rwxa -k docker
--w /var/lib/docker -p rwxa -k docker
 -w /var/run/docker.sock -p rwxa -k docker
 
 # Group modifications
