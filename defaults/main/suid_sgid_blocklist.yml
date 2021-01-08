@@ -11,11 +11,14 @@ suid_sgid_blocklist:
   - /bin/chage
   - /bin/chmod
   - /bin/chown
+  - /bin/column
+  - /bin/comm
   - /bin/cowsay
   - /bin/cowthink
   - /bin/cp
   - /bin/cpan
   - /bin/crontab
+  - /bin/csplit
   - /bin/curl
   - /bin/cut
   - /bin/dash
@@ -27,6 +30,7 @@ suid_sgid_blocklist:
   - /bin/ed
   - /bin/env
   - /bin/eqn
+  - /bin/ex
   - /bin/expand
   - /bin/file
   - /bin/find
@@ -40,8 +44,10 @@ suid_sgid_blocklist:
   - /bin/head
   - /bin/hexdump
   - /bin/iconv
+  - /bin/install
   - /bin/ionice
   - /bin/ip
+  - /bin/join
   - /bin/journalctl
   - /bin/less
   - /bin/look
@@ -64,14 +70,17 @@ suid_sgid_blocklist:
   - /bin/ntfs-3g
   - /bin/od
   - /bin/openssl
+  - /bin/paste
   - /bin/perl
   - /bin/pic
   - /bin/ping
   - /bin/ping6
   - /bin/pkexec
+  - /bin/pr
   - /bin/rbash
   - /bin/readelf
   - /bin/red
+  - /bin/rev
   - /bin/rpm
   - /bin/rpmquery
   - /bin/rsync
@@ -86,8 +95,10 @@ suid_sgid_blocklist:
   - /bin/shuf
   - /bin/soelim
   - /bin/sort
+  - /bin/split
   - /bin/sqlite3
   - /bin/ssh
+  - /bin/ssh-keyscan
   - /bin/stdbuf
   - /bin/strings
   - /bin/su
@@ -96,9 +107,11 @@ suid_sgid_blocklist:
   - /bin/tail
   - /bin/tar
   - /bin/taskset
+  - /bin/tbl
   - /bin/tee
   - /bin/timeout
   - /bin/top
+  - /bin/troff
   - /bin/ul
   - /bin/umount
   - /bin/unexpand
@@ -116,17 +129,21 @@ suid_sgid_blocklist:
   - /bin/zip
   - /bin/zsoelim
   - /sbin/arp
+  - /sbin/capsh
   - /sbin/chroot
   - /sbin/dmsetup
   - /sbin/ip
   - /sbin/ldconfig
   - /sbin/logsave
+  - /sbin/mount.nfs
   - /sbin/ping
   - /sbin/ping6
   - /sbin/service
+  - /sbin/ss
   - /sbin/start-stop-daemon
   - /sbin/sysctl
   - /sbin/tcpdump
+  - /sbin/update-alternatives
   - /usr/bin/apt
   - /usr/bin/apt-get
   - /usr/bin/at
@@ -143,11 +160,14 @@ suid_sgid_blocklist:
   - /usr/bin/chmod
   - /usr/bin/chown
   - /usr/bin/chsh
+  - /usr/bin/column
+  - /usr/bin/comm
   - /usr/bin/cowsay
   - /usr/bin/cowthink
   - /usr/bin/cp
   - /usr/bin/cpan
   - /usr/bin/crontab
+  - /usr/bin/csplit
   - /usr/bin/curl
   - /usr/bin/cut
   - /usr/bin/dash
@@ -160,6 +180,7 @@ suid_sgid_blocklist:
   - /usr/bin/ed
   - /usr/bin/env
   - /usr/bin/eqn
+  - /usr/bin/ex
   - /usr/bin/expand
   - /usr/bin/file
   - /usr/bin/find
@@ -177,9 +198,11 @@ suid_sgid_blocklist:
   - /usr/bin/head
   - /usr/bin/hexdump
   - /usr/bin/iconv
+  - /usr/bin/install
   - /usr/bin/ionice
   - /usr/bin/ip
   - /usr/bin/irb
+  - /usr/bin/join
   - /usr/bin/journalctl
   - /usr/bin/less
   - /usr/bin/look
@@ -206,6 +229,7 @@ suid_sgid_blocklist:
   - /usr/bin/ntfs-3g
   - /usr/bin/od
   - /usr/bin/openssl
+  - /usr/bin/paste
   - /usr/bin/pdb
   - /usr/bin/perl
   - /usr/bin/pic
@@ -213,11 +237,13 @@ suid_sgid_blocklist:
   - /usr/bin/ping
   - /usr/bin/ping6
   - /usr/bin/pkexec
+  - /usr/bin/pr
   - /usr/bin/python
   - /usr/bin/rake
   - /usr/bin/rbash
   - /usr/bin/readelf
   - /usr/bin/red
+  - /usr/bin/rev
   - /usr/bin/rlogin
   - /usr/bin/rpm
   - /usr/bin/rpmquery
@@ -237,8 +263,11 @@ suid_sgid_blocklist:
   - /usr/bin/shuf
   - /usr/bin/soelim
   - /usr/bin/sort
+  - /usr/bin/split
   - /usr/bin/sqlite3
+  - /usr/bin/ss
   - /usr/bin/ssh
+  - /usr/bin/ssh-keyscan
   - /usr/bin/stdbuf
   - /usr/bin/strace
   - /usr/bin/strings
@@ -248,6 +277,7 @@ suid_sgid_blocklist:
   - /usr/bin/tail
   - /usr/bin/tar
   - /usr/bin/taskset
+  - /usr/bin/tbl
   - /usr/bin/tee
   - /usr/bin/telnet
   - /usr/bin/time
@@ -255,11 +285,13 @@ suid_sgid_blocklist:
   - /usr/bin/tmux
   - /usr/bin/top
   - /usr/bin/traceroute6.iputils
+  - /usr/bin/troff
   - /usr/bin/ul
   - /usr/bin/umount
   - /usr/bin/unexpand
   - /usr/bin/uniq
   - /usr/bin/unshare
+  - /usr/bin/update-alternatives
   - /usr/bin/vi
   - /usr/bin/view
   - /usr/bin/vim
@@ -275,14 +307,18 @@ suid_sgid_blocklist:
   - /usr/bin/zsoelim
   - /usr/lib/klibc/bin/mksh-static
   - /usr/sbin/arp
+  - /usr/sbin/capsh
   - /usr/sbin/chroot
   - /usr/sbin/dmsetup
   - /usr/sbin/ip
   - /usr/sbin/ldconfig
   - /usr/sbin/logsave
   - /usr/sbin/mount.nfs
+  - /usr/sbin/ping6
   - /usr/sbin/service
+  - /usr/sbin/ss
   - /usr/sbin/start-stop-daemon
   - /usr/sbin/sysctl
   - /usr/sbin/tcpdump
+  - /usr/sbin/update-alternatives
 ...
