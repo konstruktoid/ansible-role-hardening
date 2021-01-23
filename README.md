@@ -293,7 +293,7 @@ and packages to be removed (`packages_blocklist`).
 crypto_policy: FIPS
 ```
 
-Set [cryptographic policies](https://access.redhat.aom/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/using-the-system-wide-cryptographic-policies_security-hardening)
+Set [cryptographic policies](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/using-the-system-wide-cryptographic-policies_security-hardening)
 if `/etc/crypto-policies/config` exists.
 
 ### ./defaults/main/sshd.yml
