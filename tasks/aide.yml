@@ -1,4 +1,25 @@
 ---
+- name: debian family aide installation
+  become: 'yes'
+  apt:
+    name: aide-common
+    state: present
+    install_recommends: 'no'
+  when: ansible_os_family == "Debian"
+  tags:
+    - apt
+    - packages
+
+- name: redhat family aide package installation
+  become: 'yes'
+  package:
+    name: aide
+    state: present
+  when: ansible_os_family == "RedHat"
+  tags:
+    - dnf
+    - packages
+
 - name: check cron.daily aide
   become: 'yes'
   stat:
