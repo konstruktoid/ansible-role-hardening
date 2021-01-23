@@ -6,7 +6,8 @@
     mode: 'a-s'
     state: file
     follow: 'yes'
-  ignore_errors: true
+  register: output
+  failed_when: "output.failed and output.state != 'absent'"
   with_items:
     - "{{ suid_sgid_blocklist }}"
   tags:
