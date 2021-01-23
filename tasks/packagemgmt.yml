@@ -134,6 +134,14 @@
     - dnf
     - yum
 
+- name: stat Centos-Linux-PowerTools repo
+  stat:
+    path: /etc/yum.repos.d/CentOS-Linux-PowerTools.repo
+  register: centos_linux_powertools
+  tags:
+    - dnf
+    - yum
+
 - name: stat centos stream PowerTools repo
   stat:
     path: /etc/yum.repos.d/CentOS-Stream-PowerTools.repo
@@ -152,6 +160,20 @@
     state: present
     create: 'no'
   when: centos_powertools.stat.exists
+  tags:
+    - dnf
+    - yum
+
+- name: enable Centos-Linux-PowerTools repo
+  become: 'yes'
+  lineinfile:
+    regexp: "^enabled="
+    line: "enabled=1"
+    dest: /etc/yum.repos.d/CentOS-Linux-PowerTools.repo
+    mode: 0644
+    state: present
+    create: 'no'
+  when: centos_linux_powertools.stat.exists
   tags:
     - dnf
     - yum
