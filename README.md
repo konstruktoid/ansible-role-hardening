@@ -158,12 +158,13 @@ Maximum number of processes and open files.
 ### ./defaults/main/misc.yml
 
 ```yaml
+install_aide: yes
 reboot_ubuntu: false
 redhat_rpm_key:
   - 567E347AD0044ADE55BA8A5F199E2F91FD431D51
   - 47DB287789B21722B6D95DDE5326810137017186
 ```
-
+If `install_aide: true` then AIDE IDS will be installed and configured. If you plan use another IDS then you can disable AIDE installation completely here.<br>
 If `reboot_ubuntu: true` an Ubuntu node will be rebooted if required.
 
 `redhat_rpm_key` are [RedHat Product Signing Keys](https://access.redhat.com/security/team/key/)
