@@ -21,7 +21,6 @@ packages_blocklist:
   - ypbind
 packages_debian:
   - acct
-  - aide-common
   - apparmor-profiles
   - apparmor-utils
   - apt-show-versions
@@ -44,7 +43,6 @@ packages_debian:
   - tcpd
   - vlock
 packages_redhat:
-  - aide
   - audispd-plugins
   - audit
   - gnupg2

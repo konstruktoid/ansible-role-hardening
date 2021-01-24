@@ -83,7 +83,7 @@
 #   https://bugs.launchpad.net/ubuntu/+source/aide/+bug/1903298
 - name: configure aide
   include: aide.yml
-  when: not (ansible_distribution == "Ubuntu" and (ansible_lsb.codename == "groovy" or ansible_lsb.codename == "hirsute"))
+  when: install_aide|bool and (not (ansible_distribution == "Ubuntu" and (ansible_lsb.codename == "groovy" or ansible_lsb.codename == "hirsute")))
 
 - name: remove users
   include: users.yml
