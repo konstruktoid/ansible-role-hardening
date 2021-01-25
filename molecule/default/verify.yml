@@ -312,4 +312,25 @@
       shell: mount | grep -oE '^tmpfs.*\s/tmp\s.*tmpfs.*(nosuid|nodev|noexec)'
       register: tmp_mount
       failed_when: tmp_mount.rc != 0
+
+    - name: create test user
+      become: 'yes'
+      user:
+        name: roletestuser
+        password: "{{ 'Ansible Role Test User' | password_hash('sha512') }}"
+        state: present
+        shell: /bin/bash
+
+    - name: change test user password
+      become: 'yes'
+      user:
+        name: roletestuser
+        password: "{{ 'Change Ansible Role User Password' | password_hash('sha512') }}"
+
+    - name: remove test user
+      become: 'yes'
+      user:
+        name: roletestuser
+        state: absent
+        remove: yes
 ...

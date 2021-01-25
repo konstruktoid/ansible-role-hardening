@@ -1,16 +1,21 @@
 ---
 suid_sgid_permissions: true
 suid_sgid_blocklist:
+  - /bin/ar
+  - /bin/at
   - /bin/awk
   - /bin/base32
   - /bin/base64
   - /bin/bash
   - /bin/busctl
   - /bin/busybox
+  - /bin/cancel
   - /bin/cat
   - /bin/chage
+  - /bin/chfn
   - /bin/chmod
   - /bin/chown
+  - /bin/chsh
   - /bin/column
   - /bin/comm
   - /bin/cowsay
@@ -70,6 +75,7 @@ suid_sgid_blocklist:
   - /bin/ntfs-3g
   - /bin/od
   - /bin/openssl
+  - /bin/openvt
   - /bin/paste
   - /bin/perl
   - /bin/pic
@@ -109,6 +115,7 @@ suid_sgid_blocklist:
   - /bin/taskset
   - /bin/tbl
   - /bin/tee
+  - /bin/time
   - /bin/timeout
   - /bin/top
   - /bin/troff
@@ -129,6 +136,7 @@ suid_sgid_blocklist:
   - /bin/zip
   - /bin/zsoelim
   - /sbin/arp
+  - /sbin/bridge
   - /sbin/capsh
   - /sbin/chroot
   - /sbin/dmsetup
@@ -146,6 +154,7 @@ suid_sgid_blocklist:
   - /sbin/update-alternatives
   - /usr/bin/apt
   - /usr/bin/apt-get
+  - /usr/bin/ar
   - /usr/bin/at
   - /usr/bin/awk
   - /usr/bin/base32
@@ -154,6 +163,7 @@ suid_sgid_blocklist:
   - /usr/bin/bsd-write
   - /usr/bin/busctl
   - /usr/bin/busybox
+  - /usr/bin/cancel
   - /usr/bin/cat
   - /usr/bin/chage
   - /usr/bin/chfn
@@ -174,6 +184,7 @@ suid_sgid_blocklist:
   - /usr/bin/date
   - /usr/bin/dd
   - /usr/bin/diff
+  - /usr/bin/dig
   - /usr/bin/dmesg
   - /usr/bin/dnf
   - /usr/bin/dpkg
@@ -229,6 +240,7 @@ suid_sgid_blocklist:
   - /usr/bin/ntfs-3g
   - /usr/bin/od
   - /usr/bin/openssl
+  - /usr/bin/openvt
   - /usr/bin/paste
   - /usr/bin/pdb
   - /usr/bin/perl
@@ -307,6 +319,7 @@ suid_sgid_blocklist:
   - /usr/bin/zsoelim
   - /usr/lib/klibc/bin/mksh-static
   - /usr/sbin/arp
+  - /usr/sbin/bridge
   - /usr/sbin/capsh
   - /usr/sbin/chroot
   - /usr/sbin/dmsetup

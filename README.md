@@ -158,11 +158,13 @@ Maximum number of processes and open files.
 ### ./defaults/main/misc.yml
 
 ```yaml
+install_aide: yes
 reboot_ubuntu: false
 redhat_rpm_key:
   - 567E347AD0044ADE55BA8A5F199E2F91FD431D51
   - 47DB287789B21722B6D95DDE5326810137017186
 ```
+If `install_aide: true` then AIDE IDS will be installed and configured. If you plan use another IDS then you can disable AIDE installation completely here.
 
 If `reboot_ubuntu: true` an Ubuntu node will be rebooted if required.
 
@@ -293,7 +295,7 @@ and packages to be removed (`packages_blocklist`).
 crypto_policy: FIPS
 ```
 
-Set [cryptographic policies](https://access.redhat.aom/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/using-the-system-wide-cryptographic-policies_security-hardening)
+Set [cryptographic policies](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/using-the-system-wide-cryptographic-policies_security-hardening)
 if `/etc/crypto-policies/config` exists.
 
 ### ./defaults/main/sshd.yml
