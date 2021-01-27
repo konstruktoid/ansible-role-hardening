@@ -11,7 +11,8 @@
     backrefs: 'yes'
   ignore_errors: true
   notify:
-    - mask motdnews
+    - mask motdnews timer
+    - mask motdnews service
   when: ansible_os_family == "Debian"
   tags:
     - motd

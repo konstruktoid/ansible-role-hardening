@@ -78,10 +78,18 @@
     enabled: 'no'
     state: stopped
 
-- name: mask motdnews
+- name: mask motdnews timer
   become: 'yes'
   systemd:
     name: motd-news.timer
+    masked: 'yes'
+    enabled: 'no'
+    state: stopped
+
+- name: mask motdnews service
+  become: 'yes'
+  systemd:
+    name: motd-news.service
     masked: 'yes'
     enabled: 'no'
     state: stopped
