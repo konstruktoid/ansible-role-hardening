@@ -32,7 +32,7 @@
     - mount
     - shm
 
-- name: create tmp.mount 
+- name: create tmp.mount
   become: 'yes'
   template:
     src: etc/systemd/tmp.mount.j2
