@@ -32,11 +32,11 @@
     - mount
     - shm
 
-- name: create /tmp
+- name: create tmp.mount 
   become: 'yes'
   template:
     src: etc/systemd/tmp.mount.j2
-    dest: /lib/systemd/system/tmp.mount
+    dest: /etc/systemd/system/tmp.mount
     backup: 'yes'
     mode: 0644
     owner: root
@@ -47,7 +47,7 @@
 
 - name: stat tmp.mount
   stat:
-    path: /lib/systemd/system/tmp.mount
+    path: /etc/systemd/system/tmp.mount
   register: tmp_mount
   tags:
     - mount
@@ -64,23 +64,13 @@
     - systemd
     - tmp
 
-- name: enable tmp.mount
-  become: 'yes'
-  systemd:
-    name: tmp.mount
-    enabled: 'yes'
-  when: ansible_os_family == "RedHat" and tmp_mount.stat.exists
-  tags:
-    - mount
-    - systemd
-    - tmp
-
 - name: start tmp.mount
   become: 'yes'
   systemd:
     name: tmp.mount
     daemon_reload: 'yes'
     state: started
+    enabled: yes
   when: ansible_os_family == "RedHat" and tmp_mount.stat.exists
   tags:
     - mount
