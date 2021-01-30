@@ -116,4 +116,10 @@
     - yum
     - packages
     - firewalld
+
+- name: EFI or UEFI booting check
+  set_fact:
+    booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
+  tags:
+    - fact
 ...
