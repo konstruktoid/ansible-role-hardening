@@ -3,7 +3,7 @@
 echo "# Running ansible-lint"
 ansible-lint --version
 
-if ! ansible-lint -vv .; then
+if ! ansible-lint --exclude .git --exclude .github --exclude tests/ -vv .; then
   echo 'ansible-lint failed.'
   exit 1
 fi
