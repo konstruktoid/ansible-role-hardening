@@ -66,17 +66,66 @@
   tags:
     - fact
 
-- name: redhat family epel installation
+- name: RedHat family (Centos etc..) EPEL installation
   become: 'yes'
   dnf:
     name: "epel-release"
     state: present
     update_cache: 'yes'
-  when: ansible_os_family == "RedHat" and (not ansible_distribution == "Fedora")
+  when: ansible_os_family == "RedHat" and (not (ansible_distribution == "Fedora" or ansible_distribution == "RedHat"))
   tags:
     - dnf
     - packages
 
+- name: RHEL8 repo tasks
+  block:
+    - name: Install RHEL8 EPEL GPG key
+      become: 'yes'
+      ansible.builtin.rpm_key:
+        state: present
+        key: http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
+        fingerprint: 94E2 79EB 8D8F 25B2 1810 ADF1 21EA 45AB 2F86 D6A1
+
+    - name: RHEL8 EPEL repo installation
+      become: 'yes'
+      dnf:
+        name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
+        state: present
+        update_cache: 'yes'
+      tags:
+        - dnf
+        - packages
+
+    - name: Install CodeReady repo for RHEL8
+      become: yes
+      shell: subscription-manager repos --enable "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
+
+  when: ansible_os_family == "RedHat" and ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
+
+- name: RHEL7 repo tasks
+  block:
+    - name: Install RHEL7 EPEL GPG key
+      become: 'yes'
+      ansible.builtin.rpm_key:
+        state: present
+        key: http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+        fingerprint: 91E9 7D7C 4A5E 96F1 7F3E 888F 6A2F AEA2 352C 64E5
+
+    - name: RHEL7 EPEL repo installation
+      become: 'yes'
+      dnf:
+        name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
+        state: present
+        update_cache: 'yes'
+      tags:
+        - dnf
+        - packages
+
+    - name: Install Extras and HA for RHEL7
+      become: yes
+      shell: subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms"
+
+  when: ansible_os_family == "RedHat" and ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
 - name: install python-pexpect
   become: 'yes'
   apt:
