@@ -11,16 +11,22 @@
     create: 'yes'
   with_items:
     - "{{ fs_modules_blocklist }}"
+  when: not booted_with_efi
   tags:
     - modprobe
 
-#When UEFI boot is used, VFAT can't be disabled!
-- name: delete block for VFAT if we are on UEFI system
+- name: dont disable vfat file system kernel modules if efi
   become: 'yes'
   lineinfile:
     dest: /etc/modprobe.d/disablefs.conf
-    state: absent
-    regexp: "^install\\s*vfat"
+    line: "install {{ item }} /bin/true"
+    mode: 0644
+    owner: root
+    group: root
+    state: present
+    create: 'yes'
+  with_items:
+    - "{{ fs_modules_blocklist | reject('search','vfat') | list }}"
   when: booted_with_efi
   tags:
     - modprobe

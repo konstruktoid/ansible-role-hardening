@@ -20,5 +20,5 @@
   when: item.mode|int > 0400
   changed_when: item.mode|int > 0400
   with_items:
-    - "{{ grub_cfg.files }}"
+    - "{{ grub_cfg.files | reject('search','/boot/efi/EFI/ubuntu/grub.cfg') | list }}"
 ...
