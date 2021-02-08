@@ -342,5 +342,5 @@
       user:
         name: roletestuser
         state: absent
-        remove: yes
+        remove: 'yes'
 ...

@@ -21,7 +21,7 @@ provisioner:
       focal:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
-      focal_uefi:
+      focalefi:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
       groovy:
@@ -38,7 +38,7 @@ platforms:
     instance_raw_config_args:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
-  - name: focal_uefi
+  - name: focalefi
     box: konstruktoid/focal-hardened
     config_options:
       vm.boot_timeout: 600
