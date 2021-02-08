@@ -100,7 +100,7 @@
       become: yes
       shell: subscription-manager repos --enable "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
 
-  when: ansible_os_family == "RedHat" and ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
 
 - name: RHEL7 repo tasks
   block:
@@ -125,7 +125,8 @@
       become: yes
       shell: subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms"
 
-  when: ansible_os_family == "RedHat" and ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
+  
 - name: install python-pexpect
   become: 'yes'
   apt:
