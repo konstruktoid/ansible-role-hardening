@@ -71,7 +71,7 @@
     daemon_reload: 'yes'
     state: started
     enabled: 'yes'
-  when: ansible_os_family == "RedHat" and tmp_mount.stat.exists
+  when: tmp_mount.stat.exists
   tags:
     - mount
     - systemd
