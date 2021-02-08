@@ -313,6 +313,16 @@
       register: tmp_mount
       failed_when: tmp_mount.rc != 0
 
+    - name: efi fact
+      set_fact:
+        booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
+
+    - name: check efi boot
+      shell: grep 'fat' /etc/modprobe.d/disable*
+      register: efi_fat
+      failed_when: efi_fat.rc != 0
+      when: not booted_with_efi
+
     - name: create test user
       become: 'yes'
       user:

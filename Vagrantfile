@@ -77,7 +77,7 @@ Vagrant.configure("2") do |config|
     centos_stream.vm.provider "virtualbox" do |c|
       c.default_nic_type = "82543GC"
     end
-    centos_stream.vm.hostname = "centos"
+    centos_stream.vm.hostname = "centosstream"
     centos_stream.vm.provision "shell",
       inline: "dnf clean all && dnf install -y epel-release && dnf install -y ansible"
     centos_stream.vm.provision "ansible" do |a|
@@ -100,6 +100,27 @@ Vagrant.configure("2") do |config|
     focal.vm.provision "shell",
       inline: "apt-get update && apt-get -y install ansible"
     focal.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.limit = "all"
+      a.playbook = "tests/test.yml"
+      a.extra_vars = {
+        "sshd_admin_net" => "0.0.0.0/0",
+        "sshd_allow_groups" => "vagrant sudo ubuntu",
+        "ansible_python_interpreter" => "/usr/bin/python3"
+      }
+     end
+   end
+
+  config.vm.define "focal_efi" do |focal_efi|
+    focal_efi.vm.box = "konstruktoid/focal-hardened"
+    focal_efi.ssh.insert_key = true
+    focal_efi.vm.network "private_network", ip: "10.2.3.44"
+    focal_efi.vm.hostname = "focalefi"
+    focal_efi.vm.boot_timeout = 600
+    focal_efi.vm.provision "shell",
+      inline: "apt-get update && apt-get -y install ansible",
+      upload_path: "/var/tmp/vagrant-shell"
+    focal_efi.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
       a.playbook = "tests/test.yml"
