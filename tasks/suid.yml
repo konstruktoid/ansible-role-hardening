@@ -7,7 +7,7 @@
     state: file
     follow: 'yes'
   register: output
-  failed_when: "output.failed and output.state != 'absent'"
+  failed_when: "output.failed and not 'absent' in output.msg"
   with_items:
     - "{{ suid_sgid_blocklist }}"
   tags:
