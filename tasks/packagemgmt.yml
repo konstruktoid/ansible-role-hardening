@@ -212,16 +212,4 @@
   tags:
     - dnf
     - yum
-
-- name: python-rpm installation
-  become: 'yes'
-  dnf:
-    name: "python2-rpm"
-    state: present
-  when: ansible_distribution == "RedHat"
-  tags:
-    - dnf
-    - yum
-    - packages
-    - firewalld
 ...
