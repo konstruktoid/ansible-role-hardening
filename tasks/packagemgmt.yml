@@ -205,9 +205,11 @@
 
 - name: dnf upgrade
   become: 'yes'
-  command: dnf --assumeyes upgrade-minimal
-  register: dnf_upgrade_response
-  changed_when: dnf_upgrade_response.stdout.find('Nothing to do.') == -1
+  dnf:
+    name:  "*"
+    state: latest
+    bugfix: 'yes'
+    security: 'yes'
   when: ansible_os_family == "RedHat" and system_upgrade|bool
   tags:
     - dnf
