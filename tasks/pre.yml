@@ -66,13 +66,18 @@
   tags:
     - fact
 
+- name: Update subscription info on RHEL
+  become: 'yes'
+  shell: subscription-manager refresh --force
+  when: ansible_distribution == "RedHat"
+
 - name: redhat family epel installation
   become: 'yes'
   dnf:
     name: "epel-release"
     state: present
     update_cache: 'yes'
-  when: ansible_os_family == "RedHat" and (not ansible_distribution == "Fedora")
+  when: ansible_os_family == "RedHat" and (not (ansible_distribution == "Fedora" or ansible_distribution == "RedHat"))
   tags:
     - dnf
     - packages

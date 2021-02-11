@@ -1,6 +1,6 @@
 # Hardening - the Ansible role
 
-An [Ansible](https://www.ansible.com/) role to make a CentOS, Debian or Ubuntu
+An [Ansible](https://www.ansible.com/) role to make a CentOS, RHEL, Debian or Ubuntu
 server a bit more secure,
 [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
@@ -12,7 +12,7 @@ Available on
 ```shell
 Do not use this role without first testing in a non-operational environment.
 ```
-
+[RHEL 8](https://www.redhat.com/en/enterprise-linux-8),
 [CentOS 8](https://www.centos.org),
 [Debian 10](https://www.debian.org/) and
 [Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
