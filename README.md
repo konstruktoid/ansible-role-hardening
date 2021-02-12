@@ -9,7 +9,7 @@ Requires Ansible >= 2.9.
 Available on
 [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
 
-```shell
+```console
 Do not use this role without first testing in a non-operational environment.
 ```
 
@@ -27,7 +27,7 @@ None.
 
 ## Example Playbook
 
-```shell
+```console
 ---
 - hosts: all
   serial: 50%
