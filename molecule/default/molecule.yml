@@ -50,8 +50,8 @@ verifier:
   name: ansible
 lint: |
   set -e
-  ansible-lint .
-  yamllint -d "{extends: default, rules: {line-length: {level: warning}}}" .
+  ansible-lint --exclude .git --exclude .github --exclude tests/
+  yamllint -d "{extends: default, ignore: .git*, rules: {line-length: {level: warning}}}" .
 scenario:
   name: default
   create_sequence:
