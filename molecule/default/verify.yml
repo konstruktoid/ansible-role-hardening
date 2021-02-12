@@ -23,9 +23,13 @@
 
     - name: verify auditd configuration
       become: 'yes'
-      shell: grep "^{{ item }}$" /etc/audit/auditd.conf
+      lineinfile:
+        dest: /etc/audit/auditd.conf
+        line: "{{ item }}"
+        state: present
+      check_mode: 'yes'
       register: auditd_conf
-      failed_when: auditd_conf.rc != 0
+      failed_when: auditd_conf is changed
       with_items:
         - action_mail_acct = {{ auditd_action_mail_acct }}
         - admin_space_left_action = {{ auditd_admin_space_left_action }}
@@ -39,9 +43,13 @@
 
     - name: verify systemd system.conf
       become: 'yes'
-      shell: grep "^{{ item }}$" /etc/systemd/system.conf
+      lineinfile:
+        dest: /etc/systemd/system.conf
+        line: "{{ item }}"
+        state: present
+      check_mode: 'yes'
       register: systemd_system_conf
-      failed_when: systemd_system_conf.rc != 0
+      failed_when: systemd_system_conf is changed
       with_items:
         - DumpCore=no
         - CrashShell=no
@@ -52,9 +60,13 @@
 
     - name: verify systemd user.conf
       become: 'yes'
-      shell: grep "^{{ item }}$" /etc/systemd/user.conf
+      lineinfile:
+        dest: /etc/systemd/user.conf
+        line: "{{ item }}"
+        state: present
+      check_mode: 'yes'
       register: systemd_user_conf
-      failed_when: systemd_user_conf.rc != 0
+      failed_when: systemd_user_conf is changed
       with_items:
         - DefaultLimitCORE=0
         - DefaultLimitNOFILE={{ limit_nofile_hard }}
@@ -62,13 +74,17 @@
 
     - name: verify postfix configuration
       become: 'yes'
-      shell: grep -c "^{{ item }}$" /etc/postfix/main.cf
-      register: auditd_conf
-      failed_when: auditd_conf.rc != 0 and auditd_conf.stdout != "1"
+      lineinfile:
+        dest: /etc/postfix/main.cf
+        line: "{{ item }}"
+        state: present
+      check_mode: 'yes'
+      register: postfix_conf
+      failed_when: postfix_conf is changed
       with_items:
         - disable_vrfy_command = yes
         - inet_interfaces = loopback-only
-        - smtpd_banner = \"\\\\\$myhostname - ESMTP\"
+        - smtpd_banner = "\$myhostname - ESMTP"
         - smtpd_client_restrictions = permit_mynetworks,reject
 
     - name: stat /etc/ssh/sshd_config
@@ -97,17 +113,23 @@
 
     - name: verify sshd_config PermitRootLogin configuration
       become: 'yes'
-      shell: grep "^{{ item }}$" /etc/ssh/sshd_config
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        line: "PermitRootLogin yes"
+        state: absent
+      check_mode: 'yes'
       register: sshd_config
-      failed_when: sshd_config.rc == 0
-      with_items:
-        - PermitRootLogin yes
+      failed_when: sshd_config is changed
 
     - name: verify sshd_config configuration
       become: 'yes'
-      shell: grep "^{{ item }}$" /etc/ssh/sshd_config
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        line: "{{ item }}"
+        state: present
+      check_mode: 'yes'
       register: sshd_config
-      failed_when: sshd_config.rc != 0
+      failed_when: sshd_config is changed
       with_items:
         - AllowGroups vagrant sudo
         - AllowAgentForwarding {{ sshd_allow_agent_forwarding }}
@@ -147,9 +169,13 @@
 
     - name: verify ssh_config configuration
       become: 'yes'
-      shell: grep "^    {{ item }}$" /etc/ssh/ssh_config
+      lineinfile:
+        dest: /etc/ssh/ssh_config
+        line: "    {{ item }}"
+        state: present
+      check_mode: 'yes'
       register: ssh_config
-      failed_when: ssh_config.rc != 0
+      failed_when: ssh_config is changed
       with_items:
         - Ciphers {{ sshd_ciphers }}
         - GSSAPIAuthentication {{ sshd_gssapi_authentication }}
@@ -159,9 +185,10 @@
 
     - name: verify sysctl configuration
       become: 'yes'
-      shell: grep -R "^{{ item }}$" /etc/sysctl.*
+      shell: /bin/grep -R "^{{ item }}$" /etc/sysctl.*
       register: sysctl_config
       failed_when: sysctl_config.rc != 0
+      changed_when: sysctl_config.rc != 0
       with_items:
         - fs.protected_hardlinks=1
         - fs.protected_symlinks=1
@@ -230,28 +257,40 @@
     - name: get crypto-policies value
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      command: grep "^{{ crypto_policy|upper }}$" /etc/crypto-policies/config
+      shell: grep "^{{ crypto_policy|upper }}$" /etc/crypto-policies/config
       register: crypto_policy_set
       when: crypto_policies_config.stat.exists
       failed_when: crypto_policy_set.rc != 0
+      changed_when: crypto_policy_set.rc != 0
 
     - name: verify noexec /dev/shm
       become: 'yes'
       shell: grep '^tmpfs\s/dev/shm.*noexec' /proc/mounts
       register: dev_shm_noexec
       failed_when: dev_shm_noexec.rc != 0
+      changed_when: dev_shm_noexec.rc != 0
+
+    - name: verify tmp.mount
+      become: 'yes'
+      systemd:
+        name: tmp.mount
+      register: tmp_mount
+      failed_when: not 'nosuid,nodev,noexec' in tmp_mount.status.Options
+      changed_when: not 'nosuid,nodev,noexec' in tmp_mount.status.Options
 
     - name: verify /tmp
       become: 'yes'
       shell: grep '^tmpfs\s/tmp\s.*nosuid,nodev,noexec\s' /proc/mounts
-      register: mnt_tmp
-      failed_when: mnt_tmp.rc != 0
+      register: mounts_tmp
+      failed_when: mounts_tmp.rc != 0
+      changed_when: mounts_tmp.rc != 0
 
     - name: verify login.defs settings
       become: 'yes'
       shell: grep "^{{ item }}$" /etc/login.defs
       register: login_defs
       failed_when: login_defs.rc != 0
+      changed_when: login_defs.rc != 0
       with_items:
         - ENCRYPT_METHOD SHA512
         - FAILLOG_ENAB yes
@@ -271,6 +310,7 @@
       shell: grep "^{{ item }}$" /etc/security/pwquality.conf
       register: pwquality_conf
       failed_when: pwquality_conf.rc != 0
+      changed_when: pwquality_conf.rc != 0
       with_items:
         - difok = 15
         - dictcheck = 1
@@ -285,9 +325,10 @@
 
     - name: verify audit grubenv
       become: 'yes'
-      shell: grep "{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub2/grubenv
+      command: grep "{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub2/grubenv
       register: audit_grubenv
       failed_when: audit_grubenv.rc != 0
+      changed_when: audit_grubenv.rc != 0
       when: ansible_os_family == "RedHat"
 
     - name: verify audit grub.cfg
@@ -295,6 +336,7 @@
       shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
       register: audit_grub_cfg
       failed_when: audit_grub_cfg.rc != 0
+      changed_when: audit_grub_cfg.rc != 0
       when: ansible_os_family == "Debian"
 
     - name: verify systemd resolved.conf
@@ -302,25 +344,29 @@
       shell: grep "^{{ item }}$" /etc/systemd/resolved.conf
       register: systemd_resolved_conf
       failed_when: systemd_resolved_conf.rc != 0
+      changed_when: systemd_resolved_conf.rc != 0
       with_items:
         - DNS={{ dns }}
         - FallbackDNS={{ fallback_dns }}
         - DNSSEC={{ dnssec }}
         - DNSOverTLS={{ dns_over_tls }}
 
-    - name: verify /tmp mount
-      shell: mount | grep -oE '^tmpfs.*\s/tmp\s.*tmpfs.*(nosuid|nodev|noexec)'
-      register: tmp_mount
-      failed_when: tmp_mount.rc != 0
-
     - name: efi fact
       set_fact:
         booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
 
-    - name: check efi boot
+    - name: verify vfat with efi boot
+      shell: grep 'fat' /etc/modprobe.d/disable*
+      register: efi_fat
+      failed_when: efi_fat.rc == 0
+      changed_when: efi_fat.rc == 0
+      when: booted_with_efi
+
+    - name: verify vfat without efi boot
       shell: grep 'fat' /etc/modprobe.d/disable*
       register: efi_fat
       failed_when: efi_fat.rc != 0
+      changed_when: efi_fat.rc != 0
       when: not booted_with_efi
 
     - name: create test user
