@@ -206,7 +206,7 @@
 - name: dnf upgrade
   become: 'yes'
   dnf:
-    name: "*" # noqa 403
+    name: "*"  # noqa package-latest
     state: latest
     bugfix: 'yes'
     security: 'yes'
