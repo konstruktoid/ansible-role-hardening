@@ -1,4 +1,9 @@
 ---
+- name: check if sshd_config.d exits
+  stat:
+    path: /etc/ssh/sshd_config.d
+  register: sshd_config_d_exists
+
 - name: configure sshd
   become: 'yes'
   template:
@@ -33,8 +38,15 @@
     mode: 0600
     path: "{{ item.path }}"
   with_items: "{{ ssh_host_keys.files }}"
+  loop_control:
+    label: "{{ item.path }}"
   tags:
     - sshd
+
+- name: check if ssh_config.d exits
+  stat:
+    path: /etc/ssh/ssh_config.d
+  register: ssh_config_d_exists
 
 - name: configure ssh client
   become: 'yes'
