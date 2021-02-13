@@ -1,5 +1,5 @@
 # {{ ansible_managed }}
-{% if (ansible_distribution == "Ubuntu") and (ansible_distribution_major_version|int >= 20) %}
+{% if ssh_config_d_exists.stat.exists and ssh_config_d_exists.stat.isdir %}
 Include /etc/ssh/ssh_config.d/*.conf
 {% endif %}
 
