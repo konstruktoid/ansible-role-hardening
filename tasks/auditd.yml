@@ -18,15 +18,7 @@
 
 - name: set RedHat audit grub cmdline
   become: 'yes'
-  lineinfile:
-    line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX {{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"'
-    dest: /etc/default/grub
-    insertafter: '^GRUB_CMDLINE_LINUX="[a-z]+'
-    state: present
-    create: 'no'
-    mode: 0644
-    owner: root
-    group: root
+  shell: grubby --update-kernel=ALL --args=console="{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
   notify:
     - update grub2
   when: ansible_os_family == "RedHat"
@@ -34,25 +26,6 @@
     - auditd
     - grub
 
-- name: check RedHat auditd ExecStartPost
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  command: grep -qo "^ExecStartPost=-/sbin/auditctl -R" /usr/lib/systemd/system/auditd.service
-  register: execstartpost_auditd_set
-  when: ansible_os_family == "RedHat"
-  changed_when: execstartpost_auditd_set.rc != 0
-  failed_when: execstartpost_auditd_set.rc > 1
-
-- name: set audit service execstartpost
-  become: 'yes'
-  lineinfile:
-    regexp: '#ExecStartPost=-/sbin/auditctl -R /etc/audit/audit.rules'
-    line: 'ExecStartPost=-/sbin/auditctl -R /etc/audit/audit.rules'
-    dest: /usr/lib/systemd/system/auditd.service
-    state: present
-  when: ansible_os_family == "RedHat" and execstartpost_auditd_set.rc != 0
-  tags:
-    - auditd
 
 - name: set audit action_mail_acct
   become: 'yes'
@@ -171,6 +144,7 @@
     mode: 0600
     owner: root
     group: root
+  when: auditd_apply_audit_rules|bool == true
   notify:
     - generate auditd
     - restart auditd
