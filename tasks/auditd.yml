@@ -18,7 +18,7 @@
 
 - name: set RedHat audit grub cmdline
   become: 'yes'
-  shell: grubby --update-kernel=ALL --args="{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
+  command: grubby --update-kernel=ALL --args="{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
   notify:
     - update grub2
   when: ansible_os_family == "RedHat"
@@ -144,7 +144,7 @@
     mode: 0600
     owner: root
     group: root
-  when: auditd_apply_audit_rules|bool == true
+  when: auditd_apply_audit_rules|bool
   notify:
     - generate auditd
     - restart auditd
