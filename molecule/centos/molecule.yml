@@ -34,8 +34,8 @@ platforms:
     memory: 1024
   - name: centos-stream
     box: "centos-stream/20201217"
-    box_url: "https://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-Vagrant-8-20201217.0.x86_64.vagrant-virtualbox.box"
-    box_download_checksum: "9e4d9b9dadad431b1234249e3d68bb24a03ae64dc55146751dc70760db2b5856"
+    box_url: "https://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-Vagrant-8-20210210.0.x86_64.vagrant-virtualbox.box"
+    box_download_checksum: "4ba18cc4bde5f634580b0a6142f328c84d594d75c4775e87f9a4cb26714ad423"
     box_download_checksum_type: "sha256"
     config_options:
       vm.boot_timeout: 600
