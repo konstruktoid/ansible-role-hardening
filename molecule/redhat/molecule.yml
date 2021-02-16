@@ -1,0 +1,78 @@
+---
+# https://access.redhat.com/solutions/253273
+# sudo subscription-manager register --username=USER --password=PASSWORD --auto-attach
+# sudo subscription-manager unregister
+dependency:
+  enabled: false
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+  provider_options:
+    linked_clone: false
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      callback_whitelist: profile_tasks
+  playbooks:
+    converge: ../default/converge.yml
+    verify: ../default/verify.yml
+  log: true
+  inventory:
+    host_vars:
+      redhat:
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
+platforms:
+  - name: redhat
+    box: generic/rhel8
+    config_options:
+      vm.boot_timeout: 600
+    instance_raw_config_args:
+      - 'vbguest.auto_update = false'
+    memory: 1024
+verifier:
+  name: ansible
+lint: |
+  set -e
+  ansible-lint --exclude .git --exclude .github --exclude tests/
+  yamllint -d "{extends: default, ignore: .git*, rules: {line-length: {level: warning}}}" .
+scenario:
+  name: redhat
+  create_sequence:
+    - dependency
+    - create
+    - prepare
+  check_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - create
+    - prepare
+    - converge
+    - check
+    - destroy
+  converge_sequence:
+    - dependency
+    - create
+    - prepare
+    - converge
+  destroy_sequence:
+    - dependency
+    - cleanup
+    - destroy
+  test_sequence:
+    - dependency
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
