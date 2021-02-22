@@ -59,6 +59,7 @@ See [TESTING.md](TESTING.md).
 ### ./defaults/main/auditd.yml
 
 ```yaml
+auditd_apply_audit_rules: 'yes'
 auditd_action_mail_acct: root
 auditd_admin_space_left_action: suspend
 auditd_disk_error_action: suspend
@@ -74,6 +75,11 @@ grub_audit_cmdline: audit=1
 ```
 
 Enable `auditd` at boot using Grub.
+
+`auditd_apply_audit_rules` When true, the role applies own auditd rules from the
+template file `hardening.rules.j2` To apply own rulesset (to be compliant with
+OSSEC scanner, for example) set here False and provide own ansible task to
+configure auditd.
 
 `auditd_action_mail_acct` should be a valid email address or alias.
 
