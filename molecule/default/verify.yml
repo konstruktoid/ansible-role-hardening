@@ -280,7 +280,7 @@
 
     - name: verify /tmp
       become: 'yes'
-      shell: grep '^tmpfs\s/tmp\s.*nosuid,nodev,noexec\s' /proc/mounts
+      shell: grep '^tmpfs\s/tmp\s.*nosuid,nodev,noexec' /proc/mounts
       register: mounts_tmp
       failed_when: mounts_tmp.rc != 0
       changed_when: mounts_tmp.rc != 0
