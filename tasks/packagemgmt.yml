@@ -134,7 +134,7 @@
         state: present
         key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
       with_items:
-        - "{{ rhel8_rpm_keys }}"
+        - "{{ epel8_rpm_keys }}"
       tags:
         - dnf
         - rpm
@@ -162,7 +162,7 @@
         state: present
         key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
       with_items:
-        - "{{ rhel7_rpm_keys }}"
+        - "{{ epel7_rpm_keys }}"
       tags:
         - rpm
         - yum
