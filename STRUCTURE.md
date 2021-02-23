@@ -14,145 +14,147 @@
 ├── TESTING.md
 ├── Vagrantfile
 ├── action-lint
-│   ├── Dockerfile
-│   ├── README.md
-│   └── entrypoint.sh
+│   ├── Dockerfile
+│   ├── README.md
+│   └── entrypoint.sh
 ├── defaults
-│   └── main
-│       ├── auditd.yml
-│       ├── compilers.yml
-│       ├── dns.yml
-│       ├── firewall.yml
-│       ├── limits.yml
-│       ├── misc.yml
-│       ├── module_blocklists.yml
-│       ├── ntp.yml
-│       ├── packages.yml
-│       ├── password.yml
-│       ├── sshd.yml
-│       ├── suid_sgid_blocklist.yml
-│       └── sysctl.yml
+│   └── main
+│       ├── auditd.yml
+│       ├── compilers.yml
+│       ├── dns.yml
+│       ├── firewall.yml
+│       ├── limits.yml
+│       ├── misc.yml
+│       ├── module_blocklists.yml
+│       ├── ntp.yml
+│       ├── packages.yml
+│       ├── password.yml
+│       ├── sshd.yml
+│       ├── suid_sgid_blocklist.yml
+│       └── sysctl.yml
 ├── genREADME.sh
 ├── handlers
-│   └── main.yml
+│   └── main.yml
 ├── images
-│   └── ansible-role-hardening.svg
+│   └── ansible-role-hardening.svg
 ├── meta
-│   └── main.yml
+│   └── main.yml
 ├── molecule
-│   ├── centos
-│   │   └── molecule.yml
-│   ├── debian
-│   │   └── molecule.yml
-│   ├── default
-│   │   ├── INSTALL.rst
-│   │   ├── converge.yml
-│   │   ├── molecule.yml
-│   │   └── verify.yml
-│   └── ubuntu
-│       └── molecule.yml
+│   ├── centos
+│   │   └── molecule.yml
+│   ├── debian
+│   │   └── molecule.yml
+│   ├── default
+│   │   ├── INSTALL.rst
+│   │   ├── converge.yml
+│   │   ├── molecule.yml
+│   │   └── verify.yml
+│   ├── redhat
+│   │   └── molecule.yml
+│   └── ubuntu
+│       └── molecule.yml
 ├── postChecks.sh
 ├── provision
-│   └── setup.sh
+│   └── setup.sh
 ├── renovate.json
 ├── requirements-dev.txt
 ├── runTests.sh
 ├── tasks
-│   ├── adduser.yml
-│   ├── aide.yml
-│   ├── apparmor.yml
-│   ├── apport.yml
-│   ├── auditd.yml
-│   ├── compilers.yml
-│   ├── cron.yml
-│   ├── ctrlaltdel.yml
-│   ├── disablefs.yml
-│   ├── disablemod.yml
-│   ├── disablenet.yml
-│   ├── extras.yml
-│   ├── firewall.yml
-│   ├── fstab.yml
-│   ├── hosts.yml
-│   ├── issue.yml
-│   ├── journalconf.yml
-│   ├── limits.yml
-│   ├── lockroot.yml
-│   ├── logindconf.yml
-│   ├── logindefs.yml
-│   ├── main.yml
-│   ├── motdnews.yml
-│   ├── mount.yml
-│   ├── packagemgmt.yml
-│   ├── packages.yml
-│   ├── password.yml
-│   ├── path.yml
-│   ├── post.yml
-│   ├── postfix.yml
-│   ├── pre.yml
-│   ├── prelink.yml
-│   ├── resolvedconf.yml
-│   ├── rkhunter.yml
-│   ├── rootaccess.yml
-│   ├── sshconfig.yml
-│   ├── sudo.yml
-│   ├── suid.yml
-│   ├── sysctl.yml
-│   ├── systemdconf.yml
-│   ├── timesyncd.yml
-│   ├── umask.yml
-│   └── users.yml
+│   ├── adduser.yml
+│   ├── aide.yml
+│   ├── apparmor.yml
+│   ├── apport.yml
+│   ├── auditd.yml
+│   ├── compilers.yml
+│   ├── cron.yml
+│   ├── ctrlaltdel.yml
+│   ├── disablefs.yml
+│   ├── disablemod.yml
+│   ├── disablenet.yml
+│   ├── extras.yml
+│   ├── firewall.yml
+│   ├── fstab.yml
+│   ├── hosts.yml
+│   ├── issue.yml
+│   ├── journalconf.yml
+│   ├── limits.yml
+│   ├── lockroot.yml
+│   ├── logindconf.yml
+│   ├── logindefs.yml
+│   ├── main.yml
+│   ├── motdnews.yml
+│   ├── mount.yml
+│   ├── packagemgmt.yml
+│   ├── packages.yml
+│   ├── password.yml
+│   ├── path.yml
+│   ├── post.yml
+│   ├── postfix.yml
+│   ├── pre.yml
+│   ├── prelink.yml
+│   ├── resolvedconf.yml
+│   ├── rkhunter.yml
+│   ├── rootaccess.yml
+│   ├── sshconfig.yml
+│   ├── sudo.yml
+│   ├── suid.yml
+│   ├── sysctl.yml
+│   ├── systemdconf.yml
+│   ├── timesyncd.yml
+│   ├── umask.yml
+│   └── users.yml
 ├── templates
-│   ├── etc
-│   │   ├── adduser.conf.j2
-│   │   ├── ansible
-│   │   │   └── facts.d
-│   │   │       ├── cpuinfo.fact
-│   │   │       ├── reboot.fact
-│   │   │       ├── sshkeys.fact
-│   │   │       └── systemd.fact
-│   │   ├── audit
-│   │   │   └── rules.d
-│   │   │       └── hardening.rules.j2
-│   │   ├── default
-│   │   │   ├── rkhunter.j2
-│   │   │   └── useradd.j2
-│   │   ├── hosts.allow.j2
-│   │   ├── hosts.deny.j2
-│   │   ├── issue.j2
-│   │   ├── login.defs.j2
-│   │   ├── logrotate.conf.j2
-│   │   ├── motd.j2
-│   │   ├── pam.d
-│   │   │   ├── common-account.j2
-│   │   │   ├── common-auth.j2
-│   │   │   ├── common-password.j2
-│   │   │   └── login.j2
-│   │   ├── profile.d
-│   │   │   └── initpath.sh.j2
-│   │   ├── security
-│   │   │   ├── limits.conf.j2
-│   │   │   └── pwquality.conf.j2
-│   │   ├── ssh
-│   │   │   ├── ssh_config.j2
-│   │   │   └── sshd_config.j2
-│   │   └── systemd
-│   │       ├── coredump.conf.j2
-│   │       ├── journald.conf.j2
-│   │       ├── logind.conf.j2
-│   │       ├── resolved.conf.j2
-│   │       ├── system.conf.j2
-│   │       ├── timesyncd.conf.j2
-│   │       ├── tmp.mount.j2
-│   │       └── user.conf.j2
-│   └── lib
-│       └── systemd
-│           └── system
-│               ├── aidecheck.service.j2
-│               └── aidecheck.timer.j2
+│   ├── etc
+│   │   ├── adduser.conf.j2
+│   │   ├── ansible
+│   │   │   └── facts.d
+│   │   │       ├── cpuinfo.fact
+│   │   │       ├── reboot.fact
+│   │   │       ├── sshkeys.fact
+│   │   │       └── systemd.fact
+│   │   ├── audit
+│   │   │   └── rules.d
+│   │   │       └── hardening.rules.j2
+│   │   ├── default
+│   │   │   ├── rkhunter.j2
+│   │   │   └── useradd.j2
+│   │   ├── hosts.allow.j2
+│   │   ├── hosts.deny.j2
+│   │   ├── issue.j2
+│   │   ├── login.defs.j2
+│   │   ├── logrotate.conf.j2
+│   │   ├── motd.j2
+│   │   ├── pam.d
+│   │   │   ├── common-account.j2
+│   │   │   ├── common-auth.j2
+│   │   │   ├── common-password.j2
+│   │   │   └── login.j2
+│   │   ├── profile.d
+│   │   │   └── initpath.sh.j2
+│   │   ├── security
+│   │   │   ├── limits.conf.j2
+│   │   │   └── pwquality.conf.j2
+│   │   ├── ssh
+│   │   │   ├── ssh_config.j2
+│   │   │   └── sshd_config.j2
+│   │   └── systemd
+│   │       ├── coredump.conf.j2
+│   │       ├── journald.conf.j2
+│   │       ├── logind.conf.j2
+│   │       ├── resolved.conf.j2
+│   │       ├── system.conf.j2
+│   │       ├── timesyncd.conf.j2
+│   │       ├── tmp.mount.j2
+│   │       └── user.conf.j2
+│   └── lib
+│       └── systemd
+│           └── system
+│               ├── aidecheck.service.j2
+│               └── aidecheck.timer.j2
 └── tests
     ├── debug_facts.yml
     ├── inventory
     └── test.yml
 
-29 directories, 116 files
+30 directories, 117 files
 ```

@@ -6,8 +6,10 @@
 bento/centos-8
 bento/debian-10
 bento/ubuntu-20.04
-centos-stream/20201217
+centos-stream/20210210
 debian/contrib-testing64
+generic/rhel8
+konstruktoid/focal-hardened
 ubuntu/groovy64
 ubuntu/hirsute64
 ```
@@ -27,6 +29,7 @@ The following Molecule scenarios are available:
 centos
 debian
 default
+redhat
 ubuntu
 ```
 
@@ -54,14 +57,14 @@ sudo oscap xccdf eval --fetch-remote-resources \
 ```
 
 To run a [OpenSCAP](https://github.com/ComplianceAsCode/content) test on a
-Debian 10 host, where `v0.1.53` should be replaced with the latest available
+Debian 10 host, where `v0.1.54` should be replaced with the latest available
 version:
 
 ```shell
 sudo apt-get -y install libopenscap8 unzip
-wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.53/scap-security-guide-0.1.53.zip
-unzip scap-security-guide-0.1.53.zip
-cd scap-security-guide-0.1.53
+wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.54/scap-security-guide-0.1.54.zip
+unzip scap-security-guide-0.1.54.zip
+cd scap-security-guide-0.1.54
 oscap info --fetch-remote-resources ./ssg-debian10-ds.xml
 sudo oscap xccdf eval --fetch-remote-resources \
   --profile xccdf_org.ssgproject.content_profile_anssi_np_nt28_high

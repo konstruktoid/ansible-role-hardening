@@ -1,7 +1,7 @@
 # Hardening - the Ansible role
 
-An [Ansible](https://www.ansible.com/) role to make a CentOS, RHEL, Debian or Ubuntu
-server a bit more secure,
+An [Ansible](https://www.ansible.com/) role to make a CentOS, Debian, RHEL,
+or Ubuntu server a bit more secure,
 [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
 Requires Ansible >= 2.9.
@@ -12,9 +12,10 @@ Available on
 ```console
 Do not use this role without first testing in a non-operational environment.
 ```
-[RHEL 8](https://www.redhat.com/en/enterprise-linux-8),
+
 [CentOS 8](https://www.centos.org),
 [Debian 10](https://www.debian.org/) and
+[RHEL 8](https://www.redhat.com/en/enterprise-linux-8),
 [Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
 
 [CentOS Stream](https://www.centos.org/centos-stream/),
@@ -27,7 +28,7 @@ None.
 
 ## Example Playbook
 
-```console
+```yaml
 ---
 - hosts: all
   serial: 50%
@@ -76,10 +77,8 @@ grub_audit_cmdline: audit=1
 
 Enable `auditd` at boot using Grub.
 
-`auditd_apply_audit_rules` When true, the role applies own auditd rules from the
-template file `hardening.rules.j2` To apply own rulesset (to be compliant with
-OSSEC scanner, for example) set here False and provide own ansible task to
-configure auditd.
+When `auditd_apply_audit_rules: 'yes'`, the role applies the auditd rules
+from the included template file.
 
 `auditd_action_mail_acct` should be a valid email address or alias.
 
@@ -164,17 +163,26 @@ Maximum number of processes and open files.
 ### ./defaults/main/misc.yml
 
 ```yaml
-install_aide: yes
+install_aide: 'yes'
 reboot_ubuntu: false
 redhat_rpm_key:
   - 567E347AD0044ADE55BA8A5F199E2F91FD431D51
   - 47DB287789B21722B6D95DDE5326810137017186
+epel7_rpm_keys:
+  - 91E97D7C4A5E96F17F3E888F6A2FAEA2352C64E5
+epel8_rpm_keys:
+  - 94E279EB8D8F25B21810ADF121EA45AB2F86D6A1
 ```
-If `install_aide: true` then AIDE IDS will be installed and configured. If you plan use another IDS then you can disable AIDE installation completely here.
+
+If `install_aide: true` then [AIDE](https://aide.github.io/) will be installed
+and configured.
 
 If `reboot_ubuntu: true` an Ubuntu node will be rebooted if required.
 
 `redhat_rpm_key` are [RedHat Product Signing Keys](https://access.redhat.com/security/team/key/)
+
+The `epel7_rpm_keys` and `epel8_rpm_keys` are release specific
+[Fedora EPEL signing keys](https://getfedora.org/security/).
 
 ### ./defaults/main/module_blocklists.yml
 
@@ -248,7 +256,6 @@ packages_blocklist:
   - ypbind
 packages_debian:
   - acct
-  - aide-common
   - apparmor-profiles
   - apparmor-utils
   - apt-show-versions
@@ -271,7 +278,6 @@ packages_debian:
   - tcpd
   - vlock
 packages_redhat:
-  - aide
   - audispd-plugins
   - audit
   - gnupg2
