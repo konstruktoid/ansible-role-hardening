@@ -128,7 +128,7 @@
 
 - name: RHEL8 package management tasks
   block:
-    - name: Import RHEL8 necessary GPG keys
+    - name: import RHEL8 necessary GPG keys
       become: 'yes'
       rpm_key:
         state: present
@@ -144,20 +144,19 @@
       dnf:
         name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
         state: present
-        update_cache: 'yes'
       tags:
         - dnf
         - packages
 
-    - name: Install CodeReady repo for RHEL8
+    - name: install CodeReady repo for RHEL8
       become: 'yes'
-      shell: subscription-manager repos --enable "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
-
+      command: subscription-manager repos --enable "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
+      changed_when: 'False'
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
 
 - name: RHEL7 repo tasks
   block:
-    - name: Import RHEL7 necessary GPG keys
+    - name: import RHEL7 necessary GPG keys
       become: 'yes'
       rpm_key:
         state: present
@@ -173,15 +172,14 @@
       yum:
         name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
         state: present
-        update_cache: 'yes'
       tags:
         - yum
         - packages
 
-    - name: Install Extras and HA for RHEL7
+    - name: install Extras and HA for RHEL7
       become: 'yes'
-      shell: subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms"
-
+      command: subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms"
+      changed_when: 'False'
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
 
 - name: stat centos PowerTools repo
