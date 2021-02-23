@@ -323,15 +323,17 @@
         - ocredit = -1
         - ucredit = -1
 
-    - name: verify audit grubenv
+    - name: verify RedHat grub audit settings
       become: 'yes'
-      command: grep "{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub2/grubenv
+      shell: |
+        set -o pipefail
+        grep CMDLINE /etc/default/grub | grep "{{ grub_audit_backlog_cmdline }}" | grep "{{ grub_audit_cmdline }}"
       register: audit_grubenv
       failed_when: audit_grubenv.rc != 0
       changed_when: audit_grubenv.rc != 0
       when: ansible_os_family == "RedHat"
 
-    - name: verify audit grub.cfg
+    - name: verify Debian audit grub settings
       become: 'yes'
       shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
       register: audit_grub_cfg
