@@ -33,7 +33,7 @@ platforms:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
   - name: centos-stream
-    box: "centos-stream/20201217"
+    box: "centos-stream/20210210"
     box_url: "https://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-Vagrant-8-20210210.0.x86_64.vagrant-virtualbox.box"
     box_download_checksum: "4ba18cc4bde5f634580b0a6142f328c84d594d75c4775e87f9a4cb26714ad423"
     box_download_checksum_type: "sha256"
