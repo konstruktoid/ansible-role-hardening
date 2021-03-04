@@ -4,7 +4,7 @@ An [Ansible](https://www.ansible.com/) role to make a CentOS, Debian, RHEL,
 or Ubuntu server a bit more secure,
 [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
-Requires Ansible >= 2.9.
+Requires Ansible >= 2.10.
 
 Available on
 [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).

@@ -1,4 +1,4 @@
-ansible>=2.9,<2.10
+ansible
 ansible-lint
 ansible-playbook-grapher
 molecule>=3.0,<3.1
