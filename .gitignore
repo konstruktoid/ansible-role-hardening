@@ -4,6 +4,7 @@
 *.retry
 *.rpm
 *suid.list
+.cache
 .scannerwork
 .sonar
 .vagrant
