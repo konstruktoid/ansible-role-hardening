@@ -231,7 +231,7 @@
 
 - name: allow firewalld ssh
   become: 'yes'
-  firewalld:
+  ansible.posix.firewalld:
     port: "{{ sshd_port }}/tcp"
     zone: public
     immediate: 'yes'
