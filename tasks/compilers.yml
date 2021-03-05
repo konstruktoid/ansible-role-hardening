@@ -13,5 +13,6 @@
   with_items:
     - "{{ compilers }}"
   tags:
+    - compilers
     - suid
 ...

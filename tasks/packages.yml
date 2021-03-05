@@ -22,6 +22,7 @@
     recurse: 'yes'
   when: ("needrestart" in packages_merged) and not needrestart_directory_created.stat.exists
   tags:
+    - needrestart
     - packages
 
 - name: stat needrestart configuration directory
@@ -36,6 +37,9 @@
   when: needrestart_directory.stat.exists
   changed_when: needrestart_restart_set.rc != 0
   failed_when: needrestart_restart_set.rc > 1
+  tags:
+    - needrestart
+    - packages
 
 - name: configure needrestart
   become: 'yes'
@@ -47,6 +51,9 @@
     group: root
     mode: 0644
   when: needrestart_directory.stat.exists and needrestart_restart_set.rc != 0
+  tags:
+    - needrestart
+    - packages
 
 - name: debian family package installation
   become: 'yes'
@@ -83,7 +90,7 @@
 
 - name: redhat family package installation
   become: 'yes'
-  package:
+  dnf:
     name: "{{ item }}"
     state: present
   with_items:
@@ -176,9 +183,9 @@
     state: present
     create: 'no'
     backrefs: 'yes'
+  when: default_sysstat.stat.exists
   tags:
     - sysstat
-  when: default_sysstat.stat.exists
 
 - name: remove unneeded debian dependency packages
   become: 'yes'

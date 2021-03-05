@@ -42,6 +42,7 @@
     owner: root
     group: root
   tags:
+    - mount
     - systemd
     - tmp
 

@@ -14,8 +14,8 @@ Do not use this role without first testing in a non-operational environment.
 ```
 
 [CentOS 8](https://www.centos.org),
-[Debian 10](https://www.debian.org/) and
-[RHEL 8](https://www.redhat.com/en/enterprise-linux-8),
+[Debian 10](https://www.debian.org/),
+[RHEL 8](https://www.redhat.com/en/enterprise-linux-8) and
 [Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
 
 [CentOS Stream](https://www.centos.org/centos-stream/),

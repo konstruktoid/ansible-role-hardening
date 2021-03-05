@@ -9,5 +9,5 @@
     owner: root
     group: root
   tags:
-    - login.defs
+    - login
 ...

@@ -31,6 +31,7 @@
     mode: 0644
   when: bashrc.stat.exists
   tags:
+    - bash
     - umask
 
 - name: stat csh.cshrc
@@ -48,6 +49,7 @@
     mode: 0644
   when: cshrc.stat.exists
   tags:
+    - csh
     - umask
 
 - name: set default profile umask

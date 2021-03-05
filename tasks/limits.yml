@@ -10,7 +10,7 @@
     owner: root
     group: root
   tags:
-    - limits.conf
+    - limits
 
 - name: coredump.conf
   become: 'yes'
@@ -22,6 +22,6 @@
     owner: root
     group: root
   tags:
-    - coredump.conf
+    - coredump
     - systemd
 ...

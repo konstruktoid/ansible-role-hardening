@@ -152,5 +152,4 @@
     - restart auditd
   tags:
     - auditd
-    - audit.rules
 ...

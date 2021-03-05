@@ -11,5 +11,6 @@
   notify:
     - reload systemd
   tags:
-    - resolved.conf
+    - resolved
+    - systemd
 ...

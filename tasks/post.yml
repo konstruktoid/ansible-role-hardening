@@ -23,4 +23,6 @@
     - "{{ grub_cfg.files | reject('search','/boot/efi/EFI/ubuntu/grub.cfg') | list }}"
   loop_control:
     label: "{{ item.path }}"
+  tags:
+    - grub
 ...

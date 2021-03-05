@@ -9,7 +9,8 @@
     owner: root
     group: root
   tags:
-    - adduser.conf
+    - adduser
+    - users
 
 - name: useradd
   become: 'yes'
@@ -22,4 +23,5 @@
     group: root
   tags:
     - useradd
+    - users
 ...

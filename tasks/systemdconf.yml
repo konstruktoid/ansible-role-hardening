@@ -11,8 +11,8 @@
   notify:
     - reload systemd
   tags:
+    - system
     - systemd
-    - system.conf
 
 - name: systemd user.conf
   become: 'yes'
@@ -27,5 +27,5 @@
     - reload systemd
   tags:
     - systemd
-    - user.conf
+    - users
 ...

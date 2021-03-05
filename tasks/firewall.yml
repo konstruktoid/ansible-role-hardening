@@ -85,9 +85,9 @@
     state: present
     create: 'no'
     backrefs: 'yes'
+  when: ansible_os_family == "Debian"
   tags:
     - ufw
-  when: ansible_os_family == "Debian"
 
 - name: register ufw rules
   become: 'yes'
@@ -106,6 +106,8 @@
   when: ufw_not_managed.stdout_lines | length > 0
   with_items:
     - "{{ ufw_not_managed.stdout_lines }}"
+  tags:
+    - ufw
 
 - name: allow loopback traffic in
   become: 'yes'
