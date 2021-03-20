@@ -1,136 +1,180 @@
 ---
 - name: configure local facts, install pexpect and epel-release
   include: pre.yml
+  when: no_include_pre is not defined
 
 - name: install and configure firewalls
   environment:
     PATH: /usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:/bin
   include: firewall.yml
+  when: no_include_firewall is not defined
 
 - name: configure sysctl
   include: sysctl.yml
+  when: no_include_sysctl is not defined
 
 - name: disable kernel network modules
   include: disablenet.yml
+  when: no_include_disablenet is not defined
 
 - name: disable file system kernel modules
   include: disablefs.yml
+  when: no_include_disablefs is not defined
 
 - name: configure systemd system and users
   include: systemdconf.yml
+  when: no_include_systemdconf is not defined
 
 - name: configure systemd journald and logrotate
   include: journalconf.yml
+  when: no_include_journalconf is not defined
 
 - name: configure systemd timesyncd
   include: timesyncd.yml
+  when: no_include_timesyncd is not defined
 
 - name: clean fstab
   include: fstab.yml
+  when: no_include_fstab is not defined
 
 - name: configure shm and tmp mounts
   include: mount.yml
+  when: no_include_mount is not defined
 
 - name: disable prelink
   include: prelink.yml
+  when: no_include_prelink is not defined
 
 - name: configure package managers, update caches and install updates
   include: packagemgmt.yml
+  when: no_include_packagemgmt is not defined
 
 - name: configure hosts.allow and hosts.deny
   include: hosts.yml
+  when: no_include_hosts is not defined
 
 - name: configure login.defs
   include: logindefs.yml
+  when: no_include_logindefs is not defined
 
 - name: set limits
   include: limits.yml
+  when: no_include_limits is not defined
 
 - name: configure adduser and useradd
   include: adduser.yml
+  when: no_include_adduser is not defined
 
 - name: restrict root access
   include: rootaccess.yml
+  when: no_include_rootaccess is not defined
 
 - name: configure needrestart, install and remove various packages
   environment:
     PATH: /usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:/bin
   include: packages.yml
+  when: no_include_packages is not defined
 
 - name: configure ssh server and client
   include: sshconfig.yml
+  when: no_include_sshconfig is not defined
 
 - name: configure pam
   include: password.yml
+  when: no_include_password is not defined
 
 - name: configure and clean at and cron
   include: cron.yml
+  when: no_include_cron is not defined
 
 - name: disable ctrl-alt-del.target
   include: ctrlaltdel.yml
+  when: no_include_ctrlaltdel is not defined
 
 - name: configure auditd
   include: auditd.yml
+  when: no_include_auditd is not defined
 
 - name: configure apparmor
   environment:
     PATH: /usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:/bin
   include: apparmor.yml
+  when: no_include_apparmor is not defined
 
 - name: disable misc kernel modules
   include: disablemod.yml
+  when: no_include_disablemod is not defined
 
 #   https://bugs.launchpad.net/ubuntu/+source/aide/+bug/1903298
 - name: configure aide
   include: aide.yml
-  when: install_aide|bool and (not (ansible_distribution == "Ubuntu" and (ansible_lsb.codename == "groovy" or ansible_lsb.codename == "hirsute")))
+  when:
+    - install_aide|bool and (not (ansible_distribution == "Ubuntu" and (ansible_lsb.codename == "groovy" or ansible_lsb.codename == "hirsute")))
+    - no_include_aide is not defined
 
 - name: remove users
   include: users.yml
+  when: no_include_users is not defined
 
 - name: remove suid/sgid
   include: suid.yml
-  when: suid_sgid_permissions|bool
+  when:
+    - suid_sgid_permissions|bool
+    - no_include_suid is not defined
 
 - name: configure compiler permissions
   include: compilers.yml
+  when: no_include_compilers is not defined
 
 - name: set umask
   include: umask.yml
+  when: no_include_umask is not defined
 
 - name: configure paths
   include: path.yml
+  when: no_include_path is not defined
 
 - name: configure systemd logindconf
   include: logindconf.yml
+  when: no_include_logindconf is not defined
 
 - name: configure systemd resolvedconf
   include: resolvedconf.yml
+  when: no_include_resolvedconf is not defined
 
 - name: configure rkhunter
   include: rkhunter.yml
+  when: no_include_rkhunter is not defined
 
 - name: add issue message
   include: issue.yml
+  when: no_include_issue is not defined
 
 - name: disable apport
   include: apport.yml
+  when: no_include_apport is not defined
 
 - name: lock root account
   include: lockroot.yml
+  when: no_include_lockroot is not defined
 
 - name: configure postfix
   include: postfix.yml
+  when: no_include_postfix is not defined
 
 - name: configure motdnews
   include: motdnews.yml
+  when: no_include_motdnews is not defined
 
 - name: configure sudo
   include: sudo.yml
+  when: no_include_sudo is not defined
 
 - name: misc extra tasks
   include: extras.yml
+  when: no_include_extras is not defined
 
 - name: misc tasks after all handlers
   include: post.yml
+  when: no_include_post is not defined
 ...
