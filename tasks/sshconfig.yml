@@ -1,10 +1,13 @@
 ---
-- name: check if sshd_config.d exits
+- name: "check if sshd_config.d exits"
   stat:
     path: /etc/ssh/sshd_config.d
   register: sshd_config_d_exists
+  tags:
+    - sshd_config
+    - always
 
-- name: configure sshd
+- name: "overwrite sshd_config"
   become: 'yes'
   template:
     src: etc/ssh/sshd_config.j2
@@ -18,6 +21,7 @@
   tags:
     - sshd_config
     - sshd
+  when: arh_overwrite_sshd_config is true
 
 - name: sshd host keys
   become: 'yes'
@@ -29,8 +33,9 @@
   register: ssh_host_keys
   tags:
     - sshd
+    - always
 
-- name: sshd host key permissions
+- name: "set sshd host key permissions"
   become: 'yes'
   file:
     owner: root
@@ -42,13 +47,16 @@
     label: "{{ item.path }}"
   tags:
     - sshd
+  when: arh_set_sshd_host_key_permissions is true
 
-- name: check if ssh_config.d exits
+- name: "check if ssh_config.d exits"
   stat:
     path: /etc/ssh/ssh_config.d
   register: ssh_config_d_exists
+  tags:
+    - always
 
-- name: configure ssh client
+- name: "overwrite ssh_config"
   become: 'yes'
   template:
     src: etc/ssh/ssh_config.j2
@@ -60,4 +68,5 @@
   tags:
     - ssh_config
     - ssh
+  when: arh_overwrite_ssh_config is true
 ...

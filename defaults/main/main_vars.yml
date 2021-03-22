@@ -1,0 +1,58 @@
+---
+# task-specific includes
+
+# sshconfig.yml
+arh_overwrite_ssh_config: true
+arh_overwrite_sshd_config: true
+arh_set_sshd_host_key_permissions: true
+
+# users.yml
+arh_modify_adduser_conf: true
+arh_overwrite_useradd: true
+
+
+# include top level vars in tasks/main.yml
+include_adduser: true
+include_aide: true
+include_apparmor: true
+include_apport: true
+include_auditd: true
+include_compilers: true
+include_cron: true
+include_ctrlaltdel: true
+include_disablefs: true
+include_disablemod: true
+include_disablenet: true
+include_extras: true
+include_firewall: true
+include_fstab: true
+include_hosts: true
+include_issue: true
+include_journalconf: true
+include_limits: true
+include_lockroot: true
+include_logindconf: true
+include_logindefs: true
+include_motdnews: true
+include_mount: true
+include_packagemgmt: true
+include_packages: true
+include_password: true
+include_path: true
+include_post: true
+include_postfix: true
+include_pre: true
+include_prelink: true
+include_resolvedconf: true
+include_rkhunter: true
+include_rootaccess: true
+include_sshconfig: true
+include_sudo: true
+include_suid: true
+include_sysctl: true
+include_systemdconf: true
+include_timesyncd: true
+include_umask: true
+include_users: true
+
+...

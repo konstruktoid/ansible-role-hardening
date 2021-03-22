@@ -1,5 +1,5 @@
 ---
-- name: adduser.conf
+- name: "overwrite adduser.conf"
   become: 'yes'
   template:
     src: etc/adduser.conf.j2
@@ -11,8 +11,9 @@
   tags:
     - adduser
     - users
+  when: arh_modify_adduser_conf is true
 
-- name: useradd
+- name: "overwrite useradd"
   become: 'yes'
   template:
     src: etc/default/useradd.j2
@@ -24,4 +25,5 @@
   tags:
     - useradd
     - users
+  when: arh_overwrite_useradd is true
 ...
