@@ -91,12 +91,9 @@
 - name: redhat family package installation
   become: 'yes'
   dnf:
-    name: "{{ item }}"
+    name: "{{ packages_redhat }}"
     state: present
-  with_items:
-    - "{{ packages_redhat }}"
   when: ansible_os_family == "RedHat"
-  ignore_errors: true
   notify:
     - enable haveged
   tags:
