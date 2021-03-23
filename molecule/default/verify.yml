@@ -190,6 +190,7 @@
       failed_when: sysctl_config.rc != 0
       changed_when: sysctl_config.rc != 0
       with_items:
+        - fs.protected_fifos=2
         - fs.protected_hardlinks=1
         - fs.protected_symlinks=1
         - fs.suid_dumpable=0
@@ -198,7 +199,7 @@
         - kernel.kptr_restrict=2
         - kernel.panic=60
         - kernel.panic_on_oops=60
-        - kernel.perf_event_paranoid=2
+        - kernel.perf_event_paranoid=3
         - kernel.randomize_va_space=2
         - kernel.sysrq=0
         - kernel.unprivileged_bpf_disabled=1
