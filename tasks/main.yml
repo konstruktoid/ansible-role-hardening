@@ -80,12 +80,12 @@
 - name: disable misc kernel modules
   include: disablemod.yml
 
-#   https://bugs.launchpad.net/ubuntu/+source/aide/+bug/1903298
+# https://bugs.launchpad.net/ubuntu/+source/aide/+bug/1903298
 - name: configure aide
   include: aide.yml
-  when: install_aide|bool and (not (ansible_distribution == "Ubuntu" and (ansible_lsb.codename == "groovy" or ansible_lsb.codename == "hirsute")))
+  when: install_aide|bool and not (ansible_lsb.codename == "groovy" or ansible_lsb.codename == "hirsute" or ansible_lsb.codename == "bullseye")
 
-- name: remove users
+- name: manage users
   include: users.yml
 
 - name: remove suid/sgid

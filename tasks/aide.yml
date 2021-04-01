@@ -135,11 +135,11 @@
   become: 'yes'
   expect:
     command: aideinit
-    timeout: null
+    timeout: 60
+    echo: 'yes'
     responses:
       Question:
-        - 'Overwrite /var/lib/aide/aide.db [yN]?': 'y'
-        - 'Overwrite existing /var/lib/aide/aide.db.new [Yn]?': 'y'
+        - 'Overwrite(.*)': 'y'
   when: ansible_os_family == "Debian" and not ubuaidedb.stat.exists
   tags:
     - aide
