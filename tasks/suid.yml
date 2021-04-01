@@ -1,21 +1,15 @@
 ---
-- name: register binaries in SUID/SGID blocklist
-  become: 'yes'
-  find:
-    paths: ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/snap/bin']
-    patterns: "{{ suid_sgid_blocklist }}"
-    recurse: 'yes'
-  register: suid
-
 - name: remove suid/sgid
   become: 'yes'
   file:
-    path: "{{ item.path }}"
+    path: "{{ item }}"
     mode: 'a-s'
     state: file
     follow: 'yes'
+  register: output
+  failed_when: "output.failed and not 'absent' in output.msg"
   with_items:
-    - "{{ suid.files }}"
+    - "{{ suid_sgid_blocklist }}"
   tags:
     - suid
 ...
