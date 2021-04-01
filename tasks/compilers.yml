@@ -1,18 +1,23 @@
 ---
+- name: register compilers
+  become: 'yes'
+  find:
+    paths: ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/snap/bin']
+    patterns: "{{ compilers }}"
+    recurse: 'yes'
+  register: compiler
+
 - name: restrict compiler access
   become: 'yes'
   file:
+    path: "{{ item.path }}"
     owner: root
     group: root
     mode: 0750
     state: file
     follow: 'yes'
-    path: "{{ item }}"
-  register: output
-  failed_when: "output.failed and not 'absent' in output.msg"
   with_items:
-    - "{{ compilers }}"
+    - "{{ compiler.files }}"
   tags:
     - compilers
-    - suid
 ...

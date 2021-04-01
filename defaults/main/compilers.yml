@@ -1,11 +1,7 @@
 ---
 compilers:
-  - /bin/as
-  - /bin/cc
-  - /bin/gcc
-  - /bin/make
-  - /usr/bin/as
-  - /usr/bin/cc
-  - /usr/bin/gcc
-  - /usr/bin/make
+  - as
+  - cc
+  - gcc
+  - make
 ...
