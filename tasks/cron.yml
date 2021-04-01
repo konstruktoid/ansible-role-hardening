@@ -4,7 +4,6 @@
   file:
     path: "{{ item }}"
     state: absent
-  ignore_errors: true
   with_items:
     - /etc/at.deny
     - /etc/cron.deny
@@ -47,7 +46,8 @@
     masked: 'yes'
     enabled: 'no'
     state: stopped
-  ignore_errors: true
+  register: mask_atd
+  failed_when: mask_atd is not success and not "Could not find the requested service" in mask_atd.msg
   tags:
     - at
     - systemd
@@ -65,7 +65,6 @@
     - /etc/cron.hourly
     - /etc/cron.weekly
     - /etc/cron.monthly
-  ignore_errors: true
   tags:
     - cron
 
@@ -76,7 +75,6 @@
     mode: 0600
     owner: root
     group: root
-  ignore_errors: true
   tags:
     - cron
     - crontab

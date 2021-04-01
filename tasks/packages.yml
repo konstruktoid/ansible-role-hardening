@@ -107,7 +107,8 @@
     state: absent
     purge: 'yes'
   when: ansible_os_family == "Debian"
-  ignore_errors: true
+  register: apt_purge
+  failed_when: apt_purge is not success and not "No package" in apt_purge.msg
   tags:
     - apt
     - packages
@@ -115,11 +116,10 @@
 - name: generic package removal
   become: 'yes'
   package:
-    name: "{{ item }}"
+    name: "{{ packages_blocklist }}"
     state: absent
-  ignore_errors: true
-  with_items:
-    - "{{ packages_blocklist }}"
+  register: package_removal
+  failed_when: package_removal is not success and not "No package" in package_removal.msg
   tags:
     - apt
     - dnf

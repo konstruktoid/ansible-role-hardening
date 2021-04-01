@@ -113,7 +113,7 @@
 - name: add issue message
   include: issue.yml
 
-- name: disable apport
+- name: configure apport
   include: apport.yml
 
 - name: lock root account

@@ -5,6 +5,7 @@
     name: "{{ item }}"
     state: absent
     remove: 'yes'
+  register: remove_users
   with_items:
     - games
     - gnats
@@ -13,7 +14,7 @@
     - news
     - sync
     - uucp
-  ignore_errors: true
+  failed_when: remove_users is not success and not ("not removing" in remove_users.msg or "not found" in remove_users.msg)
   tags:
     - users
 

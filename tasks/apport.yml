@@ -9,10 +9,11 @@
     state: present
     create: 'no'
     backrefs: 'yes'
-  ignore_errors: true
+  register: default_apport
   notify:
     - mask apport
   when: ansible_os_family == "Debian"
+  failed_when: default_apport.rc !=0 and not default_apport.rc == 257
   tags:
     - apport
 ...

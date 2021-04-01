@@ -9,11 +9,12 @@
     state: present
     create: 'no'
     backrefs: 'yes'
-  ignore_errors: true
+  register: motd_news
   notify:
     - mask motdnews timer
     - mask motdnews service
   when: ansible_os_family == "Debian"
+  failed_when: motd_news.rc !=0 and not motd_news.rc == 257
   tags:
     - motd
 

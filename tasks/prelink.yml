@@ -29,7 +29,6 @@
   become: 'yes'
   command: prelink -ua
   when: sysconfig_prelink_exists.stat.exists or etc_prelink_exists.stat.exists
-  ignore_errors: true
   tags:
     - prelink
 ...
