@@ -22,6 +22,7 @@ suid_sgid_blocklist:
   - /bin/cowthink
   - /bin/cp
   - /bin/cpan
+  - /bin/cpio
   - /bin/crontab
   - /bin/csplit
   - /bin/curl
@@ -46,6 +47,7 @@ suid_sgid_blocklist:
   - /bin/gawk
   - /bin/gcc
   - /bin/grep
+  - /bin/gzip
   - /bin/head
   - /bin/hexdump
   - /bin/iconv
@@ -97,6 +99,7 @@ suid_sgid_blocklist:
   - /bin/sed
   - /bin/setarch
   - /bin/sftp
+  - /bin/sg
   - /bin/sh
   - /bin/shuf
   - /bin/soelim
@@ -104,6 +107,7 @@ suid_sgid_blocklist:
   - /bin/split
   - /bin/sqlite3
   - /bin/ssh
+  - /bin/ssh-keygen
   - /bin/ssh-keyscan
   - /bin/stdbuf
   - /bin/strings
@@ -152,6 +156,8 @@ suid_sgid_blocklist:
   - /sbin/sysctl
   - /sbin/tcpdump
   - /sbin/update-alternatives
+  - /sbin/vigr
+  - /sbin/vipw
   - /usr/bin/apt
   - /usr/bin/apt-get
   - /usr/bin/ar
@@ -176,6 +182,7 @@ suid_sgid_blocklist:
   - /usr/bin/cowthink
   - /usr/bin/cp
   - /usr/bin/cpan
+  - /usr/bin/cpio
   - /usr/bin/crontab
   - /usr/bin/csplit
   - /usr/bin/curl
@@ -205,6 +212,7 @@ suid_sgid_blocklist:
   - /usr/bin/gem
   - /usr/bin/git
   - /usr/bin/grep
+  - /usr/bin/gzip
   - /usr/bin/hd
   - /usr/bin/head
   - /usr/bin/hexdump
@@ -271,6 +279,7 @@ suid_sgid_blocklist:
   - /usr/bin/sed
   - /usr/bin/setarch
   - /usr/bin/sftp
+  - /usr/bin/sg
   - /usr/bin/sh
   - /usr/bin/shuf
   - /usr/bin/soelim
@@ -279,6 +288,7 @@ suid_sgid_blocklist:
   - /usr/bin/sqlite3
   - /usr/bin/ss
   - /usr/bin/ssh
+  - /usr/bin/ssh-keygen
   - /usr/bin/ssh-keyscan
   - /usr/bin/stdbuf
   - /usr/bin/strace
@@ -307,6 +317,7 @@ suid_sgid_blocklist:
   - /usr/bin/vi
   - /usr/bin/view
   - /usr/bin/vim
+  - /usr/bin/vimdiff
   - /usr/bin/wall
   - /usr/bin/watch
   - /usr/bin/wget
@@ -334,4 +345,6 @@ suid_sgid_blocklist:
   - /usr/sbin/sysctl
   - /usr/sbin/tcpdump
   - /usr/sbin/update-alternatives
+  - /usr/sbin/vigr
+  - /usr/sbin/vipw
 ...
