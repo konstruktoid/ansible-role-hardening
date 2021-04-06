@@ -14,7 +14,7 @@
     - mask motdnews timer
     - mask motdnews service
   when: ansible_os_family == "Debian"
-  failed_when: motd_news.rc !=0 and not motd_news.rc == 257
+  failed_when: motd_news.rc != 0 and "does not exist" not in motd_news.msg
   tags:
     - motd
 
