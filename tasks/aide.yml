@@ -133,15 +133,8 @@
 
 - name: initialize Debian aide
   become: 'yes'
-  expect:
-    command: aideinit
-    timeout: 60
-    echo: 'yes'
-    responses:
-      Question:
-        - 'Overwrite(.*)': 'y'
+  command: aideinit --force --yes
   when: ansible_os_family == "Debian" and not ubuaidedb.stat.exists
   tags:
     - aide
-    - skip_ansible_lint
 ...
