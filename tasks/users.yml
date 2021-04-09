@@ -7,14 +7,11 @@
     remove: 'yes'
   register: remove_users
   with_items:
-    - games
-    - gnats
-    - irc
-    - list
-    - news
-    - sync
-    - uucp
-  failed_when: remove_users is not success and not ("not removing" in remove_users.msg or "not found" in remove_users.msg)
+    - "{{ delete_users }}"
+  failed_when: >
+    remove_users is not success and
+    not ("not removing" in remove_users.msg or
+    "not found" in remove_users.msg)
   tags:
     - users
 
