@@ -69,7 +69,7 @@
 - name: update subscription info on RHEL
   become: 'yes'
   command: subscription-manager refresh --force
-  changed_when: 'False'
+  changed_when: false
   when: ansible_distribution == "RedHat"
 
 - name: redhat family epel installation

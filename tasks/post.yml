@@ -7,8 +7,8 @@
   shell: |
     set -o pipefail
     grep CMDLINE /etc/default/grub | grep "{{ grub_audit_backlog_cmdline }}" | grep "{{ grub_audit_cmdline }}"
-  changed_when: 'False'
-  failed_when: 'False'
+  changed_when: false
+  failed_when: false
   args:
     executable: /bin/bash
   register: audit_grubenv
@@ -22,8 +22,8 @@
 - name: register Debian audit grub settings
   become: 'yes'
   shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
-  changed_when: 'False'
-  failed_when: 'False'
+  changed_when: false
+  failed_when: false
   register: audit_grub_cfg
   when: ansible_os_family == "Debian"
 

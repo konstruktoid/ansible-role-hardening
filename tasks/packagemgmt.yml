@@ -150,7 +150,7 @@
     - name: install CodeReady repo for RHEL8
       become: 'yes'
       command: subscription-manager repos --enable "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
-      changed_when: 'False'
+      changed_when: false
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
 
 - name: RHEL7 repo tasks
@@ -178,7 +178,7 @@
     - name: install Extras and HA for RHEL7
       become: 'yes'
       command: subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms"
-      changed_when: 'False'
+      changed_when: false
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
 
 - name: stat centos PowerTools repo
