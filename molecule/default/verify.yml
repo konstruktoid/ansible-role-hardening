@@ -185,7 +185,7 @@
 
     - name: verify sysctl configuration
       become: 'yes'
-      shell: /bin/grep -R "^{{ item }}$" /etc/sysctl.*
+      shell: grep -R "^{{ item }}$" /etc/sysctl.*
       register: sysctl_config
       failed_when: sysctl_config.rc != 0
       changed_when: sysctl_config.rc != 0
