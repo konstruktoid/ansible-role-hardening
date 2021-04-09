@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: hardening
   author: konstruktoid
   description: CentOS, Debian and Ubuntu hardening. systemd edition.
   license: apache
