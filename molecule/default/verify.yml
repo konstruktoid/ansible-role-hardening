@@ -354,6 +354,23 @@
         - DNSSEC={{ dnssec }}
         - DNSOverTLS={{ dns_over_tls }}
 
+    - name: register /etc/default/motd-news
+      stat:
+        path: /etc/default/motd-news
+      register: motd_news
+
+    - name: verify masked motdnews service
+      become: 'yes'
+      systemd:
+        name: motd-news.service
+        masked: 'yes'
+        enabled: 'no'
+        state: stopped
+      check_mode: 'yes'
+      register: motdnews_service
+      failed_when: motdnews_service is changed
+      when: ansible_os_family == "Debian" and motd_news.stat.exists
+
     - name: efi fact
       set_fact:
         booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
