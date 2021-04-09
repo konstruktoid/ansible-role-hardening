@@ -1,4 +1,9 @@
 ---
+- name: register /etc/default/motd-news
+  stat:
+    path: /etc/default/motd-news
+  register: motd_news
+
 - name: disable motd-news
   become: 'yes'
   lineinfile:
@@ -9,12 +14,10 @@
     state: present
     create: 'no'
     backrefs: 'yes'
-  register: motd_news
   notify:
     - mask motdnews timer
     - mask motdnews service
-  when: ansible_os_family == "Debian"
-  failed_when: motd_news.rc != 0 and "does not exist" not in motd_news.msg
+  when: ansible_os_family == "Debian" and motd_news.stat.exists
   tags:
     - motd
 
