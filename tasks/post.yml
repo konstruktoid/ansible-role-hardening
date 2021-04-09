@@ -2,6 +2,36 @@
 - name: run all notified handlers
   meta: flush_handlers
 
+- name: register RedHat grub audit settings
+  become: 'yes'
+  shell: |
+    set -o pipefail
+    grep CMDLINE /etc/default/grub | grep "{{ grub_audit_backlog_cmdline }}" | grep "{{ grub_audit_cmdline }}"
+  changed_when: 'False'
+  failed_when: 'False'
+  args:
+    executable: /bin/bash
+  register: audit_grubenv
+  when: ansible_os_family == "RedHat"
+
+- name: update grub2 if missing grub settings
+  become: 'yes'
+  command: grub2-mkconfig
+  when: ansible_os_family == "RedHat" and audit_grubenv.rc != 0
+
+- name: register Debian audit grub settings
+  become: 'yes'
+  shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
+  changed_when: 'False'
+  failed_when: 'False'
+  register: audit_grub_cfg
+  when: ansible_os_family == "Debian"
+
+- name: update grub if missing grub settings
+  become: 'yes'
+  command: update-grub
+  when: ansible_os_family == "Debian" and audit_grub_cfg.rc != 0
+
 - name: find grub config files
   become: 'yes'
   find:
