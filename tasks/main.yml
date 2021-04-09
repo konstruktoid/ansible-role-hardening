@@ -83,10 +83,12 @@
 # https://bugs.launchpad.net/ubuntu/+source/aide/+bug/1903298
 - name: configure aide
   include: aide.yml
-  when: install_aide|bool and (not (ansible_os_family == "Debian"
-        and (ansible_lsb.codename == "groovy"
-        or ansible_lsb.codename == "hirsute"
-        or ansible_lsb.codename == "bullseye")))
+  when: >
+    install_aide|bool and
+    (not (ansible_os_family == "Debian" and
+    (ansible_lsb.codename == "groovy" or
+    ansible_lsb.codename == "hirsute" or
+    ansible_lsb.codename == "bullseye")))
 
 - name: manage users
   include: users.yml
