@@ -105,14 +105,10 @@ sending the message to syslog.
 
 ```yaml
 compilers:
-  - /bin/as
-  - /bin/cc
-  - /bin/gcc
-  - /bin/make
-  - /usr/bin/as
-  - /usr/bin/cc
-  - /usr/bin/gcc
-  - /usr/bin/make
+  - as
+  - cc
+  - gcc
+  - make
 ```
 
 List of compilers that will be restricted to the root user.
@@ -391,14 +387,18 @@ connection.
 ```yaml
 suid_sgid_permissions: true
 suid_sgid_blocklist:
+  - /bin/ar
+  - /bin/at
   - /bin/awk
   - /bin/base32
   - /bin/base64
   - /bin/bash
   - /bin/busctl
   - /bin/busybox
+  - /bin/cancel
   - /bin/cat
   - /bin/chage
+  - /bin/chfn
   - /bin/chmod
   - /bin/chown
   [...]
@@ -476,7 +476,22 @@ sysctl_settings:
   net.netfilter.nf_conntrack_tcp_loose: 0
 ```
 
-Configure `sysctl`.
+`sysctl` configuration.
+
+### ./defaults/main/users.yml
+
+```yaml
+delete_users:
+  - games
+  - gnats
+  - irc
+  - list
+  - news
+  - sync
+  - uucp
+```
+
+Unused users to be removed.
 
 ## Recommended Reading
 

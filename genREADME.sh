@@ -1,16 +1,16 @@
 #!/bin/sh
 
 if [ -z "${ANSIBLE_V}" ]; then
-  ANSIBLE_V=2.9
+  ANSIBLE_V=2.10
 else
   ANSIBLE_V="${ANSIBLE_V}"
 fi
 
 {
-echo "# ansible-role-hardening
+echo "# Hardening - the Ansible role
 
-An [Ansible](https://www.ansible.com/) role to make a CentOS, Debian or Ubuntu
-server a bit more secure,
+An [Ansible](https://www.ansible.com/) role to make a CentOS, Debian, RHEL,
+or Ubuntu server a bit more secure,
 [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
 Requires Ansible >= ${ANSIBLE_V}.
@@ -18,13 +18,26 @@ Requires Ansible >= ${ANSIBLE_V}.
 Available on
 [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
 
+\`\`\`console
+Do not use this role without first testing in a non-operational environment.
+\`\`\`
+
+[CentOS 8](https://www.centos.org),
+[Debian 10](https://www.debian.org/),
+[RHEL 8](https://www.redhat.com/en/enterprise-linux-8) and
+[Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
+
+[CentOS Stream](https://www.centos.org/centos-stream/),
+[Debian 11](https://wiki.debian.org/DebianBullseye) and
+[Ubuntu 20.10](https://releases.ubuntu.com/20.10/) are in a testing phase.
+
 ## Dependencies
 
 None.
 
 ## Example Playbook
 
-\`\`\`shell
+\`\`\`yaml
 ---
 - hosts: all
   serial: 50%

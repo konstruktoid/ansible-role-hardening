@@ -43,30 +43,8 @@ repository if the host is using [Ubuntu](https://ubuntu.com/ "Ubuntu").
 ## System testing
 
 To run a [OpenSCAP](https://github.com/ComplianceAsCode/content) test on a
-CentOS host using the included Vagrantfile follow the instructions on
+CentOS host follow the instructions at
 [https://copr.fedorainfracloud.org/coprs/openscapmaint/openscap-latest/](https://copr.fedorainfracloud.org/coprs/openscapmaint/openscap-latest/).
 
-```shell
-curl -SsL https://copr.fedorainfracloud.org/coprs/openscapmaint/openscap-latest/repo/epel-8/openscapmaint-openscap-latest-epel-8.repo | \
-  sudo tee -a /etc/yum.repos.d/openscapmaint-openscap-latest-epel-8.repo
-sudo dnf install -y openscap-scanner scap-security-guide
-oscap info --fetch-remote-resources /usr/share/xml/scap/ssg/content/ssg-centos8-ds.xml
-sudo oscap xccdf eval --fetch-remote-resources \
-  --profile xccdf_org.ssgproject.content_profile_pci-dss \
-  --report fedora_pci-report.html /usr/share/xml/scap/ssg/content/ssg-centos8-ds.xml
-```
-
-To run a [OpenSCAP](https://github.com/ComplianceAsCode/content) test on a
-Debian 10 host, where `v0.1.54` should be replaced with the latest available
-version:
-
-```shell
-sudo apt-get -y install libopenscap8 unzip
-wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.54/scap-security-guide-0.1.54.zip
-unzip scap-security-guide-0.1.54.zip
-cd scap-security-guide-0.1.54
-oscap info --fetch-remote-resources ./ssg-debian10-ds.xml
-sudo oscap xccdf eval --fetch-remote-resources \
-  --profile xccdf_org.ssgproject.content_profile_anssi_np_nt28_high
-  --report ../buster_anssi-report.html ./ssg-debian10-ds.xml
-```
+Note that many benchmarks and guidelines are missing from OpenSCAP unless the
+tool is used on a RedHat server.
