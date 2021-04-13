@@ -282,6 +282,7 @@ suid_sgid_blocklist:
   - /usr/bin/sg
   - /usr/bin/sh
   - /usr/bin/shuf
+  - /usr/bin/snap
   - /usr/bin/soelim
   - /usr/bin/sort
   - /usr/bin/split
