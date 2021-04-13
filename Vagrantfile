@@ -88,6 +88,7 @@ Vagrant.configure("2") do |config|
       a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
         "sshd_allow_groups" => "vagrant sudo",
+        "ansible_python_interpreter" => "/usr/bin/python3"
       }
     end
   end
