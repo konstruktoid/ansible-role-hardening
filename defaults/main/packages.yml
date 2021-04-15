@@ -9,6 +9,7 @@ packages_blocklist:
   - git
   - pastebinit
   - popularity-contest
+  - prelink
   - rpcbind
   - rsh*
   - rsync
@@ -54,6 +55,7 @@ packages_redhat:
   - psacct
   - rkhunter
   - rsyslog
+  - rsyslog-gnutls
   - vlock
 packages_ubuntu:
   - fwupd
