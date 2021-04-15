@@ -12,6 +12,7 @@ misc_modules_blocklist:
   - bluetooth
   - bnep
   - btusb
+  - can
   - cpia2
   - firewire-core
   - floppy
@@ -25,6 +26,7 @@ misc_modules_blocklist:
   - uvcvideo
   - v4l2_common
 net_modules_blocklist:
+  - atm
   - dccp
   - sctp
   - rds
