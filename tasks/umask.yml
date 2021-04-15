@@ -77,7 +77,7 @@
 - name: set TMOUT
   become: 'yes'
   lineinfile:
-    line: "TMOUT=900"
+    line: "TMOUT=600"
     dest: /etc/profile
     mode: 0644
     state: present
