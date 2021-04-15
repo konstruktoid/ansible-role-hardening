@@ -31,6 +31,12 @@
   tags:
     - mount
     - shm
+    - CCE-80837-8
+    - CCE-80838-6
+    - CCE-80839-4
+    - CIS-UBUNTU2004-1.1.7
+    - CIS-UBUNTU2004-1.1.8
+    - CIS-UBUNTU2004-1.1.9
 
 - name: create tmp.mount
   become: 'yes'
@@ -45,6 +51,9 @@
     - mount
     - systemd
     - tmp
+    - CCE-82139-7
+    - CCE-82140-5
+    - CCE-82623-0
 
 - name: stat tmp.mount
   stat:

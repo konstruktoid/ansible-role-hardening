@@ -15,6 +15,7 @@
   when: initdrc.stat.exists
   tags:
     - umask
+    - CIS-UBUNTU2004-5.5.4
 
 - name: stat bashrc
   become: 'yes'
@@ -33,6 +34,8 @@
   tags:
     - bash
     - umask
+    - CCE-81036-6
+    - CIS-UBUNTU2004-5.5.4
 
 - name: stat csh.cshrc
   become: 'yes'
@@ -51,6 +54,7 @@
   tags:
     - csh
     - umask
+    - CIS-UBUNTU2004-5.5.4
 
 - name: set default profile umask
   become: 'yes'
@@ -61,6 +65,7 @@
     mode: 0644
   tags:
     - umask
+    - CIS-UBUNTU2004-5.5.4
 
 - name: readonly TMOUT
   become: 'yes'
@@ -85,6 +90,8 @@
     insertbefore: "^readonly TMOUT"
   tags:
     - tmout
+    - CIS-UBUNTU2004-5.5.5
+    - UBTU-20-010013
 
 - name: export TMOUT
   become: 'yes'

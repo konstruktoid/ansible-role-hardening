@@ -13,6 +13,7 @@
   tags:
     - system
     - systemd
+    - CCE-80784-2
 
 - name: systemd user.conf
   become: 'yes'

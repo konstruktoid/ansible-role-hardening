@@ -65,6 +65,10 @@
   tags:
     - apt
     - packages
+    - CIS-UBUNTU2004-1.6.1.1
+    - CIS-UBUNTU2004-4.1.1.1
+    - CIS-UBUNTU2004-4.2.1.1
+    - UBTU-20-010005
 
 - name: ubuntu package installation
   become: 'yes'
@@ -99,6 +103,10 @@
   tags:
     - dnf
     - packages
+    - CCE-80847-7
+    - CCE-81043-2
+    - CCE-82859-0
+    - CCE-83303-8
 
 - name: apt purge package removal
   become: 'yes'
@@ -124,6 +132,18 @@
     - apt
     - dnf
     - packages
+    - CCE-80873-3
+    - CCE-82182-7
+    - CCE-82184-3
+    - CCE-82436-7
+    - CIS-UBUNTU2004-1.1.23
+    - CIS-UBUNTU2004-1.5.3
+    - CIS-UBUNTU2004-2.1.3
+    - CIS-UBUNTU2004-2.1.16
+    - CIS-UBUNTU2004-2.2.2
+    - CIS-UBUNTU2004-2.2.3
+    - CIS-UBUNTU2004-2.2.4
+    - CIS-UBUNTU2004-2.2.6
 
 - name: virtualbox package installation
   become: 'yes'
@@ -161,6 +181,7 @@
   tags:
     - rng-tools
     - packages
+    - CCE-82968-9
 
 - name: stat sysstat default
   become: 'yes'

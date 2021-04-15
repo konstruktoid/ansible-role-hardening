@@ -13,6 +13,9 @@
   tags:
     - systemd
     - journald
+    - CIS-UBUNTU2004-4.2.2.1
+    - CIS-UBUNTU2004-4.2.2.2
+    - CIS-UBUNTU2004-4.2.2.3
 
 - name: logrotate.conf
   become: 'yes'
@@ -68,6 +71,7 @@
   when: rsyslogconf.stat.exists and rsyslog_filecreatemode.stdout.find('FileCreateMode') != -1
   tags:
     - rsyslog
+    - CIS-UBUNTU2004-4.2.1.4
 
 - name: set rsyslog.d FileCreateMode
   become: 'yes'

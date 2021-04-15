@@ -42,6 +42,7 @@
   when: ansible_os_family == "Debian" and system_upgrade|bool
   tags:
     - apt
+    - CIS-UBUNTU2004-1.9
 
 - name: link dnf.conf
   become: 'yes'
@@ -82,6 +83,7 @@
   tags:
     - dnf
     - yum
+    - CCE-80790-9
 
 - name: set yum.conf clean_requirements
   become: 'yes'
@@ -96,6 +98,7 @@
   tags:
     - dnf
     - yum
+    - CCE-82476-3
 
 - name: set yum.conf localpkg_gpgcheck
   become: 'yes'
@@ -110,6 +113,7 @@
   tags:
     - dnf
     - yum
+    - CCE-80791-7
 
 - name: comment yum.conf repo_gpgcheck
   become: 'yes'
@@ -269,4 +273,5 @@
   tags:
     - dnf
     - yum
+    - CCE-80865-9
 ...

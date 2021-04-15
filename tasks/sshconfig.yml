@@ -36,6 +36,41 @@
   tags:
     - sshd_config
     - sshd
+    - CCE-80895-6
+    - CCE-80896-4
+    - CCE-80897-2
+    - CCE-80898-0
+    - CCE-80901-2
+    - CCE-80902-0
+    - CCE-80903-8
+    - CCE-80904-6
+    - CCE-80905-3
+    - CCE-80906-1
+    - CCE-82177-7
+    - CCE-82281-7
+    - CCE-83360-8
+    - CIS-UBUNTU2004-5.3.1
+    - CIS-UBUNTU2004-5.3.4
+    - CIS-UBUNTU2004-5.3.5
+    - CIS-UBUNTU2004-5.3.6
+    - CIS-UBUNTU2004-5.3.7
+    - CIS-UBUNTU2004-5.3.8
+    - CIS-UBUNTU2004-5.3.9
+    - CIS-UBUNTU2004-5.3.10
+    - CIS-UBUNTU2004-5.3.11
+    - CIS-UBUNTU2004-5.3.12
+    - CIS-UBUNTU2004-5.3.13
+    - CIS-UBUNTU2004-5.3.14
+    - CIS-UBUNTU2004-5.3.15
+    - CIS-UBUNTU2004-5.3.16
+    - CIS-UBUNTU2004-5.3.17
+    - CIS-UBUNTU2004-5.3.18
+    - CIS-UBUNTU2004-5.3.19
+    - CIS-UBUNTU2004-5.3.20
+    - CIS-UBUNTU2004-5.3.21
+    - CIS-UBUNTU2004-5.3.22
+    - UBTU-20-010036
+    - UBTU-20-010037
 
 - name: sshd host keys
   become: 'yes'
@@ -60,6 +95,8 @@
     label: "{{ item.path }}"
   tags:
     - sshd
+    - CCE-82424-3
+    - CIS-UBUNTU2004-5.3.2
 
 - name: check if ssh_config.d exits
   stat:
@@ -78,4 +115,5 @@
   tags:
     - ssh_config
     - ssh
+    - CCE-82880-6
 ...

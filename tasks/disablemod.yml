@@ -13,4 +13,8 @@
     - "{{ misc_modules_blocklist }}"
   tags:
     - modprobe
+    - CCE-80832-9
+    - CCE-82005-0
+    - CCE-82059-7
+    - CIS-UBUNTU2004-1.1.24
 ...

@@ -23,6 +23,8 @@
   tags:
     - at
     - cron
+    - CIS-UBUNTU2004-5.1.8
+    - CIS-UBUNTU2004-5.1.9
 
 - name: allow root cron and at
   become: 'yes'
@@ -67,6 +69,11 @@
     - /etc/cron.monthly
   tags:
     - cron
+    - CIS-UBUNTU2004-5.1.3
+    - CIS-UBUNTU2004-5.1.4
+    - CIS-UBUNTU2004-5.1.5
+    - CIS-UBUNTU2004-5.1.6
+    - CIS-UBUNTU2004-5.1.7
 
 - name: crontab permissions
   become: 'yes'
@@ -78,4 +85,5 @@
   tags:
     - cron
     - crontab
+    - CIS-UBUNTU2004-5.1.2
 ...

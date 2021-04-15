@@ -1,5 +1,4 @@
 ---
-
 - name: disable ctrl-alt-del
   become: 'yes'
   systemd:
@@ -8,6 +7,7 @@
     enabled: 'no'
     state: stopped
   tags:
-    - systemd
     - ctrl-alt-del
+    - systemd
+    - CCE-80785-9
 ...

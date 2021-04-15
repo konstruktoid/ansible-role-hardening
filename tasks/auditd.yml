@@ -15,6 +15,8 @@
   tags:
     - auditd
     - grub
+    - CIS-UBUNTU2004-4.1.1.3
+    - CIS-UBUNTU2004-4.1.1.4
 
 - name: set RedHat audit grub cmdline
   become: 'yes'
@@ -28,6 +30,8 @@
   tags:
     - auditd
     - grub
+    - CCE-80825-3
+    - CCE-80943-4
 
 - name: set audit action_mail_acct
   become: 'yes'
@@ -40,6 +44,7 @@
     create: 'no'
   tags:
     - auditd
+    - CCE-80678-6
 
 - name: set audit admin_space_left_action
   become: 'yes'
@@ -64,6 +69,7 @@
     create: 'no'
   tags:
     - auditd
+    - CCE-84046-2
 
 - name: set audit disk_full_action
   become: 'yes'
@@ -76,6 +82,7 @@
     create: 'no'
   tags:
     - auditd
+    - CCE-84045-4
 
 - name: set audit max_log_file
   become: 'yes'
@@ -88,6 +95,7 @@
     create: 'no'
   tags:
     - auditd
+    - CIS-UBUNTU2004-4.1.2.1
 
 - name: set audit max_log_file_action
   become: 'yes'
@@ -100,6 +108,8 @@
     create: 'no'
   tags:
     - auditd
+    - CCE-80682-8
+    - CIS-UBUNTU2004-4.1.2.2
 
 - name: set audit num_logs
   become: 'yes'
@@ -136,6 +146,7 @@
     create: 'no'
   tags:
     - auditd
+    - CCE-80684-4
 
 - name: audit.rules
   become: 'yes'
@@ -152,4 +163,20 @@
     - restart auditd
   tags:
     - auditd
+    - CIS-UBUNTU2004-4.1.1.2
+    - CIS-UBUNTU2004-4.1.3
+    - CIS-UBUNTU2004-4.1.4
+    - CIS-UBUNTU2004-4.1.5
+    - CIS-UBUNTU2004-4.1.6
+    - CIS-UBUNTU2004-4.1.7
+    - CIS-UBUNTU2004-4.1.8
+    - CIS-UBUNTU2004-4.1.9
+    - CIS-UBUNTU2004-4.1.10
+    - CIS-UBUNTU2004-4.1.11
+    - CIS-UBUNTU2004-4.1.12
+    - CIS-UBUNTU2004-4.1.13
+    - CIS-UBUNTU2004-4.1.14
+    - CIS-UBUNTU2004-4.1.15
+    - CIS-UBUNTU2004-4.1.16
+    - CIS-UBUNTU2004-4.1.17
 ...

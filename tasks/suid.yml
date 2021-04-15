@@ -12,4 +12,6 @@
     - "{{ suid_sgid_blocklist }}"
   tags:
     - suid
+    - CIS-UBUNTU2004-6.1.13
+    - CIS-UBUNTU2004-6.1.14
 ...

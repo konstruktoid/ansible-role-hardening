@@ -13,4 +13,11 @@
     - "{{ net_modules_blocklist }}"
   tags:
     - modprobe
+    - CCE-80834-5
+    - CCE-82028-2
+    - CCE-82297-3
+    - CIS-UBUNTU2004-3.4.1
+    - CIS-UBUNTU2004-3.4.2
+    - CIS-UBUNTU2004-3.4.3
+    - CIS-UBUNTU2004-3.4.4
 ...

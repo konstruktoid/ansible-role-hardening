@@ -9,6 +9,7 @@
     create: 'yes'
   tags:
     - sudo
+    - CIS-UBUNTU2004-5.2.2
 
 - name: sudo configure logfile
   become: 'yes'
@@ -20,6 +21,7 @@
     create: 'yes'
   tags:
     - sudo
+    - CIS-UBUNTU2004-5.2.3
 
 - name: sudo disable pwfeedback
   become: 'yes'
@@ -76,6 +78,9 @@
   group:
     name: sugroup
     state: present
+  tags:
+    - sudo
+    - CIS-UBUNTU2004-5.7
 
 - name: configure su group
   become: 'yes'
@@ -87,4 +92,5 @@
     create: 'yes'
   tags:
     - sudo
+    - CIS-UBUNTU2004-5.7
 ...

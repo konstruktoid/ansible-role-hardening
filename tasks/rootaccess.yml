@@ -57,6 +57,7 @@
   when: etc_securetty.stat.exists
   tags:
     - securetty
+    - CIS-UBUNTU2004-5.6
 
 - name: mask debug-shell
   become: 'yes'
@@ -66,4 +67,5 @@
   tags:
     - systemd
     - debug-shell
+    - CCE-80876-6
 ...
