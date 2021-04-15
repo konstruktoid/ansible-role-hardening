@@ -2,14 +2,14 @@
 - name: sysconfig prelink
   stat:
     path: /etc/sysconfig/prelink
-  register: sysconfig_prelink_exists
+  register: sysconfig_prelink
   tags:
     - prelink
 
 - name: etc prelink config
   stat:
     path: /etc/prelink.conf
-  register: etc_prelink_exists
+  register: etc_prelink
   tags:
     - prelink
 
@@ -21,14 +21,15 @@
     mode: 0644
     state: present
     create: 'yes'
-  when: ansible_os_family == "RedHat" and sysconfig_prelink_exists.stat.exists
+  when: ansible_os_family == "RedHat" and sysconfig_prelink.stat.exists
   tags:
     - prelink
 
 - name: return to non-prelinked state
   become: 'yes'
   command: prelink -ua
-  when: sysconfig_prelink_exists.stat.exists or etc_prelink_exists.stat.exists
+  when: sysconfig_prelink.stat.exists or etc_prelink.stat.exists
   tags:
     - prelink
+    - CIS-UBUNTU2004-1.5.3
 ...
