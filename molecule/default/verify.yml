@@ -308,21 +308,17 @@
 
     - name: verify pwquality.conf settings
       become: 'yes'
-      shell: grep "^{{ item }}$" /etc/security/pwquality.conf
+      lineinfile:
+        path: /etc/security/pwquality.conf
+        line: "{{ item.key }} = {{ item.value }}"
+        state: present
+        mode: 0644
+        owner: root
+        group: root
+      check_mode: 'yes'
       register: pwquality_conf
-      failed_when: pwquality_conf.rc != 0
-      changed_when: pwquality_conf.rc != 0
-      with_items:
-        - difok = 15
-        - dictcheck = 1
-        - enforcing = 1
-        - maxrepeat = 3
-        - minclass = 3
-        - minlen = 15
-        - dcredit = -1
-        - lcredit = -1
-        - ocredit = -1
-        - ucredit = -1
+      failed_when: pwquality_conf is changed
+      with_dict: "{{ pwquality_config }}"
 
     - name: verify RedHat grub audit settings
       become: 'yes'
