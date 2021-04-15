@@ -5,6 +5,8 @@
   command: service auditd restart
   args:
     warn: false
+  tags:
+    - CCE-80872-5
 
 - name: generate auditd
   become: 'yes'

@@ -77,6 +77,8 @@ done
 echo
 echo "## Recommended Reading
 
+[Comparing the DISA STIG and CIS Benchmark values](https://github.com/konstruktoid/publications/blob/master/ubuntu_comparing_guides_benchmarks.md)
+
 [Center for Internet Security Linux Benchmarks](https://www.cisecurity.org/cis-benchmarks/)
 
 [Common Configuration Enumeration](https://nvd.nist.gov/cce/index.cfm)

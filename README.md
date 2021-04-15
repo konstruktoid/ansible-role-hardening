@@ -196,6 +196,7 @@ misc_modules_blocklist:
   - bluetooth
   - bnep
   - btusb
+  - can
   - cpia2
   - firewire-core
   - floppy
@@ -209,6 +210,7 @@ misc_modules_blocklist:
   - uvcvideo
   - v4l2_common
 net_modules_blocklist:
+  - atm
   - dccp
   - sctp
   - rds
@@ -240,6 +242,7 @@ packages_blocklist:
   - git
   - pastebinit
   - popularity-contest
+  - prelink
   - rpcbind
   - rsh*
   - rsync
@@ -285,6 +288,7 @@ packages_redhat:
   - psacct
   - rkhunter
   - rsyslog
+  - rsyslog-gnutls
   - vlock
 packages_ubuntu:
   - fwupd
@@ -301,10 +305,25 @@ and packages to be removed (`packages_blocklist`).
 
 ```yaml
 crypto_policy: FIPS
+pwquality_config:
+  dcredit: -1
+  dictcheck: 1
+  difok: 8
+  enforcing: 1
+  lcredit: -1
+  maxclassrepeat: 4
+  maxrepeat: 3
+  minclass: 4
+  minlen: 15
+  ocredit: -1
+  ucredit: -1
 ```
 
 Set [cryptographic policies](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/using-the-system-wide-cryptographic-policies_security-hardening)
 if `/etc/crypto-policies/config` exists.
+
+Configure the [libpwquality](https://manpages.ubuntu.com/manpages/focal/man5/pwquality.conf.5.html)
+library.
 
 ### ./defaults/main/sshd.yml
 
@@ -320,7 +339,7 @@ sshd_authentication_methods: any
 sshd_banner: /etc/issue.net
 sshd_challenge_response_authentication: 'no'
 sshd_ciphers: chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr
-sshd_client_alive_count_max: 3
+sshd_client_alive_count_max: 1
 sshd_client_alive_interval: 200
 sshd_compression: 'no'
 sshd_gssapi_authentication: 'no'
@@ -395,12 +414,6 @@ suid_sgid_blocklist:
   - /bin/bash
   - /bin/busctl
   - /bin/busybox
-  - /bin/cancel
-  - /bin/cat
-  - /bin/chage
-  - /bin/chfn
-  - /bin/chmod
-  - /bin/chown
   [...]
 ```
 
@@ -491,9 +504,11 @@ delete_users:
   - uucp
 ```
 
-Unused users to be removed.
+Users to be removed.
 
 ## Recommended Reading
+
+[Comparing the DISA STIG and CIS Benchmark values](https://github.com/konstruktoid/publications/blob/master/ubuntu_comparing_guides_benchmarks.md)
 
 [Center for Internet Security Linux Benchmarks](https://www.cisecurity.org/cis-benchmarks/)
 

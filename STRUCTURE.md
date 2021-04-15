@@ -133,8 +133,7 @@
 │   │   ├── profile.d
 │   │   │   └── initpath.sh.j2
 │   │   ├── security
-│   │   │   ├── limits.conf.j2
-│   │   │   └── pwquality.conf.j2
+│   │   │   └── limits.conf.j2
 │   │   ├── ssh
 │   │   │   ├── ssh_config.j2
 │   │   │   └── sshd_config.j2
@@ -157,5 +156,5 @@
     ├── inventory
     └── test.yml
 
-30 directories, 118 files
+30 directories, 117 files
 ```
