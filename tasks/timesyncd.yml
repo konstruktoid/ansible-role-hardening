@@ -13,4 +13,26 @@
   tags:
     - systemd
     - timesyncd
+    - CIS-UBUNTU2004-2.1.1.1
+    - CIS-UBUNTU2004-2.1.1.2
+
+- name: register timesyncd status
+  command: systemctl status systemd-timesyncd  # noqa command-instead-of-module
+  register: timesyncd_status
+  changed_when: false
+  failed_when: false
+
+- name: register timedatectl show
+  command: timedatectl show
+  register: timedatectl_show
+  changed_when: timedatectl_show.stdout.find('NTPSynchronized=yes') == -1 and timesyncd_status.rc == 0
+
+- name: timedatectl set-ntp
+  become: 'yes'
+  command: timedatectl set-ntp true
+  when: timedatectl_show.stdout.find('NTPSynchronized=yes') == -1 and timesyncd_status.rc == 0
+  tags:
+    - systemd
+    - timesyncd
+    - CIS-UBUNTU2004-2.1.1.2
 ...
