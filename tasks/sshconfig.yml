@@ -1,4 +1,22 @@
 ---
+- name: sysconfig sshd
+  stat:
+    path: /etc/sysconfig/sshd
+  register: sysconfig_sshd
+  tags:
+    - sshd
+
+- name: sshd system crypto policy
+  become: 'yes'
+  lineinfile:
+    dest: /etc/sysconfig/sshd
+    state: absent
+    regexp: ^\s*CRYPTO_POLICY.*$
+  when: sysconfig_sshd.stat.exists
+  tags:
+    - sshd
+    - CCE-80939-2
+
 - name: check if sshd_config.d exits
   stat:
     path: /etc/ssh/sshd_config.d
