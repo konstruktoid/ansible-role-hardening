@@ -18,10 +18,6 @@ Do not use this role without first testing in a non-operational environment.
 [RHEL 8](https://www.redhat.com/en/enterprise-linux-8) and
 [Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
 
-[CentOS Stream](https://www.centos.org/centos-stream/),
-[Debian 11](https://wiki.debian.org/DebianBullseye) and
-[Ubuntu 20.10](https://releases.ubuntu.com/20.10/) are in a testing phase.
-
 ## Dependencies
 
 None.
