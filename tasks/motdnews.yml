@@ -3,6 +3,8 @@
   stat:
     path: /etc/default/motd-news
   register: motd_news
+  tags:
+    - motd
 
 - name: disable motd-news
   become: 'yes'

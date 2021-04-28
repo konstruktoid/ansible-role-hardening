@@ -4,6 +4,8 @@
   stat:
     path: /etc/init.d/rc
   register: initdrc
+  tags:
+    - umask
 
 - name: set default rc umask
   become: 'yes'
@@ -22,6 +24,9 @@
   stat:
     path: /etc/bashrc
   register: bashrc
+  tags:
+    - bash
+    - umask
 
 - name: set default bashrc umask
   become: 'yes'
@@ -42,6 +47,9 @@
   stat:
     path: /etc/csh.cshrc
   register: cshrc
+  tags:
+    - csh
+    - umask
 
 - name: set default csh.cshrc umask
   become: 'yes'

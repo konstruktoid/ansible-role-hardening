@@ -102,6 +102,8 @@
   failed_when: ufw_not_managed.rc > 1
   changed_when: false
   register: ufw_not_managed
+  tags:
+    - ufw
 
 - name: delete unmanaged ufw rules
   become: 'yes'

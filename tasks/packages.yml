@@ -10,6 +10,9 @@
   stat:
     path: /etc/needrestart/conf.d
   register: needrestart_directory_created
+  tags:
+    - needrestart
+    - packages
 
 - name: create needrestart directory
   become: 'yes'
@@ -30,6 +33,9 @@
   stat:
     path: /etc/needrestart/conf.d
   register: needrestart_directory
+  tags:
+    - needrestart
+    - packages
 
 - name: get needrestart restart value
   command: grep -Rqo "$nrconf{restart} = 'l';" /etc/needrestart/conf.d/

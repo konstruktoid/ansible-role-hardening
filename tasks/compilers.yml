@@ -6,6 +6,8 @@
     patterns: "{{ compilers }}"
     recurse: 'yes'
   register: compiler
+  tags:
+    - compilers
 
 - name: restrict compiler access
   become: 'yes'

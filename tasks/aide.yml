@@ -29,6 +29,8 @@
   stat:
     path: /etc/cron.daily/aide
   register: aidecron
+  tags:
+    - aide
 
 - name: aide service
   become: 'yes'

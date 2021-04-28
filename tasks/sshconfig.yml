@@ -5,6 +5,7 @@
   register: sysconfig_sshd
   tags:
     - sshd
+    - sshd_config
 
 - name: sshd system crypto policy
   become: 'yes'
@@ -21,6 +22,9 @@
   stat:
     path: /etc/ssh/sshd_config.d
   register: sshd_config_d_exists
+  tags:
+    - sshd
+    - sshd_config
 
 - name: configure sshd
   become: 'yes'
@@ -34,8 +38,8 @@
   notify:
     - restart sshd
   tags:
-    - sshd_config
     - sshd
+    - sshd_config
     - CCE-80895-6
     - CCE-80896-4
     - CCE-80897-2
@@ -113,7 +117,7 @@
     owner: root
     group: root
   tags:
-    - ssh_config
     - ssh
+    - ssh_config
     - CCE-82880-6
 ...

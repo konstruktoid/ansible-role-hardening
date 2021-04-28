@@ -71,6 +71,8 @@
   command: subscription-manager refresh --force
   changed_when: false
   when: ansible_distribution == "RedHat"
+  tags:
+    - subscription
 
 - name: redhat family epel installation
   become: 'yes'
@@ -90,6 +92,10 @@
     state: present
     update_cache: 'yes'
   when: ansible_os_family == "Debian" and ansible_python.version.major <= 2
+  tags:
+    - apt
+    - packages
+    - python
 
 - name: install python3-pexpect
   become: 'yes'
@@ -98,6 +104,10 @@
     state: present
     update_cache: 'yes'
   when: ansible_os_family == "Debian" and ansible_python.version.major >= 3
+  tags:
+    - apt
+    - packages
+    - python
 
 - name: python2-rpm installation
   become: 'yes'

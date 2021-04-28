@@ -3,6 +3,9 @@
   stat:
     path: /etc/postfix/main.cf
   register: postfix_main_cf
+  tags:
+    - packages
+    - postfix
 
 - name: configure postfix disable_vrfy_command
   become: 'yes'
