@@ -5,7 +5,7 @@
     name: /proc
     src: none
     fstype: proc
-    opts: rw,nosuid,nodev,noexec,relatime,hidepid=2
+    opts: rw,nosuid,nodev,noexec,relatime,hidepid=2,gid={{ process_group }}
     state: present
   tags:
     - mount
