@@ -32,6 +32,7 @@ packages_debian:
   - gnupg2
   - haveged
   - libpam-apparmor
+  - libpam-cap
   - libpam-modules
   - libpam-pwquality
   - libpam-tmpdir
