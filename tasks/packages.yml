@@ -178,6 +178,16 @@
     - packages
     - vmware
 
+- name: qemu package installation
+  become: 'yes'
+  package:
+    name: qemu-guest-agent
+    state: present
+  when: ansible_system_vendor == "QEMU"
+  tags:
+    - packages
+    - qemu
+
 - name: rng-tools package installation
   become: 'yes'
   package:
