@@ -134,16 +134,16 @@ Vagrant.configure("2") do |config|
      end
    end
 
-  config.vm.define "groovy" do |groovy|
-    groovy.vm.box = "ubuntu/groovy64"
-    groovy.ssh.insert_key = true
-    groovy.vm.network "private_network", ip: "10.2.3.48"
-    groovy.vm.hostname = "groovy"
-    groovy.vm.boot_timeout = 600
-    groovy.vm.synced_folder ".", "/vagrant", disabled: true
-    groovy.vm.provision "shell",
+  config.vm.define "hirsute" do |hirsute|
+    hirsute.vm.box = "ubuntu/hirsute64"
+    hirsute.ssh.insert_key = true
+    hirsute.vm.network "private_network", ip: "10.2.3.51"
+    hirsute.vm.hostname = "hirsute"
+    hirsute.vm.boot_timeout = 600
+    hirsute.vm.synced_folder ".", "/vagrant", disabled: true
+    hirsute.vm.provision "shell",
       inline: "apt-get update && apt-get -y install ansible"
-    groovy.vm.provision "ansible" do |a|
+    hirsute.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
       a.playbook = "tests/test.yml"
@@ -155,16 +155,17 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "hirsute" do |hirsute|
-    hirsute.vm.box = "ubuntu/hirsute64"
-    hirsute.ssh.insert_key = true
-    hirsute.vm.network "private_network", ip: "10.2.3.51"
-    hirsute.vm.hostname = "hirsute"
-    hirsute.vm.boot_timeout = 600
-    hirsute.vm.synced_folder ".", "/vagrant", disabled: true
-    hirsute.vm.provision "shell",
+  config.vm.define "impish" do |impish|
+    impish.vm.box = "ubuntu/impish-daily"
+    impish.vm.box_url = "https://cloud-images.ubuntu.com/impish/current/impish-server-cloudimg-amd64-vagrant.box"
+    impish.ssh.insert_key = true
+    impish.vm.network "private_network", ip: "10.2.3.52"
+    impish.vm.hostname = "impish"
+    impish.vm.boot_timeout = 600
+    impish.vm.synced_folder ".", "/vagrant", disabled: true
+    impish.vm.provision "shell",
       inline: "apt-get update && apt-get -y install ansible"
-    hirsute.vm.provision "ansible" do |a|
+    impish.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
       a.playbook = "tests/test.yml"
