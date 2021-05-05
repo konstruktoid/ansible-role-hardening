@@ -385,6 +385,24 @@
       changed_when: efi_fat.rc != 0
       when: not booted_with_efi
 
+    - name: verify sudo settings
+      shell: |
+        set -o pipefail
+        sudo -l | grep "{{ item }}"
+      register: sudo_settings
+      failed_when: sudo_settings.rc != 0
+      changed_when: sudo_settings.rc != 0
+      args:
+        executable: /bin/bash
+      with_items:
+        - 'use_pty'
+        - 'logfile="/var/log/sudo.log"'
+        - '!pwfeedback'
+        - '!visiblepw'
+        - 'passwd_timeout=1'
+        - 'timestamp_timeout=5'
+        - 'timestamp_type=tty'
+
     - name: create test user
       become: 'yes'
       user:
