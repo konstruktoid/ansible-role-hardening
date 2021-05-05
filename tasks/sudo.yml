@@ -73,6 +73,18 @@
   tags:
     - sudo
 
+- name: sudo timestamp_type
+  become: 'yes'
+  lineinfile:
+    line: "Defaults timestamp_type=tty"
+    dest: /etc/sudoers.d/017_timestamptype
+    mode: 0440
+    state: present
+    create: 'yes'
+  tags:
+    - sudo
+    - M1028
+
 - name: create su group sugroup
   become: 'yes'
   group:
