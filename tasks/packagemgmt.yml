@@ -68,6 +68,7 @@
   tags:
     - dnf
     - yum
+    - CCE-80795-8
 
 - name: set yum.conf gpgcheck
   become: 'yes'
@@ -84,6 +85,7 @@
     - dnf
     - yum
     - CCE-80790-9
+    - CCE-80792-5
 
 - name: set yum.conf clean_requirements
   become: 'yes'

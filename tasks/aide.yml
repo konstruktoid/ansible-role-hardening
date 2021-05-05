@@ -60,6 +60,7 @@
     - enable aidecheck
   tags:
     - aide
+    - CCE-80676-0
     - CIS-UBUNTU2004-1.3.2
 
 - name: add aide Debian dir exclusions
@@ -120,6 +121,7 @@
   when: ansible_os_family == "RedHat" and not rhelaidedb.stat.exists
   tags:
     - aide
+    - CCE-80675-2
 
 - name: stat RedHat aide.db.new.gz
   become: 'yes'

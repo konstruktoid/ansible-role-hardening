@@ -163,6 +163,7 @@
     - restart auditd
   tags:
     - auditd
+    - CCE-80708-1
     - CIS-UBUNTU2004-4.1.1.2
     - CIS-UBUNTU2004-4.1.3
     - CIS-UBUNTU2004-4.1.4
