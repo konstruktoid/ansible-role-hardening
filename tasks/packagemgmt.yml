@@ -20,6 +20,7 @@
   when: ansible_os_family == "Debian"
   tags:
     - apt
+    - M1045
 
 - name: apt update
   become: 'yes'
@@ -43,6 +44,7 @@
   tags:
     - apt
     - CIS-UBUNTU2004-1.9
+    - M1051
 
 - name: link dnf.conf
   become: 'yes'
@@ -86,6 +88,7 @@
     - yum
     - CCE-80790-9
     - CCE-80792-5
+    - M1045
 
 - name: set yum.conf clean_requirements
   become: 'yes'
@@ -116,6 +119,7 @@
     - dnf
     - yum
     - CCE-80791-7
+    - M1045
 
 - name: comment yum.conf repo_gpgcheck
   become: 'yes'
@@ -276,4 +280,5 @@
     - dnf
     - yum
     - CCE-80865-9
+    - M1051
 ...

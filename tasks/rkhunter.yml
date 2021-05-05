@@ -14,6 +14,7 @@
   tags:
     - packages
     - rkhunter
+    - M1049
 
 - name: rkhunter ssh root user
   become: 'yes'
@@ -30,6 +31,7 @@
   tags:
     - packages
     - rkhunter
+    - M1049
 
 - name: rkhunter ssh proto
   become: 'yes'
@@ -46,4 +48,5 @@
   tags:
     - packages
     - rkhunter
+    - M1049
 ...

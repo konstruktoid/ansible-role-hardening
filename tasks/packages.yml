@@ -74,6 +74,7 @@
     - CIS-UBUNTU2004-1.6.1.1
     - CIS-UBUNTU2004-4.1.1.1
     - CIS-UBUNTU2004-4.2.1.1
+    - M1049
     - UBTU-20-010005
 
 - name: ubuntu package installation
@@ -113,6 +114,7 @@
     - CCE-81043-2
     - CCE-82859-0
     - CCE-83303-8
+    - M1049
 
 - name: apt purge package removal
   become: 'yes'
@@ -126,6 +128,7 @@
   tags:
     - apt
     - packages
+    - M1042
 
 - name: generic package removal
   become: 'yes'
@@ -150,6 +153,7 @@
     - CIS-UBUNTU2004-2.2.3
     - CIS-UBUNTU2004-2.2.4
     - CIS-UBUNTU2004-2.2.6
+    - M1042
 
 - name: virtualbox package installation
   become: 'yes'

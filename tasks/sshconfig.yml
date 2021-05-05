@@ -6,6 +6,7 @@
   tags:
     - sshd
     - sshd_config
+    - M1041
 
 - name: sshd system crypto policy
   become: 'yes'
@@ -17,6 +18,7 @@
   tags:
     - sshd
     - CCE-80939-2
+    - M1041
 
 - name: check if sshd_config.d exits
   stat:
@@ -25,6 +27,7 @@
   tags:
     - sshd
     - sshd_config
+    - M1041
 
 - name: configure sshd
   become: 'yes'
@@ -73,6 +76,7 @@
     - CIS-UBUNTU2004-5.3.20
     - CIS-UBUNTU2004-5.3.21
     - CIS-UBUNTU2004-5.3.22
+    - M1041
     - UBTU-20-010036
     - UBTU-20-010037
 
@@ -86,6 +90,8 @@
   register: ssh_host_keys
   tags:
     - sshd
+    - M1022
+    - M1041
 
 - name: sshd host key permissions
   become: 'yes'
@@ -101,11 +107,17 @@
     - sshd
     - CCE-82424-3
     - CIS-UBUNTU2004-5.3.2
+    - M1022
+    - M1041
 
 - name: check if ssh_config.d exits
   stat:
     path: /etc/ssh/ssh_config.d
   register: ssh_config_d_exists
+  tags:
+    - ssh
+    - ssh_config
+    - M1041
 
 - name: configure ssh client
   become: 'yes'
@@ -120,4 +132,5 @@
     - ssh
     - ssh_config
     - CCE-82880-6
+    - M1041
 ...

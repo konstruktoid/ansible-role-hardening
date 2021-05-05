@@ -22,6 +22,8 @@
   register: home_directories
   tags:
     - users
+    - CIS-UBUNTU2004-6.2.6
+    - M1022
 
 - name: set user /home directories permission
   become: 'yes'
@@ -34,4 +36,5 @@
   tags:
     - users
     - CIS-UBUNTU2004-6.2.6
+    - M1022
 ...

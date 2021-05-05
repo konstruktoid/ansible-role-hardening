@@ -43,6 +43,7 @@
     - ufw
     - CIS-UBUNTU2004-3.5.1.1
     - CIS-UBUNTU2004-3.5.1.3
+    - M1037
 
 - name: firewalld installation
   become: 'yes'
@@ -55,6 +56,7 @@
     - packages
     - firewalld
     - CCE-82998-6
+    - M1037
 
 - name: python-firewall installation
   become: 'yes'
@@ -66,6 +68,7 @@
     - dnf
     - packages
     - firewalld
+    - M1037
 
 - name: python3-firewall installation
   become: 'yes'
@@ -77,6 +80,7 @@
     - dnf
     - packages
     - firewalld
+    - M1037
 
 - name: set ufw IPT_SYSCTL
   become: 'yes'
@@ -91,6 +95,7 @@
   when: ansible_os_family == "Debian"
   tags:
     - ufw
+    - M1037
 
 - name: register ufw rules
   become: 'yes'
@@ -104,6 +109,7 @@
   register: ufw_not_managed
   tags:
     - ufw
+    - M1037
 
 - name: delete unmanaged ufw rules
   become: 'yes'
@@ -113,6 +119,7 @@
     - "{{ ufw_not_managed.stdout_lines }}"
   tags:
     - ufw
+    - M1037
 
 - name: allow loopback traffic in
   become: 'yes'
@@ -125,6 +132,7 @@
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.4
+    - M1037
 
 - name: allow loopback traffic out
   become: 'yes'
@@ -137,6 +145,7 @@
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.4
+    - M1037
 
 - name: allow ssh ufw
   become: 'yes'
@@ -152,6 +161,7 @@
   tags:
     - ufw
     - ssh
+    - M1037
 
 - name: allow outgoing specified ufw ports
   become: 'yes'
@@ -166,6 +176,7 @@
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.5
+    - M1037
 
 # https://github.com/ansible/ansible/issues/45446
 - name: enable ufw and set default deny incoming
@@ -181,6 +192,7 @@
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.7
+    - M1037
 
 - name: enable ufw and set default deny outgoing
   become: 'yes'
@@ -195,6 +207,7 @@
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.7
+    - M1037
 
 - name: deny loopback network traffic
   become: 'yes'
@@ -209,6 +222,7 @@
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.4
+    - M1037
 
 - name: stat firewalld conf
   become: 'yes'
@@ -217,6 +231,7 @@
   register: firewalldconf
   tags:
     - firewalld
+    - M1037
 
 - name: set firewalld DefaultZone
   become: 'yes'
@@ -231,6 +246,7 @@
   when: firewalldconf.stat.exists
   tags:
     - firewalld
+    - M1037
 
 - name: enable firewalld
   become: 'yes'
@@ -242,6 +258,7 @@
   tags:
     - firewalld
     - CCE-80877-4
+    - M1037
 
 - name: allow firewalld ssh
   become: 'yes'
@@ -254,4 +271,5 @@
   when: ansible_os_family == "RedHat"
   tags:
     - firewalld
+    - M1037
 ...

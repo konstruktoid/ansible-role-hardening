@@ -11,6 +11,7 @@
     backrefs: 'yes'
   tags:
     - path
+    - M1038
 
 - name: path script
   become: 'yes'
@@ -23,4 +24,5 @@
     group: root
   tags:
     - path
+    - M1038
 ...

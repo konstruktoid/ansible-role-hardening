@@ -24,6 +24,8 @@
     - CIS-UBUNTU2004-1.1.1.5
     - CIS-UBUNTU2004-1.1.1.6
     - CIS-UBUNTU2004-1.1.1.7
+    - M1038
+    - M1042
 
 - name: dont disable vfat file system kernel modules if efi
   become: 'yes'
