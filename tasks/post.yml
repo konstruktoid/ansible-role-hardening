@@ -49,6 +49,7 @@
   register: grub_cfg
   tags:
     - grub
+    - CIS-UBUNTU2004-1.4.3
 
 - name: set grub config permissions
   become: 'yes'
