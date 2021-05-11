@@ -39,7 +39,7 @@
     create: 'yes'
   with_items:
     - "{{ fs_modules_blocklist | reject('search','vfat') | list }}"
-  when: booted_with_efi
+  when: booted_with_efi|bool
   tags:
     - modprobe
 ...

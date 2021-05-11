@@ -376,7 +376,7 @@
       register: efi_fat
       failed_when: efi_fat.rc == 0
       changed_when: efi_fat.rc == 0
-      when: booted_with_efi
+      when: booted_with_efi|bool
 
     - name: verify vfat without efi boot
       shell: grep 'fat' /etc/modprobe.d/disable*
