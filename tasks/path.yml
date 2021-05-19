@@ -3,7 +3,7 @@
   become: 'yes'
   lineinfile:
     regexp: "^PATH="
-    line: 'PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/snap/bin"'
+    line: 'PATH="/usr/local/bin:/usr/bin:/bin:/snap/bin"'
     dest: /etc/environment
     mode: 0644
     state: present
