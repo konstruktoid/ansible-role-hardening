@@ -27,10 +27,12 @@ provisioner:
         ansible_python_interpreter: "/usr/bin/python3"
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
+        system_upgrade: "no"
       contrib:
         ansible_python_interpreter: "/usr/bin/python3"
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
+        system_upgrade: "no"
 platforms:
   - name: buster
     box: bento/debian-10
