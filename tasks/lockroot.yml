@@ -4,6 +4,7 @@
   user:
     name: root
     password_lock: 'yes'
+  no_log: true
   tags:
     - users
     - lock_root
