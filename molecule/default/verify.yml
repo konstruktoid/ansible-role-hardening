@@ -438,12 +438,14 @@
         password: "{{ 'Ansible Role Test User' | password_hash('sha512') }}"
         state: present
         shell: /bin/bash
+      no_log: true
 
     - name: change test user password
       become: 'yes'
       user:
         name: roletestuser
         password: "{{ 'Change Ansible Role User Password' | password_hash('sha512') }}"
+      no_log: true
 
     - name: remove test user
       become: 'yes'
