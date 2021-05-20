@@ -20,4 +20,41 @@
     - M1034
     - M1038
     - M1042
+
+- name: index blacklisted kernel modules
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  shell: |
+    set -o pipefail
+    modprobe -c | grep -o '^blacklist .*' | awk '{print $2}'
+  args:
+    executable: /bin/bash
+  changed_when: false
+  failed_when: modprobe_blacklist.rc != 0
+  register: modprobe_blacklist
+  when: block_blacklisted|bool
+  tags:
+    - modprobe
+    - M1034
+    - M1038
+    - M1042
+
+- name: block blacklisted kernel modules
+  become: 'yes'
+  lineinfile:
+    dest: /etc/modprobe.d/blockblacklisted.conf
+    line: "install {{ item }} /bin/true"
+    mode: 0644
+    owner: root
+    group: root
+    state: present
+    create: 'yes'
+  with_items:
+    - "{{ modprobe_blacklist.stdout_lines | sort }}"
+  when: block_blacklisted|bool
+  tags:
+    - modprobe
+    - M1034
+    - M1038
+    - M1042
 ...

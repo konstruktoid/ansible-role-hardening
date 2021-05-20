@@ -1,4 +1,5 @@
 ---
+block_blacklisted: false
 fs_modules_blocklist:
   - cramfs
   - freevxfs
