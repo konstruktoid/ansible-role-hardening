@@ -321,7 +321,9 @@ suid_sgid_blocklist:
   - /usr/bin/vimdiff
   - /usr/bin/wall
   - /usr/bin/watch
+  - /usr/bin/wc
   - /usr/bin/wget
+  - /usr/bin/whois
   - /usr/bin/write
   - /usr/bin/xargs
   - /usr/bin/xxd
@@ -340,6 +342,7 @@ suid_sgid_blocklist:
   - /usr/sbin/logsave
   - /usr/sbin/mount.nfs
   - /usr/sbin/ping6
+  - /usr/sbin/psad
   - /usr/sbin/service
   - /usr/sbin/ss
   - /usr/sbin/start-stop-daemon
