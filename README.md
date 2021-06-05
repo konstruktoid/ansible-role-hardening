@@ -18,21 +18,71 @@ Do not use this role without first testing in a non-operational environment.
 [RHEL 8](https://www.redhat.com/en/enterprise-linux-8) and
 [Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
 
+[CentOS Stream](https://www.centos.org/centos-stream/),
+[Debian 11](https://wiki.debian.org/DebianBullseye),
+[Ubuntu 21.04](https://releases.ubuntu.com/21.04/) and
+[Ubuntu 21.10](https://wiki.ubuntu.com/Releases) are in a testing phase.
+
 ## Dependencies
 
 None.
 
-## Example Playbook
+## Examples
+
+### Playbook
 
 ```yaml
 ---
-- hosts: all
-  serial: 50%
-    - { role: konstruktoid.hardening, sshd_admin_net: [10.0.0.0/24] }
+- hosts: localhost
+  any_errors_fatal: true
+  tasks:
+    - name: include the hardening role
+      include_role:
+        name: konstruktoid.hardening
+      vars:
+        block_blacklisted: true
+        sshd_admin_net:
+          - 10.0.2.0/24
+          - 192.168.0.0/24
+          - 192.168.1.0/24
+        suid_sgid_permissions: false
 ...
 ```
 
-### Note regarding Debian family UFW firewall rules
+### ansible-pull with git checkout
+
+```yaml
+---
+- hosts: localhost
+  any_errors_fatal: true
+  tasks:
+    - name: install git
+      become: 'yes'
+      package:
+        name: git
+        state: present
+
+    - name: checkout konstruktoid.hardening
+      become: 'yes'
+      ansible.builtin.git:
+        repo: 'https://github.com/konstruktoid/ansible-role-hardening'
+        dest: /etc/ansible/roles/konstruktoid.hardening
+        version: master
+
+    - name: include the hardening role
+      include_role:
+        name: konstruktoid.hardening
+      vars:
+        block_blacklisted: true
+        sshd_admin_net:
+          - 10.0.2.0/24
+          - 192.168.0.0/24
+          - 192.168.1.0/24
+        suid_sgid_permissions: false
+...
+```
+
+## Note regarding Debian family UFW firewall rules
 
 Instead of resetting `ufw` every run and by doing so causing network traffic
 disruption, the role deletes every `ufw` rule without
@@ -179,6 +229,7 @@ The `epel7_rpm_keys` and `epel8_rpm_keys` are release specific
 ### ./defaults/main/module_blocklists.yml
 
 ```yaml
+block_blacklisted: false
 fs_modules_blocklist:
   - cramfs
   - freevxfs
@@ -214,6 +265,22 @@ net_modules_blocklist:
 ```
 
 Blocked kernel modules.
+
+Setting `block_blacklisted: true` will actually block, or disable, any
+`blacklisted` kernel modules. The reasoning behind this is that a blacklisted
+module can still be loaded manually with `modprobe module_name`. Using
+`install module_name /bin/true` prevents this.
+
+### ./defaults/main/mount.yml
+
+```yaml
+process_group: root
+```
+
+This settings configures the group authorized to learn processes information
+otherwise prohibited by `hidepid=`
+
+[/proc mount options](https://www.kernel.org/doc/html/latest/filesystems/proc.html#mount-options)
 
 ### ./defaults/main/ntp.yml
 
@@ -261,6 +328,7 @@ packages_debian:
   - gnupg2
   - haveged
   - libpam-apparmor
+  - libpam-cap
   - libpam-modules
   - libpam-pwquality
   - libpam-tmpdir
@@ -272,9 +340,11 @@ packages_debian:
   - sysstat
   - tcpd
   - vlock
+  - wamerican
 packages_redhat:
   - audispd-plugins
   - audit
+  - cracklib
   - gnupg2
   - haveged
   - libpwquality
@@ -286,6 +356,7 @@ packages_redhat:
   - rsyslog
   - rsyslog-gnutls
   - vlock
+  - words
 packages_ubuntu:
   - fwupd
   - secureboot-db
@@ -393,7 +464,8 @@ SSH authentication attempts permitted per connection and the maximum number of
 open shell, login or subsystem (e.g. sftp) sessions permitted per network
 connection.
 
-`sshd_password_authentication` specifies whether password authentication is allowed.
+`sshd_password_authentication` specifies whether password authentication is
+allowed.
 
 `sshd_port` specifies the port number that sshd(8) listens on.
 
@@ -486,6 +558,8 @@ sysctl_settings:
 ```
 
 `sysctl` configuration.
+
+[sysctl.conf](https://linux.die.net/man/5/sysctl.conf)
 
 ### ./defaults/main/users.yml
 

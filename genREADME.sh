@@ -56,7 +56,6 @@ None.
 ...
 \`\`\`
 
-
 ### ansible-pull with git checkout
 
 \`\`\`yaml

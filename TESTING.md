@@ -7,10 +7,11 @@ bento/centos-8
 bento/debian-10
 bento/ubuntu-20.04
 centos-stream/20210210
+debian/bullseye64
 debian/contrib-testing64
 generic/rhel8
+impish/20210603
 konstruktoid/focal-hardened
-ubuntu/groovy64
 ubuntu/hirsute64
 ```
 

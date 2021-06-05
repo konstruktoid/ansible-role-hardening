@@ -26,6 +26,7 @@
 │       ├── limits.yml
 │       ├── misc.yml
 │       ├── module_blocklists.yml
+│       ├── mount.yml
 │       ├── ntp.yml
 │       ├── packages.yml
 │       ├── password.yml
@@ -146,15 +147,19 @@
 │   │       ├── timesyncd.conf.j2
 │   │       ├── tmp.mount.j2
 │   │       └── user.conf.j2
-│   └── lib
-│       └── systemd
-│           └── system
-│               ├── aidecheck.service.j2
-│               └── aidecheck.timer.j2
+│   ├── lib
+│   │   └── systemd
+│   │       └── system
+│   │           ├── aidecheck.service.j2
+│   │           └── aidecheck.timer.j2
+│   └── usr
+│       └── share
+│           └── dict
+│               └── passwords.list.j2
 └── tests
     ├── debug_facts.yml
     ├── inventory
     └── test.yml
 
-30 directories, 117 files
+33 directories, 119 files
 ```
