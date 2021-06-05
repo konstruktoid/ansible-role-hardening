@@ -2,8 +2,6 @@
 
 if [ -z "${ANSIBLE_V}" ]; then
   ANSIBLE_V=2.10
-else
-  ANSIBLE_V="${ANSIBLE_V}"
 fi
 
 {
@@ -28,24 +26,71 @@ Do not use this role without first testing in a non-operational environment.
 [Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
 
 [CentOS Stream](https://www.centos.org/centos-stream/),
-[Debian 11](https://wiki.debian.org/DebianBullseye) and
-[Ubuntu 20.10](https://releases.ubuntu.com/20.10/) are in a testing phase.
+[Debian 11](https://wiki.debian.org/DebianBullseye),
+[Ubuntu 21.04](https://releases.ubuntu.com/21.04/) and
+[Ubuntu 21.10](https://wiki.ubuntu.com/Releases) are in a testing phase.
 
 ## Dependencies
 
 None.
 
-## Example Playbook
+## Examples
+
+### Playbook
 
 \`\`\`yaml
 ---
-- hosts: all
-  serial: 50%
-    - { role: konstruktoid.hardening, sshd_admin_net: [10.0.0.0/24] }
+- hosts: localhost
+  any_errors_fatal: true
+  tasks:
+    - name: include the hardening role
+      include_role:
+        name: konstruktoid.hardening
+      vars:
+        block_blacklisted: true
+        sshd_admin_net:
+          - 10.0.2.0/24
+          - 192.168.0.0/24
+          - 192.168.1.0/24
+        suid_sgid_permissions: false
 ...
 \`\`\`
 
-### Note regarding Debian family UFW firewall rules
+
+### ansible-pull with git checkout
+
+\`\`\`yaml
+---
+- hosts: localhost
+  any_errors_fatal: true
+  tasks:
+    - name: install git
+      become: 'yes'
+      package:
+        name: git
+        state: present
+
+    - name: checkout konstruktoid.hardening
+      become: 'yes'
+      ansible.builtin.git:
+        repo: 'https://github.com/konstruktoid/ansible-role-hardening'
+        dest: /etc/ansible/roles/konstruktoid.hardening
+        version: master
+
+    - name: include the hardening role
+      include_role:
+        name: konstruktoid.hardening
+      vars:
+        block_blacklisted: true
+        sshd_admin_net:
+          - 10.0.2.0/24
+          - 192.168.0.0/24
+          - 192.168.1.0/24
+        suid_sgid_permissions: false
+...
+\`\`\`
+
+## Note regarding Debian family UFW firewall rules
 
 Instead of resetting \`ufw\` every run and by doing so causing network traffic
 disruption, the role deletes every \`ufw\` rule without
