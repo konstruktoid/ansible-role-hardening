@@ -115,6 +115,16 @@
   reboot:
     pre_reboot_delay: "{{ 3600 | random(start=1) }}"
 
+- name: update cracklib debian
+  become: 'yes'
+  command: update-cracklib
+  when: ansible_os_family == "Debian"
+
+- name: update cracklib redhat
+  become: 'yes'
+  command: create-cracklib-dict /usr/share/dict/*
+  when: ansible_os_family == "RedHat"
+
 - name: update grub
   become: 'yes'
   command: update-grub
