@@ -44,9 +44,11 @@ packages_debian:
   - sysstat
   - tcpd
   - vlock
+  - wamerican
 packages_redhat:
   - audispd-plugins
   - audit
+  - cracklib
   - gnupg2
   - haveged
   - libpwquality
@@ -58,6 +60,7 @@ packages_redhat:
   - rsyslog
   - rsyslog-gnutls
   - vlock
+  - words
 packages_ubuntu:
   - fwupd
   - secureboot-db
