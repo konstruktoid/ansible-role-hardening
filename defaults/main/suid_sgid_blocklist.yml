@@ -169,6 +169,8 @@ suid_sgid_blocklist:
   - /usr/bin/bsd-write
   - /usr/bin/busctl
   - /usr/bin/busybox
+  - /usr/bin/c89
+  - /usr/bin/c99
   - /usr/bin/cancel
   - /usr/bin/cat
   - /usr/bin/chage
@@ -342,7 +344,6 @@ suid_sgid_blocklist:
   - /usr/sbin/logsave
   - /usr/sbin/mount.nfs
   - /usr/sbin/ping6
-  - /usr/sbin/psad
   - /usr/sbin/service
   - /usr/sbin/ss
   - /usr/sbin/start-stop-daemon
