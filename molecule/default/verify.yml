@@ -385,6 +385,19 @@
       changed_when: efi_fat.rc != 0
       when: not booted_with_efi
 
+    - name: verify cracklib password list
+      environment:
+        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      shell: |
+        set -o pipefail
+        grep '/usr/share/dict/passwords' /var/cache/cracklib/src-dicts
+      args:
+        executable: /bin/bash
+      register: cracklib_passwords
+      failed_when: cracklib_passwords.rc != 0
+      changed_when: cracklib_passwords.rc != 0
+      when: ansible_os_family == "Debian"
+
     - name: index blacklisted kernel modules
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin

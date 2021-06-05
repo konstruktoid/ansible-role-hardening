@@ -24,6 +24,7 @@ provisioner:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
       focal:
+        block_blacklisted: 'true'
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
 platforms:
