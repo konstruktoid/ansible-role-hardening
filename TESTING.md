@@ -6,7 +6,7 @@
 bento/centos-8
 bento/debian-10
 bento/ubuntu-20.04
-centos-stream/20210210
+centos-stream/20210603
 debian/bullseye64
 debian/contrib-testing64
 generic/rhel8
