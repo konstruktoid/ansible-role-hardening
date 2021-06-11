@@ -156,8 +156,8 @@ Vagrant.configure("2") do |config|
   end
 
 #  config.vm.define "impish" do |impish|
-#    impish.vm.box = "impish/20210603"
-#    impish.vm.box_url = "https://cloud-images.ubuntu.com/impish/20210603/impish-server-cloudimg-amd64-vagrant.box"
+#    impish.vm.box = "impish/20210611"
+#    impish.vm.box_url = "https://cloud-images.ubuntu.com/impish/20210611/impish-server-cloudimg-amd64-vagrant.box"
 #    impish.ssh.insert_key = true
 #    impish.vm.network "private_network", ip: "10.2.3.52"
 #    impish.vm.hostname = "impish"

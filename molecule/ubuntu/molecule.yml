@@ -57,13 +57,15 @@ platforms:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
   - name: impish
-    box: "impish/20210603"
-    box_url: "https://cloud-images.ubuntu.com/impish/20210603/impish-server-cloudimg-amd64-vagrant.box"
-    box_download_checksum: "1a740c69c4566a7b7b472b85aee665b2230102feddae2a60f7cdb16bc7eaa204"
+    box: "impish/20210611"
+    box_url: "https://cloud-images.ubuntu.com/impish/20210611/impish-server-cloudimg-amd64-vagrant.box"
+    box_download_checksum: "7b207501da39bf8459f473fbada7ff3a7ff189dad10de36a85a0b5cec17afeb2"
     box_download_checksum_type: "sha256"
     config_options:
       vm.boot_timeout: 600
       synced_folder: false
+    provider_options:
+      linked_clone: false
     provider_raw_config_args:
       - "customize ['modifyvm', :id, '--uart1', '0x3F8', '4']"
       - "customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]"
