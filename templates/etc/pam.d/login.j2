@@ -7,11 +7,11 @@ auth       requisite  pam_nologin.so
 
 session [success=ok ignore=ignore module_unknown=ignore default=bad] pam_selinux.so close
 
-session    required     pam_loginuid.so
+session    required   pam_loginuid.so
 
 session [success=ok ignore=ignore module_unknown=ignore default=bad] pam_selinux.so open
 
-session       required   pam_env.so readenv=1 envfile=/etc/default/locale
+session    required   pam_env.so readenv=1 envfile=/etc/default/locale
 
 @include common-auth
 
