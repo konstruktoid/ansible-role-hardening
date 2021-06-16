@@ -36,6 +36,7 @@ packages_debian:
   - libpam-modules
   - libpam-pwquality
   - libpam-tmpdir
+  - lsb-release
   - needrestart
   - openssh-server
   - postfix
