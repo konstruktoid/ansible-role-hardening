@@ -453,12 +453,25 @@
         shell: /bin/bash
       no_log: true
 
+    - name: create test user salt
+      set_fact:
+        test_user_salt: "{{ lookup('password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits length=16') }}"
+
     - name: change test user password
       become: 'yes'
       user:
         name: roletestuser
-        password: "{{ 'Change Ansible Role User Password' | password_hash('sha512') }}"
+        password: "{{ 'Change Ansible Role User Password' | password_hash('sha512', test_user_salt, rounds=656000) }}"
+      register: test_user_pass
       no_log: true
+
+    - name: debug test user salt
+      debug:
+        msg: "{{ test_user_salt }}"
+
+    - name: debug test user password
+      debug:
+        msg: "{{ test_user_pass }}"
 
     - name: remove test user
       become: 'yes'
