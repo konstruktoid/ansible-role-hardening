@@ -62,8 +62,8 @@ platforms:
     memory: 1024
   - name: impish
     box: "impish/20210611"
-    box_url: "https://cloud-images.ubuntu.com/impish/20210611/impish-server-cloudimg-amd64-vagrant.box"
-    box_download_checksum: "7b207501da39bf8459f473fbada7ff3a7ff189dad10de36a85a0b5cec17afeb2"
+    box_url: "https://cloud-images.ubuntu.com/impish/20210705/impish-server-cloudimg-amd64-vagrant.box"
+    box_download_checksum: "6d25ec2c61273af034c4a4341b6355e2ed761cff5209c7917698cbbd736116af"
     box_download_checksum_type: "sha256"
     config_options:
       vm.boot_timeout: 600
