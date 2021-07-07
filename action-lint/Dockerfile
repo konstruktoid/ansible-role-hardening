@@ -9,10 +9,14 @@ LABEL "repository"="https://github.com/konstruktoid/ansible-role-hardening"
 LABEL "homepage"="https://github.com/konstruktoid/ansible-role-hardening"
 LABEL "maintainer"="Thomas Sjögren <konstruktoid@users.noreply.github.com>"
 
-RUN apk --update --no-cache add gcc musl-dev python3-dev py3-pip libffi-dev \
-      libressl-dev cargo && \
+ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1
+
+RUN apk --update --no-cache add cargo gcc g++ libffi-dev openssl-dev \
+    musl-dev py3-pip python3-dev && \
     if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi && \
     pip3 install --no-cache-dir --upgrade pip && \
+    pip3 install --no-cache-dir wheel && \
+    pip3 install --no-cache-dir cryptography && \
     pip3 install --no-cache-dir ansible ansible-lint yamllint && \
     rm -rf /var/cache/*
 
