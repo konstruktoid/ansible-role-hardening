@@ -226,6 +226,7 @@ suid_sgid_blocklist:
   - /usr/bin/join
   - /usr/bin/journalctl
   - /usr/bin/less
+  - /usr/bin/loginctl
   - /usr/bin/look
   - /usr/bin/ltrace
   - /usr/bin/mail
@@ -306,6 +307,7 @@ suid_sgid_blocklist:
   - /usr/bin/tee
   - /usr/bin/telnet
   - /usr/bin/time
+  - /usr/bin/timedatectl
   - /usr/bin/timeout
   - /usr/bin/tmux
   - /usr/bin/top
