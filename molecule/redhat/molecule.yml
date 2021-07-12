@@ -27,8 +27,6 @@ platforms:
     box: generic/rhel8
     config_options:
       vm.boot_timeout: 600
-    provider_options:
-      linked_clone: false
     instance_raw_config_args:
       - 'vbguest.auto_update = false'
     memory: 1024

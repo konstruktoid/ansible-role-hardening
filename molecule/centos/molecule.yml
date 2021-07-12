@@ -27,8 +27,6 @@ platforms:
     box: bento/centos-8
     config_options:
       vm.boot_timeout: 600
-    provider_options:
-      linked_clone: false
     instance_raw_config_args:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
@@ -39,8 +37,6 @@ platforms:
     box_download_checksum_type: "sha256"
     config_options:
       vm.boot_timeout: 600
-    provider_options:
-      linked_clone: false
     instance_raw_config_args:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
