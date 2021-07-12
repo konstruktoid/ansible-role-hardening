@@ -265,11 +265,20 @@
       changed_when: crypto_policy_set.rc != 0
 
     - name: verify noexec /dev/shm
-      become: 'yes'
       shell: grep '^tmpfs\s/dev/shm.*noexec' /proc/mounts
       register: dev_shm_noexec
       failed_when: dev_shm_noexec.rc != 0
       changed_when: dev_shm_noexec.rc != 0
+
+    - name: verify /proc
+      shell: |
+        set -o pipefail
+        grep -E '^proc\s/proc proc rw,nosuid,nodev,noexec,relatime.*hidepid=({{ hide_pid }}|invisible)' /proc/mounts
+      args:
+        executable: /bin/bash
+      register: proc_opts
+      failed_when: proc_opts.rc != 0
+      changed_when: proc_opts.rc != 0
 
     - name: verify tmp.mount
       become: 'yes'
