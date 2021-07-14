@@ -84,7 +84,7 @@ if [ "$1" == "vagrant" ]; then
 
   for VM in $(grep -v '^#' "${VMFILE}"); do
     echo "Copying postChecks.sh to ${VM}."
-    vagrant ssh "${VM}" -c 'cp /vagrant/postChecks.sh ~/'
+    vagrant scp postChecks.sh "${VM}":~/postChecks.sh
     echo "Rebooting ${VM}."
     vagrant ssh "${VM}" -c 'sudo -i reboot'
 
