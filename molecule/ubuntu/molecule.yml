@@ -55,9 +55,9 @@ platforms:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
   - name: impish
-    box: "impish/20210611"
-    box_url: "https://cloud-images.ubuntu.com/impish/20210705/impish-server-cloudimg-amd64-vagrant.box"
-    box_download_checksum: "6d25ec2c61273af034c4a4341b6355e2ed761cff5209c7917698cbbd736116af"
+    box: "impish/20210711"
+    box_url: "https://cloud-images.ubuntu.com/impish/20210711/impish-server-cloudimg-amd64-vagrant.box"
+    box_download_checksum: "1e1fbbdd4d65bc77774597a28b09165627073eb7a322cd640382ac21a537a0b2"
     box_download_checksum_type: "sha256"
     config_options:
       vm.boot_timeout: 600
