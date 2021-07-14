@@ -57,6 +57,7 @@ suid_sgid_blocklist:
   - /bin/join
   - /bin/journalctl
   - /bin/less
+  - /bin/loginctl
   - /bin/look
   - /bin/mail
   - /bin/make
@@ -65,6 +66,12 @@ suid_sgid_blocklist:
   - /bin/mksh-static
   - /bin/more
   - /bin/mount
+  - /bin/msgattrib
+  - /bin/msgcat
+  - /bin/msgconv
+  - /bin/msgfilter
+  - /bin/msgmerge
+  - /bin/msguniq
   - /bin/mv
   - /bin/nano
   - /bin/nc
@@ -120,6 +127,7 @@ suid_sgid_blocklist:
   - /bin/tbl
   - /bin/tee
   - /bin/time
+  - /bin/timedatectl
   - /bin/timeout
   - /bin/top
   - /bin/troff
@@ -132,6 +140,7 @@ suid_sgid_blocklist:
   - /bin/view
   - /bin/wall
   - /bin/watch
+  - /bin/wc
   - /bin/wget
   - /bin/write
   - /bin/xargs
@@ -165,6 +174,7 @@ suid_sgid_blocklist:
   - /usr/bin/awk
   - /usr/bin/base32
   - /usr/bin/base64
+  - /usr/bin/basenc
   - /usr/bin/bash
   - /usr/bin/bsd-write
   - /usr/bin/busctl
@@ -237,6 +247,12 @@ suid_sgid_blocklist:
   - /usr/bin/mlocate
   - /usr/bin/more
   - /usr/bin/mount
+  - /usr/bin/msgattrib
+  - /usr/bin/msgcat
+  - /usr/bin/msgconv
+  - /usr/bin/msgfilter
+  - /usr/bin/msgmerge
+  - /usr/bin/msguniq
   - /usr/bin/mtr
   - /usr/bin/mv
   - /usr/bin/nano
@@ -346,6 +362,7 @@ suid_sgid_blocklist:
   - /usr/sbin/logsave
   - /usr/sbin/mount.nfs
   - /usr/sbin/ping6
+  - /usr/sbin/psad
   - /usr/sbin/service
   - /usr/sbin/ss
   - /usr/sbin/start-stop-daemon
