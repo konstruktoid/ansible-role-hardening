@@ -168,8 +168,9 @@
 -w /etc/init.d -p wa -k init
 -w /etc/inittab -p wa -k init
 
-#
+# Library lookup paths
 -w /etc/ld.so.conf -p wa -k libpath
+-w /etc/ld.so.conf.d/ -p wa -k libpath
 
 # Local time
 -w /etc/localtime -p wa -k localtime
@@ -318,6 +319,7 @@
 
 # sshd configuration
 -w /etc/ssh/sshd_config -p rwxa -k sshd
+-w /etc/ssh/sshd_config.d/ -p rwxa -k sshd
 
 # Kernel modification
 -w /etc/sysctl.conf -p wa -k sysctl
