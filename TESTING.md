@@ -10,7 +10,7 @@ centos-stream/20210603
 debian/bullseye64
 debian/contrib-testing64
 generic/rhel8
-impish/20210603
+impish/20210807
 konstruktoid/focal-hardened
 ubuntu/hirsute64
 ```
