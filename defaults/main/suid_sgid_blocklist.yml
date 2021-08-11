@@ -167,6 +167,7 @@ suid_sgid_blocklist:
   - /sbin/update-alternatives
   - /sbin/vigr
   - /sbin/vipw
+  - /usr/bin/ansible-playbook
   - /usr/bin/apt
   - /usr/bin/apt-get
   - /usr/bin/ar
@@ -188,6 +189,7 @@ suid_sgid_blocklist:
   - /usr/bin/chmod
   - /usr/bin/chown
   - /usr/bin/chsh
+  - /usr/bin/cmp
   - /usr/bin/column
   - /usr/bin/comm
   - /usr/bin/cowsay
@@ -236,6 +238,7 @@ suid_sgid_blocklist:
   - /usr/bin/join
   - /usr/bin/journalctl
   - /usr/bin/less
+  - /usr/bin/ln
   - /usr/bin/loginctl
   - /usr/bin/look
   - /usr/bin/ltrace
@@ -356,6 +359,7 @@ suid_sgid_blocklist:
   - /usr/sbin/bridge
   - /usr/sbin/capsh
   - /usr/sbin/chroot
+  - /usr/sbin/dmidecode
   - /usr/sbin/dmsetup
   - /usr/sbin/ip
   - /usr/sbin/ldconfig
