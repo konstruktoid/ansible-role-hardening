@@ -21,12 +21,11 @@ Do not use this role without first testing in a non-operational environment.
 \`\`\`
 
 [CentOS 8](https://www.centos.org),
-[Debian 10](https://www.debian.org/),
+[Debian 11](https://www.debian.org/),
 [RHEL 8](https://www.redhat.com/en/enterprise-linux-8) and
 [Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
 
 [CentOS Stream](https://www.centos.org/centos-stream/),
-[Debian 11](https://wiki.debian.org/DebianBullseye),
 [Ubuntu 21.04](https://releases.ubuntu.com/21.04/) and
 [Ubuntu 21.10](https://wiki.ubuntu.com/Releases) are in a testing phase.
 
@@ -156,7 +155,7 @@ echo "# Task Execution and Structure
 
 ## Tasks
 
-![Alt text](./images/ansible-role-hardening.svg)
+![Task execution order](./images/ansible-role-hardening.svg)
 
 ## Structure
 "
