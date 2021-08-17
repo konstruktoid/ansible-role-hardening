@@ -52,7 +52,7 @@ verifier:
 lint: |
   set -e
   ansible-lint --exclude .git --exclude .github --exclude tests/
-  yamllint -d "{extends: default, ignore: .git*, rules: {line-length: {level: warning}}}" .
+  yamllint -d '{"extends":"default","ignore":".tox*\n.git*","rules":{"line-length":{"max":120,"level":"warning"}}}' .
 scenario:
   name: debian
   create_sequence:
