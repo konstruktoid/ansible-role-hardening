@@ -18,7 +18,7 @@ fi
 echo "# Running yamllint"
 yamllint --version
 
-if ! yamllint -d "{extends: default, ignore: .git*, rules: {line-length: {max: 120, level: warning}}}" .; then
+if ! yamllint -d '{"extends":"default","ignore":".tox*\n.git*","rules":{"line-length":{"max":120,"level":"warning"}}}' .; then
   echo 'yamllint failed.'
   exit 1
 fi
