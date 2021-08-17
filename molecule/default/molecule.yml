@@ -29,7 +29,7 @@ platforms:
   - name: bullseye
     box: debian/bullseye64
     instance_raw_config_args:
-      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+      - 'vbguest.auto_update = false'
     memory: 1024
   - name: centos
     box: bento/centos-8

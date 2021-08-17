@@ -27,11 +27,12 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "bullseye" do |bullseye|
-    bullseye.vm.box = "debian/contrib-testing64"
+    bullseye.vm.box = "debian/bullseye64"
     bullseye.ssh.insert_key = true
     bullseye.vm.network "private_network", ip: "10.2.3.50"
     bullseye.vm.hostname = "bullseye"
     bullseye.vm.boot_timeout = 600
+    bullseye.vbguest.auto_update = false
     bullseye.vm.provision "shell",
       inline: "apt-get update && apt-get -y install ansible"
     bullseye.vm.provision "ansible" do |a|
