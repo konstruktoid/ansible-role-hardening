@@ -9,6 +9,7 @@ sysctl_settings:
   kernel.core_uses_pid: 1
   kernel.dmesg_restrict: 1
   kernel.kptr_restrict: 2
+  kernel.modules_disabled: 0
   kernel.panic: 60
   kernel.panic_on_oops: 60
   kernel.perf_event_paranoid: 3
