@@ -4,6 +4,8 @@
   find:
     paths: ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/snap/bin']
     patterns: "{{ compilers }}"
+    file_type: any
+    follow: 'yes'
     recurse: 'yes'
   register: compiler
   tags:

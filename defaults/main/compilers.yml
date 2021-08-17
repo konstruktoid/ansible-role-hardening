@@ -1,7 +1,13 @@
 ---
 compilers:
   - as
+  - cargo
   - cc
+  - cc-[0-9]*
+  - clang-[0-9]*
   - gcc
+  - gcc-[0-9]*
+  - go
   - make
+  - rustc
 ...
