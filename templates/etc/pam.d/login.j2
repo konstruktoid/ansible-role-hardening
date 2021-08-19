@@ -1,7 +1,10 @@
 # {{ ansible_managed }}
 
 auth       optional   pam_faildelay.so  delay=4000000
+
+{% if (ansible_distribution_major_version < '11' and ansible_distribution == "Debian") or ansible_distribution == "Ubuntu" %}
 auth [success=ok new_authtok_reqd=ok ignore=ignore user_unknown=bad default=die] pam_securetty.so
+{% endif %}
 
 auth       requisite  pam_nologin.so
 

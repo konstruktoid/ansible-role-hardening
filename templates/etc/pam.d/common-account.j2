@@ -1,10 +1,10 @@
 # {{ ansible_managed }}
 
-{% if faillock.matched >= 1 %}
-# account required     pam_faillock.so
-# faillock matched
-{% endif %}
 account [success=1 new_authtok_reqd=done default=ignore] pam_unix.so
 account requisite     pam_deny.so
+{% if faillock.matched >= 1 %}
+account required     pam_faillock.so
+{% else %}
 account required      pam_tally2.so
+{% endif %}
 account required      pam_permit.so
