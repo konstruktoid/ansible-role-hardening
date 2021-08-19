@@ -132,4 +132,27 @@ Vagrant.configure("2") do |config|
       }
     end
   end
+
+  config.vm.define "almalinux" do |almalinux|
+    almalinux.vm.box = "almalinux/8"
+    almalinux.ssh.insert_key = true
+    almalinux.vm.network "private_network", ip: "10.2.3.52"
+    almalinux.vbguest.auto_update = false
+    almalinux.vm.provider "virtualbox" do |c|
+      c.default_nic_type = "82543GC"
+    end
+    almalinux.vm.hostname = "almalinux"
+    almalinux.vm.provision "shell",
+      inline: "dnf clean all && dnf install -y epel-release && dnf install -y ansible"
+    almalinux.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.limit = "all"
+      a.playbook = "tests/test.yml"
+      a.extra_vars = {
+        "sshd_admin_net" => "0.0.0.0/0",
+        "sshd_allow_groups" => "vagrant sudo",
+        "ansible_python_interpreter" => "/usr/bin/python3"
+      }
+    end
+  end
 end

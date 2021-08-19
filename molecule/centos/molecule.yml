@@ -16,6 +16,9 @@ provisioner:
   log: true
   inventory:
     host_vars:
+      almalinux:
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
       centos:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
@@ -23,6 +26,13 @@ provisioner:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
 platforms:
+  - name: almalinux
+    box: almalinux/8
+    config_options:
+      vm.boot_timeout: 600
+    instance_raw_config_args:
+      - 'vbguest.auto_update = false'
+    memory: 1024
   - name: centos
     box: bento/centos-8
     config_options:
