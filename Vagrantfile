@@ -40,10 +40,11 @@ Vagrant.configure("2") do |config|
       a.limit = "all"
       a.playbook = "tests/test.yml"
       a.extra_vars = {
-        "system_upgrade" => "no",
+        "ansible_become_pass" => "vagrant",
+        "ansible_python_interpreter" => "/usr/bin/python3",
         "sshd_admin_net" => "0.0.0.0/0",
         "sshd_allow_groups" => "vagrant sudo debian ubuntu",
-        "ansible_python_interpreter" => "/usr/bin/python3"
+        "system_upgrade" => "no"
      }
     end
   end
