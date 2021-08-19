@@ -87,8 +87,7 @@
     install_aide|bool and
     (not (ansible_os_family == "Debian" and
     (ansible_lsb.codename == "groovy" or
-    ansible_lsb.codename == "hirsute" or
-    ansible_lsb.codename == "bullseye")))
+    ansible_lsb.codename == "hirsute")))
 
 - name: manage users
   include: users.yml
