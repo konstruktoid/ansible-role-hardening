@@ -2,13 +2,14 @@
 galaxy_info:
   role_name: hardening
   author: konstruktoid
-  description: CentOS, Debian and Ubuntu hardening. systemd edition.
+  description: AlmaLinux, CentOS, Debian and Ubuntu hardening. systemd edition.
   license: apache
   min_ansible_version: "2.10"
   platforms:
     - name: Debian
       versions:
         - buster
+        - bullseye
     - name: EL
       versions:
         - 8
@@ -16,6 +17,7 @@ galaxy_info:
       versions:
         - focal
   galaxy_tags:
+    - almalinux
     - centos
     - cis
     - debian
