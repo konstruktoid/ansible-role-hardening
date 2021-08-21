@@ -191,68 +191,28 @@
       changed_when: false
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
 
-- name: stat centos PowerTools repo
+- name: stat PowerTools repo
   stat:
-    path: /etc/yum.repos.d/CentOS-PowerTools.repo
-  register: centos_powertools
+    path: "{{ item }}"
+  with_items:
+    - /etc/yum.repos.d/almalinux-powertools.repo
+    - /etc/yum.repos.d/CentOS-Linux-PowerTools.repo
+    - /etc/yum.repos.d/CentOS-PowerTools.repo
+    - /etc/yum.repos.d/CentOS-Stream-PowerTools.repo
+  register: powertools_repo
   tags:
     - dnf
     - yum
 
-- name: stat Centos-Linux-PowerTools repo
-  stat:
-    path: /etc/yum.repos.d/CentOS-Linux-PowerTools.repo
-  register: centos_linux_powertools
-  tags:
-    - dnf
-    - yum
-
-- name: stat centos stream PowerTools repo
-  stat:
-    path: /etc/yum.repos.d/CentOS-Stream-PowerTools.repo
-  register: centos_stream_powertools
-  tags:
-    - dnf
-    - yum
-
-- name: enable centos PowerTools repo
+- name: enable PowerTools repo
   become: 'yes'
-  lineinfile:
-    regexp: "^enabled="
-    line: "enabled=1"
-    dest: /etc/yum.repos.d/CentOS-PowerTools.repo
-    mode: 0644
-    state: present
-    create: 'no'
-  when: centos_powertools.stat.exists
-  tags:
-    - dnf
-    - yum
-
-- name: enable Centos-Linux-PowerTools repo
-  become: 'yes'
-  lineinfile:
-    regexp: "^enabled="
-    line: "enabled=1"
-    dest: /etc/yum.repos.d/CentOS-Linux-PowerTools.repo
-    mode: 0644
-    state: present
-    create: 'no'
-  when: centos_linux_powertools.stat.exists
-  tags:
-    - dnf
-    - yum
-
-- name: enable centos stream PowerTools repo
-  become: 'yes'
-  lineinfile:
-    regexp: "^enabled="
-    line: "enabled=1"
-    dest: /etc/yum.repos.d/CentOS-Stream-PowerTools.repo
-    mode: 0644
-    state: present
-    create: 'no'
-  when: centos_stream_powertools.stat.exists
+  replace:
+    regexp: "^enabled=.*$"
+    replace: "enabled=1"
+    dest: "{{ item.stat.path }}"
+  with_items:
+    - "{{ powertools_repo.results }}"
+  when: ansible_os_family == "RedHat" and item.stat.exists
   tags:
     - dnf
     - yum
