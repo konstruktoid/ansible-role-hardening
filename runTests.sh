@@ -48,11 +48,6 @@ function prep {
   sudo rm /etc/ansible/roles/konstruktoid.hardening/{*.log,*.html,*.list}
   set +x
   echo "Finished basic preparations."
-
-  if [ -x "$(command -v ansible-playbook-grapher)" ]; then
-    # https://github.com/haidaraM/ansible-playbook-grapher
-    ansible-playbook-grapher -i '127.0.0.1,' -o './images/ansible-role-hardening' --include-role-tasks tests/test.yml
-  fi
 }
 
 if [ "$1" == "prep" ]; then
