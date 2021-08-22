@@ -1,6 +1,7 @@
 ---
 suid_sgid_permissions: true
 suid_sgid_blocklist:
+  - /bin/ansible-playbook
   - /bin/ar
   - /bin/at
   - /bin/awk
@@ -9,6 +10,8 @@ suid_sgid_blocklist:
   - /bin/bash
   - /bin/busctl
   - /bin/busybox
+  - /bin/c89
+  - /bin/c99
   - /bin/cancel
   - /bin/cat
   - /bin/chage
@@ -16,6 +19,7 @@ suid_sgid_blocklist:
   - /bin/chmod
   - /bin/chown
   - /bin/chsh
+  - /bin/cmp
   - /bin/column
   - /bin/comm
   - /bin/cowsay
@@ -57,6 +61,7 @@ suid_sgid_blocklist:
   - /bin/join
   - /bin/journalctl
   - /bin/less
+  - /bin/ln
   - /bin/loginctl
   - /bin/look
   - /bin/mail
@@ -120,12 +125,14 @@ suid_sgid_blocklist:
   - /bin/strings
   - /bin/su
   - /bin/systemctl
+  - /bin/systemd-resolve
   - /bin/tac
   - /bin/tail
   - /bin/tar
   - /bin/taskset
   - /bin/tbl
   - /bin/tee
+  - /bin/tic
   - /bin/time
   - /bin/timedatectl
   - /bin/timeout
@@ -152,6 +159,7 @@ suid_sgid_blocklist:
   - /sbin/bridge
   - /sbin/capsh
   - /sbin/chroot
+  - /sbin/dmidecode
   - /sbin/dmsetup
   - /sbin/ip
   - /sbin/ldconfig
@@ -318,6 +326,7 @@ suid_sgid_blocklist:
   - /usr/bin/strings
   - /usr/bin/su
   - /usr/bin/systemctl
+  - /usr/bin/systemd-resolve
   - /usr/bin/tac
   - /usr/bin/tail
   - /usr/bin/tar
@@ -325,6 +334,7 @@ suid_sgid_blocklist:
   - /usr/bin/tbl
   - /usr/bin/tee
   - /usr/bin/telnet
+  - /usr/bin/tic
   - /usr/bin/time
   - /usr/bin/timedatectl
   - /usr/bin/timeout
