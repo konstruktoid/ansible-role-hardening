@@ -128,6 +128,12 @@ if [ "$1" == "vagrant" ]; then
       echo "$f is empty, a test stage failed."
     fi
   done
+
+  grep -iE 'warn.*\[]|sugg.*\[]' ./*-lynis.log | sed 's/-.*-lynis.log:/: /g' |\
+    sort | uniq > "$(date +%y%m%d)-warnings-suggestions.log"
+
+  grep 'not ok' ./*-bats.log | sed 's/-.*:/: /g' | sort -r | uniq > "$(date +%y%m%d)-not-ok.log"
+
 else
 
   molecule test || exit 1
