@@ -1,7 +1,7 @@
 # Hardening - the Ansible role
 
-An [Ansible](https://www.ansible.com/) role to make a CentOS, Debian, RHEL,
-or Ubuntu server a bit more secure,
+An [Ansible](https://www.ansible.com/) role to make a CentOS, Debian, or Ubuntu
+server a bit more secure,
 [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
 Requires Ansible >= 2.10.
@@ -13,13 +13,12 @@ Available on
 Do not use this role without first testing in a non-operational environment.
 ```
 
+[AlmaLinux 8](https://almalinux.org/),
 [CentOS 8](https://www.centos.org),
-[Debian 10](https://www.debian.org/),
-[RHEL 8](https://www.redhat.com/en/enterprise-linux-8) and
+[Debian 11](https://www.debian.org/) and
 [Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
 
 [CentOS Stream](https://www.centos.org/centos-stream/),
-[Debian 11](https://wiki.debian.org/DebianBullseye),
 [Ubuntu 21.04](https://releases.ubuntu.com/21.04/) and
 [Ubuntu 21.10](https://wiki.ubuntu.com/Releases) are in a testing phase.
 
@@ -152,9 +151,15 @@ sending the message to syslog.
 ```yaml
 compilers:
   - as
+  - cargo
   - cc
+  - cc-[0-9]*
+  - clang-[0-9]*
   - gcc
+  - gcc-[0-9]*
+  - go
   - make
+  - rustc
 ```
 
 List of compilers that will be restricted to the root user.
@@ -172,8 +177,10 @@ IPv4 and IPv6 addresses to use as system and fallback DNS servers.
 If `dnssec` is set to "allow-downgrade" DNSSEC validation is attempted, but if
 the server does not support DNSSEC properly, DNSSEC mode is automatically
 disabled.
+
 If `dns_over_tls` is true, all connections to the server will be encrypted if
 the DNS server supports DNS-over-TLS and has a valid certificate.
+
 [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf)
 option.
 
@@ -266,19 +273,22 @@ net_modules_blocklist:
 
 Blocked kernel modules.
 
-Setting `block_blacklisted: true` will actually block, or disable, any
-`blacklisted` kernel modules. The reasoning behind this is that a blacklisted
+Setting `block_blacklisted: true` will block, or disable, any automatic loading
+of `blacklisted` kernel modules. The reasoning behind this is that a blacklisted
 module can still be loaded manually with `modprobe module_name`. Using
 `install module_name /bin/true` prevents this.
 
 ### ./defaults/main/mount.yml
 
 ```yaml
+hide_pid: 2
 process_group: root
 ```
 
-This settings configures the group authorized to learn processes information
-otherwise prohibited by `hidepid=`
+`hide_pid` sets `/proc/<pid>/` access mode.
+
+The `process_group` setting configures the group authorized to learn processes
+information otherwise prohibited by `hidepid=`.
 
 [/proc mount options](https://www.kernel.org/doc/html/latest/filesystems/proc.html#mount-options)
 
@@ -332,6 +342,7 @@ packages_debian:
   - libpam-modules
   - libpam-pwquality
   - libpam-tmpdir
+  - lsb-release
   - needrestart
   - openssh-server
   - postfix
@@ -474,6 +485,7 @@ allowed.
 ```yaml
 suid_sgid_permissions: true
 suid_sgid_blocklist:
+  - /bin/ansible-playbook
   - /bin/ar
   - /bin/at
   - /bin/awk
@@ -486,7 +498,7 @@ suid_sgid_blocklist:
 ```
 
 If `suid_sgid_permissions: true` loop through `suid_sgid_blocklist` and remove
-any SUID/SGID permissions.
+any SUID/SGID permissions. Note that this is a very slow task.
 
 A complete file list is available in
 [defaults/main/suid_sgid_blocklist.yml](defaults/main/suid_sgid_blocklist.yml).
