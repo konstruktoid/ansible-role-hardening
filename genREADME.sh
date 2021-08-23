@@ -4,6 +4,11 @@ if [ -z "${ANSIBLE_V}" ]; then
   ANSIBLE_V=2.10
 fi
 
+if [ -x "$(command -v ansible-playbook-grapher)" ]; then
+  # https://github.com/haidaraM/ansible-playbook-grapher
+  ansible-playbook-grapher -i '127.0.0.1,' -o './images/ansible-role-hardening' --include-role-tasks tests/test.yml
+fi
+
 {
 echo "# Hardening - the Ansible role
 
@@ -20,9 +25,9 @@ Available on
 Do not use this role without first testing in a non-operational environment.
 \`\`\`
 
+[AlmaLinux 8](https://almalinux.org/),
 [CentOS 8](https://www.centos.org),
-[Debian 11](https://www.debian.org/),
-[RHEL 8](https://www.redhat.com/en/enterprise-linux-8) and
+[Debian 11](https://www.debian.org/) and
 [Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
 
 [CentOS Stream](https://www.centos.org/centos-stream/),
@@ -147,6 +152,42 @@ Apache License Version 2.0
 
 [https://github.com/konstruktoid](https://github.com/konstruktoid \"github.com/konstruktoid\")"
 } > ./README.md
+
+{
+echo "# Testing
+
+## Distribution boxes used by Molecule and Vagrant
+"
+
+echo '```console'
+git grep -E 'box:|box =' Vagrantfile molecule/ | awk '{print $NF}' |\
+  tr -d '"' | sort | uniq
+echo '```'
+
+echo
+echo "## Test examples
+"
+
+echo '```shell'
+echo "ansible-playbook tests/test.yml --extra-vars \"sshd_admin_net=192.168.1.0/24\" \
+  -c local -i 'localhost,' -K"
+echo '```'
+
+echo
+echo "If the [runTests.sh](runTests.sh) script is executed as \`runTests.sh vagrant\`,
+[Vagrant](https://www.vagrantup.com/ \"Vagrant\") will configure hosts and run the
+\`konstruktoid.hardening\` role, it will then run
+[Lynis](https://github.com/CISOfy/lynis/ \"Lynis\") and \`bats\` tests from the
+[konstruktoid/hardening](https://github.com/konstruktoid/hardening \"konstruktoid/hardening\")
+repository if the host is using [Ubuntu](https://ubuntu.com/ \"Ubuntu\")."
+
+echo
+echo "### tox environments
+"
+echo '```console'
+tox -l
+echo '```'
+} > ./TESTING.md
 
 rm ./*.log ./*.html ./*.list
 
