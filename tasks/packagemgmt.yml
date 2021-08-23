@@ -44,6 +44,7 @@
   tags:
     - apt
     - CIS-UBUNTU2004-1.9
+    - D3-SU
     - M1051
 
 - name: link dnf.conf
@@ -241,5 +242,6 @@
     - dnf
     - yum
     - CCE-80865-9
+    - D3-SU
     - M1051
 ...

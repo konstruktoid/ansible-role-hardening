@@ -119,6 +119,7 @@
     - "{{ ufw_not_managed.stdout_lines }}"
   tags:
     - ufw
+    - D3-OTF
     - M1037
 
 - name: allow loopback traffic in
@@ -176,6 +177,7 @@
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.5
+    - D3-OTF
     - M1037
 
 # https://github.com/ansible/ansible/issues/45446
@@ -192,6 +194,7 @@
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.7
+    - D3-ITF
     - M1037
 
 - name: enable ufw and set default deny outgoing
