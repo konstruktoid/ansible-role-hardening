@@ -2,7 +2,7 @@
 
 ## Tasks
 
-![Alt text](./images/ansible-role-hardening.svg)
+![Task execution order](./images/ansible-role-hardening.svg)
 
 ## Structure
 
@@ -156,10 +156,11 @@
 │       └── share
 │           └── dict
 │               └── passwords.list.j2
-└── tests
-    ├── debug_facts.yml
-    ├── inventory
-    └── test.yml
+├── tests
+│   ├── debug_facts.yml
+│   ├── inventory
+│   └── test.yml
+└── tox.ini
 
-33 directories, 119 files
+33 directories, 120 files
 ```

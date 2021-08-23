@@ -12,8 +12,8 @@ fi
 {
 echo "# Hardening - the Ansible role
 
-An [Ansible](https://www.ansible.com/) role to make a CentOS, Debian, RHEL,
-or Ubuntu server a bit more secure,
+An [Ansible](https://www.ansible.com/) role to make a CentOS, Debian, or Ubuntu
+server a bit more secure,
 [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
 Requires Ansible >= ${ANSIBLE_V}.
