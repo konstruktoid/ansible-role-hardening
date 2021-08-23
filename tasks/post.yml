@@ -14,6 +14,7 @@
   register: audit_grubenv
   when: ansible_os_family == "RedHat"
   tags:
+    - auditd
     - grub
 
 - name: update grub2 if missing grub settings
@@ -21,6 +22,7 @@
   command: grub2-mkconfig
   when: ansible_os_family == "RedHat" and audit_grubenv.rc != 0
   tags:
+    - auditd
     - grub
 
 - name: register Debian audit grub settings
@@ -31,6 +33,7 @@
   register: audit_grub_cfg
   when: ansible_os_family == "Debian"
   tags:
+    - auditd
     - grub
 
 - name: update grub if missing grub settings
@@ -38,6 +41,7 @@
   command: update-grub
   when: ansible_os_family == "Debian" and audit_grub_cfg.rc != 0
   tags:
+    - auditd
     - grub
 
 - name: find grub config files
@@ -57,7 +61,7 @@
     path: "{{ item.path }}"
     mode: 0400
   when: item.mode|int > 400
-  changed_when: item.mode|int > 400
+  changed_when: false
   with_items:
     - "{{ grub_cfg.files | reject('search','/boot/efi/EFI/ubuntu/grub.cfg') | list }}"
   loop_control:

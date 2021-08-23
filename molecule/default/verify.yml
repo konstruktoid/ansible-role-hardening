@@ -347,6 +347,24 @@
       changed_when: audit_grub_cfg.rc != 0
       when: ansible_os_family == "Debian"
 
+    - name: find grub config files
+      become: 'yes'
+      find:
+        paths: /boot
+        patterns: "*.cfg,grubenv"
+        recurse: 'yes'
+      register: perm_grub_cfg
+
+    - name: verify grub config files permission
+      stat:
+        path: "{{ item.path }}"
+      changed_when: item.mode|int > 400
+      failed_when: item.mode|int > 400
+      with_items:
+        - "{{ perm_grub_cfg.files | reject('search','/boot/efi/EFI/ubuntu/grub.cfg') | list }}"
+      loop_control:
+        label: "{{ item.path }}"
+
     - name: verify systemd resolved.conf
       become: 'yes'
       shell: grep "^{{ item }}$" /etc/systemd/resolved.conf
