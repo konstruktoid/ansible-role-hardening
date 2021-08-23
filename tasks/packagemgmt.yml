@@ -200,6 +200,7 @@
     - /etc/yum.repos.d/CentOS-PowerTools.repo
     - /etc/yum.repos.d/CentOS-Stream-PowerTools.repo
   register: powertools_repo
+  when: ansible_os_family == "RedHat"
   tags:
     - dnf
     - yum

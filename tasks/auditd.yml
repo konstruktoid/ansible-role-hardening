@@ -9,8 +9,6 @@
     mode: 0755
     owner: root
     group: root
-  notify:
-    - update grub
   when: ansible_os_family == "Debian"
   tags:
     - auditd
@@ -22,8 +20,6 @@
   become: 'yes'
   command: 'grubby --update-kernel=ALL --args="{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"'
   register: grubby_update_kernel
-  notify:
-    - update grub2
   when: ansible_os_family == "RedHat"
   changed_when: grubby_update_kernel.rc != 0
   failed_when: grubby_update_kernel.rc != 0
