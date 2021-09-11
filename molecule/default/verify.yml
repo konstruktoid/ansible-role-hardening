@@ -488,7 +488,7 @@
       become: 'yes'
       user:
         name: roletestuser
-        password: "{{ 'Change Ansible Role User Password' | password_hash('sha512', test_user_salt, rounds=656000) }}"
+        password: "{{ 'roletestuser' | password_hash('sha512', test_user_salt, rounds=656000) }}"
       register: test_user_pass
       no_log: true
 
@@ -499,11 +499,4 @@
     - name: debug test user password
       debug:
         msg: "{{ test_user_pass }}"
-
-    - name: remove test user
-      become: 'yes'
-      user:
-        name: roletestuser
-        state: absent
-        remove: 'yes'
 ...
