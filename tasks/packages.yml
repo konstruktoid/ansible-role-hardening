@@ -165,8 +165,10 @@
     packages:
       - virtualbox-guest-dkms
       - virtualbox-guest-utils
+  register: virtualbox_packages
   when: ansible_bios_version == "VirtualBox" and
         ansible_distribution == "Ubuntu"
+  failed_when: virtualbox_packages is not success and not "No package matching" in virtualbox_packages.msg
   tags:
     - apt
     - packages
