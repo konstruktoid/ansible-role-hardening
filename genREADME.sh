@@ -12,8 +12,8 @@ fi
 {
 echo "# Hardening - the Ansible role
 
-An [Ansible](https://www.ansible.com/) role to make a CentOS, Debian, or Ubuntu
-server a bit more secure,
+An [Ansible](https://www.ansible.com/) role to make a AlmaLinux, Debian, or
+Ubuntu server a bit more secure.
 [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
 Requires Ansible >= ${ANSIBLE_V}.
@@ -26,11 +26,9 @@ Do not use this role without first testing in a non-operational environment.
 \`\`\`
 
 [AlmaLinux 8](https://almalinux.org/),
-[CentOS 8](https://www.centos.org),
 [Debian 11](https://www.debian.org/) and
 [Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
 
-[CentOS Stream](https://www.centos.org/centos-stream/),
 [Ubuntu 21.04](https://releases.ubuntu.com/21.04/) and
 [Ubuntu 21.10](https://wiki.ubuntu.com/Releases) are in a testing phase.
 

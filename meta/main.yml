@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: hardening
   author: konstruktoid
-  description: AlmaLinux, CentOS, Debian and Ubuntu hardening. systemd edition.
+  description: AlmaLinux, Debian and Ubuntu hardening. systemd edition.
   license: apache
   min_ansible_version: "2.10"
   platforms:

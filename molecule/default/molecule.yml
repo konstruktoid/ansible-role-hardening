@@ -22,9 +22,6 @@ provisioner:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
         system_upgrade: 'no'
-      centos:
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
       focal:
         block_blacklisted: 'true'
         sshd_admin_net: "0.0.0.0/0"
@@ -41,13 +38,6 @@ platforms:
     box: debian/bullseye64
     instance_raw_config_args:
       - 'vbguest.auto_update = false'
-    memory: 1024
-  - name: centos
-    box: bento/centos-8
-    config_options:
-      vm.boot_timeout: 600
-    instance_raw_config_args:
-      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
   - name: focal
     box: bento/ubuntu-20.04
