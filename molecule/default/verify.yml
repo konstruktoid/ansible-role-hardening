@@ -356,6 +356,7 @@
       register: perm_grub_cfg
 
     - name: verify grub config files permission
+      become: 'yes'
       stat:
         path: "{{ item.path }}"
       changed_when: item.mode|int > 400
@@ -478,7 +479,6 @@
         password: "{{ 'Ansible Role Test User' | password_hash('sha512') }}"
         state: present
         shell: /bin/bash
-      no_log: true
 
     - name: create test user salt
       set_fact:
@@ -490,7 +490,6 @@
         name: roletestuser
         password: "{{ 'roletestuser' | password_hash('sha512', test_user_salt, rounds=656000) }}"
       register: test_user_pass
-      no_log: true
 
     - name: debug test user salt
       debug:
