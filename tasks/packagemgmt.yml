@@ -16,6 +16,7 @@
     - 'APT::Install-Recommends "false";'
     - 'APT::Install-Suggests "false";'
     - 'APT::Periodic::AutocleanInterval "7";'
+    - 'APT::Sandbox::Seccomp "1";'
     - 'Unattended-Upgrade::Remove-Unused-Dependencies "true";'
   when: ansible_os_family == "Debian"
   tags:
