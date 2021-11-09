@@ -10,6 +10,7 @@ suid_sgid_blocklist:
   - /bin/bash
   - /bin/busctl
   - /bin/busybox
+  - /bin/bzip2
   - /bin/c89
   - /bin/c99
   - /bin/cancel
@@ -149,6 +150,7 @@ suid_sgid_blocklist:
   - /bin/watch
   - /bin/wc
   - /bin/wget
+  - /bin/whiptail
   - /bin/write
   - /bin/xargs
   - /bin/xz
@@ -188,6 +190,7 @@ suid_sgid_blocklist:
   - /usr/bin/bsd-write
   - /usr/bin/busctl
   - /usr/bin/busybox
+  - /usr/bin/bzip2
   - /usr/bin/c89
   - /usr/bin/c99
   - /usr/bin/cancel
@@ -281,6 +284,7 @@ suid_sgid_blocklist:
   - /usr/bin/openvt
   - /usr/bin/paste
   - /usr/bin/pdb
+  - /usr/bin/perf
   - /usr/bin/perl
   - /usr/bin/pic
   - /usr/bin/pico
@@ -356,6 +360,7 @@ suid_sgid_blocklist:
   - /usr/bin/watch
   - /usr/bin/wc
   - /usr/bin/wget
+  - /usr/bin/whiptail
   - /usr/bin/whois
   - /usr/bin/write
   - /usr/bin/xargs
