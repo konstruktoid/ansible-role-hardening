@@ -378,6 +378,16 @@
         - DNSSEC={{ dnssec }}
         - DNSOverTLS={{ dns_over_tls }}
 
+    - name: verify systemd timesyncd.conf
+      become: 'yes'
+      shell: grep "^{{ item }}$" /etc/systemd/timesyncd.conf
+      register: systemd_timesyncd_conf
+      failed_when: systemd_timesyncd_conf.rc != 0
+      changed_when: systemd_timesyncd_conf.rc != 0
+      with_items:
+        - NTP={{ ntp }}
+        - FallbackNTP={{ fallback_ntp }}
+
     - name: register /etc/default/motd-news
       stat:
         path: /etc/default/motd-news
