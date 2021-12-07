@@ -14,7 +14,6 @@ generic/rhel8
 impish/20210819
 konstruktoid/focal-hardened
 ubuntu/focal64
-ubuntu/hirsute64
 ```
 
 ## Test examples

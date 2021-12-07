@@ -90,27 +90,6 @@ Vagrant.configure("2") do |config|
      end
    end
 
-  config.vm.define "hirsute" do |hirsute|
-    hirsute.vm.box = "ubuntu/hirsute64"
-    hirsute.ssh.insert_key = true
-    hirsute.vm.network "private_network", ip: "10.2.3.51"
-    hirsute.vm.hostname = "hirsute"
-    hirsute.vm.boot_timeout = 600
-    hirsute.vm.synced_folder ".", "/vagrant", disabled: true
-    hirsute.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible"
-    hirsute.vm.provision "ansible" do |a|
-      a.verbose = "v"
-      a.limit = "all"
-      a.playbook = "tests/test.yml"
-      a.extra_vars = {
-        "sshd_admin_net" => "0.0.0.0/0",
-        "sshd_allow_groups" => "vagrant sudo ubuntu",
-        "ansible_python_interpreter" => "/usr/bin/python3"
-      }
-    end
-  end
-
   config.vm.define "almalinux" do |almalinux|
     almalinux.vm.box = "almalinux/8"
     almalinux.ssh.insert_key = true
