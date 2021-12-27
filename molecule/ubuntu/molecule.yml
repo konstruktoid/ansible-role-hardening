@@ -25,6 +25,9 @@ provisioner:
       impish:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
+      jammy:
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
 platforms:
   - name: focal
     box: bento/ubuntu-20.04
@@ -42,6 +45,20 @@ platforms:
     memory: 1024
   - name: impish
     box: "ubuntu/impish64"
+    config_options:
+      vm.boot_timeout: 600
+      synced_folder: false
+    provider_raw_config_args:
+      - "customize ['modifyvm', :id, '--uart1', '0x3F8', '4']"
+      - "customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]"
+    instance_raw_config_args:
+      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+    memory: 1024
+  - name: jammy
+    box: "jammy/20211226"
+    box_url: "https://cloud-images.ubuntu.com/jammy/20211226/jammy-server-cloudimg-amd64-vagrant.box"
+    box_download_checksum: "dc4703501ae0fd60edb4f9a7786d4ad9a8285f7f0486f53c58980dbe3ca52243"
+    box_download_checksum_type: "sha256"
     config_options:
       vm.boot_timeout: 600
       synced_folder: false
