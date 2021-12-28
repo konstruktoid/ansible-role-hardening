@@ -482,6 +482,31 @@
         - 'timestamp_timeout=5'
         - 'timestamp_type=tty'
 
+    - name: stat faillock.conf
+      become: 'yes'
+      stat:
+        path: /etc/security/faillock.conf
+      register: faillockconf
+      tags:
+        - pam
+
+    - name: verify faillock.conf
+      become: 'yes'
+      lineinfile:
+        dest: /etc/security/faillock.conf
+        mode: 0644
+        state: present
+        line: "{{ item }}"
+      check_mode: 'yes'
+      register: verify_faillock
+      failed_when: verify_faillock is changed
+      with_items:
+        - "audit"
+        - "local_users_only"
+        - "deny = 5"
+        - "fail_interval = 900"
+      when: faillockconf.stat.exists
+
     - name: create test user
       become: 'yes'
       user:
