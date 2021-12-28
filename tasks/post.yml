@@ -1,4 +1,16 @@
 ---
+- name: create /boot/grub directory if efi boot
+  become: 'yes'
+  file:
+    path: /boot/grub
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  when: booted_with_efi|bool
+  tags:
+    - grub
+
 - name: run all notified handlers
   meta: flush_handlers
 
