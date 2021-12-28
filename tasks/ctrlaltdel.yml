@@ -6,6 +6,21 @@
     masked: 'yes'
     enabled: 'no'
     state: stopped
+  when: not ansible_os_family == "RedHat"
+  tags:
+    - ctrl-alt-del
+    - systemd
+    - CCE-80785-9
+
+- name: disable ctrl-alt-del - idempotence
+  become: 'yes'
+  systemd:
+    name: ctrl-alt-del.target
+    masked: 'yes'
+    enabled: 'no'
+    state: stopped
+  when: ansible_os_family == "RedHat"
+  changed_when: false
   tags:
     - ctrl-alt-del
     - systemd
