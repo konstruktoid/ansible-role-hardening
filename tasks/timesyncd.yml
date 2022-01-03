@@ -17,7 +17,7 @@
     - CIS-UBUNTU2004-2.1.1.2
 
 - name: register timesyncd status
-  command: systemctl status systemd-timesyncd  # noqa command-instead-of-module
+  command: systemctl status systemd-timesyncd
   register: timesyncd_status
   changed_when: false
   failed_when: false
