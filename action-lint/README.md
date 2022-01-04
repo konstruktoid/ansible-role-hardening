@@ -1,6 +1,7 @@
 # YAML and Ansible linting
 
-Using `yamllint` and `ansible-lint` to check `*.y*ml` files.
+Using `ansible-lint` to check `*.y*ml` files. Note that ansible-lint knows to
+also run `yamllint`, so you do not ned to run that one separately.
 
 ## Entrypoint code
 
@@ -12,14 +13,6 @@ ansible-lint --version
 
 if ! ansible-lint --exclude .git --exclude .github --exclude tests/ -vv; then
   echo 'ansible-lint failed.'
-  exit 1
-fi
-
-echo "# Running yamllint"
-yamllint --version
-
-if ! yamllint -d '{"extends":"default","ignore":".tox*\n.git*","rules":{"line-length":{"max":120,"level":"warning"}}}' .; then
-  echo 'yamllint failed.'
   exit 1
 fi
 ```
