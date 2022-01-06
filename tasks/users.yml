@@ -1,7 +1,7 @@
 ---
 - name: remove users
   become: 'yes'
-  user:
+  ansible.builtin.user:
     name: "{{ item }}"
     state: absent
     remove: 'yes'
@@ -16,7 +16,7 @@
     - users
 
 - name: find user /home directories
-  find:
+  ansible.builtin.find:
     paths: /home
     file_type: directory
   register: home_directories
@@ -27,7 +27,7 @@
 
 - name: set user /home directories permission
   become: 'yes'
-  file:
+  ansible.builtin.file:
     mode: 0750
     path: "{{ item.path }}"
   with_items: "{{ home_directories.files }}"

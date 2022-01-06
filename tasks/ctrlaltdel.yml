@@ -1,7 +1,7 @@
 ---
 - name: disable ctrl-alt-del
   become: 'yes'
-  systemd:
+  ansible.builtin.systemd:
     name: ctrl-alt-del.target
     masked: 'yes'
     enabled: 'no'
@@ -14,7 +14,7 @@
 
 - name: disable ctrl-alt-del - idempotence
   become: 'yes'
-  systemd:
+  ansible.builtin.systemd:
     name: ctrl-alt-del.target
     masked: 'yes'
     enabled: 'no'

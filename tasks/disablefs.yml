@@ -1,7 +1,7 @@
 ---
 - name: disable file system kernel modules
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/disablefs.conf
     line: "install {{ item }} /bin/true"
     mode: 0644
@@ -29,7 +29,7 @@
 
 - name: dont disable vfat file system kernel modules if efi
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/disablefs.conf
     line: "install {{ item }} /bin/true"
     mode: 0644

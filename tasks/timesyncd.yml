@@ -1,7 +1,7 @@
 ---
 - name: timesyncd.conf
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/systemd/timesyncd.conf.j2
     dest: /etc/systemd/timesyncd.conf
     backup: 'yes'
@@ -17,7 +17,7 @@
     - CIS-UBUNTU2004-2.1.1.2
 
 - name: register timesyncd status
-  command: systemctl status systemd-timesyncd
+  ansible.builtin.command: systemctl status systemd-timesyncd
   register: timesyncd_status
   changed_when: false
   failed_when: false
@@ -28,7 +28,7 @@
     - CIS-UBUNTU2004-2.1.1.2
 
 - name: register timedatectl show
-  command: timedatectl show
+  ansible.builtin.command: timedatectl show
   register: timedatectl_show
   changed_when: timedatectl_show.stdout.find('NTPSynchronized=yes') == -1 and timesyncd_status.rc == 0
   tags:
@@ -39,7 +39,7 @@
 
 - name: timedatectl set-ntp
   become: 'yes'
-  command: timedatectl set-ntp true
+  ansible.builtin.command: timedatectl set-ntp true
   when: timedatectl_show.stdout.find('NTPSynchronized=yes') == -1 and timesyncd_status.rc == 0
   tags:
     - systemd

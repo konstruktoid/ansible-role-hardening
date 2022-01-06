@@ -1,7 +1,7 @@
 ---
 - name: create /boot/grub directory if efi boot
   become: 'yes'
-  file:
+  ansible.builtin.file:
     path: /boot/grub
     state: directory
     mode: 0755
@@ -12,11 +12,11 @@
     - grub
 
 - name: run all notified handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: register RedHat grub audit settings
   become: 'yes'
-  shell: |
+  ansible.builtin.shell: |
     set -o pipefail
     grep "CMDLINE_LINUX=.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /etc/default/grub
   changed_when: false
@@ -31,7 +31,7 @@
 
 - name: update grub2 if missing grub settings
   become: 'yes'
-  command: grub2-mkconfig
+  ansible.builtin.command: grub2-mkconfig
   when: ansible_os_family == "RedHat" and audit_grubenv.rc != 0
   tags:
     - auditd
@@ -39,7 +39,7 @@
 
 - name: register Debian audit grub settings
   become: 'yes'
-  shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
+  ansible.builtin.shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
   changed_when: false
   failed_when: false
   register: audit_grub_cfg
@@ -50,7 +50,7 @@
 
 - name: update grub if missing grub settings
   become: 'yes'
-  command: update-grub
+  ansible.builtin.command: update-grub
   when: ansible_os_family == "Debian" and audit_grub_cfg.rc != 0
   tags:
     - auditd
@@ -58,7 +58,7 @@
 
 - name: find grub config files
   become: 'yes'
-  find:
+  ansible.builtin.find:
     paths: /boot
     patterns: "*.cfg,grubenv"
     recurse: 'yes'
@@ -69,7 +69,7 @@
 
 - name: set grub config permissions
   become: 'yes'
-  file:
+  ansible.builtin.file:
     path: "{{ item.path }}"
     mode: 0400
   when: item.mode|int > 400

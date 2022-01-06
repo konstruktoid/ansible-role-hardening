@@ -6,24 +6,24 @@
   tasks:
     - name: reboot host
       become: 'yes'
-      reboot:
+      ansible.builtin.reboot:
 
     - name: wait for the host and reconnect
-      wait_for:
+      ansible.builtin.wait_for:
         port: 22
         host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
         delay: 10
         timeout: 120
 
     - name: include default vars
-      include_vars:
+      ansible.builtin.include_vars:
         dir: ../../defaults/
         extensions:
           - 'yml'
 
     - name: verify auditd configuration
       become: 'yes'
-      lineinfile:
+      ansible.builtin.lineinfile:
         dest: /etc/audit/auditd.conf
         line: "{{ item }}"
         state: present
@@ -43,7 +43,7 @@
 
     - name: verify systemd system.conf
       become: 'yes'
-      lineinfile:
+      ansible.builtin.lineinfile:
         dest: /etc/systemd/system.conf
         line: "{{ item }}"
         state: present
@@ -60,7 +60,7 @@
 
     - name: verify systemd user.conf
       become: 'yes'
-      lineinfile:
+      ansible.builtin.lineinfile:
         dest: /etc/systemd/user.conf
         line: "{{ item }}"
         state: present
@@ -74,7 +74,7 @@
 
     - name: verify postfix configuration
       become: 'yes'
-      lineinfile:
+      ansible.builtin.lineinfile:
         dest: /etc/postfix/main.cf
         line: "{{ item }}"
         state: present
@@ -88,24 +88,24 @@
         - smtpd_client_restrictions = permit_mynetworks,reject
 
     - name: stat /etc/ssh/sshd_config
-      stat:
+      ansible.builtin.stat:
         path: '/etc/ssh/sshd_config'
       register: perm_sshd_config
 
     - name: stat /etc/ssh/ssh_config
-      stat:
+      ansible.builtin.stat:
         path: '/etc/ssh/ssh_config'
       register: perm_ssh_config
 
     - name: assert /etc/ssh/ssh_config permissions
-      assert:
+      ansible.builtin.assert:
         that:
           - perm_ssh_config.stat.mode == "0644"
         success_msg: "{{ perm_ssh_config.stat.path }} has correct permissions: {{ perm_ssh_config.stat.mode }}"
         fail_msg: "{{ perm_ssh_config.stat.path }} permissions are incorrect: {{ perm_ssh_config.stat.mode }}"
 
     - name: assert /etc/ssh/sshd_config permissions
-      assert:
+      ansible.builtin.assert:
         that:
           - perm_sshd_config.stat.mode == "0600"
         success_msg: "{{ perm_sshd_config.stat.path }} has correct permissions: {{ perm_sshd_config.stat.mode }}"
@@ -113,7 +113,7 @@
 
     - name: verify sshd_config PermitRootLogin configuration
       become: 'yes'
-      lineinfile:
+      ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config
         line: "PermitRootLogin yes"
         state: absent
@@ -123,7 +123,7 @@
 
     - name: verify sshd_config configuration
       become: 'yes'
-      lineinfile:
+      ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config
         line: "{{ item }}"
         state: present
@@ -169,7 +169,7 @@
 
     - name: verify ssh_config configuration
       become: 'yes'
-      lineinfile:
+      ansible.builtin.lineinfile:
         dest: /etc/ssh/ssh_config
         line: "    {{ item }}"
         state: present
@@ -185,7 +185,7 @@
 
     - name: verify sysctl configuration
       become: 'yes'
-      shell: grep -R "^{{ item }}$" /etc/sysctl.*
+      ansible.builtin.shell: grep -R "^{{ item }}$" /etc/sysctl.*
       register: sysctl_config
       failed_when: sysctl_config.rc != 0
       changed_when: sysctl_config.rc != 0
@@ -251,27 +251,27 @@
 
     - name: stat crypto-policies config
       become: 'yes'
-      stat:
+      ansible.builtin.stat:
         path: /etc/crypto-policies/config
       register: crypto_policies_config
 
     - name: get crypto-policies value
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      shell: grep "^{{ crypto_policy|upper }}$" /etc/crypto-policies/config
+      ansible.builtin.shell: grep "^{{ crypto_policy|upper }}$" /etc/crypto-policies/config
       register: crypto_policy_set
       when: crypto_policies_config.stat.exists
       failed_when: crypto_policy_set.rc != 0
       changed_when: crypto_policy_set.rc != 0
 
     - name: verify noexec /dev/shm
-      shell: grep '^tmpfs\s/dev/shm.*noexec' /proc/mounts
+      ansible.builtin.shell: grep '^tmpfs\s/dev/shm.*noexec' /proc/mounts
       register: dev_shm_noexec
       failed_when: dev_shm_noexec.rc != 0
       changed_when: dev_shm_noexec.rc != 0
 
     - name: verify /proc
-      shell: |
+      ansible.builtin.shell: |
         set -o pipefail
         grep -E '^proc\s/proc proc rw,nosuid,nodev,noexec,relatime.*hidepid=({{ hide_pid }}|invisible)' /proc/mounts
       args:
@@ -282,7 +282,7 @@
 
     - name: verify tmp.mount
       become: 'yes'
-      systemd:
+      ansible.builtin.systemd:
         name: tmp.mount
       register: tmp_mount
       failed_when: not 'nosuid,nodev,noexec' in tmp_mount.status.Options
@@ -290,14 +290,14 @@
 
     - name: verify /tmp
       become: 'yes'
-      shell: grep '^tmpfs\s/tmp\s.*nosuid,nodev,noexec' /proc/mounts
+      ansible.builtin.shell: grep '^tmpfs\s/tmp\s.*nosuid,nodev,noexec' /proc/mounts
       register: mounts_tmp
       failed_when: mounts_tmp.rc != 0
       changed_when: mounts_tmp.rc != 0
 
     - name: verify login.defs settings
       become: 'yes'
-      shell: grep "^{{ item }}$" /etc/login.defs
+      ansible.builtin.shell: grep "^{{ item }}$" /etc/login.defs
       register: login_defs
       failed_when: login_defs.rc != 0
       changed_when: login_defs.rc != 0
@@ -317,7 +317,7 @@
 
     - name: verify pwquality.conf settings
       become: 'yes'
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/security/pwquality.conf
         line: "{{ item.key }} = {{ item.value }}"
         state: present
@@ -331,7 +331,7 @@
 
     - name: verify RedHat grub audit settings
       become: 'yes'
-      shell: |
+      ansible.builtin.shell: |
         set -o pipefail
         grep CMDLINE /etc/default/grub | grep "{{ grub_audit_backlog_cmdline }}" | grep "{{ grub_audit_cmdline }}"
       register: audit_grubenv
@@ -341,7 +341,7 @@
 
     - name: verify Debian audit grub settings
       become: 'yes'
-      shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
+      ansible.builtin.shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
       register: audit_grub_cfg
       failed_when: audit_grub_cfg.rc != 0
       changed_when: audit_grub_cfg.rc != 0
@@ -349,7 +349,7 @@
 
     - name: find grub config files
       become: 'yes'
-      find:
+      ansible.builtin.find:
         paths: /boot
         patterns: "*.cfg,grubenv"
         recurse: 'yes'
@@ -357,7 +357,7 @@
 
     - name: verify grub config files permission
       become: 'yes'
-      stat:
+      ansible.builtin.stat:
         path: "{{ item.path }}"
       changed_when: item.mode|int > 644
       failed_when: item.mode|int > 644
@@ -368,7 +368,7 @@
 
     - name: verify systemd resolved.conf
       become: 'yes'
-      shell: grep "^{{ item }}$" /etc/systemd/resolved.conf
+      ansible.builtin.shell: grep "^{{ item }}$" /etc/systemd/resolved.conf
       register: systemd_resolved_conf
       failed_when: systemd_resolved_conf.rc != 0
       changed_when: systemd_resolved_conf.rc != 0
@@ -380,7 +380,7 @@
 
     - name: verify systemd timesyncd.conf
       become: 'yes'
-      shell: grep "^{{ item }}$" /etc/systemd/timesyncd.conf
+      ansible.builtin.shell: grep "^{{ item }}$" /etc/systemd/timesyncd.conf
       register: systemd_timesyncd_conf
       failed_when: systemd_timesyncd_conf.rc != 0
       changed_when: systemd_timesyncd_conf.rc != 0
@@ -389,13 +389,13 @@
         - FallbackNTP={{ fallback_ntp }}
 
     - name: register /etc/default/motd-news
-      stat:
+      ansible.builtin.stat:
         path: /etc/default/motd-news
       register: motd_news
 
     - name: verify masked motdnews service
       become: 'yes'
-      systemd:
+      ansible.builtin.systemd:
         name: motd-news.service
         masked: 'yes'
         enabled: 'no'
@@ -406,18 +406,18 @@
       when: ansible_os_family == "Debian" and motd_news.stat.exists
 
     - name: efi fact
-      set_fact:
+      ansible.builtin.set_fact:
         booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
 
     - name: verify vfat with efi boot
-      shell: grep 'fat' /etc/modprobe.d/disable*
+      ansible.builtin.shell: grep 'fat' /etc/modprobe.d/disable*
       register: efi_fat
       failed_when: efi_fat.rc == 0
       changed_when: efi_fat.rc == 0
       when: booted_with_efi|bool
 
     - name: verify vfat without efi boot
-      shell: grep 'fat' /etc/modprobe.d/disable*
+      ansible.builtin.shell: grep 'fat' /etc/modprobe.d/disable*
       register: efi_fat
       failed_when: efi_fat.rc != 0
       changed_when: efi_fat.rc != 0
@@ -426,7 +426,7 @@
     - name: verify cracklib password list
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      shell: |
+      ansible.builtin.shell: |
         set -o pipefail
         grep '/usr/share/dict/passwords' /var/cache/cracklib/src-dicts
       args:
@@ -439,7 +439,7 @@
     - name: index blacklisted kernel modules
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      shell: |
+      ansible.builtin.shell: |
         set -o pipefail
         modprobe -c | grep -o '^blacklist .*' | awk '{print $2}'
       args:
@@ -452,7 +452,7 @@
     - name: verify blocked blacklisted kernel modules
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      shell: |
+      ansible.builtin.shell: |
         set -o pipefail
         grep 'install {{ item }} /bin/true' /etc/modprobe.d/blockblacklisted.conf
       args:
@@ -465,7 +465,7 @@
       when: block_blacklisted|bool
 
     - name: verify sudo settings
-      shell: |
+      ansible.builtin.shell: |
         set -o pipefail
         sudo -l | grep "{{ item }}"
       register: sudo_settings
@@ -484,7 +484,7 @@
 
     - name: stat faillock.conf
       become: 'yes'
-      stat:
+      ansible.builtin.stat:
         path: /etc/security/faillock.conf
       register: faillockconf
       tags:
@@ -492,7 +492,7 @@
 
     - name: verify faillock.conf
       become: 'yes'
-      lineinfile:
+      ansible.builtin.lineinfile:
         dest: /etc/security/faillock.conf
         mode: 0644
         state: present
@@ -509,28 +509,28 @@
 
     - name: create test user
       become: 'yes'
-      user:
+      ansible.builtin.user:
         name: roletestuser
         password: "{{ 'Ansible Role Test User' | password_hash('sha512') }}"
         state: present
         shell: /bin/bash
 
     - name: create test user salt
-      set_fact:
+      ansible.builtin.set_fact:
         test_user_salt: "{{ lookup('password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits length=16') }}"
 
     - name: change test user password
       become: 'yes'
-      user:
+      ansible.builtin.user:
         name: roletestuser
         password: "{{ 'roletestuser' | password_hash('sha512', test_user_salt, rounds=656000) }}"
       register: test_user_pass
 
     - name: debug test user salt
-      debug:
+      ansible.builtin.debug:
         msg: "{{ test_user_salt }}"
 
     - name: debug test user password
-      debug:
+      ansible.builtin.debug:
         msg: "{{ test_user_pass }}"
 ...

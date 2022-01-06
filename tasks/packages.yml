@@ -1,13 +1,13 @@
 ---
 - name: merge package lists
-  set_fact:
+  ansible.builtin.set_fact:
     packages_merged: "{{ packages_debian + packages_redhat + packages_ubuntu }}"
   tags:
     - packages
 
 - name: pre stat needrestart configuration directory
   become: 'yes'
-  stat:
+  ansible.builtin.stat:
     path: /etc/needrestart/conf.d
   register: needrestart_directory_created
   tags:
@@ -16,7 +16,7 @@
 
 - name: create needrestart directory
   become: 'yes'
-  file:
+  ansible.builtin.file:
     path: /etc/needrestart/conf.d
     state: directory
     owner: root
@@ -30,7 +30,7 @@
 
 - name: stat needrestart configuration directory
   become: 'yes'
-  stat:
+  ansible.builtin.stat:
     path: /etc/needrestart/conf.d
   register: needrestart_directory
   tags:
@@ -38,7 +38,7 @@
     - packages
 
 - name: get needrestart restart value
-  command: grep -Rqo "$nrconf{restart} = 'l';" /etc/needrestart/conf.d/
+  ansible.builtin.command: grep -Rqo "$nrconf{restart} = 'l';" /etc/needrestart/conf.d/
   register: needrestart_restart_set
   when: needrestart_directory.stat.exists
   changed_when: needrestart_restart_set.rc != 0
@@ -49,7 +49,7 @@
 
 - name: configure needrestart
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/needrestart/conf.d/00-restart.conf
     line: "$nrconf{restart} = 'l';"
     create: 'yes'
@@ -63,7 +63,7 @@
 
 - name: debian family package installation
   become: 'yes'
-  apt:
+  ansible.builtin.apt:
     name: "{{ packages_debian }}"
     state: present
     install_recommends: 'no'
@@ -79,7 +79,7 @@
 
 - name: ubuntu package installation
   become: 'yes'
-  apt:
+  ansible.builtin.apt:
     name: "{{ packages_ubuntu }}"
     state: present
     install_recommends: 'no'
@@ -90,7 +90,7 @@
 
 - name: ubuntu update-notifier-common package installation
   become: 'yes'
-  apt:
+  ansible.builtin.apt:
     name: "update-notifier-common"
     state: present
     install_recommends: 'no'
@@ -101,7 +101,7 @@
 
 - name: redhat family package installation
   become: 'yes'
-  dnf:
+  ansible.builtin.dnf:
     name: "{{ packages_redhat }}"
     state: present
   when: ansible_os_family == "RedHat"
@@ -118,7 +118,7 @@
 
 - name: apt purge package removal
   become: 'yes'
-  apt:
+  ansible.builtin.apt:
     name: "{{ packages_blocklist }}"
     state: absent
     purge: 'yes'
@@ -132,7 +132,7 @@
 
 - name: generic package removal
   become: 'yes'
-  package:
+  ansible.builtin.package:
     name: "{{ packages_blocklist }}"
     state: absent
   register: package_removal
@@ -157,7 +157,7 @@
 
 - name: virtualbox package installation
   become: 'yes'
-  apt:
+  ansible.builtin.apt:
     name: "{{ packages }}"
     state: present
     install_recommends: 'no'
@@ -176,7 +176,7 @@
 
 - name: vmware package installation
   become: 'yes'
-  package:
+  ansible.builtin.package:
     name: open-vm-tools
     state: present
   when: ansible_bios_version == "VMWare"
@@ -186,7 +186,7 @@
 
 - name: qemu package installation
   become: 'yes'
-  package:
+  ansible.builtin.package:
     name: qemu-guest-agent
     state: present
   when: ansible_system_vendor == "QEMU"
@@ -196,7 +196,7 @@
 
 - name: rng-tools package installation
   become: 'yes'
-  package:
+  ansible.builtin.package:
     name: rng-tools
     state: present
   when: ansible_local.cpuinfo.rdrand
@@ -207,7 +207,7 @@
 
 - name: stat sysstat default
   become: 'yes'
-  stat:
+  ansible.builtin.stat:
     path: /etc/default/sysstat
   register: default_sysstat
   tags:
@@ -215,7 +215,7 @@
 
 - name: enable sysstat
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     regexp: "^ENABLED"
     line: 'ENABLED="true"'
     dest: /etc/default/sysstat
@@ -229,7 +229,7 @@
 
 - name: remove unneeded debian dependency packages
   become: 'yes'
-  apt:
+  ansible.builtin.apt:
     autoclean: 'yes'
     autoremove: 'yes'
   when: ansible_os_family == "Debian"

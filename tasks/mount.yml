@@ -12,7 +12,7 @@
     - proc
 
 - name: stat /dev/shm
-  stat:
+  ansible.builtin.stat:
     path: /dev/shm
   register: dev_shm
   tags:
@@ -40,7 +40,7 @@
 
 - name: create tmp.mount
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/systemd/tmp.mount.j2
     dest: /etc/systemd/system/tmp.mount
     backup: 'yes'
@@ -56,7 +56,7 @@
     - CCE-82623-0
 
 - name: stat tmp.mount
-  stat:
+  ansible.builtin.stat:
     path: /etc/systemd/system/tmp.mount
   register: tmp_mount
   tags:
@@ -65,7 +65,7 @@
 
 - name: unmask tmp.mount
   become: 'yes'
-  systemd:
+  ansible.builtin.systemd:
     name: tmp.mount
     masked: 'no'
   when: tmp_mount.stat.exists
@@ -76,7 +76,7 @@
 
 - name: start tmp.mount
   become: 'yes'
-  systemd:
+  ansible.builtin.systemd:
     name: tmp.mount
     daemon_reload: 'yes'
     state: started

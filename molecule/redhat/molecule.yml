@@ -3,7 +3,8 @@
 # sudo subscription-manager register --username=USER --password=PASSWORD --auto-attach
 # sudo subscription-manager unregister
 dependency:
-  enabled: false
+  name: galaxy
+  enabled: true
 driver:
   name: vagrant
   provider:

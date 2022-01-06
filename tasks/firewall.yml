@@ -1,7 +1,7 @@
 ---
 - name: add the nf_conntrack module
   become: 'yes'
-  modprobe:
+  community.general.modprobe:
     name: nf_conntrack
     state: present
   tags:
@@ -10,7 +10,7 @@
 
 - name: stat nf_conntrack_tcp_be_liberal
   become: 'yes'
-  stat:
+  ansible.builtin.stat:
     path: /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal
   register: conntrackliberal
   tags:
@@ -19,7 +19,7 @@
 
 - name: enable nf_conntrack_tcp_be_liberal to keep connections alive
   become: 'yes'
-  sysctl:
+  ansible.posix.sysctl:
     name: net.netfilter.nf_conntrack_tcp_be_liberal
     value: "1"
     state: present
@@ -32,7 +32,7 @@
 
 - name: ufw installation
   become: 'yes'
-  apt:
+  ansible.builtin.apt:
     name: "ufw"
     state: present
     install_recommends: 'no'
@@ -47,7 +47,7 @@
 
 - name: firewalld installation
   become: 'yes'
-  dnf:
+  ansible.builtin.dnf:
     name: "firewalld"
     state: present
   when: ansible_os_family == "RedHat"
@@ -60,7 +60,7 @@
 
 - name: python-firewall installation
   become: 'yes'
-  dnf:
+  ansible.builtin.dnf:
     name: "python-firewall"
     state: present
   when: ansible_os_family == "RedHat" and ansible_python.version.major <= 2
@@ -72,7 +72,7 @@
 
 - name: python3-firewall installation
   become: 'yes'
-  dnf:
+  ansible.builtin.dnf:
     name: "python3-firewall"
     state: present
   when: ansible_os_family == "RedHat" and ansible_python.version.major >= 3
@@ -84,7 +84,7 @@
 
 - name: set ufw IPT_SYSCTL
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     regexp: "^IPT_SYSCTL="
     line: "IPT_SYSCTL=/etc/sysctl.conf"
     dest: /etc/default/ufw
@@ -99,7 +99,7 @@
 
 - name: register ufw rules
   become: 'yes'
-  shell: |
+  ansible.builtin.shell: |
     set -o pipefail
     ufw show added | grep '^ufw' | grep -v "'ansible\smanaged'" | sed 's/ufw //g'
   args:
@@ -113,7 +113,7 @@
 
 - name: delete unmanaged ufw rules
   become: 'yes'
-  command: ufw delete {{ item }}
+  ansible.builtin.command: ufw delete {{ item }}
   when: ufw_not_managed.stdout_lines | length > 0
   with_items:
     - "{{ ufw_not_managed.stdout_lines }}"
@@ -124,7 +124,7 @@
 
 - name: allow loopback traffic in
   become: 'yes'
-  ufw:
+  community.general.ufw:
     rule: allow
     interface: lo
     direction: in
@@ -137,7 +137,7 @@
 
 - name: allow loopback traffic out
   become: 'yes'
-  ufw:
+  community.general.ufw:
     rule: allow
     interface: lo
     direction: out
@@ -150,7 +150,7 @@
 
 - name: allow ssh ufw
   become: 'yes'
-  ufw:
+  community.general.ufw:
     rule: limit
     src: "{{ item }}"
     port: "{{ sshd_port|int }}"
@@ -166,7 +166,7 @@
 
 - name: allow outgoing specified ufw ports
   become: 'yes'
-  ufw:
+  community.general.ufw:
     rule: allow
     port: '{{ item|int }}'
     direction: out
@@ -183,7 +183,7 @@
 # https://github.com/ansible/ansible/issues/45446
 - name: enable ufw and set default deny incoming
   become: 'yes'
-  ufw:
+  community.general.ufw:
     state: enabled
     direction: incoming
     policy: deny
@@ -199,7 +199,7 @@
 
 - name: enable ufw and set default deny outgoing
   become: 'yes'
-  ufw:
+  community.general.ufw:
     state: enabled
     direction: outgoing
     policy: deny
@@ -214,7 +214,7 @@
 
 - name: deny loopback network traffic
   become: 'yes'
-  ufw:
+  community.general.ufw:
     rule: deny
     src: '{{ item }}'
     comment: ansible managed
@@ -229,7 +229,7 @@
 
 - name: stat firewalld conf
   become: 'yes'
-  stat:
+  ansible.builtin.stat:
     path: /etc/firewalld/firewalld.conf
   register: firewalldconf
   tags:
@@ -238,7 +238,7 @@
 
 - name: set firewalld DefaultZone
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     regexp: "^DefaultZone="
     line: "DefaultZone=public"
     dest: /etc/firewalld/firewalld.conf
@@ -253,7 +253,7 @@
 
 - name: enable firewalld
   become: 'yes'
-  service:
+  ansible.builtin.service:
     name: firewalld
     state: started
     enabled: 'yes'

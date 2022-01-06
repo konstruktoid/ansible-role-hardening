@@ -1,7 +1,7 @@
 ---
 - name: stat access.conf
   become: 'yes'
-  stat:
+  ansible.builtin.stat:
     path: /etc/security/access.conf
   register: security_access_conf
   tags:
@@ -9,7 +9,7 @@
 
 - name: stat securetty
   become: 'yes'
-  stat:
+  ansible.builtin.stat:
     path: /etc/securetty
   register: etc_securetty
   tags:
@@ -17,7 +17,7 @@
 
 - name: clean access.conf
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/security/access.conf
     regexp: '^(?!\+:root:127.0.0.1)$'
     mode: 0644
@@ -28,7 +28,7 @@
 
 - name: allow localhost root access.conf
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/security/access.conf
     line: "+:root:127.0.0.1"
     mode: 0644
@@ -39,7 +39,7 @@
 
 - name: clean securetty
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/securetty
     regexp: "^(?!console).*$"
     state: absent
@@ -49,7 +49,7 @@
 
 - name: allow console securetty
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/securetty
     line: "console"
     mode: 0644
@@ -61,7 +61,7 @@
 
 - name: mask debug-shell
   become: 'yes'
-  systemd:
+  ansible.builtin.systemd:
     name: debug-shell.service
     masked: 'yes'
   tags:

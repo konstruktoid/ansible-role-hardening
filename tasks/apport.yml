@@ -1,7 +1,7 @@
 ---
 - name: disable apport
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     regexp: "^enabled="
     line: "enabled=0"
     dest: /etc/default/apport

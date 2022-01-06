@@ -2,7 +2,7 @@
 # https://github.com/ansible/ansible/issues/22171
 - name: restart auditd
   become: 'yes'
-  command: service auditd restart
+  ansible.builtin.command: service auditd restart
   args:
     warn: false
   tags:
@@ -10,40 +10,40 @@
 
 - name: generate auditd
   become: 'yes'
-  command: augenrules
+  ansible.builtin.command: augenrules
 
 - name: restart sysctl
   become: 'yes'
-  service:
+  ansible.builtin.service:
     name: systemd-sysctl
     state: restarted
 
 - name: reload systemd
   become: 'yes'
-  systemd:
+  ansible.builtin.systemd:
     daemon_reload: 'yes'
 
 - name: rkhunter propupd
   become: 'yes'
-  command: rkhunter --propupd
+  ansible.builtin.command: rkhunter --propupd
 
 - name: enable aidecheck
   become: 'yes'
-  systemd:
+  ansible.builtin.systemd:
     name: aidecheck.timer
     enabled: 'yes'
     state: started
 
 - name: disable aidecheck
   become: 'yes'
-  systemd:
+  ansible.builtin.systemd:
     name: aidecheck.timer
     state: stopped
     enabled: 'no'
 
 - name: mask aidecheck
   become: 'yes'
-  systemd:
+  ansible.builtin.systemd:
     name: aidecheck.timer
     masked: 'yes'
     stated: stopped
@@ -51,29 +51,29 @@
 
 - name: restart sshd
   become: 'yes'
-  service:
+  ansible.builtin.service:
     name: sshd
     state: restarted
 
 - name: restart postfix
   become: 'yes'
-  service:
+  ansible.builtin.service:
     name: postfix
     state: restarted
 
 - name: apt-get autoremove
   become: 'yes'
-  apt:
+  ansible.builtin.apt:
     autoremove: 'yes'
 
 - name: apt-get clean
   become: 'yes'
-  apt:
+  ansible.builtin.apt:
     autoclean: 'yes'
 
 - name: mask apport
   become: 'yes'
-  systemd:
+  ansible.builtin.systemd:
     name: apport.service
     masked: 'yes'
     enabled: 'no'
@@ -81,7 +81,7 @@
 
 - name: mask motdnews timer
   become: 'yes'
-  systemd:
+  ansible.builtin.systemd:
     name: motd-news.timer
     masked: 'yes'
     enabled: 'no'
@@ -89,14 +89,14 @@
 
 - name: mask motdnews service
   become: 'yes'
-  systemd:
+  ansible.builtin.systemd:
     name: motd-news.service
     masked: 'yes'
     enabled: 'no'
     state: stopped
 
 - name: dnf autoremove
-  dnf:
+  ansible.builtin.dnf:
     autoremove: 'yes'
   when: ansible_os_family == "RedHat"
   tags:
@@ -105,31 +105,31 @@
 
 - name: enable haveged
   become: 'yes'
-  systemd:
+  ansible.builtin.systemd:
     name: haveged
     enabled: 'yes'
     state: started
 
 - name: reboot node
   become: 'yes'
-  reboot:
+  ansible.builtin.reboot:
     pre_reboot_delay: "{{ 3600 | random(start=1) }}"
 
 - name: update cracklib debian
   become: 'yes'
-  command: update-cracklib
+  ansible.builtin.command: update-cracklib
   when: ansible_os_family == "Debian"
 
 - name: update cracklib redhat
   become: 'yes'
-  command: create-cracklib-dict /usr/share/dict/*
+  ansible.builtin.command: create-cracklib-dict /usr/share/dict/*
   when: ansible_os_family == "RedHat"
 
 - name: update grub
   become: 'yes'
-  command: update-grub
+  ansible.builtin.command: update-grub
 
 - name: update grub2
   become: 'yes'
-  command: grub2-mkconfig
+  ansible.builtin.command: grub2-mkconfig
 ...

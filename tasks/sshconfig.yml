@@ -1,6 +1,6 @@
 ---
 - name: sysconfig sshd
-  stat:
+  ansible.builtin.stat:
     path: /etc/sysconfig/sshd
   register: sysconfig_sshd
   tags:
@@ -10,7 +10,7 @@
 
 - name: sshd system crypto policy
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/sysconfig/sshd
     state: absent
     regexp: ^\s*CRYPTO_POLICY.*$
@@ -21,7 +21,7 @@
     - M1041
 
 - name: check if sshd_config.d exits
-  stat:
+  ansible.builtin.stat:
     path: /etc/ssh/sshd_config.d
   register: sshd_config_d_exists
   tags:
@@ -31,7 +31,7 @@
 
 - name: configure sshd
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/ssh/sshd_config.j2
     dest: /etc/ssh/sshd_config
     backup: 'yes'
@@ -82,7 +82,7 @@
 
 - name: sshd host keys
   become: 'yes'
-  find:
+  ansible.builtin.find:
     paths: /etc/ssh
     file_type: file
     patterns: 'ssh_host_*'
@@ -95,7 +95,7 @@
 
 - name: sshd host key permissions
   become: 'yes'
-  file:
+  ansible.builtin.file:
     owner: root
     group: root
     mode: 0600
@@ -111,7 +111,7 @@
     - M1041
 
 - name: check if ssh_config.d exits
-  stat:
+  ansible.builtin.stat:
     path: /etc/ssh/ssh_config.d
   register: ssh_config_d_exists
   tags:
@@ -121,7 +121,7 @@
 
 - name: configure ssh client
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/ssh/ssh_config.j2
     dest: /etc/ssh/ssh_config
     backup: 'yes'

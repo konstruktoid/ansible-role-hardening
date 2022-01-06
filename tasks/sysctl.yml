@@ -1,7 +1,7 @@
 ---
 - name: set sysctl dev.tty.ldisc_autoload
   become: 'yes'
-  sysctl:
+  ansible.posix.sysctl:
     name: dev.tty.ldisc_autoload
     value: "{{ sysctl_dev_tty_ldisc_autoload|int }}"
     state: present
@@ -12,7 +12,7 @@
 
 - name: set sysctl net.ipv6.conf.accept_ra_rtr_pref
   become: 'yes'
-  sysctl:
+  ansible.posix.sysctl:
     name: net.ipv6.conf.{{ ansible_default_ipv4.interface }}.accept_ra_rtr_pref
     value: "{{ sysctl_net_ipv6_conf_accept_ra_rtr_pref|int }}"
     state: present
@@ -24,7 +24,7 @@
   become: 'yes'
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  sysctl:
+  ansible.posix.sysctl:
     name: "{{ item.key }}"
     value: "{{ item.value|int }}"
     state: present

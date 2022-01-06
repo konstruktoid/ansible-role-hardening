@@ -4,5 +4,5 @@
   any_errors_fatal: true
   tasks:
     - name: "Include ansible-role-hardening"
-      include_role:
+      ansible.builtin.include_role:
         name: "ansible-role-hardening"

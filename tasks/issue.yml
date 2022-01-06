@@ -1,7 +1,7 @@
 ---
 - name: add motd
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/motd.j2
     dest: /etc/motd
     backup: 'yes'
@@ -16,7 +16,7 @@
 
 - name: add issue and issue.net
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/issue.j2
     dest: "{{ item }}"
     backup: 'yes'

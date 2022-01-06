@@ -1,7 +1,7 @@
 ---
 - name: disable misc kernel modules
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/disablemod.conf
     line: "install {{ item }} /bin/true"
     mode: 0644
@@ -24,7 +24,7 @@
 - name: index blacklisted kernel modules
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  shell: |
+  ansible.builtin.shell: |
     set -o pipefail
     modprobe -c | grep -o '^blacklist .*' | awk '{print $2}'
   args:
@@ -41,7 +41,7 @@
 
 - name: block blacklisted kernel modules
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/blockblacklisted.conf
     line: "install {{ item }} /bin/true"
     mode: 0644

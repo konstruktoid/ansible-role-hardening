@@ -1,6 +1,7 @@
 ---
 dependency:
-  enabled: false
+  name: galaxy
+  enabled: true
 driver:
   name: vagrant
   provider:

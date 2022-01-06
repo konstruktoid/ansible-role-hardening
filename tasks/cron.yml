@@ -1,7 +1,7 @@
 ---
 - name: remove cron.deny and at.deny
   become: 'yes'
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: absent
   with_items:
@@ -13,7 +13,7 @@
 
 - name: clean cron and at
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ item }}"
     regexp: "^(?!root).*$"
     state: absent
@@ -28,7 +28,7 @@
 
 - name: allow root cron and at
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ item }}"
     line: "root"
     mode: 0600
@@ -43,7 +43,7 @@
 
 - name: mask atd
   become: 'yes'
-  systemd:
+  ansible.builtin.systemd:
     name: atd
     masked: 'yes'
     enabled: 'no'
@@ -56,7 +56,7 @@
 
 - name: cron permissions
   become: 'yes'
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     mode: 0700
     owner: root
@@ -77,7 +77,7 @@
 
 - name: crontab permissions
   become: 'yes'
-  file:
+  ansible.builtin.file:
     path: /etc/crontab
     mode: 0600
     owner: root

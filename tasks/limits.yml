@@ -2,7 +2,7 @@
 
 - name: limits.conf
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/security/limits.conf.j2
     dest: /etc/security/limits.conf
     backup: 'yes'
@@ -18,7 +18,7 @@
 
 - name: coredump.conf
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/systemd/coredump.conf.j2
     dest: /etc/systemd/coredump.conf
     backup: 'yes'

@@ -9,7 +9,7 @@
 
 - name: remove floppy from fstab
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/fstab
     state: absent
     regexp: '^(.*)floppy(.*)$'

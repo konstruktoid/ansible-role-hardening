@@ -1,7 +1,7 @@
 ---
 - name: login.defs
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/login.defs.j2
     dest: /etc/login.defs
     backup: 'yes'

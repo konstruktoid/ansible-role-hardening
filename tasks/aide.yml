@@ -1,7 +1,7 @@
 ---
 - name: debian family aide installation
   become: 'yes'
-  apt:
+  ansible.builtin.apt:
     name: aide-common
     state: present
     install_recommends: 'no'
@@ -14,7 +14,7 @@
 
 - name: redhat family aide package installation
   become: 'yes'
-  package:
+  ansible.builtin.package:
     name: aide
     state: present
   when: ansible_os_family == "RedHat"
@@ -26,7 +26,7 @@
 
 - name: check cron.daily aide
   become: 'yes'
-  stat:
+  ansible.builtin.stat:
     path: /etc/cron.daily/aide
   register: aidecron
   tags:
@@ -34,7 +34,7 @@
 
 - name: aide service
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: lib/systemd/system/aidecheck.service.j2
     dest: /lib/systemd/system/aidecheck.service
     backup: 'yes'
@@ -47,7 +47,7 @@
 
 - name: aide timer
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: lib/systemd/system/aidecheck.timer.j2
     dest: /lib/systemd/system/aidecheck.timer
     backup: 'yes'
@@ -65,7 +65,7 @@
 
 - name: add aide Debian dir exclusions
   become: 'yes'
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: /etc/aide/aide.conf
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
     backup: 'yes'
@@ -82,7 +82,7 @@
 
 - name: stat Debian aide.db
   become: 'yes'
-  stat:
+  ansible.builtin.stat:
     path: /var/lib/aide/aide.db
   register: ubuaidedb
   when: ansible_os_family == "Debian"
@@ -91,7 +91,7 @@
 
 - name: add aide RedHat dir exclusions
   become: 'yes'
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: /etc/aide.conf
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
     backup: 'yes'
@@ -108,7 +108,7 @@
 
 - name: stat RedHat aide.db
   become: 'yes'
-  stat:
+  ansible.builtin.stat:
     path: /var/lib/aide/aide.db.gz
   register: rhelaidedb
   when: ansible_os_family == "RedHat"
@@ -117,7 +117,7 @@
 
 - name: initialize RedHat aide
   become: 'yes'
-  command: aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
+  ansible.builtin.command: aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
   when: ansible_os_family == "RedHat" and not rhelaidedb.stat.exists
   tags:
     - aide
@@ -125,7 +125,7 @@
 
 - name: stat RedHat aide.db.new.gz
   become: 'yes'
-  stat:
+  ansible.builtin.stat:
     path: /var/lib/aide/aide.db.new.gz
   register: rhelaidedbnew
   when: ansible_os_family == "RedHat"
@@ -134,14 +134,14 @@
 
 - name: copy RedHat aide db
   become: 'yes'
-  command: cp /var/lib/aide/aide.db.gz /var/lib/aide/aide.db.new.gz
+  ansible.builtin.command: cp /var/lib/aide/aide.db.gz /var/lib/aide/aide.db.new.gz
   when: ansible_os_family == "RedHat" and not rhelaidedbnew.stat.exists
   tags:
     - aide
 
 - name: initialize Debian aide
   become: 'yes'
-  command: aideinit --force --yes
+  ansible.builtin.command: aideinit --force --yes
   when: ansible_os_family == "Debian" and not ubuaidedb.stat.exists
   tags:
     - aide

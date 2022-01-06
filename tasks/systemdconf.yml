@@ -1,7 +1,7 @@
 ---
 - name: systemd system.conf
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/systemd/system.conf.j2
     dest: /etc/systemd/system.conf
     backup: 'yes'
@@ -17,7 +17,7 @@
 
 - name: systemd user.conf
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/systemd/user.conf.j2
     dest: /etc/systemd/user.conf
     backup: 'yes'

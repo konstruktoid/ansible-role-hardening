@@ -1,7 +1,7 @@
 ---
 - name: systemd journald.conf
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/systemd/journald.conf.j2
     dest: /etc/systemd/journald.conf
     backup: 'yes'
@@ -19,7 +19,7 @@
 
 - name: logrotate.conf
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/logrotate.conf.j2
     dest: /etc/logrotate.conf
     backup: 'yes'
@@ -31,7 +31,7 @@
 
 - name: cron.daily logrotate
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     line: "/usr/sbin/logrotate /etc/logrotate.conf"
     dest: /etc/cron.daily/logrotate
     mode: 0750
@@ -42,7 +42,7 @@
 
 - name: stat rsyslog.conf
   become: 'yes'
-  stat:
+  ansible.builtin.stat:
     path: /etc/rsyslog.conf
   register: rsyslogconf
   tags:
@@ -52,7 +52,7 @@
   become: 'yes'
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  shell: grep "^$FileCreateMode" /etc/rsyslog.conf
+  ansible.builtin.shell: grep "^$FileCreateMode" /etc/rsyslog.conf
   register: rsyslog_filecreatemode
   changed_when: false
   when: rsyslogconf.stat.exists
@@ -61,7 +61,7 @@
 
 - name: set rsyslog.conf FileCreateMode
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     regexp: '^\$FileCreateMode'
     line: '$FileCreateMode 0600'
     dest: /etc/rsyslog.conf
@@ -75,7 +75,7 @@
 
 - name: set rsyslog.d FileCreateMode
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     regexp: '^\$FileCreateMode'
     line: '$FileCreateMode 0600'
     dest: /etc/rsyslog.d/99-filecreatemode.conf

@@ -1,7 +1,7 @@
 ---
 - name: configure apt
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/apt/apt.conf.d/98-hardening-ubuntu
     mode: 0644
     state: present
@@ -25,7 +25,7 @@
 
 - name: apt update
   become: 'yes'
-  apt:
+  ansible.builtin.apt:
     update_cache: 'yes'
     cache_valid_time: 1800
   notify:
@@ -37,7 +37,7 @@
 
 - name: apt upgrade
   become: 'yes'
-  apt:
+  ansible.builtin.apt:
     upgrade: safe
   register: apt_upgrade_response
   changed_when: apt_upgrade_response.stdout.find('0 upgraded') == -1
@@ -50,7 +50,7 @@
 
 - name: link dnf.conf
   become: 'yes'
-  file:
+  ansible.builtin.file:
     src: /etc/dnf/dnf.conf
     dest: /etc/yum.conf
     owner: root
@@ -63,7 +63,7 @@
 
 - name: import RedHat RPM key
   become: 'yes'
-  rpm_key:
+  ansible.builtin.rpm_key:
     state: present
     key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
   with_items:
@@ -76,7 +76,7 @@
 
 - name: set yum.conf gpgcheck
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     regexp: "^gpgcheck="
     line: "gpgcheck=1"
     dest: /etc/yum.conf
@@ -94,7 +94,7 @@
 
 - name: set yum.conf clean_requirements
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     line: "clean_requirements_on_remove=True"
     dest: /etc/yum.conf
     mode: 0644
@@ -109,7 +109,7 @@
 
 - name: set yum.conf localpkg_gpgcheck
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     line: "localpkg_gpgcheck=1"
     dest: /etc/yum.conf
     mode: 0644
@@ -125,7 +125,7 @@
 
 - name: comment yum.conf repo_gpgcheck
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     line: "# repo_gpgcheck=1"
     dest: /etc/yum.conf
     mode: 0644
@@ -141,7 +141,7 @@
   block:
     - name: import RHEL8 necessary GPG keys
       become: 'yes'
-      rpm_key:
+      ansible.builtin.rpm_key:
         state: present
         key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
       with_items:
@@ -152,7 +152,7 @@
 
     - name: RHEL8 EPEL repo installation
       become: 'yes'
-      dnf:
+      ansible.builtin.dnf:
         name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
         state: present
       tags:
@@ -161,7 +161,7 @@
 
     - name: install CodeReady repo for RHEL8
       become: 'yes'
-      command: subscription-manager repos --enable "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
+      ansible.builtin.command: subscription-manager repos --enable "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
       changed_when: false
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
 
@@ -169,7 +169,7 @@
   block:
     - name: import RHEL7 necessary GPG keys
       become: 'yes'
-      rpm_key:
+      ansible.builtin.rpm_key:
         state: present
         key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
       with_items:
@@ -180,7 +180,7 @@
 
     - name: RHEL7 EPEL repo installation
       become: 'yes'
-      yum:
+      ansible.builtin.yum:
         name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
         state: present
       tags:
@@ -189,12 +189,12 @@
 
     - name: install Extras and HA for RHEL7
       become: 'yes'
-      command: subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms"
+      ansible.builtin.command: subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms"
       changed_when: false
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
 
 - name: stat PowerTools repo
-  stat:
+  ansible.builtin.stat:
     path: "{{ item }}"
   with_items:
     - /etc/yum.repos.d/almalinux-powertools.repo
@@ -209,7 +209,7 @@
 
 - name: enable PowerTools repo
   become: 'yes'
-  replace:
+  ansible.builtin.replace:
     regexp: "^enabled=.*$"
     replace: "enabled=1"
     dest: "{{ item.stat.path }}"
@@ -222,7 +222,7 @@
 
 - name: update dnf cache
   become: 'yes'
-  dnf:
+  ansible.builtin.dnf:
     update_cache: 'yes'
   when: ansible_os_family == "RedHat"
   notify:
@@ -233,7 +233,7 @@
 
 - name: dnf upgrade
   become: 'yes'
-  dnf:
+  ansible.builtin.dnf:
     name: "*"  # noqa package-latest
     state: latest
     bugfix: 'yes'

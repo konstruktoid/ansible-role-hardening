@@ -1,7 +1,7 @@
 ---
 - name: remove suid/sgid
   become: 'yes'
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     mode: 'a-s'
     state: file

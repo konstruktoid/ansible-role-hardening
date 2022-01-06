@@ -1,7 +1,7 @@
 ---
 - name: create custom facts directory
   become: 'yes'
-  file:
+  ansible.builtin.file:
     path: /etc/ansible/facts.d
     recurse: true
     state: directory
@@ -13,7 +13,7 @@
 
 - name: systemd version fact
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/ansible/facts.d/systemd.fact
     dest: /etc/ansible/facts.d/systemd.fact
     mode: 0755
@@ -25,7 +25,7 @@
 
 - name: cpuinfo rdrand fact
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/ansible/facts.d/cpuinfo.fact
     dest: /etc/ansible/facts.d/cpuinfo.fact
     mode: 0755
@@ -38,7 +38,7 @@
 
 - name: reboot required fact
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/ansible/facts.d/reboot.fact
     dest: /etc/ansible/facts.d/reboot.fact
     mode: 0755
@@ -51,7 +51,7 @@
 
 - name: ssh keys fact
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/ansible/facts.d/sshkeys.fact
     dest: /etc/ansible/facts.d/sshkeys.fact
     mode: 0755
@@ -62,13 +62,13 @@
     - fact
 
 - name: update facts
-  setup: ~
+  ansible.builtin.setup: ~
   tags:
     - fact
 
 - name: update subscription info on RHEL
   become: 'yes'
-  command: subscription-manager refresh --force
+  ansible.builtin.command: subscription-manager refresh --force
   changed_when: false
   when: ansible_distribution == "RedHat"
   tags:
@@ -76,7 +76,7 @@
 
 - name: redhat family epel installation
   become: 'yes'
-  dnf:
+  ansible.builtin.dnf:
     name: "epel-release"
     state: present
     update_cache: 'yes'
@@ -87,7 +87,7 @@
 
 - name: install python-pexpect
   become: 'yes'
-  apt:
+  ansible.builtin.apt:
     name: python-pexpect
     state: present
     update_cache: 'yes'
@@ -99,7 +99,7 @@
 
 - name: install python3-pexpect
   become: 'yes'
-  apt:
+  ansible.builtin.apt:
     name: python3-pexpect
     state: present
     update_cache: 'yes'
@@ -111,7 +111,7 @@
 
 - name: python2-rpm installation
   become: 'yes'
-  dnf:
+  ansible.builtin.dnf:
     name: "python2-rpm"
     state: present
   when: ansible_distribution == "RedHat" and ansible_python.version.major <= 2
@@ -124,7 +124,7 @@
 
 - name: python3-rpm installation
   become: 'yes'
-  dnf:
+  ansible.builtin.dnf:
     name: "python3-rpm"
     state: present
   when: ansible_distribution == "RedHat" and ansible_python.version.major <= 3
@@ -137,7 +137,7 @@
 
 - name: python3-passlib installation
   become: 'yes'
-  package:
+  ansible.builtin.package:
     name: python3-passlib
     state: present
   tags:
@@ -148,7 +148,7 @@
     - yum
 
 - name: EFI or UEFI booting check
-  set_fact:
+  ansible.builtin.set_fact:
     booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
   tags:
     - fact

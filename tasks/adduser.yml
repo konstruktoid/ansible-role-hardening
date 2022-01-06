@@ -1,7 +1,7 @@
 ---
 - name: adduser.conf
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/adduser.conf.j2
     dest: /etc/adduser.conf
     backup: 'yes'
@@ -14,7 +14,7 @@
 
 - name: useradd
   become: 'yes'
-  template:
+  ansible.builtin.template:
     src: etc/default/useradd.j2
     dest: /etc/default/useradd
     backup: 'yes'

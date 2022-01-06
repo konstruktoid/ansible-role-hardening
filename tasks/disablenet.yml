@@ -1,7 +1,7 @@
 ---
 - name: disable kernel network modules
   become: 'yes'
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/disablenet.conf
     line: "install {{ item }} /bin/true"
     mode: 0644
