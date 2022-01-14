@@ -3,7 +3,11 @@
   ansible.builtin.include_tasks: pre.yml
 
 - name: install and configure firewalls
-  ansible.builtin.include_tasks: firewall.yml
+  ansible.builtin.include_tasks:
+    file: firewall.yml
+    apply:
+      environment:
+        PATH: /usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:/bin
 
 - name: configure sysctl
   ansible.builtin.include_tasks: sysctl.yml
