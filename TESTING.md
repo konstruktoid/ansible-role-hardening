@@ -4,16 +4,15 @@
 
 ```console
 almalinux/8
-bento/centos-8
 bento/debian-10
 bento/ubuntu-20.04
-centos-stream/20210603
 debian/bullseye64
 debian/contrib-testing64
 generic/rhel8
-impish/20210819
+jammy/20220112
 konstruktoid/focal-hardened
 ubuntu/focal64
+ubuntu/impish64
 ```
 
 ## Test examples
@@ -32,8 +31,11 @@ repository if the host is using [Ubuntu](https://ubuntu.com/ "Ubuntu").
 ### tox environments
 
 ```console
-py39-ansible210
-py39-ansible34
-py39-ansible44
+devel
+py39-ansible4
+py39-ansible5
 py39-ansibledevel
+py310-ansible4
+py310-ansible5
+py310-ansibledevel
 ```

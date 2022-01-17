@@ -1,7 +1,7 @@
 # Hardening - the Ansible role
 
-An [Ansible](https://www.ansible.com/) role to make a CentOS, Debian, or Ubuntu
-server a bit more secure,
+An [Ansible](https://www.ansible.com/) role to make a AlmaLinux, Debian, or
+Ubuntu server a bit more secure.
 [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
 Requires Ansible >= 2.10.
@@ -14,12 +14,9 @@ Do not use this role without first testing in a non-operational environment.
 ```
 
 [AlmaLinux 8](https://almalinux.org/),
-[CentOS 8](https://www.centos.org),
 [Debian 11](https://www.debian.org/) and
 [Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
 
-[CentOS Stream](https://www.centos.org/centos-stream/),
-[Ubuntu 21.04](https://releases.ubuntu.com/21.04/) and
 [Ubuntu 21.10](https://wiki.ubuntu.com/Releases) are in a testing phase.
 
 ## Dependencies
@@ -498,10 +495,12 @@ suid_sgid_blocklist:
 ```
 
 If `suid_sgid_permissions: true` loop through `suid_sgid_blocklist` and remove
-any SUID/SGID permissions. Note that this is a very slow task.
+any SUID/SGID permissions.
 
 A complete file list is available in
 [defaults/main/suid_sgid_blocklist.yml](defaults/main/suid_sgid_blocklist.yml).
+
+_Note that this is a very slow task._
 
 ### ./defaults/main/sysctl.yml
 
