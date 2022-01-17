@@ -17,7 +17,7 @@ Do not use this role without first testing in a non-operational environment.
 [Debian 11](https://www.debian.org/) and
 [Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
 
-[Ubuntu 21.10](https://wiki.ubuntu.com/Releases) are in a testing phase.
+[Ubuntu 22.04](https://wiki.ubuntu.com/Releases) are in a testing phase.
 
 ## Dependencies
 
