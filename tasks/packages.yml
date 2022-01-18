@@ -166,7 +166,7 @@
       - virtualbox-guest-dkms
       - virtualbox-guest-utils
   register: virtualbox_packages
-  when: ansible_bios_version == "VirtualBox" and
+  when: ansible_virtualization_type == "VirtualBox" and
         ansible_distribution == "Ubuntu"
   failed_when: virtualbox_packages is not success and not "No package matching" in virtualbox_packages.msg
   tags:
@@ -179,7 +179,7 @@
   ansible.builtin.package:
     name: open-vm-tools
     state: present
-  when: ansible_bios_version == "VMWare"
+  when: ansible_virtualization_type == "VMware"
   tags:
     - packages
     - vmware
