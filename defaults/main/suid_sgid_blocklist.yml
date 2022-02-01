@@ -98,6 +98,7 @@ suid_sgid_blocklist:
   - /bin/ping6
   - /bin/pkexec
   - /bin/pr
+  - /bin/ptx
   - /bin/rbash
   - /bin/readelf
   - /bin/red
@@ -122,6 +123,7 @@ suid_sgid_blocklist:
   - /bin/ssh
   - /bin/ssh-keygen
   - /bin/ssh-keyscan
+  - /bin/sshpass
   - /bin/stdbuf
   - /bin/strings
   - /bin/su
@@ -157,6 +159,7 @@ suid_sgid_blocklist:
   - /bin/yum
   - /bin/zip
   - /bin/zsoelim
+  - /sbin/agetty
   - /sbin/arp
   - /sbin/bridge
   - /sbin/capsh
@@ -246,6 +249,7 @@ suid_sgid_blocklist:
   - /usr/bin/ionice
   - /usr/bin/ip
   - /usr/bin/irb
+  - /usr/bin/ispell
   - /usr/bin/join
   - /usr/bin/journalctl
   - /usr/bin/less
@@ -292,6 +296,7 @@ suid_sgid_blocklist:
   - /usr/bin/ping6
   - /usr/bin/pkexec
   - /usr/bin/pr
+  - /usr/bin/ptx
   - /usr/bin/python
   - /usr/bin/rake
   - /usr/bin/rbash
@@ -325,6 +330,7 @@ suid_sgid_blocklist:
   - /usr/bin/ssh
   - /usr/bin/ssh-keygen
   - /usr/bin/ssh-keyscan
+  - /usr/bin/sshpass
   - /usr/bin/stdbuf
   - /usr/bin/strace
   - /usr/bin/strings
@@ -370,6 +376,7 @@ suid_sgid_blocklist:
   - /usr/bin/zip
   - /usr/bin/zsoelim
   - /usr/lib/klibc/bin/mksh-static
+  - /usr/sbin/agetty
   - /usr/sbin/arp
   - /usr/sbin/bridge
   - /usr/sbin/capsh
