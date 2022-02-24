@@ -5,26 +5,6 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--uartmode1", "file", File::NULL]
   end
 
-  config.vm.define "buster" do |buster|
-    buster.vm.box = "bento/debian-10"
-    buster.ssh.insert_key = true
-    buster.vm.hostname = "buster"
-    buster.vm.boot_timeout = 600
-    buster.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible"
-    buster.vm.provision "ansible" do |a|
-      a.verbose = "v"
-      a.limit = "all"
-      a.playbook = "tests/test.yml"
-      a.extra_vars = {
-        "sshd_admin_net" => "0.0.0.0/0",
-        "sshd_allow_groups" => "vagrant sudo debian ubuntu",
-        "ansible_python_interpreter" => "/usr/bin/python3",
-        "system_upgrade" => "no"
-     }
-    end
-  end
-
   config.vm.define "bullseye" do |bullseye|
     bullseye.vm.box = "debian/bullseye64"
     bullseye.ssh.insert_key = true
@@ -42,7 +22,8 @@ Vagrant.configure("2") do |config|
         "ansible_python_interpreter" => "/usr/bin/python3",
         "sshd_admin_net" => "0.0.0.0/0",
         "sshd_allow_groups" => "vagrant sudo debian ubuntu",
-        "system_upgrade" => "no"
+        "system_upgrade" => "no",
+        "install_aide" => "false"
      }
     end
   end
@@ -61,27 +42,8 @@ Vagrant.configure("2") do |config|
       a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
         "sshd_allow_groups" => "vagrant sudo ubuntu",
-        "ansible_python_interpreter" => "/usr/bin/python3"
-      }
-     end
-   end
-
-  config.vm.define "focal_efi" do |focal_efi|
-    focal_efi.vm.box = "konstruktoid/focal-hardened"
-    focal_efi.ssh.insert_key = true
-    focal_efi.vm.hostname = "focalefi"
-    focal_efi.vm.boot_timeout = 600
-    focal_efi.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible",
-      upload_path: "/var/tmp/vagrant-shell"
-    focal_efi.vm.provision "ansible" do |a|
-      a.verbose = "v"
-      a.limit = "all"
-      a.playbook = "tests/test.yml"
-      a.extra_vars = {
-        "sshd_admin_net" => "0.0.0.0/0",
-        "sshd_allow_groups" => "vagrant sudo ubuntu",
-        "ansible_python_interpreter" => "/usr/bin/python3"
+        "ansible_python_interpreter" => "/usr/bin/python3",
+        "install_aide" => "false"
       }
      end
    end
@@ -103,7 +65,8 @@ Vagrant.configure("2") do |config|
       a.extra_vars = {
         "sshd_admin_net" => "0.0.0.0/0",
         "sshd_allow_groups" => "vagrant sudo",
-        "ansible_python_interpreter" => "/usr/bin/python3"
+        "ansible_python_interpreter" => "/usr/bin/python3",
+        "install_aide" => "false"
       }
     end
   end
