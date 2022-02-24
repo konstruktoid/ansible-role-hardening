@@ -3,6 +3,7 @@ suid_sgid_permissions: true
 suid_sgid_blocklist:
   - /bin/ansible-playbook
   - /bin/ar
+  - /bin/as
   - /bin/at
   - /bin/awk
   - /bin/base32
@@ -84,6 +85,7 @@ suid_sgid_blocklist:
   - /bin/newgrp
   - /bin/nice
   - /bin/nl
+  - /bin/nm
   - /bin/nohup
   - /bin/nroff
   - /bin/nsenter
@@ -184,6 +186,7 @@ suid_sgid_blocklist:
   - /usr/bin/apt
   - /usr/bin/apt-get
   - /usr/bin/ar
+  - /usr/bin/as
   - /usr/bin/at
   - /usr/bin/awk
   - /usr/bin/base32
@@ -279,6 +282,7 @@ suid_sgid_blocklist:
   - /usr/bin/newgrp
   - /usr/bin/nice
   - /usr/bin/nl
+  - /usr/bin/nm
   - /usr/bin/nohup
   - /usr/bin/nroff
   - /usr/bin/nsenter
