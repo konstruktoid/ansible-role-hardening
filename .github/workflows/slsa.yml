@@ -18,7 +18,7 @@ jobs:
         run: find defaults handlers tasks templates -type f -exec sha256sum {} \; > ${{ env.REPOSITORY_NAME }}.sha256
 
       - name: upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           path: ${{ env.REPOSITORY_NAME }}.sha256
 
@@ -36,6 +36,6 @@ jobs:
           artifact_path: artifact/
 
       - name: upload provenance
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           path: build.provenance
