@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: download build artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
 
       - name: generate provenance
         uses: slsa-framework/github-actions-demo@v0.1
