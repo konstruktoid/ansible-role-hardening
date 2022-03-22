@@ -1,0 +1,9 @@
+on: [push, pull_request]
+name: Ansible Lint
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lint Ansible Playbook
+        uses: ansible/ansible-lint-action@main
