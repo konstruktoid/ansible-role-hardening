@@ -109,6 +109,9 @@ if [ "$1" == "vagrant" ]; then
 
     echo "Saving bats results."
     vagrant ssh "${VM}" -c 'cat ~/bats.log' | grep 'not ok'  > "${VM}-$(date +%y%m%d)-bats.log"
+
+    echo "Saving OpenSCAP reports."
+    vagrant scp "${VM}:*.html" "."
   done
 
   rm "${VMFILE}"

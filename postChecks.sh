@@ -60,6 +60,12 @@ else
   echo "not ok: not ubuntu" > ~/bats.log
 fi
 
+if [ -f ~/hardening/misc/genOSCAPreport.sh ]; then
+  echo "Running OpenSCAP."
+  cd ~/hardening/misc || exit 1
+  bash ./genOSCAPreport.sh
+fi
+
 echo "Running Lynis."
 cd ~ || exit 1
 sudo chown -R root:root lynis
