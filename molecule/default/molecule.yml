@@ -15,6 +15,7 @@ provisioner:
   inventory:
     host_vars:
       almalinux:
+        disable_wireless: true
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
       bullseye:
@@ -25,6 +26,7 @@ provisioner:
         system_upgrade: 'no'
       focal:
         block_blacklisted: 'true'
+        disable_wireless: true
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
 platforms:

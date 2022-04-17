@@ -1,4 +1,17 @@
 ---
+- name: disable wireless interfaces
+  block:
+    - name: install network-manager
+      become: yes
+      package:
+        name: network-manager
+        state: present
+
+    - name: turn off wireless interfaces
+      become: yes
+      command: nmcli radio all off
+  when: disable_wireless
+
 - name: disable misc kernel modules
   become: 'yes'
   ansible.builtin.lineinfile:
