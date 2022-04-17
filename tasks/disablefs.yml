@@ -11,7 +11,6 @@
     create: 'yes'
   with_items:
     - "{{ fs_modules_blocklist }}"
-  when: not booted_with_efi
   tags:
     - modprobe
     - CCE-80835-2
@@ -26,20 +25,4 @@
     - CIS-UBUNTU2004-1.1.1.7
     - M1038
     - M1042
-
-- name: dont disable vfat file system kernel modules if efi
-  become: 'yes'
-  ansible.builtin.lineinfile:
-    dest: /etc/modprobe.d/disablefs.conf
-    line: "install {{ item }} /bin/true"
-    mode: 0644
-    owner: root
-    group: root
-    state: present
-    create: 'yes'
-  with_items:
-    - "{{ fs_modules_blocklist | reject('search','vfat') | list }}"
-  when: booted_with_efi|bool
-  tags:
-    - modprobe
 ...
