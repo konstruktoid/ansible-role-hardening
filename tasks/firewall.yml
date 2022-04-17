@@ -32,55 +32,19 @@
 
 - name: ufw installation
   become: 'yes'
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: "ufw"
     state: present
     install_recommends: 'no'
-  when: ansible_os_family == "Debian"
   tags:
     - apt
+    - dnf
     - packages
     - ufw
-    - CIS-UBUNTU2004-3.5.1.1
-    - CIS-UBUNTU2004-3.5.1.3
-    - M1037
-
-- name: firewalld installation
-  become: 'yes'
-  ansible.builtin.dnf:
-    name: "firewalld"
-    state: present
-  when: ansible_os_family == "RedHat"
-  tags:
-    - dnf
-    - packages
-    - firewalld
     - CCE-82998-6
     - M1037
-
-- name: python-firewall installation
-  become: 'yes'
-  ansible.builtin.dnf:
-    name: "python-firewall"
-    state: present
-  when: ansible_os_family == "RedHat" and ansible_python.version.major <= 2
-  tags:
-    - dnf
-    - packages
-    - firewalld
-    - M1037
-
-- name: python3-firewall installation
-  become: 'yes'
-  ansible.builtin.dnf:
-    name: "python3-firewall"
-    state: present
-  when: ansible_os_family == "RedHat" and ansible_python.version.major >= 3
-  tags:
-    - dnf
-    - packages
-    - firewalld
-    - M1037
+    - CIS-UBUNTU2004-3.5.1.1
+    - CIS-UBUNTU2004-3.5.1.3
 
 - name: set ufw IPT_SYSCTL
   become: 'yes'
