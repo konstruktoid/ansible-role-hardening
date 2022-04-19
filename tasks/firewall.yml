@@ -17,6 +17,7 @@
     - conntrack
     - sysctl
 
+# https://github.com/ansible/ansible/issues/45446
 - name: enable nf_conntrack_tcp_be_liberal to keep connections alive
   become: 'yes'
   ansible.posix.sysctl:
@@ -58,8 +59,6 @@
     - ufw
     - CCE-82998-6
     - M1037
-    - CIS-UBUNTU2004-3.5.1.1
-    - CIS-UBUNTU2004-3.5.1.3
 
 - name: set ufw IPT_SYSCTL
   become: 'yes'
@@ -75,130 +74,125 @@
     - ufw
     - M1037
 
-- name: configure ufw
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  block:
-    - name: register ufw rules
-      become: 'yes'
-      ansible.builtin.shell: |
-        set -o pipefail
-        ufw show added | grep '^ufw' | grep -v "'ansible\smanaged'" | sed 's/ufw //g'
-      args:
-        executable: /bin/bash
-      failed_when: ufw_not_managed.rc > 1
-      changed_when: false
-      register: ufw_not_managed
-      tags:
-        - ufw
-        - M1037
+- name: enable ufw and set default deny incoming
+  become: 'yes'
+  community.general.ufw:
+    state: enabled
+    direction: incoming
+    policy: deny
+    log: 'yes'
+    logging: low
+    comment: ansible managed
+  tags:
+    - ufw
+    - CIS-UBUNTU2004-3.5.1.7
+    - D3-ITF
+    - M1037
 
-    # https://github.com/ansible/ansible/issues/45446
-    - name: enable ufw and set default deny incoming
-      become: 'yes'
-      community.general.ufw:
-        state: enabled
-        direction: incoming
-        policy: deny
-        log: 'yes'
-        logging: low
-        comment: ansible managed
-      tags:
-        - ufw
-        - CIS-UBUNTU2004-3.5.1.7
-        - D3-ITF
-        - M1037
+- name: enable ufw and set default deny outgoing
+  become: 'yes'
+  community.general.ufw:
+    state: enabled
+    direction: outgoing
+    policy: deny
+    log: 'yes'
+    logging: low
+    comment: ansible managed
+  tags:
+    - ufw
+    - CIS-UBUNTU2004-3.5.1.7
+    - M1037
 
-    - name: enable ufw and set default deny outgoing
-      become: 'yes'
-      community.general.ufw:
-        state: enabled
-        direction: outgoing
-        policy: deny
-        log: 'yes'
-        logging: low
-        comment: ansible managed
-      tags:
-        - ufw
-        - CIS-UBUNTU2004-3.5.1.7
-        - M1037
+- name: register ufw rules
+  become: 'yes'
+  ansible.builtin.shell: |
+    set -o pipefail
+    ufw show added | grep '^ufw' | grep -v "'ansible\smanaged'" | sed 's/ufw //g'
+  args:
+    executable: /bin/bash
+  failed_when: ufw_not_managed.rc > 1
+  changed_when: false
+  register: ufw_not_managed
+  tags:
+    - ufw
+    - M1037
 
-    - name: deny loopback network traffic
-      become: 'yes'
-      community.general.ufw:
-        rule: deny
-        src: '{{ item }}'
-        comment: ansible managed
-      loop:
-        - 127.0.0.0/8
-        - ::1
-      tags:
-        - ufw
-        - CIS-UBUNTU2004-3.5.1.4
-        - M1037
+- name: allow ssh ufw
+  become: 'yes'
+  community.general.ufw:
+    rule: limit
+    src: "{{ item }}"
+    port: "{{ sshd_port|int }}"
+    proto: tcp
+    comment: ansible managed
+  with_items:
+    - "{{ sshd_admin_net }}"
+  tags:
+    - ufw
+    - ssh
+    - M1037
 
-    - name: delete unmanaged ufw rules
-      become: 'yes'
-      ansible.builtin.command: ufw delete {{ item }}
-      when: ufw_not_managed.stdout_lines | length > 0 and not ansible_os_family == "RedHat"
-      with_items:
-        - "{{ ufw_not_managed.stdout_lines }}"
-      tags:
-        - ufw
-        - D3-OTF
-        - M1037
+- name: allow outgoing specified ufw ports
+  become: 'yes'
+  community.general.ufw:
+    rule: allow
+    port: '{{ item|int }}'
+    direction: out
+    comment: ansible managed
+  with_items:
+    - "{{ ufw_outgoing_traffic }}"
+  tags:
+    - ufw
+    - CIS-UBUNTU2004-3.5.1.5
+    - D3-OTF
+    - M1037
 
-    - name: allow loopback traffic in
-      become: 'yes'
-      community.general.ufw:
-        rule: allow
-        interface: lo
-        direction: in
-        comment: ansible managed
-      tags:
-        - ufw
-        - CIS-UBUNTU2004-3.5.1.4
-        - M1037
+- name: deny loopback network traffic
+  become: 'yes'
+  community.general.ufw:
+    rule: deny
+    src: '{{ item }}'
+    comment: ansible managed
+  loop:
+    - 127.0.0.0/8
+    - ::1
+  tags:
+    - ufw
+    - CIS-UBUNTU2004-3.5.1.4
+    - M1037
 
-    - name: allow loopback traffic out
-      become: 'yes'
-      community.general.ufw:
-        rule: allow
-        interface: lo
-        direction: out
-        comment: ansible managed
-      tags:
-        - ufw
-        - CIS-UBUNTU2004-3.5.1.4
-        - M1037
+- name: allow loopback traffic in
+  become: 'yes'
+  community.general.ufw:
+    rule: allow
+    interface: lo
+    direction: in
+    comment: ansible managed
+  tags:
+    - ufw
+    - CIS-UBUNTU2004-3.5.1.4
+    - M1037
 
-    - name: allow ssh ufw
-      become: 'yes'
-      community.general.ufw:
-        rule: limit
-        src: "{{ item }}"
-        port: "{{ sshd_port|int }}"
-        proto: tcp
-        comment: ansible managed
-      with_items:
-        - "{{ sshd_admin_net }}"
-      tags:
-        - ufw
-        - ssh
-        - M1037
+- name: allow loopback traffic out
+  become: 'yes'
+  community.general.ufw:
+    rule: allow
+    interface: lo
+    direction: out
+    comment: ansible managed
+  tags:
+    - ufw
+    - CIS-UBUNTU2004-3.5.1.4
+    - M1037
 
-    - name: allow outgoing specified ufw ports
-      become: 'yes'
-      community.general.ufw:
-        rule: allow
-        port: '{{ item|int }}'
-        direction: out
-        comment: ansible managed
-      with_items:
-        - "{{ ufw_outgoing_traffic }}"
-      tags:
-        - ufw
-        - CIS-UBUNTU2004-3.5.1.5
-        - D3-OTF
-        - M1037
+- name: delete unmanaged ufw rules
+  become: 'yes'
+  ansible.builtin.command: ufw delete {{ item }}
+  when: ufw_not_managed.stdout_lines | length > 0 and not ansible_os_family == "RedHat"
+  with_items:
+    - "{{ ufw_not_managed.stdout_lines }}"
+  tags:
+    - ufw
+    - D3-OTF
+    - M1037
 ...
