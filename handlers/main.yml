@@ -116,11 +116,15 @@
     pre_reboot_delay: "{{ 3600 | random(start=1) }}"
 
 - name: update cracklib debian
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   become: 'yes'
   ansible.builtin.command: update-cracklib
   when: ansible_os_family == "Debian"
 
 - name: update cracklib redhat
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   become: 'yes'
   ansible.builtin.command: create-cracklib-dict /usr/share/dict/*
   when: ansible_os_family == "RedHat"
