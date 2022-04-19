@@ -7,7 +7,7 @@
     file: firewall.yml
     apply:
       environment:
-        PATH: /usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:/bin
+        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 - name: configure sysctl
   ansible.builtin.include_tasks: sysctl.yml
@@ -77,6 +77,10 @@
 
 - name: disable misc kernel modules
   ansible.builtin.include_tasks: disablemod.yml
+
+- name: disable wireless interface
+  ansible.builtin.include_tasks: disablewireless.yml
+  when: disable_wireless
 
 # https://bugs.launchpad.net/ubuntu/+source/aide/+bug/1903298
 - name: configure aide

@@ -17,6 +17,7 @@
     - conntrack
     - sysctl
 
+# https://github.com/ansible/ansible/issues/45446
 - name: enable nf_conntrack_tcp_be_liberal to keep connections alive
   become: 'yes'
   ansible.posix.sysctl:
@@ -25,12 +26,12 @@
     state: present
     sysctl_set: 'yes'
     reload: 'yes'
-  when: conntrackliberal.stat.exists and ansible_os_family == "Debian"
+  when: conntrackliberal.stat.exists
   tags:
     - conntrack
     - sysctl
 
-- name: ufw installation
+- name: ufw installation - debian
   become: 'yes'
   ansible.builtin.apt:
     name: "ufw"
@@ -41,45 +42,22 @@
     - apt
     - packages
     - ufw
+    - CCE-82998-6
+    - M1037
     - CIS-UBUNTU2004-3.5.1.1
     - CIS-UBUNTU2004-3.5.1.3
-    - M1037
 
-- name: firewalld installation
+- name: ufw installation - redhat
   become: 'yes'
   ansible.builtin.dnf:
-    name: "firewalld"
+    name: "ufw"
     state: present
   when: ansible_os_family == "RedHat"
   tags:
     - dnf
     - packages
-    - firewalld
+    - ufw
     - CCE-82998-6
-    - M1037
-
-- name: python-firewall installation
-  become: 'yes'
-  ansible.builtin.dnf:
-    name: "python-firewall"
-    state: present
-  when: ansible_os_family == "RedHat" and ansible_python.version.major <= 2
-  tags:
-    - dnf
-    - packages
-    - firewalld
-    - M1037
-
-- name: python3-firewall installation
-  become: 'yes'
-  ansible.builtin.dnf:
-    name: "python3-firewall"
-    state: present
-  when: ansible_os_family == "RedHat" and ansible_python.version.major >= 3
-  tags:
-    - dnf
-    - packages
-    - firewalld
     - M1037
 
 - name: set ufw IPT_SYSCTL
@@ -92,9 +70,37 @@
     state: present
     create: 'no'
     backrefs: 'yes'
-  when: ansible_os_family == "Debian"
   tags:
     - ufw
+    - M1037
+
+- name: enable ufw and set default deny incoming
+  become: 'yes'
+  community.general.ufw:
+    state: enabled
+    direction: incoming
+    policy: deny
+    log: 'yes'
+    logging: low
+    comment: ansible managed
+  tags:
+    - ufw
+    - CIS-UBUNTU2004-3.5.1.7
+    - D3-ITF
+    - M1037
+
+- name: enable ufw and set default deny outgoing
+  become: 'yes'
+  community.general.ufw:
+    state: enabled
+    direction: outgoing
+    policy: deny
+    log: 'yes'
+    logging: low
+    comment: ansible managed
+  tags:
+    - ufw
+    - CIS-UBUNTU2004-3.5.1.7
     - M1037
 
 - name: register ufw rules
@@ -111,43 +117,6 @@
     - ufw
     - M1037
 
-- name: delete unmanaged ufw rules
-  become: 'yes'
-  ansible.builtin.command: ufw delete {{ item }}
-  when: ufw_not_managed.stdout_lines | length > 0
-  with_items:
-    - "{{ ufw_not_managed.stdout_lines }}"
-  tags:
-    - ufw
-    - D3-OTF
-    - M1037
-
-- name: allow loopback traffic in
-  become: 'yes'
-  community.general.ufw:
-    rule: allow
-    interface: lo
-    direction: in
-    comment: ansible managed
-  when: ansible_os_family == "Debian"
-  tags:
-    - ufw
-    - CIS-UBUNTU2004-3.5.1.4
-    - M1037
-
-- name: allow loopback traffic out
-  become: 'yes'
-  community.general.ufw:
-    rule: allow
-    interface: lo
-    direction: out
-    comment: ansible managed
-  when: ansible_os_family == "Debian"
-  tags:
-    - ufw
-    - CIS-UBUNTU2004-3.5.1.4
-    - M1037
-
 - name: allow ssh ufw
   become: 'yes'
   community.general.ufw:
@@ -158,7 +127,6 @@
     comment: ansible managed
   with_items:
     - "{{ sshd_admin_net }}"
-  when: ansible_os_family == "Debian"
   tags:
     - ufw
     - ssh
@@ -173,43 +141,10 @@
     comment: ansible managed
   with_items:
     - "{{ ufw_outgoing_traffic }}"
-  when: ansible_os_family == "Debian"
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.5
     - D3-OTF
-    - M1037
-
-# https://github.com/ansible/ansible/issues/45446
-- name: enable ufw and set default deny incoming
-  become: 'yes'
-  community.general.ufw:
-    state: enabled
-    direction: incoming
-    policy: deny
-    log: 'yes'
-    logging: low
-    comment: ansible managed
-  when: ansible_os_family == "Debian"
-  tags:
-    - ufw
-    - CIS-UBUNTU2004-3.5.1.7
-    - D3-ITF
-    - M1037
-
-- name: enable ufw and set default deny outgoing
-  become: 'yes'
-  community.general.ufw:
-    state: enabled
-    direction: outgoing
-    policy: deny
-    log: 'yes'
-    logging: low
-    comment: ansible managed
-  when: ansible_os_family == "Debian"
-  tags:
-    - ufw
-    - CIS-UBUNTU2004-3.5.1.7
     - M1037
 
 - name: deny loopback network traffic
@@ -221,58 +156,43 @@
   loop:
     - 127.0.0.0/8
     - ::1
-  when: ansible_os_family == "Debian"
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.4
     - M1037
 
-- name: stat firewalld conf
+- name: allow loopback traffic in
   become: 'yes'
-  ansible.builtin.stat:
-    path: /etc/firewalld/firewalld.conf
-  register: firewalldconf
+  community.general.ufw:
+    rule: allow
+    interface: lo
+    direction: in
+    comment: ansible managed
   tags:
-    - firewalld
+    - ufw
+    - CIS-UBUNTU2004-3.5.1.4
     - M1037
 
-- name: set firewalld DefaultZone
+- name: allow loopback traffic out
   become: 'yes'
-  ansible.builtin.lineinfile:
-    regexp: "^DefaultZone="
-    line: "DefaultZone=public"
-    dest: /etc/firewalld/firewalld.conf
-    mode: 0640
-    state: present
-    create: 'no'
-    backrefs: 'yes'
-  when: firewalldconf.stat.exists
+  community.general.ufw:
+    rule: allow
+    interface: lo
+    direction: out
+    comment: ansible managed
   tags:
-    - firewalld
+    - ufw
+    - CIS-UBUNTU2004-3.5.1.4
     - M1037
 
-- name: enable firewalld
+- name: delete unmanaged ufw rules
   become: 'yes'
-  ansible.builtin.service:
-    name: firewalld
-    state: started
-    enabled: 'yes'
-  when: firewalldconf.stat.exists
+  ansible.builtin.command: ufw delete {{ item }}
+  when: ufw_not_managed.stdout_lines | length > 0 and not ansible_os_family == "RedHat"
+  with_items:
+    - "{{ ufw_not_managed.stdout_lines }}"
   tags:
-    - firewalld
-    - CCE-80877-4
-    - M1037
-
-- name: allow firewalld ssh
-  become: 'yes'
-  ansible.posix.firewalld:
-    port: "{{ sshd_port }}/tcp"
-    zone: public
-    immediate: 'yes'
-    permanent: 'true'
-    state: enabled
-  when: ansible_os_family == "RedHat"
-  tags:
-    - firewalld
+    - ufw
+    - D3-OTF
     - M1037
 ...

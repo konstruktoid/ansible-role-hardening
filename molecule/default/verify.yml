@@ -409,20 +409,6 @@
       ansible.builtin.set_fact:
         booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
 
-    - name: verify vfat with efi boot
-      ansible.builtin.shell: grep 'fat' /etc/modprobe.d/disable*
-      register: efi_fat
-      failed_when: efi_fat.rc == 0
-      changed_when: efi_fat.rc == 0
-      when: booted_with_efi|bool
-
-    - name: verify vfat without efi boot
-      ansible.builtin.shell: grep 'fat' /etc/modprobe.d/disable*
-      register: efi_fat
-      failed_when: efi_fat.rc != 0
-      changed_when: efi_fat.rc != 0
-      when: not booted_with_efi
-
     - name: verify cracklib password list
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -506,6 +492,15 @@
         - "deny = 5"
         - "fail_interval = 900"
       when: faillockconf.stat.exists
+
+    - name: verify wireless state
+      environment:
+        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      ansible.builtin.command: nmcli -t radio
+      register: wireless_state
+      changed_when: not 'disabled' in wireless_state.stdout
+      failed_when: not 'disabled' in wireless_state.stdout
+      when: disable_wireless
 
     - name: create test user
       become: 'yes'

@@ -242,7 +242,6 @@ fs_modules_blocklist:
   - jffs2
   - squashfs
   - udf
-  - vfat
 misc_modules_blocklist:
   - bluetooth
   - bnep
