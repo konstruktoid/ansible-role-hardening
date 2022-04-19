@@ -1,0 +1,29 @@
+---
+- name: disable wireless interfaces
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  block:
+    - name: install network-manager
+      become: 'yes'
+      ansible.builtin.apt:
+        name: network-manager
+        state: present
+        install_recommends: 'no'
+      when: ansible_os_family == "Debian"
+
+    - name: get wifi state
+      ansible.builtin.command: nmcli -t radio
+      register: wifi_state_pre
+      changed_when: wifi_state_pre.rc != 0
+      failed_when: wifi_state_pre.rc != 0
+
+    - name: turn off wireless interfaces
+      become: 'yes'
+      ansible.builtin.command: nmcli radio all off
+      register: nmcli_radio
+      changed_when: nmcli_radio.rc != 0
+      failed_when: nmcli_radio.rc != 0
+      tags:
+        - CCE-83501-7
+        - CIS-UBUNTU2004-3.1.2
+...
