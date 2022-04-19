@@ -493,6 +493,15 @@
         - "fail_interval = 900"
       when: faillockconf.stat.exists
 
+    - name: verify wireless state
+      environment:
+        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      ansible.builtin.command: nmcli -t radio
+      register: wireless_state
+      changed_when: not 'disabled' in wireless_state.stdout
+      failed_when: not 'disabled' in wireless_state.stdout
+      when: disable_wireless
+
     - name: create test user
       become: 'yes'
       ansible.builtin.user:
