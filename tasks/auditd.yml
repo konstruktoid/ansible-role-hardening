@@ -156,7 +156,8 @@
   when: auditd_apply_audit_rules|bool
   notify:
     - generate auditd
-    - restart auditd
+    - restart auditd debian
+    - restart auditd redhat
   tags:
     - auditd
     - CCE-80708-1
