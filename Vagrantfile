@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
     bullseye.vm.boot_timeout = 600
     bullseye.vbguest.auto_update = false
     bullseye.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible"
+      inline: "apt-get update && apt-get -y install python3-pip && pip3 install ansible"
     bullseye.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
     focal.vm.hostname = "focal"
     focal.vm.boot_timeout = 600
     focal.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install ansible"
+      inline: "apt-get update && apt-get -y install python3-pip && pip3 install ansible"
     focal.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -57,7 +57,7 @@ Vagrant.configure("2") do |config|
     end
     almalinux.vm.hostname = "almalinux"
     almalinux.vm.provision "shell",
-      inline: "dnf clean all && dnf install -y epel-release && dnf install -y ansible"
+      inline: "dnf clean all && dnf install -y python3-pip && pip3 install -U pip && pip3 install ansible"
     almalinux.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
