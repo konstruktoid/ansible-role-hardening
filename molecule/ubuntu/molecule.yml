@@ -42,10 +42,7 @@ platforms:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
   - name: jammy
-    box: "jammy/20220414"
-    box_url: "https://cloud-images.ubuntu.com/jammy/20220414/jammy-server-cloudimg-amd64-vagrant.box"
-    box_download_checksum: "c67dc700d61dc51da3945462869a8c540d835bc810334d54339cf6b8ea5e3982"
-    box_download_checksum_type: "sha256"
+    box: "ubuntu/jammy64"
     config_options:
       vm.boot_timeout: 600
       synced_folder: false

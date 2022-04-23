@@ -26,10 +26,9 @@ Do not use this role without first testing in a non-operational environment.
 \`\`\`
 
 [AlmaLinux 8](https://almalinux.org/),
-[Debian 11](https://www.debian.org/) and
-[Ubuntu 20.04](https://ubuntu.com/) are supported platforms.
-
-[Ubuntu 22.04](https://wiki.ubuntu.com/Releases) are in a testing phase.
+[Debian 11](https://www.debian.org/),
+[Ubuntu 20.04](https://releases.ubuntu.com/focal/) and
+[Ubuntu 22.04](https://releases.ubuntu.com/jammy/) aare supported platforms.
 
 ## Dependencies
 
