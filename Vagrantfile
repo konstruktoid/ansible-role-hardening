@@ -48,6 +48,26 @@ Vagrant.configure("2") do |config|
      end
    end
 
+  config.vm.define "jammy" do |jammy|
+    jammy.vm.box = "ubuntu/jammy64"
+    jammy.ssh.insert_key = true
+    jammy.vm.hostname = "jammy"
+    jammy.vm.boot_timeout = 600
+    jammy.vm.provision "shell",
+      inline: "apt-get update && apt-get -y install python3-pip && pip3 install ansible"
+    jammy.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.limit = "all"
+      a.playbook = "tests/test.yml"
+      a.extra_vars = {
+        "sshd_admin_net" => "0.0.0.0/0",
+        "sshd_allow_groups" => "vagrant sudo ubuntu",
+        "ansible_python_interpreter" => "/usr/bin/python3",
+        "install_aide" => "false"
+      }
+     end
+   end
+
   config.vm.define "almalinux" do |almalinux|
     almalinux.vm.box = "almalinux/8"
     almalinux.ssh.insert_key = true

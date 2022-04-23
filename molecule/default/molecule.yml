@@ -31,6 +31,11 @@ provisioner:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
         suid_sgid_permissions: 'false'
+      jammy:
+        block_blacklisted: 'true'
+        disable_wireless: 'true'
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
 platforms:
   - name: almalinux
     box: almalinux/8
@@ -48,6 +53,17 @@ platforms:
     box: bento/ubuntu-20.04
     config_options:
       vm.boot_timeout: 600
+    instance_raw_config_args:
+      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+    memory: 1024
+  - name: jammy
+    box: "ubuntu/jammy64"
+    config_options:
+      vm.boot_timeout: 600
+      synced_folder: false
+    provider_raw_config_args:
+      - "customize ['modifyvm', :id, '--uart1', '0x3F8', '4']"
+      - "customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]"
     instance_raw_config_args:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
