@@ -1,8 +1,4 @@
-# Task Execution and Structure
-
-## Tasks
-
-![Task execution order](./images/ansible-role-hardening.svg)
+# Task Structure
 
 ## Structure
 
@@ -13,14 +9,11 @@
 ├── STRUCTURE.md
 ├── TESTING.md
 ├── Vagrantfile
-├── action-lint
-│   ├── Dockerfile
-│   ├── README.md
-│   └── entrypoint.sh
 ├── defaults
 │   └── main
 │       ├── auditd.yml
 │       ├── compilers.yml
+│       ├── disablewireless.yml
 │       ├── dns.yml
 │       ├── firewall.yml
 │       ├── limits.yml
@@ -74,6 +67,7 @@
 │   ├── disablefs.yml
 │   ├── disablemod.yml
 │   ├── disablenet.yml
+│   ├── disablewireless.yml
 │   ├── extras.yml
 │   ├── firewall.yml
 │   ├── fstab.yml
@@ -163,5 +157,5 @@
 │   └── test.yml
 └── tox.ini
 
-33 directories, 121 files
+32 directories, 120 files
 ```
