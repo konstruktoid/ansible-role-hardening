@@ -9,10 +9,9 @@ bento/ubuntu-20.04
 debian/bullseye64
 debian/contrib-testing64
 generic/rhel8
-jammy/20220112
 konstruktoid/focal-hardened
 ubuntu/focal64
-ubuntu/impish64
+ubuntu/jammy64
 ```
 
 ## Test examples
@@ -32,10 +31,10 @@ repository if the host is using [Ubuntu](https://ubuntu.com/ "Ubuntu").
 
 ```console
 devel
-py39-ansible4
 py39-ansible5
+py39-ansible6
 py39-ansibledevel
-py310-ansible4
 py310-ansible5
+py310-ansible6
 py310-ansibledevel
 ```

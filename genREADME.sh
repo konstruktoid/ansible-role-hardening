@@ -4,11 +4,6 @@ if [ -z "${ANSIBLE_V}" ]; then
   ANSIBLE_V=2.10
 fi
 
-if [ -x "$(command -v ansible-playbook-grapher)" ]; then
-  # https://github.com/haidaraM/ansible-playbook-grapher
-  ansible-playbook-grapher -i '127.0.0.1,' -o './images/ansible-role-hardening' --include-role-tasks tests/test.yml
-fi
-
 {
 echo "# Hardening - the Ansible role
 
@@ -27,8 +22,8 @@ Do not use this role without first testing in a non-operational environment.
 
 [AlmaLinux 8](https://almalinux.org/),
 [Debian 11](https://www.debian.org/),
-[Ubuntu 20.04](https://releases.ubuntu.com/focal/) and
-[Ubuntu 22.04](https://releases.ubuntu.com/jammy/) aare supported platforms.
+Ubuntu [20.04 LTS (Focal Fossa)](https://releases.ubuntu.com/focal/) and
+[22.04 LTS (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/) are supported.
 
 ## Dependencies
 
@@ -188,11 +183,7 @@ echo '```'
 rm ./*.log ./*.html ./*.list
 
 {
-echo "# Task Execution and Structure
-
-## Tasks
-
-![Task execution order](./images/ansible-role-hardening.svg)
+echo "# Task Structure
 
 ## Structure
 "
