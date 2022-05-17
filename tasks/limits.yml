@@ -1,7 +1,7 @@
 ---
 
 - name: limits.conf
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/security/limits.conf.j2
     dest: /etc/security/limits.conf
@@ -17,7 +17,7 @@
     - UBTU-20-010400
 
 - name: coredump.conf
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/systemd/coredump.conf.j2
     dest: /etc/systemd/coredump.conf

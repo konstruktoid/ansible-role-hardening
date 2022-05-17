@@ -1,6 +1,6 @@
 ---
 - name: systemd system.conf
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/systemd/system.conf.j2
     dest: /etc/systemd/system.conf
@@ -16,7 +16,7 @@
     - CCE-80784-2
 
 - name: systemd user.conf
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/systemd/user.conf.j2
     dest: /etc/systemd/user.conf

@@ -1,6 +1,6 @@
 ---
 - name: reboot if required
-  become: 'yes'
+  become: true
   ansible.builtin.setup: ~
   notify:
     - reboot node

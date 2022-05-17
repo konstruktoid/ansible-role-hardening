@@ -1,6 +1,6 @@
 ---
 - name: remove /tmp from fstab
-  become: 'yes'
+  become: true
   mount:
     path: /tmp
     state: absent
@@ -8,7 +8,7 @@
     - fstab
 
 - name: remove floppy from fstab
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     path: /etc/fstab
     state: absent

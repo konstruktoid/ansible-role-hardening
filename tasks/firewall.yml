@@ -1,6 +1,6 @@
 ---
 - name: add the nf_conntrack module
-  become: 'yes'
+  become: true
   community.general.modprobe:
     name: nf_conntrack
     state: present
@@ -9,7 +9,7 @@
     - sysctl
 
 - name: stat nf_conntrack_tcp_be_liberal
-  become: 'yes'
+  become: true
   ansible.builtin.stat:
     path: /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal
   register: conntrackliberal
@@ -19,7 +19,7 @@
 
 # https://github.com/ansible/ansible/issues/45446
 - name: enable nf_conntrack_tcp_be_liberal to keep connections alive
-  become: 'yes'
+  become: true
   ansible.posix.sysctl:
     name: net.netfilter.nf_conntrack_tcp_be_liberal
     value: "1"
@@ -32,7 +32,7 @@
     - sysctl
 
 - name: ufw installation - debian
-  become: 'yes'
+  become: true
   ansible.builtin.apt:
     name: "ufw"
     state: present
@@ -48,7 +48,7 @@
     - CIS-UBUNTU2004-3.5.1.3
 
 - name: ufw installation - redhat
-  become: 'yes'
+  become: true
   ansible.builtin.dnf:
     name: "ufw"
     state: present
@@ -61,7 +61,7 @@
     - M1037
 
 - name: set ufw IPT_SYSCTL
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^IPT_SYSCTL="
     line: "IPT_SYSCTL=/etc/sysctl.conf"
@@ -75,7 +75,7 @@
     - M1037
 
 - name: enable ufw and set default deny incoming
-  become: 'yes'
+  become: true
   community.general.ufw:
     state: enabled
     direction: incoming
@@ -90,7 +90,7 @@
     - M1037
 
 - name: enable ufw and set default deny outgoing
-  become: 'yes'
+  become: true
   community.general.ufw:
     state: enabled
     direction: outgoing
@@ -104,7 +104,7 @@
     - M1037
 
 - name: register ufw rules
-  become: 'yes'
+  become: true
   ansible.builtin.shell: |
     set -o pipefail
     ufw show added | grep '^ufw' | grep -v "'ansible\smanaged'" | sed 's/ufw //g'
@@ -118,7 +118,7 @@
     - M1037
 
 - name: allow ssh ufw
-  become: 'yes'
+  become: true
   community.general.ufw:
     rule: limit
     src: "{{ item }}"
@@ -133,7 +133,7 @@
     - M1037
 
 - name: allow outgoing specified ufw ports
-  become: 'yes'
+  become: true
   community.general.ufw:
     rule: allow
     port: '{{ item|int }}'
@@ -148,7 +148,7 @@
     - M1037
 
 - name: deny loopback network traffic
-  become: 'yes'
+  become: true
   community.general.ufw:
     rule: deny
     src: '{{ item }}'
@@ -162,7 +162,7 @@
     - M1037
 
 - name: allow loopback traffic in
-  become: 'yes'
+  become: true
   community.general.ufw:
     rule: allow
     interface: lo
@@ -174,7 +174,7 @@
     - M1037
 
 - name: allow loopback traffic out
-  become: 'yes'
+  become: true
   community.general.ufw:
     rule: allow
     interface: lo
@@ -186,7 +186,7 @@
     - M1037
 
 - name: delete unmanaged ufw rules
-  become: 'yes'
+  become: true
   ansible.builtin.command: ufw delete {{ item }}
   when: ufw_not_managed.stdout_lines | length > 0 and not ansible_os_family == "RedHat"
   with_items:

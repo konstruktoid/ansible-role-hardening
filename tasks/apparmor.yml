@@ -1,6 +1,6 @@
 ---
 - name: set Debian family apparmor grub cmdline
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX apparmor=1 security=apparmor"'
     dest: /etc/default/grub.d/99-hardening-apparmor.cfg
@@ -18,7 +18,7 @@
     - CIS-UBUNTU2004-1.6.1.2
 
 - name: configure pam_apparmor
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: 'session optional pam_apparmor.so order=user,group,default'
     dest: /etc/pam.d/apparmor
@@ -35,7 +35,7 @@
     - grub
 
 - name: get apparmor status
-  become: 'yes'
+  become: true
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   ansible.builtin.command: aa-status --complaining
@@ -46,7 +46,7 @@
     - apparmor
 
 - name: enforce apparmor profiles
-  become: 'yes'
+  become: true
   ansible.builtin.command: find /etc/apparmor.d/ -maxdepth 1 -type f -exec aa-enforce {} \;
   when: ansible_os_family == "Debian" and (get_apparmor_complaining.stdout != "0")
   tags:
@@ -55,7 +55,7 @@
     - CIS-UBUNTU2004-1.6.1.4
 
 - name: enable apparmor
-  become: 'yes'
+  become: true
   ansible.builtin.systemd:
     name: apparmor
     enabled: 'yes'

@@ -5,7 +5,7 @@
 
   tasks:
     - name: reboot host
-      become: 'yes'
+      become: true
       ansible.builtin.reboot:
 
     - name: wait for the host and reconnect
@@ -22,7 +22,7 @@
           - 'yml'
 
     - name: verify auditd configuration
-      become: 'yes'
+      become: true
       ansible.builtin.lineinfile:
         dest: /etc/audit/auditd.conf
         line: "{{ item }}"
@@ -42,7 +42,7 @@
         - space_left_action = {{ auditd_space_left_action }}
 
     - name: verify systemd system.conf
-      become: 'yes'
+      become: true
       ansible.builtin.lineinfile:
         dest: /etc/systemd/system.conf
         line: "{{ item }}"
@@ -59,7 +59,7 @@
         - DefaultLimitNPROC={{ limit_nproc_hard }}
 
     - name: verify systemd user.conf
-      become: 'yes'
+      become: true
       ansible.builtin.lineinfile:
         dest: /etc/systemd/user.conf
         line: "{{ item }}"
@@ -73,7 +73,7 @@
         - DefaultLimitNPROC={{ limit_nproc_hard }}
 
     - name: verify postfix configuration
-      become: 'yes'
+      become: true
       ansible.builtin.lineinfile:
         dest: /etc/postfix/main.cf
         line: "{{ item }}"
@@ -112,7 +112,7 @@
         fail_msg: "{{ perm_sshd_config.stat.path }} permissions are incorrect: {{ perm_sshd_config.stat.mode }}"
 
     - name: verify sshd_config PermitRootLogin configuration
-      become: 'yes'
+      become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config
         line: "PermitRootLogin yes"
@@ -122,7 +122,7 @@
       failed_when: sshd_config is changed
 
     - name: verify sshd_config configuration
-      become: 'yes'
+      become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config
         line: "{{ item }}"
@@ -168,7 +168,7 @@
         - X11Forwarding {{ sshd_x11_forwarding }}
 
     - name: verify ssh_config configuration
-      become: 'yes'
+      become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/ssh_config
         line: "    {{ item }}"
@@ -184,7 +184,7 @@
         - RekeyLimit {{ sshd_rekey_limit }}
 
     - name: verify sysctl configuration
-      become: 'yes'
+      become: true
       ansible.builtin.shell: grep -R "^{{ item }}$" /etc/sysctl.*
       register: sysctl_config
       failed_when: sysctl_config.rc != 0
@@ -250,7 +250,7 @@
         - net.netfilter.nf_conntrack_tcp_loose=0
 
     - name: stat crypto-policies config
-      become: 'yes'
+      become: true
       ansible.builtin.stat:
         path: /etc/crypto-policies/config
       register: crypto_policies_config
@@ -281,7 +281,7 @@
       changed_when: proc_opts.rc != 0
 
     - name: verify tmp.mount
-      become: 'yes'
+      become: true
       ansible.builtin.systemd:
         name: tmp.mount
       register: tmp_mount
@@ -289,14 +289,14 @@
       changed_when: not 'nosuid,nodev,noexec' in tmp_mount.status.Options
 
     - name: verify /tmp
-      become: 'yes'
+      become: true
       ansible.builtin.shell: grep '^tmpfs\s/tmp\s.*nosuid,nodev,noexec' /proc/mounts
       register: mounts_tmp
       failed_when: mounts_tmp.rc != 0
       changed_when: mounts_tmp.rc != 0
 
     - name: verify login.defs settings
-      become: 'yes'
+      become: true
       ansible.builtin.shell: grep "^{{ item }}$" /etc/login.defs
       register: login_defs
       failed_when: login_defs.rc != 0
@@ -316,7 +316,7 @@
         - UMASK 077
 
     - name: verify pwquality.conf settings
-      become: 'yes'
+      become: true
       ansible.builtin.lineinfile:
         path: /etc/security/pwquality.conf
         line: "{{ item.key }} = {{ item.value }}"
@@ -330,7 +330,7 @@
       with_dict: "{{ pwquality_config }}"
 
     - name: verify RedHat grub audit settings
-      become: 'yes'
+      become: true
       ansible.builtin.shell: |
         set -o pipefail
         grep CMDLINE /etc/default/grub | grep "{{ grub_audit_backlog_cmdline }}" | grep "{{ grub_audit_cmdline }}"
@@ -340,7 +340,7 @@
       when: ansible_os_family == "RedHat"
 
     - name: verify Debian audit grub settings
-      become: 'yes'
+      become: true
       ansible.builtin.shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
       register: audit_grub_cfg
       failed_when: audit_grub_cfg.rc != 0
@@ -348,7 +348,7 @@
       when: ansible_os_family == "Debian"
 
     - name: find grub config files
-      become: 'yes'
+      become: true
       ansible.builtin.find:
         paths: /boot
         patterns: "*.cfg,grubenv"
@@ -356,7 +356,7 @@
       register: perm_grub_cfg
 
     - name: verify grub config files permission
-      become: 'yes'
+      become: true
       ansible.builtin.stat:
         path: "{{ item.path }}"
       changed_when: item.mode|int > 644
@@ -367,7 +367,7 @@
         label: "{{ item.path }}"
 
     - name: verify systemd resolved.conf
-      become: 'yes'
+      become: true
       ansible.builtin.shell: grep "^{{ item }}$" /etc/systemd/resolved.conf
       register: systemd_resolved_conf
       failed_when: systemd_resolved_conf.rc != 0
@@ -379,7 +379,7 @@
         - DNSOverTLS={{ dns_over_tls }}
 
     - name: verify systemd timesyncd.conf
-      become: 'yes'
+      become: true
       ansible.builtin.shell: grep "^{{ item }}$" /etc/systemd/timesyncd.conf
       register: systemd_timesyncd_conf
       failed_when: systemd_timesyncd_conf.rc != 0
@@ -394,7 +394,7 @@
       register: motd_news
 
     - name: verify masked motdnews service
-      become: 'yes'
+      become: true
       ansible.builtin.systemd:
         name: motd-news.service
         masked: 'yes'
@@ -469,7 +469,7 @@
         - 'timestamp_type=tty'
 
     - name: stat faillock.conf
-      become: 'yes'
+      become: true
       ansible.builtin.stat:
         path: /etc/security/faillock.conf
       register: faillockconf
@@ -477,7 +477,7 @@
         - pam
 
     - name: verify faillock.conf
-      become: 'yes'
+      become: true
       ansible.builtin.lineinfile:
         dest: /etc/security/faillock.conf
         mode: 0644
@@ -503,7 +503,7 @@
       when: disable_wireless
 
     - name: create test user
-      become: 'yes'
+      become: true
       ansible.builtin.user:
         name: roletestuser
         password: "{{ 'Ansible Role Test User' | password_hash('sha512') }}"
@@ -515,7 +515,7 @@
         test_user_salt: "{{ lookup('password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits length=16') }}"
 
     - name: change test user password
-      become: 'yes'
+      become: true
       ansible.builtin.user:
         name: roletestuser
         password: "{{ 'roletestuser' | password_hash('sha512', test_user_salt, rounds=656000) }}"

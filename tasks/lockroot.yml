@@ -1,6 +1,6 @@
 ---
 - name: lock root account
-  become: 'yes'
+  become: true
   ansible.builtin.user:
     name: root
     password_lock: 'yes'

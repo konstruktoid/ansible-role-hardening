@@ -1,6 +1,6 @@
 ---
 - name: rkhunter
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/default/rkhunter.j2
     dest: /etc/default/rkhunter
@@ -17,7 +17,7 @@
     - M1049
 
 - name: rkhunter ssh root user
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "ALLOW_SSH_ROOT_USER"
     line: "ALLOW_SSH_ROOT_USER=no"
@@ -34,7 +34,7 @@
     - M1049
 
 - name: rkhunter ssh proto
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "ALLOW_SSH_PROT_V1"
     line: "ALLOW_SSH_PROT_V1=0"

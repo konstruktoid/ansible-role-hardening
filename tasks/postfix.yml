@@ -8,7 +8,7 @@
     - postfix
 
 - name: configure postfix disable_vrfy_command
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^disable_vrfy_command"
     dest: /etc/postfix/main.cf
@@ -20,7 +20,7 @@
     - postfix
 
 - name: configure postfix inet_interfaces
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^inet_interfaces"
     dest: /etc/postfix/main.cf
@@ -32,7 +32,7 @@
     - postfix
 
 - name: configure postfix smtpd_banner
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^smtpd_banner"
     dest: /etc/postfix/main.cf
@@ -44,7 +44,7 @@
     - postfix
 
 - name: configure postfix smtpd_client_restrictions
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^smtpd_client_restrictions"
     dest: /etc/postfix/main.cf

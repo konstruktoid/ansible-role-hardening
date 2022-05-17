@@ -7,7 +7,7 @@
     - motd
 
 - name: disable motd-news
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^ENABLED="
     line: "ENABLED=0"
@@ -24,7 +24,7 @@
     - motd
 
 - name: find update-motd.d files
-  become: 'yes'
+  become: true
   ansible.builtin.find:
     paths: /etc/update-motd.d
     file_type: file
@@ -33,7 +33,7 @@
     - motd
 
 - name: motd updates permissions
-  become: 'yes'
+  become: true
   ansible.builtin.file:
     dest: "{{ item.path }}"
     mode: 0444
@@ -44,7 +44,7 @@
     - motd
 
 - name: /etc/update-motd.d permission
-  become: 'yes'
+  become: true
   ansible.builtin.file:
     dest: /etc/update-motd.d
     mode: 0755

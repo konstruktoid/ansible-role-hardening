@@ -9,7 +9,7 @@
     - M1041
 
 - name: sshd system crypto policy
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     dest: /etc/sysconfig/sshd
     state: absent
@@ -30,7 +30,7 @@
     - M1041
 
 - name: configure sshd
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/ssh/sshd_config.j2
     dest: /etc/ssh/sshd_config
@@ -81,7 +81,7 @@
     - UBTU-20-010037
 
 - name: sshd host keys
-  become: 'yes'
+  become: true
   ansible.builtin.find:
     paths: /etc/ssh
     file_type: file
@@ -94,7 +94,7 @@
     - M1041
 
 - name: sshd host key permissions
-  become: 'yes'
+  become: true
   ansible.builtin.file:
     owner: root
     group: root
@@ -120,7 +120,7 @@
     - M1041
 
 - name: configure ssh client
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/ssh/ssh_config.j2
     dest: /etc/ssh/ssh_config
