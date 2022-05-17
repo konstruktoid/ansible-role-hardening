@@ -1,6 +1,6 @@
 ---
 - name: restart auditd debian
-  become: 'yes'
+  become: true
   ansible.builtin.service:
     name: auditd
     state: restarted
@@ -10,47 +10,47 @@
 
 # https://github.com/ansible/ansible/issues/22171
 - name: restart auditd redhat  # noqa command-instead-of-module
-  become: 'yes'
+  become: true
   ansible.builtin.command: service auditd restart
   when: ansible_os_family == "RedHat"
   tags:
     - CCE-80872-5
 
 - name: generate auditd
-  become: 'yes'
+  become: true
   ansible.builtin.command: augenrules
 
 - name: restart sysctl
-  become: 'yes'
+  become: true
   ansible.builtin.service:
     name: systemd-sysctl
     state: restarted
 
 - name: reload systemd
-  become: 'yes'
+  become: true
   ansible.builtin.systemd:
     daemon_reload: 'yes'
 
 - name: rkhunter propupd
-  become: 'yes'
+  become: true
   ansible.builtin.command: rkhunter --propupd
 
 - name: enable aidecheck
-  become: 'yes'
+  become: true
   ansible.builtin.systemd:
     name: aidecheck.timer
     enabled: 'yes'
     state: started
 
 - name: disable aidecheck
-  become: 'yes'
+  become: true
   ansible.builtin.systemd:
     name: aidecheck.timer
     state: stopped
     enabled: 'no'
 
 - name: mask aidecheck
-  become: 'yes'
+  become: true
   ansible.builtin.systemd:
     name: aidecheck.timer
     masked: 'yes'
@@ -58,29 +58,29 @@
     enabled: 'no'
 
 - name: restart sshd
-  become: 'yes'
+  become: true
   ansible.builtin.service:
     name: sshd
     state: restarted
 
 - name: restart postfix
-  become: 'yes'
+  become: true
   ansible.builtin.service:
     name: postfix
     state: restarted
 
 - name: apt-get autoremove
-  become: 'yes'
+  become: true
   ansible.builtin.apt:
     autoremove: 'yes'
 
 - name: apt-get clean
-  become: 'yes'
+  become: true
   ansible.builtin.apt:
     autoclean: 'yes'
 
 - name: mask apport
-  become: 'yes'
+  become: true
   ansible.builtin.systemd:
     name: apport.service
     masked: 'yes'
@@ -88,7 +88,7 @@
     state: stopped
 
 - name: mask motdnews timer
-  become: 'yes'
+  become: true
   ansible.builtin.systemd:
     name: motd-news.timer
     masked: 'yes'
@@ -96,7 +96,7 @@
     state: stopped
 
 - name: mask motdnews service
-  become: 'yes'
+  become: true
   ansible.builtin.systemd:
     name: motd-news.service
     masked: 'yes'
@@ -112,36 +112,36 @@
     - packages
 
 - name: enable haveged
-  become: 'yes'
+  become: true
   ansible.builtin.systemd:
     name: haveged
     enabled: 'yes'
     state: started
 
 - name: reboot node
-  become: 'yes'
+  become: true
   ansible.builtin.reboot:
     pre_reboot_delay: "{{ 3600 | random(start=1) }}"
 
 - name: update cracklib debian
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  become: 'yes'
+  become: true
   ansible.builtin.command: update-cracklib
   when: ansible_os_family == "Debian"
 
 - name: update cracklib redhat
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  become: 'yes'
+  become: true
   ansible.builtin.command: create-cracklib-dict /usr/share/dict/*
   when: ansible_os_family == "RedHat"
 
 - name: update grub
-  become: 'yes'
+  become: true
   ansible.builtin.command: update-grub
 
 - name: update grub2
-  become: 'yes'
+  become: true
   ansible.builtin.command: grub2-mkconfig
 ...

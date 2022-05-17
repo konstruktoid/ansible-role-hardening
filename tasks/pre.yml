@@ -1,6 +1,6 @@
 ---
 - name: create custom facts directory
-  become: 'yes'
+  become: true
   ansible.builtin.file:
     path: /etc/ansible/facts.d
     recurse: true
@@ -12,7 +12,7 @@
     - fact
 
 - name: systemd version fact
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/ansible/facts.d/systemd.fact
     dest: /etc/ansible/facts.d/systemd.fact
@@ -24,7 +24,7 @@
     - fact
 
 - name: cpuinfo rdrand fact
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/ansible/facts.d/cpuinfo.fact
     dest: /etc/ansible/facts.d/cpuinfo.fact
@@ -37,7 +37,7 @@
     - fact
 
 - name: reboot required fact
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/ansible/facts.d/reboot.fact
     dest: /etc/ansible/facts.d/reboot.fact
@@ -50,7 +50,7 @@
     - fact
 
 - name: ssh keys fact
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/ansible/facts.d/sshkeys.fact
     dest: /etc/ansible/facts.d/sshkeys.fact
@@ -67,7 +67,7 @@
     - fact
 
 - name: update subscription info on RHEL
-  become: 'yes'
+  become: true
   ansible.builtin.command: subscription-manager refresh --force
   changed_when: false
   when: ansible_distribution == "RedHat"
@@ -75,7 +75,7 @@
     - subscription
 
 - name: redhat family epel installation
-  become: 'yes'
+  become: true
   ansible.builtin.dnf:
     name: "epel-release"
     state: present
@@ -86,7 +86,7 @@
     - packages
 
 - name: install python-pexpect
-  become: 'yes'
+  become: true
   ansible.builtin.apt:
     name: python-pexpect
     state: present
@@ -98,7 +98,7 @@
     - python
 
 - name: install python3-pexpect
-  become: 'yes'
+  become: true
   ansible.builtin.apt:
     name: python3-pexpect
     state: present
@@ -110,7 +110,7 @@
     - python
 
 - name: python2-rpm installation
-  become: 'yes'
+  become: true
   ansible.builtin.dnf:
     name: "python2-rpm"
     state: present
@@ -122,7 +122,7 @@
     - yum
 
 - name: python3-rpm installation
-  become: 'yes'
+  become: true
   ansible.builtin.dnf:
     name: "python3-rpm"
     state: present
@@ -134,7 +134,7 @@
     - yum
 
 - name: python3-passlib installation
-  become: 'yes'
+  become: true
   ansible.builtin.package:
     name: python3-passlib
     state: present

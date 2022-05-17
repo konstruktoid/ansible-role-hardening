@@ -4,7 +4,7 @@
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   block:
     - name: install network-manager
-      become: 'yes'
+      become: true
       ansible.builtin.apt:
         name: network-manager
         state: present
@@ -18,7 +18,7 @@
       failed_when: wifi_state_pre.rc != 0
 
     - name: turn off wireless interfaces
-      become: 'yes'
+      become: true
       ansible.builtin.command: nmcli radio all off
       register: nmcli_radio
       changed_when: nmcli_radio.rc != 0

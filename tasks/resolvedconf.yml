@@ -1,6 +1,6 @@
 ---
 - name: resolved.conf
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/systemd/resolved.conf.j2
     dest: /etc/systemd/resolved.conf

@@ -1,6 +1,6 @@
 ---
 - name: mount /proc
-  become: 'yes'
+  become: true
   mount:
     name: /proc
     src: none
@@ -20,7 +20,7 @@
     - shm
 
 - name: mount /dev/shm with noexec
-  become: 'yes'
+  become: true
   mount:
     name: /dev/shm
     src: none
@@ -39,7 +39,7 @@
     - CIS-UBUNTU2004-1.1.9
 
 - name: create tmp.mount
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/systemd/tmp.mount.j2
     dest: /etc/systemd/system/tmp.mount
@@ -64,7 +64,7 @@
     - tmp
 
 - name: unmask tmp.mount
-  become: 'yes'
+  become: true
   ansible.builtin.systemd:
     name: tmp.mount
     masked: 'no'
@@ -75,7 +75,7 @@
     - tmp
 
 - name: start tmp.mount
-  become: 'yes'
+  become: true
   ansible.builtin.systemd:
     name: tmp.mount
     daemon_reload: 'yes'

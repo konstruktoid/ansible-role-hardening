@@ -1,6 +1,6 @@
 ---
 - name: stat init.d/rc
-  become: 'yes'
+  become: true
   ansible.builtin.stat:
     path: /etc/init.d/rc
   register: initdrc
@@ -10,7 +10,7 @@
     - M1022
 
 - name: set default rc umask
-  become: 'yes'
+  become: true
   ansible.builtin.replace:
     regexp: 'umask(\s+.*)'
     replace: "umask 077"
@@ -23,7 +23,7 @@
     - M1022
 
 - name: stat bashrc
-  become: 'yes'
+  become: true
   ansible.builtin.stat:
     path: /etc/bashrc
   register: bashrc
@@ -35,7 +35,7 @@
     - M1022
 
 - name: set default bashrc umask
-  become: 'yes'
+  become: true
   ansible.builtin.replace:
     regexp: 'umask(\s+.*)'
     replace: "umask 077"
@@ -50,7 +50,7 @@
     - M1022
 
 - name: stat csh.cshrc
-  become: 'yes'
+  become: true
   ansible.builtin.stat:
     path: /etc/csh.cshrc
   register: cshrc
@@ -61,7 +61,7 @@
     - M1022
 
 - name: set default csh.cshrc umask
-  become: 'yes'
+  become: true
   ansible.builtin.replace:
     regexp: 'umask(\s+.*)'
     replace: "umask 077"
@@ -75,7 +75,7 @@
     - M1022
 
 - name: set default profile umask
-  become: 'yes'
+  become: true
   ansible.builtin.replace:
     regexp: 'umask(\s+.*)'
     replace: "umask 077"
@@ -87,7 +87,7 @@
     - M1022
 
 - name: readonly TMOUT
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: "readonly TMOUT"
     dest: /etc/profile
@@ -99,7 +99,7 @@
     - tmout
 
 - name: set TMOUT
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: "TMOUT=600"
     dest: /etc/profile
@@ -113,7 +113,7 @@
     - UBTU-20-010013
 
 - name: export TMOUT
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: "export TMOUT"
     dest: /etc/profile

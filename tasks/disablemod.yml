@@ -1,6 +1,6 @@
 ---
 - name: disable misc kernel modules
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/disablemod.conf
     line: "install {{ item }} /bin/true"
@@ -40,7 +40,7 @@
     - M1042
 
 - name: block blacklisted kernel modules
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/blockblacklisted.conf
     line: "install {{ item }} /bin/true"

@@ -1,6 +1,6 @@
 ---
 - name: set Debian audit grub cmdline
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX {{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"'
     dest: /etc/default/grub.d/99-hardening-audit.cfg
@@ -17,7 +17,7 @@
     - CIS-UBUNTU2004-4.1.1.4
 
 - name: set RedHat audit grub cmdline
-  become: 'yes'
+  become: true
   ansible.builtin.command: 'grubby --update-kernel=ALL --args="{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"'
   register: grubby_update_kernel
   when: ansible_os_family == "RedHat"
@@ -30,7 +30,7 @@
     - CCE-80943-4
 
 - name: set audit action_mail_acct
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^action_mail_acct ="
     line: "action_mail_acct = {{ auditd_action_mail_acct }}"
@@ -43,7 +43,7 @@
     - CCE-80678-6
 
 - name: set audit admin_space_left_action
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^admin_space_left_action = "
     line: "admin_space_left_action = {{ auditd_admin_space_left_action }}"
@@ -55,7 +55,7 @@
     - auditd
 
 - name: set audit disk_error_action
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^disk_error_action ="
     line: "disk_error_action = {{ auditd_disk_error_action }}"
@@ -68,7 +68,7 @@
     - CCE-84046-2
 
 - name: set audit disk_full_action
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^disk_full_action ="
     line: "disk_full_action = {{ auditd_disk_full_action }}"
@@ -81,7 +81,7 @@
     - CCE-84045-4
 
 - name: set audit max_log_file
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^max_log_file ="
     line: "max_log_file = {{ auditd_max_log_file }}"
@@ -94,7 +94,7 @@
     - CIS-UBUNTU2004-4.1.2.1
 
 - name: set audit max_log_file_action
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^max_log_file_action ="
     line: "max_log_file_action = {{ auditd_max_log_file_action }}"
@@ -108,7 +108,7 @@
     - CIS-UBUNTU2004-4.1.2.2
 
 - name: set audit num_logs
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^num_logs ="
     line: "num_logs = {{ auditd_num_logs }}"
@@ -120,7 +120,7 @@
     - auditd
 
 - name: set audit space_left
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^space_left ="
     line: "space_left = {{ auditd_space_left }}"
@@ -132,7 +132,7 @@
     - auditd
 
 - name: set audit space_left_action
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^space_left_action ="
     line: "space_left_action = {{ auditd_space_left_action }}"
@@ -145,7 +145,7 @@
     - CCE-80684-4
 
 - name: audit.rules
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/audit/rules.d/hardening.rules.j2
     dest: /etc/audit/rules.d/hardening.rules

@@ -1,6 +1,6 @@
 ---
 - name: disable apport
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^enabled="
     line: "enabled=0"

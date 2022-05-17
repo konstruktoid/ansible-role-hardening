@@ -1,6 +1,6 @@
 ---
 - name: set path
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^PATH="
     line: 'PATH="/usr/local/bin:/usr/bin:/bin:/snap/bin"'
@@ -14,7 +14,7 @@
     - M1038
 
 - name: path script
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/profile.d/initpath.sh.j2
     dest: /etc/profile.d/initpath.sh

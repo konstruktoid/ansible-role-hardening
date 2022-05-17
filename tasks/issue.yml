@@ -1,6 +1,6 @@
 ---
 - name: add motd
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/motd.j2
     dest: /etc/motd
@@ -15,7 +15,7 @@
     - CIS-UBUNTU2004-1.7.4
 
 - name: add issue and issue.net
-  become: 'yes'
+  become: true
   ansible.builtin.template:
     src: etc/issue.j2
     dest: "{{ item }}"

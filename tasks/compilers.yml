@@ -1,6 +1,6 @@
 ---
 - name: register compilers
-  become: 'yes'
+  become: true
   ansible.builtin.find:
     paths: ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/snap/bin']
     patterns: "{{ compilers }}"
@@ -12,7 +12,7 @@
     - compilers
 
 - name: restrict compiler access
-  become: 'yes'
+  become: true
   ansible.builtin.file:
     path: "{{ item.path }}"
     owner: root

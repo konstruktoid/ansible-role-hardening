@@ -1,6 +1,6 @@
 ---
 - name: remove cron.deny and at.deny
-  become: 'yes'
+  become: true
   ansible.builtin.file:
     path: "{{ item }}"
     state: absent
@@ -12,7 +12,7 @@
     - cron
 
 - name: clean cron and at
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     path: "{{ item }}"
     regexp: "^(?!root).*$"
@@ -27,7 +27,7 @@
     - CIS-UBUNTU2004-5.1.9
 
 - name: allow root cron and at
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     path: "{{ item }}"
     line: "root"
@@ -42,7 +42,7 @@
     - cron
 
 - name: mask atd
-  become: 'yes'
+  become: true
   ansible.builtin.systemd:
     name: atd
     masked: 'yes'
@@ -55,7 +55,7 @@
     - systemd
 
 - name: cron permissions
-  become: 'yes'
+  become: true
   ansible.builtin.file:
     path: "{{ item }}"
     mode: 0700
@@ -76,7 +76,7 @@
     - CIS-UBUNTU2004-5.1.7
 
 - name: crontab permissions
-  become: 'yes'
+  become: true
   ansible.builtin.file:
     path: /etc/crontab
     mode: 0600

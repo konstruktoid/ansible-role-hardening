@@ -1,6 +1,6 @@
 ---
 - name: sudo use_pty
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: "Defaults use_pty"
     dest: /etc/sudoers.d/011_use_pty
@@ -12,7 +12,7 @@
     - CIS-UBUNTU2004-5.2.2
 
 - name: sudo configure logfile
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: 'Defaults logfile="/var/log/sudo.log"'
     dest: /etc/sudoers.d/012_logfile
@@ -24,7 +24,7 @@
     - CIS-UBUNTU2004-5.2.3
 
 - name: sudo disable pwfeedback
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: "Defaults !pwfeedback"
     dest: /etc/sudoers.d/013_pwfeedback
@@ -35,7 +35,7 @@
     - sudo
 
 - name: sudo disable visiblepw
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: "Defaults !visiblepw"
     dest: /etc/sudoers.d/014_visiblepw
@@ -46,13 +46,13 @@
     - sudo
 
 - name: remove inconsistently named sudoer file
-  become: 'yes'
+  become: true
   ansible.builtin.file:
     path: /etc/sudoers.d/15_timeout
     state: absent
 
 - name: sudo passwd_timeout
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: "Defaults passwd_timeout=1"
     dest: /etc/sudoers.d/015_passwdtimeout
@@ -63,7 +63,7 @@
     - sudo
 
 - name: sudo timestamp_timeout
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: "Defaults timestamp_timeout=5"
     dest: /etc/sudoers.d/016_timestamptimeout
@@ -74,7 +74,7 @@
     - sudo
 
 - name: sudo timestamp_type
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: "Defaults timestamp_type=tty"
     dest: /etc/sudoers.d/017_timestamptype
@@ -86,7 +86,7 @@
     - M1028
 
 - name: create su group sugroup
-  become: 'yes'
+  become: true
   ansible.builtin.group:
     name: sugroup
     state: present
@@ -95,7 +95,7 @@
     - CIS-UBUNTU2004-5.7
 
 - name: configure su group
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: "auth required pam_wheel.so use_uid group=sugroup"
     dest: /etc/pam.d/su

@@ -14,7 +14,7 @@
     - prelink
 
 - name: disable prelinking
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     line: "PRELINKING=no"
     dest: /etc/sysconfig/prelink
@@ -26,7 +26,7 @@
     - prelink
 
 - name: return to non-prelinked state
-  become: 'yes'
+  become: true
   ansible.builtin.command: prelink -ua
   when: sysconfig_prelink.stat.exists or etc_prelink.stat.exists
   tags:

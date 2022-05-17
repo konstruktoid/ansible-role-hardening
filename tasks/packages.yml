@@ -6,7 +6,7 @@
     - packages
 
 - name: pre stat needrestart configuration directory
-  become: 'yes'
+  become: true
   ansible.builtin.stat:
     path: /etc/needrestart/conf.d
   register: needrestart_directory_created
@@ -15,7 +15,7 @@
     - packages
 
 - name: create needrestart directory
-  become: 'yes'
+  become: true
   ansible.builtin.file:
     path: /etc/needrestart/conf.d
     state: directory
@@ -29,7 +29,7 @@
     - packages
 
 - name: stat needrestart configuration directory
-  become: 'yes'
+  become: true
   ansible.builtin.stat:
     path: /etc/needrestart/conf.d
   register: needrestart_directory
@@ -48,7 +48,7 @@
     - packages
 
 - name: configure needrestart
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     path: /etc/needrestart/conf.d/00-restart.conf
     line: "$nrconf{restart} = 'l';"
@@ -62,7 +62,7 @@
     - packages
 
 - name: debian family package installation
-  become: 'yes'
+  become: true
   ansible.builtin.apt:
     name: "{{ packages_debian }}"
     state: present
@@ -78,7 +78,7 @@
     - UBTU-20-010005
 
 - name: ubuntu package installation
-  become: 'yes'
+  become: true
   ansible.builtin.apt:
     name: "{{ packages_ubuntu }}"
     state: present
@@ -89,7 +89,7 @@
     - packages
 
 - name: ubuntu update-notifier-common package installation
-  become: 'yes'
+  become: true
   ansible.builtin.apt:
     name: "update-notifier-common"
     state: present
@@ -100,7 +100,7 @@
     - packages
 
 - name: redhat family package installation
-  become: 'yes'
+  become: true
   ansible.builtin.dnf:
     name: "{{ packages_redhat }}"
     state: present
@@ -117,7 +117,7 @@
     - M1049
 
 - name: apt purge package removal
-  become: 'yes'
+  become: true
   ansible.builtin.apt:
     name: "{{ packages_blocklist }}"
     state: absent
@@ -131,7 +131,7 @@
     - M1042
 
 - name: generic package removal
-  become: 'yes'
+  become: true
   ansible.builtin.package:
     name: "{{ packages_blocklist }}"
     state: absent
@@ -156,7 +156,7 @@
     - M1042
 
 - name: virtualbox package installation
-  become: 'yes'
+  become: true
   ansible.builtin.apt:
     name: "{{ packages }}"
     state: present
@@ -175,7 +175,7 @@
     - virtualbox
 
 - name: vmware package installation
-  become: 'yes'
+  become: true
   ansible.builtin.package:
     name: open-vm-tools
     state: present
@@ -185,7 +185,7 @@
     - vmware
 
 - name: qemu package installation
-  become: 'yes'
+  become: true
   ansible.builtin.package:
     name: qemu-guest-agent
     state: present
@@ -195,7 +195,7 @@
     - qemu
 
 - name: rng-tools package installation
-  become: 'yes'
+  become: true
   ansible.builtin.package:
     name: rng-tools
     state: present
@@ -206,7 +206,7 @@
     - CCE-82968-9
 
 - name: stat sysstat default
-  become: 'yes'
+  become: true
   ansible.builtin.stat:
     path: /etc/default/sysstat
   register: default_sysstat
@@ -214,7 +214,7 @@
     - sysstat
 
 - name: enable sysstat
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     regexp: "^ENABLED"
     line: 'ENABLED="true"'
@@ -228,7 +228,7 @@
     - sysstat
 
 - name: remove unneeded debian dependency packages
-  become: 'yes'
+  become: true
   ansible.builtin.apt:
     autoclean: 'yes'
     autoremove: 'yes'

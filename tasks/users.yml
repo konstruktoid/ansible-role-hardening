@@ -1,6 +1,6 @@
 ---
 - name: remove users
-  become: 'yes'
+  become: true
   ansible.builtin.user:
     name: "{{ item }}"
     state: absent
@@ -26,7 +26,7 @@
     - M1022
 
 - name: set user /home directories permission
-  become: 'yes'
+  become: true
   ansible.builtin.file:
     mode: 0750
     path: "{{ item.path }}"

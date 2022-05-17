@@ -1,6 +1,6 @@
 ---
 - name: disable file system kernel modules
-  become: 'yes'
+  become: true
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/disablefs.conf
     line: "install {{ item }} /bin/true"
