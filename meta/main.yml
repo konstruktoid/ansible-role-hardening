@@ -12,7 +12,7 @@ galaxy_info:
         - bullseye
     - name: EL
       versions:
-        - 8
+        - "8"
     - name: Ubuntu
       versions:
         - focal
