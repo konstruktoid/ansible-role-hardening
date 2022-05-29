@@ -1,5 +1,5 @@
 ---
-- name: resolved.conf
+- name: configure systemd resolved.conf
   become: true
   ansible.builtin.template:
     src: etc/systemd/resolved.conf.j2
@@ -14,4 +14,19 @@
     - resolved
     - systemd
     - CCE-84049-6
+
+- name: add nameserver to resolv.conf
+  become: true
+  ansible.builtin.lineinfile:
+    dest: /etc/resolv.conf
+    line: "nameserver {{ item }}"
+    mode: 0644
+    owner: root
+    group: root
+    state: present
+  with_items: "{{ dns | split }}"
+  when: ansible_os_family == "RedHat"
+
+- name: run handlers to reload systemd
+  ansible.builtin.meta: flush_handlers
 ...

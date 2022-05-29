@@ -1,5 +1,11 @@
 ---
-- name: configure local facts, install pexpect and epel-release
+- name: install local facts
+  ansible.builtin.include_tasks: facts.yml
+
+- name: configure dns
+  ansible.builtin.include_tasks: resolvedconf.yml
+
+- name: install epel-release and python dependencies
   ansible.builtin.include_tasks: pre.yml
 
 - name: install and configure firewalls
