@@ -90,26 +90,39 @@
     - name: stat /etc/ssh/sshd_config
       ansible.builtin.stat:
         path: '/etc/ssh/sshd_config'
-      register: perm_sshd_config
+      register: sshd_config_file
 
     - name: stat /etc/ssh/ssh_config
       ansible.builtin.stat:
         path: '/etc/ssh/ssh_config'
-      register: perm_ssh_config
+      register: ssh_config_file
+
+    - name: stat /etc/ssh/sshd_config.d/hardening.conf
+      ansible.builtin.stat:
+        path: '/etc/ssh/sshd_config.d/hardening.conf'
+      register: sshd_config_directory
 
     - name: assert /etc/ssh/ssh_config permissions
       ansible.builtin.assert:
         that:
-          - perm_ssh_config.stat.mode == "0644"
-        success_msg: "{{ perm_ssh_config.stat.path }} has correct permissions: {{ perm_ssh_config.stat.mode }}"
-        fail_msg: "{{ perm_ssh_config.stat.path }} permissions are incorrect: {{ perm_ssh_config.stat.mode }}"
+          - ssh_config_file.stat.mode == "0644"
+        success_msg: "{{ ssh_config_file.stat.path }} has correct permissions: {{ ssh_config_file.stat.mode }}"
+        fail_msg: "{{ ssh_config_file.stat.path }} permissions are incorrect: {{ ssh_config_file.stat.mode }}"
 
     - name: assert /etc/ssh/sshd_config permissions
       ansible.builtin.assert:
         that:
-          - perm_sshd_config.stat.mode == "0600"
-        success_msg: "{{ perm_sshd_config.stat.path }} has correct permissions: {{ perm_sshd_config.stat.mode }}"
-        fail_msg: "{{ perm_sshd_config.stat.path }} permissions are incorrect: {{ perm_sshd_config.stat.mode }}"
+          - sshd_config_file.stat.mode == "0600"
+        success_msg: "{{ sshd_config_file.stat.path }} has correct permissions: {{ sshd_config_file.stat.mode }}"
+        fail_msg: "{{ sshd_config_file.stat.path }} permissions are incorrect: {{ sshd_config_file.stat.mode }}"
+
+    - name: assert /etc/ssh/sshd_config.d/hardening.conf permissions
+      ansible.builtin.assert:
+        that:
+          - sshd_config_directory.stat.mode == "0600"
+        success_msg: "{{ sshd_config_directory.stat.path }} has correct permissions: {{ sshd_config_directory.stat.mode }}"
+        fail_msg: "{{ sshd_config_directory.stat.path }} permissions are incorrect: {{ sshd_config_directory.stat.mode }}"
+      when: sshd_config_directory.stat.exists
 
     - name: verify sshd_config PermitRootLogin configuration
       become: true
@@ -120,6 +133,17 @@
       check_mode: 'yes'
       register: sshd_config
       failed_when: sshd_config is changed
+
+    - name: verify sshd_config.d PermitRootLogin configuration
+      become: true
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config.d/hardening.conf
+        line: "PermitRootLogin yes"
+        state: absent
+      check_mode: 'yes'
+      register: sshd_config_d
+      failed_when: sshd_config_d is changed
+      when: sshd_config_directory.stat.exists
 
     - name: verify sshd_config configuration
       become: true
@@ -161,11 +185,88 @@
         - PrintMotd {{ sshd_print_motd }}
         - RekeyLimit {{ sshd_rekey_limit }}
         - StrictModes {{ sshd_strict_modes }}
+        - TCPKeepAlive {{ sshd_tcp_keep_alive }}
+        - UseDNS {{ sshd_use_dns }}
+        - UsePAM {{ sshd_use_pam }}
+        - X11Forwarding {{ sshd_x11_forwarding }}
+      when: not sshd_config_directory.stat.exists
+
+    - name: verify sshd_config.d configuration
+      become: true
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config.d/hardening.conf
+        line: "{{ item }}"
+        state: present
+      check_mode: 'yes'
+      register: sshd_config
+      failed_when: sshd_config is changed
+      with_items:
+        - AllowGroups vagrant sudo
+        - AllowAgentForwarding {{ sshd_allow_agent_forwarding }}
+        - AllowTcpForwarding {{ sshd_allow_tcp_forwarding }}
+        - AuthenticationMethods {{ sshd_authentication_methods }}
+        - Banner {{ sshd_banner }}
+        - ChallengeResponseAuthentication {{ sshd_challenge_response_authentication }}
+        - Ciphers {{ sshd_ciphers }}
+        - ClientAliveCountMax {{ sshd_client_alive_count_max|int }}
+        - ClientAliveInterval {{ sshd_client_alive_interval|int }}
+        - Compression {{ sshd_compression }}
+        - GSSAPIAuthentication {{ sshd_gssapi_authentication }}
+        - HostbasedAuthentication {{ sshd_hostbased_authentication }}
+        - IgnoreUserKnownHosts {{ sshd_ignore_user_known_hosts }}
+        - KerberosAuthentication {{ sshd_kerberos_authentication }}
+        - KexAlgorithms {{ sshd_kex_algorithms }}
+        - LogLevel {{ sshd_log_level }}
+        - LoginGraceTime {{ sshd_login_grace_time|int }}
+        - Macs {{ sshd_macs }}
+        - MaxAuthTries {{ sshd_max_auth_tries|int }}
+        - MaxSessions {{ sshd_max_sessions|int }}
+        - MaxStartups {{ sshd_max_startups }}
+        - PasswordAuthentication {{ sshd_password_authentication }}
+        - PermitEmptyPasswords {{ sshd_permit_empty_passwords }}
+        - PermitRootLogin {{ sshd_permit_root_login }}
+        - PermitUserEnvironment {{ sshd_permit_user_environment }}
+        - Port {{ sshd_port|int }}
+        - PrintLastLog {{ sshd_print_last_log }}
+        - PrintMotd {{ sshd_print_motd }}
+        - RekeyLimit {{ sshd_rekey_limit }}
+        - StrictModes {{ sshd_strict_modes }}
         - Subsystem {{ sshd_subsystem }}
         - TCPKeepAlive {{ sshd_tcp_keep_alive }}
         - UseDNS {{ sshd_use_dns }}
         - UsePAM {{ sshd_use_pam }}
         - X11Forwarding {{ sshd_x11_forwarding }}
+      when: sshd_config_directory.stat.exists
+
+    - name: verify sshd runtime configuration
+      become: true
+      environment:
+        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      ansible.builtin.command: sshd -T
+      register: sshd_config
+      changed_when: false
+      failed_when: item not in sshd_config.stdout_lines
+      with_items:
+        - allowgroups sudo
+        - allowgroups vagrant
+        - allowagentforwarding {{ sshd_allow_agent_forwarding }}
+        - allowtcpforwarding {{ sshd_allow_tcp_forwarding }}
+        - authenticationmethods {{ sshd_authentication_methods }}
+        - banner {{ sshd_banner }}
+        - clientalivecountmax {{ sshd_client_alive_count_max|int }}
+        - clientaliveinterval {{ sshd_client_alive_interval|int }}
+        - compression {{ sshd_compression }}
+        - logingracetime {{ sshd_login_grace_time|int }}
+        - macs {{ sshd_macs }}
+        - maxauthtries {{ sshd_max_auth_tries|int }}
+        - maxsessions {{ sshd_max_sessions|int }}
+        - maxstartups {{ sshd_max_startups }}
+        - permitrootlogin {{ sshd_permit_root_login }}
+        - port {{ sshd_port|int }}
+        - subsystem {{ sshd_subsystem }}
+        - usedns {{ sshd_use_dns }}
+        - usepam {{ sshd_use_pam }}
+        - x11forwarding {{ sshd_x11_forwarding }}
 
     - name: verify ssh_config configuration
       become: true

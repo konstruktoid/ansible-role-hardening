@@ -1,8 +1,4 @@
 # {{ ansible_managed }}
-{% if sshd_config_d_exists.stat.exists and sshd_config_d_exists.stat.isdir %}
-Include /etc/ssh/sshd_config.d/*.conf
-{% endif %}
-
 AcceptEnv {{ sshd_accept_env }}
 AllowGroups {{ sshd_allow_groups }}
 AllowAgentForwarding {{ sshd_allow_agent_forwarding }}

@@ -28,6 +28,7 @@ provisioner:
       focal:
         block_blacklisted: 'true'
         disable_wireless: 'true'
+        install_aide: 'false'
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
         suid_sgid_permissions: 'false'
@@ -36,6 +37,7 @@ provisioner:
         disable_wireless: 'true'
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
+        suid_sgid_permissions: false
 platforms:
   - name: almalinux
     box: almalinux/8
