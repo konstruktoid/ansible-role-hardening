@@ -26,7 +26,4 @@
     state: present
   with_items: "{{ dns | split }}"
   when: ansible_os_family == "RedHat"
-
-- name: run handlers to reload systemd
-  ansible.builtin.meta: flush_handlers
 ...
