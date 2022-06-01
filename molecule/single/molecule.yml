@@ -17,23 +17,20 @@ provisioner:
   log: true
   inventory:
     host_vars:
-      almalinux:
+      focal:
+        block_blacklisted: 'false'
+        disable_wireless: 'true'
+        install_aide: 'false'
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
+        suid_sgid_permissions: 'false'
 platforms:
-  - name: arctic
-    box: "almalinux/8"
+  - name: focal
+    box: "bento/ubuntu-20.04"
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
-      - 'vbguest.auto_update = false'
-    memory: 1024
-  - name: emerald
-    box: "almalinux/9"
-    config_options:
-      vm.boot_timeout: 600
-    instance_raw_config_args:
-      - 'vbguest.auto_update = false'
+      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
 verifier:
   name: ansible
@@ -42,7 +39,7 @@ lint: |
   ansible-lint --exclude .git --exclude .github --exclude tests/
   yamllint -d '{"extends":"default","ignore":".tox*\n.git*","rules":{"line-length":{"max":120,"level":"warning"}}}' .
 scenario:
-  name: almalinux
+  name: single
   create_sequence:
     - dependency
     - create
