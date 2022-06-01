@@ -1,5 +1,5 @@
 # {{ ansible_managed }}
-{% if ssh_config_d_exists.stat.exists and ssh_config_d_exists.stat.isdir %}
+{% if ssh_config_d.stat.exists and ssh_config_d.stat.isdir %}
 Include /etc/ssh/ssh_config.d/*.conf
 {% endif %}
 
