@@ -39,20 +39,20 @@ provisioner:
         sshd_allow_groups: "vagrant sudo"
         suid_sgid_permissions: false
 platforms:
-  - name: almalinux
-    box: almalinux/8
+  - name: arctic
+    box: "almalinux/8"
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - 'vbguest.auto_update = false'
     memory: 1024
   - name: bullseye
-    box: debian/bullseye64
+    box: "debian/bullseye64"
     instance_raw_config_args:
       - 'vbguest.auto_update = false'
     memory: 1024
   - name: focal
-    box: bento/ubuntu-20.04
+    box: "bento/ubuntu-20.04"
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
