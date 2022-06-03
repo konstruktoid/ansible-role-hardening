@@ -59,7 +59,7 @@
   ansible.builtin.dnf:
     name: "python3-rpm"
     state: present
-  when: ansible_distribution == "RedHat" and ansible_python.version.major <= 3
+  when: ansible_distribution == "RedHat" and ansible_python.version.major >= 3
   tags:
     - dnf
     - packages
@@ -71,12 +71,38 @@
   ansible.builtin.package:
     name: python3-passlib
     state: present
+  register: python3_passlib
+  failed_when: python3_passlib.rc != 0 and not ansible_distribution == "AlmaLinux"
   tags:
     - apt
     - dnf
     - packages
     - python
     - yum
+
+- name: pip installation
+  block:
+    - name: python3-pip installation
+      become: true
+      ansible.builtin.package:
+        name: "python3-pip"
+        state: present
+      tags:
+        - dnf
+        - packages
+        - python
+        - yum
+
+    - name: pip passlib installation
+      become: true
+      ansible.builtin.pip:
+        name: "passlib"
+        state: present
+      tags:
+        - dnf
+        - packages
+        - python
+  when: python3_passlib.rc != 0
 
 - name: EFI or UEFI booting check
   ansible.builtin.set_fact:
