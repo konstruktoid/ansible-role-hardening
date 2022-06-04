@@ -72,7 +72,10 @@
     name: python3-passlib
     state: present
   register: python3_passlib
-  failed_when: python3_passlib.rc != 0 and not ansible_distribution == "AlmaLinux"
+  failed_when:
+    - python3_passlib.rc is defined
+    - python3_passlib.rc != 0
+    - not ansible_distribution == "AlmaLinux"
   tags:
     - apt
     - dnf
