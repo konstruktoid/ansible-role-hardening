@@ -67,7 +67,7 @@
     state: present
     key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
   with_items:
-    - "{{ redhat_rpm_key }}"
+    - "{{ redhat_signing_keys }}"
   when: ansible_os_family == "RedHat"
   tags:
     - dnf
@@ -145,7 +145,7 @@
         state: present
         key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
       with_items:
-        - "{{ epel8_rpm_keys }}"
+        - "{{ epel8_signing_keys }}"
       tags:
         - dnf
         - rpm
@@ -173,7 +173,7 @@
         state: present
         key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
       with_items:
-        - "{{ epel7_rpm_keys }}"
+        - "{{ epel7_signing_keys }}"
       tags:
         - rpm
         - yum
