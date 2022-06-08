@@ -50,7 +50,7 @@
     state: present
     create: 'yes'
   with_items:
-    - "{{ modprobe_blacklist.stdout_lines | sort }}"
+    - "{{ modprobe_blacklist.stdout_lines | sort }}"
   when: block_blacklisted|bool
   tags:
     - modprobe
