@@ -24,6 +24,10 @@
 - name: disable file system kernel modules
   ansible.builtin.include_tasks: disablefs.yml
 
+- name: disable IPv6
+  ansible.builtin.include_tasks: ipv6.yml
+  when: disable_ipv6
+
 - name: configure systemd system and users
   ansible.builtin.include_tasks: systemdconf.yml
 
