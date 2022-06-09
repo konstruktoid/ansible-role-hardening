@@ -148,13 +148,24 @@
     - UBTU-20-010036
     - UBTU-20-010037
 
-- name: remove possible Subsystem duplicate
+- name: See if an override sshd config file defines a Subsystem
+  shell: "grep -Iirn '^Subsystem.*' ."
+  args:
+    chdir: "/etc/ssh/sshd_config.d"
+  register: grep_output
+  ignore_errors: true
+
+- name: remove possible Subsystem duplicate when an override defines one
   become: true
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: ^Subsystem.*
     state: absent
-  when: sshd_config_d.stat.exists and grep_include.rc == 0
+  when:
+    - sshd_config_d.stat.exists
+    - grep_include.rc == 0
+    - grep_output.stdout != ""
+    - grep_output.stdout_lines|length > 0
 
 - name: sshd host keys
   become: true
