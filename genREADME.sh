@@ -84,7 +84,7 @@ None.
 ...
 \`\`\`
 
-## Note regarding Debian family UFW firewall rules
+## Note regarding UFW firewall rules
 
 Instead of resetting \`ufw\` every run and by doing so causing network traffic
 disruption, the role deletes every \`ufw\` rule without
@@ -96,8 +96,7 @@ the \`sshd_port\` and \`ufw_outgoing_traffic\` variables.
 
 ## Task Execution and Structure
 
-See [STRUCTURE.md](STRUCTURE.md) for a detailed map regarding all tasks
-and the role structure.
+See [STRUCTURE.md](STRUCTURE.md) for tree of the role structure.
 
 ## Role testing
 
