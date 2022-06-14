@@ -15,6 +15,7 @@ provisioner:
   inventory:
     host_vars:
       arctic:
+        disable_ipv6: 'true'
         disable_wireless: 'true'
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
@@ -33,6 +34,7 @@ provisioner:
         sshd_allow_groups: "vagrant sudo"
         suid_sgid_permissions: 'false'
       jammy:
+        disable_ipv6: 'true'
         block_blacklisted: 'true'
         disable_wireless: 'true'
         sshd_admin_net: "0.0.0.0/0"

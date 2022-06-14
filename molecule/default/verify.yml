@@ -447,6 +447,35 @@
       changed_when: audit_grub_cfg.rc != 0
       when: ansible_os_family == "Debian"
 
+    - name: verify RedHat grub IPv6 settings
+      become: true
+      ansible.builtin.shell: |
+        set -o pipefail
+        grep CMDLINE /etc/default/grub | grep "ipv6.disable=1"
+      register: audit_grubenv
+      failed_when: audit_grubenv.rc != 0
+      changed_when: audit_grubenv.rc != 0
+      when: ansible_os_family == "RedHat" and disable_ipv6
+
+    - name: verify Debian grub IPv6 settings
+      become: true
+      ansible.builtin.shell: grep "linux.*ipv6.disable=1" /boot/grub/grub.cfg
+      register: audit_grub_cfg
+      failed_when: audit_grub_cfg.rc != 0
+      changed_when: audit_grub_cfg.rc != 0
+      when: ansible_os_family == "Debian" and disable_ipv6
+
+    - name: verify IPv6 sysctl configuration
+      become: true
+      ansible.builtin.shell: grep -R "^{{ item }}$" /etc/sysctl.*
+      register: sysctl_config
+      failed_when: sysctl_config.rc != 0
+      changed_when: sysctl_config.rc != 0
+      with_items:
+        - net.ipv6.conf.all.disable_ipv6=1
+        - net.ipv6.conf.default.disable_ipv6=1
+      when: disable_ipv6
+
     - name: find grub config files
       become: true
       ansible.builtin.find:
