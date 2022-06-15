@@ -62,6 +62,7 @@ suid_sgid_blocklist:
   - /bin/ip
   - /bin/join
   - /bin/journalctl
+  - /bin/ld.so
   - /bin/less
   - /bin/ln
   - /bin/loginctl
@@ -204,6 +205,7 @@ suid_sgid_blocklist:
   - /usr/bin/chage
   - /usr/bin/chfn
   - /usr/bin/chmod
+  - /usr/bin/choom
   - /usr/bin/chown
   - /usr/bin/chsh
   - /usr/bin/cmp
@@ -255,6 +257,7 @@ suid_sgid_blocklist:
   - /usr/bin/ispell
   - /usr/bin/join
   - /usr/bin/journalctl
+  - /usr/bin/ld.so
   - /usr/bin/less
   - /usr/bin/ln
   - /usr/bin/loginctl
@@ -296,8 +299,10 @@ suid_sgid_blocklist:
   - /usr/bin/perl
   - /usr/bin/pic
   - /usr/bin/pico
+  - /usr/bin/pidstat
   - /usr/bin/ping
   - /usr/bin/ping6
+  - /usr/bin/pip
   - /usr/bin/pkexec
   - /usr/bin/pr
   - /usr/bin/ptx
@@ -346,6 +351,7 @@ suid_sgid_blocklist:
   - /usr/bin/tar
   - /usr/bin/taskset
   - /usr/bin/tbl
+  - /usr/bin/tclsh
   - /usr/bin/tee
   - /usr/bin/telnet
   - /usr/bin/tic
@@ -380,6 +386,8 @@ suid_sgid_blocklist:
   - /usr/bin/zip
   - /usr/bin/zsoelim
   - /usr/lib/klibc/bin/mksh-static
+  - /usr/local/bin/ansible-playbook
+  - /usr/local/bin/pip
   - /usr/sbin/agetty
   - /usr/sbin/arp
   - /usr/sbin/bridge
