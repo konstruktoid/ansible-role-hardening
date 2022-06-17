@@ -17,9 +17,13 @@
 
     - name: include default vars
       ansible.builtin.include_vars:
-        dir: ../../defaults/
+        dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/defaults/"
         extensions:
           - 'yml'
+
+    - name: include host vars
+      ansible.builtin.include_vars:
+        file: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/inventory/host_vars/{{ ansible_hostname }}"
 
     - name: verify auditd configuration
       become: true
