@@ -3,7 +3,7 @@ sshd_accept_env: LANG LC_*
 sshd_admin_net:
   - 192.168.0.0/24
   - 192.168.1.0/24
-sshd_allow_agent_forwarding: 'no'
+sshd_allow_agent_forwarding: "no"
 sshd_allow_groups: sudo
 sshd_allow_tcp_forwarding: 'no'
 sshd_authentication_methods: any
@@ -17,6 +17,7 @@ sshd_gssapi_authentication: 'no'
 sshd_hostbased_authentication: 'no'
 sshd_ignore_user_known_hosts: 'yes'
 sshd_kerberos_authentication: 'no'
+sshd_host_key_algorithms: ssh-ed25519,ssh-ed25519-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,rsa-sha2-256,rsa-sha2-512,rsa-sha2-256-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com
 sshd_kex_algorithms: curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
 sshd_log_level: VERBOSE
 sshd_login_grace_time: 20
