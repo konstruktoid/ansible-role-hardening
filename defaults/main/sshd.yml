@@ -3,7 +3,7 @@ sshd_accept_env: LANG LC_*
 sshd_admin_net:
   - 192.168.0.0/24
   - 192.168.1.0/24
-sshd_allow_agent_forwarding: "no"
+sshd_allow_agent_forwarding: 'no'
 sshd_allow_groups: sudo
 sshd_allow_tcp_forwarding: 'no'
 sshd_authentication_methods: any
