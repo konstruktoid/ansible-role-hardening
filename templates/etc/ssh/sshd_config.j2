@@ -14,6 +14,7 @@ GSSAPIAuthentication {{ sshd_gssapi_authentication }}
 HostbasedAuthentication {{ sshd_hostbased_authentication }}
 IgnoreUserKnownHosts {{ sshd_ignore_user_known_hosts }}
 KerberosAuthentication {{ sshd_kerberos_authentication }}
+HostKeyAlgorithms {{ sshd_host_key_algorithms }}
 KexAlgorithms {{ sshd_kex_algorithms }}
 LogLevel {{ sshd_log_level }}
 LoginGraceTime {{ sshd_login_grace_time|int }}
