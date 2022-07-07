@@ -21,14 +21,20 @@ Requires Ansible >= ${ANSIBLE_V}.
 Available on
 [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
 
-\`\`\`console
-Do not use this role without first testing in a non-operational environment.
-\`\`\`
-
 [AlmaLinux 8](https://almalinux.org/),
 [Debian 11](https://www.debian.org/),
 Ubuntu [20.04 LTS (Focal Fossa)](https://releases.ubuntu.com/focal/) and
 [22.04 LTS (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/) are supported.
+
+> **Note**
+>
+> Do not use this role without first testing in a non-operational environment.
+
+> **Note**
+>
+> There is a [SLSA](https://slsa.dev/) artifact present under the
+> [slsa action workflow](https://github.com/konstruktoid/ansible-role-hardening/actions/workflows/slsa.yml)
+> for verification.
 
 ## Dependencies
 
