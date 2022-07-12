@@ -4,6 +4,7 @@
 
 ```console
 almalinux/8
+almalinux/9
 bento/debian-10
 bento/ubuntu-20.04
 debian/bullseye64

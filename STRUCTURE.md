@@ -1,4 +1,7 @@
-# Task Structure
+# Task Execution and Structure
+
+## Tasks
+![Task execution order](./images/ansible-role-hardening.svg)
 
 ## Structure
 
@@ -16,6 +19,7 @@
 │       ├── disablewireless.yml
 │       ├── dns.yml
 │       ├── firewall.yml
+│       ├── ipv6.yml
 │       ├── limits.yml
 │       ├── misc.yml
 │       ├── module_blocklists.yml
@@ -27,6 +31,11 @@
 │       ├── suid_sgid_blocklist.yml
 │       ├── sysctl.yml
 │       └── users.yml
+├── files
+│   └── usr
+│       └── share
+│           └── dict
+│               └── passwords.list
 ├── genREADME.sh
 ├── handlers
 │   └── main.yml
@@ -45,6 +54,8 @@
 │   │   ├── molecule.yml
 │   │   └── verify.yml
 │   ├── redhat
+│   │   └── molecule.yml
+│   ├── single
 │   │   └── molecule.yml
 │   └── ubuntu
 │       └── molecule.yml
@@ -69,9 +80,11 @@
 │   ├── disablenet.yml
 │   ├── disablewireless.yml
 │   ├── extras.yml
+│   ├── facts.yml
 │   ├── firewall.yml
 │   ├── fstab.yml
 │   ├── hosts.yml
+│   ├── ipv6.yml
 │   ├── issue.yml
 │   ├── journalconf.yml
 │   ├── limits.yml
@@ -142,20 +155,16 @@
 │   │       ├── timesyncd.conf.j2
 │   │       ├── tmp.mount.j2
 │   │       └── user.conf.j2
-│   ├── lib
-│   │   └── systemd
-│   │       └── system
-│   │           ├── aidecheck.service.j2
-│   │           └── aidecheck.timer.j2
-│   └── usr
-│       └── share
-│           └── dict
-│               └── passwords.list.j2
+│   └── lib
+│       └── systemd
+│           └── system
+│               ├── aidecheck.service.j2
+│               └── aidecheck.timer.j2
 ├── tests
 │   ├── debug_facts.yml
 │   ├── inventory
 │   └── test.yml
 └── tox.ini
 
-32 directories, 120 files
+34 directories, 124 files
 ```
