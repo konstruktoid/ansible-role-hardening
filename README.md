@@ -9,14 +9,20 @@ Requires Ansible >= 2.10.
 Available on
 [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
 
-```console
-Do not use this role without first testing in a non-operational environment.
-```
-
 [AlmaLinux 8](https://almalinux.org/),
 [Debian 11](https://www.debian.org/),
 Ubuntu [20.04 LTS (Focal Fossa)](https://releases.ubuntu.com/focal/) and
 [22.04 LTS (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/) are supported.
+
+> **Note**
+>
+> Do not use this role without first testing in a non-operational environment.
+
+> **Note**
+>
+> There is a [SLSA](https://slsa.dev/) artifact present under the
+> [slsa action workflow](https://github.com/konstruktoid/ansible-role-hardening/actions/workflows/slsa.yml)
+> for file checksum verification.
 
 ## Dependencies
 
@@ -52,13 +58,13 @@ None.
   any_errors_fatal: true
   tasks:
     - name: install git
-      become: 'yes'
+      become: true
       package:
         name: git
         state: present
 
     - name: checkout konstruktoid.hardening
-      become: 'yes'
+      become: true
       ansible.builtin.git:
         repo: 'https://github.com/konstruktoid/ansible-role-hardening'
         dest: /etc/ansible/roles/konstruktoid.hardening
@@ -77,7 +83,7 @@ None.
 ...
 ```
 
-## Note regarding Debian family UFW firewall rules
+## Note regarding firewall rules
 
 Instead of resetting `ufw` every run and by doing so causing network traffic
 disruption, the role deletes every `ufw` rule without
@@ -89,8 +95,7 @@ the `sshd_port` and `ufw_outgoing_traffic` variables.
 
 ## Task Execution and Structure
 
-See [STRUCTURE.md](STRUCTURE.md) for a detailed map regarding all tasks
-and the role structure.
+See [STRUCTURE.md](STRUCTURE.md) for tree of the role structure.
 
 ## Role testing
 
@@ -202,6 +207,17 @@ ufw_outgoing_traffic:
 
 Open `ufw` ports, allowing outgoing traffic.
 
+### ./defaults/main/ipv6.yml
+
+```yaml
+disable_ipv6: false
+ipv6_sysctl_settings:
+  net.ipv6.conf.all.disable_ipv6: 1
+  net.ipv6.conf.default.disable_ipv6: 1
+```
+
+ If `disable_ipv6: true`, disable IPv6 functionality.
+
 ### ./defaults/main/limits.yml
 
 ```yaml
@@ -218,13 +234,15 @@ Maximum number of processes and open files.
 ```yaml
 install_aide: 'yes'
 reboot_ubuntu: false
-redhat_rpm_key:
+redhat_signing_keys:
   - 567E347AD0044ADE55BA8A5F199E2F91FD431D51
   - 47DB287789B21722B6D95DDE5326810137017186
-epel7_rpm_keys:
+epel7_signing_keys:
   - 91E97D7C4A5E96F17F3E888F6A2FAEA2352C64E5
-epel8_rpm_keys:
+epel8_signing_keys:
   - 94E279EB8D8F25B21810ADF121EA45AB2F86D6A1
+epel9_signing_keys:
+  - FF8AD1344597106ECE813B918A3872BF3228467C
 ```
 
 If `install_aide: true` then [AIDE](https://aide.github.io/) will be installed
@@ -232,9 +250,10 @@ and configured.
 
 If `reboot_ubuntu: true` an Ubuntu node will be rebooted if required.
 
-`redhat_rpm_key` are [RedHat Product Signing Keys](https://access.redhat.com/security/team/key/)
+`redhat_signing_keys` are [RedHat Product Signing Keys](https://access.redhat.com/security/team/key/).
 
-The `epel7_rpm_keys` and `epel8_rpm_keys` are release specific
+The `epel7_signing_keys`, `epel8_signing_keys` and
+`epel9_signing_keys` are release specific
 [Fedora EPEL signing keys](https://getfedora.org/security/).
 
 ### ./defaults/main/module_blocklists.yml
@@ -491,6 +510,7 @@ suid_sgid_permissions: true
 suid_sgid_blocklist:
   - /bin/ansible-playbook
   - /bin/ar
+  - /bin/as
   - /bin/at
   - /bin/awk
   - /bin/base32
