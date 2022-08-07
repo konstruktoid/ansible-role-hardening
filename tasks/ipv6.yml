@@ -26,6 +26,12 @@
     - ipv6
     - grub
 
+- name: Does local /proc have ipv6 settings?
+  become: true
+  ansible.builtin.stat:
+    path: /proc/sys/net/ipv6
+  register: has_ipv6
+
 - name: configure IPv6 sysctl settings
   become: true
   environment:
@@ -35,6 +41,7 @@
     value: "{{ item.value|int }}"
     state: present
     sysctl_set: 'yes'
+  when: has_ipv6.stat.exists
   with_dict: "{{ ipv6_sysctl_settings }}"
   notify:
     - restart sysctl
