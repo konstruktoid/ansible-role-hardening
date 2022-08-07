@@ -65,4 +65,15 @@
   ansible.builtin.setup: ~
   tags:
     - fact
+
+- name: Does local /proc have ipv6 settings?
+  become: true
+  ansible.builtin.stat:
+    path: /proc/sys/net/ipv6
+  register: stat_ipv6
+
+- name: Setting system has ipv6 or not.
+  ansible.builtin.set_fact:
+    system_has_ipv6: stat_ipv6.stat.exists
+
 ...

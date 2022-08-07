@@ -46,7 +46,7 @@ ipv6_sysctl_settings:
   net.ipv6.conf.default.router_solicitations: 0
   net.ipv6.conf.default.use_tempaddr: 2
 
-regular_sysctl_settings:
+generic_sysctl_settings:
   fs.protected_fifos: 2
   fs.protected_hardlinks: 1
   fs.protected_symlinks: 1
