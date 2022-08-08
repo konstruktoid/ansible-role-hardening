@@ -7,5 +7,7 @@ Host *
     Ciphers {{ sshd_ciphers }}
     GSSAPIAuthentication {{ sshd_gssapi_authentication }}
     HashKnownHosts yes
+    HostKeyAlgorithms {{ sshd_host_key_algorithms }}
+    KexAlgorithms {{ sshd_kex_algorithms }}
     MACs {{ sshd_macs }}
     RekeyLimit {{ sshd_rekey_limit }}
