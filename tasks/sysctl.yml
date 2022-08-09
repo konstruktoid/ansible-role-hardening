@@ -17,8 +17,19 @@
     value: "{{ sysctl_net_ipv6_conf_accept_ra_rtr_pref|int }}"
     state: present
     sysctl_set: 'yes'
+  when: system_has_ipv6
   tags:
     - sysctl
+
+- name: Sysctl rules if the system has ipv6
+  ansible.builtin.set_fact:
+    sysctl_settings: "{{ generic_sysctl_settings | combine(ipv4_sysctl_settings) | combine(ipv6_sysctl_settings) }}"
+  when: system_has_ipv6
+
+- name: Sysctl rules if the system does not have ipv6
+  ansible.builtin.set_fact:
+    sysctl_settings: "{{ generic_sysctl_settings | combine(ipv4_sysctl_settings) }}"
+  when: not system_has_ipv6
 
 - name: configure sysctl
   become: true
