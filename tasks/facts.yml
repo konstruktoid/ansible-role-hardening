@@ -74,6 +74,6 @@
 
 - name: Setting system has ipv6 or not.
   ansible.builtin.set_fact:
-    system_has_ipv6: stat_ipv6.stat.exists
+    system_has_ipv6: "{{ stat_ipv6.stat.exists }}"
 
 ...
