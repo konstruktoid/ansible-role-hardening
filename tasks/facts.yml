@@ -61,11 +61,6 @@
     - sshd
     - fact
 
-- name: update facts
-  ansible.builtin.setup: ~
-  tags:
-    - fact
-
 - name: Does local /proc have ipv6 settings?
   become: true
   ansible.builtin.stat:
@@ -76,4 +71,8 @@
   ansible.builtin.set_fact:
     system_has_ipv6: stat_ipv6.stat.exists
 
+- name: update facts
+  ansible.builtin.setup: ~
+  tags:
+    - fact
 ...
