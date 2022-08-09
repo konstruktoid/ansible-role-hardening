@@ -35,7 +35,7 @@
     value: "{{ item.value|int }}"
     state: present
     sysctl_set: 'yes'
-  when: system_has_ipv6
+  when: system_has_ipv6 and disable_ipv6
   with_dict: "{{ ipv6_disable_sysctl_settings }}"
   notify:
     - restart sysctl
