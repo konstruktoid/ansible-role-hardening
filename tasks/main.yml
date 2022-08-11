@@ -14,6 +14,7 @@
     apply:
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  when: ufw_enable
 
 - name: configure sysctl
   ansible.builtin.include_tasks: sysctl.yml

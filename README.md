@@ -196,6 +196,7 @@ option.
 ### ./defaults/main/firewall.yml
 
 ```yaml
+ufw_enable: true
 ufw_outgoing_traffic:
   - 22
   - 53
@@ -204,8 +205,8 @@ ufw_outgoing_traffic:
   - 443
   - 853
 ```
-
-Open `ufw` ports, allowing outgoing traffic.
+`ufw_enable: false` gives you the opportunity to manage your own firewall and firewall rules.
+`ufw_outgoing_traffic` opens `ufw` ports, allowing outgoing traffic.
 
 ### ./defaults/main/ipv6.yml
 
