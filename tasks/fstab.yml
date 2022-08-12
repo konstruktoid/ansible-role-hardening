@@ -4,6 +4,7 @@
   mount:
     path: /tmp
     state: absent
+  when: fstab_remove_tmp
   tags:
     - fstab
 

@@ -207,6 +207,14 @@ ufw_outgoing_traffic:
 
 Open `ufw` ports, allowing outgoing traffic.
 
+### ./defaults/main/fstab.yml
+
+```yaml
+fstab_remove_tmp: true
+```
+
+if `fstab_remove_tmp: true`, prevent `/tmp` from being mounted.
+
 ### ./defaults/main/ipv6.yml
 
 ```yaml
