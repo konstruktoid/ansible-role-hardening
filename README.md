@@ -83,7 +83,7 @@ None.
 ...
 ```
 
-## Note regarding firewall rules
+## Note regarding ufw rules
 
 Instead of resetting `ufw` every run and by doing so causing network traffic
 disruption, the role deletes every `ufw` rule without
