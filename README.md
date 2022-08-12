@@ -205,7 +205,7 @@ ufw_outgoing_traffic:
   - 443
   - 853
 ```
-`ufw_enable: false` gives you the opportunity to manage your own firewall and firewall rules.
+`ufw_enable: true` install and configure `ufw` with related rules. Set it to `false` to manage your firewall and rules.
 `ufw_outgoing_traffic` opens `ufw` ports, allowing outgoing traffic.
 
 ### ./defaults/main/ipv6.yml
