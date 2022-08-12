@@ -18,7 +18,7 @@
 │       ├── compilers.yml
 │       ├── disablewireless.yml
 │       ├── dns.yml
-│       ├── firewall.yml
+│       ├── ufw.yml
 │       ├── ipv6.yml
 │       ├── limits.yml
 │       ├── misc.yml
@@ -81,7 +81,7 @@
 │   ├── disablewireless.yml
 │   ├── extras.yml
 │   ├── facts.yml
-│   ├── firewall.yml
+│   ├── ufw.yml
 │   ├── fstab.yml
 │   ├── hosts.yml
 │   ├── ipv6.yml

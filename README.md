@@ -193,7 +193,7 @@ the DNS server supports DNS-over-TLS and has a valid certificate.
 [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf)
 option.
 
-### ./defaults/main/firewall.yml
+### ./defaults/main/ufw.yml
 
 ```yaml
 ufw_enable: true

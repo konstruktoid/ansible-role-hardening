@@ -651,7 +651,7 @@ $("#svg").ready(function () {
 <!-- task_9a5fd221 -->
 <g id="task_9a5fd221" class="node">
 <title>task_9a5fd221</title>
-<g id="a_task_9a5fd221"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : add the nf_conntrack module">
+<g id="a_task_9a5fd221"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : add the nf_conntrack module">
 <polygon fill="none" stroke="#723b91" points="2430.6,-12603.02 2430.6,-12617.94 2301.27,-12628.48 2118.35,-12628.48 1989.02,-12617.94 1989.02,-12603.02 2118.35,-12592.48 2301.27,-12592.48 2430.6,-12603.02"/>
 <text text-anchor="middle" x="2209.81" y="-12606.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : add the nf_conntrack module</text>
 </a>
@@ -673,7 +673,7 @@ $("#svg").ready(function () {
 <!-- task_5ff61797 -->
 <g id="task_5ff61797" class="node">
 <title>task_5ff61797</title>
-<g id="a_task_5ff61797"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : stat nf_conntrack_tcp_be_liberal">
+<g id="a_task_5ff61797"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : stat nf_conntrack_tcp_be_liberal">
 <polygon fill="none" stroke="#723b91" points="2443.43,-12549.02 2443.43,-12563.94 2306.58,-12574.48 2113.04,-12574.48 1976.19,-12563.94 1976.19,-12549.02 2113.04,-12538.48 2306.58,-12538.48 2443.43,-12549.02"/>
 <text text-anchor="middle" x="2209.81" y="-12552.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : stat nf_conntrack_tcp_be_liberal</text>
 </a>
@@ -695,7 +695,7 @@ $("#svg").ready(function () {
 <!-- task_31290d37 -->
 <g id="task_31290d37" class="node">
 <title>task_31290d37</title>
-<g id="a_task_31290d37"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : enable nf_conntrack_tcp_be_liberal to keep connections alive">
+<g id="a_task_31290d37"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : enable nf_conntrack_tcp_be_liberal to keep connections alive">
 <polygon fill="none" stroke="#723b91" points="2554.73,-12495.02 2554.73,-12509.94 2352.68,-12520.48 2066.94,-12520.48 1864.89,-12509.94 1864.89,-12495.02 2066.94,-12484.48 2352.68,-12484.48 2554.73,-12495.02"/>
 <text text-anchor="middle" x="2209.81" y="-12498.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : enable nf_conntrack_tcp_be_liberal to keep connections alive</text>
 </a>
@@ -717,7 +717,7 @@ $("#svg").ready(function () {
 <!-- task_666a27bd -->
 <g id="task_666a27bd" class="node">
 <title>task_666a27bd</title>
-<g id="a_task_666a27bd"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : ufw installation - debian">
+<g id="a_task_666a27bd"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : ufw installation - debian">
 <polygon fill="none" stroke="#723b91" points="2411.61,-12441.02 2411.61,-12455.94 2293.4,-12466.48 2126.22,-12466.48 2008.01,-12455.94 2008.01,-12441.02 2126.22,-12430.48 2293.4,-12430.48 2411.61,-12441.02"/>
 <text text-anchor="middle" x="2209.81" y="-12444.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : ufw installation - debian</text>
 </a>
@@ -739,7 +739,7 @@ $("#svg").ready(function () {
 <!-- task_8a1e02a1 -->
 <g id="task_8a1e02a1" class="node">
 <title>task_8a1e02a1</title>
-<g id="a_task_8a1e02a1"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : ufw installation - redhat">
+<g id="a_task_8a1e02a1"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : ufw installation - redhat">
 <polygon fill="none" stroke="#723b91" points="2409.39,-12387.02 2409.39,-12401.94 2292.48,-12412.48 2127.14,-12412.48 2010.23,-12401.94 2010.23,-12387.02 2127.14,-12376.48 2292.48,-12376.48 2409.39,-12387.02"/>
 <text text-anchor="middle" x="2209.81" y="-12390.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : ufw installation - redhat</text>
 </a>
@@ -761,7 +761,7 @@ $("#svg").ready(function () {
 <!-- task_4bae1c2e -->
 <g id="task_4bae1c2e" class="node">
 <title>task_4bae1c2e</title>
-<g id="a_task_4bae1c2e"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : set ufw IPT_SYSCTL">
+<g id="a_task_4bae1c2e"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : set ufw IPT_SYSCTL">
 <polygon fill="none" stroke="#723b91" points="2403.23,-12333.02 2403.23,-12347.94 2289.93,-12358.48 2129.69,-12358.48 2016.39,-12347.94 2016.39,-12333.02 2129.69,-12322.48 2289.93,-12322.48 2403.23,-12333.02"/>
 <text text-anchor="middle" x="2209.81" y="-12336.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : set ufw IPT_SYSCTL</text>
 </a>
@@ -783,7 +783,7 @@ $("#svg").ready(function () {
 <!-- task_197fc9cb -->
 <g id="task_197fc9cb" class="node">
 <title>task_197fc9cb</title>
-<g id="a_task_197fc9cb"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : enable ufw and set default deny incoming">
+<g id="a_task_197fc9cb"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : enable ufw and set default deny incoming">
 <polygon fill="none" stroke="#723b91" points="2479.19,-12279.02 2479.19,-12293.94 2321.39,-12304.48 2098.23,-12304.48 1940.43,-12293.94 1940.43,-12279.02 2098.23,-12268.48 2321.39,-12268.48 2479.19,-12279.02"/>
 <text text-anchor="middle" x="2209.81" y="-12282.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : enable ufw and set default deny incoming</text>
 </a>
@@ -805,7 +805,7 @@ $("#svg").ready(function () {
 <!-- task_fd5c945b -->
 <g id="task_fd5c945b" class="node">
 <title>task_fd5c945b</title>
-<g id="a_task_fd5c945b"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : enable ufw and set default deny outgoing">
+<g id="a_task_fd5c945b"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : enable ufw and set default deny outgoing">
 <polygon fill="none" stroke="#723b91" points="2476.56,-12225.02 2476.56,-12239.94 2320.3,-12250.48 2099.32,-12250.48 1943.06,-12239.94 1943.06,-12225.02 2099.32,-12214.48 2320.3,-12214.48 2476.56,-12225.02"/>
 <text text-anchor="middle" x="2209.81" y="-12228.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : enable ufw and set default deny outgoing</text>
 </a>
@@ -827,7 +827,7 @@ $("#svg").ready(function () {
 <!-- task_1b5f172c -->
 <g id="task_1b5f172c" class="node">
 <title>task_1b5f172c</title>
-<g id="a_task_1b5f172c"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : register ufw rules">
+<g id="a_task_1b5f172c"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : register ufw rules">
 <polygon fill="none" stroke="#723b91" points="2385.15,-12171.02 2385.15,-12185.94 2282.44,-12196.48 2137.18,-12196.48 2034.47,-12185.94 2034.47,-12171.02 2137.18,-12160.48 2282.44,-12160.48 2385.15,-12171.02"/>
 <text text-anchor="middle" x="2209.81" y="-12174.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : register ufw rules</text>
 </a>
@@ -849,7 +849,7 @@ $("#svg").ready(function () {
 <!-- task_8a58f155 -->
 <g id="task_8a58f155" class="node">
 <title>task_8a58f155</title>
-<g id="a_task_8a58f155"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : allow ssh ufw">
+<g id="a_task_8a58f155"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : allow ssh ufw">
 <polygon fill="none" stroke="#723b91" points="2371.42,-12117.02 2371.42,-12131.94 2276.75,-12142.48 2142.87,-12142.48 2048.2,-12131.94 2048.2,-12117.02 2142.87,-12106.48 2276.75,-12106.48 2371.42,-12117.02"/>
 <text text-anchor="middle" x="2209.81" y="-12120.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : allow ssh ufw</text>
 </a>
@@ -871,7 +871,7 @@ $("#svg").ready(function () {
 <!-- task_6f67b719 -->
 <g id="task_6f67b719" class="node">
 <title>task_6f67b719</title>
-<g id="a_task_6f67b719"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : allow outgoing specified ufw ports">
+<g id="a_task_6f67b719"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : allow outgoing specified ufw ports">
 <polygon fill="none" stroke="#723b91" points="2451.81,-12063.02 2451.81,-12077.94 2310.05,-12088.48 2109.57,-12088.48 1967.81,-12077.94 1967.81,-12063.02 2109.57,-12052.48 2310.05,-12052.48 2451.81,-12063.02"/>
 <text text-anchor="middle" x="2209.81" y="-12066.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : allow outgoing specified ufw ports</text>
 </a>
@@ -893,7 +893,7 @@ $("#svg").ready(function () {
 <!-- task_c4d4e699 -->
 <g id="task_c4d4e699" class="node">
 <title>task_c4d4e699</title>
-<g id="a_task_c4d4e699"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : deny loopback network traffic">
+<g id="a_task_c4d4e699"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : deny loopback network traffic">
 <polygon fill="none" stroke="#723b91" points="2433.73,-12009.02 2433.73,-12023.94 2302.56,-12034.48 2117.06,-12034.48 1985.89,-12023.94 1985.89,-12009.02 2117.06,-11998.48 2302.56,-11998.48 2433.73,-12009.02"/>
 <text text-anchor="middle" x="2209.81" y="-12012.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : deny loopback network traffic</text>
 </a>
@@ -915,7 +915,7 @@ $("#svg").ready(function () {
 <!-- task_a2c1ede1 -->
 <g id="task_a2c1ede1" class="node">
 <title>task_a2c1ede1</title>
-<g id="a_task_a2c1ede1"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : allow loopback traffic in">
+<g id="a_task_a2c1ede1"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : allow loopback traffic in">
 <polygon fill="none" stroke="#723b91" points="2412.52,-11955.02 2412.52,-11969.94 2293.78,-11980.48 2125.84,-11980.48 2007.1,-11969.94 2007.1,-11955.02 2125.84,-11944.48 2293.78,-11944.48 2412.52,-11955.02"/>
 <text text-anchor="middle" x="2209.81" y="-11958.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : allow loopback traffic in</text>
 </a>
@@ -937,7 +937,7 @@ $("#svg").ready(function () {
 <!-- task_350a4eec -->
 <g id="task_350a4eec" class="node">
 <title>task_350a4eec</title>
-<g id="a_task_350a4eec"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : allow loopback traffic out">
+<g id="a_task_350a4eec"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : allow loopback traffic out">
 <polygon fill="none" stroke="#723b91" points="2417.37,-11901.02 2417.37,-11915.94 2295.78,-11926.48 2123.84,-11926.48 2002.25,-11915.94 2002.25,-11901.02 2123.84,-11890.48 2295.78,-11890.48 2417.37,-11901.02"/>
 <text text-anchor="middle" x="2209.81" y="-11904.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : allow loopback traffic out</text>
 </a>
@@ -959,7 +959,7 @@ $("#svg").ready(function () {
 <!-- task_90abb98d -->
 <g id="task_90abb98d" class="node">
 <title>task_90abb98d</title>
-<g id="a_task_90abb98d"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/firewall.yml" xlink:title="konstruktoid.hardening : delete unmanaged ufw rules">
+<g id="a_task_90abb98d"><a xlink:href="/private/etc/ansible/roles/konstruktoid.hardening/tasks/ufw.yml" xlink:title="konstruktoid.hardening : delete unmanaged ufw rules">
 <polygon fill="none" stroke="#723b91" points="2426.66,-11847.02 2426.66,-11861.94 2299.63,-11872.48 2119.99,-11872.48 1992.96,-11861.94 1992.96,-11847.02 2119.99,-11836.48 2299.63,-11836.48 2426.66,-11847.02"/>
 <text text-anchor="middle" x="2209.81" y="-11850.78" font-family="Times,serif" font-size="14.00">konstruktoid.hardening : delete unmanaged ufw rules</text>
 </a>
