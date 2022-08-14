@@ -8,12 +8,13 @@
 - name: install epel-release and python dependencies
   ansible.builtin.include_tasks: pre.yml
 
-- name: install and configure firewalls
+- name: install and configure ufw
   ansible.builtin.include_tasks:
-    file: firewall.yml
+    file: ufw.yml
     apply:
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  when: ufw_enable
 
 - name: configure sysctl
   ansible.builtin.include_tasks: sysctl.yml

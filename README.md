@@ -83,7 +83,7 @@ None.
 ...
 ```
 
-## Note regarding firewall rules
+## Note regarding ufw rules
 
 Instead of resetting `ufw` every run and by doing so causing network traffic
 disruption, the role deletes every `ufw` rule without
@@ -193,9 +193,10 @@ the DNS server supports DNS-over-TLS and has a valid certificate.
 [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf)
 option.
 
-### ./defaults/main/firewall.yml
+### ./defaults/main/ufw.yml
 
 ```yaml
+ufw_enable: true
 ufw_outgoing_traffic:
   - 22
   - 53
@@ -204,8 +205,8 @@ ufw_outgoing_traffic:
   - 443
   - 853
 ```
-
-Open `ufw` ports, allowing outgoing traffic.
+`ufw_enable: true` install and configure `ufw` with related rules. Set it to `false` to manage your firewall and rules.
+`ufw_outgoing_traffic` opens `ufw` ports, allowing outgoing traffic.
 
 ### ./defaults/main/ipv6.yml
 
