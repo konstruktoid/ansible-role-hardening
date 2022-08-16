@@ -12,7 +12,7 @@
   ansible.builtin.dnf:
     name: "epel-release"
     state: present
-    update_cache: 'yes'
+    update_cache: true
   when: ansible_os_family == "RedHat" and (not (ansible_distribution == "Fedora" or ansible_distribution == "RedHat"))
   tags:
     - dnf
@@ -23,7 +23,7 @@
   ansible.builtin.apt:
     name: python-pexpect
     state: present
-    update_cache: 'yes'
+    update_cache: true
   when: ansible_os_family == "Debian" and ansible_python.version.major <= 2
   tags:
     - apt
@@ -35,7 +35,7 @@
   ansible.builtin.apt:
     name: python3-pexpect
     state: present
-    update_cache: 'yes'
+    update_cache: true
   when: ansible_os_family == "Debian" and ansible_python.version.major >= 3
   tags:
     - apt

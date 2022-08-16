@@ -63,7 +63,7 @@
   become: true
   ansible.builtin.systemd:
     name: debug-shell.service
-    masked: 'yes'
+    masked: true
   tags:
     - systemd
     - debug-shell

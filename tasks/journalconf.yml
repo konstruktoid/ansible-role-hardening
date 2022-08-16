@@ -4,7 +4,7 @@
   ansible.builtin.template:
     src: etc/systemd/journald.conf.j2
     dest: /etc/systemd/journald.conf
-    backup: 'yes'
+    backup: true
     mode: 0644
     owner: root
     group: root
@@ -22,7 +22,7 @@
   ansible.builtin.template:
     src: etc/logrotate.conf.j2
     dest: /etc/logrotate.conf
-    backup: 'yes'
+    backup: true
     mode: 0644
     owner: root
     group: root
@@ -36,7 +36,7 @@
     dest: /etc/cron.daily/logrotate
     mode: 0750
     state: present
-    create: 'yes'
+    create: true
   tags:
     - logrotate
 
@@ -67,7 +67,7 @@
     dest: /etc/rsyslog.conf
     mode: 0640
     state: present
-    create: 'no'
+    create: false
   when: rsyslogconf.stat.exists and rsyslog_filecreatemode.stdout.find('FileCreateMode') != -1
   tags:
     - rsyslog
@@ -81,7 +81,7 @@
     dest: /etc/rsyslog.d/99-filecreatemode.conf
     mode: 0644
     state: present
-    create: 'yes'
+    create: true
   tags:
     - rsyslog
 ...

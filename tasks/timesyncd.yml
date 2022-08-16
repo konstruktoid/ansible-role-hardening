@@ -4,7 +4,7 @@
   ansible.builtin.template:
     src: etc/systemd/timesyncd.conf.j2
     dest: /etc/systemd/timesyncd.conf
-    backup: 'yes'
+    backup: true
     mode: 0644
     owner: root
     group: root

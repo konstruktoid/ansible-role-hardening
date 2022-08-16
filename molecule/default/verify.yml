@@ -31,7 +31,7 @@
         dest: /etc/audit/auditd.conf
         line: "{{ item }}"
         state: present
-      check_mode: 'yes'
+      check_mode: true
       register: auditd_conf
       failed_when: auditd_conf is changed
       with_items:
@@ -51,7 +51,7 @@
         dest: /etc/systemd/system.conf
         line: "{{ item }}"
         state: present
-      check_mode: 'yes'
+      check_mode: true
       register: systemd_system_conf
       failed_when: systemd_system_conf is changed
       with_items:
@@ -68,7 +68,7 @@
         dest: /etc/systemd/user.conf
         line: "{{ item }}"
         state: present
-      check_mode: 'yes'
+      check_mode: true
       register: systemd_user_conf
       failed_when: systemd_user_conf is changed
       with_items:
@@ -82,7 +82,7 @@
         dest: /etc/postfix/main.cf
         line: "{{ item }}"
         state: present
-      check_mode: 'yes'
+      check_mode: true
       register: postfix_conf
       failed_when: postfix_conf is changed
       with_items:
@@ -134,7 +134,7 @@
         dest: /etc/ssh/sshd_config
         line: "PermitRootLogin yes"
         state: absent
-      check_mode: 'yes'
+      check_mode: true
       register: sshd_config
       failed_when: sshd_config is changed
 
@@ -144,7 +144,7 @@
         dest: /etc/ssh/sshd_config.d/hardening.conf
         line: "PermitRootLogin yes"
         state: absent
-      check_mode: 'yes'
+      check_mode: true
       register: sshd_config_d
       failed_when: sshd_config_d is changed
       when: sshd_config_directory.stat.exists
@@ -155,7 +155,7 @@
         dest: /etc/ssh/sshd_config
         line: "{{ item }}"
         state: present
-      check_mode: 'yes'
+      check_mode: true
       register: sshd_config
       failed_when: sshd_config is changed
       with_items:
@@ -202,7 +202,7 @@
         dest: /etc/ssh/sshd_config.d/hardening.conf
         line: "{{ item }}"
         state: present
-      check_mode: 'yes'
+      check_mode: true
       register: sshd_config
       failed_when: sshd_config is changed
       with_items:
@@ -280,7 +280,7 @@
         dest: /etc/ssh/ssh_config
         line: "    {{ item }}"
         state: present
-      check_mode: 'yes'
+      check_mode: true
       register: ssh_config
       failed_when: ssh_config is changed
       with_items:
@@ -432,7 +432,7 @@
         mode: 0644
         owner: root
         group: root
-      check_mode: 'yes'
+      check_mode: true
       register: pwquality_conf
       failed_when: pwquality_conf is changed
       with_dict: "{{ pwquality_config }}"
@@ -489,7 +489,7 @@
       ansible.builtin.find:
         paths: /boot
         patterns: "*.cfg,grubenv"
-        recurse: 'yes'
+        recurse: true
       register: perm_grub_cfg
 
     - name: verify grub config files permission
@@ -534,10 +534,10 @@
       become: true
       ansible.builtin.systemd:
         name: motd-news.service
-        masked: 'yes'
-        enabled: 'no'
+        masked: true
+        enabled: false
         state: stopped
-      check_mode: 'yes'
+      check_mode: true
       register: motdnews_service
       failed_when: motdnews_service is changed
       when: ansible_os_family == "Debian" and motd_news.stat.exists
@@ -620,7 +620,7 @@
         mode: 0644
         state: present
         line: "{{ item }}"
-      check_mode: 'yes'
+      check_mode: true
       register: verify_faillock
       failed_when: verify_faillock is changed
       with_items:

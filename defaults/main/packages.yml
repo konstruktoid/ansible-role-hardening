@@ -1,5 +1,5 @@
 ---
-system_upgrade: 'yes'
+system_upgrade: true
 packages_blocklist:
   - apport*
   - autofs

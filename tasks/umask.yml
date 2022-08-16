@@ -93,7 +93,7 @@
     dest: /etc/profile
     mode: 0644
     state: present
-    create: 'no'
+    create: false
     insertbefore: "^export"
   tags:
     - tmout
@@ -105,7 +105,7 @@
     dest: /etc/profile
     mode: 0644
     state: present
-    create: 'no'
+    create: false
     insertbefore: "^readonly TMOUT"
   tags:
     - tmout
@@ -119,7 +119,7 @@
     dest: /etc/profile
     mode: 0644
     state: present
-    create: 'no'
+    create: false
     insertafter: "^readonly TMOUT"
   tags:
     - tmout

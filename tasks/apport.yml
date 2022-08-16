@@ -7,8 +7,8 @@
     dest: /etc/default/apport
     mode: 0644
     state: present
-    create: 'no'
-    backrefs: 'yes'
+    create: false
+    backrefs: true
   register: default_apport
   notify:
     - mask apport

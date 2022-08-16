@@ -5,8 +5,8 @@
     paths: ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/snap/bin']
     patterns: "{{ compilers }}"
     file_type: any
-    follow: 'yes'
-    recurse: 'yes'
+    follow: true
+    recurse: true
   register: compiler
   tags:
     - compilers
@@ -19,7 +19,7 @@
     group: root
     mode: 0750
     state: file
-    follow: 'yes'
+    follow: true
   with_items:
     - "{{ compiler.files }}"
   tags:

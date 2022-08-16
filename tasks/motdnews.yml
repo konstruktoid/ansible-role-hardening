@@ -14,8 +14,8 @@
     dest: /etc/default/motd-news
     mode: 0644
     state: present
-    create: 'no'
-    backrefs: 'yes'
+    create: false
+    backrefs: true
   notify:
     - mask motdnews timer
     - mask motdnews service

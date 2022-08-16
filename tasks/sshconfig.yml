@@ -49,7 +49,7 @@
   ansible.builtin.template:
     src: etc/ssh/sshd_config.j2
     dest: /etc/ssh/sshd_config
-    backup: 'yes'
+    backup: true
     mode: 0600
     owner: root
     group: root
@@ -101,7 +101,7 @@
   ansible.builtin.template:
     src: etc/ssh/sshd_config.j2
     dest: /etc/ssh/sshd_config.d/hardening.conf
-    backup: 'yes'
+    backup: true
     mode: 0600
     owner: root
     group: root
@@ -200,7 +200,7 @@
   ansible.builtin.template:
     src: etc/ssh/ssh_config.j2
     dest: /etc/ssh/ssh_config
-    backup: 'yes'
+    backup: true
     mode: 0644
     owner: root
     group: root

@@ -33,7 +33,7 @@
     line: "root"
     mode: 0600
     state: present
-    create: 'yes'
+    create: true
   with_items:
     - /etc/at.allow
     - /etc/cron.allow
@@ -45,8 +45,8 @@
   become: true
   ansible.builtin.systemd:
     name: atd
-    masked: 'yes'
-    enabled: 'no'
+    masked: true
+    enabled: false
     state: stopped
   register: mask_atd
   failed_when: mask_atd is not success and not "Could not find the requested service" in mask_atd.msg

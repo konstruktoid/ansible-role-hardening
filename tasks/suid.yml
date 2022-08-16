@@ -5,7 +5,7 @@
     path: "{{ item }}"
     mode: 'a-s'
     state: file
-    follow: 'yes'
+    follow: true
   register: output
   failed_when: "output.failed and not 'absent' in output.msg"
   with_items:

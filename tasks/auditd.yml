@@ -5,7 +5,7 @@
     line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX {{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"'
     dest: /etc/default/grub.d/99-hardening-audit.cfg
     state: present
-    create: 'yes'
+    create: true
     mode: 0755
     owner: root
     group: root
@@ -37,7 +37,7 @@
     dest: /etc/audit/auditd.conf
     mode: 0640
     state: present
-    create: 'no'
+    create: false
   tags:
     - auditd
     - CCE-80678-6
@@ -50,7 +50,7 @@
     dest: /etc/audit/auditd.conf
     mode: 0640
     state: present
-    create: 'no'
+    create: false
   tags:
     - auditd
 
@@ -62,7 +62,7 @@
     dest: /etc/audit/auditd.conf
     mode: 0640
     state: present
-    create: 'no'
+    create: false
   tags:
     - auditd
     - CCE-84046-2
@@ -75,7 +75,7 @@
     dest: /etc/audit/auditd.conf
     mode: 0640
     state: present
-    create: 'no'
+    create: false
   tags:
     - auditd
     - CCE-84045-4
@@ -88,7 +88,7 @@
     dest: /etc/audit/auditd.conf
     mode: 0640
     state: present
-    create: 'no'
+    create: false
   tags:
     - auditd
     - CIS-UBUNTU2004-4.1.2.1
@@ -101,7 +101,7 @@
     dest: /etc/audit/auditd.conf
     mode: 0640
     state: present
-    create: 'no'
+    create: false
   tags:
     - auditd
     - CCE-80682-8
@@ -115,7 +115,7 @@
     dest: /etc/audit/auditd.conf
     mode: 0640
     state: present
-    create: 'no'
+    create: false
   tags:
     - auditd
 
@@ -127,7 +127,7 @@
     dest: /etc/audit/auditd.conf
     mode: 0640
     state: present
-    create: 'no'
+    create: false
   tags:
     - auditd
 
@@ -139,7 +139,7 @@
     dest: /etc/audit/auditd.conf
     mode: 0640
     state: present
-    create: 'no'
+    create: false
   tags:
     - auditd
     - CCE-80684-4
@@ -149,7 +149,7 @@
   ansible.builtin.template:
     src: etc/audit/rules.d/hardening.rules.j2
     dest: /etc/audit/rules.d/hardening.rules
-    backup: 'yes'
+    backup: true
     mode: 0600
     owner: root
     group: root

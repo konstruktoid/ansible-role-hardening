@@ -4,7 +4,7 @@
   ansible.builtin.template:
     src: etc/login.defs.j2
     dest: /etc/login.defs
-    backup: 'yes'
+    backup: true
     mode: 0644
     owner: root
     group: root

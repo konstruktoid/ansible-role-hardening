@@ -25,7 +25,7 @@ provisioner:
         disable_wireless: 'false'
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
-        system_upgrade: 'no'
+        system_upgrade: false
       focal:
         block_blacklisted: 'true'
         disable_wireless: 'true'

@@ -8,7 +8,7 @@
     owner: root
     group: root
     state: present
-    create: 'yes'
+    create: true
   with_items:
     - "{{ fs_modules_blocklist }}"
   tags:
