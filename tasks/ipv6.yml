@@ -5,7 +5,7 @@
     line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX ipv6.disable=1"'
     dest: /etc/default/grub.d/99-hardening-ipv6.cfg
     state: present
-    create: 'yes'
+    create: true
     mode: 0755
     owner: root
     group: root
@@ -34,7 +34,7 @@
     name: "{{ item.key }}"
     value: "{{ item.value|int }}"
     state: present
-    sysctl_set: 'yes'
+    sysctl_set: true
   when: system_has_ipv6 and disable_ipv6
   with_dict: "{{ ipv6_disable_sysctl_settings }}"
   notify:

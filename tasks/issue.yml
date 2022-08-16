@@ -4,7 +4,7 @@
   ansible.builtin.template:
     src: etc/motd.j2
     dest: /etc/motd
-    backup: 'yes'
+    backup: true
     mode: 0644
     owner: root
     group: root
@@ -19,7 +19,7 @@
   ansible.builtin.template:
     src: etc/issue.j2
     dest: "{{ item }}"
-    backup: 'yes'
+    backup: true
     mode: 0644
     owner: root
     group: root

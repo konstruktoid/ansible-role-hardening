@@ -3,8 +3,8 @@
   become: true
   ansible.builtin.systemd:
     name: ctrl-alt-del.target
-    masked: 'yes'
-    enabled: 'no'
+    masked: true
+    enabled: false
     state: stopped
   when: not ansible_os_family == "RedHat"
   tags:
@@ -16,8 +16,8 @@
   become: true
   ansible.builtin.systemd:
     name: ctrl-alt-del.target
-    masked: 'yes'
-    enabled: 'no'
+    masked: true
+    enabled: false
     state: stopped
   when: ansible_os_family == "RedHat"
   changed_when: false

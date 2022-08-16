@@ -43,7 +43,7 @@
   ansible.builtin.template:
     src: etc/systemd/tmp.mount.j2
     dest: /etc/systemd/system/tmp.mount
-    backup: 'yes'
+    backup: true
     mode: 0644
     owner: root
     group: root
@@ -67,7 +67,7 @@
   become: true
   ansible.builtin.systemd:
     name: tmp.mount
-    masked: 'no'
+    masked: false
   when: tmp_mount.stat.exists
   tags:
     - mount
@@ -78,9 +78,9 @@
   become: true
   ansible.builtin.systemd:
     name: tmp.mount
-    daemon_reload: 'yes'
+    daemon_reload: true
     state: started
-    enabled: 'yes'
+    enabled: true
   when: tmp_mount.stat.exists
   tags:
     - mount

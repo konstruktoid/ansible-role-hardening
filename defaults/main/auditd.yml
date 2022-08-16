@@ -1,5 +1,5 @@
 ---
-auditd_apply_audit_rules: 'yes'
+auditd_apply_audit_rules: true
 auditd_action_mail_acct: root
 auditd_admin_space_left_action: suspend
 auditd_disk_error_action: suspend

@@ -5,7 +5,7 @@
     line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX apparmor=1 security=apparmor"'
     dest: /etc/default/grub.d/99-hardening-apparmor.cfg
     state: present
-    create: 'yes'
+    create: true
     mode: 0755
     owner: root
     group: root
@@ -23,7 +23,7 @@
     line: 'session optional pam_apparmor.so order=user,group,default'
     dest: /etc/pam.d/apparmor
     state: present
-    create: 'yes'
+    create: true
     mode: 0755
     owner: root
     group: root
@@ -58,7 +58,7 @@
   become: true
   ansible.builtin.systemd:
     name: apparmor
-    enabled: 'yes'
+    enabled: true
     state: started
   when: ansible_os_family == "Debian"
   tags:

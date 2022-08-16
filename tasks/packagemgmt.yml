@@ -5,7 +5,7 @@
     dest: /etc/apt/apt.conf.d/98-hardening-ubuntu
     mode: 0644
     state: present
-    create: 'yes'
+    create: true
     line: "{{ item }}"
   with_items:
     - 'Acquire::AllowDowngradeToInsecureRepositories "false";'
@@ -26,7 +26,7 @@
 - name: apt update
   become: true
   ansible.builtin.apt:
-    update_cache: 'yes'
+    update_cache: true
     cache_valid_time: 1800
   notify:
     - apt-get clean
@@ -82,8 +82,8 @@
     dest: /etc/yum.conf
     mode: 0644
     state: present
-    create: 'no'
-    backrefs: 'yes'
+    create: false
+    backrefs: true
   when: ansible_os_family == "RedHat"
   tags:
     - dnf
@@ -99,7 +99,7 @@
     dest: /etc/yum.conf
     mode: 0644
     state: present
-    create: 'yes'
+    create: true
     insertafter: "[main]"
   when: ansible_os_family == "RedHat"
   tags:
@@ -114,7 +114,7 @@
     dest: /etc/yum.conf
     mode: 0644
     state: present
-    create: 'yes'
+    create: true
     insertafter: "[main]"
   when: ansible_os_family == "RedHat"
   tags:
@@ -130,7 +130,7 @@
     dest: /etc/yum.conf
     mode: 0644
     state: present
-    create: 'yes'
+    create: true
     insertafter: "[main]"
   when: ansible_os_family == "RedHat"
   tags:
@@ -223,7 +223,7 @@
 - name: update dnf cache
   become: true
   ansible.builtin.dnf:
-    update_cache: 'yes'
+    update_cache: true
   when: ansible_os_family == "RedHat"
   notify:
     - dnf autoremove
@@ -236,8 +236,9 @@
   ansible.builtin.dnf:
     name: "*"  # noqa package-latest
     state: latest
-    bugfix: 'yes'
-    security: 'yes'
+    bugfix: true
+    security: true
+    nobest: true
   when: ansible_os_family == "RedHat" and system_upgrade|bool
   tags:
     - dnf

@@ -61,7 +61,7 @@
   ansible.builtin.find:
     paths: /boot
     patterns: "*.cfg,grubenv"
-    recurse: 'yes'
+    recurse: true
   register: grub_cfg
   tags:
     - grub

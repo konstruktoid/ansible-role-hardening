@@ -4,7 +4,7 @@
   ansible.builtin.apt:
     name: aide-common
     state: present
-    install_recommends: 'no'
+    install_recommends: false
   when: ansible_os_family == "Debian"
   tags:
     - apt
@@ -37,7 +37,7 @@
   ansible.builtin.template:
     src: lib/systemd/system/aidecheck.service.j2
     dest: /lib/systemd/system/aidecheck.service
-    backup: 'yes'
+    backup: true
     mode: 0644
     owner: root
     group: root
@@ -50,7 +50,7 @@
   ansible.builtin.template:
     src: lib/systemd/system/aidecheck.timer.j2
     dest: /lib/systemd/system/aidecheck.timer
-    backup: 'yes'
+    backup: true
     mode: 0644
     owner: root
     group: root
@@ -68,7 +68,7 @@
   ansible.builtin.blockinfile:
     path: /etc/aide/aide.conf
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
-    backup: 'yes'
+    backup: true
     insertafter: EOF
     block: |
       !/var/lib/docker
@@ -94,7 +94,7 @@
   ansible.builtin.blockinfile:
     path: /etc/aide.conf
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
-    backup: 'yes'
+    backup: true
     insertafter: EOF
     block: |
       !/var/lib/docker

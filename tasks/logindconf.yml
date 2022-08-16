@@ -4,7 +4,7 @@
   ansible.builtin.template:
     src: etc/systemd/logind.conf.j2
     dest: /etc/systemd/logind.conf
-    backup: 'yes'
+    backup: true
     mode: 0644
     owner: root
     group: root

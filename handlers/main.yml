@@ -29,7 +29,7 @@
 - name: reload systemd
   become: true
   ansible.builtin.systemd:
-    daemon_reload: 'yes'
+    daemon_reload: true
 
 - name: rkhunter propupd
   become: true
@@ -39,7 +39,7 @@
   become: true
   ansible.builtin.systemd:
     name: aidecheck.timer
-    enabled: 'yes'
+    enabled: true
     state: started
 
 - name: disable aidecheck
@@ -47,15 +47,15 @@
   ansible.builtin.systemd:
     name: aidecheck.timer
     state: stopped
-    enabled: 'no'
+    enabled: false
 
 - name: mask aidecheck
   become: true
   ansible.builtin.systemd:
     name: aidecheck.timer
-    masked: 'yes'
+    masked: true
     stated: stopped
-    enabled: 'no'
+    enabled: false
 
 - name: restart sshd
   become: true
@@ -72,40 +72,40 @@
 - name: apt-get autoremove
   become: true
   ansible.builtin.apt:
-    autoremove: 'yes'
+    autoremove: true
 
 - name: apt-get clean
   become: true
   ansible.builtin.apt:
-    autoclean: 'yes'
+    autoclean: true
 
 - name: mask apport
   become: true
   ansible.builtin.systemd:
     name: apport.service
-    masked: 'yes'
-    enabled: 'no'
+    masked: true
+    enabled: false
     state: stopped
 
 - name: mask motdnews timer
   become: true
   ansible.builtin.systemd:
     name: motd-news.timer
-    masked: 'yes'
-    enabled: 'no'
+    masked: true
+    enabled: false
     state: stopped
 
 - name: mask motdnews service
   become: true
   ansible.builtin.systemd:
     name: motd-news.service
-    masked: 'yes'
-    enabled: 'no'
+    masked: true
+    enabled: false
     state: stopped
 
 - name: dnf autoremove
   ansible.builtin.dnf:
-    autoremove: 'yes'
+    autoremove: true
   when: ansible_os_family == "RedHat"
   tags:
     - dnf
@@ -115,7 +115,7 @@
   become: true
   ansible.builtin.systemd:
     name: haveged
-    enabled: 'yes'
+    enabled: true
     state: started
 
 - name: reboot node

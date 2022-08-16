@@ -4,7 +4,7 @@
   ansible.builtin.user:
     name: "{{ item }}"
     state: absent
-    remove: 'yes'
+    remove: true
   register: remove_users
   with_items:
     - "{{ delete_users }}"

@@ -4,7 +4,7 @@
   ansible.builtin.template:
     src: etc/adduser.conf.j2
     dest: /etc/adduser.conf
-    backup: 'yes'
+    backup: true
     mode: 0644
     owner: root
     group: root
@@ -17,7 +17,7 @@
   ansible.builtin.template:
     src: etc/default/useradd.j2
     dest: /etc/default/useradd
-    backup: 'yes'
+    backup: true
     mode: 0644
     owner: root
     group: root

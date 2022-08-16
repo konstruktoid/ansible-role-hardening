@@ -3,7 +3,7 @@
   become: true
   ansible.builtin.user:
     name: root
-    password_lock: 'yes'
+    password_lock: true
   no_log: true
   tags:
     - users

@@ -24,8 +24,8 @@
     name: net.netfilter.nf_conntrack_tcp_be_liberal
     value: "1"
     state: present
-    sysctl_set: 'yes'
-    reload: 'yes'
+    sysctl_set: true
+    reload: true
   when: conntrackliberal.stat.exists
   tags:
     - conntrack
@@ -36,7 +36,7 @@
   ansible.builtin.apt:
     name: "ufw"
     state: present
-    install_recommends: 'no'
+    install_recommends: false
   when: ansible_os_family == "Debian"
   tags:
     - apt
@@ -68,8 +68,8 @@
     dest: /etc/default/ufw
     mode: 0640
     state: present
-    create: 'no'
-    backrefs: 'yes'
+    create: false
+    backrefs: true
   tags:
     - ufw
     - M1037
@@ -80,7 +80,7 @@
     state: enabled
     direction: incoming
     policy: deny
-    log: 'yes'
+    log: true
     logging: low
     comment: ansible managed
   tags:
@@ -95,7 +95,7 @@
     state: enabled
     direction: outgoing
     policy: deny
-    log: 'yes'
+    log: true
     logging: low
     comment: ansible managed
   tags:
