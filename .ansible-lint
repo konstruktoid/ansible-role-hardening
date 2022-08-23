@@ -6,5 +6,6 @@ exclude_paths:
 enable_list:
   - fqcn-builtins  # opt-in
 warn_list:
-  - yaml
-  - var-spacing  # https://github.com/ansible/ansible-lint/issues/2209
+  - yaml[line-length]
+skip_list:
+  - name[casing]
