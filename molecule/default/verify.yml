@@ -11,7 +11,7 @@
     - name: wait for the host and reconnect
       ansible.builtin.wait_for:
         port: 22
-        host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
+        host: '{{ (ansible_ssh_host | default(ansible_host)) | default(inventory_hostname) }}'
         delay: 10
         timeout: 120
 
@@ -166,8 +166,8 @@
         - Banner {{ sshd_banner }}
         - ChallengeResponseAuthentication {{ sshd_challenge_response_authentication }}
         - Ciphers {{ sshd_ciphers }}
-        - ClientAliveCountMax {{ sshd_client_alive_count_max|int }}
-        - ClientAliveInterval {{ sshd_client_alive_interval|int }}
+        - ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
+        - ClientAliveInterval {{ sshd_client_alive_interval | int }}
         - Compression {{ sshd_compression }}
         - GSSAPIAuthentication {{ sshd_gssapi_authentication }}
         - HostbasedAuthentication {{ sshd_hostbased_authentication }}
@@ -176,16 +176,16 @@
         - HostKeyAlgorithms {{ sshd_host_key_algorithms }}
         - KexAlgorithms {{ sshd_kex_algorithms }}
         - LogLevel {{ sshd_log_level }}
-        - LoginGraceTime {{ sshd_login_grace_time|int }}
+        - LoginGraceTime {{ sshd_login_grace_time | int }}
         - Macs {{ sshd_macs }}
-        - MaxAuthTries {{ sshd_max_auth_tries|int }}
-        - MaxSessions {{ sshd_max_sessions|int }}
+        - MaxAuthTries {{ sshd_max_auth_tries | int }}
+        - MaxSessions {{ sshd_max_sessions | int }}
         - MaxStartups {{ sshd_max_startups }}
         - PasswordAuthentication {{ sshd_password_authentication }}
         - PermitEmptyPasswords {{ sshd_permit_empty_passwords }}
         - PermitRootLogin {{ sshd_permit_root_login }}
         - PermitUserEnvironment {{ sshd_permit_user_environment }}
-        - Port {{ sshd_port|int }}
+        - Port {{ sshd_port | int }}
         - PrintLastLog {{ sshd_print_last_log }}
         - PrintMotd {{ sshd_print_motd }}
         - RekeyLimit {{ sshd_rekey_limit }}
@@ -213,8 +213,8 @@
         - Banner {{ sshd_banner }}
         - ChallengeResponseAuthentication {{ sshd_challenge_response_authentication }}
         - Ciphers {{ sshd_ciphers }}
-        - ClientAliveCountMax {{ sshd_client_alive_count_max|int }}
-        - ClientAliveInterval {{ sshd_client_alive_interval|int }}
+        - ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
+        - ClientAliveInterval {{ sshd_client_alive_interval | int }}
         - Compression {{ sshd_compression }}
         - GSSAPIAuthentication {{ sshd_gssapi_authentication }}
         - HostbasedAuthentication {{ sshd_hostbased_authentication }}
@@ -223,16 +223,16 @@
         - HostKeyAlgorithms {{ sshd_host_key_algorithms }}
         - KexAlgorithms {{ sshd_kex_algorithms }}
         - LogLevel {{ sshd_log_level }}
-        - LoginGraceTime {{ sshd_login_grace_time|int }}
+        - LoginGraceTime {{ sshd_login_grace_time | int }}
         - Macs {{ sshd_macs }}
-        - MaxAuthTries {{ sshd_max_auth_tries|int }}
-        - MaxSessions {{ sshd_max_sessions|int }}
+        - MaxAuthTries {{ sshd_max_auth_tries | int }}
+        - MaxSessions {{ sshd_max_sessions | int }}
         - MaxStartups {{ sshd_max_startups }}
         - PasswordAuthentication {{ sshd_password_authentication }}
         - PermitEmptyPasswords {{ sshd_permit_empty_passwords }}
         - PermitRootLogin {{ sshd_permit_root_login }}
         - PermitUserEnvironment {{ sshd_permit_user_environment }}
-        - Port {{ sshd_port|int }}
+        - Port {{ sshd_port | int }}
         - PrintLastLog {{ sshd_print_last_log }}
         - PrintMotd {{ sshd_print_motd }}
         - RekeyLimit {{ sshd_rekey_limit }}
@@ -259,16 +259,16 @@
         - allowtcpforwarding {{ sshd_allow_tcp_forwarding }}
         - authenticationmethods {{ sshd_authentication_methods }}
         - banner {{ sshd_banner }}
-        - clientalivecountmax {{ sshd_client_alive_count_max|int }}
-        - clientaliveinterval {{ sshd_client_alive_interval|int }}
+        - clientalivecountmax {{ sshd_client_alive_count_max | int }}
+        - clientaliveinterval {{ sshd_client_alive_interval | int }}
         - compression {{ sshd_compression }}
-        - logingracetime {{ sshd_login_grace_time|int }}
+        - logingracetime {{ sshd_login_grace_time | int }}
         - macs {{ sshd_macs }}
-        - maxauthtries {{ sshd_max_auth_tries|int }}
-        - maxsessions {{ sshd_max_sessions|int }}
+        - maxauthtries {{ sshd_max_auth_tries | int }}
+        - maxsessions {{ sshd_max_sessions | int }}
         - maxstartups {{ sshd_max_startups }}
         - permitrootlogin {{ sshd_permit_root_login }}
-        - port {{ sshd_port|int }}
+        - port {{ sshd_port | int }}
         - subsystem {{ sshd_subsystem }}
         - usedns {{ sshd_use_dns }}
         - usepam {{ sshd_use_pam }}
@@ -366,7 +366,7 @@
     - name: get crypto-policies value
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      ansible.builtin.shell: grep "^{{ crypto_policy|upper }}$" /etc/crypto-policies/config
+      ansible.builtin.shell: grep "^{{ crypto_policy | upper }}$" /etc/crypto-policies/config
       register: crypto_policy_set
       when: crypto_policies_config.stat.exists
       failed_when: crypto_policy_set.rc != 0
@@ -496,10 +496,10 @@
       become: true
       ansible.builtin.stat:
         path: "{{ item.path }}"
-      changed_when: item.mode|int > 644
-      failed_when: item.mode|int > 644
+      changed_when: item.mode | int > 644
+      failed_when: item.mode | int > 644
       with_items:
-        - "{{ perm_grub_cfg.files | reject('search','/boot/efi/EFI/ubuntu/grub.cfg') | list }}"
+        - "{{ perm_grub_cfg.files | reject('search', '/boot/efi/EFI/ubuntu/grub.cfg') | list }}"
       loop_control:
         label: "{{ item.path }}"
 
@@ -570,7 +570,7 @@
       changed_when: false
       failed_when: modprobe_blacklist.rc != 0
       register: modprobe_blacklist
-      when: block_blacklisted|bool
+      when: block_blacklisted | bool
 
     - name: verify blocked blacklisted kernel modules
       environment:
@@ -584,8 +584,8 @@
       failed_when: modprobe_blockblacklisted.rc != 0
       changed_when: modprobe_blockblacklisted.rc != 0
       with_items:
-        - "{{ modprobe_blacklist.stdout_lines | sort }}"
-      when: block_blacklisted|bool
+        - "{{ modprobe_blacklist.stdout_lines | sort }}"
+      when: block_blacklisted | bool
 
     - name: verify sudo settings
       ansible.builtin.shell: |

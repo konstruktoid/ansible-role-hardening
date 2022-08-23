@@ -122,7 +122,7 @@
   community.general.ufw:
     rule: limit
     src: "{{ item }}"
-    port: "{{ sshd_port|int }}"
+    port: "{{ sshd_port | int }}"
     proto: tcp
     comment: ansible managed
   with_items:
@@ -136,7 +136,7 @@
   become: true
   community.general.ufw:
     rule: allow
-    port: '{{ item|int }}'
+    port: '{{ item | int }}'
     direction: out
     comment: ansible managed
   with_items:

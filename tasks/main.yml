@@ -97,7 +97,7 @@
 - name: configure aide
   ansible.builtin.include_tasks: aide.yml
   when: >
-    install_aide|bool and
+    install_aide | bool and
     (not (ansible_os_family == "Debian" and
     (ansible_lsb.codename == "groovy" or
     ansible_lsb.codename == "hirsute")))
@@ -107,7 +107,7 @@
 
 - name: remove suid/sgid
   ansible.builtin.include_tasks: suid.yml
-  when: suid_sgid_permissions|bool
+  when: suid_sgid_permissions | bool
 
 - name: configure compiler permissions
   ansible.builtin.include_tasks: compilers.yml

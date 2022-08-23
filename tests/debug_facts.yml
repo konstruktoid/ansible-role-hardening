@@ -88,12 +88,12 @@
 
 - name: get owner of old keys
   vars:
-    - old_key: "{{ ansible_date_time.epoch|int - 3600 }}"
+    - old_key: "{{ ansible_date_time.epoch | int - 3600 }}"
   debug:
     msg: "{{ item.user_name }}: {{ item.file }} - {{ item.modified_human }}"
   with_items:
     - "{{ ansible_local['sshkeys'] | json_query('keys.*') }}"
-  when: item.modified_epoch|int <= old_key|int and item.user_id >= 1000
+  when: item.modified_epoch | int <= old_key | int and item.user_id >= 1000
   tags:
     - debug
 ...
