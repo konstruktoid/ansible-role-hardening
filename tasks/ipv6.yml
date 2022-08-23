@@ -32,7 +32,7 @@
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   ansible.posix.sysctl:
     name: "{{ item.key }}"
-    value: "{{ item.value|int }}"
+    value: "{{ item.value | int }}"
     state: present
     sysctl_set: true
   when: system_has_ipv6 and disable_ipv6

@@ -7,7 +7,7 @@
     mode: 0755
     owner: root
     group: root
-  when: booted_with_efi|bool
+  when: booted_with_efi | bool
   tags:
     - grub
 
@@ -72,10 +72,10 @@
   ansible.builtin.file:
     path: "{{ item.path }}"
     mode: 0400
-  when: item.mode|int > 400
+  when: item.mode | int > 400
   changed_when: false
   with_items:
-    - "{{ grub_cfg.files | reject('search','/boot/efi/EFI/ubuntu/grub.cfg') | list }}"
+    - "{{ grub_cfg.files | reject('search', '/boot/efi/EFI/ubuntu/grub.cfg') | list }}"
   loop_control:
     label: "{{ item.path }}"
   tags:

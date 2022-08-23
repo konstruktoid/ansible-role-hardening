@@ -41,7 +41,7 @@
     upgrade: safe
   register: apt_upgrade_response
   changed_when: apt_upgrade_response.stdout.find('0 upgraded') == -1
-  when: ansible_os_family == "Debian" and system_upgrade|bool
+  when: ansible_os_family == "Debian" and system_upgrade | bool
   tags:
     - apt
     - CIS-UBUNTU2004-1.9
@@ -239,7 +239,7 @@
     bugfix: true
     security: true
     nobest: true
-  when: ansible_os_family == "RedHat" and system_upgrade|bool
+  when: ansible_os_family == "RedHat" and system_upgrade | bool
   tags:
     - dnf
     - yum

@@ -32,7 +32,7 @@
   changed_when: false
   failed_when: modprobe_blacklist.rc != 0
   register: modprobe_blacklist
-  when: block_blacklisted|bool
+  when: block_blacklisted | bool
   tags:
     - modprobe
     - M1034
@@ -51,7 +51,7 @@
     create: true
   with_items:
     - "{{ modprobe_blacklist.stdout_lines | sort }}"
-  when: block_blacklisted|bool
+  when: block_blacklisted | bool
   tags:
     - modprobe
     - M1034
