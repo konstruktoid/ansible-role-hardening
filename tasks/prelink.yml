@@ -1,19 +1,19 @@
 ---
-- name: sysconfig prelink
+- name: Configure sysconfig prelink
   ansible.builtin.stat:
     path: /etc/sysconfig/prelink
   register: sysconfig_prelink
   tags:
     - prelink
 
-- name: etc prelink config
+- name: Stat prelink configuration file
   ansible.builtin.stat:
     path: /etc/prelink.conf
   register: etc_prelink
   tags:
     - prelink
 
-- name: disable prelinking
+- name: Disable prelinking
   become: true
   ansible.builtin.lineinfile:
     line: "PRELINKING=no"
@@ -25,7 +25,7 @@
   tags:
     - prelink
 
-- name: return to non-prelinked state
+- name: Return to non-prelinked state
   become: true
   ansible.builtin.command: prelink -ua
   when: sysconfig_prelink.stat.exists or etc_prelink.stat.exists

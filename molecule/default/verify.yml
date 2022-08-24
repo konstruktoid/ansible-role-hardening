@@ -4,28 +4,28 @@
   any_errors_fatal: true
 
   tasks:
-    - name: reboot host
+    - name: Reboot host
       become: true
       ansible.builtin.reboot:
 
-    - name: wait for the host and reconnect
+    - name: Wait for the host and reconnect
       ansible.builtin.wait_for:
         port: 22
         host: '{{ (ansible_ssh_host | default(ansible_host)) | default(inventory_hostname) }}'
         delay: 10
         timeout: 120
 
-    - name: include default vars
+    - name: Include default vars
       ansible.builtin.include_vars:
         dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/defaults/"
         extensions:
           - 'yml'
 
-    - name: include host vars
+    - name: Include host vars
       ansible.builtin.include_vars:
         file: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/inventory/host_vars/{{ ansible_hostname }}"
 
-    - name: verify auditd configuration
+    - name: Verify auditd configuration
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/audit/auditd.conf
@@ -45,7 +45,7 @@
         - space_left = {{ auditd_space_left }}
         - space_left_action = {{ auditd_space_left_action }}
 
-    - name: verify systemd system.conf
+    - name: Verify systemd system.conf
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/systemd/system.conf
@@ -62,7 +62,7 @@
         - DefaultLimitNOFILE={{ limit_nofile_hard }}
         - DefaultLimitNPROC={{ limit_nproc_hard }}
 
-    - name: verify systemd user.conf
+    - name: Verify systemd user.conf
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/systemd/user.conf
@@ -76,7 +76,7 @@
         - DefaultLimitNOFILE={{ limit_nofile_hard }}
         - DefaultLimitNPROC={{ limit_nproc_hard }}
 
-    - name: verify postfix configuration
+    - name: Verify postfix configuration
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/postfix/main.cf
@@ -91,36 +91,36 @@
         - smtpd_banner = "\$myhostname - ESMTP"
         - smtpd_client_restrictions = permit_mynetworks,reject
 
-    - name: stat /etc/ssh/sshd_config
+    - name: Stat /etc/ssh/sshd_config
       ansible.builtin.stat:
         path: '/etc/ssh/sshd_config'
       register: sshd_config_file
 
-    - name: stat /etc/ssh/ssh_config
+    - name: Stat /etc/ssh/ssh_config
       ansible.builtin.stat:
         path: '/etc/ssh/ssh_config'
       register: ssh_config_file
 
-    - name: stat /etc/ssh/sshd_config.d/hardening.conf
+    - name: Stat /etc/ssh/sshd_config.d/hardening.conf
       ansible.builtin.stat:
         path: '/etc/ssh/sshd_config.d/hardening.conf'
       register: sshd_config_directory
 
-    - name: assert /etc/ssh/ssh_config permissions
+    - name: Assert /etc/ssh/ssh_config permissions
       ansible.builtin.assert:
         that:
           - ssh_config_file.stat.mode == "0644"
         success_msg: "{{ ssh_config_file.stat.path }} has correct permissions: {{ ssh_config_file.stat.mode }}"
         fail_msg: "{{ ssh_config_file.stat.path }} permissions are incorrect: {{ ssh_config_file.stat.mode }}"
 
-    - name: assert /etc/ssh/sshd_config permissions
+    - name: Assert /etc/ssh/sshd_config permissions
       ansible.builtin.assert:
         that:
           - sshd_config_file.stat.mode == "0600"
         success_msg: "{{ sshd_config_file.stat.path }} has correct permissions: {{ sshd_config_file.stat.mode }}"
         fail_msg: "{{ sshd_config_file.stat.path }} permissions are incorrect: {{ sshd_config_file.stat.mode }}"
 
-    - name: assert /etc/ssh/sshd_config.d/hardening.conf permissions
+    - name: Assert /etc/ssh/sshd_config.d/hardening.conf permissions
       ansible.builtin.assert:
         that:
           - sshd_config_directory.stat.mode == "0600"
@@ -128,7 +128,7 @@
         fail_msg: "{{ sshd_config_directory.stat.path }} permissions are incorrect: {{ sshd_config_directory.stat.mode }}"
       when: sshd_config_directory.stat.exists
 
-    - name: verify sshd_config PermitRootLogin configuration
+    - name: Verify sshd_config PermitRootLogin configuration
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config
@@ -138,7 +138,7 @@
       register: sshd_config
       failed_when: sshd_config is changed
 
-    - name: verify sshd_config.d PermitRootLogin configuration
+    - name: Verify sshd_config.d PermitRootLogin configuration
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config.d/hardening.conf
@@ -149,7 +149,7 @@
       failed_when: sshd_config_d is changed
       when: sshd_config_directory.stat.exists
 
-    - name: verify sshd_config configuration
+    - name: Verify sshd_config configuration
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config
@@ -196,7 +196,7 @@
         - X11Forwarding {{ sshd_x11_forwarding }}
       when: not sshd_config_directory.stat.exists
 
-    - name: verify sshd_config.d configuration
+    - name: Verify sshd_config.d configuration
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config.d/hardening.conf
@@ -244,7 +244,7 @@
         - X11Forwarding {{ sshd_x11_forwarding }}
       when: sshd_config_directory.stat.exists
 
-    - name: verify sshd runtime configuration
+    - name: Verify sshd runtime configuration
       become: true
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -274,7 +274,7 @@
         - usepam {{ sshd_use_pam }}
         - x11forwarding {{ sshd_x11_forwarding }}
 
-    - name: verify ssh_config configuration
+    - name: Verify ssh_config configuration
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/ssh_config
@@ -292,7 +292,7 @@
         - MACs {{ sshd_macs }}
         - RekeyLimit {{ sshd_rekey_limit }}
 
-    - name: verify sysctl configuration
+    - name: Verify sysctl configuration
       become: true
       ansible.builtin.shell: grep -R "^{{ item }}$" /etc/sysctl.*
       register: sysctl_config
@@ -357,13 +357,13 @@
         - net.netfilter.nf_conntrack_max=2000000
         - net.netfilter.nf_conntrack_tcp_loose=0
 
-    - name: stat crypto-policies config
+    - name: Stat crypto-policies config
       become: true
       ansible.builtin.stat:
         path: /etc/crypto-policies/config
       register: crypto_policies_config
 
-    - name: get crypto-policies value
+    - name: Get crypto-policies value
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       ansible.builtin.shell: grep "^{{ crypto_policy | upper }}$" /etc/crypto-policies/config
@@ -372,13 +372,13 @@
       failed_when: crypto_policy_set.rc != 0
       changed_when: crypto_policy_set.rc != 0
 
-    - name: verify noexec /dev/shm
+    - name: Verify noexec /dev/shm
       ansible.builtin.shell: grep '^tmpfs\s/dev/shm.*noexec' /proc/mounts
       register: dev_shm_noexec
       failed_when: dev_shm_noexec.rc != 0
       changed_when: dev_shm_noexec.rc != 0
 
-    - name: verify /proc
+    - name: Verify /proc
       ansible.builtin.shell: |
         set -o pipefail
         grep -E '^proc\s/proc proc rw,nosuid,nodev,noexec,relatime.*hidepid=({{ hide_pid }}|invisible)' /proc/mounts
@@ -387,8 +387,10 @@
       register: proc_opts
       failed_when: proc_opts.rc != 0
       changed_when: proc_opts.rc != 0
+      tags:
+        - skip_ansible_lint
 
-    - name: verify tmp.mount
+    - name: Verify tmp.mount
       become: true
       ansible.builtin.systemd:
         name: tmp.mount
@@ -396,14 +398,14 @@
       failed_when: not 'nosuid,nodev,noexec' in tmp_mount.status.Options
       changed_when: not 'nosuid,nodev,noexec' in tmp_mount.status.Options
 
-    - name: verify /tmp
+    - name: Verify /tmp
       become: true
       ansible.builtin.shell: grep '^tmpfs\s/tmp\s.*nosuid,nodev,noexec' /proc/mounts
       register: mounts_tmp
       failed_when: mounts_tmp.rc != 0
       changed_when: mounts_tmp.rc != 0
 
-    - name: verify login.defs settings
+    - name: Verify login.defs settings
       become: true
       ansible.builtin.shell: grep "^{{ item }}$" /etc/login.defs
       register: login_defs
@@ -423,7 +425,7 @@
         - SYSLOG_SU_ENAB yes
         - UMASK 077
 
-    - name: verify pwquality.conf settings
+    - name: Verify pwquality.conf settings
       become: true
       ansible.builtin.lineinfile:
         path: /etc/security/pwquality.conf
@@ -437,7 +439,7 @@
       failed_when: pwquality_conf is changed
       with_dict: "{{ pwquality_config }}"
 
-    - name: verify RedHat grub audit settings
+    - name: Verify RedHat GRUB audit settings
       become: true
       ansible.builtin.shell: |
         set -o pipefail
@@ -447,7 +449,7 @@
       changed_when: audit_grubenv.rc != 0
       when: ansible_os_family == "RedHat"
 
-    - name: verify Debian audit grub settings
+    - name: Verify Debian audit GRUB settings
       become: true
       ansible.builtin.shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
       register: audit_grub_cfg
@@ -455,7 +457,7 @@
       changed_when: audit_grub_cfg.rc != 0
       when: ansible_os_family == "Debian"
 
-    - name: verify RedHat grub IPv6 settings
+    - name: Verify RedHat GRUB IPv6 settings
       become: true
       ansible.builtin.shell: |
         set -o pipefail
@@ -465,7 +467,7 @@
       changed_when: audit_grubenv.rc != 0
       when: ansible_os_family == "RedHat" and disable_ipv6
 
-    - name: verify Debian grub IPv6 settings
+    - name: Verify Debian GRUB IPv6 settings
       become: true
       ansible.builtin.shell: grep "linux.*ipv6.disable=1" /boot/grub/grub.cfg
       register: audit_grub_cfg
@@ -473,7 +475,7 @@
       changed_when: audit_grub_cfg.rc != 0
       when: ansible_os_family == "Debian" and disable_ipv6
 
-    - name: verify IPv6 sysctl configuration
+    - name: Verify IPv6 sysctl configuration
       become: true
       ansible.builtin.shell: grep -R "^{{ item }}$" /etc/sysctl.*
       register: sysctl_config
@@ -484,7 +486,7 @@
         - net.ipv6.conf.default.disable_ipv6=1
       when: disable_ipv6
 
-    - name: find grub config files
+    - name: Find GRUB config files
       become: true
       ansible.builtin.find:
         paths: /boot
@@ -492,7 +494,7 @@
         recurse: true
       register: perm_grub_cfg
 
-    - name: verify grub config files permission
+    - name: Verify GRUB config files permission
       become: true
       ansible.builtin.stat:
         path: "{{ item.path }}"
@@ -503,7 +505,7 @@
       loop_control:
         label: "{{ item.path }}"
 
-    - name: verify systemd resolved.conf
+    - name: Verify systemd resolved.conf
       become: true
       ansible.builtin.shell: grep "^{{ item }}$" /etc/systemd/resolved.conf
       register: systemd_resolved_conf
@@ -515,7 +517,7 @@
         - DNSSEC={{ dnssec }}
         - DNSOverTLS={{ dns_over_tls }}
 
-    - name: verify systemd timesyncd.conf
+    - name: Verify systemd timesyncd.conf
       become: true
       ansible.builtin.shell: grep "^{{ item }}$" /etc/systemd/timesyncd.conf
       register: systemd_timesyncd_conf
@@ -525,12 +527,12 @@
         - NTP={{ ntp }}
         - FallbackNTP={{ fallback_ntp }}
 
-    - name: register /etc/default/motd-news
+    - name: Stat /etc/default/motd-news
       ansible.builtin.stat:
         path: /etc/default/motd-news
       register: motd_news
 
-    - name: verify masked motdnews service
+    - name: Verify masked motdnews service
       become: true
       ansible.builtin.systemd:
         name: motd-news.service
@@ -542,11 +544,11 @@
       failed_when: motdnews_service is changed
       when: ansible_os_family == "Debian" and motd_news.stat.exists
 
-    - name: efi fact
+    - name: Efi fact
       ansible.builtin.set_fact:
         booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
 
-    - name: verify cracklib password list
+    - name: Verify cracklib password list
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       ansible.builtin.shell: |
@@ -559,7 +561,7 @@
       changed_when: cracklib_passwords.rc != 0
       when: ansible_os_family == "Debian"
 
-    - name: index blacklisted kernel modules
+    - name: Index blacklisted kernel modules
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       ansible.builtin.shell: |
@@ -572,7 +574,7 @@
       register: modprobe_blacklist
       when: block_blacklisted | bool
 
-    - name: verify blocked blacklisted kernel modules
+    - name: Verify blocked blacklisted kernel modules
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       ansible.builtin.shell: |
@@ -587,7 +589,7 @@
         - "{{ modprobe_blacklist.stdout_lines | sort }}"
       when: block_blacklisted | bool
 
-    - name: verify sudo settings
+    - name: Verify sudo settings
       ansible.builtin.shell: |
         set -o pipefail
         sudo -l | grep "{{ item }}"
@@ -605,15 +607,13 @@
         - 'timestamp_timeout=5'
         - 'timestamp_type=tty'
 
-    - name: stat faillock.conf
+    - name: Stat faillock.conf
       become: true
       ansible.builtin.stat:
         path: /etc/security/faillock.conf
       register: faillockconf
-      tags:
-        - pam
 
-    - name: verify faillock.conf
+    - name: Verify faillock.conf
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/security/faillock.conf
@@ -630,7 +630,7 @@
         - "fail_interval = 900"
       when: faillockconf.stat.exists
 
-    - name: verify wireless state
+    - name: Verify wireless state
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       ansible.builtin.command: nmcli -t radio
@@ -639,7 +639,7 @@
       failed_when: not 'disabled' in wireless_state.stdout
       when: disable_wireless
 
-    - name: create test user
+    - name: Create test user
       become: true
       ansible.builtin.user:
         name: roletestuser
@@ -647,22 +647,22 @@
         state: present
         shell: /bin/bash
 
-    - name: create test user salt
+    - name: Create test user salt
       ansible.builtin.set_fact:
         test_user_salt: "{{ lookup('password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits length=16') }}"
 
-    - name: change test user password
+    - name: Change test user password
       become: true
       ansible.builtin.user:
         name: roletestuser
         password: "{{ 'roletestuser' | password_hash('sha512', test_user_salt, rounds=656000) }}"
       register: test_user_pass
 
-    - name: debug test user salt
+    - name: Debug test user salt
       ansible.builtin.debug:
         msg: "{{ test_user_salt }}"
 
-    - name: debug test user password
+    - name: Debug test user password
       ansible.builtin.debug:
         msg: "{{ test_user_pass }}"
 ...

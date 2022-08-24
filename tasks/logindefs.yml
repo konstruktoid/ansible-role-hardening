@@ -1,5 +1,5 @@
 ---
-- name: login.defs
+- name: Configure login.defs
   become: true
   ansible.builtin.template:
     src: etc/login.defs.j2

@@ -1,9 +1,9 @@
 ---
-- name: reboot if required
+- name: Reboot if required
   become: true
   ansible.builtin.setup: ~
   notify:
-    - reboot node
+    - Reboot node
   when: ansible_distribution == "Ubuntu" and ansible_local.reboot.required and
         reboot_ubuntu
   tags:

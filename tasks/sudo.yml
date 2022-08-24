@@ -1,5 +1,5 @@
 ---
-- name: sudo use_pty
+- name: Configure sudo use_pty
   become: true
   ansible.builtin.lineinfile:
     line: "Defaults use_pty"
@@ -11,7 +11,7 @@
     - sudo
     - CIS-UBUNTU2004-5.2.2
 
-- name: sudo configure logfile
+- name: Configure sudo logfile
   become: true
   ansible.builtin.lineinfile:
     line: 'Defaults logfile="/var/log/sudo.log"'
@@ -23,7 +23,7 @@
     - sudo
     - CIS-UBUNTU2004-5.2.3
 
-- name: sudo disable pwfeedback
+- name: Configure sudo disable pwfeedback
   become: true
   ansible.builtin.lineinfile:
     line: "Defaults !pwfeedback"
@@ -34,7 +34,7 @@
   tags:
     - sudo
 
-- name: sudo disable visiblepw
+- name: Configure sudo disable visiblepw
   become: true
   ansible.builtin.lineinfile:
     line: "Defaults !visiblepw"
@@ -45,13 +45,13 @@
   tags:
     - sudo
 
-- name: remove inconsistently named sudoer file
+- name: Remove inconsistently named sudoer file
   become: true
   ansible.builtin.file:
     path: /etc/sudoers.d/15_timeout
     state: absent
 
-- name: sudo passwd_timeout
+- name: Configure sudo passwd_timeout
   become: true
   ansible.builtin.lineinfile:
     line: "Defaults passwd_timeout=1"
@@ -62,7 +62,7 @@
   tags:
     - sudo
 
-- name: sudo timestamp_timeout
+- name: Configure sudo timestamp_timeout
   become: true
   ansible.builtin.lineinfile:
     line: "Defaults timestamp_timeout=5"
@@ -73,7 +73,7 @@
   tags:
     - sudo
 
-- name: sudo timestamp_type
+- name: Configure sudo timestamp_type
   become: true
   ansible.builtin.lineinfile:
     line: "Defaults timestamp_type=tty"
@@ -85,16 +85,18 @@
     - sudo
     - M1028
 
-- name: create su group sugroup
+- name: Create su group sugroup
   become: true
   ansible.builtin.group:
     name: sugroup
     state: present
   tags:
+    - pam
+    - su
     - sudo
     - CIS-UBUNTU2004-5.7
 
-- name: configure su group
+- name: Configure su group
   become: true
   ansible.builtin.lineinfile:
     line: "auth required pam_wheel.so use_uid group=sugroup"
@@ -103,6 +105,8 @@
     state: present
     create: true
   tags:
+    - pam
+    - su
     - sudo
     - CIS-UBUNTU2004-5.7
 ...

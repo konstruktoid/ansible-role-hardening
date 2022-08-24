@@ -1,6 +1,6 @@
 ---
 
-- name: limits.conf
+- name: Configure limits.conf
   become: true
   ansible.builtin.template:
     src: etc/security/limits.conf.j2
@@ -16,7 +16,7 @@
     - CIS-UBUNTU2004-1.5.4
     - UBTU-20-010400
 
-- name: coredump.conf
+- name: Configure coredump.conf
   become: true
   ansible.builtin.template:
     src: etc/systemd/coredump.conf.j2

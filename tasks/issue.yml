@@ -1,5 +1,5 @@
 ---
-- name: add motd
+- name: Add motd file
   become: true
   ansible.builtin.template:
     src: etc/motd.j2
@@ -14,7 +14,7 @@
     - CIS-UBUNTU2004-1.7.1
     - CIS-UBUNTU2004-1.7.4
 
-- name: add issue and issue.net
+- name: Add issue and issue.net files
   become: true
   ansible.builtin.template:
     src: etc/issue.j2

@@ -1,5 +1,5 @@
 ---
-- name: create /boot/grub directory if efi boot
+- name: Create /boot/grub directory if efi boot
   become: true
   ansible.builtin.file:
     path: /boot/grub
@@ -11,10 +11,10 @@
   tags:
     - grub
 
-- name: run all notified handlers
+- name: Run all notified handlers
   ansible.builtin.meta: flush_handlers
 
-- name: register RedHat grub audit settings
+- name: Stat RedHat auditd GRUB settings
   become: true
   ansible.builtin.shell: |
     set -o pipefail
@@ -29,7 +29,7 @@
     - auditd
     - grub
 
-- name: update grub2 if missing grub settings
+- name: Update grub2 if missing GRUB settings
   become: true
   ansible.builtin.command: grub2-mkconfig
   when: ansible_os_family == "RedHat" and audit_grubenv.rc != 0
@@ -37,7 +37,7 @@
     - auditd
     - grub
 
-- name: register Debian audit grub settings
+- name: Stat Debian auditd GRUB settings
   become: true
   ansible.builtin.shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
   changed_when: false
@@ -48,7 +48,7 @@
     - auditd
     - grub
 
-- name: update grub if missing grub settings
+- name: Update GRUB if settings are missing
   become: true
   ansible.builtin.command: update-grub
   when: ansible_os_family == "Debian" and audit_grub_cfg.rc != 0
@@ -56,7 +56,7 @@
     - auditd
     - grub
 
-- name: find grub config files
+- name: Find GRUB config files
   become: true
   ansible.builtin.find:
     paths: /boot
@@ -67,7 +67,7 @@
     - grub
     - CIS-UBUNTU2004-1.4.3
 
-- name: set grub config permissions
+- name: Set GRUB config permissions
   become: true
   ansible.builtin.file:
     path: "{{ item.path }}"

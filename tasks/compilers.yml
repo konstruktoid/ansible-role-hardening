@@ -1,5 +1,5 @@
 ---
-- name: register compilers
+- name: Stat available compilers
   become: true
   ansible.builtin.find:
     paths: ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/snap/bin']
@@ -11,7 +11,7 @@
   tags:
     - compilers
 
-- name: restrict compiler access
+- name: Restrict compiler access
   become: true
   ansible.builtin.file:
     path: "{{ item.path }}"

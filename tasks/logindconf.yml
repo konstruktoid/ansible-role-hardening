@@ -1,5 +1,5 @@
 ---
-- name: systemd logind
+- name: Configure systemd logind
   become: true
   ansible.builtin.template:
     src: etc/systemd/logind.conf.j2
@@ -9,7 +9,7 @@
     owner: root
     group: root
   notify:
-    - reload systemd
+    - Reload systemd
   tags:
     - systemd
     - logind

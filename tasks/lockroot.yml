@@ -1,5 +1,5 @@
 ---
-- name: lock root account
+- name: Lock the root account
   become: true
   ansible.builtin.user:
     name: root

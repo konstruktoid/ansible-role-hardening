@@ -1,5 +1,5 @@
 ---
-- name: remove /tmp from fstab
+- name: Remove /tmp from fstab
   become: true
   mount:
     path: /tmp
@@ -7,7 +7,7 @@
   tags:
     - fstab
 
-- name: remove floppy from fstab
+- name: Remove floppy from fstab
   become: true
   ansible.builtin.lineinfile:
     path: /etc/fstab

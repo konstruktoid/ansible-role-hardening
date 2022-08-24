@@ -1,5 +1,5 @@
 ---
-- name: python3-jmespath
+- name: Debug python3-jmespath
   become: true
   package:
     name: python3-jmespath
@@ -7,68 +7,68 @@
   tags:
     - debug
 
-- name: "cpuinfo_rdrand handling, true"
+- name: Debug "cpuinfo_rdrand handling, true"
   debug:
     msg: "cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}, true"
   when: ansible_local.cpuinfo.rdrand
   tags:
     - debug
 
-- name: "cpuinfo_rdrand handling, false"
+- name: Debug "cpuinfo_rdrand handling, false"
   debug:
     msg: "cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}, false"
   when: not ansible_local.cpuinfo.rdrand
   tags:
     - debug
 
-- name: "ansible_local['cpuinfo']['rdrand'], true"
+- name: Debug "ansible_local['cpuinfo']['rdrand'], true"
   debug:
     msg: "cpuinfo_rdrand is {{ ansible_local['cpuinfo']['rdrand'] }}, true"
   when: ansible_local['cpuinfo']['rdrand']
   tags:
     - debug
 
-- name: "ansible_local['cpuinfo']['rdrand'], false"
+- name: Debug "ansible_local['cpuinfo']['rdrand'], false"
   debug:
     msg: "cpuinfo_rdrand is {{ ansible_local['cpuinfo']['rdrand'] }}, false"
   when: not ansible_local['cpuinfo']['rdrand']
   tags:
     - debug
 
-- name: "cpuinfo_rdrand handling, info"
+- name: Debug "cpuinfo_rdrand handling, info"
   debug:
     msg: "cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}"
   tags:
     - debug
 
-- name: "reboot_required handling, info"
+- name: Debug "reboot_required handling, info"
   debug:
     msg: "reboot_required is {{ ansible_local.reboot.required }}"
   when: ansible_distribution == "Ubuntu"
   tags:
     - debug
 
-- name: "systemd_version handling, <= 100"
+- name: Debug "systemd_version handling, <= 100"
   debug:
     msg: "systemd version is {{ ansible_local.systemd.version }}, <= 100"
   when: ansible_local.systemd.version <= 100
   tags:
     - debug
 
-- name: "systemd_version handling, >= 100"
+- name: Debug "systemd_version handling, >= 100"
   debug:
     msg: "systemd version is {{ ansible_local.systemd.version }}, >= 100"
   when: ansible_local.systemd.version >= 100
   tags:
     - debug
 
-- name: "systemd_version handling, info"
+- name: Debug "systemd_version handling, info"
   debug:
     msg: "systemd version is {{ ansible_local.systemd.version }}"
   tags:
     - debug
 
-- name: get DSA keys
+- name: Get DSA keys
   debug:
     msg: "{{ item }}"
   with_items:
@@ -77,7 +77,7 @@
   tags:
     - debug
 
-- name: get short RSA keys
+- name: Get short RSA keys
   debug:
     msg: "{{ item }}"
   with_items:
@@ -86,7 +86,7 @@
   tags:
     - debug
 
-- name: get owner of old keys
+- name: Get owner of old keys
   vars:
     - old_key: "{{ ansible_date_time.epoch | int - 3600 }}"
   debug:
