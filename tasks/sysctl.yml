@@ -6,7 +6,7 @@
     value: "{{ sysctl_dev_tty_ldisc_autoload | int }}"
     state: present
     sysctl_set: true
-  when: ansible_kernel is version("5",">=")
+  when: ansible_kernel is version("5", ">=")
   tags:
     - sysctl
 
