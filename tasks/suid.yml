@@ -1,5 +1,5 @@
 ---
-- name: remove suid/sgid
+- name: Remove suid/sgid permissions
   become: true
   ansible.builtin.file:
     path: "{{ item }}"

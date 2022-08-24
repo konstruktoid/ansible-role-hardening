@@ -1,5 +1,5 @@
 ---
-- name: disable misc kernel modules
+- name: Disable misc kernel modules
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/disablemod.conf
@@ -21,7 +21,7 @@
     - M1038
     - M1042
 
-- name: index blacklisted kernel modules
+- name: Stat blacklisted kernel modules
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   ansible.builtin.shell: |
@@ -39,7 +39,7 @@
     - M1038
     - M1042
 
-- name: block blacklisted kernel modules
+- name: Block blacklisted kernel modules
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/blockblacklisted.conf

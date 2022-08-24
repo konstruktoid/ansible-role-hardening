@@ -1,5 +1,5 @@
 ---
-- name: remove users
+- name: Remove users
   become: true
   ansible.builtin.user:
     name: "{{ item }}"
@@ -15,7 +15,7 @@
   tags:
     - users
 
-- name: find user /home directories
+- name: Stat user /home directories
   ansible.builtin.find:
     paths: /home
     file_type: directory
@@ -25,7 +25,7 @@
     - CIS-UBUNTU2004-6.2.6
     - M1022
 
-- name: set user /home directories permission
+- name: Set user /home directories permission
   become: true
   ansible.builtin.file:
     mode: 0750

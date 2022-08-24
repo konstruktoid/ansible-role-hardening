@@ -1,5 +1,5 @@
 ---
-- name: disable apport
+- name: Disable apport
   become: true
   ansible.builtin.lineinfile:
     regexp: "^enabled="
@@ -11,7 +11,7 @@
     backrefs: true
   register: default_apport
   notify:
-    - mask apport
+    - Mask apport
   when: ansible_os_family == "Debian"
   failed_when:
     - default_apport.rc is defined

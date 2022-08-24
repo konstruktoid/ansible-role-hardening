@@ -8,5 +8,3 @@ enable_list:
 warn_list:
   - yaml
   - yaml[line-length]
-skip_list:
-  - name[casing]

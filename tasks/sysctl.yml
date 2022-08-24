@@ -1,16 +1,16 @@
 ---
-- name: set sysctl dev.tty.ldisc_autoload
+- name: Set sysctl dev.tty.ldisc_autoload
   become: true
   ansible.posix.sysctl:
     name: dev.tty.ldisc_autoload
     value: "{{ sysctl_dev_tty_ldisc_autoload | int }}"
     state: present
     sysctl_set: true
-  when: ansible_kernel is version("5",">=")
+  when: ansible_kernel is version("5", ">=")
   tags:
     - sysctl
 
-- name: set sysctl net.ipv6.conf.accept_ra_rtr_pref
+- name: Set sysctl net.ipv6.conf.accept_ra_rtr_pref
   become: true
   ansible.posix.sysctl:
     name: net.ipv6.conf.{{ ansible_default_ipv4.interface }}.accept_ra_rtr_pref
@@ -19,19 +19,25 @@
     sysctl_set: true
   when: system_has_ipv6
   tags:
+    - ipv6
     - sysctl
 
 - name: Sysctl rules if the system has ipv6
   ansible.builtin.set_fact:
     sysctl_settings: "{{ generic_sysctl_settings | combine(ipv4_sysctl_settings) | combine(ipv6_sysctl_settings) }}"
   when: system_has_ipv6
+  tags:
+    - ipv6
+    - sysctl
 
 - name: Sysctl rules if the system does not have ipv6
   ansible.builtin.set_fact:
     sysctl_settings: "{{ generic_sysctl_settings | combine(ipv4_sysctl_settings) }}"
   when: not system_has_ipv6
+  tags:
+    - sysctl
 
-- name: configure sysctl
+- name: Configure sysctl
   become: true
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -42,7 +48,7 @@
     sysctl_set: true
   with_dict: "{{ sysctl_settings }}"
   notify:
-    - restart sysctl
+    - Restart sysctl
   tags:
     - sysctl
     - CCE-80913-7

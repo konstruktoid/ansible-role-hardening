@@ -1,14 +1,14 @@
 ---
-- name: install local facts
+- name: Install local facts
   ansible.builtin.include_tasks: facts.yml
 
-- name: configure dns
+- name: Configure systemd resolved
   ansible.builtin.include_tasks: resolvedconf.yml
 
-- name: install epel-release and python dependencies
+- name: Install epel-release and python dependencies
   ansible.builtin.include_tasks: pre.yml
 
-- name: install and configure ufw
+- name: Install and configure UFW
   ansible.builtin.include_tasks:
     file: ufw.yml
     apply:
@@ -16,85 +16,85 @@
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   when: ufw_enable
 
-- name: configure sysctl
+- name: Configure sysctl
   ansible.builtin.include_tasks: sysctl.yml
 
-- name: disable kernel network modules
+- name: Disable kernel network modules
   ansible.builtin.include_tasks: disablenet.yml
 
-- name: disable file system kernel modules
+- name: Disable file system kernel modules
   ansible.builtin.include_tasks: disablefs.yml
 
-- name: disable IPv6
+- name: Disable IPv6
   ansible.builtin.include_tasks: ipv6.yml
   when: disable_ipv6
 
-- name: configure systemd system and users
+- name: Configure systemd system and users
   ansible.builtin.include_tasks: systemdconf.yml
 
-- name: configure systemd journald and logrotate
+- name: Configure systemd journald and logrotate
   ansible.builtin.include_tasks: journalconf.yml
 
-- name: configure systemd timesyncd
+- name: Configure systemd timesyncd
   ansible.builtin.include_tasks: timesyncd.yml
 
-- name: clean fstab
+- name: Clean fstab
   ansible.builtin.include_tasks: fstab.yml
 
-- name: configure shm and tmp mounts
+- name: Configure shm and tmp mounts
   ansible.builtin.include_tasks: mount.yml
 
-- name: disable prelink
+- name: Disable prelink
   ansible.builtin.include_tasks: prelink.yml
 
-- name: configure package managers, update caches and install updates
+- name: Configure package managers, update caches and install updates
   ansible.builtin.include_tasks: packagemgmt.yml
 
-- name: configure hosts.allow and hosts.deny
+- name: Configure hosts.allow and hosts.deny
   ansible.builtin.include_tasks: hosts.yml
 
-- name: configure login.defs
+- name: Configure login.defs
   ansible.builtin.include_tasks: logindefs.yml
 
-- name: set limits
+- name: Set limits
   ansible.builtin.include_tasks: limits.yml
 
-- name: configure adduser and useradd
+- name: Configure adduser and useradd
   ansible.builtin.include_tasks: adduser.yml
 
-- name: restrict root access
+- name: Restrict root access
   ansible.builtin.include_tasks: rootaccess.yml
 
-- name: configure needrestart, install and remove various packages
+- name: Configure needrestart, install and remove various packages
   ansible.builtin.include_tasks: packages.yml
 
-- name: configure ssh server and client
+- name: Configure ssh server and client
   ansible.builtin.include_tasks: sshconfig.yml
 
-- name: configure pam
+- name: Configure PAM
   ansible.builtin.include_tasks: password.yml
 
-- name: configure and clean at and cron
+- name: Configure and clean at and cron
   ansible.builtin.include_tasks: cron.yml
 
-- name: disable ctrl-alt-del.target
+- name: Disable systemd ctrl-alt-del.target
   ansible.builtin.include_tasks: ctrlaltdel.yml
 
-- name: configure auditd
+- name: Configure auditd
   ansible.builtin.include_tasks: auditd.yml
 
-- name: configure apparmor
+- name: Configure AppArmor
   ansible.builtin.include_tasks: apparmor.yml
 
-- name: disable misc kernel modules
+- name: Disable misc kernel modules
   ansible.builtin.include_tasks: disablemod.yml
 
-- name: disable wireless interface
+- name: Disable wireless interfaces
   ansible.builtin.include_tasks: disablewireless.yml
   when: disable_wireless
 
 # https://bugs.launchpad.net/ubuntu/+source/aide/+bug/1903298
-- name: configure aide
+- name: Configure AIDE
   ansible.builtin.include_tasks: aide.yml
   when: >
     install_aide | bool and
@@ -102,52 +102,49 @@
     (ansible_lsb.codename == "groovy" or
     ansible_lsb.codename == "hirsute")))
 
-- name: manage users
+- name: Manage users
   ansible.builtin.include_tasks: users.yml
 
-- name: remove suid/sgid
+- name: Remove suid/sgid permissions
   ansible.builtin.include_tasks: suid.yml
   when: suid_sgid_permissions | bool
 
-- name: configure compiler permissions
+- name: Configure compiler permissions
   ansible.builtin.include_tasks: compilers.yml
 
-- name: set umask
+- name: Set umask
   ansible.builtin.include_tasks: umask.yml
 
-- name: configure paths
+- name: Configure paths
   ansible.builtin.include_tasks: path.yml
 
-- name: configure systemd logindconf
+- name: Configure systemd logind
   ansible.builtin.include_tasks: logindconf.yml
 
-- name: configure systemd resolvedconf
-  ansible.builtin.include_tasks: resolvedconf.yml
-
-- name: configure rkhunter
+- name: Configure rkhunter
   ansible.builtin.include_tasks: rkhunter.yml
 
-- name: add issue message
+- name: Add issue message
   ansible.builtin.include_tasks: issue.yml
 
-- name: configure apport
+- name: Configure apport
   ansible.builtin.include_tasks: apport.yml
 
-- name: lock root account
+- name: Lock root account
   ansible.builtin.include_tasks: lockroot.yml
 
-- name: configure postfix
+- name: Configure Postfix
   ansible.builtin.include_tasks: postfix.yml
 
-- name: configure motdnews
+- name: Configure motdnews
   ansible.builtin.include_tasks: motdnews.yml
 
-- name: configure sudo
+- name: Configure sudo
   ansible.builtin.include_tasks: sudo.yml
 
-- name: misc extra tasks
+- name: Miscellaneous extra tasks
   ansible.builtin.include_tasks: extras.yml
 
-- name: misc tasks after all handlers
+- name: Miscellaneous tasks after all handlers
   ansible.builtin.include_tasks: post.yml
 ...

@@ -1,5 +1,5 @@
 ---
-- name: stat init.d/rc
+- name: Stat init.d/rc
   become: true
   ansible.builtin.stat:
     path: /etc/init.d/rc
@@ -9,7 +9,7 @@
     - CIS-UBUNTU2004-5.5.4
     - M1022
 
-- name: set default rc umask
+- name: Set default rc umask
   become: true
   ansible.builtin.replace:
     regexp: 'umask(\s+.*)'
@@ -22,7 +22,7 @@
     - CIS-UBUNTU2004-5.5.4
     - M1022
 
-- name: stat bashrc
+- name: Stat bashrc
   become: true
   ansible.builtin.stat:
     path: /etc/bashrc
@@ -34,7 +34,7 @@
     - CIS-UBUNTU2004-5.5.4
     - M1022
 
-- name: set default bashrc umask
+- name: Set default bashrc umask
   become: true
   ansible.builtin.replace:
     regexp: 'umask(\s+.*)'
@@ -49,7 +49,7 @@
     - CIS-UBUNTU2004-5.5.4
     - M1022
 
-- name: stat csh.cshrc
+- name: Stat csh.cshrc
   become: true
   ansible.builtin.stat:
     path: /etc/csh.cshrc
@@ -60,7 +60,7 @@
     - CIS-UBUNTU2004-5.5.4
     - M1022
 
-- name: set default csh.cshrc umask
+- name: Set default csh.cshrc umask
   become: true
   ansible.builtin.replace:
     regexp: 'umask(\s+.*)'
@@ -74,7 +74,7 @@
     - CIS-UBUNTU2004-5.5.4
     - M1022
 
-- name: set default profile umask
+- name: Set default profile umask
   become: true
   ansible.builtin.replace:
     regexp: 'umask(\s+.*)'
@@ -86,7 +86,7 @@
     - CIS-UBUNTU2004-5.5.4
     - M1022
 
-- name: readonly TMOUT
+- name: Configure readonly TMOUT
   become: true
   ansible.builtin.lineinfile:
     line: "readonly TMOUT"
@@ -98,7 +98,7 @@
   tags:
     - tmout
 
-- name: set TMOUT
+- name: Set TMOUT
   become: true
   ansible.builtin.lineinfile:
     line: "TMOUT=600"
@@ -112,7 +112,7 @@
     - CIS-UBUNTU2004-5.5.5
     - UBTU-20-010013
 
-- name: export TMOUT
+- name: Export TMOUT
   become: true
   ansible.builtin.lineinfile:
     line: "export TMOUT"

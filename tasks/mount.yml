@@ -1,5 +1,5 @@
 ---
-- name: mount /proc
+- name: Mount /proc with additional options
   become: true
   mount:
     name: /proc
@@ -11,7 +11,7 @@
     - mount
     - proc
 
-- name: stat /dev/shm
+- name: Stat /dev/shm
   ansible.builtin.stat:
     path: /dev/shm
   register: dev_shm
@@ -19,7 +19,7 @@
     - mount
     - shm
 
-- name: mount /dev/shm with noexec
+- name: Mount /dev/shm with noexec
   become: true
   mount:
     name: /dev/shm
@@ -38,7 +38,7 @@
     - CIS-UBUNTU2004-1.1.8
     - CIS-UBUNTU2004-1.1.9
 
-- name: create tmp.mount
+- name: Add systemd tmp.mount
   become: true
   ansible.builtin.template:
     src: etc/systemd/tmp.mount.j2
@@ -49,13 +49,12 @@
     group: root
   tags:
     - mount
-    - systemd
     - tmp
     - CCE-82139-7
     - CCE-82140-5
     - CCE-82623-0
 
-- name: stat tmp.mount
+- name: Stat tmp.mount
   ansible.builtin.stat:
     path: /etc/systemd/system/tmp.mount
   register: tmp_mount
@@ -63,7 +62,7 @@
     - mount
     - tmp
 
-- name: unmask tmp.mount
+- name: Unmask tmp.mount
   become: true
   ansible.builtin.systemd:
     name: tmp.mount
@@ -71,10 +70,9 @@
   when: tmp_mount.stat.exists
   tags:
     - mount
-    - systemd
     - tmp
 
-- name: start tmp.mount
+- name: Start tmp.mount
   become: true
   ansible.builtin.systemd:
     name: tmp.mount
@@ -84,6 +82,5 @@
   when: tmp_mount.stat.exists
   tags:
     - mount
-    - systemd
     - tmp
 ...

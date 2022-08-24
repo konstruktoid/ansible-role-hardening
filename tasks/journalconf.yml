@@ -1,5 +1,5 @@
 ---
-- name: systemd journald.conf
+- name: Configure systemd journald.conf
   become: true
   ansible.builtin.template:
     src: etc/systemd/journald.conf.j2
@@ -9,7 +9,7 @@
     owner: root
     group: root
   notify:
-    - reload systemd
+    - Reload systemd
   tags:
     - systemd
     - journald
@@ -17,7 +17,7 @@
     - CIS-UBUNTU2004-4.2.2.2
     - CIS-UBUNTU2004-4.2.2.3
 
-- name: logrotate.conf
+- name: Configure logrotate(8)
   become: true
   ansible.builtin.template:
     src: etc/logrotate.conf.j2
@@ -29,7 +29,7 @@
   tags:
     - logrotate
 
-- name: cron.daily logrotate
+- name: Configure cron.daily logrotate
   become: true
   ansible.builtin.lineinfile:
     line: "/usr/sbin/logrotate /etc/logrotate.conf"
@@ -38,9 +38,10 @@
     state: present
     create: true
   tags:
+    - cron
     - logrotate
 
-- name: stat rsyslog.conf
+- name: Stat rsyslog.conf
   become: true
   ansible.builtin.stat:
     path: /etc/rsyslog.conf
@@ -48,7 +49,7 @@
   tags:
     - rsyslog
 
-- name: get rsyslog.conf FileCreateMode
+- name: Stat rsyslog.conf FileCreateMode
   become: true
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -59,7 +60,7 @@
   tags:
     - rsyslog
 
-- name: set rsyslog.conf FileCreateMode
+- name: Configure rsyslog.conf FileCreateMode
   become: true
   ansible.builtin.lineinfile:
     regexp: '^\$FileCreateMode'
@@ -73,7 +74,7 @@
     - rsyslog
     - CIS-UBUNTU2004-4.2.1.4
 
-- name: set rsyslog.d FileCreateMode
+- name: Add FileCreateMode file to the rsyslog.d directory
   become: true
   ansible.builtin.lineinfile:
     regexp: '^\$FileCreateMode'

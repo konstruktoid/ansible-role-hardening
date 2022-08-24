@@ -1,5 +1,5 @@
 ---
-- name: disable ctrl-alt-del
+- name: Disable systemd ctrl-alt-del
   become: true
   ansible.builtin.systemd:
     name: ctrl-alt-del.target
@@ -9,10 +9,10 @@
   when: not ansible_os_family == "RedHat"
   tags:
     - ctrl-alt-del
-    - systemd
     - CCE-80785-9
+    - systemd
 
-- name: disable ctrl-alt-del - idempotence
+- name: Disable systemd ctrl-alt-del - RedHat family
   become: true
   ansible.builtin.systemd:
     name: ctrl-alt-del.target
@@ -23,6 +23,6 @@
   changed_when: false
   tags:
     - ctrl-alt-del
-    - systemd
     - CCE-80785-9
+    - systemd
 ...

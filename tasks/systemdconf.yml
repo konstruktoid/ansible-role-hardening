@@ -1,5 +1,5 @@
 ---
-- name: systemd system.conf
+- name: Configure systemd system.conf
   become: true
   ansible.builtin.template:
     src: etc/systemd/system.conf.j2
@@ -9,13 +9,13 @@
     owner: root
     group: root
   notify:
-    - reload systemd
+    - Reload systemd
   tags:
     - system
     - systemd
     - CCE-80784-2
 
-- name: systemd user.conf
+- name: Configure systemd user.conf
   become: true
   ansible.builtin.template:
     src: etc/systemd/user.conf.j2
@@ -25,7 +25,7 @@
     owner: root
     group: root
   notify:
-    - reload systemd
+    - Reload systemd
   tags:
     - systemd
     - users

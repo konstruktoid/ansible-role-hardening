@@ -1,5 +1,5 @@
 ---
-- name: stat postfic main.cf
+- name: Stat postfix main.cf
   ansible.builtin.stat:
     path: /etc/postfix/main.cf
   register: postfix_main_cf
@@ -7,7 +7,7 @@
     - packages
     - postfix
 
-- name: configure postfix disable_vrfy_command
+- name: Configure Postfix disable_vrfy_command
   become: true
   ansible.builtin.lineinfile:
     regexp: "^disable_vrfy_command"
@@ -19,7 +19,7 @@
     - packages
     - postfix
 
-- name: configure postfix inet_interfaces
+- name: Configure Postfix inet_interfaces
   become: true
   ansible.builtin.lineinfile:
     regexp: "^inet_interfaces"
@@ -31,7 +31,7 @@
     - packages
     - postfix
 
-- name: configure postfix smtpd_banner
+- name: Configure Postfix smtpd_banner
   become: true
   ansible.builtin.lineinfile:
     regexp: "^smtpd_banner"
@@ -43,7 +43,7 @@
     - packages
     - postfix
 
-- name: configure postfix smtpd_client_restrictions
+- name: Configure Postfix smtpd_client_restrictions
   become: true
   ansible.builtin.lineinfile:
     regexp: "^smtpd_client_restrictions"

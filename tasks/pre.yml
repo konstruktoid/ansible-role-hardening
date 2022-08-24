@@ -1,5 +1,5 @@
 ---
-- name: update subscription info on RHEL
+- name: Update subscription info on RHEL
   become: true
   ansible.builtin.command: subscription-manager refresh --force
   changed_when: false
@@ -7,7 +7,7 @@
   tags:
     - subscription
 
-- name: redhat family epel installation
+- name: RedHat family EPEL installation
   become: true
   ansible.builtin.dnf:
     name: "epel-release"
@@ -17,8 +17,9 @@
   tags:
     - dnf
     - packages
+    - yum
 
-- name: install python-pexpect
+- name: Install python-pexpect
   become: true
   ansible.builtin.apt:
     name: python-pexpect
@@ -30,7 +31,7 @@
     - packages
     - python
 
-- name: install python3-pexpect
+- name: Install python3-pexpect
   become: true
   ansible.builtin.apt:
     name: python3-pexpect
@@ -42,7 +43,7 @@
     - packages
     - python
 
-- name: python2-rpm installation
+- name: Install python2-rpm
   become: true
   ansible.builtin.dnf:
     name: "python2-rpm"
@@ -54,7 +55,7 @@
     - python
     - yum
 
-- name: python3-rpm installation
+- name: Install python3-rpm
   become: true
   ansible.builtin.dnf:
     name: "python3-rpm"
@@ -66,7 +67,7 @@
     - python
     - yum
 
-- name: python3-passlib installation
+- name: Install python3-passlib
   become: true
   ansible.builtin.package:
     name: python3-passlib
@@ -83,9 +84,9 @@
     - python
     - yum
 
-- name: pip installation
+- name: Install Python pip
   block:
-    - name: python3-pip installation
+    - name: Python3-pip installation
       become: true
       ansible.builtin.package:
         name: "python3-pip"
@@ -96,7 +97,7 @@
         - python
         - yum
 
-    - name: pip passlib installation
+    - name: Pip passlib installation
       become: true
       ansible.builtin.pip:
         name: "passlib"
@@ -105,6 +106,7 @@
         - dnf
         - packages
         - python
+        - yum
   when:
     - python3_passlib.rc is defined
     - python3_passlib.rc != 0

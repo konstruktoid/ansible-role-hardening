@@ -1,11 +1,11 @@
 ---
-- name: merge package lists
+- name: Merge package lists
   ansible.builtin.set_fact:
     packages_merged: "{{ packages_debian + packages_redhat + packages_ubuntu }}"
   tags:
     - packages
 
-- name: pre stat needrestart configuration directory
+- name: Pre register needrestart configuration directory
   become: true
   ansible.builtin.stat:
     path: /etc/needrestart/conf.d
@@ -14,7 +14,7 @@
     - needrestart
     - packages
 
-- name: create needrestart directory
+- name: Create needrestart directory
   become: true
   ansible.builtin.file:
     path: /etc/needrestart/conf.d
@@ -28,7 +28,7 @@
     - needrestart
     - packages
 
-- name: stat needrestart configuration directory
+- name: Stat needrestart configuration directory
   become: true
   ansible.builtin.stat:
     path: /etc/needrestart/conf.d
@@ -37,7 +37,7 @@
     - needrestart
     - packages
 
-- name: get needrestart restart value
+- name: Get needrestart restart value
   ansible.builtin.command: grep -Rqo "$nrconf{restart} = 'l';" /etc/needrestart/conf.d/
   register: needrestart_restart_set
   when: needrestart_directory.stat.exists
@@ -47,7 +47,7 @@
     - needrestart
     - packages
 
-- name: configure needrestart
+- name: Configure needrestart
   become: true
   ansible.builtin.lineinfile:
     path: /etc/needrestart/conf.d/00-restart.conf
@@ -61,7 +61,7 @@
     - needrestart
     - packages
 
-- name: debian family package installation
+- name: Debian family package installation
   become: true
   ansible.builtin.apt:
     name: "{{ packages_debian }}"
@@ -69,7 +69,6 @@
     install_recommends: false
   when: ansible_os_family == "Debian"
   tags:
-    - apt
     - packages
     - CIS-UBUNTU2004-1.6.1.1
     - CIS-UBUNTU2004-4.1.1.1
@@ -77,7 +76,7 @@
     - M1049
     - UBTU-20-010005
 
-- name: ubuntu package installation
+- name: Ubuntu package installation
   become: true
   ansible.builtin.apt:
     name: "{{ packages_ubuntu }}"
@@ -85,10 +84,9 @@
     install_recommends: false
   when: ansible_distribution == "Ubuntu"
   tags:
-    - apt
     - packages
 
-- name: ubuntu update-notifier-common package installation
+- name: Ubuntu update-notifier-common package installation
   become: true
   ansible.builtin.apt:
     name: "update-notifier-common"
@@ -96,19 +94,17 @@
     install_recommends: false
   when: ansible_distribution == "Ubuntu"
   tags:
-    - apt
     - packages
 
-- name: redhat family package installation
+- name: RedHat family package installation
   become: true
   ansible.builtin.dnf:
     name: "{{ packages_redhat }}"
     state: present
   when: ansible_os_family == "RedHat"
   notify:
-    - enable haveged
+    - Enable haveged
   tags:
-    - dnf
     - packages
     - CCE-80847-7
     - CCE-81043-2
@@ -116,7 +112,7 @@
     - CCE-83303-8
     - M1049
 
-- name: apt purge package removal
+- name: Run apt purge
   become: true
   ansible.builtin.apt:
     name: "{{ packages_blocklist }}"
@@ -126,11 +122,10 @@
   register: apt_purge
   failed_when: apt_purge is not success and not "No package" in apt_purge.msg
   tags:
-    - apt
     - packages
     - M1042
 
-- name: generic package removal
+- name: Generic package removal
   become: true
   ansible.builtin.package:
     name: "{{ packages_blocklist }}"
@@ -138,8 +133,6 @@
   register: package_removal
   failed_when: package_removal is not success and not "No package" in package_removal.msg
   tags:
-    - apt
-    - dnf
     - packages
     - CCE-80873-3
     - CCE-82182-7
@@ -155,7 +148,7 @@
     - CIS-UBUNTU2004-2.2.6
     - M1042
 
-- name: virtualbox package installation
+- name: VirtualBox guest packages installation
   become: true
   ansible.builtin.apt:
     name: "{{ packages }}"
@@ -170,11 +163,10 @@
         ansible_distribution == "Ubuntu"
   failed_when: virtualbox_packages is not success and not "No package matching" in virtualbox_packages.msg
   tags:
-    - apt
     - packages
     - virtualbox
 
-- name: vmware package installation
+- name: VMWare package installation
   become: true
   ansible.builtin.package:
     name: open-vm-tools
@@ -184,7 +176,7 @@
     - packages
     - vmware
 
-- name: qemu package installation
+- name: QEMU package installation
   become: true
   ansible.builtin.package:
     name: qemu-guest-agent
@@ -194,7 +186,7 @@
     - packages
     - qemu
 
-- name: rng-tools package installation
+- name: Install rng-tools
   become: true
   ansible.builtin.package:
     name: rng-tools
@@ -205,15 +197,16 @@
     - packages
     - CCE-82968-9
 
-- name: stat sysstat default
+- name: Stat sysstat default
   become: true
   ansible.builtin.stat:
     path: /etc/default/sysstat
   register: default_sysstat
   tags:
+    - packages
     - sysstat
 
-- name: enable sysstat
+- name: Enable sysstat
   become: true
   ansible.builtin.lineinfile:
     regexp: "^ENABLED"
@@ -225,15 +218,15 @@
     backrefs: true
   when: default_sysstat.stat.exists
   tags:
+    - packages
     - sysstat
 
-- name: remove unneeded debian dependency packages
+- name: Remove unneeded Debian dependencies
   become: true
   ansible.builtin.apt:
     autoclean: true
     autoremove: true
   when: ansible_os_family == "Debian"
   tags:
-    - apt
     - packages
 ...

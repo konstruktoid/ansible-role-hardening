@@ -1,5 +1,5 @@
 ---
-- name: stat access.conf
+- name: Stat access.conf
   become: true
   ansible.builtin.stat:
     path: /etc/security/access.conf
@@ -7,7 +7,7 @@
   tags:
     - access_conf
 
-- name: stat securetty
+- name: Stat securetty
   become: true
   ansible.builtin.stat:
     path: /etc/securetty
@@ -15,7 +15,7 @@
   tags:
     - securetty
 
-- name: clean access.conf
+- name: Clean access.conf
   become: true
   ansible.builtin.lineinfile:
     path: /etc/security/access.conf
@@ -26,7 +26,7 @@
   tags:
     - access_conf
 
-- name: allow localhost root access.conf
+- name: Allow localhost root in access.conf
   become: true
   ansible.builtin.lineinfile:
     path: /etc/security/access.conf
@@ -37,7 +37,7 @@
   tags:
     - access_conf
 
-- name: clean securetty
+- name: Clean securetty
   become: true
   ansible.builtin.lineinfile:
     path: /etc/securetty
@@ -47,7 +47,7 @@
   tags:
     - securetty
 
-- name: allow console securetty
+- name: Allow console in securetty
   become: true
   ansible.builtin.lineinfile:
     path: /etc/securetty
@@ -59,7 +59,7 @@
     - securetty
     - CIS-UBUNTU2004-5.6
 
-- name: mask debug-shell
+- name: Mask systemd debug-shell
   become: true
   ansible.builtin.systemd:
     name: debug-shell.service

@@ -1,5 +1,5 @@
 ---
-- name: rkhunter
+- name: Configure rkhunter
   become: true
   ansible.builtin.template:
     src: etc/default/rkhunter.j2
@@ -10,13 +10,13 @@
     group: root
   when: ansible_os_family == "Debian"
   notify:
-    - rkhunter propupd
+    - Run rkhunter propupd
   tags:
     - packages
     - rkhunter
     - M1049
 
-- name: rkhunter ssh root user
+- name: SSH root access should be disabled
   become: true
   ansible.builtin.lineinfile:
     regexp: "ALLOW_SSH_ROOT_USER"
@@ -27,13 +27,13 @@
     create: false
     backrefs: true
   notify:
-    - rkhunter propupd
+    - Run rkhunter propupd
   tags:
     - packages
     - rkhunter
     - M1049
 
-- name: rkhunter ssh proto
+- name: SSH v1 should not be used
   become: true
   ansible.builtin.lineinfile:
     regexp: "ALLOW_SSH_PROT_V1"
@@ -44,7 +44,7 @@
     create: false
     backrefs: true
   notify:
-    - rkhunter propupd
+    - Run rkhunter propupd
   tags:
     - packages
     - rkhunter

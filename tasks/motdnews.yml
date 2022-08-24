@@ -1,12 +1,12 @@
 ---
-- name: register /etc/default/motd-news
+- name: Stat /etc/default/motd-news
   ansible.builtin.stat:
     path: /etc/default/motd-news
   register: motd_news
   tags:
     - motd
 
-- name: disable motd-news
+- name: Disable motd-news
   become: true
   ansible.builtin.lineinfile:
     regexp: "^ENABLED="
@@ -17,13 +17,13 @@
     create: false
     backrefs: true
   notify:
-    - mask motdnews timer
-    - mask motdnews service
+    - Mask motdnews timer
+    - Mask motdnews service
   when: ansible_os_family == "Debian" and motd_news.stat.exists
   tags:
     - motd
 
-- name: find update-motd.d files
+- name: Find update-motd.d files
   become: true
   ansible.builtin.find:
     paths: /etc/update-motd.d
@@ -32,7 +32,7 @@
   tags:
     - motd
 
-- name: motd updates permissions
+- name: Update motd permissions
   become: true
   ansible.builtin.file:
     dest: "{{ item.path }}"
@@ -43,7 +43,7 @@
   tags:
     - motd
 
-- name: /etc/update-motd.d permission
+- name: Set /etc/update-motd.d permission
   become: true
   ansible.builtin.file:
     dest: /etc/update-motd.d

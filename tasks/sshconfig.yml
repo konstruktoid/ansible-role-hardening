@@ -1,5 +1,5 @@
 ---
-- name: sysconfig sshd
+- name: Stat sysconfig sshd configuration
   ansible.builtin.stat:
     path: /etc/sysconfig/sshd
   register: sysconfig_sshd
@@ -8,7 +8,7 @@
     - sshd_config
     - M1041
 
-- name: sshd system crypto policy
+- name: Remove sshd system crypto policy
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/sysconfig/sshd
@@ -20,14 +20,18 @@
     - CCE-80939-2
     - M1041
 
-- name: get Include config
+- name: Get sshd Include config
   become: true
   ansible.builtin.command: grep -E "^Include " /etc/ssh/sshd_config
   register: grep_include
   changed_when: false
   failed_when: false
+  tags:
+    - sshd
+    - sshd_config
+    - M1041
 
-- name: check if sshd_config.d exits
+- name: Check if sshd_config.d exits
   ansible.builtin.stat:
     path: /etc/ssh/sshd_config.d
   register: sshd_config_d
@@ -36,15 +40,18 @@
     - sshd_config
     - M1041
 
-- name: ensure /etc/ssh/sshd_config permission mode
+- name: Ensure /etc/ssh/sshd_config permissions
   become: true
   ansible.builtin.file:
     path: /etc/ssh/sshd_config
     owner: root
     group: root
     mode: 0600
+  tags:
+    - sshd
+    - sshd_config
 
-- name: configure sshd
+- name: Configure sshd
   become: true
   ansible.builtin.template:
     src: etc/ssh/sshd_config.j2
@@ -55,7 +62,7 @@
     group: root
   when: not sshd_config_d.stat.exists or grep_include.rc != 0
   notify:
-    - restart sshd
+    - Restart sshd
   tags:
     - sshd
     - sshd_config
@@ -96,7 +103,7 @@
     - UBTU-20-010036
     - UBTU-20-010037
 
-- name: configure sshd - sshd_config.d
+- name: Configure sshd using sshd_config.d
   become: true
   ansible.builtin.template:
     src: etc/ssh/sshd_config.j2
@@ -107,7 +114,7 @@
     group: root
   when: sshd_config_d.stat.exists and grep_include.rc == 0
   notify:
-    - restart sshd
+    - Restart sshd
   tags:
     - sshd
     - sshd_config
@@ -148,15 +155,18 @@
     - UBTU-20-010036
     - UBTU-20-010037
 
-- name: remove possible Subsystem duplicate
+- name: Remove possible Subsystem duplicate
   become: true
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: ^Subsystem.*
     state: absent
   when: sshd_config_d.stat.exists and grep_include.rc == 0
+  tags:
+    - sshd
+    - sshd_config
 
-- name: sshd host keys
+- name: Stat sshd host keys
   become: true
   ansible.builtin.find:
     paths: /etc/ssh
@@ -169,7 +179,7 @@
     - M1022
     - M1041
 
-- name: sshd host key permissions
+- name: Set sshd host key permissions
   become: true
   ansible.builtin.file:
     owner: root
@@ -186,7 +196,7 @@
     - M1022
     - M1041
 
-- name: check if ssh_config.d exits
+- name: Check if ssh_config.d exits
   ansible.builtin.stat:
     path: /etc/ssh/ssh_config.d
   register: ssh_config_d
@@ -195,7 +205,7 @@
     - ssh_config
     - M1041
 
-- name: configure ssh client
+- name: Configure ssh client
   become: true
   ansible.builtin.template:
     src: etc/ssh/ssh_config.j2

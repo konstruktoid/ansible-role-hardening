@@ -1,5 +1,5 @@
 ---
-- name: adduser.conf
+- name: Add configuration file for adduser and addgroup
   become: true
   ansible.builtin.template:
     src: etc/adduser.conf.j2
@@ -12,7 +12,7 @@
     - adduser
     - users
 
-- name: useradd
+- name: Add configuration file for useradd
   become: true
   ansible.builtin.template:
     src: etc/default/useradd.j2
@@ -26,6 +26,7 @@
     - users
     - CCE-27355-7
     - CCE-80954-1
+    - CCE-83627-0
     - CIS-UBUNTU2004-5.5.1.4
     - UBTU-20-010409
 ...

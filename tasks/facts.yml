@@ -1,5 +1,5 @@
 ---
-- name: create custom facts directory
+- name: Create custom facts directory
   become: true
   ansible.builtin.file:
     path: /etc/ansible/facts.d
@@ -11,7 +11,7 @@
   tags:
     - fact
 
-- name: systemd version fact
+- name: Add systemd version fact
   become: true
   ansible.builtin.template:
     src: etc/ansible/facts.d/systemd.fact
@@ -20,10 +20,10 @@
     owner: root
     group: root
   tags:
-    - systemd
     - fact
+    - systemd
 
-- name: cpuinfo rdrand fact
+- name: Add cpuinfo rdrand fact
   become: true
   ansible.builtin.template:
     src: etc/ansible/facts.d/cpuinfo.fact
@@ -33,10 +33,10 @@
     group: root
   tags:
     - cpuinfo
-    - rdrand
     - fact
+    - rdrand
 
-- name: reboot required fact
+- name: Add reboot required fact
   become: true
   ansible.builtin.template:
     src: etc/ansible/facts.d/reboot.fact
@@ -46,10 +46,10 @@
     group: root
   when: ansible_distribution == "Ubuntu"
   tags:
-    - reboot
     - fact
+    - reboot
 
-- name: ssh keys fact
+- name: Add ssh keys fact
   become: true
   ansible.builtin.template:
     src: etc/ansible/facts.d/sshkeys.fact
@@ -58,22 +58,27 @@
     owner: root
     group: root
   tags:
+    - fact
     - sshd
-    - fact
 
-- name: update facts
-  ansible.builtin.setup: ~
-  tags:
-    - fact
-
-- name: Does local /proc have ipv6 settings?
+- name: Stat IPv6 status
   become: true
   ansible.builtin.stat:
     path: /proc/sys/net/ipv6
   register: stat_ipv6
+  tags:
+    - fact
+    - ipv6
 
-- name: Setting system has ipv6 or not.
+- name: Set IPv6 fact
   ansible.builtin.set_fact:
     system_has_ipv6: "{{ stat_ipv6.stat.exists }}"
+  tags:
+    - fact
+    - ipv6
 
+- name: Update current facts
+  ansible.builtin.setup: ~
+  tags:
+    - fact
 ...

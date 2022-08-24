@@ -1,5 +1,5 @@
 ---
-- name: add the nf_conntrack module
+- name: Add the nf_conntrack module
   become: true
   community.general.modprobe:
     name: nf_conntrack
@@ -8,7 +8,7 @@
     - conntrack
     - sysctl
 
-- name: stat nf_conntrack_tcp_be_liberal
+- name: Stat nf_conntrack_tcp_be_liberal
   become: true
   ansible.builtin.stat:
     path: /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal
@@ -18,7 +18,7 @@
     - sysctl
 
 # https://github.com/ansible/ansible/issues/45446
-- name: enable nf_conntrack_tcp_be_liberal to keep connections alive
+- name: Enable nf_conntrack_tcp_be_liberal to keep connections alive
   become: true
   ansible.posix.sysctl:
     name: net.netfilter.nf_conntrack_tcp_be_liberal
@@ -31,7 +31,7 @@
     - conntrack
     - sysctl
 
-- name: ufw installation - debian
+- name: Debian family UFW installation
   become: true
   ansible.builtin.apt:
     name: "ufw"
@@ -39,28 +39,24 @@
     install_recommends: false
   when: ansible_os_family == "Debian"
   tags:
-    - apt
-    - packages
     - ufw
     - CCE-82998-6
     - M1037
     - CIS-UBUNTU2004-3.5.1.1
     - CIS-UBUNTU2004-3.5.1.3
 
-- name: ufw installation - redhat
+- name: RedHat family UFW installation
   become: true
   ansible.builtin.dnf:
     name: "ufw"
     state: present
   when: ansible_os_family == "RedHat"
   tags:
-    - dnf
-    - packages
     - ufw
     - CCE-82998-6
     - M1037
 
-- name: set ufw IPT_SYSCTL
+- name: Set UFW IPT_SYSCTL
   become: true
   ansible.builtin.lineinfile:
     regexp: "^IPT_SYSCTL="
@@ -74,7 +70,7 @@
     - ufw
     - M1037
 
-- name: enable ufw and set default deny incoming
+- name: Enable UFW and set default deny incoming
   become: true
   community.general.ufw:
     state: enabled
@@ -89,7 +85,7 @@
     - D3-ITF
     - M1037
 
-- name: enable ufw and set default deny outgoing
+- name: Enable UFW and set default deny outgoing
   become: true
   community.general.ufw:
     state: enabled
@@ -103,11 +99,11 @@
     - CIS-UBUNTU2004-3.5.1.7
     - M1037
 
-- name: register ufw rules
+- name: Stat UFW rules
   become: true
   ansible.builtin.shell: |
     set -o pipefail
-    ufw show added | grep '^ufw' | grep -v "'ansible\smanaged'" | sed 's/ufw //g'
+    UFW show added | grep '^ufw' | grep -v "'ansible\smanaged'" | sed 's/ufw //g'
   args:
     executable: /bin/bash
   failed_when: ufw_not_managed.rc > 1
@@ -117,7 +113,7 @@
     - ufw
     - M1037
 
-- name: allow ssh ufw
+- name: Allow port {{ sshd_port | int }} from administrator networks
   become: true
   community.general.ufw:
     rule: limit
@@ -129,10 +125,9 @@
     - "{{ sshd_admin_net }}"
   tags:
     - ufw
-    - ssh
     - M1037
 
-- name: allow outgoing specified ufw ports
+- name: Allow outgoing specified ports
   become: true
   community.general.ufw:
     rule: allow
@@ -147,7 +142,7 @@
     - D3-OTF
     - M1037
 
-- name: deny loopback network traffic
+- name: Deny loopback network traffic
   become: true
   community.general.ufw:
     rule: deny
@@ -161,7 +156,7 @@
     - CIS-UBUNTU2004-3.5.1.4
     - M1037
 
-- name: allow loopback traffic in
+- name: Allow loopback traffic in
   become: true
   community.general.ufw:
     rule: allow
@@ -173,7 +168,7 @@
     - CIS-UBUNTU2004-3.5.1.4
     - M1037
 
-- name: allow loopback traffic out
+- name: Allow loopback traffic out
   become: true
   community.general.ufw:
     rule: allow
@@ -185,9 +180,9 @@
     - CIS-UBUNTU2004-3.5.1.4
     - M1037
 
-- name: delete unmanaged ufw rules
+- name: Delete unmanaged UFW rules
   become: true
-  ansible.builtin.command: ufw delete {{ item }}
+  ansible.builtin.command: UFW delete {{ item }}
   when: ufw_not_managed.stdout_lines | length > 0 and not ansible_os_family == "RedHat"
   with_items:
     - "{{ ufw_not_managed.stdout_lines }}"
