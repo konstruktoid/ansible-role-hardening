@@ -6,5 +6,4 @@ exclude_paths:
 enable_list:
   - fqcn-builtins  # opt-in
 warn_list:
-  - yaml
   - yaml[line-length]
