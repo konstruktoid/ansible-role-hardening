@@ -26,6 +26,9 @@ provisioner:
       jammy:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
+      kinetic:
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
 platforms:
   - name: focal
     box: "bento/ubuntu-20.04"
@@ -52,12 +55,25 @@ platforms:
     instance_raw_config_args:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
+  - name: kinetic
+    box: "ubuntu/kinetic64"
+    box_url: "https://cloud-images.ubuntu.com/kinetic/20220830/kinetic-server-cloudimg-amd64-vagrant.box"
+    box_download_checksum: "0f5db3d9b04fb61c0a5d34e044838bced19e831bfc784fcc1df04cb97719ad97"
+    box_download_checksum_type: "sha256"
+    config_options:
+      vm.boot_timeout: 600
+      synced_folder: false
+    provider_raw_config_args:
+      - "customize ['modifyvm', :id, '--uart1', '0x3F8', '4']"
+      - "customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]"
+    instance_raw_config_args:
+      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+    memory: 1024
 verifier:
   name: ansible
 lint: |
   set -e
-  ansible-lint --exclude .git --exclude .github --exclude tests/
-  yamllint -d '{"extends":"default","ignore":".tox*\n.git*","rules":{"line-length":{"max":120,"level":"warning"}}}' .
+  ansible-lint
 scenario:
   name: ubuntu
   create_sequence:
