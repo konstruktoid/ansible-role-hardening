@@ -9,6 +9,7 @@
 .
 ├── LICENSE
 ├── README.md
+├── SECURITY.md
 ├── STRUCTURE.md
 ├── TESTING.md
 ├── Vagrantfile
@@ -18,7 +19,6 @@
 │       ├── compilers.yml
 │       ├── disablewireless.yml
 │       ├── dns.yml
-│       ├── ufw.yml
 │       ├── ipv6.yml
 │       ├── limits.yml
 │       ├── misc.yml
@@ -30,6 +30,7 @@
 │       ├── sshd.yml
 │       ├── suid_sgid_blocklist.yml
 │       ├── sysctl.yml
+│       ├── ufw.yml
 │       └── users.yml
 ├── files
 │   └── usr
@@ -81,7 +82,6 @@
 │   ├── disablewireless.yml
 │   ├── extras.yml
 │   ├── facts.yml
-│   ├── ufw.yml
 │   ├── fstab.yml
 │   ├── hosts.yml
 │   ├── ipv6.yml
@@ -111,6 +111,7 @@
 │   ├── sysctl.yml
 │   ├── systemdconf.yml
 │   ├── timesyncd.yml
+│   ├── ufw.yml
 │   ├── umask.yml
 │   └── users.yml
 ├── templates
@@ -166,5 +167,5 @@
 │   └── test.yml
 └── tox.ini
 
-34 directories, 124 files
+34 directories, 125 files
 ```
