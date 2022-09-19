@@ -22,7 +22,7 @@ Ubuntu [20.04 LTS (Focal Fossa)](https://releases.ubuntu.com/focal/) and
 >
 > There is a [SLSA](https://slsa.dev/) artifact present under the
 > [slsa action workflow](https://github.com/konstruktoid/ansible-role-hardening/actions/workflows/slsa.yml)
-> for file checksum verification.
+> for verification.
 
 ## Dependencies
 
@@ -83,7 +83,7 @@ None.
 ...
 ```
 
-## Note regarding ufw rules
+## Note regarding UFW firewall rules
 
 Instead of resetting `ufw` every run and by doing so causing network traffic
 disruption, the role deletes every `ufw` rule without
@@ -106,7 +106,7 @@ See [TESTING.md](TESTING.md).
 ### ./defaults/main/auditd.yml
 
 ```yaml
-auditd_apply_audit_rules: 'yes'
+auditd_apply_audit_rules: true
 auditd_action_mail_acct: root
 auditd_admin_space_left_action: suspend
 auditd_disk_error_action: suspend
@@ -193,31 +193,16 @@ the DNS server supports DNS-over-TLS and has a valid certificate.
 [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf)
 option.
 
-### ./defaults/main/ufw.yml
-
-```yaml
-ufw_enable: true
-ufw_outgoing_traffic:
-  - 22
-  - 53
-  - 80
-  - 123
-  - 443
-  - 853
-```
-`ufw_enable: true` install and configure `ufw` with related rules. Set it to `false` to manage your firewall and rules.
-`ufw_outgoing_traffic` opens `ufw` ports, allowing outgoing traffic.
-
 ### ./defaults/main/ipv6.yml
 
 ```yaml
 disable_ipv6: false
-ipv6_sysctl_settings:
+ipv6_disable_sysctl_settings:
   net.ipv6.conf.all.disable_ipv6: 1
   net.ipv6.conf.default.disable_ipv6: 1
 ```
 
- If `disable_ipv6: true`, disable IPv6 functionality.
+If `disable_ipv6: true`, IPv6 will be disabled.
 
 ### ./defaults/main/limits.yml
 
@@ -233,7 +218,7 @@ Maximum number of processes and open files.
 ### ./defaults/main/misc.yml
 
 ```yaml
-install_aide: 'yes'
+install_aide: true
 reboot_ubuntu: false
 redhat_signing_keys:
   - 567E347AD0044ADE55BA8A5F199E2F91FD431D51
@@ -328,7 +313,7 @@ option.
 ### ./defaults/main/packages.yml
 
 ```yaml
-system_upgrade: 'yes'
+system_upgrade: true
 packages_blocklist:
   - apport*
   - autofs
@@ -445,12 +430,12 @@ sshd_client_alive_interval: 200
 sshd_compression: 'no'
 sshd_gssapi_authentication: 'no'
 sshd_hostbased_authentication: 'no'
+sshd_host_key_algorithms: ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa,ecdsa-sha2-nistp521-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp521,ecdsa-sha2-nistp384,ecdsa-sha2-nistp256
 sshd_ignore_user_known_hosts: 'yes'
 sshd_kerberos_authentication: 'no'
-sshd_host_key_algorithms: ssh-ed25519,ssh-ed25519-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,rsa-sha2-256,rsa-sha2-512,rsa-sha2-256-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com
 sshd_kex_algorithms: curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
-sshd_log_level: VERBOSE
 sshd_login_grace_time: 20
+sshd_log_level: VERBOSE
 sshd_macs: hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
 sshd_max_auth_tries: 3
 sshd_max_sessions: 3
@@ -535,22 +520,8 @@ _Note that this is a very slow task._
 ```yaml
 sysctl_dev_tty_ldisc_autoload: 0
 sysctl_net_ipv6_conf_accept_ra_rtr_pref: 0
-sysctl_settings:
-  fs.protected_fifos: 2
-  fs.protected_hardlinks: 1
-  fs.protected_symlinks: 1
-  fs.suid_dumpable: 0
-  kernel.core_uses_pid: 1
-  kernel.dmesg_restrict: 1
-  kernel.kptr_restrict: 2
-  kernel.panic: 60
-  kernel.panic_on_oops: 60
-  kernel.perf_event_paranoid: 3
-  kernel.randomize_va_space: 2
-  kernel.sysrq: 0
-  kernel.unprivileged_bpf_disabled: 1
-  kernel.yama.ptrace_scope: 2
-  net.core.bpf_jit_harden: 2
+
+ipv4_sysctl_settings:
   net.ipv4.conf.all.accept_redirects: 0
   net.ipv4.conf.all.accept_source_route: 0
   net.ipv4.conf.all.log_martians: 1
@@ -575,6 +546,8 @@ sysctl_settings:
   net.ipv4.tcp_syn_retries: 5
   net.ipv4.tcp_synack_retries: 2
   net.ipv4.tcp_syncookies: 1
+
+ipv6_sysctl_settings:
   net.ipv6.conf.all.accept_ra: 0
   net.ipv6.conf.all.accept_redirects: 0
   net.ipv6.conf.all.accept_source_route: 0
@@ -591,6 +564,23 @@ sysctl_settings:
   net.ipv6.conf.default.max_addresses: 1
   net.ipv6.conf.default.router_solicitations: 0
   net.ipv6.conf.default.use_tempaddr: 2
+
+generic_sysctl_settings:
+  fs.protected_fifos: 2
+  fs.protected_hardlinks: 1
+  fs.protected_symlinks: 1
+  fs.suid_dumpable: 0
+  kernel.core_uses_pid: 1
+  kernel.dmesg_restrict: 1
+  kernel.kptr_restrict: 2
+  kernel.panic: 60
+  kernel.panic_on_oops: 60
+  kernel.perf_event_paranoid: 3
+  kernel.randomize_va_space: 2
+  kernel.sysrq: 0
+  kernel.unprivileged_bpf_disabled: 1
+  kernel.yama.ptrace_scope: 2
+  net.core.bpf_jit_harden: 2
   net.netfilter.nf_conntrack_max: 2000000
   net.netfilter.nf_conntrack_tcp_loose: 0
 ```
@@ -598,6 +588,21 @@ sysctl_settings:
 `sysctl` configuration.
 
 [sysctl.conf](https://linux.die.net/man/5/sysctl.conf)
+
+### ./defaults/main/ufw.yml
+
+```yaml
+ufw_enable: true
+ufw_outgoing_traffic:
+  - 22
+  - 53
+  - 80
+  - 123
+  - 443
+  - 853
+```
+`ufw_enable: true` install and configure `ufw` with related rules. Set it to `false` to manage your firewall and rules.
+`ufw_outgoing_traffic` opens `ufw` ports, allowing outgoing traffic.
 
 ### ./defaults/main/users.yml
 

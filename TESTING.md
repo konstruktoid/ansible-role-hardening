@@ -13,6 +13,7 @@ generic/rhel8
 konstruktoid/focal-hardened
 ubuntu/focal64
 ubuntu/jammy64
+ubuntu/kinetic64
 ```
 
 ## Test examples

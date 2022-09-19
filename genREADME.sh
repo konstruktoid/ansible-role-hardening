@@ -70,13 +70,13 @@ None.
   any_errors_fatal: true
   tasks:
     - name: install git
-      become: 'yes'
+      become: true
       package:
         name: git
         state: present
 
     - name: checkout konstruktoid.hardening
-      become: 'yes'
+      become: true
       ansible.builtin.git:
         repo: 'https://github.com/konstruktoid/ansible-role-hardening'
         dest: /etc/ansible/roles/konstruktoid.hardening
