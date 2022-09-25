@@ -103,7 +103,7 @@
   become: true
   ansible.builtin.shell: |
     set -o pipefail
-    UFW show added | grep '^ufw' | grep -v "'ansible\smanaged'" | sed 's/ufw //g'
+    ufw show added | grep '^ufw' | grep -v "'ansible\smanaged'" | sed 's/ufw //g'
   args:
     executable: /bin/bash
   failed_when: ufw_not_managed.rc > 1
@@ -182,7 +182,7 @@
 
 - name: Delete unmanaged UFW rules
   become: true
-  ansible.builtin.command: UFW delete {{ item }}
+  ansible.builtin.command: ufw delete {{ item }}
   when: ufw_not_managed.stdout_lines | length > 0 and not ansible_os_family == "RedHat"
   with_items:
     - "{{ ufw_not_managed.stdout_lines }}"
