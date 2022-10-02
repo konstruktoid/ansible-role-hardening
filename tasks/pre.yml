@@ -85,6 +85,9 @@
     - yum
 
 - name: Install Python pip
+  when:
+    - python3_passlib.rc is defined
+    - python3_passlib.rc != 0
   block:
     - name: Python3-pip installation
       become: true
@@ -107,9 +110,6 @@
         - packages
         - python
         - yum
-  when:
-    - python3_passlib.rc is defined
-    - python3_passlib.rc != 0
 
 - name: EFI or UEFI booting check
   ansible.builtin.set_fact:
