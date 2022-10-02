@@ -28,11 +28,6 @@ provisioner:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
         system_upgrade: "no"
-      contrib:
-        ansible_python_interpreter: "/usr/bin/python3"
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
-        system_upgrade: "no"
 platforms:
   - name: buster
     box: "bento/debian-10"
@@ -44,17 +39,11 @@ platforms:
     instance_raw_config_args:
       - 'vbguest.auto_update = false'
     memory: 1024
-  - name: contrib
-    box: "debian/contrib-testing64"
-    instance_raw_config_args:
-      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
-    memory: 1024
 verifier:
   name: ansible
 lint: |
   set -e
-  ansible-lint --exclude .git --exclude .github --exclude tests/
-  yamllint -d '{"extends":"default","ignore":".tox*\n.git*","rules":{"line-length":{"max":120,"level":"warning"}}}' .
+  ansible-lint
 scenario:
   name: debian
   create_sequence:
