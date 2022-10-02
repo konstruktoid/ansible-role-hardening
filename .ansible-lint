@@ -7,4 +7,5 @@ enable_list:
   - fqcn-builtins  # opt-in
 warn_list:
   - name[template]
+  - no-shorthand
   - yaml[line-length]
