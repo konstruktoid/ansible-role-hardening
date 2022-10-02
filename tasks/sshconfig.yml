@@ -62,7 +62,8 @@
     group: root
   when: not sshd_config_d.stat.exists or grep_include.rc != 0
   notify:
-    - Restart sshd
+    - Restart sshd service
+    - Restart ssh service
   tags:
     - sshd
     - sshd_config
@@ -114,7 +115,8 @@
     group: root
   when: sshd_config_d.stat.exists and grep_include.rc == 0
   notify:
-    - Restart sshd
+    - Restart sshd service
+    - Restart ssh service
   tags:
     - sshd
     - sshd_config
