@@ -35,8 +35,7 @@ verifier:
   name: ansible
 lint: |
   set -e
-  ansible-lint --exclude .git --exclude .github --exclude tests/
-  yamllint -d '{"extends":"default","ignore":".tox*\n.git*","rules":{"line-length":{"max":120,"level":"warning"}}}' .
+  ansible-lint
 scenario:
   name: redhat
   create_sequence:
