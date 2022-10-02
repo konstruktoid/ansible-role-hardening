@@ -20,9 +20,6 @@ provisioner:
       focal:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
-      focalefi:
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
       jammy:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
@@ -32,13 +29,6 @@ provisioner:
 platforms:
   - name: focal
     box: "bento/ubuntu-20.04"
-    config_options:
-      vm.boot_timeout: 600
-    instance_raw_config_args:
-      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
-    memory: 1024
-  - name: focalefi
-    box: "konstruktoid/focal-hardened"
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
@@ -57,8 +47,8 @@ platforms:
     memory: 1024
   - name: kinetic
     box: "ubuntu/kinetic64"
-    box_url: "https://cloud-images.ubuntu.com/kinetic/20220830/kinetic-server-cloudimg-amd64-vagrant.box"
-    box_download_checksum: "0f5db3d9b04fb61c0a5d34e044838bced19e831bfc784fcc1df04cb97719ad97"
+    box_url: "https://cloud-images.ubuntu.com/kinetic/20220925/kinetic-server-cloudimg-amd64-vagrant.box"
+    box_download_checksum: "d32cbb71c63df196209288f9bc550934e4ac61ff4eeed5099a0e4b1ce4ac707c"
     box_download_checksum_type: "sha256"
     config_options:
       vm.boot_timeout: 600
