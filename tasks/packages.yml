@@ -5,61 +5,51 @@
   tags:
     - packages
 
-- name: Pre register needrestart configuration directory
-  become: true
-  ansible.builtin.stat:
-    path: /etc/needrestart/conf.d
-  register: needrestart_directory_created
-  tags:
-    - needrestart
-    - packages
-
-- name: Create needrestart directory
-  become: true
-  ansible.builtin.file:
-    path: /etc/needrestart/conf.d
-    state: directory
-    owner: root
-    group: root
-    mode: 0755
-    recurse: true
-  when: ("needrestart" in packages_merged) and not needrestart_directory_created.stat.exists
-  tags:
-    - needrestart
-    - packages
-
-- name: Stat needrestart configuration directory
-  become: true
-  ansible.builtin.stat:
-    path: /etc/needrestart/conf.d
-  register: needrestart_directory
-  tags:
-    - needrestart
-    - packages
-
-- name: Get needrestart restart value
-  ansible.builtin.command: grep -Rqo "$nrconf{restart} = 'l';" /etc/needrestart/conf.d/
-  register: needrestart_restart_set
-  when: needrestart_directory.stat.exists
-  changed_when: needrestart_restart_set.rc != 0
-  failed_when: needrestart_restart_set.rc > 1
-  tags:
-    - needrestart
-    - packages
-
 - name: Configure needrestart
-  become: true
-  ansible.builtin.lineinfile:
-    path: /etc/needrestart/conf.d/00-restart.conf
-    line: "$nrconf{restart} = 'l';"
-    create: true
-    owner: root
-    group: root
-    mode: 0644
-  when: needrestart_directory.stat.exists and needrestart_restart_set.rc != 0
   tags:
     - needrestart
     - packages
+  block:
+    - name: Pre register needrestart configuration directory
+      become: true
+      ansible.builtin.stat:
+        path: /etc/needrestart/conf.d
+      register: needrestart_directory_created
+
+    - name: Create needrestart directory
+      become: true
+      ansible.builtin.file:
+        path: /etc/needrestart/conf.d
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+        recurse: true
+      when: ("needrestart" in packages_merged) and not needrestart_directory_created.stat.exists
+
+    - name: Stat needrestart configuration directory
+      become: true
+      ansible.builtin.stat:
+        path: /etc/needrestart/conf.d
+      register: needrestart_directory
+
+    - name: Get needrestart restart value
+      ansible.builtin.command: grep -Rqo "$nrconf{restart} = 'l';" /etc/needrestart/conf.d/
+      register: needrestart_restart_set
+      when: needrestart_directory.stat.exists
+      changed_when: needrestart_restart_set.rc != 0
+      failed_when: needrestart_restart_set.rc > 1
+
+    - name: Configure needrestart
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/needrestart/conf.d/00-restart.conf
+        line: "$nrconf{restart} = 'l';"
+        create: true
+        owner: root
+        group: root
+        mode: 0644
+      when: needrestart_directory.stat.exists and needrestart_restart_set.rc != 0
 
 - name: Debian family package installation
   become: true

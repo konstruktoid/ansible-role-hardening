@@ -57,11 +57,21 @@
     stated: stopped
     enabled: false
 
-- name: Restart sshd
+- name: Restart ssh service
+  become: true
+  ansible.builtin.service:
+    name: ssh
+    state: restarted
+  register: ssh_service
+  failed_when: ssh_service is not success and not 'Could not find the requested service' in ssh_service.msg
+
+- name: Restart sshd service
   become: true
   ansible.builtin.service:
     name: sshd
     state: restarted
+  register: sshd_service
+  failed_when: sshd_service is not success and not 'Could not find the requested service' in sshd_service.msg
 
 - name: Restart Postfix
   become: true

@@ -23,8 +23,8 @@
       register: nmcli_radio
       changed_when: nmcli_radio.rc != 0
       failed_when: nmcli_radio.rc != 0
-  tags:
-    - wireless
-    - CCE-83501-7
-    - CIS-UBUNTU2004-3.1.2
+      tags:
+        - wireless
+        - CCE-83501-7
+        - CIS-UBUNTU2004-3.1.2
 ...

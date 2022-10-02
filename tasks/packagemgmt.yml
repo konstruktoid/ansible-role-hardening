@@ -138,6 +138,7 @@
     - yum
 
 - name: RHEL8 package management tasks
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
   block:
     - name: Import RHEL8 necessary GPG keys
       become: true
@@ -165,9 +166,9 @@
       become: true
       ansible.builtin.command: subscription-manager repos --enable "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
       changed_when: false
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
 
 - name: RHEL7 repo tasks
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
   block:
     - name: Import RHEL7 necessary GPG keys
       become: true
@@ -199,7 +200,6 @@
         - dnf
         - packages
         - yum
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
 
 - name: Stat PowerTools repository files
   ansible.builtin.stat:
