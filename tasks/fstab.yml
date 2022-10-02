@@ -1,7 +1,7 @@
 ---
 - name: Remove /tmp from fstab
   become: true
-  mount:
+  ansible.posix.mount:
     path: /tmp
     state: absent
   tags:
