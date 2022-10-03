@@ -459,9 +459,10 @@
 
     - name: Verify RedHat GRUB IPv6 settings
       become: true
-      ansible.builtin.shell: |
-        set -o pipefail
-        grep CMDLINE /etc/default/grub | grep "ipv6.disable=1"
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          grep CMDLINE /etc/default/grub | grep "ipv6.disable=1"
       register: audit_grubenv
       failed_when: audit_grubenv.rc != 0
       changed_when: audit_grubenv.rc != 0
@@ -469,7 +470,8 @@
 
     - name: Verify Debian GRUB IPv6 settings
       become: true
-      ansible.builtin.shell: grep "linux.*ipv6.disable=1" /boot/grub/grub.cfg
+      ansible.builtin.shell:
+        cmd: grep "linux.*ipv6.disable=1" /boot/grub/grub.cfg
       register: audit_grub_cfg
       failed_when: audit_grub_cfg.rc != 0
       changed_when: audit_grub_cfg.rc != 0

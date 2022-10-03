@@ -17,7 +17,8 @@
 
 - name: Configure RedHat auditd GRUB cmdline
   become: true
-  ansible.builtin.command: 'grubby --update-kernel=ALL --args="{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"'
+  ansible.builtin.command:
+    cmd: 'grubby --update-kernel=ALL --args="{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"'
   register: grubby_update_kernel
   when: ansible_os_family == "RedHat"
   changed_when: grubby_update_kernel.rc != 0
