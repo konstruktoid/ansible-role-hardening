@@ -113,7 +113,7 @@
     - ufw
     - M1037
 
-- name: Allow port {{ sshd_port | int }} from administrator networks
+- name: Allow sshd port from administrator networks
   become: true
   community.general.ufw:
     rule: limit
