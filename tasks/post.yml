@@ -16,9 +16,10 @@
 
 - name: Stat RedHat auditd GRUB settings
   become: true
-  ansible.builtin.shell: |
-    set -o pipefail
-    grep "CMDLINE_LINUX=.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /etc/default/grub
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      grep "CMDLINE_LINUX=.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /etc/default/grub
   changed_when: false
   failed_when: false
   args:

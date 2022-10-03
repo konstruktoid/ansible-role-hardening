@@ -16,7 +16,8 @@
 
 - name: Set RedHat ipv6.disable GRUB cmdline
   become: true
-  ansible.builtin.command: 'grubby --update-kernel=ALL --args="ipv6.disable=1"'
+  ansible.builtin.command:
+    cmd: 'grubby --update-kernel=ALL --args="ipv6.disable=1"'
   register: grubby_update_kernel
   when: ansible_os_family == "RedHat"
   changed_when: grubby_update_kernel.rc != 0

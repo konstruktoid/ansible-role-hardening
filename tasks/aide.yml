@@ -115,7 +115,8 @@
 
 - name: Initialize RedHat AIDE
   become: true
-  ansible.builtin.command: aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
+  ansible.builtin.command:
+    cmd: aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
   when: ansible_os_family == "RedHat" and not rhelaidedb.stat.exists
   tags:
     - aide
@@ -132,7 +133,8 @@
 
 - name: Copy RedHat AIDE database
   become: true
-  ansible.builtin.command: cp /var/lib/aide/aide.db.gz /var/lib/aide/aide.db.new.gz
+  ansible.builtin.command:
+    cmd: cp /var/lib/aide/aide.db.gz /var/lib/aide/aide.db.new.gz
   when: ansible_os_family == "RedHat" and not rhelaidedbnew.stat.exists
   tags:
     - aide
