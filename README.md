@@ -37,7 +37,7 @@ None.
 - hosts: localhost
   any_errors_fatal: true
   tasks:
-    - name: include the hardening role
+    - name: Include the hardening role
       include_role:
         name: konstruktoid.hardening
       vars:
@@ -57,20 +57,20 @@ None.
 - hosts: localhost
   any_errors_fatal: true
   tasks:
-    - name: install git
+    - name: Install git
       become: true
       package:
         name: git
         state: present
 
-    - name: checkout konstruktoid.hardening
+    - name: Checkout konstruktoid.hardening
       become: true
       ansible.builtin.git:
         repo: 'https://github.com/konstruktoid/ansible-role-hardening'
         dest: /etc/ansible/roles/konstruktoid.hardening
         version: master
 
-    - name: include the hardening role
+    - name: Include the hardening role
       include_role:
         name: konstruktoid.hardening
       vars:
@@ -448,6 +448,7 @@ sshd_port: 22
 sshd_print_last_log: 'yes'
 sshd_print_motd: 'no'
 sshd_rekey_limit: 512M 1h
+sshd_required_rsa_size: 2048
 sshd_strict_modes: 'yes'
 sshd_subsystem: sftp internal-sftp
 sshd_tcp_keep_alive: 'no'
@@ -488,6 +489,9 @@ connection.
 allowed.
 
 `sshd_port` specifies the port number that sshd(8) listens on.
+
+`sshd_required_rsa_size`, RequiredRSASize, will only be set if SSH version is
+higher than 9.1.
 
 ### ./defaults/main/suid_sgid_blocklist.yml
 
@@ -601,8 +605,11 @@ ufw_outgoing_traffic:
   - 443
   - 853
 ```
-`ufw_enable: true` install and configure `ufw` with related rules. Set it to `false` to manage your firewall and rules.
-`ufw_outgoing_traffic` opens `ufw` ports, allowing outgoing traffic.
+
+`ufw_enable: true` installs and configures `ufw` with related rules. Set it to
+`false` in order to install and configure a firewall manually.
+`ufw_outgoing_traffic` opens the specific `ufw` ports,
+allowing outgoing traffic.
 
 ### ./defaults/main/users.yml
 
