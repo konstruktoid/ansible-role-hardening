@@ -30,6 +30,9 @@ Port {{ sshd_port|int }}
 PrintLastLog {{ sshd_print_last_log }}
 PrintMotd {{ sshd_print_motd }}
 RekeyLimit {{ sshd_rekey_limit }}
+{% if ssh_installed_version is version('9.1', '>') %}
+RequiredRSASize {{ sshd_required_rsa_size }}
+{% endif %}
 StrictModes {{ sshd_strict_modes }}
 Subsystem {{ sshd_subsystem }}
 TCPKeepAlive {{ sshd_tcp_keep_alive }}
