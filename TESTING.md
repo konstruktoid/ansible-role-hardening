@@ -8,9 +8,7 @@ almalinux/9
 bento/debian-10
 bento/ubuntu-20.04
 debian/bullseye64
-debian/contrib-testing64
 generic/rhel8
-konstruktoid/focal-hardened
 ubuntu/focal64
 ubuntu/jammy64
 ubuntu/kinetic64
