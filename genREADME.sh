@@ -49,7 +49,7 @@ None.
 - hosts: localhost
   any_errors_fatal: true
   tasks:
-    - name: include the hardening role
+    - name: Include the hardening role
       include_role:
         name: konstruktoid.hardening
       vars:
@@ -69,20 +69,20 @@ None.
 - hosts: localhost
   any_errors_fatal: true
   tasks:
-    - name: install git
+    - name: Install git
       become: true
       package:
         name: git
         state: present
 
-    - name: checkout konstruktoid.hardening
+    - name: Checkout konstruktoid.hardening
       become: true
       ansible.builtin.git:
         repo: 'https://github.com/konstruktoid/ansible-role-hardening'
         dest: /etc/ansible/roles/konstruktoid.hardening
         version: master
 
-    - name: include the hardening role
+    - name: Include the hardening role
       include_role:
         name: konstruktoid.hardening
       vars:
