@@ -11,7 +11,7 @@
 
 - name: Set ssh version as fact
   ansible.builtin.set_fact:
-    ssh_installed_version: "{{ ssh_version.stderr | regex_search('^OpenSSH_([0-9+].[0-9]+)', '\\1') | join('.') | float }}"  # noqa var-spacing
+    ssh_installed_version: "{{ ssh_version.stderr | regex_search('^OpenSSH_([0-9+].[0-9]+)', '\\1') | join('.') | float }}"  # noqa line-spacing
   tags:
     - sshd
     - sshd_config
@@ -77,6 +77,7 @@
     mode: 0600
     owner: root
     group: root
+    validate: sshd -t -f %s
   when: not sshd_config_d.stat.exists or grep_include.rc != 0
   notify:
     - Restart sshd service
@@ -130,6 +131,7 @@
     mode: 0600
     owner: root
     group: root
+    validate: sshd -t -f %s
   when: sshd_config_d.stat.exists and grep_include.rc == 0
   notify:
     - Restart sshd service
