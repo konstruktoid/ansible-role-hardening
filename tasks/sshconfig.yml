@@ -11,7 +11,7 @@
 
 - name: Set ssh version as fact
   ansible.builtin.set_fact:
-    ssh_installed_version: "{{ ssh_version.stderr | regex_search('^OpenSSH_([0-9+].[0-9]+)', '\\1') | join('.') | float }}"  # noqa line-spacing
+    ssh_installed_version: "{{ ssh_version.stderr | regex_search('^OpenSSH_([0-9+].[0-9]+)', '\\1') | join('.') | float }}"  # noqa var-spacing
   tags:
     - sshd
     - sshd_config
