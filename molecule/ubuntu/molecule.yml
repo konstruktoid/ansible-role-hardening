@@ -47,9 +47,6 @@ platforms:
     memory: 1024
   - name: kinetic
     box: "ubuntu/kinetic64"
-    box_url: "https://cloud-images.ubuntu.com/kinetic/20220925/kinetic-server-cloudimg-amd64-vagrant.box"
-    box_download_checksum: "d32cbb71c63df196209288f9bc550934e4ac61ff4eeed5099a0e4b1ce4ac707c"
-    box_download_checksum_type: "sha256"
     config_options:
       vm.boot_timeout: 600
       synced_folder: false
