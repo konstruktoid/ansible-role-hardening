@@ -46,6 +46,7 @@
     value: "{{ item.value | int }}"
     state: present
     sysctl_set: true
+    sysctl_file: /usr/lib/sysctl.d/zz-hardening.conf
   with_dict: "{{ sysctl_settings }}"
   notify:
     - Restart sysctl
