@@ -107,7 +107,9 @@ suid_sgid_blocklist:
   - /bin/red
   - /bin/rev
   - /bin/rpm
+  - /bin/rpmdb
   - /bin/rpmquery
+  - /bin/rpmverify
   - /bin/rsync
   - /bin/run-parts
   - /bin/rview
@@ -115,6 +117,7 @@ suid_sgid_blocklist:
   - /bin/script
   - /bin/sed
   - /bin/setarch
+  - /bin/setfacl
   - /bin/sftp
   - /bin/sg
   - /bin/sh
@@ -149,6 +152,7 @@ suid_sgid_blocklist:
   - /bin/unexpand
   - /bin/uniq
   - /bin/unshare
+  - /bin/unzip
   - /bin/vi
   - /bin/view
   - /bin/wall
@@ -173,6 +177,7 @@ suid_sgid_blocklist:
   - /sbin/ldconfig
   - /sbin/logsave
   - /sbin/mount.nfs
+  - /sbin/nft
   - /sbin/ping
   - /sbin/ping6
   - /sbin/service
@@ -314,7 +319,9 @@ suid_sgid_blocklist:
   - /usr/bin/rev
   - /usr/bin/rlogin
   - /usr/bin/rpm
+  - /usr/bin/rpmdb
   - /usr/bin/rpmquery
+  - /usr/bin/rpmverify
   - /usr/bin/rsync
   - /usr/bin/ruby
   - /usr/bin/run-mailcap
@@ -326,6 +333,7 @@ suid_sgid_blocklist:
   - /usr/bin/script
   - /usr/bin/sed
   - /usr/bin/setarch
+  - /usr/bin/setfacl
   - /usr/bin/sftp
   - /usr/bin/sg
   - /usr/bin/sh
@@ -367,6 +375,7 @@ suid_sgid_blocklist:
   - /usr/bin/unexpand
   - /usr/bin/uniq
   - /usr/bin/unshare
+  - /usr/bin/unzip
   - /usr/bin/update-alternatives
   - /usr/bin/vi
   - /usr/bin/view
@@ -399,6 +408,8 @@ suid_sgid_blocklist:
   - /usr/sbin/ldconfig
   - /usr/sbin/logsave
   - /usr/sbin/mount.nfs
+  - /usr/sbin/nft
+  - /usr/sbin/ping
   - /usr/sbin/ping6
   - /usr/sbin/psad
   - /usr/sbin/service
