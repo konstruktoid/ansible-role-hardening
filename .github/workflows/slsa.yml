@@ -14,6 +14,9 @@ jobs:
       - run: echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
         shell: bash
 
+      - name: Checkout repository
+        uses: actions/checkout@master
+
       - name: Build artifacts
         run: |
           find defaults handlers tasks templates -type f -exec sha256sum {} \; > ${{ env.REPOSITORY_NAME }}.sha256
