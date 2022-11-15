@@ -1,4 +1,10 @@
 ---
+name: slsa
+on:
+  push:
+  release:
+    types: [published, released]
+
 jobs:
   build:
     outputs:
