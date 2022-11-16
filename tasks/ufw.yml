@@ -190,4 +190,20 @@
     - ufw
     - D3-OTF
     - M1037
+
+- name: Configure conntrack sysctl
+  become: true
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value | int }}"
+    state: present
+    sysctl_set: true
+  with_dict: "{{ conntrack_sysctl_settings }}"
+  notify:
+    - Restart sysctl
+  tags:
+    - conntrack
+    - sysctl
 ...
