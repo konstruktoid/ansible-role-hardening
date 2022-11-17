@@ -4,7 +4,7 @@ Description=Aide Check
 [Service]
 Type=simple
 {% if ansible_os_family == 'Debian' %}
-ExecStart=/usr/bin/aide.wrapper --check
+ExecStart=/usr/bin/aide --check --config /etc/aide/aide.conf
 {% else %}
 ExecStart=/usr/sbin/aide --check
 {% endif %}
