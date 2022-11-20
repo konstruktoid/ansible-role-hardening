@@ -6,6 +6,7 @@
     value: "{{ sysctl_dev_tty_ldisc_autoload | int }}"
     state: present
     sysctl_set: true
+    sysctl_file: /usr/lib/sysctl.d/zz-hardening.conf
   when: ansible_kernel is version("5", ">=")
   tags:
     - sysctl
@@ -17,6 +18,7 @@
     value: "{{ sysctl_net_ipv6_conf_accept_ra_rtr_pref | int }}"
     state: present
     sysctl_set: true
+    sysctl_file: /usr/lib/sysctl.d/zz-hardening.conf
   when: system_has_ipv6
   tags:
     - ipv6
