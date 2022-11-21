@@ -25,7 +25,7 @@
   tags:
     - ipv6
 
-- name: Configure IPv6 sysctl settings
+- name: Configure sysctl to disable IPv6
   become: true
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -34,6 +34,7 @@
     value: "{{ item.value | int }}"
     state: present
     sysctl_set: true
+    sysctl_file: /usr/lib/sysctl.d/zz-hardening.conf
   when: system_has_ipv6 and disable_ipv6
   with_dict: "{{ ipv6_disable_sysctl_settings }}"
   notify:
