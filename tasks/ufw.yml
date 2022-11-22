@@ -25,6 +25,7 @@
     value: "1"
     state: present
     sysctl_set: true
+    sysctl_file: /usr/lib/sysctl.d/zz-hardening.conf
     reload: true
   when: conntrackliberal.stat.exists
   tags:
@@ -200,6 +201,7 @@
     value: "{{ item.value | int }}"
     state: present
     sysctl_set: true
+    sysctl_file: /usr/lib/sysctl.d/zz-hardening.conf
   with_dict: "{{ conntrack_sysctl_settings }}"
   notify:
     - Restart sysctl
