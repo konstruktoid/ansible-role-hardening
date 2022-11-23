@@ -25,6 +25,7 @@
     value: "1"
     state: present
     sysctl_set: true
+    sysctl_file: /usr/lib/sysctl.d/zz-hardening.conf
     reload: true
   when: conntrackliberal.stat.exists
   tags:
@@ -60,7 +61,7 @@
   become: true
   ansible.builtin.lineinfile:
     regexp: "^IPT_SYSCTL="
-    line: "IPT_SYSCTL=/etc/sysctl.conf"
+    line: "IPT_SYSCTL=/usr/lib/sysctl.d/zz-hardening.conf"
     dest: /etc/default/ufw
     mode: 0640
     state: present
@@ -200,6 +201,7 @@
     value: "{{ item.value | int }}"
     state: present
     sysctl_set: true
+    sysctl_file: /usr/lib/sysctl.d/zz-hardening.conf
   with_dict: "{{ conntrack_sysctl_settings }}"
   notify:
     - Restart sysctl
