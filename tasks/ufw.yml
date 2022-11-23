@@ -61,7 +61,7 @@
   become: true
   ansible.builtin.lineinfile:
     regexp: "^IPT_SYSCTL="
-    line: "IPT_SYSCTL=/etc/sysctl.conf"
+    line: "IPT_SYSCTL=/usr/lib/sysctl.d/zz-hardening.conf
     dest: /etc/default/ufw
     mode: 0640
     state: present
