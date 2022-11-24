@@ -17,21 +17,23 @@ provisioner:
   log: true
   inventory:
     host_vars:
-      arctic:
+      stone:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
-      emerald:
+        suid_sgid_permissions: false
+      lime:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
+        suid_sgid_permissions: false
 platforms:
-  - name: arctic
+  - name: stone
     box: "almalinux/8"
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - 'vbguest.auto_update = false'
     memory: 1024
-  - name: emerald
+  - name: lime
     box: "almalinux/9"
     config_options:
       vm.boot_timeout: 600

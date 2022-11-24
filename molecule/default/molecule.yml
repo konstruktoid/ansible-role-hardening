@@ -14,9 +14,15 @@ provisioner:
   log: true
   inventory:
     host_vars:
-      arctic:
+      stone:
         disable_ipv6: true
         disable_wireless: true
+        install_aide: false
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
+        suid_sgid_permissions: false
+      lime:
+        disable_ipv6: true
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
       bullseye:
@@ -41,8 +47,15 @@ provisioner:
         sshd_allow_groups: "vagrant sudo"
         suid_sgid_permissions: false
 platforms:
-  - name: arctic
+  - name: stone
     box: "almalinux/8"
+    config_options:
+      vm.boot_timeout: 600
+    instance_raw_config_args:
+      - 'vbguest.auto_update = false'
+    memory: 1024
+  - name: lime
+    box: "almalinux/9"
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
