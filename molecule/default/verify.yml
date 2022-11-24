@@ -131,9 +131,10 @@
         path: '/etc/ssh/ssh_config'
       register: ssh_config_file
 
-    - name: Stat /etc/ssh/sshd_config.d/hardening.conf
+    - name: Stat /etc/ssh/sshd_config.d/01-hardening.conf
+      become: true
       ansible.builtin.stat:
-        path: '/etc/ssh/sshd_config.d/hardening.conf'
+        path: '/etc/ssh/sshd_config.d/01-hardening.conf'
       register: sshd_config_directory
 
     - name: Assert /etc/ssh/ssh_config permissions
@@ -150,7 +151,7 @@
         success_msg: "{{ sshd_config_file.stat.path }} has correct permissions: {{ sshd_config_file.stat.mode }}"
         fail_msg: "{{ sshd_config_file.stat.path }} permissions are incorrect: {{ sshd_config_file.stat.mode }}"
 
-    - name: Assert /etc/ssh/sshd_config.d/hardening.conf permissions
+    - name: Assert /etc/ssh/sshd_config.d/01-hardening.conf permissions
       ansible.builtin.assert:
         that:
           - sshd_config_directory.stat.mode == "0600"
@@ -171,7 +172,7 @@
     - name: Verify sshd_config.d PermitRootLogin configuration
       become: true
       ansible.builtin.lineinfile:
-        dest: /etc/ssh/sshd_config.d/hardening.conf
+        dest: /etc/ssh/sshd_config.d/01-hardening.conf
         line: "PermitRootLogin yes"
         state: absent
       check_mode: true
@@ -229,7 +230,7 @@
     - name: Verify sshd_config.d configuration
       become: true
       ansible.builtin.lineinfile:
-        dest: /etc/ssh/sshd_config.d/hardening.conf
+        dest: /etc/ssh/sshd_config.d/01-hardening.conf
         line: "{{ item }}"
         state: present
       check_mode: true
@@ -277,7 +278,7 @@
     - name: Verify sshd RequiredRSASize
       become: true
       ansible.builtin.lineinfile:
-        dest: /etc/ssh/sshd_config.d/hardening.conf
+        dest: /etc/ssh/sshd_config.d/01-hardening.conf
         line: "RequiredRSASize {{ sshd_required_rsa_size }}"
         state: present
       check_mode: true
