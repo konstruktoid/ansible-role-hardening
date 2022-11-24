@@ -19,7 +19,7 @@
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
-      grep "CMDLINE_LINUX=.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /etc/default/grub
+      grubby --info="/boot/vmlinuz-$(uname -r)" | grep "^args.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
   changed_when: false
   failed_when: false
   args:
