@@ -444,7 +444,7 @@
       become: true
       ansible.builtin.shell: |
         set -o pipefail
-        grep CMDLINE /etc/default/grub | grep "{{ grub_audit_backlog_cmdline }}" | grep "{{ grub_audit_cmdline }}"
+        grubby --info="/boot/vmlinuz-$(uname -r)" | grep "^args.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
       register: audit_grubenv
       failed_when: audit_grubenv.rc != 0
       changed_when: audit_grubenv.rc != 0
@@ -463,7 +463,7 @@
       ansible.builtin.shell:
         cmd: |
           set -o pipefail
-          grep CMDLINE /etc/default/grub | grep "ipv6.disable=1"
+          grubby --info="/boot/vmlinuz-$(uname -r)" | grep "ipv6.disable=1"
       register: audit_grubenv
       failed_when: audit_grubenv.rc != 0
       changed_when: audit_grubenv.rc != 0
