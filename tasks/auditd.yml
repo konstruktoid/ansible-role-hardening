@@ -143,6 +143,30 @@
     - auditd
     - CCE-80684-4
 
+- name: Configure auditd name_format
+  become: true
+  ansible.builtin.lineinfile:
+    regexp: "^name_format ="
+    line: "name_format = hostname"
+    dest: /etc/audit/auditd.conf
+    mode: 0640
+    state: present
+    create: false
+  tags:
+    - auditd
+
+- name: Enable auditd syslog plugin
+  become: true
+  ansible.builtin.lineinfile:
+    dest: /etc/audit/plugins.d/syslog.conf
+    regexp: "^active"
+    line: "active = yes"
+    state: present
+    mode: 0640
+    create: true
+  tags:
+    - auditd
+
 - name: Add auditd rules
   become: true
   ansible.builtin.template:
