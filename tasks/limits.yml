@@ -31,4 +31,14 @@
     - CCE-82251-0
     - CCE-82252-8
     - CIS-UBUNTU2004-1.5.4
+
+- name: Disable kdump service
+  become: true
+  ansible.builtin.systemd:
+    name: kdump.service
+    enabled: 'no'
+    state: stopped
+    masked: 'yes'
+  register: mask_kdump
+  failed_when: mask_kdump is not success and not "Could not find the requested service" in mask_kdump.msg
 ...
