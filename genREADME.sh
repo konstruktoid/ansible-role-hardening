@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ -z "${ANSIBLE_V}" ]; then
-  ANSIBLE_V=2.10
+  ANSIBLE_V="$(grep min_ansible_version meta/main.yml | awk '{print $NF}' | tr -d '\"')"
 fi
 
 if [ -x "$(command -v ansible-playbook-grapher)" ]; then
@@ -50,7 +50,7 @@ None.
   any_errors_fatal: true
   tasks:
     - name: Include the hardening role
-      include_role:
+      ansible.builtin.include_role:
         name: konstruktoid.hardening
       vars:
         block_blacklisted: true
@@ -71,7 +71,7 @@ None.
   tasks:
     - name: Install git
       become: true
-      package:
+      ansible.builtin.package:
         name: git
         state: present
 
@@ -83,7 +83,7 @@ None.
         version: master
 
     - name: Include the hardening role
-      include_role:
+      ansible.builtin.include_role:
         name: konstruktoid.hardening
       vars:
         block_blacklisted: true

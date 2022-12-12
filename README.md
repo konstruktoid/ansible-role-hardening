@@ -4,7 +4,7 @@ An [Ansible](https://www.ansible.com/) role to make a AlmaLinux, Debian, or
 Ubuntu server a bit more secure.
 [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
-Requires Ansible >= 2.10.
+Requires Ansible >= 2.12.
 
 Available on
 [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
@@ -38,7 +38,7 @@ None.
   any_errors_fatal: true
   tasks:
     - name: Include the hardening role
-      include_role:
+      ansible.builtin.include_role:
         name: konstruktoid.hardening
       vars:
         block_blacklisted: true
@@ -59,7 +59,7 @@ None.
   tasks:
     - name: Install git
       become: true
-      package:
+      ansible.builtin.package:
         name: git
         state: present
 
@@ -71,7 +71,7 @@ None.
         version: master
 
     - name: Include the hardening role
-      include_role:
+      ansible.builtin.include_role:
         name: konstruktoid.hardening
       vars:
         block_blacklisted: true
@@ -585,6 +585,8 @@ generic_sysctl_settings:
   kernel.unprivileged_bpf_disabled: 1
   kernel.yama.ptrace_scope: 2
   net.core.bpf_jit_harden: 2
+
+conntrack_sysctl_settings:
   net.netfilter.nf_conntrack_max: 2000000
   net.netfilter.nf_conntrack_tcp_loose: 0
 ```

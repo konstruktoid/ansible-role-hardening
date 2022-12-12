@@ -3,12 +3,12 @@
   any_errors_fatal: true
   become: true
   tasks:
-    - include_role:
+    - ansible.builtin.include_role:
         name: konstruktoid.hardening
 
 - hosts: all
   any_errors_fatal: true
   become: true
   tasks:
-    - include: debug_facts.yml
+    - ansible.builtin.include_tasks: debug_facts.yml
 ...

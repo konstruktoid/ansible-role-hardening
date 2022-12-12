@@ -31,10 +31,10 @@ repository if the host is using [Ubuntu](https://ubuntu.com/ "Ubuntu").
 
 ```console
 devel
-py39-ansible5
 py39-ansible6
+py39-ansible7
 py39-ansibledevel
-py310-ansible5
 py310-ansible6
+py310-ansible7
 py310-ansibledevel
 ```
