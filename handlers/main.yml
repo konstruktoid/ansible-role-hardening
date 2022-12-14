@@ -54,7 +54,7 @@
   ansible.builtin.systemd:
     name: aidecheck.timer
     masked: true
-    stated: stopped
+    state: stopped
     enabled: false
 
 - name: Restart ssh service
