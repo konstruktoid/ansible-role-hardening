@@ -21,13 +21,21 @@ provisioner:
         ansible_python_interpreter: "/usr/bin/python3"
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
+        suid_sgid_permissions: false
         system_upgrade: "no"
       bullseye:
         ansible_become_pass: "vagrant"
         ansible_python_interpreter: "/usr/bin/python3"
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
+        suid_sgid_permissions: false
         system_upgrade: "no"
+      testing:
+        ansible_become_pass: "vagrant"
+        ansible_python_interpreter: "/usr/bin/python3"
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: "vagrant sudo"
+        suid_sgid_permissions: false
 platforms:
   - name: buster
     box: "bento/debian-10"
@@ -36,6 +44,11 @@ platforms:
     memory: 1024
   - name: bullseye
     box: "debian/bullseye64"
+    instance_raw_config_args:
+      - 'vbguest.auto_update = false'
+    memory: 1024
+  - name: testing
+    box: "debian/testing64"
     instance_raw_config_args:
       - 'vbguest.auto_update = false'
     memory: 1024
