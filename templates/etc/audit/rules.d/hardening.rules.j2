@@ -323,7 +323,7 @@
 
 # Kernel modification
 -w /etc/sysctl.conf -p wa -k sysctl
--w /usr/lib/sysctl.d/zz-hardening.conf -p wa -k sysctl
+-w "{{ sysctl_conf_dir }}/zz-hardening.conf" -p wa -k sysctl
 
 # Hostname changes
 -a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale
