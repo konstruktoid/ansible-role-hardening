@@ -77,6 +77,20 @@
     - fact
     - ipv6
 
+- name: Set sysctl configuration directory as fact
+  tags:
+    - fact
+    - sysctl
+  block:
+    - name: Stat /usr/lib/sysctl.d/ exists
+      ansible.builtin.stat:
+        path: "/usr/lib/sysctl.d/"
+      register: usr_lib_sysctl_d
+
+    - name: Set sysctl fact
+      ansible.builtin.set_fact:
+        sysctl_conf_dir: "{{ '/usr/lib/sysctl.d' if usr_lib_sysctl_d.stat.exists else '/etc/sysctl.d' }}"
+
 - name: Update current facts
   ansible.builtin.setup: ~
   tags:

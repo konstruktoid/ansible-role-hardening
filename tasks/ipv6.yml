@@ -34,7 +34,7 @@
     value: "{{ item.value | int }}"
     state: present
     sysctl_set: true
-    sysctl_file: /usr/lib/sysctl.d/zz-hardening.conf
+    sysctl_file: "{{ sysctl_conf_dir }}/zz-hardening.conf"
   when: system_has_ipv6 and disable_ipv6
   with_dict: "{{ ipv6_disable_sysctl_settings }}"
   notify:
