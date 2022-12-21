@@ -25,6 +25,24 @@
       ansible.builtin.include_vars:
         file: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/inventory/host_vars/{{ ansible_hostname }}"
 
+    - name: Set sysctl configuration directory as fact
+      tags:
+        - fact
+        - sysctl
+      block:
+        - name: Stat /usr/lib/sysctl.d/ exists
+          ansible.builtin.stat:
+            path: "/usr/lib/sysctl.d/"
+          register: usr_lib_sysctl_d
+
+        - name: Set sysctl fact
+          ansible.builtin.set_fact:
+            sysctl_conf_dir: "{{ '/usr/lib/sysctl.d' if usr_lib_sysctl_d.stat.exists else '/etc/sysctl.d' }}"
+
+        - name: Debug sysctl
+          ansible.builtin.debug:
+            msg: "{{ sysctl_conf_dir }}"
+
     - name: Get installed ssh version
       ansible.builtin.command:
         cmd: ssh -V
@@ -341,7 +359,11 @@
 
     - name: Verify sysctl configuration
       become: true
-      ansible.builtin.shell: grep -R "^{{ item.key }}.*{{ item.value | int }}$" /etc/sysctl.* /usr/lib/sysctl.d/*
+      ansible.builtin.shell: |
+        set -o pipefail
+        grep -R "^{{ item.key }}.*{{ item.value | int }}$" "{{ sysctl_conf_dir }}/"
+      args:
+        executable: /bin/bash
       with_dict: "{{ sysctl_settings | dict2items | rejectattr('key', 'search', 'nf_conntrack') | items2dict }}"
       register: sysctl_file_config
       failed_when: sysctl_file_config.rc != 0
