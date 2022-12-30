@@ -3,6 +3,7 @@
   ansible.builtin.stat:
     path: /etc/default/motd-news
   register: motd_news
+  when: ansible_os_family == "Debian"
   tags:
     - motd
 
@@ -51,4 +52,39 @@
   when: ansible_os_family == "Debian"
   tags:
     - motd
+
+- name: Stat /usr/bin/pro
+  ansible.builtin.stat:
+    path: /usr/bin/pro
+  register: ubuntu_advantage_pro
+  when: ansible_os_family == "Debian"
+  tags:
+    - apt_news
+    - ubuntu-pro
+
+- name: Check apt_news status
+  ansible.builtin.shell: |
+    set -o pipefail
+    pro config show | grep '^apt_news.*False'
+  args:
+    executable: /bin/bash
+  register: ubuntu_advantage_pro_state
+  changed_when: ubuntu_advantage_pro_state.rc != 0
+  failed_when: ubuntu_advantage_pro_state.rc > 1
+  when: ansible_os_family == "Debian" and ubuntu_advantage_pro.stat.exists
+  tags:
+    - apt_news
+    - ubuntu-pro
+
+- name: Disable apt_news
+  become: true
+  ansible.builtin.command:
+    cmd: pro config set apt_news=false
+  when:
+    - ansible_os_family == "Debian"
+    - ubuntu_advantage_pro.stat.exists
+    - ubuntu_advantage_pro_state.rc != 0
+  tags:
+    - apt_news
+    - ubuntu-pro
 ...
