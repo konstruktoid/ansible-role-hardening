@@ -582,6 +582,23 @@
       failed_when: motdnews_service is changed
       when: ansible_os_family == "Debian" and motd_news.stat.exists
 
+    - name: Stat /usr/bin/pro
+      ansible.builtin.stat:
+        path: /usr/bin/pro
+      register: ubuntu_advantage_pro
+      when: ansible_os_family == "Debian"
+
+    - name: Verify that apt_news is disabled
+      ansible.builtin.shell: |
+        set -o pipefail
+        pro config show | grep '^apt_news.*False'
+      args:
+        executable: /bin/bash
+      register: ubuntu_advantage_pro_state
+      changed_when: ubuntu_advantage_pro_state.rc != 0
+      failed_when: ubuntu_advantage_pro_state.rc != 0
+      when: ansible_os_family == "Debian" and ubuntu_advantage_pro.stat.exists
+
     - name: Efi fact
       ansible.builtin.set_fact:
         booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
