@@ -27,14 +27,7 @@ cd ~ || exit 1
 echo "Generating SUID list."
 curl -sSL 'https://raw.githubusercontent.com/konstruktoid/hardening/master/misc/suid.list' > /tmp/suid.list
 grep -vE '^#|^$' /tmp/suid.list | while read -r suid; do
-  file=$(command -v "$suid")
-  sfile=$(sudo which "$suid")
-  if [ -x "$file" ]; then
-    echo "  - $file" >> "suid.list"
-  fi
-  if [ -x "$sfile" ]; then
-    echo "  - $sfile" >> "suid.list"
-  fi
+    echo "  - $suid" >> "suid.list"
 done
 
 grep -vE '^#|^$' /etc/shells | while read -r S; do

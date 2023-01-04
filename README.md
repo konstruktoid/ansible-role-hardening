@@ -498,16 +498,16 @@ higher than 9.1.
 ```yaml
 suid_sgid_permissions: true
 suid_sgid_blocklist:
-  - /bin/ansible-playbook
-  - /bin/ar
-  - /bin/as
-  - /bin/at
-  - /bin/awk
-  - /bin/base32
-  - /bin/base64
-  - /bin/bash
-  - /bin/busctl
-  - /bin/busybox
+  - ansible-playbook
+  - ar
+  - as
+  - at
+  - awk
+  - base32
+  - base64
+  - bash
+  - busctl
+  - busybox
   [...]
 ```
 
@@ -516,8 +516,6 @@ any SUID/SGID permissions.
 
 A complete file list is available in
 [defaults/main/suid_sgid_blocklist.yml](defaults/main/suid_sgid_blocklist.yml).
-
-_Note that this is a very slow task._
 
 ### ./defaults/main/sysctl.yml
 
