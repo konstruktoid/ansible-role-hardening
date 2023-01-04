@@ -36,19 +36,6 @@
     - fact
     - rdrand
 
-- name: Add reboot required fact
-  become: true
-  ansible.builtin.template:
-    src: etc/ansible/facts.d/reboot.fact
-    dest: /etc/ansible/facts.d/reboot.fact
-    mode: 0755
-    owner: root
-    group: root
-  when: ansible_distribution == "Ubuntu"
-  tags:
-    - fact
-    - reboot
-
 - name: Add ssh keys fact
   become: true
   ansible.builtin.template:

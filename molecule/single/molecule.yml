@@ -21,6 +21,7 @@ provisioner:
         block_blacklisted: false
         disable_wireless: true
         install_aide: false
+        reboot_ubuntu: true
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
         suid_sgid_permissions: true

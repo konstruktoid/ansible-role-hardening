@@ -1,12 +1,21 @@
 ---
 - name: Reboot if required
-  become: true
-  ansible.builtin.setup: ~
-  notify:
-    - Reboot node
-  when: ansible_distribution == "Ubuntu" and ansible_local.reboot.required and
-        reboot_ubuntu
   tags:
     - reboot
     - ubuntu
+  when: reboot_ubuntu
+  block:
+    - name: Stat /var/run/reboot-required
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+      register: stat_reboot_required
+
+    - name: Notify reboot handler
+      become: true
+      ansible.builtin.setup: ~
+      notify:
+        - Reboot node
+      when:
+        - ansible_distribution == "Ubuntu"
+        - stat_reboot_required.stat.exists
 ...
