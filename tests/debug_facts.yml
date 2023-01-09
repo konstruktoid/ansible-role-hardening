@@ -41,12 +41,17 @@
   tags:
     - debug
 
-- name: Debug "reboot_required handling, info"
+- name: Stat /var/run/reboot-required
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+  register: stat_reboot_required
+
+- name: Notify reboot handler
   debug:
-    msg: "reboot_required is {{ ansible_local.reboot.required }}"
-  when: ansible_distribution == "Ubuntu"
-  tags:
-    - debug
+  msg: "reboot_required is {{ stat_reboot_required.stat.exist }}"
+  when:
+    - ansible_distribution == "Ubuntu"
+    - stat_reboot_required.stat.exists
 
 - name: Debug "systemd_version handling, <= 100"
   debug:
