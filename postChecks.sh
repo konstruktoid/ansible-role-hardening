@@ -19,7 +19,7 @@ deb-src http://ftp.debian.org/debian buster-updates main
 deb-src http://security.debian.org/debian-security buster/updates main" | sudo tee /etc/apt/sources.list
   fi
 
-  sudo "$PKG" -y update
+  sudo "${PKG}" -y update
 fi
 
 cd ~ || exit 1
@@ -27,25 +27,25 @@ cd ~ || exit 1
 echo "Generating SUID list."
 curl -sSL 'https://raw.githubusercontent.com/konstruktoid/hardening/master/misc/suid.list' > /tmp/suid.list
 grep -vE '^#|^$' /tmp/suid.list | while read -r suid; do
-    echo "  - $suid" >> "suid.list"
+    echo "  - ${suid}" >> "suid.list"
 done
 
 grep -vE '^#|^$' /etc/shells | while read -r S; do
-  echo "  - $S" >> "suid.list"
+  echo "  - $(basename "${S}")" >> "suid.list"
 done
 
 cd ~ || exit 1
 
-sudo "$PKG" -y install git
+sudo "${PKG}" -y install git
 
 git clone https://github.com/CISOFy/lynis
 git clone https://github.com/konstruktoid/hardening.git
 
-sudo "$PKG" -y remove git
+sudo "${PKG}" -y remove git
 
 if lsb_release -a 2>/dev/null | grep -qi ubuntu; then
   echo "Running bats tests."
-  sudo "$PKG" -y install bats
+  sudo "${PKG}" -y install bats
   cd ~/hardening/tests || exit 1
   PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin sudo bats . | tee  ~/bats.log
   sudo chown vagrant:vagrant ~/bats.log
