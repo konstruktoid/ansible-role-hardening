@@ -1,30 +1,61 @@
 ---
 suid_sgid_permissions: true
 suid_sgid_blocklist:
+  - 7z
+  - ab
   - agetty
+  - alpine
   - ansible-playbook
+  - aoss
   - apt
   - apt-get
   - ar
+  - aria2c
+  - arj
   - arp
   - as
+  - ascii-xfr
+  - ascii85
+  - ash
+  - aspell
   - at
+  - atobm
   - awk
+  - aws
   - base32
+  - base58
   - base64
   - basenc
+  - basez
   - bash
+  - batcat
+  - bc
+  - bconsole
+  - bpftrace
   - bridge
   - bsd-write
+  - bundle
+  - bundler
   - busctl
   - busybox
+  - byebug
   - bzip2
   - c89
   - c99
+  - cabal
   - cancel
   - capsh
   - cat
+  - cdist
+  - certbot
   - chage
+  - check_by_ssh
+  - check_cups
+  - check_log
+  - check_memory
+  - check_raid
+  - check_ssl_cert
+  - check_statusfile
   - chfn
   - chmod
   - choom
@@ -32,64 +63,119 @@ suid_sgid_blocklist:
   - chroot
   - chsh
   - cmp
+  - cobc
   - column
   - comm
+  - composer
   - cowsay
   - cowthink
   - cp
   - cpan
   - cpio
+  - cpulimit
+  - crash
   - crontab
+  - csh
   - csplit
+  - csvtool
+  - cupsfilter
   - curl
   - cut
   - dash
   - date
   - dd
+  - debugfs
+  - dialog
   - diff
   - dig
   - dmesg
   - dmidecode
   - dmsetup
   - dnf
+  - docker
+  - dosbox
   - dpkg
+  - dvips
+  - easy_install
+  - eb
   - ed
+  - efax
+  - emacs
   - env
   - eqn
+  - espeak
   - ex
+  - exiftool
   - expand
+  - expect
+  - facter
   - file
   - find
+  - finger
+  - fish
   - flock
   - fmt
   - fold
+  - fping
   - ftp
   - fusermount
   - gawk
   - gcc
+  - gcloud
+  - gcore
+  - gdb
   - gem
+  - genie
+  - genisoimage
+  - ghc
+  - ghci
+  - gimp
+  - ginsh
   - git
+  - grc
   - grep
+  - gtester
   - gzip
   - hd
   - head
   - hexdump
+  - highlight
+  - hping3
   - iconv
+  - iftop
   - install
   - ionice
   - ip
   - irb
   - ispell
+  - jjs
   - join
   - journalctl
+  - jq
+  - jrunscript
+  - jtag
+  - knife
+  - ksh
+  - ksshell
+  - ksu
+  - kubectl
+  - latex
+  - latexmk
   - ld.so
   - ldconfig
   - less
+  - lftp
   - ln
   - loginctl
   - logsave
   - look
+  - lp
   - ltrace
+  - lua
+  - lualatex
+  - luatex
+  - lwp-download
+  - lwp-request
   - mail
   - make
   - man
@@ -98,8 +184,10 @@ suid_sgid_blocklist:
   - mksh-static
   - mlocate
   - more
+  - mosquitto
   - mount
   - mount.nfs
+  - msfconsole
   - msgattrib
   - msgcat
   - msgconv
@@ -107,26 +195,44 @@ suid_sgid_blocklist:
   - msgmerge
   - msguniq
   - mtr
+  - multitime
   - mv
+  - mysql
   - nano
+  - nasm
   - nawk
   - nc
+  - neofetch
+  - netfilter-persistent
   - newgrp
   - nft
   - nice
   - nl
   - nm
+  - nmap
+  - node
   - nohup
+  - npm
   - nroff
   - nsenter
   - ntfs-3g
+  - octave
   - od
   - openssl
+  - openvpn
   - openvt
+  - opkg
+  - pandoc
   - paste
+  - pax
   - pdb
+  - pdflatex
+  - pdftex
   - perf
   - perl
+  - perlbug
+  - pg
+  - php
   - pic
   - pico
   - pidstat
@@ -134,39 +240,59 @@ suid_sgid_blocklist:
   - ping6
   - pip
   - pkexec
+  - pkg
+  - posh
+  - pppd
   - pr
+  - pry
   - psad
+  - psftp
+  - psql
   - ptx
+  - puppet
   - python
   - rake
   - rbash
   - readelf
   - red
+  - redcarpet
+  - restic
   - rev
   - rlogin
+  - rlwrap
   - rpm
   - rpmdb
   - rpmquery
   - rpmverify
   - rsync
+  - rtorrent
   - ruby
   - run-mailcap
   - run-parts
   - rview
   - rvim
+  - sash
+  - scanmem
   - scp
   - screen
   - script
+  - scrot
   - sed
   - service
   - setarch
   - setfacl
+  - setlock
   - sftp
   - sg
   - sh
   - shuf
+  - slsh
+  - smbclient
   - snap
+  - socat
+  - socket
   - soelim
+  - softlimit
   - sort
   - split
   - sqlite3
@@ -186,20 +312,29 @@ suid_sgid_blocklist:
   - tac
   - tail
   - tar
+  - task
   - taskset
+  - tasksh
   - tbl
   - tclsh
   - tcpdump
+  - tcsh
   - tee
   - telnet
+  - tex
+  - tftp
   - tic
   - time
   - timedatectl
   - timeout
+  - tmate
   - tmux
   - top
+  - torify
+  - torsocks
   - traceroute6.iputils
   - troff
+  - tshark
   - ul
   - umount
   - unexpand
@@ -207,23 +342,43 @@ suid_sgid_blocklist:
   - unshare
   - unzip
   - update-alternatives
+  - uudecode
+  - uuencode
+  - valgrind
   - vi
   - view
   - vigr
   - vim
   - vimdiff
   - vipw
+  - virsh
+  - volatility
+  - w3m
   - wall
   - watch
   - wc
   - wget
   - whiptail
   - whois
+  - wireshark
+  - wish
   - write
   - xargs
+  - xdotool
+  - xelatex
+  - xetex
+  - xmodmap
+  - xmore
+  - xpad
   - xxd
   - xz
+  - yarn
+  - yash
+  - yelp
   - yum
+  - zathura
   - zip
+  - zsh
   - zsoelim
+  - zypper
 ...
