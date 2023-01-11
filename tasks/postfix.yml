@@ -36,7 +36,7 @@
   ansible.builtin.lineinfile:
     regexp: "^smtpd_banner"
     dest: /etc/postfix/main.cf
-    line: 'smtpd_banner = "\$myhostname - ESMTP"'
+    line: 'smtpd_banner = \$myhostname - ESMTP'
     state: present
   when: postfix_main_cf.stat.exists
   tags:
