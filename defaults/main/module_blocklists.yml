@@ -16,6 +16,7 @@ misc_modules_blocklist:
   - cpia2
   - firewire-core
   - floppy
+  - ksmbd
   - n_hdlc
   - net-pf-31
   - pcspkr
