@@ -1,7 +1,5 @@
 # {{ ansible_managed }}
-# https://github.com/konstruktoid/ansible-role-hardening/blob/master/templates/etc/audit/rules.d/hardening.rules.j2
-# https://github.com/konstruktoid/Ansible/blob/master/roles/docker/templates/audit.rules.j2
-# https://github.com/gds-operations/puppet-auditd/tree/master/templates
+# https://github.com/konstruktoid/ansible-role-hardening
 
 # Remove any existing rules
 -D
@@ -9,8 +7,8 @@
 # Buffer Size
 -b 8192
 
-# Ignore errors
--i
+# Report errors
+-c
 
 # Failure Mode
 -f {{ auditd_mode|int }}
@@ -207,7 +205,7 @@
 -w /usr/sbin/modprobe -p x -k modules
 -w /usr/sbin/rmmod -p x -k modules
 
-#
+# Mounts
 -a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=-1 -k mounts
 -a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=-1 -k mounts
 
@@ -323,7 +321,7 @@
 
 # Kernel modification
 -w /etc/sysctl.conf -p wa -k sysctl
--w "{{ sysctl_conf_dir }}/zz-hardening.conf" -p wa -k sysctl
+-w {{ sysctl_conf_dir }}/zz-hardening.conf -p wa -k sysctl
 
 # Hostname changes
 -a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale
