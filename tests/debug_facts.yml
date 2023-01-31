@@ -48,7 +48,7 @@
 
 - name: Notify reboot handler
   debug:
-  msg: "reboot_required is {{ stat_reboot_required.stat.exist }}"
+    msg: "reboot_required is {{ stat_reboot_required.stat.exist }}"
   when:
     - ansible_distribution == "Ubuntu"
     - stat_reboot_required.stat.exists
