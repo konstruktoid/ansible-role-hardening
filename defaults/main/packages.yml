@@ -16,6 +16,7 @@ packages_blocklist:
   - talk*
   - telnet*
   - tftp*
+  - tuned
   - whoopsie
   - xinetd
   - yp-tools
