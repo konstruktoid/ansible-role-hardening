@@ -85,6 +85,21 @@
     - sudo
     - M1028
 
+- name: Configure sudo user password for privilege escalation
+  become: true
+  ansible.builtin.lineinfile:
+    line: "Defaults {{ item }}"
+    dest: /etc/sudoers.d/018_userpassword
+    mode: 0440
+    state: present
+    create: true
+  with_items:
+    - "!rootpw"
+    - "!runaspw"
+    - "!targetpw"
+  tags:
+    - sudo
+
 - name: Create su group sugroup
   become: true
   ansible.builtin.group:
