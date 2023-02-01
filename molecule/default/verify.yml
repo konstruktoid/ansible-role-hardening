@@ -661,6 +661,9 @@
         - 'passwd_timeout=1'
         - 'timestamp_timeout=5'
         - 'timestamp_type=tty'
+        - "!rootpw"
+        - "!runaspw"
+        - "!targetpw"
 
     - name: Stat faillock.conf
       become: true
