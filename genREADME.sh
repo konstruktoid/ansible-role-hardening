@@ -21,8 +21,9 @@ Requires Ansible >= ${ANSIBLE_V}.
 Available on
 [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
 
-[AlmaLinux 8](https://almalinux.org/),
-[Debian 11](https://www.debian.org/),
+[AlmaLinux 8](https://wiki.almalinux.org/release-notes/#almalinux-8),
+[AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9),
+[Debian 11](https://www.debian.org/releases/bullseye/),
 Ubuntu [20.04 LTS (Focal Fossa)](https://releases.ubuntu.com/focal/) and
 [22.04 LTS (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/) are supported.
 
