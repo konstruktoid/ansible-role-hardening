@@ -60,9 +60,9 @@ platforms:
       - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
     memory: 1024
   - name: lunar
-    box: "lunar/20221227"
-    box_url: "https://cloud-images.ubuntu.com/lunar/20221227/lunar-server-cloudimg-amd64-vagrant.box"
-    box_download_checksum: "5576b35423437b60ddcbf2500a2700a5354947a080d83efc057f75d4a0e08789"
+    box: "lunar/20230202"
+    box_url: "https://cloud-images.ubuntu.com/lunar/20230202/lunar-server-cloudimg-amd64-vagrant.box"
+    box_download_checksum: "dfd3f48efd8f170a0d2560b6fa17877929659c2e1d3903692cbc6c8787ae2407"
     box_download_checksum_type: "sha256"
     config_options:
       vm.boot_timeout: 600
