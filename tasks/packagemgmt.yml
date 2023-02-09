@@ -18,6 +18,7 @@
     - 'APT::Periodic::AutocleanInterval "7";'
     - 'APT::Sandbox::Seccomp "1";'
     - 'Unattended-Upgrade::Remove-Unused-Dependencies "true";'
+    - 'Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";'
   when: ansible_os_family == "Debian"
   tags:
     - apt
