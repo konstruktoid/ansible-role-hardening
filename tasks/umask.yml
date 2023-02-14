@@ -13,7 +13,7 @@
   become: true
   ansible.builtin.replace:
     regexp: 'umask(\s+.*)'
-    replace: "umask 077"
+    replace: "umask {{ umask_value }}"
     dest: /etc/init.d/rc
     mode: 0755
   when: initdrc.stat.exists
@@ -38,7 +38,7 @@
   become: true
   ansible.builtin.replace:
     regexp: 'umask(\s+.*)'
-    replace: "umask 077"
+    replace: "umask {{ umask_value }}"
     dest: /etc/bashrc
     mode: 0644
   when: bashrc.stat.exists
@@ -64,7 +64,7 @@
   become: true
   ansible.builtin.replace:
     regexp: 'umask(\s+.*)'
-    replace: "umask 077"
+    replace: "umask {{ umask_value }}"
     dest: /etc/csh.cshrc
     mode: 0644
   when: cshrc.stat.exists
@@ -78,7 +78,7 @@
   become: true
   ansible.builtin.replace:
     regexp: 'umask(\s+.*)'
-    replace: "umask 077"
+    replace: "umask {{ umask_value }}"
     dest: /etc/profile
     mode: 0644
   tags:

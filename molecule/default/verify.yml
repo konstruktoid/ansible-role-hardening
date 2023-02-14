@@ -447,7 +447,7 @@
         - SU_NAME su
         - SYSLOG_SG_ENAB yes
         - SYSLOG_SU_ENAB yes
-        - UMASK 077
+        - UMASK {{ umask_value }}
 
     - name: Verify pwquality.conf settings
       become: true

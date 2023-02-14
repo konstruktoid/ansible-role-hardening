@@ -21,6 +21,7 @@ provisioner:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
         suid_sgid_permissions: false
+        umask_value: "027"
 platforms:
   - name: jammy
     box: "bento/ubuntu-22.04"
