@@ -88,6 +88,7 @@ suid_sgid_blocklist:
   - dialog
   - diff
   - dig
+  - distcc
   - dmesg
   - dmidecode
   - dmsetup
@@ -95,6 +96,7 @@ suid_sgid_blocklist:
   - docker
   - dosbox
   - dpkg
+  - dstat
   - dvips
   - easy_install
   - eb
@@ -149,6 +151,7 @@ suid_sgid_blocklist:
   - irb
   - ispell
   - jjs
+  - joe
   - join
   - journalctl
   - jq
@@ -231,6 +234,7 @@ suid_sgid_blocklist:
   - perf
   - perl
   - perlbug
+  - pexec
   - pg
   - php
   - pic
@@ -256,6 +260,7 @@ suid_sgid_blocklist:
   - readelf
   - red
   - redcarpet
+  - redis
   - restic
   - rev
   - rlogin
@@ -296,6 +301,7 @@ suid_sgid_blocklist:
   - sort
   - split
   - sqlite3
+  - sqlmap
   - ss
   - ssh
   - ssh-keygen
