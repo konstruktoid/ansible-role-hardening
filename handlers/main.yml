@@ -88,6 +88,7 @@
   become: true
   ansible.builtin.apt:
     autoclean: true
+    clean: true
 
 - name: Mask apport
   become: true
