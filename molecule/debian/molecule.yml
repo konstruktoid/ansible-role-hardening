@@ -22,14 +22,13 @@ provisioner:
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
         suid_sgid_permissions: false
-        system_upgrade: "no"
+        system_upgrade: false
       bullseye:
         ansible_become_pass: "vagrant"
         ansible_python_interpreter: "/usr/bin/python3"
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
         suid_sgid_permissions: false
-        system_upgrade: "no"
       testing:
         ansible_become_pass: "vagrant"
         ansible_python_interpreter: "/usr/bin/python3"
