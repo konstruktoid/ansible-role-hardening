@@ -1,0 +1,12 @@
+---
+on:
+  schedule:
+    - cron: "0 5 * * */3"
+name: ansible-lint Upstream - Scheduled
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: ansible-lint Upstream - Scheduled
+        uses: ./action-lint
