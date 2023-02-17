@@ -1,5 +1,9 @@
 on: [push, pull_request]
 name: Ansible Lint
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
