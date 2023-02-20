@@ -522,6 +522,9 @@
       args:
         executable: /bin/bash
       with_dict: "{{ ipv6_disable_sysctl_settings }}"
+      register: sysctl_ipv6
+      changed_when: sysctl_ipv6.rc != 0
+      failed_when: sysctl_ipv6.rc != 0
       when: system_has_ipv6 and disable_ipv6
 
     - name: Find GRUB config files

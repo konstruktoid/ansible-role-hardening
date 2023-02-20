@@ -32,7 +32,11 @@
 
 - name: Update grub2 if missing GRUB settings
   become: true
-  ansible.builtin.command: grub2-mkconfig
+  ansible.builtin.command:
+    cmd: grub2-mkconfig
+  register: update_grub_redhat
+  changed_when: update_grub_redhat.rc != 0
+  failed_when: update_grub_redhat.rc != 0
   when: ansible_os_family == "RedHat" and audit_grubenv.rc != 0
   tags:
     - auditd
@@ -41,8 +45,8 @@
 - name: Stat Debian auditd GRUB settings
   become: true
   ansible.builtin.shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
-  changed_when: false
-  failed_when: false
+  changed_when: audit_grub_cfg.rc != 0
+  failed_when: audit_grub_cfg.rc != 0
   register: audit_grub_cfg
   when: ansible_os_family == "Debian"
   tags:
@@ -51,7 +55,11 @@
 
 - name: Update GRUB if settings are missing
   become: true
-  ansible.builtin.command: update-grub
+  ansible.builtin.command:
+    cmd: update-grub
+  register: update_grub_debian
+  changed_when: update_grub_debian.rc != 0
+  failed_when: update_grub_debian.rc != 0
   when: ansible_os_family == "Debian" and audit_grub_cfg.rc != 0
   tags:
     - auditd

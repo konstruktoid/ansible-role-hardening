@@ -80,6 +80,9 @@
   become: true
   ansible.builtin.command:
     cmd: pro config set apt_news=false
+  register: disable_apt_news
+  changed_when: disable_apt_news.rc != 0
+  failed_when: disable_apt_news.rc != 0
   when:
     - ansible_os_family == "Debian"
     - ubuntu_advantage_pro.stat.exists
