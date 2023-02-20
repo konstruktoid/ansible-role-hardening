@@ -109,6 +109,8 @@
   ansible.builtin.stat:
     path: /var/lib/aide/aide.db.gz
   register: rhelaidedb
+  changed_when: false
+  failed_when: false
   when: ansible_os_family == "RedHat"
   tags:
     - aide
@@ -117,6 +119,9 @@
   become: true
   ansible.builtin.command:
     cmd: aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
+  register: init_redhat_aide
+  changed_when: init_redhat_aide.rc != 0
+  failed_when: init_redhat_aide.rc != 0
   when: ansible_os_family == "RedHat" and not rhelaidedb.stat.exists
   tags:
     - aide
@@ -127,6 +132,8 @@
   ansible.builtin.stat:
     path: /var/lib/aide/aide.db.new.gz
   register: rhelaidedbnew
+  changed_when: false
+  failed_when: false
   when: ansible_os_family == "RedHat"
   tags:
     - aide
@@ -135,13 +142,20 @@
   become: true
   ansible.builtin.command:
     cmd: cp /var/lib/aide/aide.db.gz /var/lib/aide/aide.db.new.gz
+  register: cp_redhat_aide_db
+  changed_when: cp_redhat_aide_db.rc != 0
+  failed_when: cp_redhat_aide_db.rc != 0
   when: ansible_os_family == "RedHat" and not rhelaidedbnew.stat.exists
   tags:
     - aide
 
 - name: Initialize Debian AIDE
   become: true
-  ansible.builtin.command: aideinit --force --yes
+  ansible.builtin.command:
+    cmd: aideinit --force --yes
+  register: init_debian_aide
+  changed_when: init_debian_aide.rc != 0
+  failed_when: init_debian_aide.rc != 0
   when: ansible_os_family == "Debian" and not ubuaidedb.stat.exists
   tags:
     - aide
