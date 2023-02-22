@@ -17,10 +17,11 @@
     - CIS-UBUNTU2004-2.1.1.2
 
 - name: Stat timesyncd status
-  ansible.builtin.command: systemctl status systemd-timesyncd
+  ansible.builtin.command:
+    cmd: systemctl status systemd-timesyncd
   register: timesyncd_status
   changed_when: false
-  failed_when: false
+  failed_when: timesyncd_status.rc != 0
   tags:
     - systemd
     - timesyncd
@@ -28,9 +29,11 @@
     - CIS-UBUNTU2004-2.1.1.2
 
 - name: Stat timedatectl show
-  ansible.builtin.command: timedatectl show
+  ansible.builtin.command:
+    cmd: timedatectl show
   register: timedatectl_show
   changed_when: timedatectl_show.stdout.find('NTPSynchronized=yes') == -1 and timesyncd_status.rc == 0
+  failed_when: timedatectl_show.rc != 0
   tags:
     - systemd
     - timesyncd
@@ -39,7 +42,11 @@
 
 - name: Run timedatectl set-ntp
   become: true
-  ansible.builtin.command: timedatectl set-ntp true
+  ansible.builtin.command:
+    cmd: timedatectl set-ntp true
+  register: timedatectl_setntp
+  changed_when: timedatectl_setntp.rc != 0
+  failed_when: timedatectl_setntp.rc != 0
   when: timedatectl_show.stdout.find('NTPSynchronized=yes') == -1 and timesyncd_status.rc == 0
   tags:
     - systemd
