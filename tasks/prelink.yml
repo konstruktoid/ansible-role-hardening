@@ -27,7 +27,11 @@
 
 - name: Return to non-prelinked state
   become: true
-  ansible.builtin.command: prelink -ua
+  ansible.builtin.command:
+    cmd: prelink -ua
+  register: nonprelinked_state
+  changed_when: nonprelinked_state.rc != 0
+  failed_when: nonprelinked_state.rc != 0
   when: sysconfig_prelink.stat.exists or etc_prelink.stat.exists
   tags:
     - prelink

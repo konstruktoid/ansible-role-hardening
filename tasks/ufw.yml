@@ -183,7 +183,11 @@
 
 - name: Delete unmanaged UFW rules
   become: true
-  ansible.builtin.command: ufw delete {{ item }}
+  ansible.builtin.command:
+    cmd: ufw delete {{ item }}
+  register: ufw_delete
+  changed_when: ufw_delete.rc != 0
+  failed_when: ufw_delete.rc != 0
   when: ufw_not_managed.stdout_lines | length > 0 and not ansible_os_family == "RedHat"
   with_items:
     - "{{ ufw_not_managed.stdout_lines }}"
