@@ -18,7 +18,7 @@
   ansible.builtin.lineinfile:
     line: "PRELINKING=no"
     dest: /etc/sysconfig/prelink
-    mode: 0644
+    mode: "0644"
     state: present
     create: true
   when: ansible_os_family == "RedHat" and sysconfig_prelink.stat.exists

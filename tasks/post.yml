@@ -80,7 +80,7 @@
   become: true
   ansible.builtin.file:
     path: "{{ item.path }}"
-    mode: 0400
+    mode: "0400"
   when: item.mode | int > 400
   changed_when: false
   with_items:

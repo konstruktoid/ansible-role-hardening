@@ -63,7 +63,7 @@
     path: /etc/ssh/sshd_config
     owner: root
     group: root
-    mode: 0600
+    mode: "0600"
   tags:
     - sshd
     - sshd_config
@@ -74,7 +74,7 @@
     src: etc/ssh/sshd_config.j2
     dest: /etc/ssh/sshd_config
     backup: true
-    mode: 0600
+    mode: "0600"
     owner: root
     group: root
     validate: sshd -t -f %s
@@ -128,7 +128,7 @@
     src: etc/ssh/sshd_config.j2
     dest: /etc/ssh/sshd_config.d/01-hardening.conf
     backup: true
-    mode: 0600
+    mode: "0600"
     owner: root
     group: root
     validate: sshd -t -f %s
@@ -205,7 +205,7 @@
   ansible.builtin.file:
     owner: root
     group: root
-    mode: 0600
+    mode: "0600"
     path: "{{ item.path }}"
   with_items: "{{ ssh_host_keys.files }}"
   loop_control:
