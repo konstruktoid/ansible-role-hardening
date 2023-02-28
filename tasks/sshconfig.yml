@@ -232,7 +232,7 @@
     src: etc/ssh/ssh_config.j2
     dest: /etc/ssh/ssh_config
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   tags:

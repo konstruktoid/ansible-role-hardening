@@ -3,7 +3,7 @@
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/apt/apt.conf.d/98-hardening-ubuntu
-    mode: 0644
+    mode: "0644"
     state: present
     create: true
     line: "{{ item }}"
@@ -81,7 +81,7 @@
     regexp: "^gpgcheck="
     line: "gpgcheck=1"
     dest: /etc/yum.conf
-    mode: 0644
+    mode: "0644"
     state: present
     create: false
     backrefs: true
@@ -98,7 +98,7 @@
   ansible.builtin.lineinfile:
     line: "clean_requirements_on_remove=True"
     dest: /etc/yum.conf
-    mode: 0644
+    mode: "0644"
     state: present
     create: true
     insertafter: "[main]"
@@ -113,7 +113,7 @@
   ansible.builtin.lineinfile:
     line: "localpkg_gpgcheck=1"
     dest: /etc/yum.conf
-    mode: 0644
+    mode: "0644"
     state: present
     create: true
     insertafter: "[main]"
@@ -129,7 +129,7 @@
   ansible.builtin.lineinfile:
     line: "# repo_gpgcheck=1"
     dest: /etc/yum.conf
-    mode: 0644
+    mode: "0644"
     state: present
     create: true
     insertafter: "[main]"

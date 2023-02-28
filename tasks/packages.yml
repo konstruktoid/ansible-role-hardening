@@ -23,7 +23,7 @@
         state: directory
         owner: root
         group: root
-        mode: 0755
+        mode: "0755"
         recurse: true
       when: ("needrestart" in packages_merged) and not needrestart_directory_created.stat.exists
 
@@ -49,7 +49,7 @@
         create: true
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
       when: needrestart_directory.stat.exists and needrestart_restart_set.rc != 0
 
 - name: Debian family package installation
@@ -203,7 +203,7 @@
     regexp: "^ENABLED"
     line: 'ENABLED="true"'
     dest: /etc/default/sysstat
-    mode: 0644
+    mode: "0644"
     state: present
     create: false
     backrefs: true

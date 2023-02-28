@@ -5,7 +5,7 @@
     src: etc/systemd/journald.conf.j2
     dest: /etc/systemd/journald.conf
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   notify:
@@ -23,7 +23,7 @@
     src: etc/logrotate.conf.j2
     dest: /etc/logrotate.conf
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   tags:
@@ -34,7 +34,7 @@
   ansible.builtin.lineinfile:
     line: "/usr/sbin/logrotate /etc/logrotate.conf"
     dest: /etc/cron.daily/logrotate
-    mode: 0750
+    mode: "0750"
     state: present
     create: true
   tags:
@@ -66,7 +66,7 @@
     regexp: '^\$FileCreateMode'
     line: '$FileCreateMode 0600'
     dest: /etc/rsyslog.conf
-    mode: 0640
+    mode: "0640"
     state: present
     create: false
   when: rsyslogconf.stat.exists and rsyslog_filecreatemode.stdout.find('FileCreateMode') != -1
@@ -80,7 +80,7 @@
     regexp: '^\$FileCreateMode'
     line: '$FileCreateMode 0600'
     dest: /etc/rsyslog.d/99-filecreatemode.conf
-    mode: 0644
+    mode: "0644"
     state: present
     create: true
   tags:

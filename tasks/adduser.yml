@@ -5,7 +5,7 @@
     src: etc/adduser.conf.j2
     dest: /etc/adduser.conf
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   tags:
@@ -18,7 +18,7 @@
     src: etc/default/useradd.j2
     dest: /etc/default/useradd
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   tags:

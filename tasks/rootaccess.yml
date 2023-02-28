@@ -20,7 +20,7 @@
   ansible.builtin.lineinfile:
     path: /etc/security/access.conf
     regexp: '^(?!\+:root:127.0.0.1)$'
-    mode: 0644
+    mode: "0644"
     state: absent
   when: security_access_conf.stat.exists
   tags:
@@ -31,7 +31,7 @@
   ansible.builtin.lineinfile:
     path: /etc/security/access.conf
     line: "+:root:127.0.0.1"
-    mode: 0644
+    mode: "0644"
     state: present
   when: security_access_conf.stat.exists
   tags:
@@ -52,7 +52,7 @@
   ansible.builtin.lineinfile:
     path: /etc/securetty
     line: "console"
-    mode: 0644
+    mode: "0644"
     state: present
   when: etc_securetty.stat.exists
   tags:

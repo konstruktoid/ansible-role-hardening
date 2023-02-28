@@ -5,7 +5,7 @@
     path: /etc/ansible/facts.d
     recurse: true
     state: directory
-    mode: 0755
+    mode: "0755"
     owner: root
     group: root
   tags:
@@ -16,7 +16,7 @@
   ansible.builtin.template:
     src: etc/ansible/facts.d/systemd.fact
     dest: /etc/ansible/facts.d/systemd.fact
-    mode: 0755
+    mode: "0755"
     owner: root
     group: root
   tags:
@@ -28,7 +28,7 @@
   ansible.builtin.template:
     src: etc/ansible/facts.d/cpuinfo.fact
     dest: /etc/ansible/facts.d/cpuinfo.fact
-    mode: 0755
+    mode: "0755"
     owner: root
     group: root
   tags:
@@ -41,7 +41,7 @@
   ansible.builtin.template:
     src: etc/ansible/facts.d/sshkeys.fact
     dest: /etc/ansible/facts.d/sshkeys.fact
-    mode: 0755
+    mode: "0755"
     owner: root
     group: root
   tags:

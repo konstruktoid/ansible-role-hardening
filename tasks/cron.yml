@@ -31,7 +31,7 @@
   ansible.builtin.lineinfile:
     path: "{{ item }}"
     line: "root"
-    mode: 0600
+    mode: "0600"
     state: present
     create: true
   with_items:
@@ -58,7 +58,7 @@
   become: true
   ansible.builtin.file:
     path: "{{ item }}"
-    mode: 0700
+    mode: "0700"
     owner: root
     group: root
   with_items:
@@ -79,7 +79,7 @@
   become: true
   ansible.builtin.file:
     path: /etc/crontab
-    mode: 0600
+    mode: "0600"
     owner: root
     group: root
   tags:

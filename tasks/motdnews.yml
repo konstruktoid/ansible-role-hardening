@@ -13,7 +13,7 @@
     regexp: "^ENABLED="
     line: "ENABLED=0"
     dest: /etc/default/motd-news
-    mode: 0644
+    mode: "0644"
     state: present
     create: false
     backrefs: true
@@ -48,7 +48,7 @@
   become: true
   ansible.builtin.file:
     dest: /etc/update-motd.d
-    mode: 0755
+    mode: "0755"
   when: ansible_os_family == "Debian"
   tags:
     - motd

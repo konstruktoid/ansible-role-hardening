@@ -4,7 +4,7 @@
   ansible.builtin.file:
     path: /boot/grub
     state: directory
-    mode: 0755
+    mode: "0755"
     owner: root
     group: root
   when: booted_with_efi | bool

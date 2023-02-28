@@ -5,7 +5,7 @@
     regexp: "^PATH="
     line: 'PATH="/usr/local/bin:/usr/sbin:/usr/bin:/bin:/snap/bin"'
     dest: /etc/environment
-    mode: 0644
+    mode: "0644"
     state: present
     create: false
     backrefs: true
@@ -19,7 +19,7 @@
     src: etc/profile.d/initpath.sh.j2
     dest: /etc/profile.d/initpath.sh
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   tags:
