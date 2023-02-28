@@ -5,7 +5,7 @@
     src: etc/motd.j2
     dest: /etc/motd
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   tags:
@@ -20,7 +20,7 @@
     src: etc/issue.j2
     dest: "{{ item }}"
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   with_items:

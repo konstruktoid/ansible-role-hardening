@@ -1,10 +1,8 @@
 ---
+profile: production
 exclude_paths:
   - .git/
   - .github/
-  - tests/
-enable_list:
-  - fqcn-builtins  # opt-in
 warn_list:
   - line-length
   - yaml[line-length]

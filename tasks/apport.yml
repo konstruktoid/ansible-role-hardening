@@ -5,7 +5,7 @@
     regexp: "^enabled="
     line: "enabled=0"
     dest: /etc/default/apport
-    mode: 0644
+    mode: "0644"
     state: present
     create: false
     backrefs: true

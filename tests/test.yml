@@ -1,12 +1,16 @@
 ---
-- hosts: all
+- name: Include the konstruktoid.hardening role
+  hosts: all
   any_errors_fatal: true
   tasks:
-    - ansible.builtin.include_role:
+    - name: Include role
+      ansible.builtin.include_role:
         name: konstruktoid.hardening
 
-- hosts: all
+- name: Debug facts
+  hosts: all
   any_errors_fatal: true
   tasks:
-    - ansible.builtin.include_tasks: debug_facts.yml
+    - name: Include debug tasks
+      ansible.builtin.include_tasks: debug_facts.yml
 ...

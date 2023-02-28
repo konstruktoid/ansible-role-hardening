@@ -36,7 +36,7 @@
     src: lib/systemd/system/aidecheck.service.j2
     dest: /lib/systemd/system/aidecheck.service
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   when: not aidecron.stat.exists
@@ -49,7 +49,7 @@
     src: lib/systemd/system/aidecheck.timer.j2
     dest: /lib/systemd/system/aidecheck.timer
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   when: not aidecron.stat.exists

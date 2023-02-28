@@ -6,7 +6,7 @@
     src: etc/security/limits.conf.j2
     dest: /etc/security/limits.conf
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   tags:
@@ -22,7 +22,7 @@
     src: etc/systemd/coredump.conf.j2
     dest: /etc/systemd/coredump.conf
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   tags:

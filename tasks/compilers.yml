@@ -17,7 +17,7 @@
     path: "{{ item.path }}"
     owner: root
     group: root
-    mode: 0750
+    mode: "0750"
     state: file
     follow: true
   with_items:

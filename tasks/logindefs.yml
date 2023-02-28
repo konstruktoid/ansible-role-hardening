@@ -5,7 +5,7 @@
     src: etc/login.defs.j2
     dest: /etc/login.defs
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   tags:

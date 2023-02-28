@@ -5,7 +5,7 @@
     src: etc/systemd/logind.conf.j2
     dest: /etc/systemd/logind.conf
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   notify:

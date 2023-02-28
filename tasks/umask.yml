@@ -15,7 +15,7 @@
     regexp: 'umask(\s+.*)'
     replace: "umask {{ umask_value }}"
     dest: /etc/init.d/rc
-    mode: 0755
+    mode: "0755"
   when: initdrc.stat.exists
   tags:
     - umask
@@ -40,7 +40,7 @@
     regexp: 'umask(\s+.*)'
     replace: "umask {{ umask_value }}"
     dest: /etc/bashrc
-    mode: 0644
+    mode: "0644"
   when: bashrc.stat.exists
   tags:
     - bash
@@ -66,7 +66,7 @@
     regexp: 'umask(\s+.*)'
     replace: "umask {{ umask_value }}"
     dest: /etc/csh.cshrc
-    mode: 0644
+    mode: "0644"
   when: cshrc.stat.exists
   tags:
     - csh
@@ -80,7 +80,7 @@
     regexp: 'umask(\s+.*)'
     replace: "umask {{ umask_value }}"
     dest: /etc/profile
-    mode: 0644
+    mode: "0644"
   tags:
     - umask
     - CIS-UBUNTU2004-5.5.4
@@ -91,7 +91,7 @@
   ansible.builtin.lineinfile:
     line: "readonly TMOUT"
     dest: /etc/profile
-    mode: 0644
+    mode: "0644"
     state: present
     create: false
     insertbefore: "^export"
@@ -103,7 +103,7 @@
   ansible.builtin.lineinfile:
     line: "TMOUT=600"
     dest: /etc/profile
-    mode: 0644
+    mode: "0644"
     state: present
     create: false
     insertbefore: "^readonly TMOUT"
@@ -117,7 +117,7 @@
   ansible.builtin.lineinfile:
     line: "export TMOUT"
     dest: /etc/profile
-    mode: 0644
+    mode: "0644"
     state: present
     create: false
     insertafter: "^readonly TMOUT"

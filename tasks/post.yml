@@ -4,7 +4,7 @@
   ansible.builtin.file:
     path: /boot/grub
     state: directory
-    mode: 0755
+    mode: "0755"
     owner: root
     group: root
   when: booted_with_efi | bool
@@ -80,7 +80,7 @@
   become: true
   ansible.builtin.file:
     path: "{{ item.path }}"
-    mode: 0400
+    mode: "0400"
   when: item.mode | int > 400
   changed_when: false
   with_items:

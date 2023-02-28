@@ -9,7 +9,7 @@
       ansible.builtin.lineinfile:
         line: "Defaults use_pty"
         dest: /etc/sudoers.d/011_use_pty
-        mode: 0440
+        mode: "0440"
         state: present
         create: true
         validate: visudo -cf %s
@@ -21,7 +21,7 @@
       ansible.builtin.lineinfile:
         line: 'Defaults logfile="/var/log/sudo.log"'
         dest: /etc/sudoers.d/012_logfile
-        mode: 0440
+        mode: "0440"
         state: present
         create: true
         validate: visudo -cf %s
@@ -33,7 +33,7 @@
       ansible.builtin.lineinfile:
         line: "Defaults !pwfeedback"
         dest: /etc/sudoers.d/013_pwfeedback
-        mode: 0440
+        mode: "0440"
         state: present
         create: true
         validate: visudo -cf %s
@@ -43,7 +43,7 @@
       ansible.builtin.lineinfile:
         line: "Defaults !visiblepw"
         dest: /etc/sudoers.d/014_visiblepw
-        mode: 0440
+        mode: "0440"
         state: present
         create: true
         validate: visudo -cf %s
@@ -59,7 +59,7 @@
       ansible.builtin.lineinfile:
         line: "Defaults passwd_timeout=1"
         dest: /etc/sudoers.d/015_passwdtimeout
-        mode: 0440
+        mode: "0440"
         state: present
         create: true
         validate: visudo -cf %s
@@ -69,7 +69,7 @@
       ansible.builtin.lineinfile:
         line: "Defaults timestamp_timeout=5"
         dest: /etc/sudoers.d/016_timestamptimeout
-        mode: 0440
+        mode: "0440"
         state: present
         create: true
         validate: visudo -cf %s
@@ -79,7 +79,7 @@
       ansible.builtin.lineinfile:
         line: "Defaults timestamp_type=tty"
         dest: /etc/sudoers.d/017_timestamptype
-        mode: 0440
+        mode: "0440"
         state: present
         create: true
         validate: visudo -cf %s
@@ -91,7 +91,7 @@
       ansible.builtin.lineinfile:
         line: "Defaults {{ item }}"
         dest: /etc/sudoers.d/018_userpassword
-        mode: 0440
+        mode: "0440"
         state: present
         create: true
         validate: visudo -cf %s
@@ -118,7 +118,7 @@
   ansible.builtin.lineinfile:
     line: "auth required pam_wheel.so use_uid group=sugroup"
     dest: /etc/pam.d/su
-    mode: 0644
+    mode: "0644"
     state: present
     create: true
   tags:

@@ -28,7 +28,7 @@
 - name: Set user /home directories permission
   become: true
   ansible.builtin.file:
-    mode: 0750
+    mode: "0750"
     path: "{{ item.path }}"
   with_items: "{{ home_directories.files }}"
   loop_control:

@@ -4,7 +4,7 @@
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/disablemod.conf
     line: "install {{ item }} /bin/true"
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
     state: present
@@ -44,7 +44,7 @@
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/blockblacklisted.conf
     line: "install {{ item }} /bin/true"
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
     state: present

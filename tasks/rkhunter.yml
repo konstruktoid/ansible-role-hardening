@@ -5,7 +5,7 @@
     src: etc/default/rkhunter.j2
     dest: /etc/default/rkhunter
     backup: true
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   when: ansible_os_family == "Debian"
@@ -22,7 +22,7 @@
     regexp: "ALLOW_SSH_ROOT_USER"
     line: "ALLOW_SSH_ROOT_USER=no"
     dest: /etc/rkhunter.conf
-    mode: 0640
+    mode: "0640"
     state: present
     create: false
     backrefs: true
@@ -39,7 +39,7 @@
     regexp: "ALLOW_SSH_PROT_V1"
     line: "ALLOW_SSH_PROT_V1=0"
     dest: /etc/rkhunter.conf
-    mode: 0640
+    mode: "0640"
     state: present
     create: false
     backrefs: true
