@@ -6,21 +6,21 @@ AllowTcpForwarding {{ sshd_allow_tcp_forwarding }}
 AuthenticationMethods {{ sshd_authentication_methods }}
 Banner {{ sshd_banner }}
 ChallengeResponseAuthentication {{ sshd_challenge_response_authentication }}
-Ciphers {{ sshd_ciphers }}
-ClientAliveCountMax {{ sshd_client_alive_count_max|int }}
-ClientAliveInterval {{ sshd_client_alive_interval|int }}
+Ciphers {{ sshd_ciphers | replace(', ', ',') }}
+ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
+ClientAliveInterval {{ sshd_client_alive_interval | int }}
 Compression {{ sshd_compression }}
 GSSAPIAuthentication {{ sshd_gssapi_authentication }}
+HostKeyAlgorithms {{ sshd_host_key_algorithms | replace(', ', ',') }}
 HostbasedAuthentication {{ sshd_hostbased_authentication }}
-HostKeyAlgorithms {{ sshd_host_key_algorithms }}
 IgnoreUserKnownHosts {{ sshd_ignore_user_known_hosts }}
 KerberosAuthentication {{ sshd_kerberos_authentication }}
-KexAlgorithms {{ sshd_kex_algorithms }}
-LoginGraceTime {{ sshd_login_grace_time|int }}
+KexAlgorithms {{ sshd_kex_algorithms | replace(', ', ',') }}
 LogLevel {{ sshd_log_level }}
-Macs {{ sshd_macs }}
-MaxAuthTries {{ sshd_max_auth_tries|int }}
-MaxSessions {{ sshd_max_sessions|int }}
+LoginGraceTime {{ sshd_login_grace_time | int }}
+MACs {{ sshd_macs | replace(', ', ',') }}
+MaxAuthTries {{ sshd_max_auth_tries | int }}
+MaxSessions {{ sshd_max_sessions | int }}
 MaxStartups {{ sshd_max_startups }}
 PasswordAuthentication {{ sshd_password_authentication }}
 PermitEmptyPasswords {{ sshd_permit_empty_passwords }}
