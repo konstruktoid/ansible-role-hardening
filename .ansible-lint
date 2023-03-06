@@ -3,6 +3,4 @@ profile: production
 exclude_paths:
   - .git/
   - .github/
-warn_list:
-  - line-length
-  - yaml[line-length]
+  - tests
