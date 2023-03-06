@@ -165,7 +165,9 @@
 
     - name: Install CodeReady repo for RHEL8
       become: true
-      ansible.builtin.command: subscription-manager repos --enable "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
+      ansible.builtin.command: >-
+        subscription-manager repos
+        --enable "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
       changed_when: false
 
 - name: RHEL7 repo tasks
@@ -195,7 +197,11 @@
 
     - name: Install Extras and HA for RHEL7
       become: true
-      ansible.builtin.command: subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms"
+      ansible.builtin.command: >-
+        subscription-manager repos
+        --enable "rhel-*-optional-rpms"
+        --enable "rhel-*-extras-rpms"
+        --enable "rhel-ha-for-rhel-*-server-rpms"
       changed_when: false
       tags:
         - dnf
