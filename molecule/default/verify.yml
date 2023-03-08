@@ -455,7 +455,7 @@
         path: /etc/security/pwquality.conf
         line: "{{ item.key }} = {{ item.value }}"
         state: present
-        mode: 0644
+        mode: "0644"
         owner: root
         group: root
       check_mode: true
@@ -678,7 +678,7 @@
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/security/faillock.conf
-        mode: 0644
+        mode: "0644"
         state: present
         line: "{{ item }}"
       check_mode: true
