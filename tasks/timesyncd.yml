@@ -1,4 +1,15 @@
 ---
+- name: Install systemd timesyncd
+  become: true
+  ansible.builtin.package:
+    name: systemd-timesyncd
+    state: present
+  tags:
+    - systemd
+    - timesyncd
+    - CIS-UBUNTU2004-2.1.1.1
+    - CIS-UBUNTU2004-2.1.1.2
+
 - name: Configure systemd timesyncd
   become: true
   ansible.builtin.template:
@@ -21,6 +32,7 @@
   ansible.builtin.systemd:
     name: systemd-timesyncd
     enabled: true
+    masked: false
     state: started
   tags:
     - systemd

@@ -18,10 +18,12 @@ provisioner:
   inventory:
     host_vars:
       stone:
+        enable_timesyncd: false
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
         suid_sgid_permissions: false
       lime:
+        enable_timesyncd: false
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: "vagrant sudo"
         suid_sgid_permissions: false

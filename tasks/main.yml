@@ -37,6 +37,7 @@
 
 - name: Configure systemd timesyncd
   ansible.builtin.include_tasks: timesyncd.yml
+  when: enable_timesyncd
 
 - name: Clean fstab
   ansible.builtin.include_tasks: fstab.yml
