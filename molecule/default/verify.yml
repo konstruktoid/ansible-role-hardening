@@ -567,6 +567,7 @@
       with_items:
         - NTP={{ ntp }}
         - FallbackNTP={{ fallback_ntp }}
+      when: enable_timesyncd
 
     - name: Stat /etc/default/motd-news
       ansible.builtin.stat:
