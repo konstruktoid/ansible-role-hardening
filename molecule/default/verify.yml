@@ -178,7 +178,7 @@
         fail_msg: "{{ sshd_config_directory.stat.path }} permissions are incorrect: {{ sshd_config_directory.stat.mode }}"
       when: sshd_config_directory.stat.exists
 
-    - name: Verify sshd_config PermitRootLogin configuration
+    - name: Verify sshd PermitRootLogin configuration
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config
@@ -199,11 +199,11 @@
       failed_when: sshd_config_d is changed
       when: sshd_config_directory.stat.exists
 
-    - name: Verify sshd_config configuration
+    - name: Verify sshd configuration
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config
-        line: "{{ item }}"
+        line: "{{ item | replace(', ', ',') }}"
         state: present
       check_mode: true
       register: sshd_config
@@ -227,7 +227,7 @@
         - KexAlgorithms {{ sshd_kex_algorithms }}
         - LogLevel {{ sshd_log_level }}
         - LoginGraceTime {{ sshd_login_grace_time | int }}
-        - Macs {{ sshd_macs }}
+        - MACs {{ sshd_macs }}
         - MaxAuthTries {{ sshd_max_auth_tries | int }}
         - MaxSessions {{ sshd_max_sessions | int }}
         - MaxStartups {{ sshd_max_startups }}
@@ -246,11 +246,11 @@
         - X11Forwarding {{ sshd_x11_forwarding }}
       when: not sshd_config_directory.stat.exists
 
-    - name: Verify sshd_config.d configuration
+    - name: Verify sshd config.d configuration
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config.d/01-hardening.conf
-        line: "{{ item }}"
+        line: "{{ item | replace(', ', ',') }}"
         state: present
       check_mode: true
       register: sshd_config
@@ -274,7 +274,7 @@
         - KexAlgorithms {{ sshd_kex_algorithms }}
         - LogLevel {{ sshd_log_level }}
         - LoginGraceTime {{ sshd_login_grace_time | int }}
-        - Macs {{ sshd_macs }}
+        - MACs {{ sshd_macs }}
         - MaxAuthTries {{ sshd_max_auth_tries | int }}
         - MaxSessions {{ sshd_max_sessions | int }}
         - MaxStartups {{ sshd_max_startups }}
@@ -324,7 +324,7 @@
         - clientaliveinterval {{ sshd_client_alive_interval | int }}
         - compression {{ sshd_compression }}
         - logingracetime {{ sshd_login_grace_time | int }}
-        - macs {{ sshd_macs }}
+        - macs {{ sshd_macs | replace(', ', ',') }}
         - maxauthtries {{ sshd_max_auth_tries | int }}
         - maxsessions {{ sshd_max_sessions | int }}
         - maxstartups {{ sshd_max_startups }}
@@ -335,7 +335,7 @@
         - usepam {{ sshd_use_pam }}
         - x11forwarding {{ sshd_x11_forwarding }}
 
-    - name: Verify ssh_config configuration
+    - name: Verify ssh client configuration
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/ssh_config
@@ -345,12 +345,12 @@
       register: ssh_config
       failed_when: ssh_config is changed
       with_items:
-        - Ciphers {{ sshd_ciphers }}
+        - Ciphers {{ sshd_ciphers | replace(', ', ',') }}
         - GSSAPIAuthentication {{ sshd_gssapi_authentication }}
         - HashKnownHosts yes
-        - HostKeyAlgorithms {{ sshd_host_key_algorithms }}
-        - KexAlgorithms {{ sshd_kex_algorithms }}
-        - MACs {{ sshd_macs }}
+        - HostKeyAlgorithms {{ sshd_host_key_algorithms | replace(', ', ',') }}
+        - KexAlgorithms {{ sshd_kex_algorithms | replace(', ', ',') }}
+        - MACs {{ sshd_macs | replace(', ', ',') }}
         - RekeyLimit {{ sshd_rekey_limit }}
 
     - name: Merge sysctl settings
