@@ -52,6 +52,10 @@ jobs:
       upload-assets: ${{ startsWith(github.ref, 'refs/tags/') }}
 
   release:
+    permissions:
+      actions: read
+      id-token: write
+      contents: write
     needs: [build, provenance]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
