@@ -13,6 +13,9 @@
 ├── STRUCTURE.md
 ├── TESTING.md
 ├── Vagrantfile
+├── action-lint
+│   ├── Dockerfile
+│   └── entrypoint.sh
 ├── defaults
 │   └── main
 │       ├── auditd.yml
@@ -31,6 +34,7 @@
 │       ├── suid_sgid_blocklist.yml
 │       ├── sysctl.yml
 │       ├── ufw.yml
+│       ├── umask.yml
 │       └── users.yml
 ├── files
 │   └── usr
@@ -120,7 +124,6 @@
 │   │   ├── ansible
 │   │   │   └── facts.d
 │   │   │       ├── cpuinfo.fact
-│   │   │       ├── reboot.fact
 │   │   │       ├── sshkeys.fact
 │   │   │       └── systemd.fact
 │   │   ├── audit
@@ -167,5 +170,5 @@
 │   └── test.yml
 └── tox.ini
 
-34 directories, 125 files
+36 directories, 127 files
 ```

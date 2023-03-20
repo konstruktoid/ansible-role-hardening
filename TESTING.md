@@ -7,8 +7,11 @@ almalinux/8
 almalinux/9
 bento/debian-10
 bento/ubuntu-20.04
+bento/ubuntu-22.04
 debian/bullseye64
+debian/testing64
 generic/rhel8
+lunar/20230202
 ubuntu/focal64
 ubuntu/jammy64
 ubuntu/kinetic64
@@ -31,10 +34,10 @@ repository if the host is using [Ubuntu](https://ubuntu.com/ "Ubuntu").
 
 ```console
 devel
-py39-ansible6
-py39-ansible7
-py39-ansibledevel
 py310-ansible6
 py310-ansible7
 py310-ansibledevel
+py311-ansible6
+py311-ansible7
+py311-ansibledevel
 ```
