@@ -4,13 +4,14 @@ An [Ansible](https://www.ansible.com/) role to make a AlmaLinux, Debian, or
 Ubuntu server a bit more secure.
 [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
-Requires Ansible >= 2.12.
+Requires Ansible >= 2.13.
 
 Available on
 [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
 
-[AlmaLinux 8](https://almalinux.org/),
-[Debian 11](https://www.debian.org/),
+[AlmaLinux 8](https://wiki.almalinux.org/release-notes/#almalinux-8),
+[AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9),
+[Debian 11](https://www.debian.org/releases/bullseye/),
 Ubuntu [20.04 LTS (Focal Fossa)](https://releases.ubuntu.com/focal/) and
 [22.04 LTS (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/) are supported.
 
@@ -262,6 +263,7 @@ misc_modules_blocklist:
   - cpia2
   - firewire-core
   - floppy
+  - ksmbd
   - n_hdlc
   - net-pf-31
   - pcspkr
@@ -303,12 +305,14 @@ information otherwise prohibited by `hidepid=`.
 ### ./defaults/main/ntp.yml
 
 ```yaml
+enable_timesyncd: true
 fallback_ntp: 2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org
 ntp: 0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org
 ```
 
-NTP server host names or IP addresses. [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdtimesyncdconf)
-option.
+If `enable_timesyncd: true` then configure systemd
+[timesyncd](https://manpages.ubuntu.com/manpages/jammy/man8/systemd-timesyncd.service.8.html),
+otherwise installing a NTP client is recommended.
 
 ### ./defaults/main/packages.yml
 
@@ -330,6 +334,7 @@ packages_blocklist:
   - talk*
   - telnet*
   - tftp*
+  - tuned
   - whoopsie
   - xinetd
   - yp-tools
@@ -390,7 +395,7 @@ and packages to be removed (`packages_blocklist`).
 ### ./defaults/main/password.yml
 
 ```yaml
-crypto_policy: FIPS
+crypto_policy: "DEFAULT:NO-SHA1"
 pwquality_config:
   dcredit: -1
   dictcheck: 1
@@ -424,19 +429,41 @@ sshd_allow_tcp_forwarding: 'no'
 sshd_authentication_methods: any
 sshd_banner: /etc/issue.net
 sshd_challenge_response_authentication: 'no'
-sshd_ciphers: chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr
+sshd_ciphers: >-
+  chacha20-poly1305@openssh.com,
+  aes256-gcm@openssh.com,
+  aes256-ctr
 sshd_client_alive_count_max: 1
 sshd_client_alive_interval: 200
 sshd_compression: 'no'
 sshd_gssapi_authentication: 'no'
 sshd_hostbased_authentication: 'no'
-sshd_host_key_algorithms: ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa,ecdsa-sha2-nistp521-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp521,ecdsa-sha2-nistp384,ecdsa-sha2-nistp256
+sshd_host_key_algorithms: >-
+  ssh-ed25519-cert-v01@openssh.com,
+  ssh-rsa-cert-v01@openssh.com,
+  ssh-ed25519,
+  ssh-rsa,
+  ecdsa-sha2-nistp521-cert-v01@openssh.com,
+  ecdsa-sha2-nistp384-cert-v01@openssh.com,
+  ecdsa-sha2-nistp256-cert-v01@openssh.com,
+  ecdsa-sha2-nistp521,
+  ecdsa-sha2-nistp384,
+  ecdsa-sha2-nistp256
 sshd_ignore_user_known_hosts: 'yes'
 sshd_kerberos_authentication: 'no'
-sshd_kex_algorithms: curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+sshd_kex_algorithms: >-
+  curve25519-sha256@libssh.org,
+  ecdh-sha2-nistp521,
+  ecdh-sha2-nistp384,
+  ecdh-sha2-nistp256,
+  diffie-hellman-group-exchange-sha256
 sshd_login_grace_time: 20
 sshd_log_level: VERBOSE
-sshd_macs: hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
+sshd_macs: >-
+  hmac-sha2-512-etm@openssh.com,
+  hmac-sha2-256-etm@openssh.com,
+  hmac-sha2-512,
+  hmac-sha2-256
 sshd_max_auth_tries: 3
 sshd_max_sessions: 3
 sshd_max_startups: 10:30:60
@@ -498,16 +525,14 @@ higher than 9.1.
 ```yaml
 suid_sgid_permissions: true
 suid_sgid_blocklist:
+  - 7z
+  - ab
+  - agetty
+  - alpine
   - ansible-playbook
-  - ar
-  - as
-  - at
-  - awk
-  - base32
-  - base64
-  - bash
-  - busctl
-  - busybox
+  - aoss
+  - apt
+  - apt-get
   [...]
 ```
 
@@ -610,6 +635,14 @@ ufw_outgoing_traffic:
 `false` in order to install and configure a firewall manually.
 `ufw_outgoing_traffic` opens the specific `ufw` ports,
 allowing outgoing traffic.
+
+### ./defaults/main/umask.yml
+
+```yaml
+umask_value: "077"
+```
+
+Set default [umask value](https://manpages.ubuntu.com/manpages/jammy/man2/umask.2.html).
 
 ### ./defaults/main/users.yml
 
