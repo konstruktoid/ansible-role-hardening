@@ -90,4 +90,21 @@
   tags:
     - apt_news
     - ubuntu-pro
+
+- name: Stat apt ESM hook
+  ansible.builtin.stat:
+    path: /etc/apt/apt.conf.d/20apt-esm-hook.conf
+  register: ubuntu_esm_hook
+  when: ansible_os_family == "Debian"
+  tags:
+    - ubuntu-pro
+
+- name: Remove apt ESM hook
+  become: true
+  ansible.builtin.file:
+    dest: /etc/apt/apt.conf.d/20apt-esm-hook.conf
+    state: absent
+  when: ansible_os_family == "Debian" and ubuntu_esm_hook.stat.exists
+  tags:
+    - ubuntu-pro
 ...
