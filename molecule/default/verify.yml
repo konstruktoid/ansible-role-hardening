@@ -603,6 +603,13 @@
       failed_when: ubuntu_advantage_pro_state.rc != 0
       when: ansible_os_family == "Debian" and ubuntu_advantage_pro.stat.exists
 
+    - name: Stat apt ESM hook
+      ansible.builtin.stat:
+        path: /etc/apt/apt.conf.d/20apt-esm-hook.conf
+      register: ubuntu_esm_hook
+      failed_when: ubuntu_esm_hook.stat.exists
+      when: ansible_os_family == "Debian"
+
     - name: Efi fact
       ansible.builtin.set_fact:
         booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
