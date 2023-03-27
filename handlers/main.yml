@@ -12,6 +12,8 @@
 - name: Restart RedHat auditd  # noqa command-instead-of-module
   become: true
   ansible.builtin.command: service auditd restart
+  register: service_auditd_restart
+  changed_when: service_auditd_restart.rc == 0
   when: ansible_os_family == "RedHat"
   tags:
     - CCE-80872-5
@@ -19,6 +21,8 @@
 - name: Generate auditd rules
   become: true
   ansible.builtin.command: augenrules
+  register: augenrules_handler
+  changed_when: augenrules_handler.rc == 0
 
 - name: Restart sysctl
   become: true
@@ -34,6 +38,8 @@
 - name: Run rkhunter propupd
   become: true
   ansible.builtin.command: rkhunter --propupd
+  register: rkhunter_propupd
+  changed_when: rkhunter_propupd.rc == 0
 
 - name: Enable aidecheck
   become: true
@@ -138,6 +144,8 @@
   become: true
   ansible.builtin.shell: |
     update-cracklib
+  register: update_debian_cracklib
+  changed_when: update_debian_cracklib.rc == 0
   when: ansible_os_family == "Debian"
 
 - name: Update RedHat cracklib
@@ -145,13 +153,19 @@
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   become: true
   ansible.builtin.command: create-cracklib-dict /usr/share/dict/*
+  register: update_redhat_cracklib
+  changed_when: update_redhat_cracklib.rc == 0
   when: ansible_os_family == "RedHat"
 
 - name: Update GRUB
   become: true
   ansible.builtin.command: update-grub
+  register: update_grub
+  changed_when: update_grub.rc == 0
 
 - name: Update GRUB2
   become: true
   ansible.builtin.command: grub2-mkconfig
+  register: update_grub2
+  changed_when: update_grub2.rc == 0
 ...
