@@ -69,7 +69,7 @@
   args:
     executable: /bin/bash
   register: ubuntu_advantage_pro_state
-  changed_when: ubuntu_advantage_pro_state.rc != 0
+  changed_when: false
   failed_when: ubuntu_advantage_pro_state.rc > 1
   when: ansible_os_family == "Debian" and ubuntu_advantage_pro.stat.exists
   tags:
