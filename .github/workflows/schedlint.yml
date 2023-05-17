@@ -12,4 +12,4 @@ jobs:
     steps:
       - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
       - name: Lint Ansible Playbook
-        uses: ansible/ansible-lint-action@912d1bf4240f503c2b7e50a6cacadd7df5c3dd82 # main
+        uses: ansible/ansible-lint-action@df0be150a0e1e11ae3a2789e88074077568a91e1 # main
