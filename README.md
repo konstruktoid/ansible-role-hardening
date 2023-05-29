@@ -288,6 +288,14 @@ of `blacklisted` kernel modules. The reasoning behind this is that a blacklisted
 module can still be loaded manually with `modprobe module_name`. Using
 `install module_name /bin/true` prevents this.
 
+**Please note:** This will affect modules that the OS itself has blacklisted as
+part of its default setup, or that were added manually at some point, by anyone
+with access to your system. Please verify the affected modules before turning
+this on, under `/etc/modprobe.d/`.
+
+This code project does not blacklist any modules, it only blocks/disables, as
+described in the first paragraph of this section.
+
 Note that disabling the `usb-storage` module will disable any usage of USB
 storage devices, if such devices are needed [USBGuard](https://github.com/USBGuard/usbguard),
 or a similar tool, should be configured accordingly.
