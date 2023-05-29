@@ -2,6 +2,9 @@
 AcceptEnv {{ sshd_accept_env }}
 AllowAgentForwarding {{ sshd_allow_agent_forwarding }}
 AllowGroups {{ sshd_allow_groups }}
+{% if sshd_allow_users is defined and sshd_allow_users %}
+AllowUsers {{ sshd_allow_users }}
+{% endif %}
 AllowTcpForwarding {{ sshd_allow_tcp_forwarding }}
 AuthenticationMethods {{ sshd_authentication_methods }}
 Banner {{ sshd_banner }}

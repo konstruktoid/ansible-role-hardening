@@ -437,6 +437,7 @@ sshd_admin_net:
   - 192.168.1.0/24
 sshd_allow_agent_forwarding: 'no'
 sshd_allow_groups: sudo
+sshd_allow_users: "{{ ansible_user }}"
 sshd_allow_tcp_forwarding: 'no'
 sshd_authentication_methods: any
 sshd_banner: /etc/issue.net
@@ -505,6 +506,7 @@ to allow access to additional services.
 
 OpenSSH login is allowed only for users whose primary group or supplementary
 group list matches one of the patterns in `sshd_allow_groups`.
+OpenSSH login is also allowed for users in `sshd_allow_users`.
 
 `sshd_allow_agent_forwarding` specifies whether ssh-agent(1) forwarding is
 permitted.
