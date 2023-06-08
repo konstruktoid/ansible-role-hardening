@@ -8,17 +8,17 @@
     create: true
     line: "{{ item }}"
   with_items:
-    - 'Acquire::AllowDowngradeToInsecureRepositories "false";'
-    - 'Acquire::AllowInsecureRepositories "false";'
-    - 'Acquire::http::AllowRedirect "false";'
-    - 'APT::Get::AllowUnauthenticated "false";'
-    - 'APT::Get::AutomaticRemove "true";'
-    - 'APT::Install-Recommends "false";'
-    - 'APT::Install-Suggests "false";'
-    - 'APT::Periodic::AutocleanInterval "7";'
-    - 'APT::Sandbox::Seccomp "1";'
-    - 'Unattended-Upgrade::Remove-Unused-Dependencies "true";'
-    - 'Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";'
+    - Acquire::AllowDowngradeToInsecureRepositories "false";
+    - Acquire::AllowInsecureRepositories "false";
+    - Acquire::http::AllowRedirect "false";
+    - APT::Get::AllowUnauthenticated "false";
+    - APT::Get::AutomaticRemove "true";
+    - APT::Install-Recommends "false";
+    - APT::Install-Suggests "false";
+    - APT::Periodic::AutocleanInterval "7";
+    - APT::Sandbox::Seccomp "1";
+    - Unattended-Upgrade::Remove-Unused-Dependencies "true";
+    - Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
   when: ansible_os_family == "Debian"
   tags:
     - apt
@@ -78,8 +78,8 @@
 - name: Set yum.conf gpgcheck
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^gpgcheck="
-    line: "gpgcheck=1"
+    regexp: ^gpgcheck=
+    line: gpgcheck=1
     dest: /etc/yum.conf
     mode: "0644"
     state: present
@@ -96,7 +96,7 @@
 - name: Set yum.conf clean_requirements
   become: true
   ansible.builtin.lineinfile:
-    line: "clean_requirements_on_remove=True"
+    line: clean_requirements_on_remove=True
     dest: /etc/yum.conf
     mode: "0644"
     state: present
@@ -111,7 +111,7 @@
 - name: Set yum.conf localpkg_gpgcheck
   become: true
   ansible.builtin.lineinfile:
-    line: "localpkg_gpgcheck=1"
+    line: localpkg_gpgcheck=1
     dest: /etc/yum.conf
     mode: "0644"
     state: present
@@ -156,7 +156,7 @@
     - name: RHEL8 EPEL repo installation
       become: true
       ansible.builtin.dnf:
-        name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
         state: present
       tags:
         - dnf
@@ -188,7 +188,7 @@
     - name: RHEL7 EPEL repo installation
       become: true
       ansible.builtin.yum:
-        name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
         state: present
       tags:
         - dnf
@@ -227,8 +227,8 @@
 - name: Enable the PowerTools repository
   become: true
   ansible.builtin.replace:
-    regexp: "^enabled=.*$"
-    replace: "enabled=1"
+    regexp: ^enabled=.*$
+    replace: enabled=1
     dest: "{{ item.stat.path }}"
   with_items:
     - "{{ powertools_repo.results }}"
@@ -252,7 +252,7 @@
 - name: Run dnf upgrade
   become: true
   ansible.builtin.dnf:
-    name: "*"  # noqa package-latest
+    name: "*" # noqa package-latest
     state: latest
     bugfix: true
     security: true
@@ -264,4 +264,3 @@
     - CCE-80865-9
     - D3-SU
     - M1051
-...

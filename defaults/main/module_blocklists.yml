@@ -32,4 +32,3 @@ net_modules_blocklist:
   - sctp
   - rds
   - tipc
-...

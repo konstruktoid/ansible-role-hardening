@@ -10,7 +10,7 @@
 - name: RedHat family EPEL installation
   become: true
   ansible.builtin.dnf:
-    name: "epel-release"
+    name: epel-release
     state: present
     update_cache: true
   when: ansible_os_family == "RedHat" and (not (ansible_distribution == "Fedora" or ansible_distribution == "RedHat"))
@@ -46,7 +46,7 @@
 - name: Install python2-rpm
   become: true
   ansible.builtin.dnf:
-    name: "python2-rpm"
+    name: python2-rpm
     state: present
   when: ansible_distribution == "RedHat" and ansible_python.version.major <= 2
   tags:
@@ -58,7 +58,7 @@
 - name: Install python3-rpm
   become: true
   ansible.builtin.dnf:
-    name: "python3-rpm"
+    name: python3-rpm
     state: present
   when: ansible_distribution == "RedHat" and ansible_python.version.major >= 3
   tags:
@@ -92,7 +92,7 @@
     - name: Python3-pip installation
       become: true
       ansible.builtin.package:
-        name: "python3-pip"
+        name: python3-pip
         state: present
       tags:
         - dnf
@@ -103,7 +103,7 @@
     - name: Pip passlib installation
       become: true
       ansible.builtin.pip:
-        name: "passlib"
+        name: passlib
         state: present
       tags:
         - dnf
@@ -116,4 +116,3 @@
     booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
   tags:
     - fact
-...

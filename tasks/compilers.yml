@@ -2,7 +2,7 @@
 - name: Stat available compilers
   become: true
   ansible.builtin.find:
-    paths: ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/snap/bin']
+    paths: [/usr/local/sbin, /usr/local/bin, /usr/sbin, /usr/bin, /sbin, /bin, /snap/bin]
     patterns: "{{ compilers }}"
     file_type: any
     follow: true
@@ -24,4 +24,3 @@
     - "{{ compiler.files }}"
   tags:
     - compilers
-...

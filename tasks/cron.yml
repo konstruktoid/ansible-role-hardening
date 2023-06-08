@@ -15,7 +15,7 @@
   become: true
   ansible.builtin.lineinfile:
     path: "{{ item }}"
-    regexp: "^(?!root).*$"
+    regexp: ^(?!root).*$
     state: absent
   with_items:
     - /etc/at.allow
@@ -30,7 +30,7 @@
   become: true
   ansible.builtin.lineinfile:
     path: "{{ item }}"
-    line: "root"
+    line: root
     mode: "0600"
     state: present
     create: true
@@ -86,4 +86,3 @@
     - cron
     - crontab
     - CIS-UBUNTU2004-5.1.2
-...

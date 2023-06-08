@@ -3,7 +3,7 @@
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/disablenet.conf
-    line: "install {{ item }} /bin/true"
+    line: install {{ item }} /bin/true
     mode: "0644"
     owner: root
     group: root
@@ -22,4 +22,3 @@
     - CIS-UBUNTU2004-3.4.4
     - M1038
     - M1042
-...

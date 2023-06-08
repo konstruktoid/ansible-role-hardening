@@ -19,70 +19,70 @@ provisioner:
         enable_timesyncd: false
         install_aide: false
         sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
+        sshd_allow_groups: vagrant sudo
         suid_sgid_permissions: false
       lime:
         enable_timesyncd: false
         sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
+        sshd_allow_groups: vagrant sudo
       bullseye:
-        ansible_become_pass: "vagrant"
-        ansible_python_interpreter: "/usr/bin/python3"
+        ansible_become_pass: vagrant
+        ansible_python_interpreter: /usr/bin/python3
         disable_wireless: false
         sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
+        sshd_allow_groups: vagrant sudo
         system_upgrade: false
       focal:
         block_blacklisted: true
         disable_wireless: true
         install_aide: false
         sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
+        sshd_allow_groups: vagrant sudo
         suid_sgid_permissions: false
       jammy:
         disable_ipv6: true
         block_blacklisted: true
         disable_wireless: true
         sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
+        sshd_allow_groups: vagrant sudo
         suid_sgid_permissions: false
 platforms:
   - name: stone
-    box: "almalinux/8"
+    box: almalinux/8
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
-      - 'vbguest.auto_update = false'
+      - vbguest.auto_update = false
     memory: 1024
   - name: lime
-    box: "almalinux/9"
+    box: almalinux/9
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
-      - 'vbguest.auto_update = false'
+      - vbguest.auto_update = false
     memory: 1024
   - name: bullseye
-    box: "debian/bullseye64"
+    box: debian/bullseye64
     instance_raw_config_args:
-      - 'vbguest.auto_update = false'
+      - vbguest.auto_update = false
     memory: 1024
   - name: focal
-    box: "bento/ubuntu-20.04"
+    box: bento/ubuntu-20.04
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
-      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+      - "vbguest.installer_options = { allow_kernel_upgrade: true }"
     memory: 1024
   - name: jammy
-    box: "ubuntu/jammy64"
+    box: ubuntu/jammy64
     config_options:
       vm.boot_timeout: 600
       synced_folder: false
     provider_raw_config_args:
-      - "customize ['modifyvm', :id, '--uart1', '0x3F8', '4']"
-      - "customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]"
+      - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
+      - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
     instance_raw_config_args:
-      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+      - "vbguest.installer_options = { allow_kernel_upgrade: true }"
     memory: 1024
 verifier:
   name: ansible

@@ -12,10 +12,9 @@
 
     - name: Notify reboot handler
       become: true
-      ansible.builtin.setup: ~
+      ansible.builtin.setup:
       notify:
         - Reboot node
       when:
         - ansible_distribution == "Ubuntu"
         - stat_reboot_required.stat.exists
-...

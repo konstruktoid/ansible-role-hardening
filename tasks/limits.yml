@@ -1,5 +1,4 @@
 ---
-
 - name: Configure limits.conf
   become: true
   ansible.builtin.template:
@@ -36,9 +35,8 @@
   become: true
   ansible.builtin.systemd:
     name: kdump.service
-    enabled: 'no'
+    enabled: "no"
     state: stopped
-    masked: 'yes'
+    masked: "yes"
   register: mask_kdump
   failed_when: mask_kdump is not success and not "Could not find the requested service" in mask_kdump.msg
-...

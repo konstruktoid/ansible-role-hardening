@@ -2,8 +2,8 @@
 - name: Disable apport
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^enabled="
-    line: "enabled=0"
+    regexp: ^enabled=
+    line: enabled=0
     dest: /etc/default/apport
     mode: "0644"
     state: present
@@ -19,4 +19,3 @@
     - not default_apport.rc == 257
   tags:
     - apport
-...

@@ -22,14 +22,14 @@ provisioner:
     host_vars:
       redhat:
         sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
+        sshd_allow_groups: vagrant sudo
 platforms:
   - name: redhat
-    box: "generic/rhel8"
+    box: generic/rhel8
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
-      - 'vbguest.auto_update = false'
+      - vbguest.auto_update = false
     memory: 1024
 verifier:
   name: ansible

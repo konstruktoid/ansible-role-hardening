@@ -32,7 +32,7 @@
 - name: Configure cron.daily logrotate
   become: true
   ansible.builtin.lineinfile:
-    line: "/usr/sbin/logrotate /etc/logrotate.conf"
+    line: /usr/sbin/logrotate /etc/logrotate.conf
     dest: /etc/cron.daily/logrotate
     mode: "0750"
     state: present
@@ -63,8 +63,8 @@
 - name: Configure rsyslog.conf FileCreateMode
   become: true
   ansible.builtin.lineinfile:
-    regexp: '^\$FileCreateMode'
-    line: '$FileCreateMode 0600'
+    regexp: ^\$FileCreateMode
+    line: $FileCreateMode 0600
     dest: /etc/rsyslog.conf
     mode: "0640"
     state: present
@@ -77,12 +77,11 @@
 - name: Add FileCreateMode file to the rsyslog.d directory
   become: true
   ansible.builtin.lineinfile:
-    regexp: '^\$FileCreateMode'
-    line: '$FileCreateMode 0600'
+    regexp: ^\$FileCreateMode
+    line: $FileCreateMode 0600
     dest: /etc/rsyslog.d/99-filecreatemode.conf
     mode: "0644"
     state: present
     create: true
   tags:
     - rsyslog
-...

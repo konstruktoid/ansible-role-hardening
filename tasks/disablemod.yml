@@ -3,7 +3,7 @@
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/disablemod.conf
-    line: "install {{ item }} /bin/true"
+    line: install {{ item }} /bin/true
     mode: "0644"
     owner: root
     group: root
@@ -43,7 +43,7 @@
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/blockblacklisted.conf
-    line: "install {{ item }} /bin/true"
+    line: install {{ item }} /bin/true
     mode: "0644"
     owner: root
     group: root
@@ -57,4 +57,3 @@
     - M1034
     - M1038
     - M1042
-...

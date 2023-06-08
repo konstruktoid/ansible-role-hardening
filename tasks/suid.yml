@@ -30,7 +30,7 @@
       become: true
       ansible.builtin.file:
         path: "{{ item.stat.path }}"
-        mode: 'a-s'
+        mode: a-s
         state: file
         follow: true
       when:
@@ -39,4 +39,3 @@
         - item.stat.mode | int <= 5000
       with_items:
         - "{{ suid_file.results }}"
-...

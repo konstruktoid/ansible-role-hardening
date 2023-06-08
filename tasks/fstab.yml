@@ -12,7 +12,6 @@
   ansible.builtin.lineinfile:
     path: /etc/fstab
     state: absent
-    regexp: '^(.*)floppy(.*)$'
+    regexp: ^(.*)floppy(.*)$
   tags:
     - fstab
-...

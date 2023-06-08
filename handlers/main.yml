@@ -9,7 +9,7 @@
     - CCE-80872-5
 
 # https://github.com/ansible/ansible/issues/22171
-- name: Restart RedHat auditd  # noqa command-instead-of-module
+- name: Restart RedHat auditd # noqa command-instead-of-module
   become: true
   ansible.builtin.command: service auditd restart
   register: service_auditd_restart
@@ -168,4 +168,3 @@
   ansible.builtin.command: grub2-mkconfig
   register: update_grub2
   changed_when: update_grub2.rc == 0
-...

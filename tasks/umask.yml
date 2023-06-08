@@ -12,8 +12,8 @@
 - name: Set default rc umask
   become: true
   ansible.builtin.replace:
-    regexp: 'umask(\s+.*)'
-    replace: "umask {{ umask_value }}"
+    regexp: umask(\s+.*)
+    replace: umask {{ umask_value }}
     dest: /etc/init.d/rc
     mode: "0755"
   when: initdrc.stat.exists
@@ -37,8 +37,8 @@
 - name: Set default bashrc umask
   become: true
   ansible.builtin.replace:
-    regexp: 'umask(\s+.*)'
-    replace: "umask {{ umask_value }}"
+    regexp: umask(\s+.*)
+    replace: umask {{ umask_value }}
     dest: /etc/bashrc
     mode: "0644"
   when: bashrc.stat.exists
@@ -63,8 +63,8 @@
 - name: Set default csh.cshrc umask
   become: true
   ansible.builtin.replace:
-    regexp: 'umask(\s+.*)'
-    replace: "umask {{ umask_value }}"
+    regexp: umask(\s+.*)
+    replace: umask {{ umask_value }}
     dest: /etc/csh.cshrc
     mode: "0644"
   when: cshrc.stat.exists
@@ -77,8 +77,8 @@
 - name: Set default profile umask
   become: true
   ansible.builtin.replace:
-    regexp: 'umask(\s+.*)'
-    replace: "umask {{ umask_value }}"
+    regexp: umask(\s+.*)
+    replace: umask {{ umask_value }}
     dest: /etc/profile
     mode: "0644"
   tags:
@@ -89,24 +89,24 @@
 - name: Configure readonly TMOUT
   become: true
   ansible.builtin.lineinfile:
-    line: "readonly TMOUT"
+    line: readonly TMOUT
     dest: /etc/profile
     mode: "0644"
     state: present
     create: false
-    insertbefore: "^export"
+    insertbefore: ^export
   tags:
     - tmout
 
 - name: Set TMOUT
   become: true
   ansible.builtin.lineinfile:
-    line: "TMOUT=600"
+    line: TMOUT=600
     dest: /etc/profile
     mode: "0644"
     state: present
     create: false
-    insertbefore: "^readonly TMOUT"
+    insertbefore: ^readonly TMOUT
   tags:
     - tmout
     - CIS-UBUNTU2004-5.5.5
@@ -115,12 +115,11 @@
 - name: Export TMOUT
   become: true
   ansible.builtin.lineinfile:
-    line: "export TMOUT"
+    line: export TMOUT
     dest: /etc/profile
     mode: "0644"
     state: present
     create: false
-    insertafter: "^readonly TMOUT"
+    insertafter: ^readonly TMOUT
   tags:
     - tmout
-...
