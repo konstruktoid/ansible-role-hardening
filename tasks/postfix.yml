@@ -10,9 +10,9 @@
 - name: Configure Postfix disable_vrfy_command
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^disable_vrfy_command"
+    regexp: ^disable_vrfy_command
     dest: /etc/postfix/main.cf
-    line: "disable_vrfy_command = yes"
+    line: disable_vrfy_command = yes
     state: present
   when: postfix_main_cf.stat.exists
   tags:
@@ -22,9 +22,9 @@
 - name: Configure Postfix inet_interfaces
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^inet_interfaces"
+    regexp: ^inet_interfaces
     dest: /etc/postfix/main.cf
-    line: "inet_interfaces = loopback-only"
+    line: inet_interfaces = loopback-only
     state: present
   when: postfix_main_cf.stat.exists
   tags:
@@ -34,9 +34,9 @@
 - name: Configure Postfix smtpd_banner
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^smtpd_banner"
+    regexp: ^smtpd_banner
     dest: /etc/postfix/main.cf
-    line: 'smtpd_banner = \$myhostname - ESMTP'
+    line: smtpd_banner = \$myhostname - ESMTP
     state: present
   when: postfix_main_cf.stat.exists
   tags:
@@ -46,11 +46,10 @@
 - name: Configure Postfix smtpd_client_restrictions
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^smtpd_client_restrictions"
+    regexp: ^smtpd_client_restrictions
     dest: /etc/postfix/main.cf
-    line: "smtpd_client_restrictions = permit_mynetworks,reject"
+    line: smtpd_client_restrictions = permit_mynetworks,reject
   when: postfix_main_cf.stat.exists
   tags:
     - packages
     - postfix
-...

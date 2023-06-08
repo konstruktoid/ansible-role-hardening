@@ -19,16 +19,16 @@ provisioner:
     host_vars:
       jammy:
         sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
+        sshd_allow_groups: vagrant sudo
         suid_sgid_permissions: false
         umask_value: "027"
 platforms:
   - name: jammy
-    box: "bento/ubuntu-22.04"
+    box: bento/ubuntu-22.04
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
-      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+      - "vbguest.installer_options = { allow_kernel_upgrade: true }"
     memory: 1024
 verifier:
   name: ansible

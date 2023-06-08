@@ -2,7 +2,7 @@
 - name: Set Debian family AppArmor grub cmdline
   become: true
   ansible.builtin.lineinfile:
-    line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX apparmor=1 security=apparmor"'
+    line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX apparmor=1 security=apparmor"
     dest: /etc/default/grub.d/99-hardening-apparmor.cfg
     state: present
     create: true
@@ -19,7 +19,7 @@
 - name: Configure pam_apparmor
   become: true
   ansible.builtin.lineinfile:
-    line: 'session optional pam_apparmor.so order=user,group,default'
+    line: session optional pam_apparmor.so order=user,group,default
     dest: /etc/pam.d/apparmor
     state: present
     create: true
@@ -65,4 +65,3 @@
   when: ansible_os_family == "Debian"
   tags:
     - apparmor
-...

@@ -20,27 +20,27 @@ provisioner:
       stone:
         enable_timesyncd: false
         sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
+        sshd_allow_groups: vagrant sudo
         suid_sgid_permissions: false
       lime:
         enable_timesyncd: false
         sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
+        sshd_allow_groups: vagrant sudo
         suid_sgid_permissions: false
 platforms:
   - name: stone
-    box: "almalinux/8"
+    box: almalinux/8
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
-      - 'vbguest.auto_update = false'
+      - vbguest.auto_update = false
     memory: 1024
   - name: lime
-    box: "almalinux/9"
+    box: almalinux/9
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
-      - 'vbguest.auto_update = false'
+      - vbguest.auto_update = false
     memory: 1024
 verifier:
   name: ansible

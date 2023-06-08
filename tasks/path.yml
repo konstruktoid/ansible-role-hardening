@@ -2,8 +2,8 @@
 - name: Set path
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^PATH="
-    line: 'PATH="/usr/local/bin:/usr/sbin:/usr/bin:/bin:/snap/bin"'
+    regexp: ^PATH=
+    line: PATH="/usr/local/bin:/usr/sbin:/usr/bin:/bin:/snap/bin"
     dest: /etc/environment
     mode: "0644"
     state: present
@@ -25,4 +25,3 @@
   tags:
     - path
     - M1038
-...

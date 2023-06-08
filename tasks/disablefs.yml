@@ -3,7 +3,7 @@
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/disablefs.conf
-    line: "install {{ item }} /bin/true"
+    line: install {{ item }} /bin/true
     mode: "0644"
     owner: root
     group: root
@@ -25,4 +25,3 @@
     - CIS-UBUNTU2004-1.1.1.7
     - M1038
     - M1042
-...

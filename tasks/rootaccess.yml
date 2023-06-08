@@ -19,7 +19,7 @@
   become: true
   ansible.builtin.lineinfile:
     path: /etc/security/access.conf
-    regexp: '^(?!\+:root:127.0.0.1)$'
+    regexp: ^(?!\+:root:127.0.0.1)$
     mode: "0644"
     state: absent
   when: security_access_conf.stat.exists
@@ -30,7 +30,7 @@
   become: true
   ansible.builtin.lineinfile:
     path: /etc/security/access.conf
-    line: "+:root:127.0.0.1"
+    line: +:root:127.0.0.1
     mode: "0644"
     state: present
   when: security_access_conf.stat.exists
@@ -41,7 +41,7 @@
   become: true
   ansible.builtin.lineinfile:
     path: /etc/securetty
-    regexp: "^(?!console).*$"
+    regexp: ^(?!console).*$
     state: absent
   when: etc_securetty.stat.exists
   tags:
@@ -51,7 +51,7 @@
   become: true
   ansible.builtin.lineinfile:
     path: /etc/securetty
-    line: "console"
+    line: console
     mode: "0644"
     state: present
   when: etc_securetty.stat.exists
@@ -68,4 +68,3 @@
     - systemd
     - debug-shell
     - CCE-80876-6
-...

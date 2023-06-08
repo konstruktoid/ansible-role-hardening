@@ -7,7 +7,7 @@
     - name: Configure sudo use_pty
       become: true
       ansible.builtin.lineinfile:
-        line: "Defaults use_pty"
+        line: Defaults use_pty
         dest: /etc/sudoers.d/011_use_pty
         mode: "0440"
         state: present
@@ -19,7 +19,7 @@
     - name: Configure sudo logfile
       become: true
       ansible.builtin.lineinfile:
-        line: 'Defaults logfile="/var/log/sudo.log"'
+        line: Defaults logfile="/var/log/sudo.log"
         dest: /etc/sudoers.d/012_logfile
         mode: "0440"
         state: present
@@ -31,7 +31,7 @@
     - name: Configure sudo disable pwfeedback
       become: true
       ansible.builtin.lineinfile:
-        line: "Defaults !pwfeedback"
+        line: Defaults !pwfeedback
         dest: /etc/sudoers.d/013_pwfeedback
         mode: "0440"
         state: present
@@ -41,7 +41,7 @@
     - name: Configure sudo disable visiblepw
       become: true
       ansible.builtin.lineinfile:
-        line: "Defaults !visiblepw"
+        line: Defaults !visiblepw
         dest: /etc/sudoers.d/014_visiblepw
         mode: "0440"
         state: present
@@ -57,7 +57,7 @@
     - name: Configure sudo passwd_timeout
       become: true
       ansible.builtin.lineinfile:
-        line: "Defaults passwd_timeout=1"
+        line: Defaults passwd_timeout=1
         dest: /etc/sudoers.d/015_passwdtimeout
         mode: "0440"
         state: present
@@ -67,7 +67,7 @@
     - name: Configure sudo timestamp_timeout
       become: true
       ansible.builtin.lineinfile:
-        line: "Defaults timestamp_timeout=5"
+        line: Defaults timestamp_timeout=5
         dest: /etc/sudoers.d/016_timestamptimeout
         mode: "0440"
         state: present
@@ -77,7 +77,7 @@
     - name: Configure sudo timestamp_type
       become: true
       ansible.builtin.lineinfile:
-        line: "Defaults timestamp_type=tty"
+        line: Defaults timestamp_type=tty
         dest: /etc/sudoers.d/017_timestamptype
         mode: "0440"
         state: present
@@ -89,7 +89,7 @@
     - name: Configure sudo user password for privilege escalation
       become: true
       ansible.builtin.lineinfile:
-        line: "Defaults {{ item }}"
+        line: Defaults {{ item }}
         dest: /etc/sudoers.d/018_userpassword
         mode: "0440"
         state: present
@@ -116,7 +116,7 @@
 - name: Configure su group
   become: true
   ansible.builtin.lineinfile:
-    line: "auth required pam_wheel.so use_uid group=sugroup"
+    line: auth required pam_wheel.so use_uid group=sugroup
     dest: /etc/pam.d/su
     mode: "0644"
     state: present
@@ -126,4 +126,3 @@
     - su
     - sudo
     - CIS-UBUNTU2004-5.7
-...

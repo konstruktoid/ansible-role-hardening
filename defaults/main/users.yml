@@ -7,4 +7,3 @@ delete_users:
   - news
   - sync
   - uucp
-...

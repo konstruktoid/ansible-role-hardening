@@ -66,4 +66,3 @@ generic_sysctl_settings:
 conntrack_sysctl_settings:
   net.netfilter.nf_conntrack_max: 2000000
   net.netfilter.nf_conntrack_tcp_loose: 0
-...

@@ -18,38 +18,38 @@ provisioner:
   inventory:
     host_vars:
       buster:
-        ansible_python_interpreter: "/usr/bin/python3"
+        ansible_python_interpreter: /usr/bin/python3
         sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
+        sshd_allow_groups: vagrant sudo
         suid_sgid_permissions: false
         system_upgrade: false
       bullseye:
-        ansible_become_pass: "vagrant"
-        ansible_python_interpreter: "/usr/bin/python3"
+        ansible_become_pass: vagrant
+        ansible_python_interpreter: /usr/bin/python3
         sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
+        sshd_allow_groups: vagrant sudo
         suid_sgid_permissions: false
       testing:
-        ansible_become_pass: "vagrant"
-        ansible_python_interpreter: "/usr/bin/python3"
+        ansible_become_pass: vagrant
+        ansible_python_interpreter: /usr/bin/python3
         sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: "vagrant sudo"
+        sshd_allow_groups: vagrant sudo
         suid_sgid_permissions: false
 platforms:
   - name: buster
-    box: "bento/debian-10"
+    box: bento/debian-10
     instance_raw_config_args:
-      - 'vbguest.installer_options = { allow_kernel_upgrade: true }'
+      - "vbguest.installer_options = { allow_kernel_upgrade: true }"
     memory: 1024
   - name: bullseye
-    box: "debian/bullseye64"
+    box: debian/bullseye64
     instance_raw_config_args:
-      - 'vbguest.auto_update = false'
+      - vbguest.auto_update = false
     memory: 1024
   - name: testing
-    box: "debian/testing64"
+    box: debian/testing64
     instance_raw_config_args:
-      - 'vbguest.auto_update = false'
+      - vbguest.auto_update = false
     memory: 1024
 verifier:
   name: ansible

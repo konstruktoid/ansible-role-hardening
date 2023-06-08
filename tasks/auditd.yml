@@ -2,7 +2,7 @@
 - name: Configure Debian auditd GRUB cmdline
   become: true
   ansible.builtin.lineinfile:
-    line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX {{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"'
+    line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX {{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
     dest: /etc/default/grub.d/99-hardening-audit.cfg
     state: present
     create: true
@@ -18,7 +18,7 @@
 - name: Configure RedHat auditd GRUB cmdline
   become: true
   ansible.builtin.command:
-    cmd: 'grubby --update-kernel=ALL --args="{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"'
+    cmd: grubby --update-kernel=ALL --args="{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
   register: grubby_update_kernel
   when: ansible_os_family == "RedHat"
   changed_when: grubby_update_kernel.rc != 0
@@ -31,8 +31,8 @@
 - name: Configure auditd action_mail_acct
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^action_mail_acct ="
-    line: "action_mail_acct = {{ auditd_action_mail_acct }}"
+    regexp: ^action_mail_acct =
+    line: action_mail_acct = {{ auditd_action_mail_acct }}
     dest: /etc/audit/auditd.conf
     mode: "0640"
     state: present
@@ -45,7 +45,7 @@
   become: true
   ansible.builtin.lineinfile:
     regexp: "^admin_space_left_action = "
-    line: "admin_space_left_action = {{ auditd_admin_space_left_action }}"
+    line: admin_space_left_action = {{ auditd_admin_space_left_action }}
     dest: /etc/audit/auditd.conf
     mode: "0640"
     state: present
@@ -56,8 +56,8 @@
 - name: Configure auditd disk_error_action
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^disk_error_action ="
-    line: "disk_error_action = {{ auditd_disk_error_action }}"
+    regexp: ^disk_error_action =
+    line: disk_error_action = {{ auditd_disk_error_action }}
     dest: /etc/audit/auditd.conf
     mode: "0640"
     state: present
@@ -69,8 +69,8 @@
 - name: Configure auditd disk_full_action
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^disk_full_action ="
-    line: "disk_full_action = {{ auditd_disk_full_action }}"
+    regexp: ^disk_full_action =
+    line: disk_full_action = {{ auditd_disk_full_action }}
     dest: /etc/audit/auditd.conf
     mode: "0640"
     state: present
@@ -82,8 +82,8 @@
 - name: Configure auditd max_log_file
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^max_log_file ="
-    line: "max_log_file = {{ auditd_max_log_file }}"
+    regexp: ^max_log_file =
+    line: max_log_file = {{ auditd_max_log_file }}
     dest: /etc/audit/auditd.conf
     mode: "0640"
     state: present
@@ -95,8 +95,8 @@
 - name: Configure auditd max_log_file_action
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^max_log_file_action ="
-    line: "max_log_file_action = {{ auditd_max_log_file_action }}"
+    regexp: ^max_log_file_action =
+    line: max_log_file_action = {{ auditd_max_log_file_action }}
     dest: /etc/audit/auditd.conf
     mode: "0640"
     state: present
@@ -109,8 +109,8 @@
 - name: Configure auditd num_logs
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^num_logs ="
-    line: "num_logs = {{ auditd_num_logs }}"
+    regexp: ^num_logs =
+    line: num_logs = {{ auditd_num_logs }}
     dest: /etc/audit/auditd.conf
     mode: "0640"
     state: present
@@ -121,8 +121,8 @@
 - name: Configure auditd space_left
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^space_left ="
-    line: "space_left = {{ auditd_space_left }}"
+    regexp: ^space_left =
+    line: space_left = {{ auditd_space_left }}
     dest: /etc/audit/auditd.conf
     mode: "0640"
     state: present
@@ -133,8 +133,8 @@
 - name: Configure auditd space_left_action
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^space_left_action ="
-    line: "space_left_action = {{ auditd_space_left_action }}"
+    regexp: ^space_left_action =
+    line: space_left_action = {{ auditd_space_left_action }}
     dest: /etc/audit/auditd.conf
     mode: "0640"
     state: present
@@ -146,8 +146,8 @@
 - name: Configure auditd name_format
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^name_format ="
-    line: "name_format = hostname"
+    regexp: ^name_format =
+    line: name_format = hostname
     dest: /etc/audit/auditd.conf
     mode: "0640"
     state: present
@@ -159,8 +159,8 @@
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/audit/plugins.d/syslog.conf
-    regexp: "^active"
-    line: "active = yes"
+    regexp: ^active
+    line: active = yes
     state: present
     mode: "0640"
     create: true
@@ -202,4 +202,3 @@
     - CIS-UBUNTU2004-4.1.17
     - D3-SDM
     - D3-SFA
-...

@@ -45,7 +45,7 @@
       become: true
       ansible.builtin.lineinfile:
         path: /etc/needrestart/conf.d/00-restart.conf
-        line: "$nrconf{restart} = 'l';"
+        line: $nrconf{restart} = 'l';
         create: true
         owner: root
         group: root
@@ -80,7 +80,7 @@
 - name: Ubuntu update-notifier-common package installation
   become: true
   ansible.builtin.apt:
-    name: "update-notifier-common"
+    name: update-notifier-common
     state: present
     install_recommends: false
   when: ansible_distribution == "Ubuntu"
@@ -150,8 +150,7 @@
       - virtualbox-guest-dkms
       - virtualbox-guest-utils
   register: virtualbox_packages
-  when: ansible_virtualization_type == "VirtualBox" and
-        ansible_distribution == "Ubuntu"
+  when: ansible_virtualization_type == "VirtualBox" and ansible_distribution == "Ubuntu"
   failed_when: virtualbox_packages is not success and not "No package matching" in virtualbox_packages.msg
   tags:
     - packages
@@ -200,8 +199,8 @@
 - name: Enable sysstat
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^ENABLED"
-    line: 'ENABLED="true"'
+    regexp: ^ENABLED
+    line: ENABLED="true"
     dest: /etc/default/sysstat
     mode: "0644"
     state: present
@@ -220,4 +219,3 @@
   when: ansible_os_family == "Debian"
   tags:
     - packages
-...

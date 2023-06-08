@@ -387,4 +387,3 @@ suid_sgid_blocklist:
   - zsh
   - zsoelim
   - zypper
-...

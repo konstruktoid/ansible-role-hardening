@@ -19,8 +19,8 @@
 - name: SSH root access should be disabled
   become: true
   ansible.builtin.lineinfile:
-    regexp: "ALLOW_SSH_ROOT_USER"
-    line: "ALLOW_SSH_ROOT_USER=no"
+    regexp: ALLOW_SSH_ROOT_USER
+    line: ALLOW_SSH_ROOT_USER=no
     dest: /etc/rkhunter.conf
     mode: "0640"
     state: present
@@ -36,8 +36,8 @@
 - name: SSH v1 should not be used
   become: true
   ansible.builtin.lineinfile:
-    regexp: "ALLOW_SSH_PROT_V1"
-    line: "ALLOW_SSH_PROT_V1=0"
+    regexp: ALLOW_SSH_PROT_V1
+    line: ALLOW_SSH_PROT_V1=0
     dest: /etc/rkhunter.conf
     mode: "0640"
     state: present
@@ -49,4 +49,3 @@
     - packages
     - rkhunter
     - M1049
-...

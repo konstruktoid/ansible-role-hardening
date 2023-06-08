@@ -19,7 +19,7 @@
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/resolv.conf
-    line: "nameserver {{ item }}"
+    line: nameserver {{ item }}
     mode: "0644"
     owner: root
     group: root
@@ -28,4 +28,3 @@
   when: ansible_os_family == "RedHat"
   tags:
     - resolved
-...

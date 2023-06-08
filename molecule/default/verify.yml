@@ -7,11 +7,10 @@
     - name: Reboot host
       become: true
       ansible.builtin.reboot:
-
     - name: Wait for the host and reconnect
       ansible.builtin.wait_for:
         port: 22
-        host: '{{ (ansible_ssh_host | default(ansible_host)) | default(inventory_hostname) }}'
+        host: "{{ (ansible_ssh_host | default(ansible_host)) | default(inventory_hostname) }}"
         delay: 10
         timeout: 120
 
@@ -19,7 +18,7 @@
       ansible.builtin.include_vars:
         dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/defaults/"
         extensions:
-          - 'yml'
+          - yml
 
     - name: Include host vars
       ansible.builtin.include_vars:
@@ -32,7 +31,7 @@
       block:
         - name: Stat /usr/lib/sysctl.d/ exists
           ansible.builtin.stat:
-            path: "/usr/lib/sysctl.d/"
+            path: /usr/lib/sysctl.d/
           register: usr_lib_sysctl_d
 
         - name: Set sysctl fact
@@ -55,7 +54,7 @@
 
     - name: Set ssh version as fact
       ansible.builtin.set_fact:
-        ssh_installed_version: "{{ ssh_version.stderr | regex_search('^OpenSSH_([0-9+].[0-9]+)', '\\1') | join('.') | float }}"  # noqa jinja[spacing]
+        ssh_installed_version: "{{ ssh_version.stderr | regex_search('^OpenSSH_([0-9+].[0-9]+)', '\\1') | join('.') | float }}" # noqa jinja[spacing]
       tags:
         - sshd
         - sshd_config
@@ -71,7 +70,7 @@
         system_has_ipv6: "{{ stat_ipv6.stat.exists }}"
 
     - name: Update current facts
-      ansible.builtin.setup: ~
+      ansible.builtin.setup:
 
     - name: Verify auditd configuration
       become: true
@@ -142,18 +141,18 @@
 
     - name: Stat /etc/ssh/sshd_config
       ansible.builtin.stat:
-        path: '/etc/ssh/sshd_config'
+        path: /etc/ssh/sshd_config
       register: sshd_config_file
 
     - name: Stat /etc/ssh/ssh_config
       ansible.builtin.stat:
-        path: '/etc/ssh/ssh_config'
+        path: /etc/ssh/ssh_config
       register: ssh_config_file
 
     - name: Stat /etc/ssh/sshd_config.d/01-hardening.conf
       become: true
       ansible.builtin.stat:
-        path: '/etc/ssh/sshd_config.d/01-hardening.conf'
+        path: /etc/ssh/sshd_config.d/01-hardening.conf
       register: sshd_config_directory
 
     - name: Assert /etc/ssh/ssh_config permissions
@@ -182,7 +181,7 @@
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config
-        line: "PermitRootLogin yes"
+        line: PermitRootLogin yes
         state: absent
       check_mode: true
       register: sshd_config
@@ -192,7 +191,7 @@
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config.d/01-hardening.conf
-        line: "PermitRootLogin yes"
+        line: PermitRootLogin yes
         state: absent
       check_mode: true
       register: sshd_config_d
@@ -298,7 +297,7 @@
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config.d/01-hardening.conf
-        line: "RequiredRSASize {{ sshd_required_rsa_size }}"
+        line: RequiredRSASize {{ sshd_required_rsa_size }}
         state: present
       check_mode: true
       register: sshd_config_rsasize
@@ -666,13 +665,13 @@
       args:
         executable: /bin/bash
       with_items:
-        - 'use_pty'
-        - 'logfile="/var/log/sudo.log"'
-        - '!pwfeedback'
-        - '!visiblepw'
-        - 'passwd_timeout=1'
-        - 'timestamp_timeout=5'
-        - 'timestamp_type=tty'
+        - use_pty
+        - logfile="/var/log/sudo.log"
+        - "!pwfeedback"
+        - "!visiblepw"
+        - passwd_timeout=1
+        - timestamp_timeout=5
+        - timestamp_type=tty
         - "!rootpw"
         - "!runaspw"
         - "!targetpw"
@@ -694,10 +693,10 @@
       register: verify_faillock
       failed_when: verify_faillock is changed
       with_items:
-        - "audit"
-        - "local_users_only"
-        - "deny = 5"
-        - "fail_interval = 900"
+        - audit
+        - local_users_only
+        - deny = 5
+        - fail_interval = 900
       when: faillockconf.stat.exists
 
     - name: Verify wireless state
@@ -759,4 +758,3 @@
     - name: Debug test user password
       ansible.builtin.debug:
         msg: "{{ test_user_pass }}"
-...

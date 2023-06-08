@@ -10,8 +10,8 @@
 - name: Disable motd-news
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^ENABLED="
-    line: "ENABLED=0"
+    regexp: ^ENABLED=
+    line: ENABLED=0
     dest: /etc/default/motd-news
     mode: "0644"
     state: present
@@ -107,4 +107,3 @@
   when: ansible_os_family == "Debian" and ubuntu_esm_hook.stat.exists
   tags:
     - ubuntu-pro
-...
