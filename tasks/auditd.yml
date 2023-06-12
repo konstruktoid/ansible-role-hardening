@@ -44,7 +44,7 @@
 - name: Configure auditd admin_space_left_action
   become: true
   ansible.builtin.lineinfile:
-    regexp: "^admin_space_left_action = "
+    regexp: ^admin_space_left_action =
     line: admin_space_left_action = {{ auditd_admin_space_left_action }}
     dest: /etc/audit/auditd.conf
     mode: "0640"

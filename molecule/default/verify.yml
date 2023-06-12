@@ -7,6 +7,7 @@
     - name: Reboot host
       become: true
       ansible.builtin.reboot:
+
     - name: Wait for the host and reconnect
       ansible.builtin.wait_for:
         port: 22
