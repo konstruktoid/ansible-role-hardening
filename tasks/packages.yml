@@ -5,6 +5,29 @@
   tags:
     - packages
 
+- name: Generic package removal
+  become: true
+  ansible.builtin.package:
+    name: "{{ packages_blocklist }}"
+    state: absent
+  register: package_removal
+  failed_when: package_removal is not success and not "No package" in package_removal.msg
+  tags:
+    - packages
+    - CCE-80873-3
+    - CCE-82182-7
+    - CCE-82184-3
+    - CCE-82436-7
+    - CIS-UBUNTU2004-1.1.23
+    - CIS-UBUNTU2004-1.5.3
+    - CIS-UBUNTU2004-2.1.3
+    - CIS-UBUNTU2004-2.1.16
+    - CIS-UBUNTU2004-2.2.2
+    - CIS-UBUNTU2004-2.2.3
+    - CIS-UBUNTU2004-2.2.4
+    - CIS-UBUNTU2004-2.2.6
+    - M1042
+
 - name: Configure needrestart
   tags:
     - needrestart
@@ -114,29 +137,6 @@
   failed_when: apt_purge is not success and not "No package" in apt_purge.msg
   tags:
     - packages
-    - M1042
-
-- name: Generic package removal
-  become: true
-  ansible.builtin.package:
-    name: "{{ packages_blocklist }}"
-    state: absent
-  register: package_removal
-  failed_when: package_removal is not success and not "No package" in package_removal.msg
-  tags:
-    - packages
-    - CCE-80873-3
-    - CCE-82182-7
-    - CCE-82184-3
-    - CCE-82436-7
-    - CIS-UBUNTU2004-1.1.23
-    - CIS-UBUNTU2004-1.5.3
-    - CIS-UBUNTU2004-2.1.3
-    - CIS-UBUNTU2004-2.1.16
-    - CIS-UBUNTU2004-2.2.2
-    - CIS-UBUNTU2004-2.2.3
-    - CIS-UBUNTU2004-2.2.4
-    - CIS-UBUNTU2004-2.2.6
     - M1042
 
 - name: VirtualBox guest packages installation

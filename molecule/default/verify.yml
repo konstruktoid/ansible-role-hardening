@@ -73,6 +73,17 @@
     - name: Update current facts
       ansible.builtin.setup:
 
+    - name: Ensure snapd is running
+      ansible.builtin.shell: |
+        set -o pipefail
+        snap info snapd | grep snap-id
+      args:
+        executable: /bin/bash
+      register: snapd_running
+      changed_when: false
+      failed_when: snapd_running.rc != 0
+      when: ansible_distribution == "Ubuntu"
+
     - name: Verify auditd configuration
       become: true
       ansible.builtin.lineinfile:

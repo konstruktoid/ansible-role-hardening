@@ -66,3 +66,4 @@ packages_redhat:
 packages_ubuntu:
   - fwupd
   - secureboot-db
+  - snapd
