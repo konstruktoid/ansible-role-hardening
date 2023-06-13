@@ -12,7 +12,7 @@
 
 - name: RedHat family AIDE package installation
   become: true
-  ansible.builtin.package:
+  ansible.builtin.dnf:
     name: aide
     state: present
   when: ansible_os_family == "RedHat"
@@ -61,11 +61,31 @@
     - CCE-80676-0
     - CIS-UBUNTU2004-1.3.2
 
-- name: Add AIDE Debian dir exclusions
+- name: Verify the Audit tools
+  become: true
+  ansible.builtin.lineinfile:
+    dest: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+    state: present
+    regexp: ^[# ]*{{ item }}
+    line: "{{ item }} p+i+n+u+g+s+b+acl+xattrs+sha512"
+    mode: "0640"
+    create: false
+  with_items:
+    - /usr/sbin/auditctl
+    - /usr/sbin/auditd
+    - /usr/sbin/ausearch
+    - /usr/sbin/aureport
+    - /usr/sbin/autrace
+    - /usr/sbin/augenrules
+    - /usr/sbin/audispd
+  tags:
+    - aide
+
+- name: Add AIDE dir exclusions
   become: true
   ansible.builtin.blockinfile:
-    path: /etc/aide/aide.conf
-    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    path: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+    marker: "# {mark} ANSIBLE MANAGED EXCLUSION BLOCK"
     backup: true
     insertafter: EOF
     block: |
@@ -74,7 +94,6 @@
       !/var/lib/private/systemd
       !/var/log/audit
       !/var/log/journal
-  when: ansible_os_family == "Debian"
   tags:
     - aide
 
@@ -84,23 +103,6 @@
     path: /var/lib/aide/aide.db
   register: ubuaidedb
   when: ansible_os_family == "Debian"
-  tags:
-    - aide
-
-- name: Add AIDE RedHat dir exclusions
-  become: true
-  ansible.builtin.blockinfile:
-    path: /etc/aide.conf
-    marker: "# {mark} ANSIBLE MANAGED BLOCK"
-    backup: true
-    insertafter: EOF
-    block: |
-      !/var/lib/docker
-      !/var/lib/lxcfs
-      !/var/lib/private/systemd
-      !/var/log/audit
-      !/var/log/journal
-  when: ansible_os_family == "RedHat"
   tags:
     - aide
 
