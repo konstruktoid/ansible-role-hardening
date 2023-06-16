@@ -41,3 +41,14 @@
     - Restart sysctl
   tags:
     - ipv6
+
+- name: Confire rc.local
+  become: true
+  ansible.builtin.template:
+    src: etc/rc.local.j2
+    dest: /etc/rc.local
+    backup: true
+    mode: "0755"
+    owner: root
+    group: root
+  when: system_has_ipv6 and disable_ipv6

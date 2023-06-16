@@ -1,0 +1,8 @@
+#!/bin/bash
+# /etc/rc.local
+
+/etc/sysctl.d
+{{ '/usr/lib/sysctl.d' if usr_lib_sysctl_d.stat.exists else "" }}
+/etc/init.d/procps restart
+
+exit 0
