@@ -2,10 +2,12 @@
 suid_sgid_permissions: true
 suid_sgid_blocklist:
   - 7z
+  - aa-exec
   - ab
   - agetty
   - alpine
   - ansible-playbook
+  - ansible-test
   - aoss
   - apt
   - apt-get
@@ -14,8 +16,8 @@ suid_sgid_blocklist:
   - arj
   - arp
   - as
-  - ascii-xfr
   - ascii85
+  - ascii-xfr
   - ash
   - aspell
   - at
@@ -94,7 +96,9 @@ suid_sgid_blocklist:
   - dmsetup
   - dnf
   - docker
+  - dos2unix
   - dosbox
+  - dotnet
   - dpkg
   - dstat
   - dvips
@@ -102,6 +106,7 @@ suid_sgid_blocklist:
   - eb
   - ed
   - efax
+  - elvish
   - emacs
   - env
   - eqn
@@ -157,6 +162,7 @@ suid_sgid_blocklist:
   - jq
   - jrunscript
   - jtag
+  - julia
   - knife
   - ksh
   - ksshell
@@ -164,8 +170,8 @@ suid_sgid_blocklist:
   - kubectl
   - latex
   - latexmk
-  - ld.so
   - ldconfig
+  - ld.so
   - less
   - lftp
   - ln
@@ -205,6 +211,7 @@ suid_sgid_blocklist:
   - nasm
   - nawk
   - nc
+  - ncftp
   - neofetch
   - netfilter-persistent
   - newgrp
@@ -254,9 +261,11 @@ suid_sgid_blocklist:
   - psql
   - ptx
   - puppet
+  - pwsh
   - python
   - rake
   - rbash
+  - rc
   - readelf
   - red
   - redcarpet
@@ -304,6 +313,7 @@ suid_sgid_blocklist:
   - sqlmap
   - ss
   - ssh
+  - ssh-agent
   - ssh-keygen
   - ssh-keyscan
   - sshpass
@@ -325,6 +335,7 @@ suid_sgid_blocklist:
   - tclsh
   - tcpdump
   - tcsh
+  - tdbtool
   - tee
   - telnet
   - tex
@@ -350,6 +361,7 @@ suid_sgid_blocklist:
   - update-alternatives
   - uudecode
   - uuencode
+  - vagrant
   - valgrind
   - vi
   - view
