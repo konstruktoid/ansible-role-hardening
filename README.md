@@ -112,8 +112,9 @@ auditd_action_mail_acct: root
 auditd_admin_space_left_action: suspend
 auditd_disk_error_action: suspend
 auditd_disk_full_action: suspend
-auditd_max_log_file: 8
-auditd_max_log_file_action: keep_logs
+auditd_flush: sync
+auditd_max_log_file: 20
+auditd_max_log_file_action: rotate
 auditd_mode: 1
 auditd_num_logs: 5
 auditd_space_left: 75
@@ -132,6 +133,9 @@ from the included template file.
 `auditd_admin_space_left_action` defines what action to take when the system has
 detected that it is low on disk space. `suspend` will cause the audit daemon to
 stop writing records to the disk.
+
+`auditd_flush: sync` tells the audit daemon to keep both the data and meta-data
+fully sync'd with every write to disk.
 
 `auditd_max_log_file_action` sets what action to take when the system has
 detected that the max file size limit has been reached. E.g. the `rotate` option
