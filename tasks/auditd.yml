@@ -79,6 +79,19 @@
     - auditd
     - CCE-84045-4
 
+- name: Configure auditd flush
+  become: true
+  ansible.builtin.lineinfile:
+    regexp: ^flush =
+    line: flush = {{ auditd_flush }}
+    dest: /etc/audit/auditd.conf
+    mode: "0640"
+    state: present
+    create: false
+  tags:
+    - auditd
+    - CCE-84045-4
+
 - name: Configure auditd max_log_file
   become: true
   ansible.builtin.lineinfile:
