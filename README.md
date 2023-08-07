@@ -378,6 +378,7 @@ packages_debian:
   - rkhunter
   - rsyslog
   - sysstat
+  - systemd-journal-remote
   - tcpd
   - vlock
   - wamerican
@@ -395,11 +396,13 @@ packages_redhat:
   - rkhunter
   - rsyslog
   - rsyslog-gnutls
+  - systemd-journal-remote
   - vlock
   - words
 packages_ubuntu:
   - fwupd
   - secureboot-db
+  - snapd
 ```
 
 `system_upgrade: 'yes'` will run `apt upgrade` or
