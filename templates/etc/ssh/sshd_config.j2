@@ -16,6 +16,7 @@ Compression {{ sshd_compression }}
 GSSAPIAuthentication {{ sshd_gssapi_authentication }}
 HostKeyAlgorithms {{ sshd_host_key_algorithms | replace(', ', ',') }}
 HostbasedAuthentication {{ sshd_hostbased_authentication }}
+IgnoreRhosts {{ sshd_ignore_rhosts }}
 IgnoreUserKnownHosts {{ sshd_ignore_user_known_hosts }}
 KerberosAuthentication {{ sshd_kerberos_authentication }}
 KexAlgorithms {{ sshd_kex_algorithms | replace(', ', ',') }}
