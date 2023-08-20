@@ -21,6 +21,7 @@ ClientAliveInterval {{ sshd_client_alive_interval | int }}
 Compression {{ sshd_compression }}
 GSSAPIAuthentication {{ sshd_gssapi_authentication }}
 HostbasedAuthentication {{ sshd_hostbased_authentication }}
+IgnoreRhosts {{ sshd_ignore_rhosts }}
 IgnoreUserKnownHosts {{ sshd_ignore_user_known_hosts }}
 KerberosAuthentication {{ sshd_kerberos_authentication }}
 LogLevel {{ sshd_log_level }}

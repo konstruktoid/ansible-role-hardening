@@ -30,6 +30,7 @@ sshd_host_key_algorithms: >-
   ecdsa-sha2-nistp521,
   ecdsa-sha2-nistp384,
   ecdsa-sha2-nistp256
+sshd_ignore_rhosts: "yes"
 sshd_ignore_user_known_hosts: "yes"
 sshd_kerberos_authentication: "no"
 sshd_kex_algorithms: >-
