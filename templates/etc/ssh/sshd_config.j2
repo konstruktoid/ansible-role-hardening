@@ -1,4 +1,11 @@
 # {{ ansible_managed }}
+{% if not set_crypto_policy %}
+Ciphers {{ sshd_ciphers | replace(', ', ',') }}
+HostKeyAlgorithms {{ sshd_host_key_algorithms | replace(', ', ',') }}
+KexAlgorithms {{ sshd_kex_algorithms | replace(', ', ',') }}
+MACs {{ sshd_macs | replace(', ', ',') }}
+{% endif %}
+
 AcceptEnv {{ sshd_accept_env }}
 AllowAgentForwarding {{ sshd_allow_agent_forwarding }}
 AllowGroups {{ sshd_allow_groups }}
@@ -9,19 +16,15 @@ AllowTcpForwarding {{ sshd_allow_tcp_forwarding }}
 AuthenticationMethods {{ sshd_authentication_methods }}
 Banner {{ sshd_banner }}
 ChallengeResponseAuthentication {{ sshd_challenge_response_authentication }}
-Ciphers {{ sshd_ciphers | replace(', ', ',') }}
 ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
 ClientAliveInterval {{ sshd_client_alive_interval | int }}
 Compression {{ sshd_compression }}
 GSSAPIAuthentication {{ sshd_gssapi_authentication }}
-HostKeyAlgorithms {{ sshd_host_key_algorithms | replace(', ', ',') }}
 HostbasedAuthentication {{ sshd_hostbased_authentication }}
 IgnoreUserKnownHosts {{ sshd_ignore_user_known_hosts }}
 KerberosAuthentication {{ sshd_kerberos_authentication }}
-KexAlgorithms {{ sshd_kex_algorithms | replace(', ', ',') }}
 LogLevel {{ sshd_log_level }}
 LoginGraceTime {{ sshd_login_grace_time | int }}
-MACs {{ sshd_macs | replace(', ', ',') }}
 MaxAuthTries {{ sshd_max_auth_tries | int }}
 MaxSessions {{ sshd_max_sessions | int }}
 MaxStartups {{ sshd_max_startups }}
@@ -33,7 +36,7 @@ Port {{ sshd_port|int }}
 PrintLastLog {{ sshd_print_last_log }}
 PrintMotd {{ sshd_print_motd }}
 RekeyLimit {{ sshd_rekey_limit }}
-{% if ssh_installed_version is version('9.1', '>') %}
+{% if ssh_installed_version is version('9.1', '>') and not set_crypto_policy %}
 RequiredRSASize {{ sshd_required_rsa_size }}
 {% endif %}
 StrictModes {{ sshd_strict_modes }}

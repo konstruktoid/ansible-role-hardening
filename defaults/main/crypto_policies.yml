@@ -1,0 +1,3 @@
+---
+set_crypto_policy: true
+crypto_policy: DEFAULT:NO-SHA1
