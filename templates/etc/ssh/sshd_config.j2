@@ -1,11 +1,13 @@
 # {{ ansible_managed }}
-{% if not set_crypto_policy %}
+{% if not crypto_policies_config or not set_crypto_policy %}
+
+CASignatureAlgorithms {{ sshd_ca_signature_algorithms | replace(', ', ',') }}
 Ciphers {{ sshd_ciphers | replace(', ', ',') }}
 HostKeyAlgorithms {{ sshd_host_key_algorithms | replace(', ', ',') }}
 KexAlgorithms {{ sshd_kex_algorithms | replace(', ', ',') }}
 MACs {{ sshd_macs | replace(', ', ',') }}
-{% endif %}
 
+{% endif %}
 AcceptEnv {{ sshd_accept_env }}
 AllowAgentForwarding {{ sshd_allow_agent_forwarding }}
 AllowGroups {{ sshd_allow_groups }}
@@ -37,7 +39,7 @@ Port {{ sshd_port|int }}
 PrintLastLog {{ sshd_print_last_log }}
 PrintMotd {{ sshd_print_motd }}
 RekeyLimit {{ sshd_rekey_limit }}
-{% if ssh_installed_version is version('9.1', '>') and not set_crypto_policy %}
+{% if ssh_installed_version is version('9.1', '>') and (not crypto_policies_config or not set_crypto_policy) %}
 RequiredRSASize {{ sshd_required_rsa_size }}
 {% endif %}
 StrictModes {{ sshd_strict_modes }}

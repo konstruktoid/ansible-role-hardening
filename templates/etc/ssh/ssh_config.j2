@@ -4,10 +4,12 @@ Include /etc/ssh/ssh_config.d/*.conf
 {% endif %}
 
 Host *
+{% if not crypto_policies_config or not set_crypto_policy %}
     Ciphers {{ sshd_ciphers | replace(', ', ',') }}
-    GSSAPIAuthentication {{ sshd_gssapi_authentication }}
-    HashKnownHosts yes
     HostKeyAlgorithms {{ sshd_host_key_algorithms | replace(', ', ',') }}
     KexAlgorithms {{ sshd_kex_algorithms | replace(', ', ',') }}
     MACs {{ sshd_macs | replace(', ', ',') }}
+{% endif %}
+    GSSAPIAuthentication {{ sshd_gssapi_authentication }}
+    HashKnownHosts yes
     RekeyLimit {{ sshd_rekey_limit }}
