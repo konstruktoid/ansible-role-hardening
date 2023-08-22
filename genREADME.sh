@@ -24,8 +24,9 @@ Available on
 [AlmaLinux 8](https://wiki.almalinux.org/release-notes/#almalinux-8),
 [AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9),
 [Debian 11](https://www.debian.org/releases/bullseye/),
-Ubuntu [20.04 LTS (Focal Fossa)](https://releases.ubuntu.com/focal/) and
-[22.04 LTS (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/) are supported.
+[Debian 12](https://www.debian.org/releases/bookworm/),
+[Ubuntu 20.04](https://releases.ubuntu.com/focal/) and
+[Ubuntu 22.04](https://releases.ubuntu.com/jammy/) are supported.
 
 > **Note**
 >
