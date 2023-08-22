@@ -14,18 +14,18 @@ provisioner:
   log: true
   inventory:
     host_vars:
-      stone:
+      almalinux8:
         disable_wireless: true
         enable_timesyncd: false
         install_aide: false
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: vagrant sudo
         suid_sgid_permissions: false
-      lime:
+      almalinux9:
         enable_timesyncd: false
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: vagrant sudo
-      bullseye:
+      bookworm:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
         disable_wireless: false
@@ -47,22 +47,22 @@ provisioner:
         sshd_allow_groups: vagrant sudo
         suid_sgid_permissions: false
 platforms:
-  - name: stone
+  - name: almalinux8
     box: almalinux/8
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 1024
-  - name: lime
+  - name: almalinux9
     box: almalinux/9
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 1024
-  - name: bullseye
-    box: debian/bullseye64
+  - name: bookworm
+    box: debian/bookworm64
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 1024

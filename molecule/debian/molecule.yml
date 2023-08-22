@@ -17,7 +17,7 @@ provisioner:
   log: true
   inventory:
     host_vars:
-      buster:
+      bookworm:
         ansible_python_interpreter: /usr/bin/python3
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: vagrant sudo
@@ -36,8 +36,8 @@ provisioner:
         sshd_allow_groups: vagrant sudo
         suid_sgid_permissions: false
 platforms:
-  - name: buster
-    box: bento/debian-10
+  - name: bookworm
+    box: bento/debian-12
     instance_raw_config_args:
       - "vbguest.installer_options = { allow_kernel_upgrade: true }"
     memory: 1024
