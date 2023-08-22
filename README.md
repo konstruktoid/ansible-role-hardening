@@ -122,7 +122,6 @@ grub_audit_backlog_cmdline: audit_backlog_limit=8192
 grub_audit_cmdline: audit=1
 ```
 
-
 Enable `auditd` at boot using Grub.
 
 When `auditd_apply_audit_rules: 'yes'`, the role applies the auditd rules
