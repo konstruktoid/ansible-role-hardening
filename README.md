@@ -13,8 +13,8 @@ Available on
 [AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9),
 [Debian 11](https://www.debian.org/releases/bullseye/),
 [Debian 12](https://www.debian.org/releases/bookworm/),
-Ubuntu [20.04 LTS (Focal Fossa)](https://releases.ubuntu.com/focal/) and
-[22.04 LTS (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/) are supported.
+[Ubuntu 20.04](https://releases.ubuntu.com/focal/) and
+[Ubuntu 22.04](https://releases.ubuntu.com/jammy/) are supported.
 
 > **Note**
 >
@@ -49,7 +49,6 @@ None.
           - 192.168.0.0/24
           - 192.168.1.0/24
         suid_sgid_permissions: false
-...
 ```
 
 ### ansible-pull with git checkout
@@ -82,7 +81,6 @@ None.
           - 192.168.0.0/24
           - 192.168.1.0/24
         suid_sgid_permissions: false
-...
 ```
 
 ## Note regarding UFW firewall rules
@@ -170,6 +168,16 @@ compilers:
 ```
 
 List of compilers that will be restricted to the root user.
+
+### ./defaults/main/crypto_policies.yml
+
+```yaml
+set_crypto_policy: true
+crypto_policy: DEFAULT:NO-SHA1
+```
+
+Set and use [cryptographic policies](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/using-the-system-wide-cryptographic-policies_security-hardening)
+if `/etc/crypto-policies/config` exists and `set_crypto_policy: true`.
 
 ### ./defaults/main/disablewireless.yml
 
@@ -324,7 +332,7 @@ information otherwise prohibited by `hidepid=`.
 ```yaml
 enable_timesyncd: true
 fallback_ntp: 2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org
-ntp: 0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org
+ntp: "0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org"
 ```
 
 If `enable_timesyncd: true` then configure systemd
@@ -415,7 +423,6 @@ and packages to be removed (`packages_blocklist`).
 ### ./defaults/main/password.yml
 
 ```yaml
-crypto_policy: "DEFAULT:NO-SHA1"
 pwquality_config:
   dcredit: -1
   dictcheck: 1
@@ -430,9 +437,6 @@ pwquality_config:
   ucredit: -1
 ```
 
-Set [cryptographic policies](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/using-the-system-wide-cryptographic-policies_security-hardening)
-if `/etc/crypto-policies/config` exists.
-
 Configure the [libpwquality](https://manpages.ubuntu.com/manpages/focal/man5/pwquality.conf.5.html)
 library.
 
@@ -443,22 +447,30 @@ sshd_accept_env: LANG LC_*
 sshd_admin_net:
   - 192.168.0.0/24
   - 192.168.1.0/24
-sshd_allow_agent_forwarding: 'no'
+sshd_allow_agent_forwarding: "no"
 sshd_allow_groups: sudo
 sshd_allow_users: "{{ ansible_user }}"
-sshd_allow_tcp_forwarding: 'no'
+sshd_allow_tcp_forwarding: "no"
 sshd_authentication_methods: any
 sshd_banner: /etc/issue.net
-sshd_challenge_response_authentication: 'no'
+sshd_ca_signature_algorithms: >-
+  ecdsa-sha2-nistp256,
+  ecdsa-sha2-nistp384,
+  ecdsa-sha2-nistp521,
+  ssh-ed25519,
+  rsa-sha2-256,
+  rsa-sha2-512,
+  ssh-rsa
+sshd_challenge_response_authentication: "no"
 sshd_ciphers: >-
   chacha20-poly1305@openssh.com,
   aes256-gcm@openssh.com,
   aes256-ctr
 sshd_client_alive_count_max: 1
 sshd_client_alive_interval: 200
-sshd_compression: 'no'
-sshd_gssapi_authentication: 'no'
-sshd_hostbased_authentication: 'no'
+sshd_compression: "no"
+sshd_gssapi_authentication: "no"
+sshd_hostbased_authentication: "no"
 sshd_host_key_algorithms: >-
   ssh-ed25519-cert-v01@openssh.com,
   ssh-rsa-cert-v01@openssh.com,
@@ -470,8 +482,9 @@ sshd_host_key_algorithms: >-
   ecdsa-sha2-nistp521,
   ecdsa-sha2-nistp384,
   ecdsa-sha2-nistp256
-sshd_ignore_user_known_hosts: 'yes'
-sshd_kerberos_authentication: 'no'
+sshd_ignore_rhosts: "yes"
+sshd_ignore_user_known_hosts: "yes"
+sshd_kerberos_authentication: "no"
 sshd_kex_algorithms: >-
   curve25519-sha256@libssh.org,
   ecdh-sha2-nistp521,
@@ -488,22 +501,28 @@ sshd_macs: >-
 sshd_max_auth_tries: 3
 sshd_max_sessions: 3
 sshd_max_startups: 10:30:60
-sshd_password_authentication: 'no'
-sshd_permit_empty_passwords: 'no'
-sshd_permit_root_login: 'no'
-sshd_permit_user_environment: 'no'
+sshd_password_authentication: "no"
+sshd_permit_empty_passwords: "no"
+sshd_permit_root_login: "no"
+sshd_permit_user_environment: "no"
 sshd_port: 22
-sshd_print_last_log: 'yes'
-sshd_print_motd: 'no'
+sshd_print_last_log: "yes"
+sshd_print_motd: "no"
 sshd_rekey_limit: 512M 1h
 sshd_required_rsa_size: 2048
-sshd_strict_modes: 'yes'
+sshd_strict_modes: "yes"
 sshd_subsystem: sftp internal-sftp
-sshd_tcp_keep_alive: 'no'
-sshd_use_dns: 'no'
-sshd_use_pam: 'yes'
-sshd_x11_forwarding: 'no'
+sshd_tcp_keep_alive: "no"
+sshd_use_dns: "no"
+sshd_use_pam: "yes"
+sshd_x11_forwarding: "no"
 ```
+
+> **Note**
+>
+> `CASignatureAlgorithms`, `Ciphers`, `HostKeyAlgorithms`, `KexAlgorithms` and `MACs`
+> will be configured as defined by cryptographic policies if
+> `/etc/crypto-policies/config` exists and `set_crypto_policy: true`.
 
 For a explanation of the options not described below, please read
 [https://man.openbsd.org/sshd_config](https://man.openbsd.org/sshd_config).
@@ -562,7 +581,8 @@ If `suid_sgid_permissions: true` loop through `suid_sgid_blocklist` and remove
 any SUID/SGID permissions.
 
 A complete file list is available in
-[defaults/main/suid_sgid_blocklist.yml](defaults/main/suid_sgid_blocklist.yml).
+[defaults/main/suid_sgid_blocklist.yml](defaults/main/suid_sgid_blocklist.yml)
+and is based on the work by @GTFOBins.
 
 ### ./defaults/main/sysctl.yml
 

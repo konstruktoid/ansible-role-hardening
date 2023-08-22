@@ -7,12 +7,6 @@
 
 ```sh
 .
-├── LICENSE
-├── README.md
-├── SECURITY.md
-├── STRUCTURE.md
-├── TESTING.md
-├── Vagrantfile
 ├── action-lint
 │   ├── Dockerfile
 │   └── entrypoint.sh
@@ -20,6 +14,7 @@
 │   └── main
 │       ├── auditd.yml
 │       ├── compilers.yml
+│       ├── crypto_policies.yml
 │       ├── disablewireless.yml
 │       ├── dns.yml
 │       ├── ipv6.yml
@@ -46,6 +41,7 @@
 │   └── main.yml
 ├── images
 │   └── ansible-role-hardening.svg
+├── LICENSE
 ├── meta
 │   └── main.yml
 ├── molecule
@@ -54,7 +50,6 @@
 │   ├── debian
 │   │   └── molecule.yml
 │   ├── default
-│   │   ├── INSTALL.rst
 │   │   ├── converge.yml
 │   │   ├── molecule.yml
 │   │   └── verify.yml
@@ -67,10 +62,13 @@
 ├── postChecks.sh
 ├── provision
 │   └── setup.sh
+├── README.md
 ├── renovate.json
 ├── requirements-dev.txt
 ├── requirements.yml
 ├── runTests.sh
+├── SECURITY.md
+├── STRUCTURE.md
 ├── tasks
 │   ├── adduser.yml
 │   ├── aide.yml
@@ -102,10 +100,10 @@
 │   ├── packages.yml
 │   ├── password.yml
 │   ├── path.yml
-│   ├── post.yml
 │   ├── postfix.yml
-│   ├── pre.yml
+│   ├── post.yml
 │   ├── prelink.yml
+│   ├── pre.yml
 │   ├── resolvedconf.yml
 │   ├── rkhunter.yml
 │   ├── rootaccess.yml
@@ -164,11 +162,13 @@
 │           └── system
 │               ├── aidecheck.service.j2
 │               └── aidecheck.timer.j2
+├── TESTING.md
 ├── tests
 │   ├── debug_facts.yml
 │   ├── inventory
 │   └── test.yml
-└── tox.ini
+├── tox.ini
+└── Vagrantfile
 
-36 directories, 127 files
+35 directories, 127 files
 ```

@@ -61,7 +61,6 @@ None.
           - 192.168.0.0/24
           - 192.168.1.0/24
         suid_sgid_permissions: false
-...
 \`\`\`
 
 ### ansible-pull with git checkout
@@ -94,7 +93,6 @@ None.
           - 192.168.0.0/24
           - 192.168.1.0/24
         suid_sgid_permissions: false
-...
 \`\`\`
 
 ## Note regarding UFW firewall rules
