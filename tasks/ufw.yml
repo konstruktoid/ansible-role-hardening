@@ -143,15 +143,24 @@
     - D3-OTF
     - M1037
 
-- name: Deny loopback network traffic
+- name: Deny IPv4 loopback network traffic
   become: true
   community.general.ufw:
     rule: deny
-    src: "{{ item }}"
+    src: 127.0.0.0/8
     comment: ansible managed
-  loop:
-    - 127.0.0.0/8
-    - ::1
+  tags:
+    - ufw
+    - CIS-UBUNTU2004-3.5.1.4
+    - M1037
+
+- name: Deny IPv6 loopback network traffic
+  become: true
+  when: not disable_ipv6
+  community.general.ufw:
+    rule: deny
+    src: ::1
+    comment: ansible managed
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.4
