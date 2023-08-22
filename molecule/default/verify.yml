@@ -25,6 +25,20 @@
       ansible.builtin.include_vars:
         file: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/inventory/host_vars/{{ ansible_hostname }}"
 
+    - name: Set crypto-policies config as fact
+      tags:
+        - fact
+        - crypto-policy
+      block:
+        - name: Stat crypto-policies config
+          ansible.builtin.stat:
+            path: /etc/crypto-policies/config
+          register: stat_crypto_policies_config
+
+        - name: Set crypto-policies
+          ansible.builtin.set_fact:
+            crypto_policies_config: "{{ stat_crypto_policies_config.stat.exists }}"
+
     - name: Set sysctl configuration directory as fact
       tags:
         - fact
@@ -55,7 +69,7 @@
 
     - name: Set ssh version as fact
       ansible.builtin.set_fact:
-        ssh_installed_version: "{{ ssh_version.stderr | regex_search('^OpenSSH_([0-9+].[0-9]+)', '\\1') | join('.') | float }}" # noqa jinja[spacing]
+        ssh_installed_version: "{{ ssh_version.stderr | regex_search('^OpenSSH_([0-9+].[0-9]+)', '\\1') | join('.') | float }}"  # noqa jinja[spacing]
       tags:
         - sshd
         - sshd_config
@@ -227,7 +241,6 @@
         - AuthenticationMethods {{ sshd_authentication_methods }}
         - Banner {{ sshd_banner }}
         - ChallengeResponseAuthentication {{ sshd_challenge_response_authentication }}
-        - Ciphers {{ sshd_ciphers }}
         - ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
         - ClientAliveInterval {{ sshd_client_alive_interval | int }}
         - Compression {{ sshd_compression }}
@@ -235,11 +248,8 @@
         - HostbasedAuthentication {{ sshd_hostbased_authentication }}
         - IgnoreUserKnownHosts {{ sshd_ignore_user_known_hosts }}
         - KerberosAuthentication {{ sshd_kerberos_authentication }}
-        - HostKeyAlgorithms {{ sshd_host_key_algorithms }}
-        - KexAlgorithms {{ sshd_kex_algorithms }}
         - LogLevel {{ sshd_log_level }}
         - LoginGraceTime {{ sshd_login_grace_time | int }}
-        - MACs {{ sshd_macs }}
         - MaxAuthTries {{ sshd_max_auth_tries | int }}
         - MaxSessions {{ sshd_max_sessions | int }}
         - MaxStartups {{ sshd_max_startups }}
@@ -274,7 +284,6 @@
         - AuthenticationMethods {{ sshd_authentication_methods }}
         - Banner {{ sshd_banner }}
         - ChallengeResponseAuthentication {{ sshd_challenge_response_authentication }}
-        - Ciphers {{ sshd_ciphers }}
         - ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
         - ClientAliveInterval {{ sshd_client_alive_interval | int }}
         - Compression {{ sshd_compression }}
@@ -282,11 +291,8 @@
         - HostbasedAuthentication {{ sshd_hostbased_authentication }}
         - IgnoreUserKnownHosts {{ sshd_ignore_user_known_hosts }}
         - KerberosAuthentication {{ sshd_kerberos_authentication }}
-        - HostKeyAlgorithms {{ sshd_host_key_algorithms }}
-        - KexAlgorithms {{ sshd_kex_algorithms }}
         - LogLevel {{ sshd_log_level }}
         - LoginGraceTime {{ sshd_login_grace_time | int }}
-        - MACs {{ sshd_macs }}
         - MaxAuthTries {{ sshd_max_auth_tries | int }}
         - MaxSessions {{ sshd_max_sessions | int }}
         - MaxStartups {{ sshd_max_startups }}
@@ -305,17 +311,6 @@
         - UsePAM {{ sshd_use_pam }}
         - X11Forwarding {{ sshd_x11_forwarding }}
       when: sshd_config_directory.stat.exists
-
-    - name: Verify sshd RequiredRSASize
-      become: true
-      ansible.builtin.lineinfile:
-        dest: /etc/ssh/sshd_config.d/01-hardening.conf
-        line: RequiredRSASize {{ sshd_required_rsa_size }}
-        state: present
-      check_mode: true
-      register: sshd_config_rsasize
-      failed_when: sshd_config_rsasize is changed
-      when: sshd_config_directory.stat.exists and ssh_installed_version is version('9.1', '>')
 
     - name: Verify sshd runtime configuration
       become: true
@@ -336,7 +331,6 @@
         - clientaliveinterval {{ sshd_client_alive_interval | int }}
         - compression {{ sshd_compression }}
         - logingracetime {{ sshd_login_grace_time | int }}
-        - macs {{ sshd_macs | replace(', ', ',') }}
         - maxauthtries {{ sshd_max_auth_tries | int }}
         - maxsessions {{ sshd_max_sessions | int }}
         - maxstartups {{ sshd_max_startups }}
@@ -346,6 +340,33 @@
         - usedns {{ sshd_use_dns }}
         - usepam {{ sshd_use_pam }}
         - x11forwarding {{ sshd_x11_forwarding }}
+
+    - name: Verify sshd runtime ciphers and algorithms
+      become: true
+      environment:
+        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      ansible.builtin.command: sshd -T
+      register: sshd_algo_runtime
+      changed_when: false
+      failed_when: item not in sshd_algo_runtime.stdout_lines
+      when: not crypto_policies_config or not set_crypto_policy
+      with_items:
+        - casignaturealgorithms {{ sshd_ca_signature_algorithms | replace(', ', ',') }}
+        - ciphers {{ sshd_ciphers | replace(', ', ',') }}
+        - hostkeyalgorithms {{ sshd_host_key_algorithms | replace(', ', ',') }}
+        - kexalgorithms {{ sshd_kex_algorithms | replace(', ', ',') }}
+        - macs {{ sshd_macs | replace(', ', ',') }}
+
+    - name: Verify sshd RequiredRSASize
+      become: true
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config.d/01-hardening.conf
+        line: RequiredRSASize {{ sshd_required_rsa_size }}
+        state: present
+      check_mode: true
+      register: sshd_config_rsasize
+      failed_when: sshd_config_rsasize is changed
+      when: sshd_config_directory.stat.exists and ssh_installed_version is version('9.1', '>')
 
     - name: Verify ssh client configuration
       become: true
@@ -357,12 +378,8 @@
       register: ssh_config
       failed_when: ssh_config is changed
       with_items:
-        - Ciphers {{ sshd_ciphers | replace(', ', ',') }}
         - GSSAPIAuthentication {{ sshd_gssapi_authentication }}
         - HashKnownHosts yes
-        - HostKeyAlgorithms {{ sshd_host_key_algorithms | replace(', ', ',') }}
-        - KexAlgorithms {{ sshd_kex_algorithms | replace(', ', ',') }}
-        - MACs {{ sshd_macs | replace(', ', ',') }}
         - RekeyLimit {{ sshd_rekey_limit }}
 
     - name: Merge sysctl settings
@@ -393,18 +410,12 @@
       failed_when: sysctl_runtime_config.rc != 0
       changed_when: sysctl_runtime_config.rc != 0
 
-    - name: Stat crypto-policies config
-      become: true
-      ansible.builtin.stat:
-        path: /etc/crypto-policies/config
-      register: crypto_policies_config
-
     - name: Get crypto-policies value
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       ansible.builtin.shell: grep "^{{ crypto_policy | upper }}$" /etc/crypto-policies/config
       register: crypto_policy_set
-      when: crypto_policies_config.stat.exists
+      when: crypto_policies_config
       failed_when: crypto_policy_set.rc != 0
       changed_when: crypto_policy_set.rc != 0
 

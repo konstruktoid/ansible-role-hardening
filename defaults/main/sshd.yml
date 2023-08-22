@@ -9,6 +9,14 @@ sshd_allow_users: "{{ ansible_user }}"
 sshd_allow_tcp_forwarding: "no"
 sshd_authentication_methods: any
 sshd_banner: /etc/issue.net
+sshd_ca_signature_algorithms: >-
+  ecdsa-sha2-nistp256,
+  ecdsa-sha2-nistp384,
+  ecdsa-sha2-nistp521,
+  ssh-ed25519,
+  rsa-sha2-256,
+  rsa-sha2-512,
+  ssh-rsa
 sshd_challenge_response_authentication: "no"
 sshd_ciphers: >-
   chacha20-poly1305@openssh.com,
