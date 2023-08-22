@@ -78,6 +78,20 @@
       ansible.builtin.set_fact:
         sysctl_conf_dir: "{{ '/usr/lib/sysctl.d' if usr_lib_sysctl_d.stat.exists else '/etc/sysctl.d' }}"
 
+- name: Set crypto-policies config as fact
+  tags:
+    - fact
+    - crypto-policy
+  block:
+    - name: Stat crypto-policies config
+      ansible.builtin.stat:
+        path: /etc/crypto-policies/config
+      register: stat_crypto_policies_config
+
+    - name: Set config fact
+      ansible.builtin.set_fact:
+        crypto_policies_config: "{{ stat_crypto_policies_config.stat.exists }}"
+
 - name: Update current facts
   ansible.builtin.setup:
   tags:
