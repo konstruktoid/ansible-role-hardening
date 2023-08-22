@@ -25,7 +25,7 @@ provisioner:
         enable_timesyncd: false
         sshd_admin_net: "0.0.0.0/0"
         sshd_allow_groups: vagrant sudo
-      bullseye:
+      bookworm:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
         disable_wireless: false
@@ -61,8 +61,8 @@ platforms:
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 1024
-  - name: bullseye
-    box: debian/bullseye64
+  - name: bookworm
+    box: debian/bookworm64
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 1024
