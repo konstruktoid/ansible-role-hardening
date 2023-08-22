@@ -582,7 +582,7 @@ any SUID/SGID permissions.
 
 A complete file list is available in
 [defaults/main/suid_sgid_blocklist.yml](defaults/main/suid_sgid_blocklist.yml)
-and is based on the work by @GTFOBins.
+and is based on the work by [@GTFOBins](https://github.com/GTFOBins).
 
 ### ./defaults/main/sysctl.yml
 
