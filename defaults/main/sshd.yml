@@ -5,7 +5,7 @@ sshd_admin_net:
   - 192.168.1.0/24
 sshd_allow_agent_forwarding: "no"
 sshd_allow_groups: sudo
-sshd_allow_users: "{{ ansible_user }}"
+sshd_allow_users: "{{ ansible_user_id | default(lookup('ansible.builtin.env', 'USER')) }}"
 sshd_allow_tcp_forwarding: "no"
 sshd_authentication_methods: any
 sshd_banner: /etc/issue.net
