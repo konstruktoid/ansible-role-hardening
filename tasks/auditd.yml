@@ -10,6 +10,8 @@
     owner: root
     group: root
   when: ansible_os_family == "Debian"
+  notify:
+    - Update GRUB
   tags:
     - auditd
     - CIS-UBUNTU2004-4.1.1.3
