@@ -61,6 +61,8 @@
     mode: "0700"
     owner: root
     group: root
+  register: cron_perm
+  failed_when: cron_perm is not success and not 'is absent, cannot continue' in cron_perm.msg
   with_items:
     - /etc/cron.d
     - /etc/cron.daily
