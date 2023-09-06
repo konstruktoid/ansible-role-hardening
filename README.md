@@ -103,6 +103,22 @@ See [TESTING.md](TESTING.md).
 
 ## Role Variables with defaults
 
+### ./defaults/main/aide.yml
+
+```yaml
+---
+install_aide: true
+aide_checksums: sha512
+```
+
+If `install_aide: true` then [AIDE](https://aide.github.io/) will be installed
+and configured.
+
+`aide_checksums` modifies the AIDE `Checksums` variable. Note that the
+`Checksums` variable might not be present depending on distribution.
+
+[aide.conf(5)](https://linux.die.net/man/5/aide.conf)
+
 ### ./defaults/main/auditd.yml
 
 ```yaml
@@ -232,7 +248,6 @@ Maximum number of processes and open files.
 ### ./defaults/main/misc.yml
 
 ```yaml
-install_aide: true
 reboot_ubuntu: false
 redhat_signing_keys:
   - 567E347AD0044ADE55BA8A5F199E2F91FD431D51
@@ -245,8 +260,6 @@ epel9_signing_keys:
   - FF8AD1344597106ECE813B918A3872BF3228467C
 ```
 
-If `install_aide: true` then [AIDE](https://aide.github.io/) will be installed
-and configured.
 
 If `reboot_ubuntu: true` an Ubuntu node will be rebooted if required.
 
