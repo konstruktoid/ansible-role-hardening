@@ -81,6 +81,18 @@
   tags:
     - aide
 
+- name: Limit AIDE checksums
+  become: true
+  ansible.builtin.lineinfile:
+    dest: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+    state: present
+    regexp: ^Checksums =
+    line: Checksums = {{ aide_checksums }}
+    mode: "0640"
+    create: false
+  tags:
+    - aide
+
 - name: Add AIDE dir exclusions
   become: true
   ansible.builtin.blockinfile:
