@@ -1,4 +1,3 @@
 ---
 install_aide: true
-aide_checksums:
-  - sha512
+aide_checksums: sha512
