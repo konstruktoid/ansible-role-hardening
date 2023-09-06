@@ -1,5 +1,4 @@
 ---
-install_aide: true
 reboot_ubuntu: false
 redhat_signing_keys:
   - 567E347AD0044ADE55BA8A5F199E2F91FD431D51
