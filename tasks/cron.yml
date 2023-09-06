@@ -61,6 +61,8 @@
     mode: "0700"
     owner: root
     group: root
+  register: cron_perm
+  failed_when: cron_perm is not success and not 'is absent, cannot continue' in cron_perm.msg
   with_items:
     - /etc/cron.d
     - /etc/cron.daily
@@ -82,6 +84,8 @@
     mode: "0600"
     owner: root
     group: root
+  register: crontab_perm
+  failed_when: crontab_perm is not success and not 'is absent, cannot continue' in crontab_perm.msg
   tags:
     - cron
     - crontab
