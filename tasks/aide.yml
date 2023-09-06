@@ -70,6 +70,7 @@
     line: "{{ item }} p+i+n+u+g+s+b+acl+xattrs+sha512"
     mode: "0640"
     create: false
+    validate: aide --config-check --config=%s
   with_items:
     - /usr/sbin/auditctl
     - /usr/sbin/auditd
@@ -90,6 +91,7 @@
     line: Checksums = {{ aide_checksums }}
     mode: "0640"
     create: false
+    validate: aide --config-check --config=%s
   tags:
     - aide
 
@@ -106,6 +108,7 @@
       !/var/lib/private/systemd
       !/var/log/audit
       !/var/log/journal
+    validate: aide --config-check --config=%s
   tags:
     - aide
 
