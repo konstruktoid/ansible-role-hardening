@@ -628,6 +628,7 @@ ipv4_sysctl_settings:
   net.ipv4.tcp_syn_retries: 5
   net.ipv4.tcp_synack_retries: 2
   net.ipv4.tcp_syncookies: 1
+  net.ipv4.tcp_timestamps: 0
 
 ipv6_sysctl_settings:
   net.ipv6.conf.all.accept_ra: 0
