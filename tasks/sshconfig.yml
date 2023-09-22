@@ -71,7 +71,7 @@
 - name: Configure sshd
   become: true
   ansible.builtin.template:
-    src: etc/ssh/sshd_config.j2
+    src: "{{ sshd_config_template }}"
     dest: /etc/ssh/sshd_config
     backup: true
     mode: "0600"
@@ -125,7 +125,7 @@
 - name: Configure sshd using sshd_config.d
   become: true
   ansible.builtin.template:
-    src: etc/ssh/sshd_config.j2
+    src: "{{ sshd_config_template }}"
     dest: /etc/ssh/sshd_config.d/01-hardening.conf
     backup: true
     mode: "0600"
@@ -229,7 +229,7 @@
 - name: Configure ssh client
   become: true
   ansible.builtin.template:
-    src: etc/ssh/ssh_config.j2
+    src: "{{ ssh_config_template }}"
     dest: /etc/ssh/ssh_config
     backup: true
     mode: "0644"

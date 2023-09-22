@@ -2,7 +2,7 @@
 - name: Configure login.defs
   become: true
   ansible.builtin.template:
-    src: etc/login.defs.j2
+    src: "{{ login_defs_template }}"
     dest: /etc/login.defs
     backup: true
     mode: "0644"
