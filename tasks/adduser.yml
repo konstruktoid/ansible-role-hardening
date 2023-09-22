@@ -2,7 +2,7 @@
 - name: Add configuration file for adduser and addgroup
   become: true
   ansible.builtin.template:
-    src: etc/adduser.conf.j2
+    src: "{{ adduser_conf_template }}"
     dest: /etc/adduser.conf
     backup: true
     mode: "0644"
@@ -15,7 +15,7 @@
 - name: Add configuration file for useradd
   become: true
   ansible.builtin.template:
-    src: etc/default/useradd.j2
+    src: "{{ useradd_template }}"
     dest: /etc/default/useradd
     backup: true
     mode: "0644"

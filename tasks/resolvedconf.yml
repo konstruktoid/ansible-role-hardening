@@ -2,7 +2,7 @@
 - name: Configure systemd resolved
   become: true
   ansible.builtin.template:
-    src: etc/systemd/resolved.conf.j2
+    src: "{{ resolved_conf_template }}"
     dest: /etc/systemd/resolved.conf
     backup: true
     mode: "0644"

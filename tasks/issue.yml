@@ -2,7 +2,7 @@
 - name: Add motd file
   become: true
   ansible.builtin.template:
-    src: etc/motd.j2
+    src: "{{ motd_template }}"
     dest: /etc/motd
     backup: true
     mode: "0644"
@@ -17,7 +17,7 @@
 - name: Add issue and issue.net files
   become: true
   ansible.builtin.template:
-    src: etc/issue.j2
+    src: "{{ issue_template }}"
     dest: "{{ item }}"
     backup: true
     mode: "0644"
