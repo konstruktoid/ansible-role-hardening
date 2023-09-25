@@ -12,6 +12,7 @@
 │   └── entrypoint.sh
 ├── defaults
 │   └── main
+│       ├── aide.yml
 │       ├── auditd.yml
 │       ├── compilers.yml
 │       ├── crypto_policies.yml
@@ -28,6 +29,7 @@
 │       ├── sshd.yml
 │       ├── suid_sgid_blocklist.yml
 │       ├── sysctl.yml
+│       ├── templates.yml
 │       ├── ufw.yml
 │       ├── umask.yml
 │       └── users.yml
@@ -170,5 +172,5 @@
 ├── tox.ini
 └── Vagrantfile
 
-35 directories, 127 files
+35 directories, 129 files
 ```
