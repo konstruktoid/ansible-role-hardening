@@ -106,7 +106,6 @@ See [TESTING.md](TESTING.md).
 ### ./defaults/main/aide.yml
 
 ```yaml
----
 install_aide: true
 aide_checksums: sha512
 ```
@@ -260,7 +259,6 @@ epel9_signing_keys:
   - FF8AD1344597106ECE813B918A3872BF3228467C
 ```
 
-
 If `reboot_ubuntu: true` an Ubuntu node will be rebooted if required.
 
 `redhat_signing_keys` are [RedHat Product Signing Keys](https://access.redhat.com/security/team/key/).
@@ -314,17 +312,16 @@ of `blacklisted` kernel modules. The reasoning behind this is that a blacklisted
 module can still be loaded manually with `modprobe module_name`. Using
 `install module_name /bin/true` prevents this.
 
-**Please note:** This will affect modules that the OS itself has blacklisted as
+This will affect modules that the distribution has blacklisted as
 part of its default setup, or that were added manually at some point, by anyone
 with access to your system. Please verify the affected modules before turning
-this on, under `/etc/modprobe.d/`.
+this on by running `modprobe --showconfig | grep '^blacklist'`
 
-This code project does not blacklist any modules, it only blocks/disables, as
-described in the first paragraph of this section.
-
-Note that disabling the `usb-storage` module will disable any usage of USB
-storage devices, if such devices are needed [USBGuard](https://github.com/USBGuard/usbguard),
-or a similar tool, should be configured accordingly.
+> **Note**
+>
+> Disabling the `usb-storage` module will disable all USB
+> storage devices. If such devices are needed [USBGuard](https://github.com/USBGuard/usbguard),
+> or a similar tool, should be configured accordingly.
 
 ### ./defaults/main/mount.yml
 
@@ -450,7 +447,7 @@ pwquality_config:
   ucredit: -1
 ```
 
-Configure the [libpwquality](https://manpages.ubuntu.com/manpages/focal/man5/pwquality.conf.5.html)
+Configure the [libpwquality](https://manpages.ubuntu.com/manpages/jammy/man5/pwquality.conf.5.html)
 library.
 
 ### ./defaults/main/sshd.yml
@@ -580,10 +577,12 @@ higher than 9.1.
 suid_sgid_permissions: true
 suid_sgid_blocklist:
   - 7z
+  - aa-exec
   - ab
   - agetty
   - alpine
   - ansible-playbook
+  - ansible-test
   - aoss
   - apt
   - apt-get
@@ -672,6 +671,38 @@ conntrack_sysctl_settings:
 `sysctl` configuration.
 
 [sysctl.conf](https://linux.die.net/man/5/sysctl.conf)
+
+### ./defaults/main/templates.yml
+
+```yaml
+adduser_conf_template: etc/adduser.conf.j2
+common_account_template: etc/pam.d/common-account.j2
+common_auth_template: etc/pam.d/common-auth.j2
+common_password_template: etc/pam.d/common-password.j2
+coredump_conf_template: etc/systemd/coredump.conf.j2
+hardening_rules_template: etc/audit/rules.d/hardening.rules.j2
+hosts_allow_template: etc/hosts.allow.j2
+hosts_deny_template: etc/hosts.deny.j2
+initpath_sh_template: etc/profile.d/initpath.sh.j2
+issue_template: etc/issue.j2
+journald_conf_template: etc/systemd/journald.conf.j2
+limits_conf_template: etc/security/limits.conf.j2
+logind_conf_template: etc/systemd/logind.conf.j2
+login_defs_template: etc/login.defs.j2
+login_template: etc/pam.d/login.j2
+logrotate_conf_template: etc/logrotate.conf.j2
+motd_template: etc/motd.j2
+resolved_conf_template: etc/systemd/resolved.conf.j2
+rkhunter_template: etc/default/rkhunter.j2
+ssh_config_template: etc/ssh/ssh_config.j2
+sshd_config_template: etc/ssh/sshd_config.j2
+system_conf_template: etc/systemd/system.conf.j2
+timesyncd_conf_template: etc/systemd/timesyncd.conf.j2
+useradd_template: etc/default/useradd.j2
+user_conf_template: etc/systemd/user.conf.j2
+```
+
+Paths in order to support overriding the default [role templates](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html).
 
 ### ./defaults/main/ufw.yml
 
