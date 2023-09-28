@@ -62,6 +62,7 @@
         cmd: ssh -V
       changed_when: false
       failed_when: false
+      check_mode: false
       register: ssh_version
       tags:
         - sshd
