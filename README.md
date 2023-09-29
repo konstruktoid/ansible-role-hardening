@@ -500,7 +500,7 @@ sshd_host_key_algorithms:
   - ecdsa-sha2-nistp256
 sshd_host_keys_files: []
 sshd_host_keys_group: root
-sshd_host_keys_mode: 0600
+sshd_host_keys_mode: "0600"
 sshd_host_keys_owner: root
 sshd_hostbased_authentication: false
 sshd_ignore_rhosts: true

@@ -69,14 +69,14 @@
   block:
     - name: Search pre-existing custom configurations in /etc/ssh/sshd_config.d
       become: true
-      find:
+      ansible.builtin.find:
         path: /etc/ssh/sshd_config.d
         patterns: '*'
       register: sshd_config_d_content
 
     - name: Clear pre-existing custom configurations in /etc/ssh/sshd_config.d
       become: true
-      file:
+      ansible.builtin.file:
         path: "{{ item.path }}"
         state: absent
       loop: "{{ sshd_config_d_content.files }}"
