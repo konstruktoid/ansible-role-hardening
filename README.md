@@ -91,7 +91,7 @@ disruption, the role deletes every `ufw` rule without
 
 The role also sets default deny policies, which means that firewall rules
 needs to be created for any additional ports except those specified in
-the `sshd_port` and `ufw_outgoing_traffic` variables.
+the `sshd_ports` and `ufw_outgoing_traffic` variables.
 
 ## Task Execution and Structure
 
@@ -563,7 +563,7 @@ sshd_x11_forwarding: false
 For a explanation of the options not described below, please read
 [https://man.openbsd.org/sshd_config](https://man.openbsd.org/sshd_config).
 
-Only the network(s) defined in `sshd_admin_net` are allowed to connect to `sshd_port`. Note that additional rules need to be set up in order to allow access to additional services.
+Only the network(s) defined in `sshd_admin_net` are allowed to connect to `sshd_ports`. Note that additional rules need to be set up in order to allow access to additional services.
 
 OpenSSH login is allowed only for users whose primary group or supplementary group list matches one of the patterns in `sshd_allow_groups`. OpenSSH login is also allowed for users in `sshd_allow_users`. To do the opposite and deny access, use the `sshd_deny_groups` and `sshd_deny_users` parameters, which in turn have priority over the previous parameters.
 
@@ -580,7 +580,7 @@ connection.
 
 `sshd_password_authentication` specifies whether password authentication is allowed.
 
-`sshd_port` specifies the port number that sshd(8) listens on.
+`sshd_ports` specifies the port(s) number that sshd(8) listens on.
 
 `sshd_required_rsa_size`, RequiredRSASize, will only be set if SSH version is higher than 9.1.
 

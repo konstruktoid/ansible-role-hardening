@@ -1,4 +1,17 @@
 ---
+- name: Allow sshd port from administrator networks
+  become: true
+  community.general.ufw:
+    rule: limit
+    src: "{{ item.0 }}"
+    port: "{{ item.1 | int }}"
+    proto: tcp
+    comment: ansible managed
+  loop: "{{ sshd_admin_net | product(sshd_ports) | list }}"
+  tags:
+    - ufw
+    - M1037
+
 - name: Add the nf_conntrack module
   become: true
   community.general.modprobe:
@@ -110,20 +123,6 @@
   failed_when: ufw_not_managed.rc > 1
   changed_when: false
   register: ufw_not_managed
-  tags:
-    - ufw
-    - M1037
-
-- name: Allow sshd port from administrator networks
-  become: true
-  community.general.ufw:
-    rule: limit
-    src: "{{ item }}"
-    port: "{{ sshd_port | int }}"
-    proto: tcp
-    comment: ansible managed
-  with_items:
-    - "{{ sshd_admin_net }}"
   tags:
     - ufw
     - M1037
