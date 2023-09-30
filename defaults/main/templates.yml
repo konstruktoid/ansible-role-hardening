@@ -22,5 +22,6 @@ ssh_config_template: etc/ssh/ssh_config.j2
 sshd_config_template: etc/ssh/sshd_config.j2
 system_conf_template: etc/systemd/system.conf.j2
 timesyncd_conf_template: etc/systemd/timesyncd.conf.j2
+tmp_mount_template: etc/systemd/tmp.mount.j2
 useradd_template: etc/default/useradd.j2
 user_conf_template: etc/systemd/user.conf.j2
