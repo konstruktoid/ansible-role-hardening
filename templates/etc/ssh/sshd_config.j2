@@ -12,7 +12,7 @@
 {% for port in sshd_ports %}
 Port {{ port }}
 {% endfor %}
-AddressFamily {{ 'inet' if (disable_ipv6|bool) else 'any' }}
+AddressFamily {{ 'inet' if (disable_ipv6 | bool) else 'any' }}
 {% for address in sshd_listen %}
 ListenAddress {{ address }}
 {% endfor %}
@@ -27,7 +27,7 @@ HostKey {{ key }}
 {% if ssh_installed_version is version('7.6', '<') %}
 Protocol 2
 {% endif %}
-StrictModes {{ 'yes' if (sshd_strict_modes|bool) else 'no' }}
+StrictModes {{ 'yes' if (sshd_strict_modes | bool) else 'no' }}
 SyslogFacility {{ sshd_syslog_facility }}
 LogLevel {{ sshd_log_level }}
 
@@ -36,11 +36,11 @@ LogLevel {{ sshd_log_level }}
 #######################################################
 
 {% if not crypto_policies_config or not set_crypto_policy %}
-{{ 'CASignatureAlgorithms ' ~ sshd_ca_signature_algorithms|join(',') if sshd_ca_signature_algorithms }}
-{{ 'Ciphers ' ~ sshd_ciphers|join(',') if sshd_ciphers }}
-{{ 'HostKeyAlgorithms ' ~ sshd_host_key_algorithms|join(',') if sshd_host_key_algorithms }}
-{{ 'KexAlgorithms ' ~ sshd_kex_algorithms|join(',') if sshd_kex_algorithms }}
-{{ 'MACs ' ~ sshd_macs|join(',') if sshd_macs }}
+{{ 'CASignatureAlgorithms ' ~ sshd_ca_signature_algorithms | join(',') if sshd_ca_signature_algorithms }}
+{{ 'Ciphers ' ~ sshd_ciphers | join(',') if sshd_ciphers }}
+{{ 'HostKeyAlgorithms ' ~ sshd_host_key_algorithms | join(',') if sshd_host_key_algorithms }}
+{{ 'KexAlgorithms ' ~ sshd_kex_algorithms | join(',') if sshd_kex_algorithms }}
+{{ 'MACs ' ~ sshd_macs | join(',') if sshd_macs }}
 {% endif %}
 RekeyLimit {{ sshd_rekey_limit }}
 {% if ssh_installed_version is version('9.1', '>') and (not crypto_policies_config or not set_crypto_policy) %}
@@ -51,66 +51,66 @@ RequiredRSASize {{ sshd_required_rsa_size }}
 # Authentication
 #######################################################
 
-PermitRootLogin {{ 'yes' if (sshd_permit_root_login|bool) else 'no' }}
+PermitRootLogin {{ 'yes' if (sshd_permit_root_login | bool) else 'no' }}
 {% if ssh_installed_version is version('7.4', '<') %}
 UseLogin no
 {% endif %}
 {% if ssh_installed_version is version('7.5', '<') %}
-UsePrivilegeSeparation {{ sshd_use_privilege_separation if (sshd_use_privilege_separation in ('yes', 'no', 'sandbox')) else ('yes' if (sshd_use_privilege_separation|bool) else 'no') }}
+UsePrivilegeSeparation {{ sshd_use_privilege_separation if (sshd_use_privilege_separation in ('yes', 'no', 'sandbox')) else ('yes' if (sshd_use_privilege_separation | bool) else 'no') }}
 {% endif %}
 LoginGraceTime {{ sshd_login_grace_time | int }}
 MaxAuthTries {{ sshd_max_auth_tries | int }}
 MaxSessions {{ sshd_max_sessions | int }}
 MaxStartups {{ sshd_max_startups }}
 PubkeyAuthentication yes
-IgnoreRhosts {{ 'yes' if (sshd_ignore_rhosts|bool) else 'no' }}
-IgnoreUserKnownHosts {{ 'yes' if (sshd_ignore_user_known_hosts|bool) else 'no' }}
-HostbasedAuthentication {{ 'yes' if (sshd_hostbased_authentication|bool) else 'no' }}
-UsePAM {{ 'yes' if (sshd_use_pam|bool) else 'no' }}
+IgnoreRhosts {{ 'yes' if (sshd_ignore_rhosts | bool) else 'no' }}
+IgnoreUserKnownHosts {{ 'yes' if (sshd_ignore_user_known_hosts | bool) else 'no' }}
+HostbasedAuthentication {{ 'yes' if (sshd_hostbased_authentication | bool) else 'no' }}
+UsePAM {{ 'yes' if (sshd_use_pam | bool) else 'no' }}
 {% if ssh_installed_version is version('6.2', '>=') %}
 AuthenticationMethods {{ sshd_authentication_methods }}
 {% endif %}
-PasswordAuthentication {{ 'yes' if (sshd_password_authentication|bool) else 'no' }}
-PermitEmptyPasswords {{ 'yes' if (sshd_permit_empty_passwords|bool) else 'no' }}
-ChallengeResponseAuthentication {{ 'yes' if (sshd_challenge_response_authentication|bool) else 'no' }}
-KerberosAuthentication {{ 'yes' if (sshd_kerberos_authentication|bool) else 'no' }}
-GSSAPIAuthentication {{ 'yes' if (sshd_gssapi_authentication|bool) else 'no' }}
+PasswordAuthentication {{ 'yes' if (sshd_password_authentication | bool) else 'no' }}
+PermitEmptyPasswords {{ 'yes' if (sshd_permit_empty_passwords | bool) else 'no' }}
+ChallengeResponseAuthentication {{ 'yes' if (sshd_challenge_response_authentication | bool) else 'no' }}
+KerberosAuthentication {{ 'yes' if (sshd_kerberos_authentication | bool) else 'no' }}
+GSSAPIAuthentication {{ 'yes' if (sshd_gssapi_authentication | bool) else 'no' }}
 GSSAPICleanupCredentials yes
 {% if sshd_deny_groups %}
-{{ 'DenyGroups ' ~ sshd_deny_groups|join(' ') }}
+{{ 'DenyGroups ' ~ sshd_deny_groups | join(' ') }}
 {% endif %}
 {% if sshd_allow_groups %}
-{{ 'AllowGroups ' ~ sshd_allow_groups|join(' ') }}
+{{ 'AllowGroups ' ~ sshd_allow_groups | join(' ') }}
 {% endif %}
 {% if sshd_deny_users %}
-{{ 'DenyUsers ' ~ sshd_deny_users|join(' ') }}
+{{ 'DenyUsers ' ~ sshd_deny_users | join(' ') }}
 {% endif %}
 {% if sshd_allow_users %}
-{{ 'AllowUsers ' ~ sshd_allow_users|join(' ') }}
+{{ 'AllowUsers ' ~ sshd_allow_users | join(' ') }}
 {% endif %}
 
 #######################################################
 # Network
 #######################################################
 
-TCPKeepAlive {{ 'yes' if (sshd_tcp_keep_alive|bool) else 'no' }}
+TCPKeepAlive {{ 'yes' if (sshd_tcp_keep_alive | bool) else 'no' }}
 ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
 ClientAliveInterval {{ sshd_client_alive_interval | int }}
-PermitTunnel {{ 'yes' if (sshd_permit_tunnel|bool) else 'no' }}
+PermitTunnel {{ 'yes' if (sshd_permit_tunnel | bool) else 'no' }}
 {% if ssh_installed_version is version('6.2', '>=') %}
-AllowTcpForwarding {{ sshd_allow_tcp_forwarding if (sshd_allow_tcp_forwarding in ('yes', 'no', 'local', 'all', 'remote')) else ('yes' if (sshd_allow_tcp_forwarding|bool) else 'no') }}
+AllowTcpForwarding {{ sshd_allow_tcp_forwarding if (sshd_allow_tcp_forwarding in ('yes', 'no', 'local', 'all', 'remote')) else ('yes' if (sshd_allow_tcp_forwarding | bool) else 'no') }}
 {% else %}
-AllowTcpForwarding {{ sshd_allow_tcp_forwarding if (sshd_allow_tcp_forwarding in ('yes', 'no')) else ('yes' if (sshd_allow_tcp_forwarding|bool) else 'no') }}
+AllowTcpForwarding {{ sshd_allow_tcp_forwarding if (sshd_allow_tcp_forwarding in ('yes', 'no')) else ('yes' if (sshd_allow_tcp_forwarding | bool) else 'no') }}
 {% endif %}
-AllowAgentForwarding {{ 'yes' if (sshd_allow_agent_forwarding|bool) else 'no' }}
-X11Forwarding {{ 'yes' if (sshd_x11_forwarding|bool) else 'no' }}
+AllowAgentForwarding {{ 'yes' if (sshd_allow_agent_forwarding | bool) else 'no' }}
+X11Forwarding {{ 'yes' if (sshd_x11_forwarding | bool) else 'no' }}
 X11UseLocalhost yes
 
 #######################################################
 # User environment configuration
 #######################################################
 
-PermitUserEnvironment {{ 'yes' if (sshd_permit_user_environment|bool) else 'no' }}
+PermitUserEnvironment {{ 'yes' if (sshd_permit_user_environment | bool) else 'no' }}
 {% if sshd_accept_env %}
 AcceptEnv {{ sshd_accept_env }}
 {% endif %}
@@ -119,13 +119,13 @@ AcceptEnv {{ sshd_accept_env }}
 # Misc. configuration
 #######################################################
 
-Compression {{ 'yes' if (sshd_compression|bool) else 'no' }}
-UseDNS {{ 'yes' if (sshd_use_dns|bool) else 'no' }}
-PrintMotd {{ 'yes' if (sshd_print_motd|bool) else 'no' }}
-PrintLastLog {{ 'yes' if (sshd_print_last_log|bool) else 'no' }}
+Compression {{ 'yes' if (sshd_compression | bool) else 'no' }}
+UseDNS {{ 'yes' if (sshd_use_dns | bool) else 'no' }}
+PrintMotd {{ 'yes' if (sshd_print_motd | bool) else 'no' }}
+PrintLastLog {{ 'yes' if (sshd_print_last_log | bool) else 'no' }}
 Banner {{ sshd_banner if sshd_banner else 'none' }}
 {% if ansible_facts.os_family == 'Debian' %}
-DebianBanner {{ 'yes' if (sshd_debian_banner|bool) else 'no' }}
+DebianBanner {{ 'yes' if (sshd_debian_banner | bool) else 'no' }}
 {% endif %}
 
 {%+ if sshd_sftp_enabled +%}
@@ -142,7 +142,7 @@ Match Group {{ sshd_sftp_only_group }}
 {% endif %}
     AllowTcpForwarding no
     AllowAgentForwarding no
-    PasswordAuthentication {{ 'yes' if (sshd_password_authentication|bool) else 'no' }}
+    PasswordAuthentication {{ 'yes' if (sshd_password_authentication | bool) else 'no' }}
     PermitRootLogin no
     X11Forwarding no
 {% endif %}
