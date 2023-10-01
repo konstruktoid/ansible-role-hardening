@@ -93,6 +93,7 @@
     - sshd_config
 
 - name: Set default for sshd_host_keys_files if not supplied
+  become: true
   when: not sshd_host_keys_files
   tags:
     - sshd
@@ -140,6 +141,7 @@
       loop: "{{ sshd_host_keys_files }}"
 
 - name: Disable PAM dynamic MOTD
+  become: true
   community.general.pamd:
     name: sshd
     type: session
@@ -226,7 +228,7 @@
     owner: root
     group: root
     validate: "/usr/sbin/sshd -T -C user=root -C host=localhost -C addr=localhost -C lport=22 -f %s"
-  when: not ( sshd_config_force_replace | bool ) or sshd_config_d.stat.exists and grep_include.rc == 0
+  when: not ( sshd_config_force_replace | bool ) and sshd_config_d.stat.exists and grep_include.rc == 0
   notify:
     - Restart sshd service
     - Restart ssh service

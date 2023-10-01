@@ -584,13 +584,13 @@ connection.
 
 `sshd_required_rsa_size`, RequiredRSASize, will only be set if SSH version is higher than 9.1.
 
-`sshd_config_d_force_clear` force clear directory `/etc/sshd_config.d`. Default: `false`.
+`sshd_config_d_force_clear` force clear directory `/etc/ssh/sshd_config.d`. Default: `false`.
 
-`sshd_config_force_replace` force replace configuration file `/etc/sshd_config`. Default: `false`.
+`sshd_config_force_replace` force replace configuration file `/etc/ssh/sshd_config`. Default: `false`.
 
 > **Note**
 >
-> By default, the role checks whether the directory `/etc/sshd_config.d` exists and whether it is linked via the `Include` parameter in the `/etc/sshd_config` file, if so, an additional configuration file is created in `/ etc/sshd_config.d`, if not, the `/etc/sshd_config` file is overwritten.
+> By default, the role checks whether the directory `/etc/ssh/sshd_config.d` exists and whether it is linked via the `Include` parameter in the `/etc/ssh/sshd_config` file, if so, an additional configuration file is created in `/ etc/ssh/sshd_config.d`, if not, the `/etc/ssh/sshd_config` file is overwritten.
 
 > **Warning**
 >

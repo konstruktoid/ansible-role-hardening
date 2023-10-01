@@ -233,19 +233,18 @@
           - AllowGroups vagrant sudo
           - AllowAgentForwarding {{ 'yes' if (sshd_allow_agent_forwarding | bool) else 'no' }}
           - >-
-            {# Set variable "tcp_fw" for ignore ansible-lint yaml[line-length] -#}
-            {% set tcp_fw = sshd_allow_tcp_forwarding %}
-            {% if ssh_installed_version is version('6.2', '>=') %}
+            {#- Set variable "tcp_fw" for ignore ansible-lint yaml[line-length] -#}
+            {%- set tcp_fw = sshd_allow_tcp_forwarding -%}
+            {%- if ssh_installed_version is version('6.2', '>=') -%}
             AllowTcpForwarding {{ tcp_fw if (tcp_fw in ('yes', 'no', 'local', 'all', 'remote')) else ('yes' if (tcp_fw | bool) else 'no') }}
-            {% else %}
+            {%- else -%}
             AllowTcpForwarding {{ tcp_fw if (tcp_fw in ('yes', 'no')) else ('yes' if (tcp_fw | bool) else 'no') }}
-            {% endif %}
+            {%- endif -%}
           - Banner {{ sshd_banner if sshd_banner else 'none' }}
           - ChallengeResponseAuthentication {{ 'yes' if (sshd_challenge_response_authentication | bool) else 'no' }}
           - ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
           - ClientAliveInterval {{ sshd_client_alive_interval | int }}
           - Compression {{ 'yes' if (sshd_compression | bool) else 'no' }}
-          - DebianBanner {{ 'yes' if (sshd_debian_banner | bool) else 'no' }}
           - GSSAPIAuthentication {{ 'yes' if (sshd_gssapi_authentication | bool) else 'no' }}
           - GSSAPICleanupCredentials yes
           - HostbasedAuthentication {{ 'yes' if (sshd_hostbased_authentication | bool) else 'no' }}
@@ -279,6 +278,11 @@
         sshd_config_parameters: "{{ sshd_config_parameters + ['AuthenticationMethods ' + sshd_authentication_methods] }}"
       when: ssh_installed_version is version('6.2', '>=')
 
+    - name: Set sshd_config_parameters DebianBanner
+      ansible.builtin.set_fact:
+        sshd_config_parameters: "{{ sshd_config_parameters + ['DebianBanner ' + 'yes' if (sshd_debian_banner | bool) else 'no'] }}"
+      when: ansible_facts.os_family == 'Debian'
+
     - name: Set sshd_config_parameters HostKey
       ansible.builtin.set_fact:
         sshd_config_parameters: "{{ sshd_config_parameters + ['HostKey ' + item] }}"
@@ -296,7 +300,7 @@
 
     - name: Set sshd_config_parameters RequiredRSASize
       ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['RequiredRSASize ' + sshd_required_rsa_size] }}"
+        sshd_config_parameters: "{{ sshd_config_parameters + ['RequiredRSASize ' + sshd_required_rsa_size | string] }}"
       when: ssh_installed_version is version('9.1', '>')
 
     - name: Set sshd_config_parameters Subsystem
