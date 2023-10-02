@@ -162,7 +162,8 @@
     sshd_match_users | length > 0 or
     sshd_match_groups | length > 0 or
     sshd_match_addresses | length > 0 or
-    sshd_match_local_ports | length > 0
+    sshd_match_local_ports | length > 0 or
+    (sshd_sftp_only_group is defined and sshd_sftp_only_group | length != 0)
 
 - name: Configure sshd
   become: true

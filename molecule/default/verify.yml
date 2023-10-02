@@ -273,6 +273,11 @@
           - X11Forwarding {{ 'yes' if (sshd_x11_forwarding | bool) else 'no' }}
           - X11UseLocalhost yes
 
+    - name: Set sshd_config_parameters AcceptEnv
+      ansible.builtin.set_fact:
+        sshd_config_parameters: "{{ sshd_config_parameters + ['AcceptEnv ' + sshd_authentication_methods] }}"
+      when: sshd_accept_env is defined and sshd_accept_env | length != 0
+
     - name: Set sshd_config_parameters AuthenticationMethods
       ansible.builtin.set_fact:
         sshd_config_parameters: "{{ sshd_config_parameters + ['AuthenticationMethods ' + sshd_authentication_methods] }}"
@@ -280,7 +285,7 @@
 
     - name: Set sshd_config_parameters DebianBanner
       ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['DebianBanner ' + 'yes' if (sshd_debian_banner | bool) else 'no'] }}"
+        sshd_config_parameters: "{{ sshd_config_parameters + ['DebianBanner ' + ('yes' if (sshd_debian_banner | bool) else 'no')] }}"
       when: ansible_facts.os_family == 'Debian'
 
     - name: Set sshd_config_parameters HostKey
@@ -295,18 +300,44 @@
 
     - name: Set sshd_config_parameters Port
       ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['Port ' + item | string] }}"
+        sshd_config_parameters: "{{ sshd_config_parameters + ['Port ' + (item | string)] }}"
       loop: "{{ sshd_ports }}"
+
+    - name: Set sshd_config_parameters Protocol
+      ansible.builtin.set_fact:
+        sshd_config_parameters: "{{ sshd_config_parameters + ['Protocol 2'] }}"
+      when: ssh_installed_version is version('7.6', '<')
 
     - name: Set sshd_config_parameters RequiredRSASize
       ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['RequiredRSASize ' + sshd_required_rsa_size | string] }}"
+        sshd_config_parameters: "{{ sshd_config_parameters + ['RequiredRSASize ' + (sshd_required_rsa_size | string)] }}"
       when: ssh_installed_version is version('9.1', '>')
 
     - name: Set sshd_config_parameters Subsystem
       ansible.builtin.set_fact:
         sshd_config_parameters: "{{ sshd_config_parameters + ['Subsystem sftp ' + sshd_sftp_subsystem] }}"
       when: sshd_sftp_enabled | bool
+
+    - name: Set sshd_config_parameters UseLogin
+      ansible.builtin.set_fact:
+        sshd_config_parameters: "{{ sshd_config_parameters + ['UseLogin no'] }}"
+      when: ssh_installed_version is version('7.4', '<')
+
+    - name: Set sshd_config_parameters UsePrivilegeSeparation
+      ansible.builtin.set_fact:
+        sshd_config_parameters: "{{ sshd_config_parameters + ['UsePrivilegeSeparation ' + sshd_use_privilege_separation if (sshd_use_privilege_separation in ('yes', 'no', 'sandbox')) else ('yes' if (sshd_use_privilege_separation | bool) else 'no')] }}"  # noqa yaml[line-length]
+      when: ssh_installed_version is version('7.5', '<')
+
+    - name: Verify sshd runtime ciphers and algorithms
+      ansible.builtin.set_fact:
+        sshd_config_parameters: "{{ sshd_config_parameters + [item] }}"
+      when: not crypto_policies_config or not set_crypto_policy
+      loop:
+        - CASignatureAlgorithms {{ sshd_ca_signature_algorithms | join(',') }}
+        - Ciphers {{ sshd_ciphers | join(',') }}
+        - HostKeyAlgorithms {{ sshd_host_key_algorithms | join(',') }}
+        - KexAlgorithms {{ sshd_kex_algorithms | join(',') }}
+        - MACs {{ sshd_macs | join(',') }}
 
     - name: Verify sshd configuration
       become: true
@@ -324,7 +355,7 @@
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config.d/01-hardening.conf
-        line: "{{ item | replace(', ', ',') }}"
+        line: "{{ item }}"
         state: present
       check_mode: true
       register: sshd_config
@@ -337,6 +368,7 @@
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       ansible.builtin.command: sshd -T
+      check_mode: false
       register: sshd_config
       changed_when: false
       failed_when: >-
@@ -344,32 +376,16 @@
         {{ ( item | regex_replace('^[^\ ]+', lower_parameter) ) not in sshd_config.stdout_lines }}
       loop: "{{ (sshd_config_parameters | reject('regex', 'Allowgroups ') | list) + ['allowgroups vagrant', 'allowgroups sudo'] }}"
 
-    - name: Verify sshd runtime ciphers and algorithms
-      become: true
-      environment:
-        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      ansible.builtin.command: sshd -T
-      register: sshd_algo_runtime
-      changed_when: false
-      failed_when: item not in sshd_algo_runtime.stdout_lines
-      when: not crypto_policies_config or not set_crypto_policy
-      loop:
-        - "{{ 'casignaturealgorithms ' ~ sshd_ca_signature_algorithms | join(',') if sshd_ca_signature_algorithms }}"
-        - "{{ 'ciphers ' ~ sshd_ciphers | join(',') if sshd_ciphers }}"
-        - "{{ 'hostkeyalgorithms ' ~ sshd_host_key_algorithms | join(',') if sshd_host_key_algorithms }}"
-        - "{{ 'kexalgorithms ' ~ sshd_kex_algorithms | join(',') if sshd_kex_algorithms }}"
-        - "{{ 'macs ' ~ sshd_macs | join(',') if sshd_macs }}"
-
     - name: Verify ssh client configuration
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/ssh_config
-        line: "{{ item | indent(4) }}"
+        line: "    {{ item }}"
         state: present
       check_mode: true
       register: ssh_config
       failed_when: ssh_config is changed
-      with_items:
+      loop:
         - GSSAPIAuthentication {{ 'yes' if (sshd_gssapi_authentication | bool) else 'no' }}
         - HashKnownHosts yes
         - RekeyLimit {{ sshd_rekey_limit }}

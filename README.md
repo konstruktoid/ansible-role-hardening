@@ -594,7 +594,7 @@ connection.
 
 > **Warning**
 >
-> If any `sshd_match_(users|groups|addresses|local_ports)` parameters is set, the value `true` will be implicit.
+> If any `sshd_match_(users|groups|addresses|local_ports)` or `sshd_sftp_only_group` parameters is set, the value `true` will be implicit.
 
 `sshd_host_keys_files` host keys for sshd. If empty `['/etc/ssh/ssh_host_rsa_key', '/etc/ssh/ssh_host_ecdsa_key', '/etc/ssh/ssh_host_ed25519_key']` will be used, as far as supported by the installed sshd version.
 
