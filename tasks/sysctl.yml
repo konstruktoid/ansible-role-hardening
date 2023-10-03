@@ -14,7 +14,7 @@
 - name: Set sysctl net.ipv6.conf.accept_ra_rtr_pref
   become: true
   ansible.posix.sysctl:
-    name: net.ipv6.conf.{{ ansible_default_ipv4.interface }}.accept_ra_rtr_pref
+    name: net.ipv6.conf.{{ ansible_default_ipv4.interface | regex_replace('\.', '/') }}.accept_ra_rtr_pref
     value: "{{ sysctl_net_ipv6_conf_accept_ra_rtr_pref | int }}"
     state: present
     sysctl_set: true
