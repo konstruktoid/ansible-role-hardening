@@ -1,0 +1,24 @@
+---
+- name: Ensure restrict compilers access via DNF post-transaction-actions Plugin
+  tags:
+    - compilers
+  block:
+    - name: Get package name rpm of binary file {{ item }}
+      become: true
+      ansible.builtin.command: rpm --query --queryformat='%{NAME}' --file {{ item }}  # noqa command-instead-of-module
+      register: compiler_package
+      changed_when: compiler_package.rc != 0
+      check_mode: false
+
+    - name: Ensure restrict compilers access via DNF post-transaction-actions Plugin for {{ item }}
+      become: true
+      ansible.builtin.lineinfile:
+        dest: /etc/dnf/plugins/post-transaction-actions.d/compilers.action
+        regexp: '{{ compiler_package.stdout }}:in:chown root:root "{{ item }}" && chmod 0750 "{{ item }}"'
+        line: '{{ compiler_package.stdout }}:in:chown root:root "{{ item }}" && chmod 0750 "{{ item }}"'
+        create: true
+        owner: root
+        group: root
+        mode: 0644
+        state: present
+      when: compiler_package is defined and compiler_package.rc == 0
