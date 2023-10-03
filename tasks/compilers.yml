@@ -25,6 +25,7 @@
     - compilers
 
 - name: Ensure restrict compilers access via dpkg-statoverride
+  become: true
   ansible.builtin.command: dpkg-statoverride --update --force-all --add root root 0750 "{{ item.path }}"
   register: dpkg_statoverride
   changed_when: dpkg_statoverride.rc != 0
