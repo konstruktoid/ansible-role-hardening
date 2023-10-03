@@ -11,7 +11,7 @@
   tags:
     - compilers
 
-- name: Restrict compiler access
+- name: Restrict compilers access
   become: true
   ansible.builtin.file:
     path: "{{ item.path }}"
@@ -20,7 +20,23 @@
     mode: "0750"
     state: file
     follow: true
-  with_items:
-    - "{{ compiler.files }}"
+  loop: "{{ compiler.files }}"
+  tags:
+    - compilers
+
+- name: Ensure restrict compilers access via dpkg-statoverride
+  become: true
+  ansible.builtin.command: dpkg-statoverride --update --force-all --add root root 0750 "{{ item.path }}"
+  register: dpkg_statoverride
+  changed_when: dpkg_statoverride.rc != 0
+  loop: "{{ compiler.files }}"
+  when: ansible_os_family == 'Debian'
+  tags:
+    - compilers
+
+- name: Ensure restrict compilers access via DNF post-transaction-actions Plugin
+  ansible.builtin.include_tasks: compilers_dnf_post_transaction_actions_plugin.yml
+  loop: "{{ compiler.files | map(attribute='path') | unique }}"
+  when: ansible_os_family == 'RedHat'
   tags:
     - compilers
