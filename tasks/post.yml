@@ -21,7 +21,7 @@
       set -o pipefail
       grubby --info="/boot/vmlinuz-$(uname -r)" | grep "^args.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
   changed_when: false
-  failed_when: false
+  failed_when: audit_grubenv.rc > 1
   args:
     executable: /bin/bash
   register: audit_grubenv
@@ -45,8 +45,8 @@
 - name: Stat Debian auditd GRUB settings
   become: true
   ansible.builtin.shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
-  changed_when: audit_grub_cfg.rc != 0
-  failed_when: audit_grub_cfg.rc != 0
+  changed_when: false
+  failed_when: audit_grub_cfg.rc > 1
   register: audit_grub_cfg
   when: ansible_os_family == "Debian"
   tags:
