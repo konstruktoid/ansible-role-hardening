@@ -19,6 +19,6 @@
         create: true
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
         state: present
       when: compiler_package is defined and compiler_package.rc == 0
