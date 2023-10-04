@@ -1,4 +1,21 @@
 ---
+
+- name: Populate service facts
+  become: true
+  ansible.builtin.service_facts:
+  tags:
+    - resolved
+    - systemd
+
+- name: Get stats of /etc/resolv.conf
+  become: true
+  ansible.builtin.stat:
+    path: /etc/resolv.conf
+  register: resolv_conf
+  tags:
+    - resolved
+    - resolvconf
+
 - name: Configure systemd resolved
   become: true
   ansible.builtin.template:
@@ -10,21 +27,49 @@
     group: root
   notify:
     - Reload systemd
+  when:
+    - dns is defined and dns | length > 0
+    - '"systemd-resolved.service" in services'
+    - services["systemd-resolved.service"]["status"] == "enabled"
+    - resolv_conf.stat.islnk is defined and resolv_conf.stat.islnk | bool
+    - resolv_conf.stat.lnk_source is defined and resolv_conf.stat.lnk_source == "/run/systemd/resolve/stub-resolv.conf"
   tags:
     - resolved
     - systemd
     - CCE-84049-6
 
-- name: Add nameservers to resolv.conf
-  become: true
-  ansible.builtin.lineinfile:
-    dest: /etc/resolv.conf
-    line: nameserver {{ item }}
-    mode: "0644"
-    owner: root
-    group: root
-    state: present
-  loop: "{{ dns | split }}"
-  when: ansible_os_family == "RedHat"
+- name: Configure /etc/resolv.conf
+  when:
+    - dns is defined and dns | length > 0
+    - '"systemd-resolved.service" not in services or services["systemd-resolved.service"]["status"] == "disabled"'
+    - resolv_conf.stat.islnk is not defined or not ( resolv_conf.stat.islnk | bool )
   tags:
     - resolved
+    - resolvconf
+  block:
+    - name: Read /etc/NetworkManager/NetworkManager.conf
+      become: true
+      ansible.builtin.slurp:
+        src: /etc/NetworkManager/NetworkManager.conf
+      register: networkmanager_conf_content
+      when: '"NetworkManager.service" in services and services["NetworkManager.service"]["status"] not in ("disabled", "unknown")'
+
+    - name: Read /etc/resolv.conf
+      become: true
+      ansible.builtin.slurp:
+        src: /etc/resolv.conf
+      register: resolv_conf_content
+
+    - name: Add nameservers to resolv.conf
+      become: true
+      vars:
+        networkmanager_dns: "{{ networkmanager_conf_content.content | default('') | b64decode | regex_findall('\\s*dns\\s*=\\s*(.*)') | first | default('') }}"
+        dns_searchs: "{{ resolv_conf_content.content | default('') | b64decode | regex_findall('\\s*search\\s*(.*)') }}"
+      ansible.builtin.template:
+        src: "{{ resolv_conf_template }}"
+        dest: /etc/resolv.conf
+        backup: true
+        mode: "0644"
+        owner: root
+        group: root
+      when: '"NetworkManager.service" not in services or services["NetworkManager.service"]["status"] == "disabled" or networkmanager_dns == "none"'

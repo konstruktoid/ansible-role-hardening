@@ -205,8 +205,12 @@ If `true`, turn off all wireless interfaces.
 ### ./defaults/main/dns.yml
 
 ```yaml
-dns: 127.0.0.1 1.1.1.1
-fallback_dns: 9.9.9.9 1.0.0.1
+dns:
+  - 127.0.0.1
+  - 1.1.1.1
+fallback_dns:
+  - 9.9.9.9
+  - 1.0.0.1
 dnssec: allow-downgrade
 dns_over_tls: opportunistic
 ```
@@ -824,6 +828,7 @@ login_defs_template: etc/login.defs.j2
 login_template: etc/pam.d/login.j2
 logrotate_conf_template: etc/logrotate.conf.j2
 motd_template: etc/motd.j2
+resolv_conf_template: etc/resolv.conf.j2
 resolved_conf_template: etc/systemd/resolved.conf.j2
 rkhunter_template: etc/default/rkhunter.j2
 ssh_config_template: etc/ssh/ssh_config.j2

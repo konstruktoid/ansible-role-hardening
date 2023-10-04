@@ -667,15 +667,20 @@
 
     - name: Verify systemd resolved.conf
       become: true
+      vars:
+        resolved_parameters: >-
+          [
+            "DNS={{ dns | join(' ') }}"
+            {{ ', "FallbackDNS=' + fallback_dns | join(' ') + '"' if fallback_dns }}
+            {{ ', "DNSSEC=' + dnssec + '"' if dnssec }}
+            {{ ', "DNSOverTLS=' + dns_over_tls + '"' if dns_over_tls }}
+          ]
       ansible.builtin.shell: grep "^{{ item }}$" /etc/systemd/resolved.conf
       register: systemd_resolved_conf
       failed_when: systemd_resolved_conf.rc != 0
       changed_when: systemd_resolved_conf.rc != 0
-      with_items:
-        - DNS={{ dns }}
-        - FallbackDNS={{ fallback_dns }}
-        - DNSSEC={{ dnssec }}
-        - DNSOverTLS={{ dns_over_tls }}
+      loop: resolved_parameters
+      when: ansible_os_family != "RedHat"
 
     - name: Verify systemd timesyncd.conf
       become: true
