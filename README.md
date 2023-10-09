@@ -208,23 +208,26 @@ If `true`, turn off all wireless interfaces.
 dns:
   - 127.0.0.1
   - 1.1.1.1
+dns_over_tls: opportunistic
+dnssec: allow-downgrade
 fallback_dns:
   - 9.9.9.9
   - 1.0.0.1
-dnssec: allow-downgrade
-dns_over_tls: opportunistic
+network_manager_dns_none: true
 ```
 
 IPv4 and IPv6 addresses to use as system and fallback DNS servers.
-If `dnssec` is set to "allow-downgrade" DNSSEC validation is attempted, but if
-the server does not support DNSSEC properly, DNSSEC mode is automatically
-disabled.
 
-If `dns_over_tls` is true, all connections to the server will be encrypted if
-the DNS server supports DNS-over-TLS and has a valid certificate.
+If `dnssec` is set to "allow-downgrade" DNSSEC validation is attempted, but if the server does not support DNSSEC properly, DNSSEC mode is automatically disabled.
+
+If `dns_over_tls` is `true`, all connections to the server will be encrypted if the DNS server supports DNS-over-TLS and has a valid certificate.
+
+If `network_manager_dns_none` is `true`, the Network-Manager will be prevented from modifying the `/etc/resolv.conf` file, ensuring a fixed DNS configuration, even using a DHCP client. This configuration will only be applied if there are addresses defined in the `dns` variable. This option will be more relevant for systems in the "RedHat" family, which do not enable `resolved` by default.
 
 [systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf)
 option.
+
+[Network-Manager](https://developer-old.gnome.org/NetworkManager/stable/NetworkManager.conf.html)
 
 ### ./defaults/main/ipv6.yml
 

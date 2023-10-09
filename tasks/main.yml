@@ -3,9 +3,8 @@
   ansible.builtin.include_tasks:
     file: facts.yml
 
-- name: Configure systemd resolved
-  ansible.builtin.include_tasks:
-    file: resolvedconf.yml
+- name: Configure DNS
+  ansible.builtin.include_tasks: dns.yml
 
 - name: Install epel-release and python dependencies
   ansible.builtin.include_tasks:

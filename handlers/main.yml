@@ -168,3 +168,10 @@
   ansible.builtin.command: grub2-mkconfig
   register: update_grub2
   changed_when: update_grub2.rc == 0
+
+- name: Restart Network-Manager
+  systemd:
+    name: NetworkManager
+    state: restarted
+  when:
+    - services["NetworkManager.service"]["status"] == "enabled"

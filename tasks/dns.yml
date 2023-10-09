@@ -4,6 +4,7 @@
   become: true
   ansible.builtin.service_facts:
   tags:
+    - dns
     - resolved
     - systemd
 
@@ -13,7 +14,7 @@
     path: /etc/resolv.conf
   register: resolv_conf
   tags:
-    - resolved
+    - dns
     - resolvconf
 
 - name: Configure systemd resolved
@@ -34,9 +35,36 @@
     - resolv_conf.stat.islnk is defined and resolv_conf.stat.islnk | bool
     - resolv_conf.stat.lnk_source is defined and resolv_conf.stat.lnk_source == "/run/systemd/resolve/stub-resolv.conf"
   tags:
+    - dns
     - resolved
     - systemd
     - CCE-84049-6
+
+- name: Get stats of /etc/NetworkManager/NetworkManager.conf
+  become: true
+  ansible.builtin.stat:
+    path: /etc/NetworkManager/NetworkManager.conf
+  register: networkmanager_conf
+  tags:
+    - dns
+    - networkmanager
+
+- name: Ensure Network-Manager not modify /etc/resolv.conf
+  ini_file:
+    path: /etc/NetworkManager/NetworkManager.conf
+    section: main
+    option: dns
+    value: none
+    no_extra_spaces: yes
+  notify:
+    - "Restart Network-Manager"
+  when:
+    - dns is defined and dns | length > 0
+    - networkmanager_conf.stat.exists is defined and networkmanager_conf.stat.exists | bool
+    - network_manager_dns_none is defined and network_manager_dns_none | bool
+  tags:
+    - dns
+    - networkmanager
 
 - name: Configure /etc/resolv.conf
   when:
@@ -44,7 +72,7 @@
     - '"systemd-resolved.service" not in services or services["systemd-resolved.service"]["status"] == "disabled"'
     - resolv_conf.stat.islnk is not defined or not ( resolv_conf.stat.islnk | bool )
   tags:
-    - resolved
+    - dns
     - resolvconf
   block:
     - name: Read /etc/NetworkManager/NetworkManager.conf
@@ -52,7 +80,8 @@
       ansible.builtin.slurp:
         src: /etc/NetworkManager/NetworkManager.conf
       register: networkmanager_conf_content
-      when: '"NetworkManager.service" in services and services["NetworkManager.service"]["status"] not in ("disabled", "unknown")'
+      when:
+        - '"NetworkManager.service" in services and services["NetworkManager.service"]["status"] not in ("disabled", "unknown")'
 
     - name: Read /etc/resolv.conf
       become: true
