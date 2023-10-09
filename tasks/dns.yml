@@ -50,12 +50,13 @@
     - networkmanager
 
 - name: Ensure Network-Manager not modify /etc/resolv.conf
-  ini_file:
+  community.general.ini_file:
     path: /etc/NetworkManager/NetworkManager.conf
     section: main
     option: dns
     value: none
-    no_extra_spaces: yes
+    no_extra_spaces: true
+    create: false
   notify:
     - "Restart Network-Manager"
   when:
