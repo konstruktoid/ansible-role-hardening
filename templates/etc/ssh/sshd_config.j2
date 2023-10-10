@@ -72,7 +72,11 @@ AuthenticationMethods {{ sshd_authentication_methods }}
 {% endif %}
 PasswordAuthentication {{ 'yes' if (sshd_password_authentication | bool) else 'no' }}
 PermitEmptyPasswords {{ 'yes' if (sshd_permit_empty_passwords | bool) else 'no' }}
-ChallengeResponseAuthentication {{ 'yes' if (sshd_challenge_response_authentication | bool) else 'no' }}
+{% if ssh_installed_version is version('8.7', '>=') %}
+KbdInteractiveAuthentication {{ 'yes' if (sshd_kbd_interactive_authentication | bool) else 'no' }}
+{% else %}
+ChallengeResponseAuthentication {{ 'yes' if (sshd_kbd_interactive_authentication | bool) else 'no' }}
+{% endif %}
 KerberosAuthentication {{ 'yes' if (sshd_kerberos_authentication | bool) else 'no' }}
 GSSAPIAuthentication {{ 'yes' if (sshd_gssapi_authentication | bool) else 'no' }}
 GSSAPICleanupCredentials yes

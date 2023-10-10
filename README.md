@@ -473,7 +473,7 @@ sshd_ca_signature_algorithms:
   - rsa-sha2-256
   - rsa-sha2-512
   - ssh-rsa
-sshd_challenge_response_authentication: false
+sshd_kbd_interactive_authentication: false
 sshd_ciphers:
   - chacha20-poly1305@openssh.com
   - aes256-gcm@openssh.com

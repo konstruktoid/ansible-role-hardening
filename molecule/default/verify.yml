@@ -229,30 +229,49 @@
     - name: Set sshd_config_parameters
       ansible.builtin.set_fact:
         sshd_config_parameters:
+          - "{{ 'AcceptEnv ' + sshd_accept_env if (sshd_accept_env is defined and sshd_accept_env | length != 0)}}"
           - AddressFamily {{ 'inet' if (disable_ipv6 | bool) else 'any' }}
           - AllowGroups vagrant sudo
           - AllowAgentForwarding {{ 'yes' if (sshd_allow_agent_forwarding | bool) else 'no' }}
           - >-
-            {#- Set variable "tcp_fw" for ignore ansible-lint yaml[line-length] -#}
-            {%- set tcp_fw = sshd_allow_tcp_forwarding -%}
-            {%- if ssh_installed_version is version('6.2', '>=') -%}
-            AllowTcpForwarding {{ tcp_fw if (tcp_fw in ('yes', 'no', 'local', 'all', 'remote')) else ('yes' if (tcp_fw | bool) else 'no') }}
+            {%- if (ssh_installed_version is version('6.2', '>=')) -%}
+              {%- if (sshd_allow_tcp_forwarding in ('yes', 'no', 'local', 'all', 'remote')) -%}
+                AllowTcpForwarding {{ sshd_allow_tcp_forwarding }}
             {%- else -%}
-            AllowTcpForwarding {{ tcp_fw if (tcp_fw in ('yes', 'no')) else ('yes' if (tcp_fw | bool) else 'no') }}
+              AllowTcpForwarding {{ 'yes' if (sshd_allow_tcp_forwarding | bool) else 'no' }}
             {%- endif -%}
+            {%- else -%}
+              {%- if (sshd_allow_tcp_forwarding in ('yes', 'no')) -%}
+                AllowTcpForwarding {{ sshd_allow_tcp_forwarding }}
+            {%- else -%}
+              AllowTcpForwarding {{ 'yes' if (sshd_allow_tcp_forwarding | bool) else 'no' }}
+            {%- endif -%}
+            {%- endif -%}
+          - "{{ 'AuthenticationMethods ' + sshd_authentication_methods if (ssh_installed_version is version('6.2', '>='))}}"
           - Banner {{ sshd_banner if sshd_banner else 'none' }}
-          - ChallengeResponseAuthentication {{ 'yes' if (sshd_challenge_response_authentication | bool) else 'no' }}
+          - "{{ 'CASignatureAlgorithms ' + sshd_ca_signature_algorithms | join(',') if (not crypto_policies_config or not set_crypto_policy)}}"
+          - "{{ 'Ciphers ' + sshd_ciphers | join(',') if (not crypto_policies_config or not set_crypto_policy)}}"
           - ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
           - ClientAliveInterval {{ sshd_client_alive_interval | int }}
           - Compression {{ 'yes' if (sshd_compression | bool) else 'no' }}
+          - "{{ 'DebianBanner ' + ('yes' if (sshd_debian_banner | bool) else 'no') if (ansible_facts.os_family == 'Debian')}}"
           - GSSAPIAuthentication {{ 'yes' if (sshd_gssapi_authentication | bool) else 'no' }}
           - GSSAPICleanupCredentials yes
           - HostbasedAuthentication {{ 'yes' if (sshd_hostbased_authentication | bool) else 'no' }}
+          - "{{ 'HostKeyAlgorithms ' + sshd_host_key_algorithms | join(',') if (not crypto_policies_config or not set_crypto_policy)}}"
           - IgnoreRhosts {{ 'yes' if (sshd_ignore_rhosts | bool) else 'no' }}
           - IgnoreUserKnownHosts {{ 'yes' if (sshd_ignore_user_known_hosts | bool) else 'no' }}
+          - >-
+            {%- if ssh_installed_version is version('8.7', '>=') -%}
+              KbdInteractiveAuthentication {{ 'yes' if (sshd_kbd_interactive_authentication | bool) else 'no' }}
+            {%- else -%}
+              ChallengeResponseAuthentication {{ 'yes' if (sshd_kbd_interactive_authentication | bool) else 'no' }}
+            {%- endif -%}
           - KerberosAuthentication {{ 'yes' if (sshd_kerberos_authentication | bool) else 'no' }}
+          - "{{ 'KexAlgorithms ' + sshd_kex_algorithms | join(',') if (not crypto_policies_config or not set_crypto_policy)}}"
           - LogLevel {{ sshd_log_level }}
           - LoginGraceTime {{ sshd_login_grace_time | int }}
+          - "{{ 'MACs ' + sshd_macs | join(',') if (not crypto_policies_config or not set_crypto_policy)}}"
           - MaxAuthTries {{ sshd_max_auth_tries | int }}
           - MaxSessions {{ sshd_max_sessions | int }}
           - MaxStartups {{ sshd_max_startups }}
@@ -263,81 +282,36 @@
           - PermitUserEnvironment {{ 'yes' if (sshd_permit_user_environment | bool) else 'no' }}
           - PrintLastLog {{ 'yes' if (sshd_print_last_log | bool) else 'no' }}
           - PrintMotd {{ 'yes' if (sshd_print_motd | bool) else 'no' }}
+          - "{{ 'Protocol 2' if (ssh_installed_version is version('7.6', '<'))}}"
           - PubkeyAuthentication yes
           - RekeyLimit {{ sshd_rekey_limit }}
+          - "{{ 'RequiredRSASize ' + (sshd_required_rsa_size | string) if (ssh_installed_version is version('9.1', '>'))}}"
           - StrictModes {{ 'yes' if (sshd_strict_modes | bool) else 'no' }}
+          - "{{ 'Subsystem sftp ' + sshd_sftp_subsystem if (sshd_sftp_enabled | bool)}}"
           - SyslogFacility {{ sshd_syslog_facility }}
           - TCPKeepAlive {{ 'yes' if (sshd_tcp_keep_alive | bool) else 'no' }}
           - UseDNS {{ 'yes' if (sshd_use_dns | bool) else 'no' }}
+          - "{{ 'UseLogin no' if (ssh_installed_version is version('7.4', '<'))}}"
           - UsePAM {{ 'yes' if (sshd_use_pam | bool) else 'no' }}
+          - >-
+            {%- if ssh_installed_version is version('7.5', '<') -%}
+              {%- if sshd_use_privilege_separation in ('yes', 'no', 'sandbox') -%}
+                UsePrivilegeSeparation {{ sshd_use_privilege_separation }}
+            {%- else -%}
+              UsePrivilegeSeparation {{ 'yes' if (sshd_use_privilege_separation | bool) else 'no' }}
+            {%- endif -%}
+            {%- endif -%}
           - X11Forwarding {{ 'yes' if (sshd_x11_forwarding | bool) else 'no' }}
           - X11UseLocalhost yes
 
-    - name: Set sshd_config_parameters AcceptEnv
+    - name: Set repeating parameters and clear empty values in sshd_config_parameters
+      vars:
+        _hostkey: "{{ ['HostKey '] | product(sshd_host_keys_files) | map('join') | list }}"
+        _listenaddress: "{{ ['ListenAddress '] | product(sshd_listen) | map('join') | list }}"
+        _port: "{{ ['Port '] | product(sshd_ports) | map('join') | list }}"
       ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['AcceptEnv ' + sshd_authentication_methods] }}"
-      when: sshd_accept_env is defined and sshd_accept_env | length != 0
-
-    - name: Set sshd_config_parameters AuthenticationMethods
-      ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['AuthenticationMethods ' + sshd_authentication_methods] }}"
-      when: ssh_installed_version is version('6.2', '>=')
-
-    - name: Set sshd_config_parameters DebianBanner
-      ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['DebianBanner ' + ('yes' if (sshd_debian_banner | bool) else 'no')] }}"
-      when: ansible_facts.os_family == 'Debian'
-
-    - name: Set sshd_config_parameters HostKey
-      ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['HostKey ' + item] }}"
-      loop: "{{ sshd_host_keys_files }}"
-
-    - name: Set sshd_config_parameters ListenAddress
-      ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['ListenAddress ' + item] }}"
-      loop: "{{ sshd_listen }}"
-
-    - name: Set sshd_config_parameters Port
-      ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['Port ' + (item | string)] }}"
-      loop: "{{ sshd_ports }}"
-
-    - name: Set sshd_config_parameters Protocol
-      ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['Protocol 2'] }}"
-      when: ssh_installed_version is version('7.6', '<')
-
-    - name: Set sshd_config_parameters RequiredRSASize
-      ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['RequiredRSASize ' + (sshd_required_rsa_size | string)] }}"
-      when: ssh_installed_version is version('9.1', '>')
-
-    - name: Set sshd_config_parameters Subsystem
-      ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['Subsystem sftp ' + sshd_sftp_subsystem] }}"
-      when: sshd_sftp_enabled | bool
-
-    - name: Set sshd_config_parameters UseLogin
-      ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['UseLogin no'] }}"
-      when: ssh_installed_version is version('7.4', '<')
-
-    - name: Set sshd_config_parameters UsePrivilegeSeparation
-      ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + ['UsePrivilegeSeparation ' + sshd_use_privilege_separation if (sshd_use_privilege_separation in ('yes', 'no', 'sandbox')) else ('yes' if (sshd_use_privilege_separation | bool) else 'no')] }}"  # noqa yaml[line-length]
-      when: ssh_installed_version is version('7.5', '<')
-
-    - name: Verify sshd runtime ciphers and algorithms
-      ansible.builtin.set_fact:
-        sshd_config_parameters: "{{ sshd_config_parameters + [item] }}"
-      when: not crypto_policies_config or not set_crypto_policy
-      loop:
-        - CASignatureAlgorithms {{ sshd_ca_signature_algorithms | join(',') }}
-        - Ciphers {{ sshd_ciphers | join(',') }}
-        - HostKeyAlgorithms {{ sshd_host_key_algorithms | join(',') }}
-        - KexAlgorithms {{ sshd_kex_algorithms | join(',') }}
-        - MACs {{ sshd_macs | join(',') }}
+        sshd_config_parameters:
+          "{{ (sshd_config_parameters + _hostkey + _listenaddress + _port) | select() }}"
 
     - name: Verify sshd configuration
       become: true
