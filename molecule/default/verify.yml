@@ -667,38 +667,24 @@
 
     - name: Verify systemd resolved.conf
       become: true
-      vars:
-        resolved_parameters: >-
-          [
-            "DNS={{ dns | join(' ') }}"
-            {{ ', "FallbackDNS=' + fallback_dns | join(' ') + '"' if fallback_dns }}
-            {{ ', "DNSSEC=' + dnssec + '"' if dnssec }}
-            {{ ', "DNSOverTLS=' + dns_over_tls + '"' if dns_over_tls }}
-          ]
       ansible.builtin.shell: grep "^{{ item }}$" /etc/systemd/resolved.conf
       register: systemd_resolved_conf
       failed_when: systemd_resolved_conf.rc != 0
       changed_when: systemd_resolved_conf.rc != 0
-      loop: "{{ resolved_parameters }}"
+      loop:
+        - DNS={{ dns | join(' ') }}
+        - FallbackDNS={{ fallback_dns | join(' ') }}
+        - DNSSEC={{ dnssec }}
+        - DNSOverTLS={{ dns_over_tls }}
       when: ansible_os_family != "RedHat"
 
     - name: Verify resolv.conf
       become: true
-      vars:
-        resolv_parameters: >-
-          [
-            {% for nameserver in dns %}
-              {% if not loop.first %}
-                ,
-              {% endif %}
-              '"nameserver {{ nameserver }}"'
-            {% endfor %}
-          ]
       ansible.builtin.shell: grep "^{{ item }}$" /etc/resolv.conf
       register: resolv_conf
       failed_when: resolv_conf.rc != 0
       changed_when: resolv_conf.rc != 0
-      loop: "{{ resolv_parameters }}"
+      loop: "{{ ['nameserver '] | product(dns) | map('join') | list }}"
       when:
         - ansible_os_family == "RedHat"
 
