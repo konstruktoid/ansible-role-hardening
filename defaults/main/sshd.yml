@@ -90,7 +90,7 @@ sshd_sftp_enabled: true
 sshd_sftp_only_chroot: true
 sshd_sftp_only_chroot_dir: '%h'
 sshd_sftp_only_group: ''
-sshd_sftp_subsystem: internal-sftp -f LOCAL6 -l INFO -u 0027
+sshd_sftp_subsystem: internal-sftp -f LOCAL6 -l INFO
 sshd_strict_modes: true
 sshd_syslog_facility: AUTH
 sshd_tcp_keep_alive: false

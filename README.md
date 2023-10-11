@@ -544,7 +544,7 @@ sshd_sftp_enabled: true
 sshd_sftp_only_chroot: true
 sshd_sftp_only_chroot_dir: '%h'
 sshd_sftp_only_group: ''
-sshd_sftp_subsystem: internal-sftp -f LOCAL6 -l INFO -u 0027
+sshd_sftp_subsystem: internal-sftp -f LOCAL6 -l INFO
 sshd_strict_modes: true
 sshd_syslog_facility: AUTH
 sshd_tcp_keep_alive: false
@@ -660,7 +660,7 @@ sshd_match_ports:
 `sshd_print_pam_motd` specifies whether printing of the MOTD via pam (Debian and Ubuntu). Default: `false`.
 
 `sshd_sftp_enabled` specifies whether enabled sftp configuration. Default: `true`.
-`sshd_sftp_subsystem` Set external subsystem for file  transfer  daemon. Default: `internal-sftp -f LOCAL6 -l INFO -u 0027`.
+`sshd_sftp_subsystem` Set external subsystem for file  transfer  daemon. Default: `internal-sftp -f LOCAL6 -l INFO`.
 `sshd_sftp_only_group` specifies the name of the group that will have access restricted to the sftp service only. Default: `""`.
 `sshd_sftp_only_chroot` specifies group access will be via chroot isolation. Default: `true`.
 `sshd_sftp_only_chroot_dir` specifies the chroot directory. Accepts the tokens `%%` (a literal `%`), `%h` (home directory of the user), and `%u` (username). Default: `"%h"`.
