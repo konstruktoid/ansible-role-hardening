@@ -23,7 +23,6 @@ Vagrant.configure("2") do |config|
         "sshd_admin_net" => "0.0.0.0/0",
         "sshd_allow_groups" => "vagrant sudo debian ubuntu",
         "system_upgrade" => "no",
-        "install_aide" => "false"
      }
     end
   end
@@ -43,7 +42,6 @@ Vagrant.configure("2") do |config|
         "sshd_admin_net" => "0.0.0.0/0",
         "sshd_allow_groups" => "vagrant sudo ubuntu",
         "ansible_python_interpreter" => "/usr/bin/python3",
-        "install_aide" => "false"
       }
      end
    end
@@ -63,7 +61,6 @@ Vagrant.configure("2") do |config|
         "sshd_admin_net" => "0.0.0.0/0",
         "sshd_allow_groups" => "vagrant sudo ubuntu",
         "ansible_python_interpreter" => "/usr/bin/python3",
-        "install_aide" => "false"
       }
      end
    end
@@ -86,7 +83,6 @@ Vagrant.configure("2") do |config|
         "sshd_admin_net" => "0.0.0.0/0",
         "sshd_allow_groups" => "vagrant sudo",
         "ansible_python_interpreter" => "/usr/bin/python3",
-        "install_aide" => "false"
       }
     end
   end
