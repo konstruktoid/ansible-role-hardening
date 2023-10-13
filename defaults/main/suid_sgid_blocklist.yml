@@ -64,6 +64,7 @@ suid_sgid_blocklist:
   - chown
   - chroot
   - chsh
+  - clamscan
   - cmp
   - cobc
   - column
@@ -338,6 +339,7 @@ suid_sgid_blocklist:
   - tdbtool
   - tee
   - telnet
+  - terraform
   - tex
   - tftp
   - tic
@@ -357,6 +359,7 @@ suid_sgid_blocklist:
   - unexpand
   - uniq
   - unshare
+  - unsquashfs
   - unzip
   - update-alternatives
   - uudecode
@@ -382,6 +385,7 @@ suid_sgid_blocklist:
   - wish
   - write
   - xargs
+  - xdg-user-dir
   - xdotool
   - xelatex
   - xetex
