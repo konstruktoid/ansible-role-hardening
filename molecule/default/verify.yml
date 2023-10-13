@@ -337,6 +337,43 @@
       loop: "{{ sshd_config_parameters }}"
       when: sshd_config_directory.stat.exists
 
+    - name: Set parameters for runtime check
+      ansible.builtin.set_fact:
+        sshd_config_parameters_runtime: >-
+          {{
+            sshd_config_parameters_runtime | default([]) +
+            [(item.split(' ')[0] | lower) + ' ' + (item.split(' ')[1:] | join(' '))]
+          }}
+      loop: "{{ sshd_config_parameters }}"
+
+    - name: Set multiple parameters in runtime checking
+      ansible.builtin.set_fact:
+        sshd_config_parameters_runtime: >-
+          {{
+            ( sshd_config_parameters_runtime | reject('regex', '^' + item + ' ') | list ) +
+            ( [item + ' '] |
+              product( sshd_config_parameters_runtime |
+                       select('match', '^' + item + ' ') |
+                       map('split', ' ', 1) |
+                       map('last') |
+                       map('split', ' ') |
+                       unique |
+                       flatten ) |
+              map('join') | list )
+          }}
+      loop:
+        - allowgroups
+        - acceptenv
+
+    - name: Ignore parameters for runtime check
+      ansible.builtin.set_fact:
+        sshd_config_parameters_runtime: "{{ (sshd_config_parameters_runtime | reject('regex', '^' + item + ' ') | list) }}"
+      loop:
+        # rekeylimit: runtime returns values only in bytes and seconds, having to treat these values would be a lot of work.
+        - rekeylimit
+        # listenaddress: runtime returns values addresses and ports(Ex: 0.0.0.0:22), ports is optional and can have multiple values.
+        - listenaddress
+
     - name: Verify sshd runtime configuration
       become: true
       environment:
@@ -345,10 +382,8 @@
       check_mode: false
       register: sshd_config
       changed_when: false
-      failed_when: >-
-        {%- set lower_parameter = item.split( )[0] | lower -%}
-        {{ ( item | regex_replace('^[^\ ]+', lower_parameter) ) not in sshd_config.stdout_lines }}
-      loop: "{{ (sshd_config_parameters | reject('regex', 'Allowgroups ') | list) + ['allowgroups vagrant', 'allowgroups sudo'] }}"
+      failed_when: item not in sshd_config.stdout_lines
+      loop: "{{ sshd_config_parameters_runtime }}"
 
     - name: Verify ssh client configuration
       become: true
