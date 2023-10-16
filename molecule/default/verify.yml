@@ -369,10 +369,12 @@
       ansible.builtin.set_fact:
         sshd_config_parameters_runtime: "{{ (sshd_config_parameters_runtime | reject('regex', '^' + item + ' ') | list) }}"
       loop:
-        # rekeylimit: runtime returns values only in bytes and seconds, having to treat these values would be a lot of work.
-        - rekeylimit
+        # debianbanner: not show in runtime.
+        - debianbanner
         # listenaddress: runtime returns values addresses and ports(Ex: 0.0.0.0:22), ports is optional and can have multiple values.
         - listenaddress
+        # rekeylimit: runtime returns values only in bytes and seconds, having to treat these values would be a lot of work.
+        - rekeylimit
 
     - name: Verify sshd runtime configuration
       become: true
