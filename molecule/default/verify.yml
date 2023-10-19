@@ -62,6 +62,7 @@
         cmd: ssh -V
       changed_when: false
       failed_when: false
+      check_mode: false
       register: ssh_version
       tags:
         - sshd
@@ -225,148 +226,166 @@
       failed_when: sshd_config_d is changed
       when: sshd_config_directory.stat.exists
 
+    - name: Set sshd_config_parameters
+      ansible.builtin.set_fact:
+        sshd_config_parameters:
+          - "{{ 'AcceptEnv ' + sshd_accept_env if (sshd_accept_env is defined and sshd_accept_env | length != 0)}}"
+          - AddressFamily {{ 'inet' if (disable_ipv6 | bool) else 'any' }}
+          - AllowGroups vagrant sudo
+          - AllowAgentForwarding {{ 'yes' if (sshd_allow_agent_forwarding | bool) else 'no' }}
+          - >-
+            {%- if (ssh_installed_version is version('6.2', '>=')) -%}
+              {%- if (sshd_allow_tcp_forwarding in ('yes', 'no', 'local', 'all', 'remote')) -%}
+                AllowTcpForwarding {{ sshd_allow_tcp_forwarding }}
+            {%- else -%}
+              AllowTcpForwarding {{ 'yes' if (sshd_allow_tcp_forwarding | bool) else 'no' }}
+            {%- endif -%}
+            {%- else -%}
+              {%- if (sshd_allow_tcp_forwarding in ('yes', 'no')) -%}
+                AllowTcpForwarding {{ sshd_allow_tcp_forwarding }}
+            {%- else -%}
+              AllowTcpForwarding {{ 'yes' if (sshd_allow_tcp_forwarding | bool) else 'no' }}
+            {%- endif -%}
+            {%- endif -%}
+          - "{{ 'AuthenticationMethods ' + sshd_authentication_methods if (ssh_installed_version is version('6.2', '>='))}}"
+          - Banner {{ sshd_banner if sshd_banner else 'none' }}
+          - "{{ 'CASignatureAlgorithms ' + sshd_ca_signature_algorithms | join(',') if (not crypto_policies_config or not set_crypto_policy)}}"
+          - "{{ 'Ciphers ' + sshd_ciphers | join(',') if (not crypto_policies_config or not set_crypto_policy)}}"
+          - ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
+          - ClientAliveInterval {{ sshd_client_alive_interval | int }}
+          - Compression {{ 'yes' if (sshd_compression | bool) else 'no' }}
+          - "{{ 'DebianBanner ' + ('yes' if (sshd_debian_banner | bool) else 'no') if (ansible_facts.os_family == 'Debian')}}"
+          - GSSAPIAuthentication {{ 'yes' if (sshd_gssapi_authentication | bool) else 'no' }}
+          - GSSAPICleanupCredentials yes
+          - HostbasedAuthentication {{ 'yes' if (sshd_hostbased_authentication | bool) else 'no' }}
+          - "{{ 'HostKeyAlgorithms ' + sshd_host_key_algorithms | join(',') if (not crypto_policies_config or not set_crypto_policy)}}"
+          - IgnoreRhosts {{ 'yes' if (sshd_ignore_rhosts | bool) else 'no' }}
+          - IgnoreUserKnownHosts {{ 'yes' if (sshd_ignore_user_known_hosts | bool) else 'no' }}
+          - >-
+            {%- if ssh_installed_version is version('8.7', '>=') -%}
+              KbdInteractiveAuthentication {{ 'yes' if (sshd_kbd_interactive_authentication | bool) else 'no' }}
+            {%- else -%}
+              ChallengeResponseAuthentication {{ 'yes' if (sshd_kbd_interactive_authentication | bool) else 'no' }}
+            {%- endif -%}
+          - KerberosAuthentication {{ 'yes' if (sshd_kerberos_authentication | bool) else 'no' }}
+          - "{{ 'KexAlgorithms ' + sshd_kex_algorithms | join(',') if (not crypto_policies_config or not set_crypto_policy)}}"
+          - LogLevel {{ sshd_log_level }}
+          - LoginGraceTime {{ sshd_login_grace_time | int }}
+          - "{{ 'MACs ' + sshd_macs | join(',') if (not crypto_policies_config or not set_crypto_policy)}}"
+          - MaxAuthTries {{ sshd_max_auth_tries | int }}
+          - MaxSessions {{ sshd_max_sessions | int }}
+          - MaxStartups {{ sshd_max_startups }}
+          - PasswordAuthentication {{ 'yes' if (sshd_password_authentication | bool) else 'no' }}
+          - PermitEmptyPasswords {{ 'yes' if (sshd_permit_empty_passwords | bool) else 'no' }}
+          - PermitRootLogin {{ 'yes' if (sshd_permit_root_login | bool) else 'no' }}
+          - PermitTunnel {{ 'yes' if (sshd_permit_tunnel | bool) else 'no' }}
+          - PermitUserEnvironment {{ 'yes' if (sshd_permit_user_environment | bool) else 'no' }}
+          - PrintLastLog {{ 'yes' if (sshd_print_last_log | bool) else 'no' }}
+          - PrintMotd {{ 'yes' if (sshd_print_motd | bool) else 'no' }}
+          - "{{ 'Protocol 2' if (ssh_installed_version is version('7.6', '<'))}}"
+          - PubkeyAuthentication yes
+          - RekeyLimit {{ sshd_rekey_limit }}
+          - "{{ 'RequiredRSASize ' + (sshd_required_rsa_size | string) if (ssh_installed_version is version('9.1', '>'))}}"
+          - StrictModes {{ 'yes' if (sshd_strict_modes | bool) else 'no' }}
+          - "{{ 'Subsystem sftp ' + sshd_sftp_subsystem if (sshd_sftp_enabled | bool)}}"
+          - SyslogFacility {{ sshd_syslog_facility }}
+          - TCPKeepAlive {{ 'yes' if (sshd_tcp_keep_alive | bool) else 'no' }}
+          - UseDNS {{ 'yes' if (sshd_use_dns | bool) else 'no' }}
+          - "{{ 'UseLogin no' if (ssh_installed_version is version('7.4', '<'))}}"
+          - UsePAM {{ 'yes' if (sshd_use_pam | bool) else 'no' }}
+          - >-
+            {%- if ssh_installed_version is version('7.5', '<') -%}
+              {%- if sshd_use_privilege_separation in ('yes', 'no', 'sandbox') -%}
+                UsePrivilegeSeparation {{ sshd_use_privilege_separation }}
+            {%- else -%}
+              UsePrivilegeSeparation {{ 'yes' if (sshd_use_privilege_separation | bool) else 'no' }}
+            {%- endif -%}
+            {%- endif -%}
+          - X11Forwarding {{ 'yes' if (sshd_x11_forwarding | bool) else 'no' }}
+          - X11UseLocalhost yes
+
+    - name: Set repeating parameters and clear empty values in sshd_config_parameters
+      vars:
+        _hostkey: "{{ ['HostKey '] | product(sshd_host_keys_files) | map('join') | list }}"
+        _listenaddress: "{{ ['ListenAddress '] | product(sshd_listen) | map('join') | list }}"
+        _port: "{{ ['Port '] | product(sshd_ports) | map('join') | list }}"
+      ansible.builtin.set_fact:
+        sshd_config_parameters:
+          "{{ (sshd_config_parameters + _hostkey + _listenaddress + _port) | select() }}"
+
     - name: Verify sshd configuration
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config
-        line: "{{ item | replace(', ', ',') }}"
+        line: "{{ item }}"
         state: present
       check_mode: true
       register: sshd_config
       failed_when: sshd_config is changed
-      with_items:
-        - AllowGroups vagrant sudo
-        - AllowAgentForwarding {{ sshd_allow_agent_forwarding }}
-        - AllowTcpForwarding {{ sshd_allow_tcp_forwarding }}
-        - AuthenticationMethods {{ sshd_authentication_methods }}
-        - Banner {{ sshd_banner }}
-        - ChallengeResponseAuthentication {{ sshd_challenge_response_authentication }}
-        - ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
-        - ClientAliveInterval {{ sshd_client_alive_interval | int }}
-        - Compression {{ sshd_compression }}
-        - GSSAPIAuthentication {{ sshd_gssapi_authentication }}
-        - HostbasedAuthentication {{ sshd_hostbased_authentication }}
-        - IgnoreUserKnownHosts {{ sshd_ignore_user_known_hosts }}
-        - KerberosAuthentication {{ sshd_kerberos_authentication }}
-        - LogLevel {{ sshd_log_level }}
-        - LoginGraceTime {{ sshd_login_grace_time | int }}
-        - MaxAuthTries {{ sshd_max_auth_tries | int }}
-        - MaxSessions {{ sshd_max_sessions | int }}
-        - MaxStartups {{ sshd_max_startups }}
-        - PasswordAuthentication {{ sshd_password_authentication }}
-        - PermitEmptyPasswords {{ sshd_permit_empty_passwords }}
-        - PermitRootLogin {{ sshd_permit_root_login }}
-        - PermitUserEnvironment {{ sshd_permit_user_environment }}
-        - Port {{ sshd_port | int }}
-        - PrintLastLog {{ sshd_print_last_log }}
-        - PrintMotd {{ sshd_print_motd }}
-        - RekeyLimit {{ sshd_rekey_limit }}
-        - StrictModes {{ sshd_strict_modes }}
-        - TCPKeepAlive {{ sshd_tcp_keep_alive }}
-        - UseDNS {{ sshd_use_dns }}
-        - UsePAM {{ sshd_use_pam }}
-        - X11Forwarding {{ sshd_x11_forwarding }}
+      loop: "{{ sshd_config_parameters }}"
       when: not sshd_config_directory.stat.exists
 
     - name: Verify sshd config.d configuration
       become: true
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config.d/01-hardening.conf
-        line: "{{ item | replace(', ', ',') }}"
+        line: "{{ item }}"
         state: present
       check_mode: true
       register: sshd_config
       failed_when: sshd_config is changed
-      with_items:
-        - AllowGroups vagrant sudo
-        - AllowAgentForwarding {{ sshd_allow_agent_forwarding }}
-        - AllowTcpForwarding {{ sshd_allow_tcp_forwarding }}
-        - AuthenticationMethods {{ sshd_authentication_methods }}
-        - Banner {{ sshd_banner }}
-        - ChallengeResponseAuthentication {{ sshd_challenge_response_authentication }}
-        - ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
-        - ClientAliveInterval {{ sshd_client_alive_interval | int }}
-        - Compression {{ sshd_compression }}
-        - GSSAPIAuthentication {{ sshd_gssapi_authentication }}
-        - HostbasedAuthentication {{ sshd_hostbased_authentication }}
-        - IgnoreUserKnownHosts {{ sshd_ignore_user_known_hosts }}
-        - KerberosAuthentication {{ sshd_kerberos_authentication }}
-        - LogLevel {{ sshd_log_level }}
-        - LoginGraceTime {{ sshd_login_grace_time | int }}
-        - MaxAuthTries {{ sshd_max_auth_tries | int }}
-        - MaxSessions {{ sshd_max_sessions | int }}
-        - MaxStartups {{ sshd_max_startups }}
-        - PasswordAuthentication {{ sshd_password_authentication }}
-        - PermitEmptyPasswords {{ sshd_permit_empty_passwords }}
-        - PermitRootLogin {{ sshd_permit_root_login }}
-        - PermitUserEnvironment {{ sshd_permit_user_environment }}
-        - Port {{ sshd_port | int }}
-        - PrintLastLog {{ sshd_print_last_log }}
-        - PrintMotd {{ sshd_print_motd }}
-        - RekeyLimit {{ sshd_rekey_limit }}
-        - StrictModes {{ sshd_strict_modes }}
-        - Subsystem {{ sshd_subsystem }}
-        - TCPKeepAlive {{ sshd_tcp_keep_alive }}
-        - UseDNS {{ sshd_use_dns }}
-        - UsePAM {{ sshd_use_pam }}
-        - X11Forwarding {{ sshd_x11_forwarding }}
+      loop: "{{ sshd_config_parameters }}"
       when: sshd_config_directory.stat.exists
+
+    - name: Set parameters for runtime check
+      ansible.builtin.set_fact:
+        sshd_config_parameters_runtime: >-
+          {{
+            sshd_config_parameters_runtime | default([]) +
+            [(item.split(' ')[0] | lower) + ' ' + (item.split(' ')[1:] | join(' '))]
+          }}
+      loop: "{{ sshd_config_parameters }}"
+
+    - name: Set multiple parameters in runtime checking
+      ansible.builtin.set_fact:
+        sshd_config_parameters_runtime: >-
+          {{
+            ( sshd_config_parameters_runtime | reject('regex', '^' + item + ' ') | list ) +
+            ( [item + ' '] |
+              product( sshd_config_parameters_runtime |
+                       select('match', '^' + item + ' ') |
+                       map('split', ' ', 1) |
+                       map('last') |
+                       map('split', ' ') |
+                       unique |
+                       flatten ) |
+              map('join') | list )
+          }}
+      loop:
+        - allowgroups
+        - acceptenv
+
+    - name: Ignore parameters for runtime check
+      ansible.builtin.set_fact:
+        sshd_config_parameters_runtime: "{{ (sshd_config_parameters_runtime | reject('regex', '^' + item + ' ') | list) }}"
+      loop:
+        # debianbanner: not show in runtime.
+        - debianbanner
+        # listenaddress: runtime returns values addresses and ports(Ex: 0.0.0.0:22), ports is optional and can have multiple values.
+        - listenaddress
+        # rekeylimit: runtime returns values only in bytes and seconds, having to treat these values would be a lot of work.
+        - rekeylimit
 
     - name: Verify sshd runtime configuration
       become: true
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       ansible.builtin.command: sshd -T
+      check_mode: false
       register: sshd_config
       changed_when: false
       failed_when: item not in sshd_config.stdout_lines
-      with_items:
-        - allowgroups sudo
-        - allowgroups vagrant
-        - allowagentforwarding {{ sshd_allow_agent_forwarding }}
-        - allowtcpforwarding {{ sshd_allow_tcp_forwarding }}
-        - authenticationmethods {{ sshd_authentication_methods }}
-        - banner {{ sshd_banner }}
-        - clientalivecountmax {{ sshd_client_alive_count_max | int }}
-        - clientaliveinterval {{ sshd_client_alive_interval | int }}
-        - compression {{ sshd_compression }}
-        - logingracetime {{ sshd_login_grace_time | int }}
-        - maxauthtries {{ sshd_max_auth_tries | int }}
-        - maxsessions {{ sshd_max_sessions | int }}
-        - maxstartups {{ sshd_max_startups }}
-        - permitrootlogin {{ sshd_permit_root_login }}
-        - port {{ sshd_port | int }}
-        - subsystem {{ sshd_subsystem }}
-        - usedns {{ sshd_use_dns }}
-        - usepam {{ sshd_use_pam }}
-        - x11forwarding {{ sshd_x11_forwarding }}
-
-    - name: Verify sshd runtime ciphers and algorithms
-      become: true
-      environment:
-        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      ansible.builtin.command: sshd -T
-      register: sshd_algo_runtime
-      changed_when: false
-      failed_when: item not in sshd_algo_runtime.stdout_lines
-      when: not crypto_policies_config or not set_crypto_policy
-      with_items:
-        - casignaturealgorithms {{ sshd_ca_signature_algorithms | replace(', ', ',') }}
-        - ciphers {{ sshd_ciphers | replace(', ', ',') }}
-        - hostkeyalgorithms {{ sshd_host_key_algorithms | replace(', ', ',') }}
-        - kexalgorithms {{ sshd_kex_algorithms | replace(', ', ',') }}
-        - macs {{ sshd_macs | replace(', ', ',') }}
-
-    - name: Verify sshd RequiredRSASize
-      become: true
-      ansible.builtin.lineinfile:
-        dest: /etc/ssh/sshd_config.d/01-hardening.conf
-        line: RequiredRSASize {{ sshd_required_rsa_size }}
-        state: present
-      check_mode: true
-      register: sshd_config_rsasize
-      failed_when: sshd_config_rsasize is changed
-      when: sshd_config_directory.stat.exists and ssh_installed_version is version('9.1', '>')
+      loop: "{{ sshd_config_parameters_runtime }}"
 
     - name: Verify ssh client configuration
       become: true
@@ -377,8 +396,8 @@
       check_mode: true
       register: ssh_config
       failed_when: ssh_config is changed
-      with_items:
-        - GSSAPIAuthentication {{ sshd_gssapi_authentication }}
+      loop:
+        - GSSAPIAuthentication {{ 'yes' if (sshd_gssapi_authentication | bool) else 'no' }}
         - HashKnownHosts yes
         - RekeyLimit {{ sshd_rekey_limit }}
 

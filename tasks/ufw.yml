@@ -118,12 +118,11 @@
   become: true
   community.general.ufw:
     rule: limit
-    src: "{{ item }}"
-    port: "{{ sshd_port | int }}"
+    src: "{{ item.0 }}"
+    port: "{{ item.1 | int }}"
     proto: tcp
     comment: ansible managed
-  with_items:
-    - "{{ sshd_admin_net }}"
+  loop: "{{ sshd_admin_net | product(sshd_ports) | list }}"
   tags:
     - ufw
     - M1037
@@ -135,8 +134,7 @@
     port: "{{ item | int }}"
     direction: out
     comment: ansible managed
-  with_items:
-    - "{{ ufw_outgoing_traffic }}"
+  loop: "{{ ufw_outgoing_traffic }}"
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.5
@@ -198,8 +196,7 @@
   changed_when: ufw_delete.rc != 0
   failed_when: ufw_delete.rc != 0
   when: ufw_not_managed.stdout_lines | length > 0 and not ansible_os_family == "RedHat"
-  with_items:
-    - "{{ ufw_not_managed.stdout_lines }}"
+  loop: "{{ ufw_not_managed.stdout_lines }}"
   tags:
     - ufw
     - D3-OTF

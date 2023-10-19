@@ -91,7 +91,7 @@ disruption, the role deletes every `ufw` rule without
 
 The role also sets default deny policies, which means that firewall rules
 needs to be created for any additional ports except those specified in
-the `sshd_port` and `ufw_outgoing_traffic` variables.
+the `sshd_ports` and `ufw_outgoing_traffic` variables.
 
 ## Task Execution and Structure
 
@@ -458,75 +458,101 @@ sshd_accept_env: LANG LC_*
 sshd_admin_net:
   - 192.168.0.0/24
   - 192.168.1.0/24
-sshd_allow_agent_forwarding: "no"
-sshd_allow_groups: sudo
-sshd_allow_users: "{{ ansible_user | default(lookup('ansible.builtin.env', 'USER')) }}"
-sshd_allow_tcp_forwarding: "no"
+sshd_allow_agent_forwarding: false
+sshd_allow_groups:
+  - sudo
+sshd_allow_tcp_forwarding: false
+sshd_allow_users:
+  - {{ ansible_user | default(lookup('ansible.builtin.env', 'USER')) }}
 sshd_authentication_methods: any
 sshd_banner: /etc/issue.net
-sshd_ca_signature_algorithms: >-
-  ecdsa-sha2-nistp256,
-  ecdsa-sha2-nistp384,
-  ecdsa-sha2-nistp521,
-  ssh-ed25519,
-  rsa-sha2-256,
-  rsa-sha2-512,
-  ssh-rsa
-sshd_challenge_response_authentication: "no"
-sshd_ciphers: >-
-  chacha20-poly1305@openssh.com,
-  aes256-gcm@openssh.com,
-  aes256-ctr
+sshd_ca_signature_algorithms:
+  - ecdsa-sha2-nistp256
+  - ecdsa-sha2-nistp384
+  - ecdsa-sha2-nistp521
+  - ssh-ed25519
+  - rsa-sha2-256
+  - rsa-sha2-512
+  - ssh-rsa
+sshd_kbd_interactive_authentication: false
+sshd_ciphers:
+  - chacha20-poly1305@openssh.com
+  - aes256-gcm@openssh.com
+  - aes256-ctr
 sshd_client_alive_count_max: 1
 sshd_client_alive_interval: 200
-sshd_compression: "no"
-sshd_gssapi_authentication: "no"
-sshd_hostbased_authentication: "no"
-sshd_host_key_algorithms: >-
-  ssh-ed25519-cert-v01@openssh.com,
-  ssh-rsa-cert-v01@openssh.com,
-  ssh-ed25519,
-  ssh-rsa,
-  ecdsa-sha2-nistp521-cert-v01@openssh.com,
-  ecdsa-sha2-nistp384-cert-v01@openssh.com,
-  ecdsa-sha2-nistp256-cert-v01@openssh.com,
-  ecdsa-sha2-nistp521,
-  ecdsa-sha2-nistp384,
-  ecdsa-sha2-nistp256
-sshd_ignore_rhosts: "yes"
-sshd_ignore_user_known_hosts: "yes"
-sshd_kerberos_authentication: "no"
-sshd_kex_algorithms: >-
-  curve25519-sha256@libssh.org,
-  ecdh-sha2-nistp521,
-  ecdh-sha2-nistp384,
-  ecdh-sha2-nistp256,
-  diffie-hellman-group-exchange-sha256
-sshd_login_grace_time: 20
+sshd_compression: false
+sshd_config_d_force_clear: false
+sshd_config_force_replace: false
+sshd_debian_banner: false
+sshd_deny_groups: []
+sshd_deny_users: []
+sshd_gssapi_authentication: false
+sshd_host_key_algorithms:
+  - ssh-ed25519-cert-v01@openssh.com
+  - ssh-rsa-cert-v01@openssh.com
+  - ssh-ed25519
+  - ssh-rsa
+  - ecdsa-sha2-nistp521-cert-v01@openssh.com
+  - ecdsa-sha2-nistp384-cert-v01@openssh.com
+  - ecdsa-sha2-nistp256-cert-v01@openssh.com
+  - ecdsa-sha2-nistp521
+  - ecdsa-sha2-nistp384
+  - ecdsa-sha2-nistp256
+sshd_host_keys_files: []
+sshd_host_keys_group: root
+sshd_host_keys_mode: "0600"
+sshd_host_keys_owner: root
+sshd_hostbased_authentication: false
+sshd_ignore_rhosts: true
+sshd_ignore_user_known_hosts: true
+sshd_kerberos_authentication: false
+sshd_kex_algorithms:
+  - curve25519-sha256@libssh.org
+  - ecdh-sha2-nistp521
+  - ecdh-sha2-nistp384
+  - ecdh-sha2-nistp256
+  - diffie-hellman-group-exchange-sha256
+sshd_listen:
+  - 0.0.0.0
 sshd_log_level: VERBOSE
-sshd_macs: >-
-  hmac-sha2-512-etm@openssh.com,
-  hmac-sha2-256-etm@openssh.com,
-  hmac-sha2-512,
-  hmac-sha2-256
+sshd_login_grace_time: 20
+sshd_macs:
+  - hmac-sha2-512-etm@openssh.com
+  - hmac-sha2-256-etm@openssh.com
+  - hmac-sha2-512
+  - hmac-sha2-256
+sshd_match_addresses: {}
+sshd_match_groups: {}
+sshd_match_local_ports: {}
+sshd_match_users: {}
 sshd_max_auth_tries: 3
 sshd_max_sessions: 3
-sshd_max_startups: 10:30:60
-sshd_password_authentication: "no"
-sshd_permit_empty_passwords: "no"
-sshd_permit_root_login: "no"
-sshd_permit_user_environment: "no"
-sshd_port: 22
-sshd_print_last_log: "yes"
-sshd_print_motd: "no"
+sshd_max_startups: '10:30:60'
+sshd_password_authentication: false
+sshd_permit_empty_passwords: false
+sshd_permit_root_login: false
+sshd_permit_tunnel: false
+sshd_permit_user_environment: false
+sshd_ports:
+  - 22
+sshd_print_last_log: true
+sshd_print_motd: false
+sshd_print_pam_motd: false
 sshd_rekey_limit: 512M 1h
 sshd_required_rsa_size: 2048
-sshd_strict_modes: "yes"
-sshd_subsystem: sftp internal-sftp
-sshd_tcp_keep_alive: "no"
-sshd_use_dns: "no"
-sshd_use_pam: "yes"
-sshd_x11_forwarding: "no"
+sshd_sftp_enabled: true
+sshd_sftp_only_chroot: true
+sshd_sftp_only_chroot_dir: '%h'
+sshd_sftp_only_group: ''
+sshd_sftp_subsystem: internal-sftp -f LOCAL6 -l INFO
+sshd_strict_modes: true
+sshd_syslog_facility: AUTH
+sshd_tcp_keep_alive: false
+sshd_use_dns: false
+sshd_use_pam: true
+sshd_use_privilege_separation: sandbox
+sshd_x11_forwarding: false
 ```
 
 > **Note**
@@ -538,39 +564,109 @@ sshd_x11_forwarding: "no"
 For a explanation of the options not described below, please read
 [https://man.openbsd.org/sshd_config](https://man.openbsd.org/sshd_config).
 
-Only the network(s) defined in `sshd_admin_net` are allowed to
-connect to `sshd_port`. Note that additional rules need to be set up in order
-to allow access to additional services.
+Only the network(s) defined in `sshd_admin_net` are allowed to connect to `sshd_ports`. Note that additional rules need to be set up in order to allow access to additional services.
 
-OpenSSH login is allowed only for users whose primary group or supplementary
-group list matches one of the patterns in `sshd_allow_groups`.
-OpenSSH login is also allowed for users in `sshd_allow_users`.
+OpenSSH login is allowed only for users whose primary group or supplementary group list matches one of the patterns in `sshd_allow_groups`. OpenSSH login is also allowed for users in `sshd_allow_users`. To do the opposite and deny access, use the `sshd_deny_groups` and `sshd_deny_users` parameters, which in turn have priority over the previous parameters.
 
-`sshd_allow_agent_forwarding` specifies whether ssh-agent(1) forwarding is
-permitted.
+`sshd_allow_agent_forwarding` specifies whether ssh-agent(1) forwarding is permitted.
 
-`sshd_allow_tcp_forwarding` specifies whether TCP forwarding is permitted.
-The available options are `yes` or all to allow TCP forwarding, `no` to prevent
-all TCP forwarding, `local` to allow local (from the perspective of ssh(1))
-forwarding only or `remote` to allow remote forwarding only.
+`sshd_allow_tcp_forwarding` specifies whether TCP forwarding is permitted. The available options are `true|yes` or all to allow TCP forwarding, `false|no` to prevent all TCP forwarding, `local` to allow local (from the perspective of ssh(1)) forwarding only or `remote` to allow remote forwarding only.
 
-`sshd_authentication_methods` specifies the authentication methods that must
-be successfully completed in order to grant access to a user.
+`sshd_authentication_methods` specifies the authentication methods that must be successfully completed in order to grant access to a user.
 
 `sshd_log_level` gives the verbosity level that is used when logging messages.
 
-`sshd_max_auth_tries` and `sshd_max_sessions` specifies the maximum number of
-SSH authentication attempts permitted per connection and the maximum number of
-open shell, login or subsystem (e.g. sftp) sessions permitted per network
+`sshd_max_auth_tries` and `sshd_max_sessions` specifies the maximum number of SSH authentication attempts permitted per connection and the maximum number of open shell, login or subsystem (e.g. sftp) sessions permitted per network
 connection.
 
-`sshd_password_authentication` specifies whether password authentication is
-allowed.
+`sshd_password_authentication` specifies whether password authentication is allowed.
 
-`sshd_port` specifies the port number that sshd(8) listens on.
+`sshd_ports` specifies the port(s) number that sshd(8) listens on.
 
-`sshd_required_rsa_size`, RequiredRSASize, will only be set if SSH version is
-higher than 9.1.
+`sshd_required_rsa_size`, RequiredRSASize, will only be set if SSH version is higher than 9.1.
+
+`sshd_config_d_force_clear` force clear directory `/etc/ssh/sshd_config.d`. Default: `false`.
+
+`sshd_config_force_replace` force replace configuration file `/etc/ssh/sshd_config`. Default: `false`.
+
+> **Note**
+>
+> By default, the role checks whether the directory `/etc/ssh/sshd_config.d` exists and whether it is linked via the `Include` parameter in the `/etc/ssh/sshd_config` file, if so, an additional configuration file is created in `/ etc/ssh/sshd_config.d`, if not, the `/etc/ssh/sshd_config` file is overwritten.
+
+> **Warning**
+>
+> If any `sshd_match_(users|groups|addresses|local_ports)` or `sshd_sftp_only_group` parameters is set, the value `true` will be implicit.
+
+`sshd_host_keys_files` host keys for sshd. If empty `['/etc/ssh/ssh_host_rsa_key', '/etc/ssh/ssh_host_ecdsa_key', '/etc/ssh/ssh_host_ed25519_key']` will be used, as far as supported by the installed sshd version.
+
+`sshd_host_keys_owner` set owner of host keys for sshd. Default: `root`.
+`sshd_host_keys_group` set group of host keys for sshd. Default: `root`.
+`sshd_host_keys_mode` set permission of host keys for sshd. Default: `"0600"`.
+
+`sshd_match_users` add a conditional block for users. If all of the criteria on the Match line are satisfied, the rules/parameters defined on the following lines override those set in the global section of the config file, until either another Match line or the end of the file.
+
+Expected configuration structure:
+```yaml
+sshd_match_users:
+  - user: <username>
+    rules:
+      - <parameter sshd> <value>
+      - <parameter sshd> <value>
+```
+Example, allow `ubuntu` user access through password authentication and allow `ansible` user access without banner:
+```yaml
+sshd_match_users:
+  - user: ubuntu
+    rules:
+      - AllowUsers ubuntu
+      - AuthenticationMethods password
+      - PasswordAuthentication yes
+  - user: ansible
+    rules:
+      - AllowUsers ansible
+      - Banner none
+```
+`sshd_match_groups` add a conditional block for groups. More details and examples in the parameter description `sshd_match_users`.
+
+Expected configuration structure:
+```yaml
+sshd_match_groups:
+  - group: <groupname>
+    rules:
+      - <parameter sshd> <value>
+      - <parameter sshd> <value>
+```
+
+`sshd_match_addresses` add a conditional block for adddresses. More details and examples in the parameter description `sshd_match_users`.
+
+Expected configuration structure:
+```yaml
+sshd_match_addresses:
+  - address: <ip>
+    rules:
+      - <parameter sshd> <value>
+      - <parameter sshd> <value>
+```
+`sshd_match_local_ports` add a conditional block for ports. More details and examples in the parameter description `sshd_match_users`.
+
+Expected configuration structure:
+```yaml
+sshd_match_ports:
+  - port: <port>
+    rules:
+      - <parameter sshd> <value>
+      - <parameter sshd> <value>
+```
+
+`sshd_print_pam_motd` specifies whether printing of the MOTD via pam (Debian and Ubuntu). Default: `false`.
+
+`sshd_sftp_enabled` specifies whether enabled sftp configuration. Default: `true`.
+`sshd_sftp_subsystem` Set external subsystem for file  transfer  daemon. Default: `internal-sftp -f LOCAL6 -l INFO`.
+`sshd_sftp_only_group` specifies the name of the group that will have access restricted to the sftp service only. Default: `""`.
+`sshd_sftp_only_chroot` specifies group access will be via chroot isolation. Default: `true`.
+`sshd_sftp_only_chroot_dir` specifies the chroot directory. Accepts the tokens `%%` (a literal `%`), `%h` (home directory of the user), and `%u` (username). Default: `"%h"`.
+
+`sshd_syslog_facility` set the facility code that is used when logging messages from sshd.Default: `AUTH`.
 
 ### ./defaults/main/suid_sgid_blocklist.yml
 

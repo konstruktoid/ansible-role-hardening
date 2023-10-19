@@ -18,33 +18,48 @@ provisioner:
         disable_wireless: true
         enable_timesyncd: false
         install_aide: false
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - 0.0.0.0/0
+        sshd_allow_groups:
+          - vagrant
+          - sudo
         suid_sgid_permissions: false
       almalinux9:
         enable_timesyncd: false
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - 0.0.0.0/0
+        sshd_allow_groups:
+          - vagrant
+          - sudo
       bookworm:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
         disable_wireless: false
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - 0.0.0.0/0
+        sshd_allow_groups:
+          - vagrant
+          - sudo
         system_upgrade: false
       focal:
         block_blacklisted: true
         disable_wireless: true
         install_aide: false
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - 0.0.0.0/0
+        sshd_allow_groups:
+          - vagrant
+          - sudo
         suid_sgid_permissions: false
       jammy:
         disable_ipv6: true
         block_blacklisted: true
         disable_wireless: true
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - 0.0.0.0/0
+        sshd_allow_groups:
+          - vagrant
+          - sudo
         suid_sgid_permissions: false
 platforms:
   - name: almalinux8

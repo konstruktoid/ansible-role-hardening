@@ -4,6 +4,7 @@
     cmd: ssh -V
   changed_when: false
   failed_when: false
+  check_mode: false
   register: ssh_version
   tags:
     - sshd
@@ -43,6 +44,7 @@
   register: grep_include
   changed_when: false
   failed_when: false
+  check_mode: false
   tags:
     - sshd
     - sshd_config
@@ -57,6 +59,28 @@
     - sshd_config
     - M1041
 
+- name: Clear pre-existing custom configurations in /etc/ssh/sshd_config.d
+  when:
+    - sshd_config_d_force_clear | bool
+    - sshd_config_d.stat.exists
+  tags:
+    - sshd
+    - sshd_config
+  block:
+    - name: Search pre-existing custom configurations in /etc/ssh/sshd_config.d
+      become: true
+      ansible.builtin.find:
+        path: /etc/ssh/sshd_config.d
+        patterns: '*'
+      register: sshd_config_d_content
+
+    - name: Clear pre-existing custom configurations in /etc/ssh/sshd_config.d
+      become: true
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ sshd_config_d_content.files }}"
+
 - name: Ensure /etc/ssh/sshd_config permissions
   become: true
   ansible.builtin.file:
@@ -68,6 +92,79 @@
     - sshd
     - sshd_config
 
+- name: Set default for sshd_host_keys_files if not supplied
+  become: true
+  when: not sshd_host_keys_files
+  tags:
+    - sshd
+  block:
+    - name: Replace default 2048 bits RSA keypair
+      community.crypto.openssh_keypair:
+        state: present
+        type: rsa
+        size: "{{ sshd_required_rsa_size }}"
+        path: "/etc/ssh/ssh_host_rsa_key"
+        force: false
+        regenerate: partial_idempotence
+
+    - name: Set hostkeys according to openssh-version if openssh >= 5.3
+      ansible.builtin.set_fact:
+        sshd_host_keys_files:
+          - "/etc/ssh/ssh_host_rsa_key"
+      when:
+        - ssh_installed_version is version('5.3', '>=')
+        - ssh_installed_version is version('6.0', '<')
+
+    - name: Set hostkeys according to openssh-version if openssh >= 6.0
+      ansible.builtin.set_fact:
+        sshd_host_keys_files:
+          - "/etc/ssh/ssh_host_rsa_key"
+          - "/etc/ssh/ssh_host_ecdsa_key"
+      when:
+        - ssh_installed_version is version('6.0', '>=')
+        - ssh_installed_version is version('6.3', '<')
+
+    - name: Set hostkeys according to openssh-version if openssh >= 6.3
+      ansible.builtin.set_fact:
+        sshd_host_keys_files:
+          - "/etc/ssh/ssh_host_rsa_key"
+          - "/etc/ssh/ssh_host_ecdsa_key"
+          - "/etc/ssh/ssh_host_ed25519_key"
+      when: ssh_installed_version is version('6.3', '>=')
+
+    - name: Change host private key ownership, group and permissions
+      ansible.builtin.file:
+        path: "{{ item }}"
+        owner: "{{ sshd_host_keys_owner }}"
+        group: "{{ sshd_host_keys_group }}"
+        mode: "{{ sshd_host_keys_mode }}"
+      loop: "{{ sshd_host_keys_files }}"
+
+- name: Disable PAM dynamic MOTD
+  become: true
+  community.general.pamd:
+    name: sshd
+    type: session
+    control: optional
+    module_path: pam_motd.so
+    state: absent
+    backup: true
+  when:
+    - sshd_use_pam | bool
+    - not (sshd_print_pam_motd | bool)
+  tags:
+    - sshd
+
+- name: Check variable sshd_config_force_replace
+  ansible.builtin.set_fact:
+    sshd_config_force_replace: true
+  when: >-
+    sshd_match_users | length > 0 or
+    sshd_match_groups | length > 0 or
+    sshd_match_addresses | length > 0 or
+    sshd_match_local_ports | length > 0 or
+    (sshd_sftp_only_group is defined and sshd_sftp_only_group | length != 0)
+
 - name: Configure sshd
   become: true
   ansible.builtin.template:
@@ -77,8 +174,8 @@
     mode: "0600"
     owner: root
     group: root
-    validate: sshd -t -f %s
-  when: not sshd_config_d.stat.exists or grep_include.rc != 0
+    validate: "/usr/sbin/sshd -T -C user=root -C host=localhost -C addr=localhost -C lport=22 -f %s"
+  when: sshd_config_force_replace | bool or not sshd_config_d.stat.exists or grep_include.rc != 0
   notify:
     - Restart sshd service
     - Restart ssh service
@@ -131,8 +228,8 @@
     mode: "0600"
     owner: root
     group: root
-    validate: sshd -t -f %s
-  when: sshd_config_d.stat.exists and grep_include.rc == 0
+    validate: "/usr/sbin/sshd -T -C user=root -C host=localhost -C addr=localhost -C lport=22 -f %s"
+  when: not ( sshd_config_force_replace | bool ) and sshd_config_d.stat.exists and grep_include.rc == 0
   notify:
     - Restart sshd service
     - Restart ssh service

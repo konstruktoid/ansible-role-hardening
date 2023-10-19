@@ -21,8 +21,11 @@ provisioner:
   inventory:
     host_vars:
       redhat:
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - 0.0.0.0/0
+        sshd_allow_groups:
+          - vagrant
+          - sudo
 platforms:
   - name: redhat
     box: generic/rhel8

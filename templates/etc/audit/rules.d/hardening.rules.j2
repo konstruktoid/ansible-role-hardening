@@ -11,7 +11,7 @@
 -c
 
 # Failure Mode
--f {{ auditd_mode|int }}
+-f {{ auditd_mode | int }}
 
 # File and directory access
 -a always,exit -F arch=b32 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=-1 -k access

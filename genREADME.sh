@@ -103,7 +103,7 @@ disruption, the role deletes every \`ufw\` rule without
 
 The role also sets default deny policies, which means that firewall rules
 needs to be created for any additional ports except those specified in
-the \`sshd_port\` and \`ufw_outgoing_traffic\` variables.
+the \`sshd_ports\` and \`ufw_outgoing_traffic\` variables.
 
 ## Task Execution and Structure
 
