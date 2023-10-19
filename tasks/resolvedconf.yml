@@ -24,7 +24,7 @@
     owner: root
     group: root
     state: present
-  with_items: "{{ dns | split }}"
+  loop: "{{ dns | split }}"
   when: ansible_os_family == "RedHat"
   tags:
     - resolved

@@ -71,7 +71,7 @@
     mode: "0640"
     create: false
     validate: aide --config-check --config=%s
-  with_items:
+  loop:
     - /usr/sbin/auditctl
     - /usr/sbin/auditd
     - /usr/sbin/ausearch

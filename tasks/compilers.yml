@@ -35,7 +35,8 @@
     - compilers
 
 - name: Ensure restrict compilers access via DNF post-transaction-actions Plugin
-  ansible.builtin.include_tasks: compilers_dnf_post_transaction_actions_plugin.yml
+  ansible.builtin.include_tasks:
+    file: compilers_dnf_post_transaction_actions_plugin.yml
   loop: "{{ compiler.files | map(attribute='path') | unique }}"
   when: ansible_os_family == 'RedHat'
   tags:

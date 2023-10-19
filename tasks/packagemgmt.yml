@@ -7,7 +7,7 @@
     state: present
     create: true
     line: "{{ item }}"
-  with_items:
+  loop:
     - Acquire::AllowDowngradeToInsecureRepositories "false";
     - Acquire::AllowInsecureRepositories "false";
     - Acquire::http::AllowRedirect "false";
@@ -146,7 +146,7 @@
       ansible.builtin.rpm_key:
         state: present
         key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
-      with_items:
+      loop:
         - "{{ epel8_signing_keys }}"
       tags:
         - dnf
@@ -178,7 +178,7 @@
       ansible.builtin.rpm_key:
         state: present
         key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
-      with_items:
+      loop:
         - "{{ epel7_signing_keys }}"
       tags:
         - dnf

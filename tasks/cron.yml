@@ -4,7 +4,7 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: absent
-  with_items:
+  loop:
     - /etc/at.deny
     - /etc/cron.deny
   tags:
@@ -17,7 +17,7 @@
     path: "{{ item }}"
     regexp: ^(?!root).*$
     state: absent
-  with_items:
+  loop:
     - /etc/at.allow
     - /etc/cron.allow
   tags:
@@ -34,7 +34,7 @@
     mode: "0600"
     state: present
     create: true
-  with_items:
+  loop:
     - /etc/at.allow
     - /etc/cron.allow
   tags:
@@ -63,7 +63,7 @@
     group: root
   register: cron_perm
   failed_when: cron_perm is not success and not 'is absent, cannot continue' in cron_perm.msg
-  with_items:
+  loop:
     - /etc/cron.d
     - /etc/cron.daily
     - /etc/cron.hourly

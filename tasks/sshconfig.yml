@@ -71,7 +71,7 @@
       become: true
       ansible.builtin.find:
         path: /etc/ssh/sshd_config.d
-        patterns: '*'
+        patterns: "*"
       register: sshd_config_d_content
 
     - name: Clear pre-existing custom configurations in /etc/ssh/sshd_config.d
@@ -103,14 +103,14 @@
         state: present
         type: rsa
         size: "{{ sshd_required_rsa_size }}"
-        path: "/etc/ssh/ssh_host_rsa_key"
+        path: /etc/ssh/ssh_host_rsa_key
         force: false
         regenerate: partial_idempotence
 
     - name: Set hostkeys according to openssh-version if openssh >= 5.3
       ansible.builtin.set_fact:
         sshd_host_keys_files:
-          - "/etc/ssh/ssh_host_rsa_key"
+          - /etc/ssh/ssh_host_rsa_key
       when:
         - ssh_installed_version is version('5.3', '>=')
         - ssh_installed_version is version('6.0', '<')
@@ -118,8 +118,8 @@
     - name: Set hostkeys according to openssh-version if openssh >= 6.0
       ansible.builtin.set_fact:
         sshd_host_keys_files:
-          - "/etc/ssh/ssh_host_rsa_key"
-          - "/etc/ssh/ssh_host_ecdsa_key"
+          - /etc/ssh/ssh_host_rsa_key
+          - /etc/ssh/ssh_host_ecdsa_key
       when:
         - ssh_installed_version is version('6.0', '>=')
         - ssh_installed_version is version('6.3', '<')
@@ -127,9 +127,9 @@
     - name: Set hostkeys according to openssh-version if openssh >= 6.3
       ansible.builtin.set_fact:
         sshd_host_keys_files:
-          - "/etc/ssh/ssh_host_rsa_key"
-          - "/etc/ssh/ssh_host_ecdsa_key"
-          - "/etc/ssh/ssh_host_ed25519_key"
+          - /etc/ssh/ssh_host_rsa_key
+          - /etc/ssh/ssh_host_ecdsa_key
+          - /etc/ssh/ssh_host_ed25519_key
       when: ssh_installed_version is version('6.3', '>=')
 
     - name: Change host private key ownership, group and permissions
@@ -174,7 +174,7 @@
     mode: "0600"
     owner: root
     group: root
-    validate: "/usr/sbin/sshd -T -C user=root -C host=localhost -C addr=localhost -C lport=22 -f %s"
+    validate: /usr/sbin/sshd -T -C user=root -C host=localhost -C addr=localhost -C lport=22 -f %s
   when: sshd_config_force_replace | bool or not sshd_config_d.stat.exists or grep_include.rc != 0
   notify:
     - Restart sshd service
@@ -228,7 +228,7 @@
     mode: "0600"
     owner: root
     group: root
-    validate: "/usr/sbin/sshd -T -C user=root -C host=localhost -C addr=localhost -C lport=22 -f %s"
+    validate: /usr/sbin/sshd -T -C user=root -C host=localhost -C addr=localhost -C lport=22 -f %s
   when: not ( sshd_config_force_replace | bool ) and sshd_config_d.stat.exists and grep_include.rc == 0
   notify:
     - Restart sshd service
@@ -304,7 +304,7 @@
     group: root
     mode: "0600"
     path: "{{ item.path }}"
-  with_items: "{{ ssh_host_keys.files }}"
+  loop: "{{ ssh_host_keys.files }}"
   loop_control:
     label: "{{ item.path }}"
   tags:
