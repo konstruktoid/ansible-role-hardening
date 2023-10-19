@@ -434,22 +434,57 @@ and packages to be removed (`packages_blocklist`).
 ### ./defaults/main/password.yml
 
 ```yaml
-pwquality_config:
+faillock_enable: true
+faillock:
+  admin_group: []
+  audit: true
+  deny: 5
+  dir: /var/run/faillock
+  even_deny_root: true
+  fail_interval: 900
+  local_users_only: true
+  no_log_info: false
+  nodelay: true
+  root_unlock_time: 600
+  silent: false
+  unlock_time: 600
+login_defs:
+  login_retries: 5
+  login_timeout: 60
+  pass_max_days: 60
+  pass_min_days: 1
+  pass_warn_age: 7
+password_remember: 5
+pwquality:
   dcredit: -1
   dictcheck: 1
+  dictpath: 1
   difok: 8
+  enforce_for_root: true
   enforcing: 1
+  gecoscheck: 1
   lcredit: -1
+  local_users_only: true
   maxclassrepeat: 4
   maxrepeat: 3
   minclass: 4
   minlen: 15
   ocredit: -1
+  retry: 3
   ucredit: -1
+  usercheck: 1
+  usersubstr: 3
 ```
 
-Configure the [libpwquality](https://manpages.ubuntu.com/manpages/jammy/man5/pwquality.conf.5.html)
-library.
+`faillock_enable` set to `false` for disable faillock library.
+
+`password_remember` set the size of the password history that the user will not be able to reuse.
+
+Configure the [pam_faillock](https://manpages.ubuntu.com/manpages/lunar/en/man5/faillock.conf.5.html) library.
+
+Configure the [login.defs](https://manpages.ubuntu.com/manpages/lunar/en/man5/login.defs.5.html) configuration.
+
+Configure the [libpwquality](https://manpages.ubuntu.com/manpages/jammy/man5/pwquality.conf.5.html) library.
 
 ### ./defaults/main/sshd.yml
 

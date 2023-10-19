@@ -4,6 +4,7 @@ common_account_template: etc/pam.d/common-account.j2
 common_auth_template: etc/pam.d/common-auth.j2
 common_password_template: etc/pam.d/common-password.j2
 coredump_conf_template: etc/systemd/coredump.conf.j2
+faillock_conf_template: etc/security/faillock.conf.j2
 hardening_rules_template: etc/audit/rules.d/hardening.rules.j2
 hosts_allow_template: etc/hosts.allow.j2
 hosts_deny_template: etc/hosts.deny.j2
@@ -11,11 +12,12 @@ initpath_sh_template: etc/profile.d/initpath.sh.j2
 issue_template: etc/issue.j2
 journald_conf_template: etc/systemd/journald.conf.j2
 limits_conf_template: etc/security/limits.conf.j2
-logind_conf_template: etc/systemd/logind.conf.j2
 login_defs_template: etc/login.defs.j2
 login_template: etc/pam.d/login.j2
+logind_conf_template: etc/systemd/logind.conf.j2
 logrotate_conf_template: etc/logrotate.conf.j2
 motd_template: etc/motd.j2
+pwquality_conf_template: etc/security/pwquality.conf.j2
 resolved_conf_template: etc/systemd/resolved.conf.j2
 rkhunter_template: etc/default/rkhunter.j2
 ssh_config_template: etc/ssh/ssh_config.j2
@@ -23,5 +25,5 @@ sshd_config_template: etc/ssh/sshd_config.j2
 system_conf_template: etc/systemd/system.conf.j2
 timesyncd_conf_template: etc/systemd/timesyncd.conf.j2
 tmp_mount_template: etc/systemd/tmp.mount.j2
-useradd_template: etc/default/useradd.j2
 user_conf_template: etc/systemd/user.conf.j2
+useradd_template: etc/default/useradd.j2
