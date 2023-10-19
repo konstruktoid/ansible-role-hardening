@@ -76,7 +76,7 @@
   community.general.ufw:
     state: enabled
     direction: incoming
-    policy: deny
+    default: deny
     log: true
     logging: low
     comment: ansible managed
@@ -91,7 +91,7 @@
   community.general.ufw:
     state: enabled
     direction: outgoing
-    policy: deny
+    default: deny
     log: true
     logging: low
     comment: ansible managed
@@ -118,8 +118,8 @@
   become: true
   community.general.ufw:
     rule: limit
-    src: "{{ item.0 }}"
-    port: "{{ item.1 | int }}"
+    from_ip: "{{ item.0 }}"
+    to_port: "{{ item.1 | int }}"
     proto: tcp
     comment: ansible managed
   loop: "{{ sshd_admin_net | product(sshd_ports) | list }}"
@@ -131,7 +131,7 @@
   become: true
   community.general.ufw:
     rule: allow
-    port: "{{ item | int }}"
+    to_port: "{{ item | int }}"
     direction: out
     comment: ansible managed
   loop: "{{ ufw_outgoing_traffic }}"
@@ -145,7 +145,7 @@
   become: true
   community.general.ufw:
     rule: deny
-    src: 127.0.0.0/8
+    from_ip: 127.0.0.0/8
     comment: ansible managed
   tags:
     - ufw
@@ -157,7 +157,7 @@
   when: not disable_ipv6
   community.general.ufw:
     rule: deny
-    src: ::1
+    from_ip: ::1
     comment: ansible managed
   tags:
     - ufw
