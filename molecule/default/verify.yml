@@ -933,9 +933,9 @@
             - ansible_os_family == "Debian"
 
         - name: Create yescrypt password hash
-          ansible.builtin.shell: |-
+          ansible.builtin.shell: |
             set -o pipefail
-            echo -n '{{ item }}' | mkpasswd --stdin --method=yescrypt --rounds=11 | tr -d '\n'
+            echo -n '{{ item }}' | mkpasswd --stdin --method=yescrypt --rounds=8
           args:
             executable: /bin/bash
           register: mkpasswd
@@ -949,7 +949,9 @@
         - name: Set passwords
           ansible.builtin.set_fact:
             passwords: "{{ mkpasswd.results | map(attribute='stdout') | list }}"
-          when: mkpasswd.rc != 0
+          when:
+            - password_algorithm == "yescrypt"
+            - mkpasswd.rc == 0
 
         - name: Create sha512 password hash
           vars:
