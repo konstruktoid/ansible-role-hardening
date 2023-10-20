@@ -913,36 +913,59 @@
             - "!/var/log/audit"
             - "!/var/log/journal"
 
-    - name: Install mkpasswd
-      become: true
-      ansible.builtin.package:
-        name: mkpasswd
-
     - name: Create hash password
-      vars:
-        options: >-
-          {%- if (password_algorithm == 'sha512') -%}
-            --salt={{ lookup('password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits length=16') }} --rounds=65536 --method=sha-512
-          {%- else -%}
-            --method=yescrypt --rounds=11
-          {%- endif -%}
-      ansible.builtin.shell: |-
-        set -o pipefail
-        echo -n '{{ item }}' | mkpasswd --stdin {{ options }} | tr -d '\n'
-      args:
-        executable: /bin/bash
-      register: mkpasswd
-      changed_when: false
-      failed_when: mkpasswd.rc != 0
-      loop:
-        - 'Ansible Role Test User'
-        - 'Change Ansible Role Test User'
+      block:
+        - name: Install mkpasswd RedHat family
+          become: true
+          ansible.builtin.package:
+            name: mkpasswd
+          when:
+            - password_algorithm == "yescrypt"
+            - ansible_os_family == "RedHat"
+            - ansible_distribution_major_version | int >= 9
+
+        - name: Install mkpasswd Debian family
+          become: true
+          ansible.builtin.package:
+            name: whois
+          when:
+            - password_algorithm == "yescrypt"
+            - ansible_os_family == "Debian"
+
+        - name: Create yescrypt password hash
+          ansible.builtin.shell: |-
+            set -o pipefail
+            echo -n '{{ item }}' | mkpasswd --stdin --method=yescrypt --rounds=11 | tr -d '\n'
+          args:
+            executable: /bin/bash
+          register: mkpasswd
+          changed_when: false
+          failed_when: mkpasswd.rc != 0
+          loop:
+            - 'Ansible Role Test User'
+            - 'Change Ansible Role Test User'
+          when: password_algorithm == "yescrypt"
+
+        - name: Set passwords
+          ansible.builtin.set_fact:
+            passwords: "{{ mkpasswd.results | map(attribute='stdout') | list }}"
+          when: mkpasswd.rc != 0
+
+        - name: Create sha512 password hash
+          vars:
+            salt: "{{ lookup('password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits length=16') }}"
+          ansible.builtin.set_fact:
+            passwords: "{{ passwords | default([]) | union([item | password_hash('sha512', salt, rounds=65536)]) }}"
+          loop:
+            - 'Ansible Role Test User'
+            - 'Change Ansible Role Test User'
+          when: password_algorithm == "sha512"
 
     - name: Create test user
       become: true
       ansible.builtin.user:
         name: roletestuser
-        password: "{{ mkpasswd.results[0].stdout }}"
+        password: "{{ passwords[0] }}"
         state: present
         shell: /bin/bash
 
@@ -950,7 +973,7 @@
       become: true
       ansible.builtin.user:
         name: roletestuser
-        password: "{{ mkpasswd.results[1].stdout }}"
+        password: "{{ passwords[1] }}"
       register: test_user_pass
 
     - name: Debug test user password
