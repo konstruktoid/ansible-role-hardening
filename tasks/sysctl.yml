@@ -45,7 +45,7 @@
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   ansible.posix.sysctl:
     name: "{{ item.key }}"
-    value: "{{ item.value | int }}"
+    value: "{{ item.value }}"
     state: present
     sysctl_set: true
     sysctl_file: "{{ sysctl_conf_dir }}/zz-hardening.conf"
