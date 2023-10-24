@@ -531,7 +531,10 @@
         pwquality_parameters:
           - dcredit = {{ pwquality.dcredit }}
           - dictcheck = {{ pwquality.dictcheck }}
-          - dictpath = {{ pwquality.dictpath }}
+          - >-
+            {%- if pwquality.dictpath != "" -%}
+              dictpath = {{ pwquality.dictpath }}
+            {%- endif -%}
           - difok = {{ pwquality.difok }}
           - >-
             {%- if (pwquality.enforce_for_root | bool) -%}

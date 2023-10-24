@@ -458,7 +458,7 @@ password_remember: 5
 pwquality:
   dcredit: -1
   dictcheck: 1
-  dictpath: 1
+  dictpath: ''
   difok: 8
   enforce_for_root: true
   enforcing: 1
