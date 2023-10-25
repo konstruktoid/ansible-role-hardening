@@ -938,49 +938,46 @@
         - name: Create yescrypt password hash
           ansible.builtin.shell: |
             set -o pipefail
-            echo -n '{{ item }}' | mkpasswd --stdin --method=yescrypt --rounds=8
+            echo -n 'Ansible Role Test User' | mkpasswd --stdin --method=yescrypt --rounds=8
           args:
             executable: /bin/bash
           register: mkpasswd
           changed_when: false
           failed_when: mkpasswd.rc != 0
-          loop:
-            - 'Ansible Role Test User'
-            - 'Change Ansible Role Test User'
           when: password_algorithm == "yescrypt"
 
-        - name: Set passwords
+        - name: Set password
           ansible.builtin.set_fact:
-            passwords: "{{ mkpasswd.results | map(attribute='stdout') | list }}"
-          when:
-            - password_algorithm == "yescrypt"
-            - mkpasswd.rc == 0
+            password: "{{ mkpasswd.stdout }}"
+          when: password_algorithm == "yescrypt"
 
         - name: Create sha512 password hash
           vars:
             salt: "{{ lookup('password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits length=16') }}"
           ansible.builtin.set_fact:
-            passwords: "{{ passwords | default([]) | union([item | password_hash('sha512', salt, rounds=65536)]) }}"
-          loop:
-            - 'Ansible Role Test User'
-            - 'Change Ansible Role Test User'
+            password: "{{ 'Ansible Role Test User' | password_hash('sha512', salt, rounds=656000) }}"
           when: password_algorithm == "sha512"
+
+        - name: Print password
+          ansible.builtin.debug:
+            msg: "{{ password }}"
+          when: password
 
     - name: Create test user
       become: true
       ansible.builtin.user:
         name: roletestuser
-        password: "{{ passwords[0] }}"
+        password: "{{ password }}"
         state: present
         shell: /bin/bash
 
-    - name: Change test user password
+    - name: Get test user password
       become: true
-      ansible.builtin.user:
-        name: roletestuser
-        password: "{{ passwords[1] }}"
-      register: test_user_pass
+      ansible.builtin.command:
+        cmd: grep roletestuser /etc/shadow
+      register: roletestuser_pass
+      changed_when: false
 
-    - name: Debug test user password
+    - name: Print test user
       ansible.builtin.debug:
-        msg: "{{ test_user_pass }}"
+        msg: "{{ roletestuser_pass.stdout }}"
