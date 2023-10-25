@@ -471,6 +471,39 @@
       failed_when: mounts_tmp.rc != 0
       changed_when: mounts_tmp.rc != 0
 
+    - name: Get PAM version
+      tags:
+        - fact
+        - common-account
+        - common-auth
+        - pam
+      block:
+        - name: Gather package facts
+          ansible.builtin.package_facts:
+
+        - name: Get libpam version in Debian family
+          ansible.builtin.set_fact:
+            pam_version: "{{ ansible_facts.packages['libpam-modules'][0].version }}"
+          when:
+            - ansible_os_family == "Debian"
+            - "'libpam-modules' in ansible_facts.packages"
+
+        - name: Get libpam version in RedHat family
+          ansible.builtin.set_fact:
+            pam_version: "{{ ansible_facts.packages['pam'][0].version }}"
+          when:
+            - ansible_os_family == "RedHat"
+            - "'pam' in ansible_facts.packages"
+
+    - name: Set hashing algorithm for password (yescrypt|sha512)
+      ansible.builtin.set_fact:
+        password_algorithm: "{{ 'yescrypt' if (pam_version is version('1.4.0', '>=')) else 'sha512' }}"
+      tags:
+        - fact
+        - pam
+        - CIS-UBUNTU2204-5.4.4
+        - M1041
+
     - name: Verify login.defs settings
       become: true
       ansible.builtin.shell: grep "^{{ item }}$" /etc/login.defs
@@ -478,12 +511,14 @@
       failed_when: login_defs.rc != 0
       changed_when: login_defs.rc != 0
       with_items:
-        - ENCRYPT_METHOD SHA512
+        - ENCRYPT_METHOD {{ password_algorithm | upper }}
         - FAILLOG_ENAB yes
         - LOG_OK_LOGINS yes
-        - PASS_MAX_DAYS 60
-        - PASS_MIN_DAYS 1
-        - PASS_WARN_AGE 7
+        - LOGIN_RETRIES {{ login_defs.login_retries }}
+        - LOGIN_TIMEOUT {{ login_defs.login_timeout }}
+        - PASS_MAX_DAYS {{ login_defs.pass_max_days }}
+        - PASS_MIN_DAYS {{ login_defs.pass_min_days }}
+        - PASS_WARN_AGE {{ login_defs.pass_warn_age }}
         - SHA_CRYPT_MAX_ROUNDS 65536
         - SHA_CRYPT_MIN_ROUNDS 10000
         - SU_NAME su
@@ -491,19 +526,48 @@
         - SYSLOG_SU_ENAB yes
         - UMASK {{ umask_value }}
 
+    - name: Set pwquality_parameters
+      ansible.builtin.set_fact:
+        pwquality_parameters:
+          - dcredit = {{ pwquality.dcredit }}
+          - dictcheck = {{ pwquality.dictcheck }}
+          - >-
+            {%- if pwquality.dictpath != "" -%}
+              dictpath = {{ pwquality.dictpath }}
+            {%- endif -%}
+          - difok = {{ pwquality.difok }}
+          - >-
+            {%- if (pwquality.enforce_for_root | bool) -%}
+              enforce_for_root
+            {%- endif -%}
+          - enforcing = {{ pwquality.enforcing }}
+          - gecoscheck = {{ pwquality.gecoscheck }}
+          - lcredit = {{ pwquality.lcredit }}
+          - >-
+            {%- if (pwquality.local_users_only | bool) -%}
+              local_users_only
+            {%- endif -%}
+          - maxclassrepeat = {{ pwquality.maxclassrepeat }}
+          - maxrepeat = {{ pwquality.maxrepeat }}
+          - minclass = {{ pwquality.minclass }}
+          - minlen = {{ pwquality.minlen }}
+          - ocredit = {{ pwquality.ocredit }}
+          - retry = {{ pwquality.retry }}
+          - ucredit = {{ pwquality.ucredit }}
+          - usercheck = {{ pwquality.usercheck }}
+          - usersubstr = {{ pwquality.usersubstr }}
+
     - name: Verify pwquality.conf settings
       become: true
       ansible.builtin.lineinfile:
-        path: /etc/security/pwquality.conf
-        line: "{{ item.key }} = {{ item.value }}"
-        state: present
+        dest: /etc/security/pwquality.conf
         mode: "0644"
-        owner: root
-        group: root
+        state: present
+        line: "{{ item }}"
       check_mode: true
-      register: pwquality_conf
-      failed_when: pwquality_conf is changed
-      with_dict: "{{ pwquality_config }}"
+      register: verify_pwquality
+      failed_when: verify_pwquality is changed
+      loop: "{{ pwquality_parameters | select() }}"
 
     - name: Verify RedHat GRUB audit settings
       become: true
@@ -725,6 +789,53 @@
         path: /etc/security/faillock.conf
       register: faillockconf
 
+    - name: Get PAM version
+      when: faillockconf.stat.exists
+      tags:
+        - common-account
+        - common-auth
+        - pam
+      block:
+        - name: Gather package facts
+          ansible.builtin.package_facts:
+
+        - name: Get libpam version in Debian family
+          ansible.builtin.set_fact:
+            pam_version: "{{ ansible_facts.packages['libpam-modules'][0].version }}"
+          when:
+            - ansible_os_family == "Debian"
+            - "'libpam-modules' in ansible_facts.packages"
+
+        - name: Get libpam version in RedHat family
+          ansible.builtin.set_fact:
+            pam_version: "{{ ansible_facts.packages['pam'][0].version }}"
+          when:
+            - ansible_os_family == "RedHat"
+            - "'pam' in ansible_facts.packages"
+
+    - name: Set faillock_parameters
+      ansible.builtin.set_fact:
+        faillock_parameters:
+          - dir = {{ faillock.dir }}
+          - "{{ 'audit' if (faillock.audit | bool) }}"
+          - "{{ 'silent' if (faillock.silent | bool) }}"
+          - "{{ 'no_log_info' if (faillock.no_log_info | bool) }}"
+          - "{{ 'local_users_only' if (faillock.local_users_only | bool) }}"
+          - >-
+            {%- if (pam_version is version('1.5.1', '>=')) -%}
+              {{ 'nodelay' if (faillock.nodelay | bool) }}
+            {%- endif -%}
+          - deny = {{ faillock.deny }}
+          - fail_interval = {{ faillock.fail_interval }}
+          - unlock_time = {{ faillock.unlock_time }}
+          - "{{ 'even_deny_root' if (faillock.even_deny_root | bool) }}"
+          - root_unlock_time = {{ faillock.root_unlock_time }}
+          - >-
+            {%- for group in faillock.admin_group -%}
+              admin_group = {{ group }}
+            {%- endfor -%}
+      when: faillockconf.stat.exists
+
     - name: Verify faillock.conf
       become: true
       ansible.builtin.lineinfile:
@@ -735,11 +846,7 @@
       check_mode: true
       register: verify_faillock
       failed_when: verify_faillock is changed
-      with_items:
-        - audit
-        - local_users_only
-        - deny = 5
-        - fail_interval = 900
+      loop: "{{ faillock_parameters | select() }}"
       when: faillockconf.stat.exists
 
     - name: Verify wireless state
@@ -809,29 +916,68 @@
             - "!/var/log/audit"
             - "!/var/log/journal"
 
+    - name: Create hash password
+      block:
+        - name: Install mkpasswd RedHat family
+          become: true
+          ansible.builtin.package:
+            name: mkpasswd
+          when:
+            - password_algorithm == "yescrypt"
+            - ansible_os_family == "RedHat"
+            - ansible_distribution_major_version | int >= 9
+
+        - name: Install mkpasswd Debian family
+          become: true
+          ansible.builtin.package:
+            name: whois
+          when:
+            - password_algorithm == "yescrypt"
+            - ansible_os_family == "Debian"
+
+        - name: Create yescrypt password hash
+          ansible.builtin.shell: |
+            set -o pipefail
+            echo -n 'Ansible Role Test User' | mkpasswd --stdin --method=yescrypt --rounds=8
+          args:
+            executable: /bin/bash
+          register: mkpasswd
+          changed_when: false
+          failed_when: mkpasswd.rc != 0
+          when: password_algorithm == "yescrypt"
+
+        - name: Set password
+          ansible.builtin.set_fact:
+            password: "{{ mkpasswd.stdout }}"
+          when: password_algorithm == "yescrypt"
+
+        - name: Create sha512 password hash
+          vars:
+            salt: "{{ lookup('password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits length=16') }}"
+          ansible.builtin.set_fact:
+            password: "{{ 'Ansible Role Test User' | password_hash('sha512', salt, rounds=656000) }}"
+          when: password_algorithm == "sha512"
+
+        - name: Print password
+          ansible.builtin.debug:
+            msg: "{{ password }}"
+          when: password
+
     - name: Create test user
       become: true
       ansible.builtin.user:
         name: roletestuser
-        password: "{{ 'Ansible Role Test User' | password_hash('sha512') }}"
+        password: "{{ password }}"
         state: present
         shell: /bin/bash
 
-    - name: Create test user salt
-      ansible.builtin.set_fact:
-        test_user_salt: "{{ lookup('password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits length=16') }}"
-
-    - name: Change test user password
+    - name: Get test user password
       become: true
-      ansible.builtin.user:
-        name: roletestuser
-        password: "{{ 'roletestuser' | password_hash('sha512', test_user_salt, rounds=656000) }}"
-      register: test_user_pass
+      ansible.builtin.command:
+        cmd: grep roletestuser /etc/shadow
+      register: roletestuser_pass
+      changed_when: false
 
-    - name: Debug test user salt
+    - name: Print test user
       ansible.builtin.debug:
-        msg: "{{ test_user_salt }}"
-
-    - name: Debug test user password
-      ansible.builtin.debug:
-        msg: "{{ test_user_pass }}"
+        msg: "{{ roletestuser_pass.stdout }}"
