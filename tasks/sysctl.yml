@@ -7,6 +7,7 @@
     state: present
     sysctl_set: true
     sysctl_file: "{{ sysctl_conf_dir }}/zz-hardening.conf"
+    ignoreerrors: true
   when: ansible_kernel is version("5", ">=")
   tags:
     - sysctl
@@ -19,6 +20,7 @@
     state: present
     sysctl_set: true
     sysctl_file: "{{ sysctl_conf_dir }}/zz-hardening.conf"
+    ignoreerrors: true
   when: system_has_ipv6
   tags:
     - ipv6
@@ -49,6 +51,7 @@
     state: present
     sysctl_set: true
     sysctl_file: "{{ sysctl_conf_dir }}/zz-hardening.conf"
+    ignoreerrors: true
   with_dict: "{{ sysctl_settings }}"
   notify:
     - Restart sysctl
