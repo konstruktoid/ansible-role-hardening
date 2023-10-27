@@ -25,6 +25,16 @@ provisioner:
           - sudo
         suid_sgid_permissions: false
         umask_value: "027"
+        sshd_match_users:
+          - user: testuser01
+            rules:
+              - AllowUsers testuser01
+              - AuthenticationMethods password
+              - PasswordAuthentication yes
+          - user: testuser02
+            rules:
+              - AllowUsers testuser02
+              - Banner none
 platforms:
   - name: focal
     box: bento/ubuntu-20.04
