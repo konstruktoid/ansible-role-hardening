@@ -39,6 +39,19 @@
           ansible.builtin.set_fact:
             crypto_policies_config: "{{ stat_crypto_policies_config.stat.exists }}"
 
+    - name: Create test users
+      become: true
+      ansible.builtin.user:
+        name: "{{ item }}"
+        shell: /bin/bash
+        create_home: true
+        generate_ssh_key: true
+        ssh_key_bits: 3072
+        ssh_key_file: .ssh/id_rsa
+      loop:
+        - testuser01
+        - testuser02
+
     - name: Set sysctl configuration directory as fact
       tags:
         - fact
