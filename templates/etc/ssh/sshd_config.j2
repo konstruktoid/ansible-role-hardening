@@ -132,7 +132,7 @@ Banner {{ sshd_banner if sshd_banner else 'none' }}
 DebianBanner {{ 'yes' if (sshd_debian_banner | bool) else 'no' }}
 {% endif %}
 
-{%+ if sshd_sftp_enabled +%}
+{% if sshd_sftp_enabled %}
 #######################################################
 # SFTP matching configuration
 #######################################################
@@ -150,7 +150,7 @@ Match Group {{ sshd_sftp_only_group }}
     PermitRootLogin no
     X11Forwarding no
 {% endif %}
-{%+ endif +%}
+{% endif %}
 {% for item in sshd_match_addresses %}
 {%+ if loop.first +%}
 #######################################################
