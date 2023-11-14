@@ -48,3 +48,5 @@
     path: '{{ sysctl_conf_dir }}/zz-002-ipv6-hardening.conf'
     state: absent
   when: not system_has_ipv6
+  notify:
+    - Restart sysctl
