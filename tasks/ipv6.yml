@@ -27,19 +27,26 @@
   tags:
     - ipv6
 
-- name: Configure sysctl to disable IPv6
+- name: Template sysctl file with settings to disabled ipv6 for the running machine
   become: true
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  ansible.posix.sysctl:
-    name: "{{ item.key }}"
-    value: "{{ item.value | int }}"
-    state: present
-    sysctl_set: true
-    sysctl_file: "{{ sysctl_conf_dir }}/zz-hardening.conf"
-  when: system_has_ipv6 and disable_ipv6
-  with_dict: "{{ ipv6_disable_sysctl_settings }}"
+  ansible.builtin.template:
+    src: '{{ sysctl_ipv6_config_template }}'
+    dest: '{{ sysctl_conf_dir }}/zz-002-ipv6-hardening.conf'
+    mode: "0755"
+    owner: root
+    group: root
+    backup: false
+  when: system_has_ipv6
   notify:
     - Restart sysctl
   tags:
     - ipv6
+
+- name: Make sure we delete the ipv6 sysctl file if this machine doesn't support ipv6
+  become: true
+  ansible.builtin.file:
+    path: '{{ sysctl_conf_dir }}/zz-002-ipv6-hardening.conf'
+    state: absent
+  when: not system_has_ipv6
+  notify:
+    - Restart sysctl
