@@ -321,9 +321,9 @@
 
 # Kernel modification
 -w /etc/sysctl.conf -p wa -k sysctl
--w {{ sysctl_conf_dir }}/zz-001-main-hardening.conf -p wa -k sysctl
--w {{ sysctl_conf_dir }}/zz-002-ipv6-hardening.conf -p wa -k sysctl
--w {{ sysctl_conf_dir }}/zz-003-ufw-hardening.conf -p wa -k sysctl
+-w {{ sysctl_conf_dir }}/zz-main-hardening.conf -p wa -k sysctl
+-w {{ sysctl_conf_dir }}/zz-ipv6-hardening.conf -p wa -k sysctl
+-w {{ sysctl_conf_dir }}/zz-ufw-hardening.conf -p wa -k sysctl
 
 # Hostname changes
 -a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale
