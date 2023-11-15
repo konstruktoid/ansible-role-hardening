@@ -22,7 +22,7 @@ provisioner:
     host_vars:
       redhat:
         sshd_admin_net:
-          - 0.0.0.0/0
+          - "0.0.0.0/0"
         sshd_allow_groups:
           - vagrant
           - sudo
