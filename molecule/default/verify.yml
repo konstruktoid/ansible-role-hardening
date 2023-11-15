@@ -622,13 +622,13 @@
 
     - name: Verify IPv6 sysctl configuration
       become: true
-      ansible.builtin.shell: grep -R "^{{ item }}$" /etc/sysctl.* /usr/lib/sysctl.d/*
+      ansible.builtin.shell: grep -R "^{{ item }}$" "{{ sysctl_conf_dir }}/"
       register: sysctl_ipv6_config
       failed_when: sysctl_ipv6_config.rc != 0
       changed_when: sysctl_ipv6_config.rc != 0
       with_items:
-        - net.ipv6.conf.all.disable_ipv6=1
-        - net.ipv6.conf.default.disable_ipv6=1
+        - net.ipv6.conf.all.disable_ipv6 = 1
+        - net.ipv6.conf.default.disable_ipv6 = 1
       when: disable_ipv6
 
     - name: Verify IPv6 sysctl runtime configuration
