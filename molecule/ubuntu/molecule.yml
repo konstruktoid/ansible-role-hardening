@@ -19,25 +19,25 @@ provisioner:
     host_vars:
       focal:
         sshd_admin_net:
-          - 0.0.0.0/0
+          - "0.0.0.0/0"
         sshd_allow_groups:
           - vagrant
           - sudo
       jammy:
         sshd_admin_net:
-          - 0.0.0.0/0
+          - "0.0.0.0/0"
         sshd_allow_groups:
           - vagrant
           - sudo
       lunar:
         sshd_admin_net:
-          - 0.0.0.0/0
+          - "0.0.0.0/0"
         sshd_allow_groups:
           - vagrant
           - sudo
       mantic:
         sshd_admin_net:
-          - 0.0.0.0/0
+          - "0.0.0.0/0"
         sshd_allow_groups:
           - vagrant
           - sudo

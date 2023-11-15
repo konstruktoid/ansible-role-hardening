@@ -8,8 +8,8 @@
 - name: Template the sysctl file with general sysctl hardening settings
   become: true
   ansible.builtin.template:
-    src: '{{ sysctl_main_config_template }}'
-    dest: '{{ sysctl_conf_dir }}/zz-main-hardening.conf'
+    src: "{{ sysctl_main_config_template }}"
+    dest: "{{ sysctl_conf_dir }}/zz-main-hardening.conf"
     mode: "0755"
     owner: root
     group: root

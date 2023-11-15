@@ -20,7 +20,7 @@ provisioner:
       bookworm:
         ansible_python_interpreter: /usr/bin/python3
         sshd_admin_net:
-          - 0.0.0.0/0
+          - "0.0.0.0/0"
         sshd_allow_groups:
           - vagrant
           - sudo
@@ -30,7 +30,7 @@ provisioner:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
         sshd_admin_net:
-          - 0.0.0.0/0
+          - "0.0.0.0/0"
         sshd_allow_groups:
           - vagrant
           - sudo
@@ -39,7 +39,7 @@ provisioner:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
         sshd_admin_net:
-          - 0.0.0.0/0
+          - "0.0.0.0/0"
         sshd_allow_groups:
           - vagrant
           - sudo
