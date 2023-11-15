@@ -1,5 +1,4 @@
 ---
-
 - name: Template the sysctl file with general sysctl hardening settings
   become: true
   ansible.builtin.template:
@@ -50,3 +49,18 @@
     - CIS-UBUNTU2004-3.3.9
     - UBTU-20-010412
     - UBTU-20-010448
+
+- name: Template sysctl file with IPv6 settings
+  become: true
+  ansible.builtin.template:
+    src: "{{ sysctl_ipv6_config_template }}"
+    dest: "{{ sysctl_conf_dir }}/zz-002-ipv6-hardening.conf"
+    mode: "0755"
+    owner: root
+    group: root
+    backup: false
+  when: system_has_ipv6 and (not disable_ipv6)
+  notify:
+    - Restart sysctl
+  tags:
+    - ipv6
