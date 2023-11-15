@@ -1,9 +1,15 @@
 ---
+- name: Ensure old sysctl file is removed
+  become: true
+  ansible.builtin.file:
+    path: "{{ sysctl_conf_dir }}/zz-hardening.conf"
+    state: absent
+
 - name: Template the sysctl file with general sysctl hardening settings
   become: true
   ansible.builtin.template:
     src: '{{ sysctl_main_config_template }}'
-    dest: '{{ sysctl_conf_dir }}/zz-001-main-hardening.conf'
+    dest: '{{ sysctl_conf_dir }}/zz-main-hardening.conf'
     mode: "0755"
     owner: root
     group: root
@@ -54,7 +60,7 @@
   become: true
   ansible.builtin.template:
     src: "{{ sysctl_ipv6_config_template }}"
-    dest: "{{ sysctl_conf_dir }}/zz-002-ipv6-hardening.conf"
+    dest: "{{ sysctl_conf_dir }}/zz-ipv6-hardening.conf"
     mode: "0755"
     owner: root
     group: root
