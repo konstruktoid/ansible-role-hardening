@@ -1,5 +1,6 @@
 ---
 system_upgrade: true
+
 packages_blocklist:
   - apport*
   - autofs
@@ -21,6 +22,7 @@ packages_blocklist:
   - xinetd
   - yp-tools
   - ypbind
+
 packages_debian:
   - acct
   - apparmor-profiles
@@ -48,6 +50,7 @@ packages_debian:
   - tcpd
   - vlock
   - wamerican
+
 packages_redhat:
   - audispd-plugins
   - audit
@@ -66,6 +69,7 @@ packages_redhat:
   - systemd-journal-remote
   - vlock
   - words
+
 packages_ubuntu:
   - fwupd
   - secureboot-db
