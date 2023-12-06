@@ -4,7 +4,7 @@ auditd_action_mail_acct: root
 auditd_admin_space_left_action: suspend
 auditd_disk_error_action: suspend
 auditd_disk_full_action: suspend
-auditd_flush: sync
+auditd_flush: incremental_async
 auditd_max_log_file: 20
 auditd_max_log_file_action: rotate
 auditd_mode: 1
