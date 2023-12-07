@@ -16,8 +16,6 @@ provisioner:
     host_vars:
       almalinux8:
         disable_wireless: true
-        enable_timesyncd: false
-        install_aide: false
         sshd_admin_net:
           - "0.0.0.0/0"
         sshd_allow_groups:
@@ -44,7 +42,6 @@ provisioner:
       focal:
         block_blacklisted: true
         disable_wireless: true
-        install_aide: false
         sshd_admin_net:
           - "0.0.0.0/0"
         sshd_allow_groups:
