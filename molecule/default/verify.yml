@@ -43,6 +43,7 @@
       become: true
       ansible.builtin.user:
         name: "{{ item }}"
+        group: "{{ item }}"
         shell: /bin/bash
         create_home: true
         generate_ssh_key: true
@@ -979,6 +980,7 @@
       become: true
       ansible.builtin.user:
         name: roletestuser
+        group: roletestuser
         password: "{{ password }}"
         state: present
         shell: /bin/bash
