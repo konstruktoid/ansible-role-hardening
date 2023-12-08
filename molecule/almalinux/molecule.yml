@@ -40,14 +40,14 @@ platforms:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - vbguest.auto_update = false
-    memory: 1024
+    memory: 2048
   - name: almalinux9
     box: almalinux/9
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - vbguest.auto_update = false
-    memory: 1024
+    memory: 2048
 verifier:
   name: ansible
 scenario:

@@ -17,7 +17,6 @@ provisioner:
       almalinux8:
         disable_wireless: true
         enable_timesyncd: false
-        install_aide: false
         sshd_admin_net:
           - "0.0.0.0/0"
         sshd_allow_groups:
@@ -44,13 +43,13 @@ provisioner:
       focal:
         block_blacklisted: true
         disable_wireless: true
-        install_aide: false
         sshd_admin_net:
           - "0.0.0.0/0"
         sshd_allow_groups:
           - vagrant
           - sudo
         suid_sgid_permissions: false
+        umask_value: "027"
       jammy:
         disable_ipv6: true
         block_blacklisted: true
@@ -78,14 +77,14 @@ platforms:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - vbguest.auto_update = false
-    memory: 1024
+    memory: 2048
   - name: almalinux9
     box: almalinux/9
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - vbguest.auto_update = false
-    memory: 1024
+    memory: 2048
   - name: bookworm
     box: debian/bookworm64
     instance_raw_config_args:

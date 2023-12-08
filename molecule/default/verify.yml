@@ -39,10 +39,21 @@
           ansible.builtin.set_fact:
             crypto_policies_config: "{{ stat_crypto_policies_config.stat.exists }}"
 
+    - name: Ensure test groups exists
+      become: true
+      ansible.builtin.group:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - roletestuser
+        - testuser01
+        - testuser02
+
     - name: Create test users
       become: true
       ansible.builtin.user:
         name: "{{ item }}"
+        group: "{{ item }}"
         shell: /bin/bash
         create_home: true
         generate_ssh_key: true
@@ -979,6 +990,7 @@
       become: true
       ansible.builtin.user:
         name: roletestuser
+        group: roletestuser
         password: "{{ password }}"
         state: present
         shell: /bin/bash

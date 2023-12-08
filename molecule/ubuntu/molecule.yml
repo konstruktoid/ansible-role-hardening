@@ -23,6 +23,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
+        umask_value: "027"
       jammy:
         sshd_admin_net:
           - "0.0.0.0/0"
