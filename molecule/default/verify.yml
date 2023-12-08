@@ -39,6 +39,16 @@
           ansible.builtin.set_fact:
             crypto_policies_config: "{{ stat_crypto_policies_config.stat.exists }}"
 
+    - name: Ensure test groups exists
+      become: true
+      ansible.builtin.group:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - roletestuser
+        - testuser01
+        - testuser02
+
     - name: Create test users
       become: true
       ansible.builtin.user:
