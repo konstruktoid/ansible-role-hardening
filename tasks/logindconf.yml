@@ -2,7 +2,7 @@
 - name: Configure systemd logind
   become: true
   ansible.builtin.template:
-    src: etc/systemd/logind.conf.j2
+    src: "{{ logind_conf_template }}"
     dest: /etc/systemd/logind.conf
     backup: true
     mode: "0644"

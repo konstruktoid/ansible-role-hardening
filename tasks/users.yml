@@ -6,7 +6,7 @@
     state: absent
     remove: true
   register: remove_users
-  with_items:
+  loop:
     - "{{ delete_users }}"
   failed_when: >
     remove_users is not success and
@@ -30,7 +30,7 @@
   ansible.builtin.file:
     mode: "0750"
     path: "{{ item.path }}"
-  with_items: "{{ home_directories.files }}"
+  loop: "{{ home_directories.files }}"
   loop_control:
     label: "{{ item.path }}"
   tags:

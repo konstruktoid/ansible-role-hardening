@@ -2,7 +2,7 @@
 - name: Mount /proc with additional options
   become: true
   ansible.posix.mount:
-    name: /proc
+    path: /proc
     src: none
     fstype: proc
     opts: rw,nosuid,nodev,noexec,relatime,hidepid={{ hide_pid | int }},gid={{ process_group }}
@@ -22,7 +22,7 @@
 - name: Mount /dev/shm with noexec
   become: true
   ansible.posix.mount:
-    name: /dev/shm
+    path: /dev/shm
     src: none
     fstype: tmpfs
     opts: rw,nosuid,nodev,noexec
@@ -41,7 +41,7 @@
 - name: Add systemd tmp.mount
   become: true
   ansible.builtin.template:
-    src: etc/systemd/tmp.mount.j2
+    src: "{{ tmp_mount_template }}"
     dest: /etc/systemd/system/tmp.mount
     backup: true
     mode: "0644"

@@ -17,7 +17,7 @@ RUN apk --update --no-cache add cargo gcc git g++ libffi-dev openssl-dev \
     python3 -m ensurepip --upgrade && \
     python3 -m pip install --no-cache-dir --upgrade pip && \
     python3 -m pip install --no-cache-dir wheel && \
-    python3 -m pip install --no-cache-dir cryptography && \
+    python3 -m pip install --no-cache-dir cryptography passlib && \
     python3 -m pip install --no-cache-dir git+https://github.com/ansible/ansible-lint.git && \
     rm -rf /var/cache/*
 

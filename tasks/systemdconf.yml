@@ -2,7 +2,7 @@
 - name: Configure systemd system.conf
   become: true
   ansible.builtin.template:
-    src: etc/systemd/system.conf.j2
+    src: "{{ system_conf_template }}"
     dest: /etc/systemd/system.conf
     backup: true
     mode: "0644"
@@ -18,7 +18,7 @@
 - name: Configure systemd user.conf
   become: true
   ansible.builtin.template:
-    src: etc/systemd/user.conf.j2
+    src: "{{ user_conf_template }}"
     dest: /etc/systemd/user.conf
     backup: true
     mode: "0644"

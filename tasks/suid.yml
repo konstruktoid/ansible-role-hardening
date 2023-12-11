@@ -10,7 +10,7 @@
         command -v "{{ item }}"
       args:
         executable: /bin/bash
-      with_items:
+      loop:
         - "{{ suid_sgid_blocklist }}"
       register: find_result
       changed_when: false
@@ -37,5 +37,5 @@
         - item.stat.mode is defined
         - item.stat.mode | int >= 2000
         - item.stat.mode | int <= 5000
-      with_items:
+      loop:
         - "{{ suid_file.results }}"

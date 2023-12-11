@@ -19,13 +19,19 @@ provisioner:
     host_vars:
       almalinux8:
         enable_timesyncd: false
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        sshd_allow_groups:
+          - vagrant
+          - sudo
         suid_sgid_permissions: false
       almalinux9:
         enable_timesyncd: false
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        sshd_allow_groups:
+          - vagrant
+          - sudo
         suid_sgid_permissions: false
 platforms:
   - name: almalinux8
@@ -34,14 +40,14 @@ platforms:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - vbguest.auto_update = false
-    memory: 1024
+    memory: 2048
   - name: almalinux9
     box: almalinux/9
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - vbguest.auto_update = false
-    memory: 1024
+    memory: 2048
 verifier:
   name: ansible
 scenario:

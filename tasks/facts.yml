@@ -92,6 +92,39 @@
       ansible.builtin.set_fact:
         crypto_policies_config: "{{ stat_crypto_policies_config.stat.exists }}"
 
+- name: Get PAM version
+  tags:
+    - fact
+    - common-account
+    - common-auth
+    - pam
+  block:
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+
+    - name: Get libpam version in Debian family
+      ansible.builtin.set_fact:
+        pam_version: "{{ ansible_facts.packages['libpam-modules'][0].version }}"
+      when:
+        - ansible_os_family == "Debian"
+        - "'libpam-modules' in ansible_facts.packages"
+
+    - name: Get libpam version in RedHat family
+      ansible.builtin.set_fact:
+        pam_version: "{{ ansible_facts.packages['pam'][0].version }}"
+      when:
+        - ansible_os_family == "RedHat"
+        - "'pam' in ansible_facts.packages"
+
+- name: Set hashing algorithm for password (yescrypt|sha512)
+  ansible.builtin.set_fact:
+    password_algorithm: "{{ 'yescrypt' if (pam_version is version('1.4.0', '>=')) else 'sha512' }}"
+  tags:
+    - fact
+    - pam
+    - CIS-UBUNTU2204-5.4.4
+    - M1041
+
 - name: Update current facts
   ansible.builtin.setup:
   tags:

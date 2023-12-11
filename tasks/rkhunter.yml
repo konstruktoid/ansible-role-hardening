@@ -2,7 +2,7 @@
 - name: Configure rkhunter
   become: true
   ansible.builtin.template:
-    src: etc/default/rkhunter.j2
+    src: "{{ rkhunter_template }}"
     dest: /etc/default/rkhunter
     backup: true
     mode: "0644"

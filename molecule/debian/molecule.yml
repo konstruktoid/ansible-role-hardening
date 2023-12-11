@@ -19,21 +19,30 @@ provisioner:
     host_vars:
       bookworm:
         ansible_python_interpreter: /usr/bin/python3
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        sshd_allow_groups:
+          - vagrant
+          - sudo
         suid_sgid_permissions: false
         system_upgrade: false
       bullseye:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        sshd_allow_groups:
+          - vagrant
+          - sudo
         suid_sgid_permissions: false
       testing:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        sshd_allow_groups:
+          - vagrant
+          - sudo
         suid_sgid_permissions: false
 platforms:
   - name: bookworm

@@ -2,7 +2,7 @@
 - name: Configure systemd journald.conf
   become: true
   ansible.builtin.template:
-    src: etc/systemd/journald.conf.j2
+    src: "{{ journald_conf_template }}"
     dest: /etc/systemd/journald.conf
     backup: true
     mode: "0644"
@@ -20,7 +20,7 @@
 - name: Configure logrotate(8)
   become: true
   ansible.builtin.template:
-    src: etc/logrotate.conf.j2
+    src: "{{ logrotate_conf_template }}"
     dest: /etc/logrotate.conf
     backup: true
     mode: "0644"

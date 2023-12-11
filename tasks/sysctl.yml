@@ -1,55 +1,19 @@
 ---
-- name: Set sysctl dev.tty.ldisc_autoload
+- name: Ensure old sysctl file is removed
   become: true
-  ansible.posix.sysctl:
-    name: dev.tty.ldisc_autoload
-    value: "{{ sysctl_dev_tty_ldisc_autoload | int }}"
-    state: present
-    sysctl_set: true
-    sysctl_file: "{{ sysctl_conf_dir }}/zz-hardening.conf"
-  when: ansible_kernel is version("5", ">=")
-  tags:
-    - sysctl
+  ansible.builtin.file:
+    path: "{{ sysctl_conf_dir }}/zz-hardening.conf"
+    state: absent
 
-- name: Set sysctl net.ipv6.conf.accept_ra_rtr_pref
+- name: Template the sysctl file with general sysctl hardening settings
   become: true
-  ansible.posix.sysctl:
-    name: net.ipv6.conf.{{ ansible_default_ipv4.interface }}.accept_ra_rtr_pref
-    value: "{{ sysctl_net_ipv6_conf_accept_ra_rtr_pref | int }}"
-    state: present
-    sysctl_set: true
-    sysctl_file: "{{ sysctl_conf_dir }}/zz-hardening.conf"
-  when: system_has_ipv6
-  tags:
-    - ipv6
-    - sysctl
-
-- name: Sysctl rules if the system has ipv6
-  ansible.builtin.set_fact:
-    sysctl_settings: "{{ generic_sysctl_settings | combine(ipv4_sysctl_settings) | combine(ipv6_sysctl_settings) }}"
-  when: system_has_ipv6
-  tags:
-    - ipv6
-    - sysctl
-
-- name: Sysctl rules if the system does not have ipv6
-  ansible.builtin.set_fact:
-    sysctl_settings: "{{ generic_sysctl_settings | combine(ipv4_sysctl_settings) }}"
-  when: not system_has_ipv6
-  tags:
-    - sysctl
-
-- name: Configure sysctl
-  become: true
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  ansible.posix.sysctl:
-    name: "{{ item.key }}"
-    value: "{{ item.value | int }}"
-    state: present
-    sysctl_set: true
-    sysctl_file: "{{ sysctl_conf_dir }}/zz-hardening.conf"
-  with_dict: "{{ sysctl_settings }}"
+  ansible.builtin.template:
+    src: "{{ sysctl_main_config_template }}"
+    dest: "{{ sysctl_conf_dir }}/zz-main-hardening.conf"
+    mode: "0755"
+    owner: root
+    group: root
+    backup: false
   notify:
     - Restart sysctl
   tags:
@@ -91,3 +55,18 @@
     - CIS-UBUNTU2004-3.3.9
     - UBTU-20-010412
     - UBTU-20-010448
+
+- name: Template sysctl file with IPv6 settings
+  become: true
+  ansible.builtin.template:
+    src: "{{ sysctl_ipv6_config_template }}"
+    dest: "{{ sysctl_conf_dir }}/zz-ipv6-hardening.conf"
+    mode: "0755"
+    owner: root
+    group: root
+    backup: false
+  when: system_has_ipv6 and (not disable_ipv6)
+  notify:
+    - Restart sysctl
+  tags:
+    - ipv6
