@@ -16,7 +16,7 @@
 - name: Add path script
   become: true
   ansible.builtin.template:
-    src: etc/profile.d/initpath.sh.j2
+    src: "{{ initpath_sh_template }}"
     dest: /etc/profile.d/initpath.sh
     backup: true
     mode: "0644"

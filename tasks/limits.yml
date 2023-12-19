@@ -2,7 +2,7 @@
 - name: Configure limits.conf
   become: true
   ansible.builtin.template:
-    src: etc/security/limits.conf.j2
+    src: "{{ limits_conf_template }}"
     dest: /etc/security/limits.conf
     backup: true
     mode: "0644"
@@ -18,7 +18,7 @@
 - name: Configure coredump.conf
   become: true
   ansible.builtin.template:
-    src: etc/systemd/coredump.conf.j2
+    src: "{{ coredump_conf_template }}"
     dest: /etc/systemd/coredump.conf
     backup: true
     mode: "0644"

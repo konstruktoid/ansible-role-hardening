@@ -95,7 +95,7 @@
         state: present
         create: true
         validate: visudo -cf %s
-      with_items:
+      loop:
         - "!rootpw"
         - "!runaspw"
         - "!targetpw"

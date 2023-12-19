@@ -14,6 +14,7 @@ generic/rhel8
 ubuntu/focal64
 ubuntu/jammy64
 ubuntu/lunar64
+ubuntu/mantic64
 ```
 
 ## Test examples
