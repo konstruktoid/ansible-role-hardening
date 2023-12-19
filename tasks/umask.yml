@@ -22,6 +22,17 @@
     - CIS-UBUNTU2004-5.5.4
     - M1022
 
+- name: Ensure that a umask line appears in rc
+  become: true
+  ansible.builtin.lineinfile:
+    line: umask {{ umask_value }}
+    mode: "0644"
+    path: /etc/init.d/rc
+    regexp: umask(\s+.*)
+  when: initdrc.stat.exists
+  tags:
+    - umask
+
 - name: Stat bashrc
   become: true
   ansible.builtin.stat:
@@ -49,6 +60,55 @@
     - CIS-UBUNTU2004-5.5.4
     - M1022
 
+- name: Ensure that a umask line appears in bashrc
+  become: true
+  ansible.builtin.lineinfile:
+    line: umask {{ umask_value }}
+    mode: "0644"
+    path: /etc/bashrc
+    regexp: umask(\s+.*)
+  when: bashrc.stat.exists
+  tags:
+    - umask
+
+- name: Stat bash.bashrc
+  become: true
+  ansible.builtin.stat:
+    path: /etc/bash.bashrc
+  register: bash_bashrc
+  tags:
+    - bash
+    - umask
+    - CCE-81036-6
+    - CIS-UBUNTU2004-5.5.4
+    - M1022
+
+- name: Set default bash.bashrc umask
+  become: true
+  ansible.builtin.replace:
+    regexp: umask(\s+.*)
+    replace: umask {{ umask_value }}
+    dest: /etc/bash.bashrc
+    mode: "0644"
+  when: bash_bashrc.stat.exists
+  tags:
+    - bash
+    - umask
+    - CCE-81036-6
+    - CIS-UBUNTU2004-5.5.4
+    - M1022
+
+- name: Ensure that a umask line appears in bash.bashrc
+  become: true
+  ansible.builtin.lineinfile:
+    line: umask {{ umask_value }}
+    mode: "0644"
+    path: /etc/bash.bashrc
+    regexp: umask(\s+.*)
+  when: bash_bashrc.stat.exists
+  tags:
+    - umask
+
 - name: Stat csh.cshrc
   become: true
   ansible.builtin.stat:
@@ -74,6 +134,17 @@
     - CIS-UBUNTU2004-5.5.4
     - M1022
 
+- name: Ensure that a umask line appears in csh.cshrc
+  become: true
+  ansible.builtin.lineinfile:
+    line: umask {{ umask_value }}
+    mode: "0644"
+    path: /etc/csh.cshrc
+    regexp: umask(\s+.*)
+  when: cshrc.stat.exists
+  tags:
+    - umask
+
 - name: Set default profile umask
   become: true
   ansible.builtin.replace:
@@ -86,40 +157,63 @@
     - CIS-UBUNTU2004-5.5.4
     - M1022
 
-- name: Configure readonly TMOUT
+- name: Ensure that a umask line appears in profile
   become: true
   ansible.builtin.lineinfile:
-    line: readonly TMOUT
-    dest: /etc/profile
+    line: umask {{ umask_value }}
     mode: "0644"
-    state: present
-    create: false
-    insertbefore: ^export
+    path: /etc/profile
+    regexp: umask(\s+.*)
   tags:
-    - tmout
+    - umask
 
-- name: Set TMOUT
-  become: true
-  ansible.builtin.lineinfile:
-    line: TMOUT=600
-    dest: /etc/profile
-    mode: "0644"
-    state: present
-    create: false
-    insertbefore: ^readonly TMOUT
-  tags:
-    - tmout
-    - CIS-UBUNTU2004-5.5.5
-    - UBTU-20-010013
+- name: Find all files in /etc/profile.d
+  ansible.builtin.find:
+    paths:
+      - /etc/profile.d
+    patterns:
+      - "*"
+  register: find_profiled_result
 
-- name: Export TMOUT
+- name: Set default profile umask for each file in /etc/profile.d
   become: true
-  ansible.builtin.lineinfile:
-    line: export TMOUT
-    dest: /etc/profile
+  ansible.builtin.replace:
+    regexp: umask(\s+.*)
+    replace: umask {{ umask_value }}
+    dest: "{{ item.path }}"
     mode: "0644"
-    state: present
-    create: false
-    insertafter: ^readonly TMOUT
+  loop: "{{ find_profiled_result.files }}"
+  loop_control:
+    label: "{{ item.path }}"
   tags:
-    - tmout
+    - umask
+
+- name: Set TMOUT in /etc/profile
+  become: true
+  block:
+    - name: Configure readonly TMOUT
+      ansible.builtin.lineinfile:
+        line: "readonly TMOUT"
+        dest: /etc/profile
+        mode: "0644"
+        state: present
+        create: false
+        insertbefore: "^export"
+
+    - name: Set TMOUT
+      ansible.builtin.lineinfile:
+        line: "TMOUT=900"
+        dest: /etc/profile
+        mode: "0644"
+        state: present
+        create: false
+        insertbefore: "^readonly TMOUT"
+
+    - name: Export TMOUT
+      ansible.builtin.lineinfile:
+        line: "export TMOUT"
+        dest: /etc/profile
+        mode: "0644"
+        state: present
+        create: false
+        insertafter: "^readonly TMOUT"

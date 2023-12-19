@@ -69,7 +69,7 @@ None.
       ansible.builtin.git:
         repo: 'https://github.com/konstruktoid/ansible-role-hardening'
         dest: /etc/ansible/roles/konstruktoid.hardening
-        version: master
+        version: v1.15.0
 
     - name: Include the hardening role
       ansible.builtin.include_role:
@@ -91,7 +91,7 @@ disruption, the role deletes every `ufw` rule without
 
 The role also sets default deny policies, which means that firewall rules
 needs to be created for any additional ports except those specified in
-the `sshd_port` and `ufw_outgoing_traffic` variables.
+the `sshd_ports` and `ufw_outgoing_traffic` variables.
 
 ## Task Execution and Structure
 
@@ -102,6 +102,21 @@ See [STRUCTURE.md](STRUCTURE.md) for tree of the role structure.
 See [TESTING.md](TESTING.md).
 
 ## Role Variables with defaults
+
+### ./defaults/main/aide.yml
+
+```yaml
+install_aide: true
+aide_checksums: sha512
+```
+
+If `install_aide: true` then [AIDE](https://aide.github.io/) will be installed
+and configured.
+
+`aide_checksums` modifies the AIDE `Checksums` variable. Note that the
+`Checksums` variable might not be present depending on distribution.
+
+[aide.conf(5)](https://linux.die.net/man/5/aide.conf)
 
 ### ./defaults/main/auditd.yml
 
@@ -232,7 +247,6 @@ Maximum number of processes and open files.
 ### ./defaults/main/misc.yml
 
 ```yaml
-install_aide: true
 reboot_ubuntu: false
 redhat_signing_keys:
   - 567E347AD0044ADE55BA8A5F199E2F91FD431D51
@@ -244,9 +258,6 @@ epel8_signing_keys:
 epel9_signing_keys:
   - FF8AD1344597106ECE813B918A3872BF3228467C
 ```
-
-If `install_aide: true` then [AIDE](https://aide.github.io/) will be installed
-and configured.
 
 If `reboot_ubuntu: true` an Ubuntu node will be rebooted if required.
 
@@ -301,17 +312,16 @@ of `blacklisted` kernel modules. The reasoning behind this is that a blacklisted
 module can still be loaded manually with `modprobe module_name`. Using
 `install module_name /bin/true` prevents this.
 
-**Please note:** This will affect modules that the OS itself has blacklisted as
+This will affect modules that the distribution has blacklisted as
 part of its default setup, or that were added manually at some point, by anyone
 with access to your system. Please verify the affected modules before turning
-this on, under `/etc/modprobe.d/`.
+this on by running `modprobe --showconfig | grep '^blacklist'`
 
-This code project does not blacklist any modules, it only blocks/disables, as
-described in the first paragraph of this section.
-
-Note that disabling the `usb-storage` module will disable any usage of USB
-storage devices, if such devices are needed [USBGuard](https://github.com/USBGuard/usbguard),
-or a similar tool, should be configured accordingly.
+> **Note**
+>
+> Disabling the `usb-storage` module will disable all USB
+> storage devices. If such devices are needed [USBGuard](https://github.com/USBGuard/usbguard),
+> or a similar tool, should be configured accordingly.
 
 ### ./defaults/main/mount.yml
 
@@ -402,6 +412,7 @@ packages_redhat:
   - needrestart
   - postfix
   - psacct
+  - python3-dnf-plugin-post-transaction-actions
   - rkhunter
   - rsyslog
   - rsyslog-gnutls
@@ -423,22 +434,57 @@ and packages to be removed (`packages_blocklist`).
 ### ./defaults/main/password.yml
 
 ```yaml
-pwquality_config:
+faillock_enable: true
+faillock:
+  admin_group: []
+  audit: true
+  deny: 5
+  dir: /var/run/faillock
+  even_deny_root: true
+  fail_interval: 900
+  local_users_only: true
+  no_log_info: false
+  nodelay: true
+  root_unlock_time: 600
+  silent: false
+  unlock_time: 600
+login_defs:
+  login_retries: 5
+  login_timeout: 60
+  pass_max_days: 60
+  pass_min_days: 1
+  pass_warn_age: 7
+password_remember: 5
+pwquality:
   dcredit: -1
   dictcheck: 1
+  dictpath: ''
   difok: 8
+  enforce_for_root: true
   enforcing: 1
+  gecoscheck: 1
   lcredit: -1
+  local_users_only: true
   maxclassrepeat: 4
   maxrepeat: 3
   minclass: 4
   minlen: 15
   ocredit: -1
+  retry: 3
   ucredit: -1
+  usercheck: 1
+  usersubstr: 3
 ```
 
-Configure the [libpwquality](https://manpages.ubuntu.com/manpages/focal/man5/pwquality.conf.5.html)
-library.
+`faillock_enable` set to `false` for disable faillock library.
+
+`password_remember` set the size of the password history that the user will not be able to reuse.
+
+Configure the [pam_faillock](https://manpages.ubuntu.com/manpages/lunar/en/man5/faillock.conf.5.html) library.
+
+Configure the [login.defs](https://manpages.ubuntu.com/manpages/lunar/en/man5/login.defs.5.html) configuration.
+
+Configure the [libpwquality](https://manpages.ubuntu.com/manpages/jammy/man5/pwquality.conf.5.html) library.
 
 ### ./defaults/main/sshd.yml
 
@@ -447,75 +493,101 @@ sshd_accept_env: LANG LC_*
 sshd_admin_net:
   - 192.168.0.0/24
   - 192.168.1.0/24
-sshd_allow_agent_forwarding: "no"
-sshd_allow_groups: sudo
-sshd_allow_users: "{{ ansible_user | default(lookup('ansible.builtin.env', 'USER')) }}"
-sshd_allow_tcp_forwarding: "no"
+sshd_allow_agent_forwarding: false
+sshd_allow_groups:
+  - sudo
+sshd_allow_tcp_forwarding: false
+sshd_allow_users:
+  - {{ ansible_user | default(lookup('ansible.builtin.env', 'USER')) }}
 sshd_authentication_methods: any
 sshd_banner: /etc/issue.net
-sshd_ca_signature_algorithms: >-
-  ecdsa-sha2-nistp256,
-  ecdsa-sha2-nistp384,
-  ecdsa-sha2-nistp521,
-  ssh-ed25519,
-  rsa-sha2-256,
-  rsa-sha2-512,
-  ssh-rsa
-sshd_challenge_response_authentication: "no"
-sshd_ciphers: >-
-  chacha20-poly1305@openssh.com,
-  aes256-gcm@openssh.com,
-  aes256-ctr
+sshd_ca_signature_algorithms:
+  - ecdsa-sha2-nistp256
+  - ecdsa-sha2-nistp384
+  - ecdsa-sha2-nistp521
+  - ssh-ed25519
+  - rsa-sha2-256
+  - rsa-sha2-512
+  - ssh-rsa
+sshd_kbd_interactive_authentication: false
+sshd_ciphers:
+  - chacha20-poly1305@openssh.com
+  - aes256-gcm@openssh.com
+  - aes256-ctr
 sshd_client_alive_count_max: 1
 sshd_client_alive_interval: 200
-sshd_compression: "no"
-sshd_gssapi_authentication: "no"
-sshd_hostbased_authentication: "no"
-sshd_host_key_algorithms: >-
-  ssh-ed25519-cert-v01@openssh.com,
-  ssh-rsa-cert-v01@openssh.com,
-  ssh-ed25519,
-  ssh-rsa,
-  ecdsa-sha2-nistp521-cert-v01@openssh.com,
-  ecdsa-sha2-nistp384-cert-v01@openssh.com,
-  ecdsa-sha2-nistp256-cert-v01@openssh.com,
-  ecdsa-sha2-nistp521,
-  ecdsa-sha2-nistp384,
-  ecdsa-sha2-nistp256
-sshd_ignore_rhosts: "yes"
-sshd_ignore_user_known_hosts: "yes"
-sshd_kerberos_authentication: "no"
-sshd_kex_algorithms: >-
-  curve25519-sha256@libssh.org,
-  ecdh-sha2-nistp521,
-  ecdh-sha2-nistp384,
-  ecdh-sha2-nistp256,
-  diffie-hellman-group-exchange-sha256
-sshd_login_grace_time: 20
+sshd_compression: false
+sshd_config_d_force_clear: false
+sshd_config_force_replace: false
+sshd_debian_banner: false
+sshd_deny_groups: []
+sshd_deny_users: []
+sshd_gssapi_authentication: false
+sshd_host_key_algorithms:
+  - ssh-ed25519-cert-v01@openssh.com
+  - ssh-rsa-cert-v01@openssh.com
+  - ssh-ed25519
+  - ssh-rsa
+  - ecdsa-sha2-nistp521-cert-v01@openssh.com
+  - ecdsa-sha2-nistp384-cert-v01@openssh.com
+  - ecdsa-sha2-nistp256-cert-v01@openssh.com
+  - ecdsa-sha2-nistp521
+  - ecdsa-sha2-nistp384
+  - ecdsa-sha2-nistp256
+sshd_host_keys_files: []
+sshd_host_keys_group: root
+sshd_host_keys_mode: "0600"
+sshd_host_keys_owner: root
+sshd_hostbased_authentication: false
+sshd_ignore_rhosts: true
+sshd_ignore_user_known_hosts: true
+sshd_kerberos_authentication: false
+sshd_kex_algorithms:
+  - curve25519-sha256@libssh.org
+  - ecdh-sha2-nistp521
+  - ecdh-sha2-nistp384
+  - ecdh-sha2-nistp256
+  - diffie-hellman-group-exchange-sha256
+sshd_listen:
+  - 0.0.0.0
 sshd_log_level: VERBOSE
-sshd_macs: >-
-  hmac-sha2-512-etm@openssh.com,
-  hmac-sha2-256-etm@openssh.com,
-  hmac-sha2-512,
-  hmac-sha2-256
+sshd_login_grace_time: 20
+sshd_macs:
+  - hmac-sha2-512-etm@openssh.com
+  - hmac-sha2-256-etm@openssh.com
+  - hmac-sha2-512
+  - hmac-sha2-256
+sshd_match_addresses: {}
+sshd_match_groups: {}
+sshd_match_local_ports: {}
+sshd_match_users: {}
 sshd_max_auth_tries: 3
 sshd_max_sessions: 3
-sshd_max_startups: 10:30:60
-sshd_password_authentication: "no"
-sshd_permit_empty_passwords: "no"
-sshd_permit_root_login: "no"
-sshd_permit_user_environment: "no"
-sshd_port: 22
-sshd_print_last_log: "yes"
-sshd_print_motd: "no"
+sshd_max_startups: '10:30:60'
+sshd_password_authentication: false
+sshd_permit_empty_passwords: false
+sshd_permit_root_login: false
+sshd_permit_tunnel: false
+sshd_permit_user_environment: false
+sshd_ports:
+  - 22
+sshd_print_last_log: true
+sshd_print_motd: false
+sshd_print_pam_motd: false
 sshd_rekey_limit: 512M 1h
 sshd_required_rsa_size: 2048
-sshd_strict_modes: "yes"
-sshd_subsystem: sftp internal-sftp
-sshd_tcp_keep_alive: "no"
-sshd_use_dns: "no"
-sshd_use_pam: "yes"
-sshd_x11_forwarding: "no"
+sshd_sftp_enabled: true
+sshd_sftp_only_chroot: true
+sshd_sftp_only_chroot_dir: '%h'
+sshd_sftp_only_group: ''
+sshd_sftp_subsystem: internal-sftp -f LOCAL6 -l INFO
+sshd_strict_modes: true
+sshd_syslog_facility: AUTH
+sshd_tcp_keep_alive: false
+sshd_use_dns: false
+sshd_use_pam: true
+sshd_use_privilege_separation: sandbox
+sshd_x11_forwarding: false
 ```
 
 > **Note**
@@ -527,39 +599,109 @@ sshd_x11_forwarding: "no"
 For a explanation of the options not described below, please read
 [https://man.openbsd.org/sshd_config](https://man.openbsd.org/sshd_config).
 
-Only the network(s) defined in `sshd_admin_net` are allowed to
-connect to `sshd_port`. Note that additional rules need to be set up in order
-to allow access to additional services.
+Only the network(s) defined in `sshd_admin_net` are allowed to connect to `sshd_ports`. Note that additional rules need to be set up in order to allow access to additional services.
 
-OpenSSH login is allowed only for users whose primary group or supplementary
-group list matches one of the patterns in `sshd_allow_groups`.
-OpenSSH login is also allowed for users in `sshd_allow_users`.
+OpenSSH login is allowed only for users whose primary group or supplementary group list matches one of the patterns in `sshd_allow_groups`. OpenSSH login is also allowed for users in `sshd_allow_users`. To do the opposite and deny access, use the `sshd_deny_groups` and `sshd_deny_users` parameters, which in turn have priority over the previous parameters.
 
-`sshd_allow_agent_forwarding` specifies whether ssh-agent(1) forwarding is
-permitted.
+`sshd_allow_agent_forwarding` specifies whether ssh-agent(1) forwarding is permitted.
 
-`sshd_allow_tcp_forwarding` specifies whether TCP forwarding is permitted.
-The available options are `yes` or all to allow TCP forwarding, `no` to prevent
-all TCP forwarding, `local` to allow local (from the perspective of ssh(1))
-forwarding only or `remote` to allow remote forwarding only.
+`sshd_allow_tcp_forwarding` specifies whether TCP forwarding is permitted. The available options are `true|yes` or all to allow TCP forwarding, `false|no` to prevent all TCP forwarding, `local` to allow local (from the perspective of ssh(1)) forwarding only or `remote` to allow remote forwarding only.
 
-`sshd_authentication_methods` specifies the authentication methods that must
-be successfully completed in order to grant access to a user.
+`sshd_authentication_methods` specifies the authentication methods that must be successfully completed in order to grant access to a user.
 
 `sshd_log_level` gives the verbosity level that is used when logging messages.
 
-`sshd_max_auth_tries` and `sshd_max_sessions` specifies the maximum number of
-SSH authentication attempts permitted per connection and the maximum number of
-open shell, login or subsystem (e.g. sftp) sessions permitted per network
+`sshd_max_auth_tries` and `sshd_max_sessions` specifies the maximum number of SSH authentication attempts permitted per connection and the maximum number of open shell, login or subsystem (e.g. sftp) sessions permitted per network
 connection.
 
-`sshd_password_authentication` specifies whether password authentication is
-allowed.
+`sshd_password_authentication` specifies whether password authentication is allowed.
 
-`sshd_port` specifies the port number that sshd(8) listens on.
+`sshd_ports` specifies the port(s) number that sshd(8) listens on.
 
-`sshd_required_rsa_size`, RequiredRSASize, will only be set if SSH version is
-higher than 9.1.
+`sshd_required_rsa_size`, RequiredRSASize, will only be set if SSH version is higher than 9.1.
+
+`sshd_config_d_force_clear` force clear directory `/etc/ssh/sshd_config.d`. Default: `false`.
+
+`sshd_config_force_replace` force replace configuration file `/etc/ssh/sshd_config`. Default: `false`.
+
+> **Note**
+>
+> By default, the role checks whether the directory `/etc/ssh/sshd_config.d` exists and whether it is linked via the `Include` parameter in the `/etc/ssh/sshd_config` file, if so, an additional configuration file is created in `/ etc/ssh/sshd_config.d`, if not, the `/etc/ssh/sshd_config` file is overwritten.
+
+> **Warning**
+>
+> If any `sshd_match_(users|groups|addresses|local_ports)` or `sshd_sftp_only_group` parameters is set, the value `true` will be implicit.
+
+`sshd_host_keys_files` host keys for sshd. If empty `['/etc/ssh/ssh_host_rsa_key', '/etc/ssh/ssh_host_ecdsa_key', '/etc/ssh/ssh_host_ed25519_key']` will be used, as far as supported by the installed sshd version.
+
+`sshd_host_keys_owner` set owner of host keys for sshd. Default: `root`.
+`sshd_host_keys_group` set group of host keys for sshd. Default: `root`.
+`sshd_host_keys_mode` set permission of host keys for sshd. Default: `"0600"`.
+
+`sshd_match_users` add a conditional block for users. If all of the criteria on the Match line are satisfied, the rules/parameters defined on the following lines override those set in the global section of the config file, until either another Match line or the end of the file.
+
+Expected configuration structure:
+```yaml
+sshd_match_users:
+  - user: <username>
+    rules:
+      - <parameter sshd> <value>
+      - <parameter sshd> <value>
+```
+Example, allow `ubuntu` user access through password authentication and allow `ansible` user access without banner:
+```yaml
+sshd_match_users:
+  - user: ubuntu
+    rules:
+      - AllowUsers ubuntu
+      - AuthenticationMethods password
+      - PasswordAuthentication yes
+  - user: ansible
+    rules:
+      - AllowUsers ansible
+      - Banner none
+```
+`sshd_match_groups` add a conditional block for groups. More details and examples in the parameter description `sshd_match_users`.
+
+Expected configuration structure:
+```yaml
+sshd_match_groups:
+  - group: <groupname>
+    rules:
+      - <parameter sshd> <value>
+      - <parameter sshd> <value>
+```
+
+`sshd_match_addresses` add a conditional block for adddresses. More details and examples in the parameter description `sshd_match_users`.
+
+Expected configuration structure:
+```yaml
+sshd_match_addresses:
+  - address: <ip>
+    rules:
+      - <parameter sshd> <value>
+      - <parameter sshd> <value>
+```
+`sshd_match_local_ports` add a conditional block for ports. More details and examples in the parameter description `sshd_match_users`.
+
+Expected configuration structure:
+```yaml
+sshd_match_ports:
+  - port: <port>
+    rules:
+      - <parameter sshd> <value>
+      - <parameter sshd> <value>
+```
+
+`sshd_print_pam_motd` specifies whether printing of the MOTD via pam (Debian and Ubuntu). Default: `false`.
+
+`sshd_sftp_enabled` specifies whether enabled sftp configuration. Default: `true`.
+`sshd_sftp_subsystem` Set external subsystem for file  transfer  daemon. Default: `internal-sftp -f LOCAL6 -l INFO`.
+`sshd_sftp_only_group` specifies the name of the group that will have access restricted to the sftp service only. Default: `""`.
+`sshd_sftp_only_chroot` specifies group access will be via chroot isolation. Default: `true`.
+`sshd_sftp_only_chroot_dir` specifies the chroot directory. Accepts the tokens `%%` (a literal `%`), `%h` (home directory of the user), and `%u` (username). Default: `"%h"`.
+
+`sshd_syslog_facility` set the facility code that is used when logging messages from sshd.Default: `AUTH`.
 
 ### ./defaults/main/suid_sgid_blocklist.yml
 
@@ -567,10 +709,12 @@ higher than 9.1.
 suid_sgid_permissions: true
 suid_sgid_blocklist:
   - 7z
+  - aa-exec
   - ab
   - agetty
   - alpine
   - ansible-playbook
+  - ansible-test
   - aoss
   - apt
   - apt-get
@@ -659,6 +803,43 @@ conntrack_sysctl_settings:
 `sysctl` configuration.
 
 [sysctl.conf](https://linux.die.net/man/5/sysctl.conf)
+
+### ./defaults/main/templates.yml
+
+```yaml
+adduser_conf_template: etc/adduser.conf.j2
+common_account_template: etc/pam.d/common-account.j2
+common_auth_template: etc/pam.d/common-auth.j2
+common_password_template: etc/pam.d/common-password.j2
+coredump_conf_template: etc/systemd/coredump.conf.j2
+faillock_conf_template: etc/security/faillock.conf.j2
+hardening_rules_template: etc/audit/rules.d/hardening.rules.j2
+hosts_allow_template: etc/hosts.allow.j2
+hosts_deny_template: etc/hosts.deny.j2
+initpath_sh_template: etc/profile.d/initpath.sh.j2
+issue_template: etc/issue.j2
+journald_conf_template: etc/systemd/journald.conf.j2
+limits_conf_template: etc/security/limits.conf.j2
+login_defs_template: etc/login.defs.j2
+login_template: etc/pam.d/login.j2
+logind_conf_template: etc/systemd/logind.conf.j2
+logrotate_conf_template: etc/logrotate.conf.j2
+motd_template: etc/motd.j2
+pwquality_conf_template: etc/security/pwquality.conf.j2
+resolved_conf_template: etc/systemd/resolved.conf.j2
+rkhunter_template: etc/default/rkhunter.j2
+ssh_config_template: etc/ssh/ssh_config.j2
+sshd_config_template: etc/ssh/sshd_config.j2
+sysctl_ipv6_config_template: etc/sysctl/sysctl.ipv6.conf.j2
+sysctl_main_config_template: etc/sysctl/sysctl.main.conf.j2
+system_conf_template: etc/systemd/system.conf.j2
+timesyncd_conf_template: etc/systemd/timesyncd.conf.j2
+tmp_mount_template: etc/systemd/tmp.mount.j2
+user_conf_template: etc/systemd/user.conf.j2
+useradd_template: etc/default/useradd.j2
+```
+
+Paths in order to support overriding the default [role templates](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html).
 
 ### ./defaults/main/ufw.yml
 

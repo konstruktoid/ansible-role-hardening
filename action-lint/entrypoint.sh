@@ -1,5 +1,7 @@
 #!/bin/sh -l
 
+export PATH="${PATH}:/root/.local/bin"
+
 echo "# Running ansible-lint"
 ansible-lint --version
 

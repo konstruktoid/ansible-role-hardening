@@ -25,7 +25,7 @@
     value: "1"
     state: present
     sysctl_set: true
-    sysctl_file: "{{ sysctl_conf_dir }}/zz-hardening.conf"
+    sysctl_file: "{{ sysctl_conf_dir }}/zz-ufw-hardening.conf"
     reload: true
   when: conntrackliberal.stat.exists
   tags:
@@ -61,7 +61,7 @@
   become: true
   ansible.builtin.lineinfile:
     regexp: ^IPT_SYSCTL=
-    line: IPT_SYSCTL={{ sysctl_conf_dir }}/zz-hardening.conf
+    line: IPT_SYSCTL={{ sysctl_conf_dir }}/zz-ufw-hardening.conf
     dest: /etc/default/ufw
     mode: "0640"
     state: present
@@ -76,7 +76,7 @@
   community.general.ufw:
     state: enabled
     direction: incoming
-    policy: deny
+    default: deny
     log: true
     logging: low
     comment: ansible managed
@@ -91,7 +91,7 @@
   community.general.ufw:
     state: enabled
     direction: outgoing
-    policy: deny
+    default: deny
     log: true
     logging: low
     comment: ansible managed
@@ -118,12 +118,11 @@
   become: true
   community.general.ufw:
     rule: limit
-    src: "{{ item }}"
-    port: "{{ sshd_port | int }}"
+    from_ip: "{{ item.0 }}"
+    to_port: "{{ item.1 | int }}"
     proto: tcp
     comment: ansible managed
-  with_items:
-    - "{{ sshd_admin_net }}"
+  loop: "{{ sshd_admin_net | product(sshd_ports) | list }}"
   tags:
     - ufw
     - M1037
@@ -132,11 +131,10 @@
   become: true
   community.general.ufw:
     rule: allow
-    port: "{{ item | int }}"
+    to_port: "{{ item | int }}"
     direction: out
     comment: ansible managed
-  with_items:
-    - "{{ ufw_outgoing_traffic }}"
+  loop: "{{ ufw_outgoing_traffic }}"
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.5
@@ -147,7 +145,7 @@
   become: true
   community.general.ufw:
     rule: deny
-    src: 127.0.0.0/8
+    from_ip: 127.0.0.0/8
     comment: ansible managed
   tags:
     - ufw
@@ -159,7 +157,7 @@
   when: not disable_ipv6
   community.general.ufw:
     rule: deny
-    src: ::1
+    from_ip: ::1
     comment: ansible managed
   tags:
     - ufw
@@ -198,8 +196,7 @@
   changed_when: ufw_delete.rc != 0
   failed_when: ufw_delete.rc != 0
   when: ufw_not_managed.stdout_lines | length > 0 and not ansible_os_family == "RedHat"
-  with_items:
-    - "{{ ufw_not_managed.stdout_lines }}"
+  loop: "{{ ufw_not_managed.stdout_lines }}"
   tags:
     - ufw
     - D3-OTF
@@ -214,7 +211,7 @@
     value: "{{ item.value | int }}"
     state: present
     sysctl_set: true
-    sysctl_file: "{{ sysctl_conf_dir }}/zz-hardening.conf"
+    sysctl_file: "{{ sysctl_conf_dir }}/zz-ufw-hardening.conf"
   with_dict: "{{ conntrack_sysctl_settings }}"
   notify:
     - Restart sysctl

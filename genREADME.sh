@@ -81,7 +81,7 @@ None.
       ansible.builtin.git:
         repo: 'https://github.com/konstruktoid/ansible-role-hardening'
         dest: /etc/ansible/roles/konstruktoid.hardening
-        version: master
+        version: v1.15.0
 
     - name: Include the hardening role
       ansible.builtin.include_role:
@@ -103,7 +103,7 @@ disruption, the role deletes every \`ufw\` rule without
 
 The role also sets default deny policies, which means that firewall rules
 needs to be created for any additional ports except those specified in
-the \`sshd_port\` and \`ufw_outgoing_traffic\` variables.
+the \`sshd_ports\` and \`ufw_outgoing_traffic\` variables.
 
 ## Task Execution and Structure
 

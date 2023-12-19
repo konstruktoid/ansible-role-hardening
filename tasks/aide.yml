@@ -70,7 +70,8 @@
     line: "{{ item }} p+i+n+u+g+s+b+acl+xattrs+sha512"
     mode: "0640"
     create: false
-  with_items:
+    validate: aide --config-check --config=%s
+  loop:
     - /usr/sbin/auditctl
     - /usr/sbin/auditd
     - /usr/sbin/ausearch
@@ -78,6 +79,19 @@
     - /usr/sbin/autrace
     - /usr/sbin/augenrules
     - /usr/sbin/audispd
+  tags:
+    - aide
+
+- name: Configure AIDE checksums
+  become: true
+  ansible.builtin.lineinfile:
+    dest: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+    state: present
+    regexp: ^Checksums =
+    line: Checksums = {{ aide_checksums }}
+    mode: "0640"
+    create: false
+    validate: aide --config-check --config=%s
   tags:
     - aide
 
@@ -94,6 +108,7 @@
       !/var/lib/private/systemd
       !/var/log/audit
       !/var/log/journal
+    validate: aide --config-check --config=%s
   tags:
     - aide
 

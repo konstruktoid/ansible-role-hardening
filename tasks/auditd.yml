@@ -185,7 +185,7 @@
 - name: Add auditd rules
   become: true
   ansible.builtin.template:
-    src: etc/audit/rules.d/hardening.rules.j2
+    src: "{{ hardening_rules_template }}"
     dest: /etc/audit/rules.d/hardening.rules
     backup: true
     mode: "0600"

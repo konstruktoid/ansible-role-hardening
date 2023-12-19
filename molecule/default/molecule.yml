@@ -17,35 +17,59 @@ provisioner:
       almalinux8:
         disable_wireless: true
         enable_timesyncd: false
-        install_aide: false
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        sshd_allow_groups:
+          - vagrant
+          - sudo
         suid_sgid_permissions: false
       almalinux9:
         enable_timesyncd: false
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        sshd_allow_groups:
+          - vagrant
+          - sudo
       bookworm:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
         disable_wireless: false
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        sshd_allow_groups:
+          - vagrant
+          - sudo
         system_upgrade: false
       focal:
         block_blacklisted: true
         disable_wireless: true
-        install_aide: false
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        sshd_allow_groups:
+          - vagrant
+          - sudo
         suid_sgid_permissions: false
+        umask_value: "027"
       jammy:
         disable_ipv6: true
         block_blacklisted: true
         disable_wireless: true
-        sshd_admin_net: "0.0.0.0/0"
-        sshd_allow_groups: vagrant sudo
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        sshd_allow_groups:
+          - vagrant
+          - sudo
         suid_sgid_permissions: false
+        sshd_match_users:
+          - user: testuser01
+            rules:
+              - AllowUsers testuser01
+              - AuthenticationMethods password
+              - PasswordAuthentication yes
+          - user: testuser02
+            rules:
+              - AllowUsers testuser02
+              - Banner none
 platforms:
   - name: almalinux8
     box: almalinux/8
@@ -53,14 +77,14 @@ platforms:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - vbguest.auto_update = false
-    memory: 1024
+    memory: 2048
   - name: almalinux9
     box: almalinux/9
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
       - vbguest.auto_update = false
-    memory: 1024
+    memory: 2048
   - name: bookworm
     box: debian/bookworm64
     instance_raw_config_args:

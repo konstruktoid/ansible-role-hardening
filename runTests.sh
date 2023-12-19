@@ -110,6 +110,10 @@ if [ "$1" == "vagrant" ]; then
 
   curl -sSL https://raw.githubusercontent.com/konstruktoid/ansible-role-hardening/master/defaults/main/suid_sgid_blocklist.yml | grep '  - ' >> "$(date +%y%m%d)-suid.list"
 
+  if command -v dos2unix; then
+    dos2unix ./*.list
+  fi
+
   printf '\n\n'
 
   find ./ -name '*-lynis.log' -type f | while read -r f; do
@@ -127,8 +131,6 @@ if [ "$1" == "vagrant" ]; then
   grep 'not ok' ./*-bats.log | sed 's/-.*:/: /g' | sort -r | uniq > "$(date +%y%m%d)-not-ok.log"
 
 else
-
   molecule test || exit 1
-
   echo "Tested with Ansible version: $ANSIBLE_V0"
 fi
