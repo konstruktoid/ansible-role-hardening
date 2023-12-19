@@ -17,6 +17,12 @@ provisioner:
   log: true
   inventory:
     host_vars:
+      bullseye_vlan:
+        ansible_python_interpreter: /usr/bin/python3
+        sshd_admin_net: "0.0.0.0/0"
+        sshd_allow_groups: vagrant sudo
+        suid_sgid_permissions: false
+        system_upgrade: false
       bookworm:
         ansible_python_interpreter: /usr/bin/python3
         sshd_admin_net: "0.0.0.0/0"
@@ -40,6 +46,11 @@ platforms:
     box: bento/debian-12
     instance_raw_config_args:
       - "vbguest.installer_options = { allow_kernel_upgrade: true }"
+    memory: 1024
+  - name: bullseye_vlan
+    box: debian/bullseye64
+    instance_raw_config_args:
+      - vbguest.auto_update = false
     memory: 1024
   - name: bullseye
     box: debian/bullseye64
