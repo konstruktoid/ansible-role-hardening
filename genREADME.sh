@@ -66,7 +66,7 @@ None.
         suid_sgid_permissions: false
 \`\`\`
 
-### ansible-pull with git checkout
+### Local playbook using git checkout
 
 \`\`\`yaml
 ---
