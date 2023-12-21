@@ -22,10 +22,10 @@ Vagrant.configure("2") do |config|
       a.extra_vars = {
         "ansible_become_pass" => "vagrant",
         "ansible_python_interpreter" => "/usr/bin/python3",
-        "sshd_admin_net" => "0.0.0.0/0",
-        "sshd_allow_groups" => "vagrant sudo debian ubuntu",
-        "system_upgrade" => "no",
-        "install_aide" => "false"
+        "sshd_admin_net" => ["0.0.0.0/0"],
+        "sshd_allow_groups" => ["vagrant", "sudo", "debian", "ubuntu"],
+        "system_upgrade" => "false",
+        "install_aide" => "false",
       }
     end
   end
@@ -47,7 +47,7 @@ Vagrant.configure("2") do |config|
         "ansible_python_interpreter" => "/usr/bin/python3",
         "sshd_admin_net" => ["0.0.0.0/0"],
         "sshd_allow_groups" => ["vagrant", "sudo", "debian", "ubuntu"],
-        "system_upgrade" => "no",
+        "system_upgrade" => "false",
      }
     end
   end
