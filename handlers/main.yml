@@ -104,22 +104,6 @@
     enabled: false
     state: stopped
 
-- name: Mask motdnews timer
-  become: true
-  ansible.builtin.systemd:
-    name: motd-news.timer
-    masked: true
-    enabled: false
-    state: stopped
-
-- name: Mask motdnews service
-  become: true
-  ansible.builtin.systemd:
-    name: motd-news.service
-    masked: true
-    enabled: false
-    state: stopped
-
 - name: Run dnf autoremove
   ansible.builtin.dnf:
     autoremove: true
