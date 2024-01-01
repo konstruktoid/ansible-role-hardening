@@ -49,39 +49,40 @@
   tags:
     - rsyslog
 
-- name: Stat rsyslog.conf FileCreateMode
+- name: Stat rsyslog.d
   become: true
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  ansible.builtin.shell: grep "^$FileCreateMode" /etc/rsyslog.conf
-  register: rsyslog_filecreatemode
-  changed_when: false
-  when: rsyslogconf.stat.exists
+  ansible.builtin.stat:
+    path: /etc/rsyslog.d
+  register: rsyslogd
   tags:
     - rsyslog
 
-- name: Configure rsyslog.conf FileCreateMode
+- name: Set rsyslog FileCreateMode
   become: true
-  ansible.builtin.lineinfile:
-    regexp: ^\$FileCreateMode
-    line: $FileCreateMode 0600
-    dest: /etc/rsyslog.conf
-    mode: "0640"
-    state: present
-    create: false
-  when: rsyslogconf.stat.exists and rsyslog_filecreatemode.stdout.find('FileCreateMode') != -1
-  tags:
-    - rsyslog
-    - CIS-UBUNTU2004-4.2.1.4
+  block:
+    - name: Configure rsyslog.conf FileCreateMode
+      ansible.builtin.lineinfile:
+        regexp: ^\$FileCreateMode
+        line: $FileCreateMode 0600
+        dest: /etc/rsyslog.conf
+        mode: "0640"
+        state: present
+        create: false
+        validate: rsyslogd -N3 -f %s
+      when: rsyslogconf.stat.exists
+      tags:
+        - rsyslog
+        - CIS-UBUNTU2004-4.2.1.4
 
-- name: Add FileCreateMode file to the rsyslog.d directory
-  become: true
-  ansible.builtin.lineinfile:
-    regexp: ^\$FileCreateMode
-    line: $FileCreateMode 0600
-    dest: /etc/rsyslog.d/99-filecreatemode.conf
-    mode: "0644"
-    state: present
-    create: true
-  tags:
-    - rsyslog
+    - name: Add FileCreateMode file to the rsyslog.d directory
+      ansible.builtin.lineinfile:
+        regexp: ^\$FileCreateMode
+        line: $FileCreateMode 0600
+        dest: /etc/rsyslog.d/99-filecreatemode.conf
+        mode: "0644"
+        state: present
+        create: true
+        validate: rsyslogd -N3 -f %s
+      when: rsyslogd.stat.isdir
+      tags:
+        - rsyslog
