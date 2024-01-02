@@ -1,6 +1,7 @@
 ansible
 ansible-lint
 ansible-playbook-grapher
+jmespath
 molecule
 molecule-vagrant
 passlib
