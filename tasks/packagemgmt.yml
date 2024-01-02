@@ -29,9 +29,6 @@
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 1800
-  notify:
-    - Run apt-get clean
-    - Run apt-get autoremove
   when: ansible_os_family == "Debian"
   tags:
     - apt
@@ -43,6 +40,9 @@
   register: apt_upgrade_response
   changed_when: apt_upgrade_response.stdout.find('0 upgraded') == -1
   when: ansible_os_family == "Debian" and system_upgrade | bool
+  notify:
+    - Run apt-get clean
+    - Run apt-get autoremove
   tags:
     - apt
     - CIS-UBUNTU2004-1.9
@@ -243,8 +243,6 @@
   ansible.builtin.dnf:
     update_cache: true
   when: ansible_os_family == "RedHat"
-  notify:
-    - Run dnf autoremove
   tags:
     - dnf
     - yum
@@ -258,6 +256,8 @@
     security: true
     nobest: true
   when: ansible_os_family == "RedHat" and system_upgrade | bool
+  notify:
+    - Run dnf autoremove
   tags:
     - dnf
     - yum
