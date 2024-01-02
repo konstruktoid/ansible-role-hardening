@@ -81,7 +81,11 @@
     name: "{{ packages_debian }}"
     state: present
     install_recommends: false
+    update_cache: true
   when: ansible_os_family == "Debian"
+  notify:
+    - Run apt-get clean
+    - Run apt-get autoremove
   tags:
     - packages
     - CIS-UBUNTU2004-1.6.1.1
@@ -96,7 +100,11 @@
     name: "{{ packages_ubuntu }}"
     state: present
     install_recommends: false
+    update_cache: true
   when: ansible_distribution == "Ubuntu"
+  notify:
+    - Run apt-get clean
+    - Run apt-get autoremove
   tags:
     - packages
 
@@ -115,9 +123,11 @@
   ansible.builtin.dnf:
     name: "{{ packages_redhat }}"
     state: present
+    update_cache: true
   when: ansible_os_family == "RedHat"
   notify:
     - Enable haveged
+    - Run dnf autoremove
   tags:
     - packages
     - CCE-80847-7
@@ -132,9 +142,12 @@
     name: "{{ packages_blocklist }}"
     state: absent
     purge: true
-  when: ansible_os_family == "Debian"
   register: apt_purge
   failed_when: apt_purge is not success and not "No package" in apt_purge.msg
+  when: ansible_os_family == "Debian"
+  notify:
+    - Run apt-get clean
+    - Run apt-get autoremove
   tags:
     - packages
     - M1042
@@ -216,6 +229,16 @@
   ansible.builtin.apt:
     autoclean: true
     autoremove: true
+    clean: true
   when: ansible_os_family == "Debian"
   tags:
+    - packages
+
+- name: Run dnf autoremove
+  become: true
+  ansible.builtin.dnf:
+    autoremove: true
+  when: ansible_os_family == "RedHat"
+  tags:
+    - dnf
     - packages

@@ -105,6 +105,7 @@
     state: stopped
 
 - name: Run dnf autoremove
+  become: true
   ansible.builtin.dnf:
     autoremove: true
   when: ansible_os_family == "RedHat"
