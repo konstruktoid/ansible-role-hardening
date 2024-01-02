@@ -193,27 +193,27 @@
   block:
     - name: Configure readonly TMOUT
       ansible.builtin.lineinfile:
-        line: "readonly TMOUT"
+        line: readonly TMOUT
         dest: /etc/profile
         mode: "0644"
         state: present
         create: false
-        insertbefore: "^export"
+        insertbefore: ^export
 
     - name: Set TMOUT
       ansible.builtin.lineinfile:
-        line: "TMOUT=900"
+        line: TMOUT=900
         dest: /etc/profile
         mode: "0644"
         state: present
         create: false
-        insertbefore: "^readonly TMOUT"
+        insertbefore: ^readonly TMOUT
 
     - name: Export TMOUT
       ansible.builtin.lineinfile:
-        line: "export TMOUT"
+        line: export TMOUT
         dest: /etc/profile
         mode: "0644"
         state: present
         create: false
-        insertafter: "^readonly TMOUT"
+        insertafter: ^readonly TMOUT

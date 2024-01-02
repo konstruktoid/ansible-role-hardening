@@ -8,35 +8,35 @@
 
 - name: Debug "cpuinfo_rdrand handling, true"
   ansible.builtin.debug:
-    msg: "cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}, true"
+    msg: cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}, true
   when: ansible_local.cpuinfo.rdrand
   tags:
     - debug
 
 - name: Debug "cpuinfo_rdrand handling, false"
   ansible.builtin.debug:
-    msg: "cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}, false"
+    msg: cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}, false
   when: not ansible_local.cpuinfo.rdrand
   tags:
     - debug
 
 - name: Debug "ansible_local['cpuinfo']['rdrand'], true"
   ansible.builtin.debug:
-    msg: "cpuinfo_rdrand is {{ ansible_local['cpuinfo']['rdrand'] }}, true"
+    msg: cpuinfo_rdrand is {{ ansible_local['cpuinfo']['rdrand'] }}, true
   when: ansible_local['cpuinfo']['rdrand']
   tags:
     - debug
 
 - name: Debug "ansible_local['cpuinfo']['rdrand'], false"
   ansible.builtin.debug:
-    msg: "cpuinfo_rdrand is {{ ansible_local['cpuinfo']['rdrand'] }}, false"
+    msg: cpuinfo_rdrand is {{ ansible_local['cpuinfo']['rdrand'] }}, false
   when: not ansible_local['cpuinfo']['rdrand']
   tags:
     - debug
 
 - name: Debug "cpuinfo_rdrand handling, info"
   ansible.builtin.debug:
-    msg: "cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}"
+    msg: cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}
   tags:
     - debug
 
@@ -47,28 +47,28 @@
 
 - name: Notify reboot handler
   ansible.builtin.debug:
-    msg: "reboot_required is {{ stat_reboot_required.stat.exists }}"
+    msg: reboot_required is {{ stat_reboot_required.stat.exists }}
   when:
     - ansible_distribution == "Ubuntu"
     - stat_reboot_required.stat.exists
 
 - name: Debug "systemd_version handling, <= 100"
   ansible.builtin.debug:
-    msg: "systemd version is {{ ansible_local.systemd.version }}, <= 100"
+    msg: systemd version is {{ ansible_local.systemd.version }}, <= 100
   when: ansible_local.systemd.version <= 100
   tags:
     - debug
 
 - name: Debug "systemd_version handling, >= 100"
   ansible.builtin.debug:
-    msg: "systemd version is {{ ansible_local.systemd.version }}, >= 100"
+    msg: systemd version is {{ ansible_local.systemd.version }}, >= 100
   when: ansible_local.systemd.version >= 100
   tags:
     - debug
 
 - name: Debug "systemd_version handling, info"
   ansible.builtin.debug:
-    msg: "systemd version is {{ ansible_local.systemd.version }}"
+    msg: systemd version is {{ ansible_local.systemd.version }}
   tags:
     - debug
 
@@ -92,12 +92,11 @@
 
 - name: Get owner of old keys
   vars:
-    - old_key: "{{ ansible_date_time.epoch | int - 3600 }}"
+    old_key: "{{ ansible_date_time.epoch | int - 3600 }}"
   ansible.builtin.debug:
     msg: "{{ item.user_name }}: {{ item.file }} - {{ item.modified_human }}"
   with_items:
     - "{{ ansible_local['sshkeys'] | json_query('keys.*') }}"
-  when: item.modified_epoch | int <= old_key | int and item.user_id >= 1000
+  when: ( item.modified_epoch | int <= old_key | int ) and item.user_id >= 1000
   tags:
     - debug
-...
