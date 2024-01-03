@@ -36,7 +36,8 @@
   become: true
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  ansible.builtin.command: aa-status --complaining
+  ansible.builtin.command:
+    cmd: aa-status --complaining
   register: get_apparmor_complaining
   changed_when: get_apparmor_complaining.stdout != "0"
   when: ansible_os_family == "Debian"

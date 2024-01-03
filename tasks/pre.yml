@@ -1,7 +1,8 @@
 ---
 - name: Update subscription info on RHEL
   become: true
-  ansible.builtin.command: subscription-manager refresh --force
+  ansible.builtin.command:
+    cmd: subscription-manager refresh --force
   changed_when: false
   when: ansible_distribution == "RedHat"
   tags:

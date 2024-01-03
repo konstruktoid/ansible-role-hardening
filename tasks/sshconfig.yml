@@ -40,7 +40,8 @@
 
 - name: Get sshd Include config
   become: true
-  ansible.builtin.command: grep -E "^Include " /etc/ssh/sshd_config
+  ansible.builtin.command:
+    cmd: grep -E "^Include " /etc/ssh/sshd_config
   register: grep_include
   changed_when: false
   failed_when: false

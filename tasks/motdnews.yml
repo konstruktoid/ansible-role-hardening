@@ -59,9 +59,10 @@
         - ubuntu-pro
 
     - name: Check apt_news status
-      ansible.builtin.shell: |
-        set -o pipefail
-        pro config show | grep '^apt_news.*False'
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          pro config show | grep '^apt_news.*False'
       args:
         executable: /bin/bash
       register: ubuntu_advantage_pro_state

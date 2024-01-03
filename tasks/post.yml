@@ -44,7 +44,8 @@
 
 - name: Stat Debian auditd GRUB settings
   become: true
-  ansible.builtin.shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
+  ansible.builtin.shell:
+    cmd: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
   changed_when: false
   failed_when: audit_grub_cfg.rc > 1
   register: audit_grub_cfg
