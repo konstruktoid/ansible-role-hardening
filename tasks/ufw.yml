@@ -91,9 +91,10 @@
 
 - name: Stat UFW rules
   become: true
-  ansible.builtin.shell: |
-    set -o pipefail
-    ufw show added | grep '^ufw' | grep -v "'ansible\smanaged'" | sed 's/ufw //g'
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      ufw show added | grep '^ufw' | grep -v "'ansible\smanaged'" | sed 's/ufw //g'
   args:
     executable: /bin/bash
   failed_when: ufw_not_managed.rc > 1

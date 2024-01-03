@@ -416,7 +416,8 @@
       become: true
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      ansible.builtin.command: sshd -T
+      ansible.builtin.command:
+        cmd: sshd -T
       check_mode: false
       register: sshd_config
       changed_when: false
@@ -888,7 +889,8 @@
     - name: Verify wireless state
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      ansible.builtin.command: nmcli -t radio
+      ansible.builtin.command:
+        cmd: nmcli -t radio
       register: wireless_state
       changed_when: not 'disabled' in wireless_state.stdout
       failed_when: not 'disabled' in wireless_state.stdout
@@ -924,7 +926,8 @@
       block:
         - name: Aide config check
           become: true
-          ansible.builtin.command: aide --config-check --config="{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+          ansible.builtin.command:
+            cmd: aide --config-check --config="{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
           register: aide_config
           changed_when: false
           failed_when: aide_config.rc != 0

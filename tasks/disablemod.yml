@@ -24,9 +24,10 @@
 - name: Stat blacklisted kernel modules
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  ansible.builtin.shell: |
-    set -o pipefail
-    modprobe -c | grep -o '^blacklist .*' | awk '{print $2}'
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      modprobe -c | grep -o '^blacklist .*' | awk '{print $2}'
   args:
     executable: /bin/bash
   changed_when: false

@@ -12,14 +12,16 @@
       when: ansible_os_family == "Debian"
 
     - name: Get WiFi state
-      ansible.builtin.command: nmcli -t radio
+      ansible.builtin.command:
+        cmd: nmcli -t radio
       register: wifi_state_pre
       changed_when: wifi_state_pre.rc != 0
       failed_when: wifi_state_pre.rc != 0
 
     - name: Turn off wireless interfaces
       become: true
-      ansible.builtin.command: nmcli radio all off
+      ansible.builtin.command:
+        cmd: nmcli radio all off
       register: nmcli_radio
       changed_when: nmcli_radio.rc != 0
       failed_when: nmcli_radio.rc != 0
