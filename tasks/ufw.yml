@@ -81,8 +81,8 @@
     logging: low
     comment: ansible managed
   loop:
-     - incoming
-     - outgoing
+    - incoming
+    - outgoing
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.7
