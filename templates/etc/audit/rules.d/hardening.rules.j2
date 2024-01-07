@@ -13,17 +13,9 @@
 # Failure Mode
 -f {{ auditd_mode | int }}
 
-# File and directory access
--a always,exit -F arch=b32 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b32 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b32 -S creat -S ftruncate -S open -S openat -S truncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b32 -S creat -S ftruncate -S open -S openat -S truncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b32 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b32 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b32 -S openat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b32 -S openat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b32 -S open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b32 -S open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
+# File-related system calls and directory access
+-a always,exit -F arch=b32 -S creat,ftruncate,open,openat,truncate,open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
+-a always,exit -F arch=b32 -S creat,ftruncate,open,openat,truncate,open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
 -a always,exit -F arch=b32 -S open -F dir=/bin -F success=0 -F key=access
 -a always,exit -F arch=b32 -S open -F dir=/etc -F success=0 -F key=access
 -a always,exit -F arch=b32 -S open -F dir=/home -F success=0 -F key=access
@@ -38,16 +30,8 @@
 -a always,exit -F arch=b32 -S open -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
 -a always,exit -F arch=b32 -S truncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
 -a always,exit -F arch=b32 -S truncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b64 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b64 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b64 -S creat -S ftruncate -S open -S openat -S truncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b64 -S creat -S ftruncate -S open -S openat -S truncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b64 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b64 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b64 -S openat -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b64 -S openat -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b64 -S open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
--a always,exit -F arch=b64 -S open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
+-a always,exit -F arch=b64 -S creat,ftruncate,open,openat,truncate,open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
+-a always,exit -F arch=b64 -S creat,ftruncate,open,openat,truncate,open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
 -a always,exit -F arch=b64 -S open -F dir=/bin -F success=0 -F key=access
 -a always,exit -F arch=b64 -S open -F dir=/etc -F success=0 -F key=access
 -a always,exit -F arch=b64 -S open -F dir=/home -F success=0 -F key=access
@@ -63,34 +47,32 @@
 -a always,exit -F arch=b64 -S truncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=access
 -a always,exit -F arch=b64 -S truncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=access
 
+# Various system calls by non-root users
 -a always,exit -F arch=b32 -C euid!=uid -F euid=0 -Fauid>=1000 -F auid!=unset -S execve -F key=actions
--a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=unset -F key=actions
--a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=unset -F key=actions
--a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=actions
--a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=actions
--a always,exit -F arch=b32 -S fremovexattr -F auid>=1000 -F auid!=unset -F key=actions
--a always,exit -F arch=b32 -S lremovexattr -F auid>=1000 -F auid!=unset -F key=actions
--a always,exit -F arch=b32 -S removexattr -F auid>=1000 -F auid!=unset -F key=actions
--a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=unset -F key=actions
+-a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=unset -F key=actions
+-a always,exit -F arch=b32 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=unset -F key=actions
+-a always,exit -F arch=b32 -S creat,open,openat,truncate,ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=actions
+-a always,exit -F arch=b32 -S creat,open,openat,truncate,ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=actions
+-a always,exit -F arch=b32 -S fremovexattr,lremovexattr,removexattr -F auid>=1000 -F auid!=unset -F key=actions
+-a always,exit -F arch=b32 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=unset -F key=actions
 -a always,exit -F arch=b64 -C euid!=uid -F euid=0 -Fauid>=1000 -F auid!=unset -S execve -F key=actions
--a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=unset -F key=actions
--a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=unset -F key=actions
--a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=actions
--a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=actions
--a always,exit -F arch=b64 -S fremovexattr -F auid>=1000 -F auid!=unset -F key=actions
--a always,exit -F arch=b64 -S lremovexattr -F auid>=1000 -F auid!=unset -F key=actions
--a always,exit -F arch=b64 -S removexattr -F auid>=1000 -F auid!=unset -F key=actions
--a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=unset -F key=actions
+-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=unset -F key=actions
+-a always,exit -F arch=b64 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=unset -F key=actions
+-a always,exit -F arch=b64 -S creat,open,openat,truncate,ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -F key=actions
+-a always,exit -F arch=b64 -S creat,open,openat,truncate,ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -F key=actions
+-a always,exit -F arch=b64 -S fremovexattr,lremovexattr,removexattr -F auid>=1000 -F auid!=unset -F key=actions
+-a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=unset -F key=actions
 
-# SU and sudo
+# Access to su, sudo, and sudoers files
 -w /bin/su -p x -F key=actions
 -w /etc/sudoers.d/ -p wa -F key=actions
 -w /etc/sudoers -p wa -F key=actions
 -w /usr/bin/sudo -p x -F key=actions
 
+# Actions by root in /home/ not owned by root
 -a always,exit -S all -F dir=/home/ -F uid=0 -C auid!=obj_uid -F key=admin-user-home
 
-# Apparmor configuration and tools
+# Access to AppArmor tools and configuration
 -w /sbin/apparmor_parser -p x -F key=apparmor-tools
 -w /usr/sbin/aa-complain -p x -F key=apparmor-tools
 -w /usr/sbin/aa-disable -p x -F key=apparmor-tools
@@ -98,7 +80,7 @@
 -w /etc/apparmor.d -p wa -F key=apparmor
 -w /etc/apparmor -p wa -F key=apparmor
 
-# Auditd configuration and tools
+# Changes to audit configuration and tools
 -w /etc/audisp -p wa -F key=audispconfig
 -w /etc/audit -p wa -F key=auditconfig
 -w /etc/libaudit.conf -p wa -F key=auditconfig
@@ -106,24 +88,27 @@
 -w /sbin/auditctl -p x -F key=audittools
 -w /sbin/auditd -p x -F key=audittools
 
-# Network configuration
--a always,exit -F arch=b32 -S sethostname -S setdomainname -F key=audit_rules_networkconfig_modification
--a always,exit -F arch=b64 -S sethostname -S setdomainname -F key=audit_rules_networkconfig_modification
+# Network configuration changes
+-a always,exit -F arch=b32 -S sethostname,setdomainname -F key=audit_rules_networkconfig_modification
+-a always,exit -F arch=b64 -S sethostname,setdomainname -F key=audit_rules_networkconfig_modification
 -w /etc/hosts -p wa -F key=audit_rules_networkconfig_modification
 -w /etc/issue.net -p wa -F key=audit_rules_networkconfig_modification
 -w /etc/issue -p wa -F key=audit_rules_networkconfig_modification
 -w /etc/sysconfig/network -p wa -F key=audit_rules_networkconfig_modification
+
+# User/group file modifications
 -w /etc/group -p wa -F key=audit_rules_usergroup_modification
 -w /etc/gshadow -p wa -F key=audit_rules_usergroup_modification
 -w /etc/passwd -p wa -F key=audit_rules_usergroup_modification
 -w /etc/security/opasswd -p wa -F key=audit_rules_usergroup_modification
 -w /etc/shadow -p wa -F key=audit_rules_usergroup_modification
 
--a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -F key=audit_time_rules
--a always,exit -F arch=b64 -S adjtimex -S settimeofday -F key=audit_time_rules
+# System time modifications
+-a always,exit -F arch=b32 -S adjtimex,settimeofday,stime -F key=audit_time_rules
+-a always,exit -F arch=b64 -S adjtimex,settimeofday -F key=audit_time_rules
 -w /etc/localtime -p wa -F key=audit_time_rules
 
-# Cron
+# Cron configuration modifications
 -w /etc/cron.allow -p wa -F key=cron
 -w /etc/cron.daily -p wa -F key=cron
 -w /etc/cron.deny -p wa -F key=cron
@@ -134,10 +119,11 @@
 -w /etc/cron.weekly -p wa -F key=cron
 -w /var/spool/cron/crontabs -p rwxa -F key=cron
 
--a always,exit -F arch=b32 -S rename -S renameat -S unlink -S unlinkat -F auid>=1000 -F auid!=unset -F key=delete
--a always,exit -F arch=b64 -S rename -S renameat -S unlink -S unlinkat -F auid>=1000 -F auid!=unset -F key=delete
+# File deletion and renaming by users
+-a always,exit -F arch=b32 -S rename,renameat,unlink,unlinkat -F auid>=1000 -F auid!=unset -F key=delete
+-a always,exit -F arch=b64 -S rename,renameat,unlink,unlinkat -F auid>=1000 -F auid!=unset -F key=delete
 
-# Group modifications
+# Group file modifications and group commands
 -w /etc/group -p wa -F key=group-modification
 -w /etc/gshadow -p wa -F key=group-modification
 -w /etc/passwd -p wa -F key=group-modification
@@ -187,15 +173,9 @@
 -w /etc/modules -p wa -F key=modprobe
 -a always,exit -F arch=b32 -S create_module -F key=module-change
 -a always,exit -F arch=b64 -S create_module -F key=module-change
--a always,exit -F arch=b32 -S delete_module -F key=modules
--a always,exit -F arch=b32 -S finit_module -F key=modules
--a always,exit -F arch=b32 -S finit_module -S init_module -F key=modules
--a always,exit -F arch=b32 -S init_module -F key=modules
+-a always,exit -F arch=b32 -S delete_module,finit_module,init_module -F key=modules
 -a always,exit -F arch=b32 -S query_module -F auid>=1000 -F auid!=unset -F key=modules
--a always,exit -F arch=b64 -S delete_module -F key=modules
--a always,exit -F arch=b64 -S finit_module -F key=modules
--a always,exit -F arch=b64 -S finit_module -S init_module -F key=modules
--a always,exit -F arch=b64 -S init_module -S delete_module -F key=modules
+-a always,exit -F arch=b64 -S delete_module,finit_module,init_module -F key=modules
 -a always,exit -F arch=b64 -S query_module -F auid>=1000 -F auid!=unset -F key=modules
 -w /bin/kmod -p x -F key=modules
 -w /sbin/insmod -p x -F key=modules
@@ -206,11 +186,11 @@
 -w /usr/sbin/modprobe -p x -F key=modules
 -w /usr/sbin/rmmod -p x -F key=modules
 
-# Mounts
+# Mount events for accounts with UID => 1000
 -a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=unset -F key=mounts
 -a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=unset -F key=mounts
 
-# PAM configuration
+# PAM configuration files
 -w /etc/pam.d -p wa -F key=pam
 -w /etc/security/limits.conf -p wa -F key=pam
 -w /etc/security/namespace.conf -p wa -F key=pam
@@ -220,22 +200,23 @@
 # Password modification
 -w /usr/bin/passwd -p x -F key=passwd-modification
 
--a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=unset -F key=perm_mod
--a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=unset -F key=perm_mod
--a always,exit -F arch=b32 -S fremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+#  Permission modifications by non-root users
+-a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=unset -F key=perm_mod
+-a always,exit -F arch=b32 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=unset -F key=perm_mod
+-a always,exit -F arch=b32 -S fremovexattr,fsetxattr,lremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
 -a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=unset -F key=perm_mod
--a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=unset -F key=perm_mod
--a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=unset -F key=perm_mod
--a always,exit -F arch=b64 -S fremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=unset -F key=perm_mod
+-a always,exit -F arch=b64 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=unset -F key=perm_mod
+-a always,exit -F arch=b64 -S fremovexattr,lremovexattr,fsetxattr -F auid>=1000 -F auid!=unset -F key=perm_mod
 -a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=unset -F key=perm_mod
 
-# Power management
+# Power management commands
 -w /sbin/halt -p x -F key=power
 -w /sbin/poweroff -p x -F key=power
 -w /sbin/reboot -p x -F key=power
 -w /sbin/shutdown -p x -F key=power
 
-# Privileged commands
+# Privileged command usage by non-root users
 -a always,exit -F path=/bin/fusermount -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
 -a always,exit -F path=/bin/mount -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
 -a always,exit -F path=/bin/ntfs-3g -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
@@ -243,7 +224,6 @@
 -a always,exit -F path=/bin/ping -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
 -a always,exit -F path=/bin/su -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
 -a always,exit -F path=/bin/umount -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
--a always,exit -F path=/opt/VBoxGuestAdditions-7.0.9/bin/VBoxDRMClient -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
 -a always,exit -F path=/sbin/pam_extrausers_chkpwd -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
 -a always,exit -F path=/sbin/pam_timestamp_check -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
 -a always,exit -F path=/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
@@ -320,8 +300,9 @@
 -w /var/log/wtmp -p wa -F key=session
 -w /var/run/utmp -p wa -F key=session
 
--a always,exit -F arch=b32 -S mknod,mknodat -F key=specialfiles
--a always,exit -F arch=b64 -S mknod,mknodat -F key=specialfiles
+# Creation of special files
+-a always,exit -F arch=b32 -S mknod -S mknodat -F key=specialfiles
+-a always,exit -F arch=b64 -S mknod -S mknodat -F key=specialfiles
 
 # SSH configuration and tools
 -w /etc/ssh/sshd_config.d/ -p rwxa -F key=sshd
@@ -339,17 +320,9 @@
 -w /etc/systemd -p wa -F key=systemd
 -w /lib/systemd -p wa -F key=systemd
 
-# Hostname changes
--a always,exit -F arch=b32 -S sethostname -S setdomainname -F key=system-locale
--a always,exit -F arch=b64 -S sethostname -S setdomainname -F key=system-locale
-
 # Time changes
--a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -F key=time-change
--a always,exit -F arch=b32 -S clock_settime -F a0=0x0 -F key=time-change
--a always,exit -F arch=b32 -S clock_settime -F key=time-change
--a always,exit -F arch=b64 -S adjtimex -S settimeofday -F key=time-change
--a always,exit -F arch=b64 -S clock_settime -F a0=0x0 -F key=time-change
--a always,exit -F arch=b64 -S clock_settime -F key=time-change
+-a always,exit -F arch=b32 -S adjtimex,settimeofday,stime,clock_settime -F key=time-change
+-a always,exit -F arch=b64 -S adjtimex,settimeofday,clock_settime -F key=time-change
 -w /etc/localtime -p wa -F key=time-change
 -w /etc/timezone -p wa -F key=time-changezone
 
