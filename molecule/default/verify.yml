@@ -771,6 +771,18 @@
       changed_when: cracklib_passwords.rc != 0
       when: ansible_os_family == "Debian"
 
+    - name: Verify username password list
+      environment:
+        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      ansible.builtin.shell: |
+        set -o pipefail
+        grep "{{ ansible_user | default(lookup('ansible.builtin.env', 'USER')) }}" /usr/share/dict/passwords.local
+      args:
+        executable: /bin/bash
+      register: username_passwords
+      failed_when: username_passwords.rc != 0
+      changed_when: username_passwords.rc != 0
+
     - name: Index blacklisted kernel modules
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
