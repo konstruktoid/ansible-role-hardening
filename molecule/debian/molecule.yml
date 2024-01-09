@@ -46,7 +46,7 @@ provisioner:
         suid_sgid_permissions: false
 platforms:
   - name: bookworm
-    box: bento/debian-12
+    box: debian/bookworm64
     instance_raw_config_args:
       - "vbguest.installer_options = { allow_kernel_upgrade: true }"
     memory: 1024
