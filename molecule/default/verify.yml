@@ -268,7 +268,8 @@
         sshd_config_parameters:
           - "{{ 'AcceptEnv ' + sshd_accept_env if (sshd_accept_env is defined and sshd_accept_env | length != 0)}}"
           - AddressFamily {{ 'inet' if (disable_ipv6 | bool) else 'any' }}
-          - AllowGroups vagrant sudo
+          - AllowGroups {{ sshd_allow_groups | join(' ') }}
+          - AllowUsers {{ sshd_allow_users | join(' ') }}
           - AllowAgentForwarding {{ 'yes' if (sshd_allow_agent_forwarding | bool) else 'no' }}
           - >-
             {%- if (ssh_installed_version is version('6.2', '>=')) -%}
