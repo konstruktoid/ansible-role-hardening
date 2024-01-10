@@ -164,3 +164,5 @@
   become: true
   ansible.builtin.command:
     cmd: rsyslogd -N3 -f /etc/rsyslog.conf
+  register: validate_rsyslogd
+  changed_when: validate_rsyslogd.rc == 0
