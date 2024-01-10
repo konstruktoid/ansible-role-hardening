@@ -159,3 +159,10 @@
     cmd: grub2-mkconfig
   register: update_grub2
   changed_when: update_grub2.rc == 0
+
+- name: Validate rsyslogd
+  become: true
+  ansible.builtin.command:
+    cmd: rsyslogd -N3 -f /etc/rsyslog.conf
+  register: validate_rsyslogd
+  changed_when: validate_rsyslogd.rc == 0
