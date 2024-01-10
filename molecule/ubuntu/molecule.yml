@@ -42,9 +42,14 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
+      noble:
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        sshd_allow_groups:
+          - vagrant
 platforms:
   - name: focal
-    box: bento/ubuntu-20.04
+    box: ubuntu/focal64
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
@@ -74,6 +79,17 @@ platforms:
     memory: 1024
   - name: mantic
     box: ubuntu/mantic64
+    config_options:
+      vm.boot_timeout: 600
+      synced_folder: false
+    provider_raw_config_args:
+      - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
+      - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
+    instance_raw_config_args:
+      - "vbguest.installer_options = { allow_kernel_upgrade: true }"
+    memory: 1024
+  - name: noble
+    box: ubuntu/noble64
     config_options:
       vm.boot_timeout: 600
       synced_folder: false
