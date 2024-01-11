@@ -85,7 +85,8 @@ sshd_print_last_log: true
 sshd_print_motd: false
 sshd_print_pam_motd: false
 sshd_rekey_limit: 512M 1h
-sshd_required_rsa_size: 2048
+sshd_required_ecdsa_size: 521
+sshd_required_rsa_size: 4096
 sshd_sftp_enabled: true
 sshd_sftp_only_chroot: true
 sshd_sftp_only_chroot_dir: "%h"

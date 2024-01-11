@@ -93,20 +93,52 @@
     - sshd
     - sshd_config
 
+- name: Find DSA host files
+  become: true
+  ansible.builtin.find:
+    paths: /etc/ssh
+    patterns: '*_host_dsa_key*'
+  register: dsa_files
+
+- name: Remove DSA host files
+  become: true
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ dsa_files.files }}"
+
 - name: Set default for sshd_host_keys_files if not supplied
   become: true
   when: not sshd_host_keys_files
   tags:
     - sshd
   block:
-    - name: Replace default 2048 bits RSA keypair
+    - name: Generate SSH RSA keypair
       community.crypto.openssh_keypair:
         state: present
         type: rsa
         size: "{{ sshd_required_rsa_size }}"
         path: /etc/ssh/ssh_host_rsa_key
-        force: false
         regenerate: partial_idempotence
+
+    - name: Generate SSH ECDSA keypair
+      community.crypto.openssh_keypair:
+        state: present
+        type: ecdsa
+        size: "{{ sshd_required_ecdsa_size }}"
+        path: /etc/ssh/ssh_host_ecdsa_key
+        regenerate: partial_idempotence
+      when:
+        - ssh_installed_version is version('6.0', '>=')
+
+    - name: Generate SSH Ed25519 keypair
+      community.crypto.openssh_keypair:
+        state: present
+        type: ed25519
+        path: /etc/ssh/ssh_host_ed25519_key
+        regenerate: partial_idempotence
+      when:
+        - ssh_installed_version is version('6.5', '>=')
 
     - name: Set hostkeys according to openssh-version if openssh >= 5.3
       ansible.builtin.set_fact:
@@ -123,15 +155,15 @@
           - /etc/ssh/ssh_host_ecdsa_key
       when:
         - ssh_installed_version is version('6.0', '>=')
-        - ssh_installed_version is version('6.3', '<')
+        - ssh_installed_version is version('6.5', '<')
 
-    - name: Set hostkeys according to openssh-version if openssh >= 6.3
+    - name: Set hostkeys according to openssh-version if openssh >= 6.5
       ansible.builtin.set_fact:
         sshd_host_keys_files:
           - /etc/ssh/ssh_host_rsa_key
           - /etc/ssh/ssh_host_ecdsa_key
           - /etc/ssh/ssh_host_ed25519_key
-      when: ssh_installed_version is version('6.3', '>=')
+      when: ssh_installed_version is version('6.5', '>=')
 
     - name: Change host private key ownership, group and permissions
       ansible.builtin.file:
