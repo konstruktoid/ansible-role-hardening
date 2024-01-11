@@ -97,7 +97,7 @@
   become: true
   ansible.builtin.find:
     paths: /etc/ssh
-    patterns: '*_host_dsa_key*'
+    patterns: "*_host_dsa_key*"
   register: dsa_files
 
 - name: Remove DSA host files
