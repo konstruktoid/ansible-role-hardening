@@ -57,8 +57,9 @@
         shell: /bin/bash
         create_home: true
         generate_ssh_key: true
-        ssh_key_bits: 3072
+        ssh_key_bits: "{{ sshd_required_rsa_size }}"
         ssh_key_file: .ssh/id_rsa
+        ssh_key_type: rsa
       loop:
         - testuser01
         - testuser02
@@ -1034,3 +1035,12 @@
     - name: Print test user
       ansible.builtin.debug:
         msg: "{{ roletestuser_pass.stdout }}"
+
+    - name: Stat ssh moduli
+      ansible.builtin.stat:
+        path: /etc/ssh/moduli
+      register: ssh_moduli
+
+    - name: Print ssh moduli checksum
+      ansible.builtin.debug:
+        msg: "{{ ssh_moduli.stat.checksum }}"
