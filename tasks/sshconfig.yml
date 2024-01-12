@@ -93,6 +93,23 @@
     - sshd
     - sshd_config
 
+- name: SSH moduli file
+  become: true
+  when: sshd_update_moduli
+  block:
+    - name: Stat moduli file
+      ansible.builtin.stat:
+        path: /etc/ssh/moduli
+      register: ssh_moduli
+
+    - name: Update moduli file
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/konstruktoid/ssh-moduli/main/moduli
+        dest: "{{ '/etc/ssh/' if ssh_moduli.stat.exists else '/etc/' }}"
+        owner: root
+        group: root
+        mode: "0644"
+
 - name: Find DSA host files
   become: true
   ansible.builtin.find:

@@ -22,6 +22,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
+        sshd_update_moduli: true
         suid_sgid_permissions: false
       almalinux9:
         enable_timesyncd: false
@@ -30,6 +31,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
+        sshd_update_moduli: true
       bookworm:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
@@ -39,6 +41,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
+        sshd_update_moduli: true
         system_upgrade: false
       focal:
         block_blacklisted: true
@@ -48,6 +51,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
+        sshd_update_moduli: true
         suid_sgid_permissions: false
         umask_value: "027"
       jammy:
