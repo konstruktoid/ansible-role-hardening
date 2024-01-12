@@ -95,6 +95,7 @@ sshd_sftp_subsystem: internal-sftp -f LOCAL6 -l INFO
 sshd_strict_modes: true
 sshd_syslog_facility: AUTH
 sshd_tcp_keep_alive: false
+sshd_update_moduli: false
 sshd_use_dns: false
 sshd_use_pam: true
 sshd_use_privilege_separation: sandbox

@@ -44,6 +44,7 @@ provisioner:
           - vagrant
           - sudo
         suid_sgid_permissions: false
+        sshd_update_moduli: true
 platforms:
   - name: bookworm
     box: debian/bookworm64

@@ -24,8 +24,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
-        suid_sgid_permissions: false
-        umask_value: "027"
+        sshd_update_moduli: true
         sshd_match_users:
           - user: testuser01
             rules:
@@ -36,6 +35,8 @@ provisioner:
             rules:
               - AllowUsers testuser02
               - Banner none
+        suid_sgid_permissions: false
+        umask_value: "027"
 platforms:
   - name: focal
     box: bento/ubuntu-20.04
