@@ -19,7 +19,7 @@
     - name: Configure sudo logfile
       become: true
       ansible.builtin.lineinfile:
-        line: Defaults logfile="/var/log/sudo.log"
+        line: Defaults logfile=/var/log/sudo.log
         dest: /etc/sudoers.d/012_logfile
         mode: "0440"
         state: present
