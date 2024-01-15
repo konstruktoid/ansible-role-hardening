@@ -188,32 +188,13 @@
   tags:
     - umask
 
-- name: Set TMOUT in /etc/profile
+- name: Configure session timeout
   become: true
-  block:
-    - name: Configure readonly TMOUT
-      ansible.builtin.lineinfile:
-        line: readonly TMOUT
-        dest: /etc/profile
-        mode: "0644"
-        state: present
-        create: false
-        insertbefore: ^export
-
-    - name: Set TMOUT
-      ansible.builtin.lineinfile:
-        line: TMOUT=900
-        dest: /etc/profile
-        mode: "0644"
-        state: present
-        create: false
-        insertbefore: ^readonly TMOUT
-
-    - name: Export TMOUT
-      ansible.builtin.lineinfile:
-        line: export TMOUT
-        dest: /etc/profile
-        mode: "0644"
-        state: present
-        create: false
-        insertafter: ^readonly TMOUT
+  ansible.builtin.lineinfile:
+    line: declare -xr TMOUT={{ session_timeout }}
+    dest: /etc/profile
+    mode: "0644"
+    state: present
+    create: false
+    insertbefore: ^export
+  when: session_timeout
