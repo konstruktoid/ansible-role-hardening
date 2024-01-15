@@ -17,6 +17,24 @@
     - CIS-UBUNTU2004-4.2.2.2
     - CIS-UBUNTU2004-4.2.2.3
 
+- name: Disable systemd-journal-remote
+  become: true
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+    masked: true
+  loop:
+    - systemd-journal-remote.socket
+    - systemd-journal-remote.service
+  register: mask_journal_remote
+  failed_when:
+    - mask_journal_remote is not success
+    - not "Could not find the requested service" in mask_journal_remote.msg
+  tags:
+    - systemd
+    - journald
+
 - name: Configure logrotate(8)
   become: true
   ansible.builtin.template:
