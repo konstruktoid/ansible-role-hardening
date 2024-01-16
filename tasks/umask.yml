@@ -191,7 +191,7 @@
 - name: Configure session timeout
   become: true
   ansible.builtin.lineinfile:
-    line: declare -xr TMOUT={{ session_timeout }}
+    line: declare -rix TMOUT={{ session_timeout }}
     dest: /etc/profile
     mode: "0644"
     state: present
