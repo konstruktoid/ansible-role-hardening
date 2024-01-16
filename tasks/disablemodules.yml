@@ -1,26 +1,4 @@
 ---
-- name: Disable misc kernel modules
-  become: true
-  ansible.builtin.lineinfile:
-    dest: /etc/modprobe.d/disablemod.conf
-    line: install {{ item }} /bin/true
-    mode: "0644"
-    owner: root
-    group: root
-    state: present
-    create: true
-  with_items:
-    - "{{ misc_modules_blocklist }}"
-  tags:
-    - modprobe
-    - CCE-80832-9
-    - CCE-82005-0
-    - CCE-82059-7
-    - CIS-UBUNTU2004-1.1.24
-    - M1034
-    - M1038
-    - M1042
-
 - name: Stat blacklisted kernel modules
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -33,7 +11,6 @@
   changed_when: false
   failed_when: modprobe_blacklist.rc != 0
   register: modprobe_blacklist
-  when: block_blacklisted | bool
   tags:
     - modprobe
     - M1034
@@ -43,7 +20,7 @@
 - name: Block blacklisted kernel modules
   become: true
   ansible.builtin.lineinfile:
-    dest: /etc/modprobe.d/blockblacklisted.conf
+    dest: /etc/modprobe.d/blacklist-blocked.conf
     line: install {{ item }} /bin/true
     mode: "0644"
     owner: root
@@ -52,7 +29,6 @@
     create: true
   with_items:
     - "{{ modprobe_blacklist.stdout_lines | sort }}"
-  when: block_blacklisted | bool
   tags:
     - modprobe
     - M1034
