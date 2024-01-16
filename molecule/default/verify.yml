@@ -803,7 +803,7 @@
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       ansible.builtin.shell: |
         set -o pipefail
-        grep 'install {{ item }} /bin/true' /etc/modprobe.d/blockblacklisted.conf
+        grep 'install {{ item }} /bin/true' /etc/modprobe.d/blacklist-blocked.conf
       args:
         executable: /bin/bash
       register: modprobe_blockblacklisted

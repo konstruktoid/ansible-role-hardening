@@ -1,0 +1,73 @@
+---
+- name: Disable kernel file system modules
+  become: true
+  ansible.builtin.lineinfile:
+    dest: /etc/modprobe.d/disablefs.conf
+    line: install {{ item }} /bin/true
+    mode: "0644"
+    owner: root
+    group: root
+    state: present
+    create: true
+  with_items:
+    - "{{ fs_modules_blocklist }}"
+  tags:
+    - modprobe
+    - CCE-80835-2
+    - CCE-81031-7
+    - CIS-UBUNTU2004-1.1.1.1
+    - CIS-UBUNTU2004-1.1.1.2
+    - CIS-UBUNTU2004-1.1.1.3
+    - CIS-UBUNTU2004-1.1.1.4
+    - CIS-UBUNTU2004-1.1.1.5
+    - CIS-UBUNTU2004-1.1.1.5
+    - CIS-UBUNTU2004-1.1.1.6
+    - CIS-UBUNTU2004-1.1.1.7
+    - M1038
+    - M1042
+
+- name: Disable kernel network modules
+  become: true
+  ansible.builtin.lineinfile:
+    dest: /etc/modprobe.d/disablenet.conf
+    line: install {{ item }} /bin/true
+    mode: "0644"
+    owner: root
+    group: root
+    state: present
+    create: true
+  with_items:
+    - "{{ net_modules_blocklist }}"
+  tags:
+    - modprobe
+    - CCE-80834-5
+    - CCE-82028-2
+    - CCE-82297-3
+    - CIS-UBUNTU2004-3.4.1
+    - CIS-UBUNTU2004-3.4.2
+    - CIS-UBUNTU2004-3.4.3
+    - CIS-UBUNTU2004-3.4.4
+    - M1038
+    - M1042
+
+- name: Disable misc kernel modules
+  become: true
+  ansible.builtin.lineinfile:
+    dest: /etc/modprobe.d/disablemod.conf
+    line: install {{ item }} /bin/true
+    mode: "0644"
+    owner: root
+    group: root
+    state: present
+    create: true
+  with_items:
+    - "{{ misc_modules_blocklist }}"
+  tags:
+    - modprobe
+    - CCE-80832-9
+    - CCE-82005-0
+    - CCE-82059-7
+    - CIS-UBUNTU2004-1.1.24
+    - M1034
+    - M1038
+    - M1042

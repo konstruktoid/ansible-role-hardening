@@ -23,13 +23,9 @@
   ansible.builtin.include_tasks:
     file: sysctl.yml
 
-- name: Disable kernel network modules
+- name: Disable kernel modules
   ansible.builtin.include_tasks:
-    file: disablenet.yml
-
-- name: Disable file system kernel modules
-  ansible.builtin.include_tasks:
-    file: disablefs.yml
+    file: kernelmodules.yml
 
 - name: Disable IPv6
   ansible.builtin.include_tasks:
@@ -113,9 +109,10 @@
   ansible.builtin.include_tasks:
     file: apparmor.yml
 
-- name: Disable misc kernel modules
+- name: Block blacklisted kernel modules
   ansible.builtin.include_tasks:
-    file: disablemod.yml
+    file: disablemodules.yml
+  when: block_blacklisted
 
 - name: Disable wireless interfaces
   ansible.builtin.include_tasks:
