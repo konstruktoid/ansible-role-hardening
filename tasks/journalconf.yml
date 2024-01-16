@@ -81,7 +81,7 @@
     - name: Configure rsyslog.conf FileCreateMode
       ansible.builtin.lineinfile:
         regexp: ^\$FileCreateMode
-        line: $FileCreateMode 0600
+        line: $FileCreateMode {{ rsyslog_filecreatemode }}
         dest: /etc/rsyslog.conf
         mode: "0640"
         state: present
@@ -96,7 +96,7 @@
     - name: Add FileCreateMode file to the rsyslog.d directory
       ansible.builtin.lineinfile:
         regexp: ^\$FileCreateMode
-        line: $FileCreateMode 0600
+        line: $FileCreateMode {{ rsyslog_filecreatemode }}
         dest: /etc/rsyslog.d/99-filecreatemode.conf
         mode: "0644"
         state: present

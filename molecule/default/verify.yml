@@ -130,7 +130,7 @@
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       ansible.builtin.shell: |
         set -o pipefail
-        rsyslogd -N3 -d 2>&1 | grep -o '\$FileCreateMode.*' | awk '{ if ($NF!="0600") exit 1}'
+        rsyslogd -N3 -d 2>&1 | grep -o '\$FileCreateMode.*' | awk '{ if ($NF!="{{ rsyslog_filecreatemode }}") exit 1}'
       args:
         executable: /bin/bash
       register: rsyslog_filecreate
