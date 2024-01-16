@@ -1044,3 +1044,13 @@
     - name: Print ssh moduli checksum
       ansible.builtin.debug:
         msg: "{{ ssh_moduli.stat.checksum }}"
+
+    - name: Verify TMOUT setting
+      ansible.builtin.shell: |
+        set -o pipefail
+        grep "^declare -irx TMOUT={{ session_timeout }}$" /etc/profile
+      args:
+        executable: /bin/bash
+      register: declare_tmout
+      changed_when: false
+      failed_when: declare_tmout.rc != 0
