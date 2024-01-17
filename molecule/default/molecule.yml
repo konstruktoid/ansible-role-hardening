@@ -22,6 +22,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
+        sshd_host_keys_group: ssh_keys
         sshd_update_moduli: true
         suid_sgid_permissions: false
       almalinux9:
@@ -31,6 +32,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
+        sshd_host_keys_group: ssh_keys
         sshd_update_moduli: true
       bookworm:
         ansible_become_pass: vagrant
