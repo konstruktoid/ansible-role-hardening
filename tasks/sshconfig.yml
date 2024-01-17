@@ -182,14 +182,6 @@
           - /etc/ssh/ssh_host_ed25519_key
       when: ssh_installed_version is version('6.5', '>=')
 
-    - name: Change host private key ownership, group and permissions
-      ansible.builtin.file:
-        path: "{{ item }}"
-        owner: "{{ sshd_host_keys_owner }}"
-        group: "{{ sshd_host_keys_group }}"
-        mode: "{{ sshd_host_keys_mode }}"
-      loop: "{{ sshd_host_keys_files }}"
-
 - name: Disable PAM dynamic MOTD
   become: true
   community.general.pamd:
@@ -356,9 +348,9 @@
 - name: Set sshd host key permissions
   become: true
   ansible.builtin.file:
-    owner: root
-    group: root
-    mode: "0600"
+    owner: "{{ sshd_host_keys_owner }}"
+    group: "{{ sshd_host_keys_group }}"
+    mode: "{{ sshd_host_keys_mode }}"
     path: "{{ item.path }}"
   loop: "{{ ssh_host_keys.files }}"
   loop_control:
