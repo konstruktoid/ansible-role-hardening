@@ -63,6 +63,7 @@
     name: apparmor
     enabled: true
     state: started
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
   tags:
     - apparmor

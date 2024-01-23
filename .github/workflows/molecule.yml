@@ -1,0 +1,25 @@
+---
+name: Molecule testing workflow
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 5 * * */3"
+jobs:
+  Molecule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get --assume-yes install podman python3-pip slirp4netns uidmap --no-install-recommends
+          python3 -m pip install --user -U ansible ansible-lint molecule-plugins[podman]
+
+      - name: Run ansible-lint
+        run: |
+          ansible-lint
+
+      - name: Run molecule
+        run: |
+          molecule test -s podman

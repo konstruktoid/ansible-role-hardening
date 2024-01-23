@@ -14,80 +14,85 @@
 - name: Run all notified handlers
   ansible.builtin.meta: flush_handlers
 
-- name: Stat RedHat auditd GRUB settings
+- name: Grub settings
   become: true
-  ansible.builtin.shell:
-    cmd: |
-      set -o pipefail
-      grubby --info="/boot/vmlinuz-$(uname -r)" | grep "^args.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
-  changed_when: false
-  failed_when: audit_grubenv.rc > 1
-  args:
-    executable: /bin/bash
-  register: audit_grubenv
-  when: ansible_os_family == "RedHat"
-  tags:
-    - auditd
-    - grub
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
+  block:
+    - name: Stat RedHat auditd GRUB settings
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          grubby --info="/boot/vmlinuz-$(uname -r)" | grep "^args.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
+      changed_when: false
+      failed_when: audit_grubenv.rc > 1
+      args:
+        executable: /bin/bash
+      register: audit_grubenv
+      when: ansible_os_family == "RedHat"
+      tags:
+        - auditd
+        - grub
 
-- name: Update grub2 if missing GRUB settings
-  become: true
-  ansible.builtin.command:
-    cmd: grub2-mkconfig
-  register: update_grub_redhat
-  changed_when: update_grub_redhat.rc != 0
-  failed_when: update_grub_redhat.rc != 0
-  when: ansible_os_family == "RedHat" and audit_grubenv.rc != 0
-  tags:
-    - auditd
-    - grub
+    - name: Update grub2 if missing GRUB settings
+      ansible.builtin.command:
+        cmd: grub2-mkconfig
+      register: update_grub_redhat
+      changed_when: update_grub_redhat.rc != 0
+      failed_when: update_grub_redhat.rc != 0
+      when:
+        - ansible_os_family == "RedHat"
+        - audit_grubenv.rc != 0
+        - ansible_virtualization_type not in ["container", "docker", "podman"]
+      tags:
+        - auditd
+        - grub
 
-- name: Stat Debian auditd GRUB settings
-  become: true
-  ansible.builtin.shell:
-    cmd: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
-  changed_when: false
-  failed_when: audit_grub_cfg.rc > 1
-  register: audit_grub_cfg
-  when: ansible_os_family == "Debian"
-  tags:
-    - auditd
-    - grub
+    - name: Stat Debian auditd GRUB settings
+      ansible.builtin.shell:
+        cmd: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
+      changed_when: false
+      failed_when: audit_grub_cfg.rc > 1
+      register: audit_grub_cfg
+      when:
+        - ansible_os_family == "Debian"
+      tags:
+        - auditd
+        - grub
 
-- name: Update GRUB if settings are missing
-  become: true
-  ansible.builtin.command:
-    cmd: update-grub
-  register: update_grub_debian
-  changed_when: update_grub_debian.rc != 0
-  failed_when: update_grub_debian.rc != 0
-  when: ansible_os_family == "Debian" and audit_grub_cfg.rc != 0
-  tags:
-    - auditd
-    - grub
+    - name: Update GRUB if settings are missing
+      ansible.builtin.command:
+        cmd: update-grub
+      register: update_grub_debian
+      changed_when: update_grub_debian.rc != 0
+      failed_when: update_grub_debian.rc != 0
+      when:
+        - ansible_os_family == "Debian"
+        - audit_grub_cfg.rc != 0
+      tags:
+        - auditd
+        - grub
 
-- name: Find GRUB config files
-  become: true
-  ansible.builtin.find:
-    paths: /boot
-    patterns: "*.cfg,grubenv"
-    recurse: true
-  register: grub_cfg
-  tags:
-    - grub
-    - CIS-UBUNTU2004-1.4.3
+    - name: Find GRUB config files
+      ansible.builtin.find:
+        paths: /boot
+        patterns: "*.cfg,grubenv"
+        recurse: true
+      register: grub_cfg
+      tags:
+        - grub
+        - CIS-UBUNTU2004-1.4.3
 
-- name: Set GRUB config permissions
-  become: true
-  ansible.builtin.file:
-    path: "{{ item.path }}"
-    mode: "0400"
-  when: item.mode | int > 400
-  changed_when: false
-  with_items:
-    - "{{ grub_cfg.files | reject('search', '/boot/efi/EFI/ubuntu/grub.cfg') | list }}"
-  loop_control:
-    label: "{{ item.path }}"
-  tags:
-    - grub
-    - CIS-UBUNTU2004-1.4.3
+    - name: Set GRUB config permissions
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        mode: "0400"
+      when: item.mode | int > 400
+      changed_when: false
+      with_items:
+        - "{{ grub_cfg.files | reject('search', '/boot/efi/EFI/ubuntu/grub.cfg') | list }}"
+      loop_control:
+        label: "{{ item.path }}"
+      tags:
+        - grub
+        - CIS-UBUNTU2004-1.4.3

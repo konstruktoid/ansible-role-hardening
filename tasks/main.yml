@@ -6,6 +6,8 @@
 - name: Configure systemd resolved
   ansible.builtin.include_tasks:
     file: resolvedconf.yml
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Install epel-release and python dependencies
   ansible.builtin.include_tasks:
@@ -17,11 +19,15 @@
     apply:
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  when: ufw_enable
+  when:
+    - ufw_enable
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Configure sysctl
   ansible.builtin.include_tasks:
     file: sysctl.yml
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Disable kernel modules
   ansible.builtin.include_tasks:
@@ -43,7 +49,9 @@
 - name: Configure systemd timesyncd
   ansible.builtin.include_tasks:
     file: timesyncd.yml
-  when: enable_timesyncd
+  when:
+    - enable_timesyncd
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Clean fstab
   ansible.builtin.include_tasks:
@@ -100,6 +108,8 @@
 - name: Disable systemd ctrl-alt-del.target
   ansible.builtin.include_tasks:
     file: ctrlaltdel.yml
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Configure auditd
   ansible.builtin.include_tasks:
@@ -108,6 +118,8 @@
 - name: Configure AppArmor
   ansible.builtin.include_tasks:
     file: apparmor.yml
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Block blacklisted kernel modules
   ansible.builtin.include_tasks:
@@ -117,7 +129,9 @@
 - name: Disable wireless interfaces
   ansible.builtin.include_tasks:
     file: disablewireless.yml
-  when: disable_wireless
+  when:
+    - disable_wireless
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 # https://bugs.launchpad.net/ubuntu/+source/aide/+bug/1903298
 - name: Configure AIDE

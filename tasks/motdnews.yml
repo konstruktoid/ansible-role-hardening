@@ -103,34 +103,21 @@
       tags:
         - ubuntu-pro
 
-    - name: Get motdnews timer state
-      ansible.builtin.systemd:
-        name: motd-news.timer
-      register: motd_news_timer
-
-    - name: Get motdnews service state
-      ansible.builtin.systemd:
-        name: motd-news.service
-      register: motd_news_service
-
-    - name: Mask motdnews timer
+    - name: Mask motdnews
       become: true
       ansible.builtin.systemd:
-        name: motd-news.timer
+        name: "{{ item }}"
         masked: true
         enabled: false
         state: stopped
-      when: motd_news_timer['status']['LoadState'] == "loaded"
-      tags:
-        - motd
-
-    - name: Mask motdnews service
-      become: true
-      ansible.builtin.systemd:
-        name: motd-news.service
-        masked: true
-        enabled: false
-        state: stopped
-      when: motd_news_service['status']['LoadState'] == "loaded"
+      register: mask_motdnews
+      failed_when:
+        - mask_motdnews is not success
+        - not "Could not find the requested service" in mask_motdnews.msg
+      loop:
+        - motd-news.service
+        - motd-news.timer
+      when:
+        - ansible_virtualization_type not in ["container", "docker", "podman"]
       tags:
         - motd

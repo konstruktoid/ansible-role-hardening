@@ -31,6 +31,8 @@
   failed_when:
     - mask_journal_remote is not success
     - not "Could not find the requested service" in mask_journal_remote.msg
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
   tags:
     - systemd
     - journald
@@ -101,7 +103,9 @@
         mode: "0644"
         state: present
         create: true
-      when: rsyslogd.stat.isdir
+      when:
+        - rsyslogd.stat.exists
+        - rsyslogd.stat.isdir
       notify:
         - Validate rsyslogd
       tags:

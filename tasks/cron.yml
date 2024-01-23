@@ -50,6 +50,8 @@
     state: stopped
   register: mask_atd
   failed_when: mask_atd is not success and not "Could not find the requested service" in mask_atd.msg
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
   tags:
     - at
     - systemd

@@ -39,4 +39,8 @@
     state: stopped
     masked: "yes"
   register: mask_kdump
-  failed_when: mask_kdump is not success and not "Could not find the requested service" in mask_kdump.msg
+  failed_when:
+    - mask_kdump is not success
+    - not "Could not find the requested service" in mask_kdump.msg
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]

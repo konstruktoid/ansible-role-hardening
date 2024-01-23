@@ -1,0 +1,110 @@
+---
+dependency:
+  name: galaxy
+  enabled: true
+driver:
+  name: podman
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      callback_whitelist: profile_tasks
+  playbooks:
+    converge: ../default/converge.yml
+    verify: ../default/verify.yml
+  log: true
+  inventory:
+    host_vars:
+      almalinux9:
+        enable_timesyncd: false
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        sshd_allow_groups:
+          - vagrant
+          - sudo
+        sshd_host_keys_group: ssh_keys
+        sshd_update_moduli: true
+      bookworm:
+        ansible_become_pass: vagrant
+        ansible_python_interpreter: /usr/bin/python3
+        disable_wireless: false
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        sshd_allow_groups:
+          - vagrant
+          - sudo
+        sshd_update_moduli: true
+        system_upgrade: false
+      jammy:
+        disable_ipv6: true
+        block_blacklisted: true
+        disable_wireless: true
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        sshd_allow_groups:
+          - vagrant
+          - sudo
+        suid_sgid_permissions: false
+        sshd_match_users:
+          - user: testuser01
+            rules:
+              - AllowUsers testuser01
+              - AuthenticationMethods password
+              - PasswordAuthentication yes
+          - user: testuser02
+            rules:
+              - AllowUsers testuser02
+              - Banner none
+platforms:
+  - name: almalinux9
+    image: docker.io/almalinux:9
+    privileged: true
+    volume_mounts:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  - name: bookworm
+    image: docker.io/debian:bookworm
+    privileged: true
+    volume_mounts:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  - name: jammy
+    image: docker.io/ubuntu:jammy
+    privileged: true
+    volume_mounts:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+verifier:
+  name: ansible
+scenario:
+  name: podman
+  create_sequence:
+    - dependency
+    - create
+    - prepare
+  check_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - create
+    - prepare
+    - converge
+    - check
+    - destroy
+  converge_sequence:
+    - dependency
+    - create
+    - prepare
+    - converge
+  destroy_sequence:
+    - dependency
+    - cleanup
+    - destroy
+  test_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - verify
+    - cleanup
+    - destroy

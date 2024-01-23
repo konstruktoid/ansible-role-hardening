@@ -64,6 +64,8 @@
   ansible.builtin.systemd:
     name: debug-shell.service
     masked: true
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
   tags:
     - systemd
     - debug-shell
