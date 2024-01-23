@@ -1,4 +1,13 @@
 ---
+- name: Ensure sysctl configuration dir has the correct permissions
+  become: true
+  ansible.builtin.file:
+    path: "{{ sysctl_conf_dir }}"
+    mode: "0755"
+    owner: root
+    group: root
+    state: directory
+
 - name: Ensure old sysctl file is removed
   become: true
   ansible.builtin.file:
@@ -10,7 +19,7 @@
   ansible.builtin.template:
     src: "{{ sysctl_main_config_template }}"
     dest: "{{ sysctl_conf_dir }}/zz-main-hardening.conf"
-    mode: "0755"
+    mode: "0644"
     owner: root
     group: root
     backup: false
@@ -61,7 +70,7 @@
   ansible.builtin.template:
     src: "{{ sysctl_ipv6_config_template }}"
     dest: "{{ sysctl_conf_dir }}/zz-ipv6-hardening.conf"
-    mode: "0755"
+    mode: "0644"
     owner: root
     group: root
     backup: false
