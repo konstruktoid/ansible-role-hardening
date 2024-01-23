@@ -22,9 +22,11 @@
   ansible.builtin.command:
     cmd: grubby --update-kernel=ALL --args="{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
   register: grubby_update_kernel
-  when: ansible_os_family == "RedHat"
   changed_when: grubby_update_kernel.rc != 0
   failed_when: grubby_update_kernel.rc != 0
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
   tags:
     - auditd
     - CCE-80825-3
