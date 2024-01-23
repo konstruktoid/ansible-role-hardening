@@ -4,7 +4,9 @@
   ansible.builtin.service:
     name: auditd
     state: restarted
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
   tags:
     - CCE-80872-5
 
@@ -15,7 +17,9 @@
     cmd: service auditd restart
   register: service_auditd_restart
   changed_when: service_auditd_restart.rc == 0
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_virtualization_type not in ["contaier", "docker", "podman"]
   tags:
     - CCE-80872-5
 
@@ -31,11 +35,15 @@
   ansible.builtin.service:
     name: systemd-sysctl
     state: restarted
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Reload systemd
   become: true
   ansible.builtin.systemd:
     daemon_reload: true
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Run rkhunter propupd
   become: true
@@ -50,6 +58,8 @@
     name: aidecheck.timer
     enabled: true
     state: started
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Disable aidecheck
   become: true
@@ -57,6 +67,8 @@
     name: aidecheck.timer
     state: stopped
     enabled: false
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Mask aidecheck
   become: true
@@ -65,6 +77,8 @@
     masked: true
     state: stopped
     enabled: false
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Restart ssh service
   become: true
@@ -73,6 +87,8 @@
     state: restarted
   register: ssh_service
   failed_when: ssh_service is not success and not 'Could not find the requested service' in ssh_service.msg
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Restart sshd service
   become: true
@@ -81,12 +97,16 @@
     state: restarted
   register: sshd_service
   failed_when: sshd_service is not success and not 'Could not find the requested service' in sshd_service.msg
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Restart Postfix
   become: true
   ansible.builtin.service:
     name: postfix
     state: restarted
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Run apt-get autoremove
   become: true
@@ -106,6 +126,8 @@
     masked: true
     enabled: false
     state: stopped
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Run dnf autoremove
   become: true
@@ -122,6 +144,8 @@
     name: haveged
     enabled: true
     state: started
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Reboot node
   become: true
@@ -152,6 +176,8 @@
     cmd: update-grub
   register: update_grub
   changed_when: update_grub.rc == 0
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Update GRUB2
   become: true
@@ -159,6 +185,8 @@
     cmd: grub2-mkconfig
   register: update_grub2
   changed_when: update_grub2.rc == 0
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Validate rsyslogd
   become: true
