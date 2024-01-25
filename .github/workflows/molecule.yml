@@ -16,7 +16,7 @@ jobs:
           sudo apt-get --assume-yes install podman python3-pip slirp4netns  \
             uidmap --no-install-recommends
           python3 -m pip install --user -U ansible ansible-lint \
-            jmespath molecule-plugins[podman]
+            jmespath molecule-plugins[podman] passlib
 
       - name: Run ansible-lint
         run: |
