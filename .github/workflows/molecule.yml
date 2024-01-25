@@ -24,4 +24,6 @@ jobs:
 
       - name: Run molecule
         run: |
-          ANSIBLE_REMOTE_TMP="/var/tmp/${USER}/ansible" molecule test -s podman
+          ANSIBLE_KEEP_REMOTE_FILES=1 \
+          ANSIBLE_REMOTE_TMP="/var/tmp/${USER}/ansible" \
+          molecule test -s podman
