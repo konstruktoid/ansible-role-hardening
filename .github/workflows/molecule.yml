@@ -13,10 +13,11 @@ jobs:
 
       - name: Install system dependencies
         run: |
-          sudo apt-get --assume-yes install podman python3-pip slirp4netns  \
-            uidmap --no-install-recommends
+          sudo apt-get update
+          sudo apt-get --assume-yes --no-install-recommends install python3-pip
           python3 -m pip install --user -U ansible ansible-lint \
-            jmespath molecule-plugins[podman] passlib
+            jmespath molecule-plugins[docker] passlib \
+          python3 -m pip install --user 'requests==2.28.1'
 
       - name: Run ansible-lint
         run: |
@@ -24,6 +25,5 @@ jobs:
 
       - name: Run molecule
         run: |
-          ANSIBLE_KEEP_REMOTE_FILES=1 \
           ANSIBLE_REMOTE_TMP="/var/tmp/${USER}/ansible" \
-          molecule test -s podman
+          molecule test -s docker

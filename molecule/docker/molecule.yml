@@ -3,7 +3,7 @@ dependency:
   name: galaxy
   enabled: true
 driver:
-  name: podman
+  name: docker
 provisioner:
   name: ansible
   config_options:
@@ -74,7 +74,7 @@ platforms:
 verifier:
   name: ansible
 scenario:
-  name: podman
+  name: docker
   create_sequence:
     - dependency
     - create
