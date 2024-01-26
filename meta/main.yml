@@ -4,13 +4,12 @@ galaxy_info:
   author: konstruktoid
   description: AlmaLinux, Debian and Ubuntu hardening. systemd edition.
   license: apache
-  min_ansible_version: "2.13"
+  min_ansible_version: "2.15"
   platforms:
     - name: Debian
       versions:
-        - buster
-        - bullseye
         - bookworm
+        - bullseye
     - name: EL
       versions:
         - "8"
