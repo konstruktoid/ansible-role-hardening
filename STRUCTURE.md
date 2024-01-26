@@ -1,9 +1,4 @@
-# Task Execution and Structure
-
-## Tasks
-![Task execution order](./images/ansible-role-hardening.svg)
-
-## Structure
+# Structure
 
 ```sh
 .

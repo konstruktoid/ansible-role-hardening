@@ -4,11 +4,6 @@ if [ -z "${ANSIBLE_V}" ]; then
   ANSIBLE_V="$(grep min_ansible_version meta/main.yml | awk '{print $NF}' | tr -d '\"')"
 fi
 
-if [ -x "$(command -v ansible-playbook-grapher)" ]; then
-  # https://github.com/haidaraM/ansible-playbook-grapher
-  ansible-playbook-grapher -i '127.0.0.1,' -o './images/ansible-role-hardening' --include-role-tasks tests/test.yml
-fi
-
 {
 echo "# Hardening - the Ansible role
 
@@ -47,6 +42,16 @@ None.
 
 ## Examples
 
+### Requirements
+
+\`\`\`yaml
+roles:
+  - name: konstruktoid.hardening
+    version: 'v1.15.0'
+    src: https://github.com/konstruktoid/ansible-role-hardening.git
+    scm: git
+\`\`\
+
 ### Playbook
 
 \`\`\`yaml
@@ -84,7 +89,7 @@ None.
       ansible.builtin.git:
         repo: 'https://github.com/konstruktoid/ansible-role-hardening'
         dest: /etc/ansible/roles/konstruktoid.hardening
-        version: v1.15.0
+        version: 'v1.15.0'
 
     - name: Include the hardening role
       ansible.builtin.include_role:
@@ -137,7 +142,7 @@ echo "## Recommended Reading
 
 [DISA Security Technical Implementation Guides](https://public.cyber.mil/stigs/downloads/?_dl_facet_stigs=operating-systems%2Cunix-linux)
 
-[SCAP Security Guides](https://static.open-scap.org/)
+[SCAP Security Guides](https://complianceascode.github.io/content-pages/guides/index.html)
 
 [Security focused systemd configuration](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc)
 
@@ -164,17 +169,8 @@ echo "# Testing
 "
 
 echo '```console'
-git grep -E 'box:|box =' Vagrantfile molecule/ | awk '{print $NF}' |\
+git grep -E 'box:|box =|image:' Vagrantfile molecule/ | awk '{print $NF}' |\
   tr -d '"' | sort | uniq
-echo '```'
-
-echo
-echo "## Test examples
-"
-
-echo '```shell'
-echo "ansible-playbook tests/test.yml --extra-vars \"sshd_admin_net=192.168.1.0/24\" \
-  -c local -i 'localhost,' -K"
 echo '```'
 
 echo
@@ -196,12 +192,8 @@ echo '```'
 rm ./*.log ./*.html ./*.list
 
 {
-echo "# Task Execution and Structure
+echo "# Structure
 
-## Tasks
-![Task execution order](./images/ansible-role-hardening.svg)
-
-## Structure
 "
 
 echo '```sh'
