@@ -69,6 +69,11 @@
   ansible.builtin.include_tasks:
     file: packagemgmt.yml
 
+- name: Configure automatic updates
+  ansible.builtin.include_tasks:
+    file: automatic_updates.yml
+  when: automatic_updates
+
 - name: Configure hosts.allow and hosts.deny
   ansible.builtin.include_tasks:
     file: hosts.yml
