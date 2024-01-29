@@ -1,0 +1,68 @@
+---
+- name: Install and configure dnf-automatic
+  become: true
+  when: ansible_os_family == "RedHat"
+  block:
+    - name: Install dnf-automatic
+      ansible.builtin.dnf:
+        name: dnf-automatic
+        state: present
+        update_cache: true
+      notify:
+        - Run dnf autoremove
+
+    - name: Install updates automatically
+      community.general.ini_file:
+        dest: /etc/dnf/automatic.conf
+        section: commands
+        option: apply_updates
+        value: "yes"
+        owner: root
+        group: root
+        mode: "0644"
+        create: true
+
+    - name: Install only security updates
+      community.general.ini_file:
+        dest: /etc/dnf/automatic.conf
+        section: commands
+        option: upgrade_type
+        value: security
+        owner: root
+        group: root
+        mode: "0644"
+        create: true
+
+    - name: Enable dnf-automatic timer
+      ansible.builtin.systemd:
+        name: dnf-automatic.timer
+        enabled: true
+        state: started
+      when:
+        - ansible_virtualization_type not in ["container", "docker", "podman"]
+
+- name: Install and configure unattended-upgrades
+  become: true
+  when: ansible_os_family == "Debian"
+  block:
+    - name: Configure unattended-upgrades package lists updates
+      ansible.builtin.lineinfile:
+        dest: /etc/apt/apt.conf.d/20auto-upgrades
+        line: APT::Periodic::Update-Package-Lists "1";
+        regexp: ^APT::Periodic::Update-Package-Lists
+        state: present
+        owner: root
+        group: root
+        mode: "0644"
+        create: true
+
+    - name: Configure unattended-upgrades upgrade intervall
+      ansible.builtin.lineinfile:
+        dest: /etc/apt/apt.conf.d/20auto-upgrades
+        line: APT::Periodic::Unattended-Upgrade "1";
+        regexp: ^APT::Periodic::Unattended-Upgrade
+        state: present
+        owner: root
+        group: root
+        mode: "0644"
+        create: true
