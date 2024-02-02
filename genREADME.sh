@@ -47,10 +47,10 @@ None.
 \`\`\`yaml
 roles:
   - name: konstruktoid.hardening
-    version: 'v1.15.0'
+    version: 'v2.0.0'
     src: https://github.com/konstruktoid/ansible-role-hardening.git
     scm: git
-\`\`\
+\`\`\`
 
 ### Playbook
 
@@ -89,7 +89,7 @@ roles:
       ansible.builtin.git:
         repo: 'https://github.com/konstruktoid/ansible-role-hardening'
         dest: /etc/ansible/roles/konstruktoid.hardening
-        version: 'v1.15.0'
+        version: 'v2.0.0'
 
     - name: Include the hardening role
       ansible.builtin.include_role:
