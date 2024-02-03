@@ -1,9 +1,17 @@
 ---
-- name: Disable kernel file system modules
+- name: Ensure kmod is installed
+  become: true
+  ansible.builtin.package:
+    name: kmod
+    state: present
+  tags:
+    - modprobe
+
+- name: Blacklist kernel file system modules
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/disablefs.conf
-    line: install {{ item }} /bin/true
+    line: blacklist {{ item }}
     mode: "0644"
     owner: root
     group: root
@@ -26,11 +34,11 @@
     - M1038
     - M1042
 
-- name: Disable kernel network modules
+- name: Blacklist kernel network modules
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/disablenet.conf
-    line: install {{ item }} /bin/true
+    line: blacklist {{ item }}
     mode: "0644"
     owner: root
     group: root
@@ -50,11 +58,11 @@
     - M1038
     - M1042
 
-- name: Disable misc kernel modules
+- name: Blacklist misc kernel modules
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/disablemod.conf
-    line: install {{ item }} /bin/true
+    line: blacklist {{ item }}
     mode: "0644"
     owner: root
     group: root
@@ -71,3 +79,39 @@
     - M1034
     - M1038
     - M1042
+
+- name: Stat blacklisted kernel modules
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      /usr/sbin/modprobe -c | grep -o '^blacklist .*' | awk '{print $2}'
+  args:
+    executable: /bin/bash
+  changed_when: false
+  failed_when: modprobe_blacklist.rc != 0
+  register: modprobe_blacklist
+  tags:
+    - modprobe
+    - M1034
+    - M1038
+    - M1042
+
+- name: Block blacklisted kernel modules
+  become: true
+  ansible.builtin.lineinfile:
+    dest: /etc/modprobe.d/blacklist-blocked.conf
+    line: install {{ item }} /bin/true
+    mode: "0644"
+    owner: root
+    group: root
+    state: present
+    create: true
+  with_items:
+    - "{{ modprobe_blacklist.stdout_lines | sort | unique }}"
+  tags:
+    - modprobe
+    - M1034
+    - M1038
+    - M1042n

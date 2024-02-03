@@ -46,7 +46,6 @@ provisioner:
         sshd_update_moduli: true
         system_upgrade: false
       focal:
-        block_blacklisted: true
         disable_wireless: true
         sshd_admin_net:
           - "0.0.0.0/0"
@@ -58,7 +57,6 @@ provisioner:
         umask_value: "027"
       jammy:
         disable_ipv6: true
-        block_blacklisted: true
         disable_wireless: true
         sshd_admin_net:
           - "0.0.0.0/0"

@@ -126,11 +126,6 @@
   when:
     - ansible_virtualization_type not in ["container", "docker", "podman"]
 
-- name: Block blacklisted kernel modules
-  ansible.builtin.include_tasks:
-    file: disablemodules.yml
-  when: block_blacklisted
-
 - name: Disable wireless interfaces
   ansible.builtin.include_tasks:
     file: disablewireless.yml
