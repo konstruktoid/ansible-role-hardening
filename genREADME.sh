@@ -63,7 +63,6 @@ roles:
       ansible.builtin.include_role:
         name: konstruktoid.hardening
       vars:
-        block_blacklisted: true
         sshd_admin_net:
           - 10.0.2.0/24
           - 192.168.0.0/24
@@ -95,7 +94,6 @@ roles:
       ansible.builtin.include_role:
         name: konstruktoid.hardening
       vars:
-        block_blacklisted: true
         sshd_admin_net:
           - 10.0.2.0/24
           - 192.168.0.0/24

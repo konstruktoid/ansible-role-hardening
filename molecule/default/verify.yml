@@ -834,35 +834,35 @@
       when:
         - ansible_virtualization_type not in ["container", "docker", "podman"]
 
-    - name: Index blacklisted kernel modules
-      environment:
-        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      ansible.builtin.shell: |
-        set -o pipefail
-        modprobe -c | grep -o '^blacklist .*' | awk '{print $2}'
-      args:
-        executable: /bin/bash
-      changed_when: false
-      failed_when: modprobe_blacklist.rc != 0
-      register: modprobe_blacklist
+    - name: Kernel modules
       when:
-        - block_blacklisted | bool
+        - ansible_virtualization_type not in ["container", "docker", "podman"]
+      block:
+        - name: Index blacklisted kernel modules
+          environment:
+            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          ansible.builtin.shell: |
+            set -o pipefail
+            modprobe -c | grep -o '^blacklist .*' | awk '{print $2}'
+          args:
+            executable: /bin/bash
+          changed_when: false
+          failed_when: modprobe_blacklist.rc != 0
+          register: modprobe_blacklist
 
-    - name: Verify blocked blacklisted kernel modules
-      environment:
-        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      ansible.builtin.shell: |
-        set -o pipefail
-        grep 'install {{ item }} /bin/true' /etc/modprobe.d/blacklist-blocked.conf
-      args:
-        executable: /bin/bash
-      register: modprobe_blockblacklisted
-      failed_when: modprobe_blockblacklisted.rc != 0
-      changed_when: modprobe_blockblacklisted.rc != 0
-      with_items:
-        - "{{ modprobe_blacklist.stdout_lines | sort }}"
-      when:
-        - block_blacklisted | bool
+        - name: Verify blocked blacklisted kernel modules
+          environment:
+            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          ansible.builtin.shell: |
+            set -o pipefail
+            grep 'install {{ item }} /bin/true' /etc/modprobe.d/blacklist-blocked.conf
+          args:
+            executable: /bin/bash
+          register: modprobe_blockblacklisted
+          failed_when: modprobe_blockblacklisted.rc != 0
+          changed_when: modprobe_blockblacklisted.rc != 0
+          with_items:
+            - "{{ modprobe_blacklist.stdout_lines | sort | unique }}"
 
     - name: Verify sudo settings
       ansible.builtin.shell: |

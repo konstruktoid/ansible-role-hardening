@@ -37,7 +37,6 @@ provisioner:
         system_upgrade: false
       jammy:
         disable_ipv6: true
-        block_blacklisted: true
         disable_wireless: true
         sshd_admin_net:
           - "0.0.0.0/0"

@@ -35,7 +35,6 @@ packages_debian:
   - debsums
   - gnupg2
   - haveged
-  - kmod
   - libpam-apparmor
   - libpam-cap
   - libpam-modules
@@ -59,7 +58,6 @@ packages_redhat:
   - cracklib
   - gnupg2
   - haveged
-  - kmod
   - libpwquality
   - openssh-server
   - needrestart
