@@ -28,7 +28,7 @@
     owner: root
     group: root
     state: present
-  loop: "{{ dns_merged | sort | unique }}"
+  loop: "{{ dns_merged | unique }}"
   when:
     - ansible_os_family == "RedHat"
   tags:
