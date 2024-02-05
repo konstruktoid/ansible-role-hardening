@@ -1,4 +1,8 @@
 ---
 enable_timesyncd: true
-fallback_ntp: 2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org
-ntp: "0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org"
+fallback_ntp:
+  - 2.ubuntu.pool.ntp.org
+  - 3.ubuntu.pool.ntp.org
+ntp:
+  - pool.ntp.org
+  - time.nist.gov
