@@ -1,4 +1,8 @@
 ---
+- name: Merge all DNS servers
+  ansible.builtin.set_fact:
+    dns_merged: "{{ dns + fallback_dns }}"
+
 - name: Configure systemd resolved
   become: true
   ansible.builtin.template:
@@ -24,7 +28,7 @@
     owner: root
     group: root
     state: present
-  loop: "{{ dns | split }}"
+  loop: "{{ dns_merged | sort | unique }}"
   when:
     - ansible_os_family == "RedHat"
   tags:
