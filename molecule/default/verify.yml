@@ -78,14 +78,6 @@
             path: /usr/lib/sysctl.d/
           register: usr_lib_sysctl_d
 
-        - name: Set sysctl fact
-          ansible.builtin.set_fact:
-            sysctl_conf_dir: "{{ '/usr/lib/sysctl.d' if usr_lib_sysctl_d.stat.exists else '/etc/sysctl.d' }}"
-
-        - name: Debug sysctl
-          ansible.builtin.debug:
-            msg: "{{ sysctl_conf_dir }}"
-
     - name: Get installed sshd version
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin/
@@ -472,7 +464,7 @@
       become: true
       ansible.builtin.shell: |
         set -o pipefail
-        grep -R "^{{ item.key }}.*{{ item.value | int }}$" "{{ sysctl_conf_dir }}/"
+        /lib/systemd/systemd-sysctl --cat-config | grep "^{{ item.key }}.*{{ item.value | int }}$"
       args:
         executable: /bin/bash
       with_dict: "{{ sysctl_settings | dict2items | rejectattr('key', 'search', 'nf_conntrack') | items2dict }}"
@@ -685,7 +677,11 @@
         - ansible_virtualization_type not in ["container", "docker", "podman"]
       block:
         - name: Verify IPv6 sysctl configuration
-          ansible.builtin.shell: grep -R "^{{ item }}$" "{{ sysctl_conf_dir }}/"
+          ansible.builtin.shell: |
+            set -o pipefail
+            /lib/systemd/systemd-sysctl --cat-config | grep "^{{ item }}$"
+          args:
+            executable: /bin/bash
           register: sysctl_ipv6_config
           failed_when: sysctl_ipv6_config.rc != 0
           changed_when: sysctl_ipv6_config.rc != 0
