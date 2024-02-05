@@ -1,9 +1,9 @@
 ---
 dns:
-  - 127.0.0.1
-  - 1.1.1.1
-fallback_dns:
+  - 1.1.1.2
   - 9.9.9.9
-  - 1.0.0.1
+fallback_dns:
+  - 1.0.0.2
+  - 149.112.112.112
 dnssec: allow-downgrade
 dns_over_tls: opportunistic
