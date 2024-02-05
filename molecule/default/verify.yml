@@ -750,8 +750,8 @@
       failed_when: systemd_timesyncd_conf.rc != 0
       changed_when: systemd_timesyncd_conf.rc != 0
       with_items:
-        - NTP={{ ntp }}
-        - FallbackNTP={{ fallback_ntp }}
+        - NTP={{ ntp | join(' ') }}
+        - FallbackNTP={{ fallback_ntp | join(' ') }}
       when:
         - enable_timesyncd
         - ansible_virtualization_type not in ["container", "docker", "podman"]
