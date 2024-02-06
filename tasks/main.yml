@@ -38,6 +38,13 @@
     file: ipv6.yml
   when: disable_ipv6
 
+- name: Configure USBGuard
+  ansible.builtin.include_tasks:
+    file: usbguard.yml
+  when:
+    - enable_usbguard
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
+
 - name: Configure systemd system and users
   ansible.builtin.include_tasks:
     file: systemdconf.yml

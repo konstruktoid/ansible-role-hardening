@@ -1,0 +1,181 @@
+---
+- name: Install and configure USBGuard
+  become: true
+  block:
+    - name: Debian family USBGuard installation
+      ansible.builtin.apt:
+        name: usbguard
+        state: present
+        install_recommends: false
+      when: ansible_os_family == "Debian"
+
+    - name: RedHat family USBGuard package installation
+      ansible.builtin.dnf:
+        name: usbguard
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Configure RuleFile
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)RuleFile
+        dest: "{{ usbguard_configuration_file }}"
+        line: RuleFile={{ usbguard_rulefile }}
+        state: present
+        backrefs: true
+
+    - name: Configure ImplicitPolicyTarget
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)ImplicitPolicyTarget
+        dest: "{{ usbguard_configuration_file }}"
+        line: ImplicitPolicyTarget={{ usbguard_implicitpolicytarget }}
+        state: present
+        backrefs: true
+
+    - name: Configure PresentDevicePolicy
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)PresentDevicePolicy
+        dest: "{{ usbguard_configuration_file }}"
+        line: PresentDevicePolicy={{ usbguard_presentdevicepolicy }}
+        state: present
+        backrefs: true
+
+    - name: Configure PresentControllerPolicy
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)PresentControllerPolicy
+        dest: "{{ usbguard_configuration_file }}"
+        line: PresentControllerPolicy={{ usbguard_presentcontrollerpolicy }}
+        state: present
+        backrefs: true
+
+    - name: Configure InsertedDevicePolicy
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)InsertedDevicePolicy
+        dest: "{{ usbguard_configuration_file }}"
+        line: InsertedDevicePolicy={{ usbguard_inserteddevicepolicy }}
+        state: present
+        backrefs: true
+
+    - name: Configure AuthorizedDefault
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)AuthorizedDefault
+        dest: "{{ usbguard_configuration_file }}"
+        line: AuthorizedDefault={{ usbguard_authorizeddefault }}
+        state: present
+        backrefs: true
+
+    - name: Configure RestoreControllerDeviceState
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)RestoreControllerDeviceState
+        dest: "{{ usbguard_configuration_file }}"
+        line: RestoreControllerDeviceState={{ 'true' if usbguard_restorecontrollerdevicestate else 'false' }}
+        state: present
+        backrefs: true
+
+    - name: Configure DeviceManagerBackend
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)DeviceManagerBackend
+        dest: "{{ usbguard_configuration_file }}"
+        line: DeviceManagerBackend={{ usbguard_devicemanagerbackend }}
+        state: present
+        backrefs: true
+
+    - name: Configure IPCAllowedUsers
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)IPCAllowedUsers
+        dest: "{{ usbguard_configuration_file }}"
+        line: IPCAllowedUsers={{ usbguard_ipcallowedusers | join(' ') }}
+        state: present
+        backrefs: true
+
+    - name: Configure IPCAllowedGroups
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)IPCAllowedGroups
+        dest: "{{ usbguard_configuration_file }}"
+        line: IPCAllowedGroups={{ usbguard_ipcallowedgroups | join(' ') }}
+        state: present
+        backrefs: true
+
+    - name: Configure IPCAccessControlFiles
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)IPCAccessControlFiles
+        dest: "{{ usbguard_configuration_file }}"
+        line: IPCAccessControlFiles={{ usbguard_ipcaccesscontrolfiles }}
+        state: present
+        backrefs: true
+
+    - name: Configure DeviceRulesWithPort
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)DeviceRulesWithPort
+        dest: "{{ usbguard_configuration_file }}"
+        line: DeviceRulesWithPort={{ 'true' if usbguard_deviceruleswithport else 'false' }}
+        state: present
+        backrefs: true
+
+    - name: Configure AuditBackend
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)AuditBackend
+        dest: "{{ usbguard_configuration_file }}"
+        line: AuditBackend={{ usbguard_auditbackend }}
+        state: present
+        backrefs: true
+
+    - name: Configure AuditFilePath
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)AuditFilePath
+        dest: "{{ usbguard_configuration_file }}"
+        line: AuditFilePath={{ usbguard_auditfilepath }}
+        state: present
+        backrefs: true
+
+    - name: Configure HidePII
+      ansible.builtin.lineinfile:
+        regexp: (^|^#)HidePII
+        dest: "{{ usbguard_configuration_file }}"
+        line: HidePII={{ 'true' if usbguard_hidepii else 'false' }}
+        state: present
+        backrefs: true
+
+    - name: Start and enable USBGuard
+      ansible.builtin.systemd:
+        name: usbguard
+        enabled: true
+        masked: false
+        state: started
+
+    - name: List all USBGuard rules
+      become: true
+      ansible.builtin.command:
+        cmd: usbguard list-rules
+      changed_when: false
+      register: usbguard_rules
+
+    - name: Generate USBGuard policy
+      become: true
+      ansible.builtin.command:
+        cmd: usbguard generate-policy
+      changed_when: false
+      register: usbguard_policy
+      when:
+        - usbguard_rules.stdout_lines | length == 0
+
+    - name: Write policy and restart USBGuard
+      become: true
+      when:
+        - usbguard_rules.stdout_lines | length == 0
+        - usbguard_policy.stdout_lines | length >= 1
+      block:
+        - name: Write policy
+          ansible.builtin.lineinfile:
+            path: /etc/usbguard/rules.conf
+            line: "{{ item }}"
+            owner: root
+            group: root
+            mode: "0600"
+            create: true
+          with_items:
+            - "{{ usbguard_policy.stdout_lines }}"
+
+        - name: Restart USBGuard
+          ansible.builtin.systemd:
+            name: usbguard
+            state: restarted

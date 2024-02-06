@@ -58,6 +58,10 @@
     - M1038
     - M1042
 
+- name: Allow USB kernel modules if USBGuard is used
+  ansible.builtin.set_fact:
+    misc_modules_usbguard: "{{ misc_modules_blocklist | reject('search', 'usb') | list }}"
+
 - name: Blacklist misc kernel modules
   become: true
   ansible.builtin.lineinfile:
@@ -69,7 +73,7 @@
     state: present
     create: true
   with_items:
-    - "{{ misc_modules_blocklist }}"
+    - "{{ misc_modules_usbguard if enable_usbguard else misc_modules_blocklist }}"
   tags:
     - modprobe
     - CCE-80832-9
@@ -114,4 +118,4 @@
     - modprobe
     - M1034
     - M1038
-    - M1042n
+    - M1042
