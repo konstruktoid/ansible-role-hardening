@@ -9,7 +9,8 @@
 
 - name: Configure Postfix
   become: true
-  when: postfix_main_cf.stat.exists
+  when:
+    - postfix_main_cf.stat.exists
   tags:
     - packages
     - postfix

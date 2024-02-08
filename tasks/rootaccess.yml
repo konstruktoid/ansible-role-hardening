@@ -22,7 +22,8 @@
     regexp: ^(?!\+:root:127.0.0.1)$
     mode: "0644"
     state: absent
-  when: security_access_conf.stat.exists
+  when:
+    - security_access_conf.stat.exists
   tags:
     - access_conf
 
@@ -33,7 +34,8 @@
     line: +:root:127.0.0.1
     mode: "0644"
     state: present
-  when: security_access_conf.stat.exists
+  when:
+    - security_access_conf.stat.exists
   tags:
     - access_conf
 
@@ -43,7 +45,8 @@
     path: /etc/securetty
     regexp: ^(?!console).*$
     state: absent
-  when: etc_securetty.stat.exists
+  when:
+    - etc_securetty.stat.exists
   tags:
     - securetty
 
@@ -54,7 +57,8 @@
     line: console
     mode: "0644"
     state: present
-  when: etc_securetty.stat.exists
+  when:
+    - etc_securetty.stat.exists
   tags:
     - securetty
     - CIS-UBUNTU2004-5.6

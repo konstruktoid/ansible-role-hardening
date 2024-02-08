@@ -22,4 +22,6 @@
         group: root
         mode: "0644"
         state: present
-      when: compiler_package is defined and compiler_package.rc == 0
+      when:
+        - compiler_package is defined
+        - compiler_package.rc == 0

@@ -16,7 +16,8 @@
     replace: umask {{ umask_value }}
     dest: /etc/init.d/rc
     mode: "0755"
-  when: initdrc.stat.exists
+  when:
+    - initdrc.stat.exists
   tags:
     - umask
     - CIS-UBUNTU2004-5.5.4
@@ -29,7 +30,8 @@
     mode: "0644"
     path: /etc/init.d/rc
     regexp: umask(\s+.*)
-  when: initdrc.stat.exists
+  when:
+    - initdrc.stat.exists
   tags:
     - umask
 
@@ -52,7 +54,8 @@
     replace: umask {{ umask_value }}
     dest: /etc/bashrc
     mode: "0644"
-  when: bashrc.stat.exists
+  when:
+    - bashrc.stat.exists
   tags:
     - bash
     - umask
@@ -67,7 +70,8 @@
     mode: "0644"
     path: /etc/bashrc
     regexp: umask(\s+.*)
-  when: bashrc.stat.exists
+  when:
+    - bashrc.stat.exists
   tags:
     - umask
 
@@ -90,7 +94,8 @@
     replace: umask {{ umask_value }}
     dest: /etc/bash.bashrc
     mode: "0644"
-  when: bash_bashrc.stat.exists
+  when:
+    - bash_bashrc.stat.exists
   tags:
     - bash
     - umask
@@ -105,7 +110,8 @@
     mode: "0644"
     path: /etc/bash.bashrc
     regexp: umask(\s+.*)
-  when: bash_bashrc.stat.exists
+  when:
+    - bash_bashrc.stat.exists
   tags:
     - umask
 
@@ -127,7 +133,8 @@
     replace: umask {{ umask_value }}
     dest: /etc/csh.cshrc
     mode: "0644"
-  when: cshrc.stat.exists
+  when:
+    - cshrc.stat.exists
   tags:
     - csh
     - umask
@@ -141,7 +148,8 @@
     mode: "0644"
     path: /etc/csh.cshrc
     regexp: umask(\s+.*)
-  when: cshrc.stat.exists
+  when:
+    - cshrc.stat.exists
   tags:
     - umask
 
@@ -197,4 +205,5 @@
     state: present
     create: false
     insertbefore: ^export
-  when: session_timeout
+  when:
+    - session_timeout

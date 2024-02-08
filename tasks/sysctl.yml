@@ -74,7 +74,9 @@
     owner: root
     group: root
     backup: false
-  when: system_has_ipv6 and (not disable_ipv6)
+  when:
+    - system_has_ipv6
+    - not disable_ipv6
   notify:
     - Restart sysctl
   tags:

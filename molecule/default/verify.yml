@@ -257,7 +257,8 @@
           - sshd_config_directory.stat.mode == "0600"
         success_msg: "{{ sshd_config_directory.stat.path }} has correct permissions: {{ sshd_config_directory.stat.mode }}"
         fail_msg: "{{ sshd_config_directory.stat.path }} permissions are incorrect: {{ sshd_config_directory.stat.mode }}"
-      when: sshd_config_directory.stat.exists
+      when:
+        - sshd_config_directory.stat.exists
 
     - name: Verify sshd PermitRootLogin configuration
       become: true
@@ -278,7 +279,8 @@
       check_mode: true
       register: sshd_config_d
       failed_when: sshd_config_d is changed
-      when: sshd_config_directory.stat.exists
+      when:
+        - sshd_config_directory.stat.exists
 
     - name: Set sshd_config_parameters
       ansible.builtin.set_fact:
@@ -377,7 +379,8 @@
       register: sshd_config
       failed_when: sshd_config is changed
       loop: "{{ sshd_config_parameters }}"
-      when: not sshd_config_directory.stat.exists
+      when:
+        - not sshd_config_directory.stat.exists
 
     - name: Verify sshd config.d configuration
       become: true
@@ -389,7 +392,8 @@
       register: sshd_config
       failed_when: sshd_config is changed
       loop: "{{ sshd_config_parameters }}"
-      when: sshd_config_directory.stat.exists
+      when:
+        - sshd_config_directory.stat.exists
 
     - name: Set parameters for runtime check
       ansible.builtin.set_fact:
@@ -493,9 +497,10 @@
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       ansible.builtin.shell: grep "^{{ crypto_policy | upper }}$" /etc/crypto-policies/config
       register: crypto_policy_set
-      when: crypto_policies_config
-      failed_when: crypto_policy_set.rc != 0
       changed_when: crypto_policy_set.rc != 0
+      failed_when: crypto_policy_set.rc != 0
+      when:
+        - crypto_policies_config
 
     - name: Verify mounts
       when:
@@ -644,14 +649,16 @@
           register: audit_grubenv
           failed_when: audit_grubenv.rc != 0
           changed_when: audit_grubenv.rc != 0
-          when: ansible_os_family == "RedHat"
+          when:
+            - ansible_os_family == "RedHat"
 
         - name: Verify Debian audit GRUB settings
           ansible.builtin.shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
           register: audit_grub_cfg
           failed_when: audit_grub_cfg.rc != 0
           changed_when: audit_grub_cfg.rc != 0
-          when: ansible_os_family == "Debian"
+          when:
+            - ansible_os_family == "Debian"
 
         - name: Verify RedHat GRUB IPv6 settings
           ansible.builtin.shell:
@@ -661,7 +668,9 @@
           register: audit_grubenv
           failed_when: audit_grubenv.rc != 0
           changed_when: audit_grubenv.rc != 0
-          when: ansible_os_family == "RedHat" and disable_ipv6
+          when:
+            - ansible_os_family == "RedHat"
+            - disable_ipv6
 
         - name: Verify Debian GRUB IPv6 settings
           ansible.builtin.shell:
@@ -669,7 +678,9 @@
           register: audit_grub_cfg
           failed_when: audit_grub_cfg.rc != 0
           changed_when: audit_grub_cfg.rc != 0
-          when: ansible_os_family == "Debian" and disable_ipv6
+          when:
+            - ansible_os_family == "Debian"
+            - disable_ipv6
 
     - name: IPv6 sysctl configuration
       become: true
@@ -688,7 +699,8 @@
           with_items:
             - net.ipv6.conf.all.disable_ipv6 = 1
             - net.ipv6.conf.default.disable_ipv6 = 1
-          when: disable_ipv6
+          when:
+            - disable_ipv6
 
         - name: Verify IPv6 sysctl runtime configuration
           environment:
@@ -776,7 +788,8 @@
       ansible.builtin.stat:
         path: /usr/bin/pro
       register: ubuntu_advantage_pro
-      when: ansible_os_family == "Debian"
+      when:
+        - ansible_os_family == "Debian"
 
     - name: Verify that apt_news is disabled
       become: true
@@ -797,7 +810,8 @@
         path: /etc/apt/apt.conf.d/20apt-esm-hook.conf
       register: ubuntu_esm_hook
       failed_when: ubuntu_esm_hook.stat.exists
-      when: ansible_os_family == "Debian"
+      when:
+        - ansible_os_family == "Debian"
 
     - name: Efi fact
       ansible.builtin.set_fact:
@@ -814,7 +828,8 @@
       register: cracklib_passwords
       failed_when: cracklib_passwords.rc != 0
       changed_when: cracklib_passwords.rc != 0
-      when: ansible_os_family == "Debian"
+      when:
+        - ansible_os_family == "Debian"
 
     - name: Verify username password list
       environment:
@@ -888,7 +903,8 @@
       register: faillockconf
 
     - name: Get PAM version
-      when: faillockconf.stat.exists
+      when:
+        - faillockconf.stat.exists
       tags:
         - common-account
         - common-auth
@@ -932,7 +948,8 @@
             {%- for group in faillock.admin_group -%}
               admin_group = {{ group }}
             {%- endfor -%}
-      when: faillockconf.stat.exists
+      when:
+        - faillockconf.stat.exists
 
     - name: Verify faillock.conf
       become: true
@@ -945,7 +962,8 @@
       register: verify_faillock
       failed_when: verify_faillock is changed
       loop: "{{ faillock_parameters | select() }}"
-      when: faillockconf.stat.exists
+      when:
+        - faillockconf.stat.exists
 
     - name: Verify wireless state
       environment:
@@ -975,7 +993,8 @@
 
     - name: Verify aide configuration
       become: true
-      when: install_aide
+      when:
+        - install_aide
       block:
         - name: Aide config check
           become: true
@@ -1036,24 +1055,28 @@
           register: mkpasswd
           changed_when: false
           failed_when: mkpasswd.rc != 0
-          when: password_algorithm == "yescrypt"
+          when:
+            - password_algorithm == "yescrypt"
 
         - name: Set password
           ansible.builtin.set_fact:
             password: "{{ mkpasswd.stdout }}"
-          when: password_algorithm == "yescrypt"
+          when:
+            - password_algorithm == "yescrypt"
 
         - name: Create sha512 password hash
           vars:
             salt: "{{ lookup('password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits length=16') }}"
           ansible.builtin.set_fact:
             password: "{{ 'Ansible Role Test User' | password_hash('sha512', salt, rounds=656000) }}"
-          when: password_algorithm == "sha512"
+          when:
+            - password_algorithm == "sha512"
 
         - name: Print password
           ansible.builtin.debug:
             msg: "{{ password }}"
-          when: password
+          when:
+            - password
 
     - name: Create test user
       become: true

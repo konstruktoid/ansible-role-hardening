@@ -7,13 +7,15 @@
         name: usbguard
         state: present
         install_recommends: false
-      when: ansible_os_family == "Debian"
+      when:
+        - ansible_os_family == "Debian"
 
     - name: RedHat family USBGuard package installation
       ansible.builtin.dnf:
         name: usbguard
         state: present
-      when: ansible_os_family == "RedHat"
+      when:
+        - ansible_os_family == "RedHat"
 
     - name: Configure RuleFile
       ansible.builtin.lineinfile:

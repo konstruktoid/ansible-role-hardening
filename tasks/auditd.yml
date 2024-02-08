@@ -9,7 +9,8 @@
     mode: "0640"
     owner: root
     group: root
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
   notify:
     - Update GRUB
   tags:
@@ -193,7 +194,8 @@
     mode: "0600"
     owner: root
     group: root
-  when: auditd_apply_audit_rules | bool
+  when:
+    - auditd_apply_audit_rules | bool
   notify:
     - Generate auditd rules
     - Restart Debian auditd

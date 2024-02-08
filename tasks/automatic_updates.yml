@@ -1,7 +1,8 @@
 ---
 - name: Install and configure dnf-automatic
   become: true
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
   block:
     - name: Install dnf-automatic
       ansible.builtin.dnf:
@@ -43,7 +44,8 @@
 
 - name: Install and configure unattended-upgrades
   become: true
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
   block:
     - name: Configure unattended-upgrades package lists updates
       ansible.builtin.lineinfile:

@@ -36,7 +36,8 @@
 - name: Disable IPv6
   ansible.builtin.include_tasks:
     file: ipv6.yml
-  when: disable_ipv6
+  when:
+    - disable_ipv6
 
 - name: Configure USBGuard
   ansible.builtin.include_tasks:
@@ -79,7 +80,8 @@
 - name: Configure automatic updates
   ansible.builtin.include_tasks:
     file: automatic_updates.yml
-  when: automatic_updates
+  when:
+    - automatic_updates
 
 - name: Configure hosts.allow and hosts.deny
   ansible.builtin.include_tasks:
@@ -157,7 +159,8 @@
 - name: Remove suid/sgid permissions
   ansible.builtin.include_tasks:
     file: suid.yml
-  when: suid_sgid_permissions | bool
+  when:
+    - suid_sgid_permissions | bool
 
 - name: Configure compiler permissions
   ansible.builtin.include_tasks:
