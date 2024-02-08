@@ -43,7 +43,7 @@
   ansible.builtin.include_tasks:
     file: usbguard.yml
   when:
-    - enable_usbguard
+    - manage_usbguard
     - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Configure systemd system and users
@@ -58,7 +58,7 @@
   ansible.builtin.include_tasks:
     file: timesyncd.yml
   when:
-    - enable_timesyncd
+    - manage_timesyncd
     - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Clean fstab
@@ -110,6 +110,8 @@
 - name: Configure ssh server and client
   ansible.builtin.include_tasks:
     file: sshconfig.yml
+  when:
+    - manage_ssh
 
 - name: Configure PAM
   ansible.builtin.include_tasks:
@@ -128,6 +130,8 @@
 - name: Configure auditd
   ansible.builtin.include_tasks:
     file: auditd.yml
+  when:
+    - manage_auditd
 
 - name: Configure AppArmor
   ansible.builtin.include_tasks:
@@ -147,7 +151,7 @@
   ansible.builtin.include_tasks:
     file: aide.yml
   when: >
-    install_aide | bool and
+    manage_aide | bool and
     (not (ansible_os_family == "Debian" and
     (ansible_lsb.codename == "groovy" or
     ansible_lsb.codename == "hirsute")))

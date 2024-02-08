@@ -73,7 +73,7 @@
     state: present
     create: true
   with_items:
-    - "{{ misc_modules_usbguard if enable_usbguard else misc_modules_blocklist }}"
+    - "{{ misc_modules_usbguard if manage_usbguard else misc_modules_blocklist }}"
   tags:
     - modprobe
     - CCE-80832-9

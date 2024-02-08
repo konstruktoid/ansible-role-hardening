@@ -16,7 +16,7 @@ provisioner:
     host_vars:
       almalinux8:
         disable_wireless: true
-        enable_timesyncd: false
+        manage_timesyncd: false
         sshd_admin_net:
           - "0.0.0.0/0"
         sshd_allow_groups:
@@ -26,7 +26,7 @@ provisioner:
         sshd_update_moduli: true
         suid_sgid_permissions: false
       almalinux9:
-        enable_timesyncd: false
+        manage_timesyncd: false
         sshd_admin_net:
           - "0.0.0.0/0"
         sshd_allow_groups:
@@ -38,7 +38,7 @@ provisioner:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
         disable_wireless: false
-        enable_usbguard: false
+        manage_usbguard: false
         sshd_admin_net:
           - "0.0.0.0/0"
         sshd_allow_groups:

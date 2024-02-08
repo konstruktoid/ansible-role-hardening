@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
         "sshd_admin_net" => ["0.0.0.0/0"],
         "sshd_allow_groups" => ["vagrant", "sudo", "debian", "ubuntu"],
         "system_upgrade" => "false",
-        "install_aide" => "false",
+        "manage_aide" => "false",
       }
     end
   end

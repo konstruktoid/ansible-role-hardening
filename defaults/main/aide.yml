@@ -1,3 +1,4 @@
 ---
-install_aide: true
+manage_aide: true
+
 aide_checksums: sha512

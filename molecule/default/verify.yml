@@ -761,7 +761,7 @@
         - NTP={{ ntp | join(' ') }}
         - FallbackNTP={{ fallback_ntp | join(' ') }}
       when:
-        - enable_timesyncd
+        - manage_timesyncd
         - ansible_virtualization_type not in ["container", "docker", "podman"]
 
     - name: Stat /etc/default/motd-news
@@ -994,7 +994,7 @@
     - name: Verify aide configuration
       become: true
       when:
-        - install_aide
+        - manage_aide
       block:
         - name: Aide config check
           become: true

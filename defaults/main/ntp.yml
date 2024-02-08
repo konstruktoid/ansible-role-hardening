@@ -1,5 +1,6 @@
 ---
-enable_timesyncd: true
+manage_timesyncd: true
+
 fallback_ntp:
   - ntp.netnod.se
   - ntp.ubuntu.com
