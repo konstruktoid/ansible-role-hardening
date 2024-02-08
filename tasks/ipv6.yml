@@ -9,7 +9,8 @@
     mode: "0640"
     owner: root
     group: root
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
   notify:
     - Update GRUB
   tags:
@@ -21,7 +22,8 @@
   ansible.builtin.command:
     cmd: grubby --update-kernel=ALL --args="ipv6.disable=1"
   register: grubby_update_kernel
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
   changed_when: grubby_update_kernel.rc != 0
   failed_when: grubby_update_kernel.rc != 0
   tags:
@@ -32,7 +34,8 @@
   ansible.builtin.file:
     path: "{{ sysctl_conf_dir }}/zz-ipv6-hardening.conf"
     state: absent
-  when: not system_has_ipv6
+  when:
+    - not system_has_ipv6
   notify:
     - Restart sysctl
   tags:

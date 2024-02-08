@@ -49,7 +49,9 @@
     enabled: false
     state: stopped
   register: mask_atd
-  failed_when: mask_atd is not success and not "Could not find the requested service" in mask_atd.msg
+  failed_when:
+    - mask_atd is not success
+    - not "Could not find the requested service" in mask_atd.msg
   when:
     - ansible_virtualization_type not in ["container", "docker", "podman"]
   tags:
@@ -64,7 +66,9 @@
     owner: root
     group: root
   register: cron_perm
-  failed_when: cron_perm is not success and not 'is absent, cannot continue' in cron_perm.msg
+  failed_when:
+    - cron_perm is not success
+    - not 'is absent, cannot continue' in cron_perm.msg
   loop:
     - /etc/cron.d
     - /etc/cron.daily
@@ -87,7 +91,9 @@
     owner: root
     group: root
   register: crontab_perm
-  failed_when: crontab_perm is not success and not 'is absent, cannot continue' in crontab_perm.msg
+  failed_when:
+    - crontab_perm is not success
+    - not 'is absent, cannot continue' in crontab_perm.msg
   tags:
     - cron
     - crontab

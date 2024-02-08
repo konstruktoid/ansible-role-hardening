@@ -3,7 +3,8 @@
   tags:
     - reboot
     - ubuntu
-  when: reboot_ubuntu
+  when:
+    - reboot_ubuntu
   block:
     - name: Stat /var/run/reboot-required
       ansible.builtin.stat:

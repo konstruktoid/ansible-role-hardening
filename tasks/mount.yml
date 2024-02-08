@@ -27,7 +27,8 @@
     fstype: tmpfs
     opts: rw,nosuid,nodev,noexec
     state: present
-  when: dev_shm.stat.exists
+  when:
+    - dev_shm.stat.exists
   tags:
     - mount
     - shm

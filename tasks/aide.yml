@@ -5,7 +5,8 @@
     name: aide-common
     state: present
     install_recommends: false
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
   tags:
     - aide
     - CIS-UBUNTU2004-1.3.1
@@ -15,7 +16,8 @@
   ansible.builtin.dnf:
     name: aide
     state: present
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
   tags:
     - aide
     - CCE-80844-4
@@ -39,7 +41,8 @@
     mode: "0644"
     owner: root
     group: root
-  when: not aidecron.stat.exists
+  when:
+    - not aidecron.stat.exists
   tags:
     - aide
 
@@ -52,7 +55,8 @@
     mode: "0644"
     owner: root
     group: root
-  when: not aidecron.stat.exists
+  when:
+    - not aidecron.stat.exists
   notify:
     - Reload systemd
     - Enable aidecheck
@@ -117,7 +121,8 @@
   ansible.builtin.stat:
     path: /var/lib/aide/aide.db
   register: ubuaidedb
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
   tags:
     - aide
 
@@ -128,7 +133,8 @@
   register: rhelaidedb
   changed_when: false
   failed_when: false
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
   tags:
     - aide
 
@@ -139,7 +145,9 @@
   register: init_redhat_aide
   changed_when: init_redhat_aide.rc != 0
   failed_when: init_redhat_aide.rc != 0
-  when: ansible_os_family == "RedHat" and not rhelaidedb.stat.exists
+  when:
+    - ansible_os_family == "RedHat"
+    - rhelaidedb.stat.exists
   tags:
     - aide
     - CCE-80675-2
@@ -151,7 +159,8 @@
   register: rhelaidedbnew
   changed_when: false
   failed_when: false
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
   tags:
     - aide
 
@@ -162,7 +171,9 @@
   register: cp_redhat_aide_db
   changed_when: cp_redhat_aide_db.rc != 0
   failed_when: cp_redhat_aide_db.rc != 0
-  when: ansible_os_family == "RedHat" and not rhelaidedbnew.stat.exists
+  when:
+    - ansible_os_family == "RedHat"
+    - rhelaidedbnew.stat.exists
   tags:
     - aide
 
@@ -173,6 +184,8 @@
   register: init_debian_aide
   changed_when: init_debian_aide.rc != 0
   failed_when: init_debian_aide.rc != 0
-  when: ansible_os_family == "Debian" and not ubuaidedb.stat.exists
+  when:
+    - ansible_os_family == "Debian"
+    - ubuaidedb.stat.exists
   tags:
     - aide

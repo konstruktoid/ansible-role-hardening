@@ -1,6 +1,7 @@
 ---
 - name: Manage apt esm, motd-news and Ubuntu PRO
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
   block:
     - name: Stat /etc/default/motd-news
       ansible.builtin.stat:
@@ -19,7 +20,8 @@
         state: present
         create: false
         backrefs: true
-      when: motd_news.stat.exists
+      when:
+        - motd_news.stat.exists
       tags:
         - motd
 
@@ -68,7 +70,8 @@
       register: ubuntu_advantage_pro_state
       changed_when: false
       failed_when: ubuntu_advantage_pro_state.rc > 1
-      when: ubuntu_advantage_pro.stat.exists
+      when:
+        - ubuntu_advantage_pro.stat.exists
       tags:
         - apt_news
         - ubuntu-pro
@@ -99,7 +102,8 @@
       ansible.builtin.file:
         dest: /etc/apt/apt.conf.d/20apt-esm-hook.conf
         state: absent
-      when: ubuntu_esm_hook.stat.exists
+      when:
+        - ubuntu_esm_hook.stat.exists
       tags:
         - ubuntu-pro
 

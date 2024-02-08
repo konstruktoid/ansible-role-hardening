@@ -19,7 +19,8 @@
     - APT::Sandbox::Seccomp "1";
     - Unattended-Upgrade::Remove-Unused-Dependencies "true";
     - Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
   tags:
     - apt
     - M1045
@@ -29,7 +30,8 @@
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 1800
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
   tags:
     - apt
 
@@ -39,7 +41,9 @@
     upgrade: safe
   register: apt_upgrade_response
   changed_when: apt_upgrade_response.stdout.find('0 upgraded') == -1
-  when: ansible_os_family == "Debian" and system_upgrade | bool
+  when:
+    - ansible_os_family == "Debian"
+    - system_upgrade | bool
   notify:
     - Run apt-get clean
     - Run apt-get autoremove
@@ -57,7 +61,8 @@
     owner: root
     group: root
     state: link
-  when: ansible_distribution == "Fedora"
+  when:
+    - ansible_distribution == "Fedora"
   tags:
     - dnf
     - yum
@@ -69,7 +74,8 @@
     key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
   with_items:
     - "{{ redhat_signing_keys }}"
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
   tags:
     - dnf
     - yum
@@ -85,7 +91,8 @@
     state: present
     create: false
     backrefs: true
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
   tags:
     - dnf
     - yum
@@ -102,7 +109,8 @@
     state: present
     create: true
     insertafter: "[main]"
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
   tags:
     - dnf
     - yum
@@ -117,7 +125,8 @@
     state: present
     create: true
     insertafter: "[main]"
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
   tags:
     - dnf
     - yum
@@ -133,13 +142,16 @@
     state: present
     create: true
     insertafter: "[main]"
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
   tags:
     - dnf
     - yum
 
 - name: RHEL8 package management tasks
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
+  when:
+    - ansible_distribution == "RedHat"
+    - ansible_distribution_major_version == "8"
   block:
     - name: Import RHEL8 necessary GPG keys
       become: true
@@ -171,7 +183,9 @@
       changed_when: false
 
 - name: RHEL7 repo tasks
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
+  when:
+    - ansible_distribution == "RedHat"
+    - ansible_distribution_major_version == "7"
   block:
     - name: Import RHEL7 necessary GPG keys
       become: true
@@ -218,7 +232,8 @@
     - /etc/yum.repos.d/CentOS-PowerTools.repo
     - /etc/yum.repos.d/CentOS-Stream-PowerTools.repo
   register: powertools_repo
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
   tags:
     - dnf
     - packages
@@ -232,7 +247,9 @@
     dest: "{{ item.stat.path }}"
   with_items:
     - "{{ powertools_repo.results }}"
-  when: ansible_os_family == "RedHat" and item.stat.exists
+  when:
+    - ansible_os_family == "RedHat"
+    - item.stat.exists
   tags:
     - dnf
     - packages
@@ -242,7 +259,8 @@
   become: true
   ansible.builtin.dnf:
     update_cache: true
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
   tags:
     - dnf
     - yum
@@ -255,7 +273,9 @@
     bugfix: true
     security: true
     nobest: true
-  when: ansible_os_family == "RedHat" and system_upgrade | bool
+  when:
+    - ansible_os_family == "RedHat"
+    - system_upgrade | bool
   notify:
     - Run dnf autoremove
   tags:

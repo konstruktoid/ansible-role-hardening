@@ -6,7 +6,8 @@
     masked: true
     enabled: false
     state: stopped
-  when: not ansible_os_family == "RedHat"
+  when:
+    - not ansible_os_family == "RedHat"
   tags:
     - ctrl-alt-del
     - CCE-80785-9
@@ -19,8 +20,9 @@
     masked: true
     enabled: false
     state: stopped
-  when: ansible_os_family == "RedHat"
   changed_when: false
+  when:
+    - ansible_os_family == "RedHat"
   tags:
     - ctrl-alt-del
     - CCE-80785-9

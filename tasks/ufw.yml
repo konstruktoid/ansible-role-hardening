@@ -27,7 +27,8 @@
     sysctl_set: true
     sysctl_file: "{{ sysctl_conf_dir }}/zz-ufw-hardening.conf"
     reload: true
-  when: conntrackliberal.stat.exists
+  when:
+    - conntrackliberal.stat.exists
   tags:
     - conntrack
     - sysctl
@@ -38,7 +39,8 @@
     name: ufw
     state: present
     install_recommends: false
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
   tags:
     - ufw
     - CCE-82998-6
@@ -51,7 +53,8 @@
   ansible.builtin.dnf:
     name: ufw
     state: present
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
   tags:
     - ufw
     - CCE-82998-6
@@ -118,8 +121,8 @@
       ufw show added | grep '^ufw' | grep -v "'ansible\smanaged'" | sed 's/ufw //g'
   args:
     executable: /bin/bash
-  failed_when: ufw_not_managed.rc > 1
   changed_when: false
+  failed_when: ufw_not_managed.rc > 1
   register: ufw_not_managed
   tags:
     - ufw
@@ -165,7 +168,8 @@
 
 - name: Deny IPv6 loopback network traffic
   become: true
-  when: not disable_ipv6
+  when:
+    - not disable_ipv6
   community.general.ufw:
     rule: deny
     from_ip: ::1
@@ -206,7 +210,8 @@
   register: ufw_delete
   changed_when: ufw_delete.rc != 0
   failed_when: ufw_delete.rc != 0
-  when: ufw_not_managed.stdout_lines | length > 0
+  when:
+    - ufw_not_managed.stdout_lines | length > 0
   loop: "{{ ufw_not_managed.stdout_lines }}"
   tags:
     - ufw

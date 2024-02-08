@@ -86,7 +86,9 @@
     name: ssh
     state: restarted
   register: ssh_service
-  failed_when: ssh_service is not success and not 'Could not find the requested service' in ssh_service.msg
+  failed_when:
+    - ssh_service is not success
+    - not 'Could not find the requested service' in ssh_service.msg
   when:
     - ansible_virtualization_type not in ["container", "docker", "podman"]
 
@@ -96,7 +98,9 @@
     name: sshd
     state: restarted
   register: sshd_service
-  failed_when: sshd_service is not success and not 'Could not find the requested service' in sshd_service.msg
+  failed_when:
+    - sshd_service is not success
+    - not 'Could not find the requested service' in sshd_service.msg
   when:
     - ansible_virtualization_type not in ["container", "docker", "podman"]
 
@@ -133,7 +137,8 @@
   become: true
   ansible.builtin.dnf:
     autoremove: true
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
   tags:
     - dnf
     - packages
@@ -158,7 +163,8 @@
     update-cracklib
   register: update_debian_cracklib
   changed_when: update_debian_cracklib.rc == 0
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
 
 - name: Update RedHat cracklib
   environment:
@@ -168,7 +174,8 @@
     cmd: create-cracklib-dict /usr/share/dict/*
   register: update_redhat_cracklib
   changed_when: update_redhat_cracklib.rc == 0
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
 
 - name: Update GRUB
   become: true

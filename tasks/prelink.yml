@@ -21,7 +21,9 @@
     mode: "0644"
     state: present
     create: true
-  when: ansible_os_family == "RedHat" and sysconfig_prelink.stat.exists
+  when:
+    - ansible_os_family == "RedHat"
+    - sysconfig_prelink.stat.exists
   tags:
     - prelink
 
@@ -32,7 +34,9 @@
   register: nonprelinked_state
   changed_when: nonprelinked_state.rc != 0
   failed_when: nonprelinked_state.rc != 0
-  when: sysconfig_prelink.stat.exists or etc_prelink.stat.exists
+  when: >
+    sysconfig_prelink.stat.exists or
+    etc_prelink.stat.exists
   tags:
     - prelink
     - CIS-UBUNTU2004-1.5.3

@@ -69,7 +69,9 @@
   ansible.builtin.command:
     cmd: timedatectl set-ntp true
   changed_when: false
-  when: timedatectl_show.stdout.find('NTP=yes') != -1 and timesyncd_status.rc == 0
+  when:
+    - timedatectl_show.stdout.find('NTP=yes') != -1
+    - timesyncd_status.rc == 0
   tags:
     - systemd
     - timesyncd

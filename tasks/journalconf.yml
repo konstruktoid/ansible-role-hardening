@@ -88,7 +88,8 @@
         mode: "0640"
         state: present
         create: false
-      when: rsyslogconf.stat.exists
+      when:
+        - rsyslogconf.stat.exists
       notify:
         - Validate rsyslogd
       tags:

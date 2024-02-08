@@ -9,7 +9,8 @@
     mode: "0640"
     owner: root
     group: root
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
   notify:
     - Update GRUB
   tags:
@@ -26,7 +27,8 @@
     mode: "0640"
     owner: root
     group: root
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
   notify:
     - Update GRUB
   tags:
@@ -40,7 +42,8 @@
     cmd: aa-status --complaining
   register: get_apparmor_complaining
   changed_when: get_apparmor_complaining.stdout != "0"
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
   tags:
     - apparmor
 
@@ -51,7 +54,9 @@
   register: enforce_apparmor_profiles
   changed_when: enforce_apparmor_profiles.rc != 0
   failed_when: enforce_apparmor_profiles.rc != 0
-  when: ansible_os_family == "Debian" and (get_apparmor_complaining.stdout != "0")
+  when:
+    - ansible_os_family == "Debian"
+    - get_apparmor_complaining.stdout != "0"
   tags:
     - apparmor
     - CIS-UBUNTU2004-1.6.1.3

@@ -48,7 +48,8 @@
     dest: /etc/sysconfig/sshd
     state: absent
     regexp: ^\s*CRYPTO_POLICY.*$
-  when: sysconfig_sshd.stat.exists
+  when:
+    - sysconfig_sshd.stat.exists
   tags:
     - sshd
     - CCE-80939-2
@@ -111,7 +112,8 @@
 
 - name: SSH moduli file
   become: true
-  when: sshd_update_moduli
+  when:
+    - sshd_update_moduli
   block:
     - name: Stat moduli file
       ansible.builtin.stat:
@@ -142,7 +144,8 @@
 
 - name: Set default for sshd_host_keys_files if not supplied
   become: true
-  when: not sshd_host_keys_files
+  when:
+    - not sshd_host_keys_files
   tags:
     - sshd
   block:
@@ -196,7 +199,8 @@
           - /etc/ssh/ssh_host_rsa_key
           - /etc/ssh/ssh_host_ecdsa_key
           - /etc/ssh/ssh_host_ed25519_key
-      when: ssh_installed_version is version('6.5', '>=')
+      when:
+        - ssh_installed_version is version('6.5', '>=')
 
 - name: Disable PAM dynamic MOTD
   become: true
@@ -216,7 +220,7 @@
 - name: Check variable sshd_config_force_replace
   ansible.builtin.set_fact:
     sshd_config_force_replace: true
-  when: >-
+  when: >
     sshd_match_users | length > 0 or
     sshd_match_groups | length > 0 or
     sshd_match_addresses | length > 0 or
@@ -233,7 +237,10 @@
     owner: root
     group: root
     validate: /usr/sbin/sshd -T -C user=root -C host=localhost -C addr=localhost -C lport=22 -f %s
-  when: (sshd_config_force_replace | bool) or (not sshd_config_d.stat.exists) or (grep_include.rc != 0)
+  when: >
+    (sshd_config_force_replace | bool) or
+    (not sshd_config_d.stat.exists) or
+    (grep_include.rc != 0)
   notify:
     - Restart sshd service
     - Restart ssh service
