@@ -20,7 +20,7 @@
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   when:
-    - ufw_enable
+    - manage_ufw
     - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Configure sysctl

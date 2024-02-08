@@ -71,23 +71,44 @@
     - ufw
     - M1037
 
+- name: Get UFW status
+  become: true
+  ansible.builtin.command:
+    cmd: ufw status verbose
+  changed_when: false
+  register: ufw_status
+
 - name: Enable UFW and set default deny
   become: true
-  community.general.ufw:
-    state: enabled
-    direction: "{{ item }}"
-    default: deny
-    log: true
-    logging: low
-    comment: ansible managed
-  loop:
-    - incoming
-    - outgoing
+  when: >
+    'deny (incoming)' not in ufw_status.stdout or
+    'deny (outgoing)' not in ufw_status.stdout or
+    'disabled (routed)' not in ufw_status.stdout
   tags:
     - ufw
     - CIS-UBUNTU2004-3.5.1.7
     - D3-ITF
     - M1037
+  block:
+    - name: Enable UFW service
+      ansible.builtin.systemd:
+        name: ufw
+        enabled: true
+        state: started
+      when:
+        - ansible_virtualization_type not in ["container", "docker", "podman"]
+
+    - name: Set default deny
+      community.general.ufw:
+        state: enabled
+        direction: "{{ item }}"
+        default: deny
+        log: true
+        logging: low
+        comment: ansible managed
+      loop:
+        - incoming
+        - outgoing
 
 - name: Stat UFW rules
   become: true
@@ -185,7 +206,7 @@
   register: ufw_delete
   changed_when: ufw_delete.rc != 0
   failed_when: ufw_delete.rc != 0
-  when: ufw_not_managed.stdout_lines | length > 0 and not ansible_os_family == "RedHat"
+  when: ufw_not_managed.stdout_lines | length > 0
   loop: "{{ ufw_not_managed.stdout_lines }}"
   tags:
     - ufw

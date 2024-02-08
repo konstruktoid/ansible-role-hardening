@@ -1,5 +1,5 @@
 ---
-ufw_enable: true
+manage_ufw: true
 ufw_outgoing_traffic:
   - 22
   - 53
