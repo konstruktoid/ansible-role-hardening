@@ -959,32 +959,18 @@
         - disable_wireless
         - ansible_virtualization_type not in ["container", "docker", "podman"]
 
-    - name: Stat firewall rules when UFW is enabled
+    - name: Get UFW status
       become: true
-      ansible.builtin.shell: |
-        set -o pipefail
-        ufw show added | grep '^ufw' | grep -v "'ansible\smanaged'" | sed 's/ufw //g'
-      args:
-        executable: /bin/bash
-      failed_when: ufw_not_managed.rc > 1
+      ansible.builtin.command:
+        cmd: ufw status verbose
       changed_when: false
-      register: ufw_not_managed
+      register: ufw_status
+      failed_when: >
+        'deny (incoming)' not in ufw_status.stdout or
+        'deny (outgoing)' not in ufw_status.stdout or
+        'disabled (routed)' not in ufw_status.stdout
       when:
-        - ufw_enable
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
-
-    - name: Stat firewall rules when UFW is disabled
-      become: true
-      ansible.builtin.shell: |
-        set -o pipefail
-        ufw show added | grep '^ufw' | grep "'ansible\smanaged'" | sed 's/ufw //g'
-      args:
-        executable: /bin/bash
-      failed_when: ufw_not_managed.rc > 1
-      changed_when: false
-      register: ufw_not_managed
-      when:
-        - not ufw_enable
+        - manage_ufw
         - ansible_virtualization_type not in ["container", "docker", "podman"]
 
     - name: Verify aide configuration
