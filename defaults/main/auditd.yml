@@ -1,4 +1,6 @@
 ---
+manage_auditd: true
+
 auditd_apply_audit_rules: true
 auditd_action_mail_acct: root
 auditd_admin_space_left_action: suspend

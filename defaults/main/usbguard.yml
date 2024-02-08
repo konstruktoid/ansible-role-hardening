@@ -1,5 +1,6 @@
 ---
-enable_usbguard: true
+manage_usbguard: true
+
 usbguard_configuration_file: /etc/usbguard/usbguard-daemon.conf
 usbguard_rulefile: /etc/usbguard/rules.conf
 
