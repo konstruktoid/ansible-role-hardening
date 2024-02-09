@@ -820,6 +820,11 @@ restricted to the sftp service only.
 `sshd_syslog_facility` set the facility code that is used when logging messages
 from sshd.
 
+`sshd_update_moduli`, if set to `true`, will download a updated
+[moduli file](https://man7.org/linux/man-pages/man5/moduli.5.html)
+from the [konstruktoid/ssh-moduli](https://github.com/konstruktoid/ssh-moduli)
+repository.
+
 ### ./defaults/main/suid_sgid_blocklist.yml
 
 ```yaml
