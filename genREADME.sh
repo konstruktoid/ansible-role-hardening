@@ -55,7 +55,8 @@ roles:
 
 \`\`\`yaml
 ---
-- hosts: localhost
+- name: Include and use the hardening role
+  hosts: localhost
   any_errors_fatal: true
   tasks:
     - name: Include the hardening role
@@ -73,7 +74,8 @@ roles:
 
 \`\`\`yaml
 ---
-- hosts: localhost
+- name: Include and use the hardening role
+  hosts: localhost
   any_errors_fatal: true
   tasks:
     - name: Install git
@@ -85,7 +87,7 @@ roles:
     - name: Checkout konstruktoid.hardening
       become: true
       ansible.builtin.git:
-        repo: 'https://github.com/konstruktoid/ansible-role-hardening'
+        repo: https://github.com/konstruktoid/ansible-role-hardening
         dest: /etc/ansible/roles/konstruktoid.hardening
         version: 'v2.0.0'
 
