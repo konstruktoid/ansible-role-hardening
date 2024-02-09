@@ -1,5 +1,6 @@
 # Structure
 
+
 ```sh
 .
 ├── action-lint
@@ -14,6 +15,7 @@
 │       ├── disablewireless.yml
 │       ├── dns.yml
 │       ├── ipv6.yml
+│       ├── journal.yml
 │       ├── limits.yml
 │       ├── misc.yml
 │       ├── module_blocklists.yml
@@ -27,6 +29,7 @@
 │       ├── templates.yml
 │       ├── ufw.yml
 │       ├── umask.yml
+│       ├── usbguard.yml
 │       └── users.yml
 ├── files
 │   └── usr
@@ -36,8 +39,6 @@
 ├── genREADME.sh
 ├── handlers
 │   └── main.yml
-├── images
-│   └── ansible-role-hardening.svg
 ├── LICENSE
 ├── meta
 │   └── main.yml
@@ -50,6 +51,8 @@
 │   │   ├── converge.yml
 │   │   ├── molecule.yml
 │   │   └── verify.yml
+│   ├── docker
+│   │   └── molecule.yml
 │   ├── redhat
 │   │   └── molecule.yml
 │   ├── single
@@ -57,8 +60,6 @@
 │   └── ubuntu
 │       └── molecule.yml
 ├── postChecks.sh
-├── provision
-│   └── setup.sh
 ├── README.md
 ├── renovate.json
 ├── requirements-dev.txt
@@ -72,12 +73,11 @@
 │   ├── apparmor.yml
 │   ├── apport.yml
 │   ├── auditd.yml
+│   ├── automatic_updates.yml
+│   ├── compilers_dnf_post_transaction_actions_plugin.yml
 │   ├── compilers.yml
 │   ├── cron.yml
 │   ├── ctrlaltdel.yml
-│   ├── disablefs.yml
-│   ├── disablemod.yml
-│   ├── disablenet.yml
 │   ├── disablewireless.yml
 │   ├── extras.yml
 │   ├── facts.yml
@@ -86,6 +86,7 @@
 │   ├── ipv6.yml
 │   ├── issue.yml
 │   ├── journalconf.yml
+│   ├── kernelmodules.yml
 │   ├── limits.yml
 │   ├── lockroot.yml
 │   ├── logindconf.yml
@@ -112,6 +113,7 @@
 │   ├── timesyncd.yml
 │   ├── ufw.yml
 │   ├── umask.yml
+│   ├── usbguard.yml
 │   └── users.yml
 ├── templates
 │   ├── etc
@@ -141,10 +143,15 @@
 │   │   ├── profile.d
 │   │   │   └── initpath.sh.j2
 │   │   ├── security
-│   │   │   └── limits.conf.j2
+│   │   │   ├── faillock.conf.j2
+│   │   │   ├── limits.conf.j2
+│   │   │   └── pwquality.conf.j2
 │   │   ├── ssh
 │   │   │   ├── ssh_config.j2
 │   │   │   └── sshd_config.j2
+│   │   ├── sysctl
+│   │   │   ├── sysctl.ipv6.conf.j2
+│   │   │   └── sysctl.main.conf.j2
 │   │   └── systemd
 │   │       ├── coredump.conf.j2
 │   │       ├── journald.conf.j2
@@ -167,5 +174,5 @@
 ├── tox.ini
 └── Vagrantfile
 
-35 directories, 129 files
+35 directories, 135 files
 ```

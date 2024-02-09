@@ -23,8 +23,7 @@ Available on
 [Ubuntu 20.04](https://releases.ubuntu.com/focal/) and
 [Ubuntu 22.04](https://releases.ubuntu.com/jammy/) are supported.
 
-There are also [hardened Amazon Web Services (AWS) images](https://github.com/konstruktoid/hardened-images)
-available, built with Packer and using this role.
+There are also [hardened Amazon Web Services (AWS) images](https://github.com/konstruktoid/hardened-images) available, built with Packer and using this role.
 
 > **Note**
 >

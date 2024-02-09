@@ -5,22 +5,19 @@
 ```console
 almalinux/8
 almalinux/9
-bento/debian-12
 bento/ubuntu-20.04
 debian/bookworm64
 debian/bullseye64
 debian/testing64
+docker.io/almalinux:9
+docker.io/debian:bookworm
+docker.io/ubuntu:jammy
 generic/rhel8
 ubuntu/focal64
 ubuntu/jammy64
 ubuntu/lunar64
 ubuntu/mantic64
-```
-
-## Test examples
-
-```shell
-ansible-playbook tests/test.yml --extra-vars "sshd_admin_net=192.168.1.0/24"   -c local -i 'localhost,' -K
+ubuntu/noble64
 ```
 
 If the [runTests.sh](runTests.sh) script is executed as `runTests.sh vagrant`,
@@ -34,10 +31,10 @@ repository if the host is using [Ubuntu](https://ubuntu.com/ "Ubuntu").
 
 ```console
 devel
-py310-ansible7
 py310-ansible8
+py310-ansible9
 py310-ansibledevel
-py311-ansible7
 py311-ansible8
+py311-ansible9
 py311-ansibledevel
 ```

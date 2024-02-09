@@ -4,7 +4,7 @@ An [Ansible](https://www.ansible.com/) role to make a AlmaLinux, Debian, or
 Ubuntu server a bit more secure.
 [systemd edition](https://freedesktop.org/wiki/Software/systemd/).
 
-Requires Ansible >= 2.13.
+Requires Ansible >= 2.15.
 
 Available on
 [Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
@@ -15,6 +15,8 @@ Available on
 [Debian 12](https://www.debian.org/releases/bookworm/),
 [Ubuntu 20.04](https://releases.ubuntu.com/focal/) and
 [Ubuntu 22.04](https://releases.ubuntu.com/jammy/) are supported.
+
+There are also [hardened Amazon Web Services (AWS) images](https://github.com/konstruktoid/hardened-images) available, built with Packer and using this role.
 
 > **Note**
 >
@@ -32,6 +34,16 @@ None.
 
 ## Examples
 
+### Requirements
+
+```yaml
+roles:
+  - name: konstruktoid.hardening
+    version: 'v2.0.0'
+    src: https://github.com/konstruktoid/ansible-role-hardening.git
+    scm: git
+```
+
 ### Playbook
 
 ```yaml
@@ -43,7 +55,6 @@ None.
       ansible.builtin.include_role:
         name: konstruktoid.hardening
       vars:
-        block_blacklisted: true
         sshd_admin_net:
           - 10.0.2.0/24
           - 192.168.0.0/24
@@ -51,7 +62,7 @@ None.
         suid_sgid_permissions: false
 ```
 
-### ansible-pull with git checkout
+### Local playbook using git checkout
 
 ```yaml
 ---
@@ -69,13 +80,12 @@ None.
       ansible.builtin.git:
         repo: 'https://github.com/konstruktoid/ansible-role-hardening'
         dest: /etc/ansible/roles/konstruktoid.hardening
-        version: v1.15.0
+        version: 'v2.0.0'
 
     - name: Include the hardening role
       ansible.builtin.include_role:
         name: konstruktoid.hardening
       vars:
-        block_blacklisted: true
         sshd_admin_net:
           - 10.0.2.0/24
           - 192.168.0.0/24
@@ -106,11 +116,12 @@ See [TESTING.md](TESTING.md).
 ### ./defaults/main/aide.yml
 
 ```yaml
-install_aide: true
+manage_aide: true
+
 aide_checksums: sha512
 ```
 
-If `install_aide: true` then [AIDE](https://aide.github.io/) will be installed
+If `manage_aide: true` then [AIDE](https://aide.github.io/) will be installed
 and configured.
 
 `aide_checksums` modifies the AIDE `Checksums` variable. Note that the
@@ -121,12 +132,14 @@ and configured.
 ### ./defaults/main/auditd.yml
 
 ```yaml
+manage_auditd: true
+
 auditd_apply_audit_rules: true
 auditd_action_mail_acct: root
 auditd_admin_space_left_action: suspend
 auditd_disk_error_action: suspend
 auditd_disk_full_action: suspend
-auditd_flush: sync
+auditd_flush: incremental_async
 auditd_max_log_file: 20
 auditd_max_log_file_action: rotate
 auditd_mode: 1
@@ -137,7 +150,8 @@ grub_audit_backlog_cmdline: audit_backlog_limit=8192
 grub_audit_cmdline: audit=1
 ```
 
-Enable `auditd` at boot using Grub.
+If `manage_auditd: true` then the audit daemon (`auditd`) will configured and
+enabled at boot using GRUB.
 
 When `auditd_apply_audit_rules: 'yes'`, the role applies the auditd rules
 from the included template file.
@@ -205,8 +219,12 @@ If `true`, turn off all wireless interfaces.
 ### ./defaults/main/dns.yml
 
 ```yaml
-dns: 127.0.0.1 1.1.1.1
-fallback_dns: 9.9.9.9 1.0.0.1
+dns:
+  - 1.1.1.2
+  - 9.9.9.9
+fallback_dns:
+  - 1.0.0.2
+  - 149.112.112.112
 dnssec: allow-downgrade
 dns_over_tls: opportunistic
 ```
@@ -226,12 +244,47 @@ option.
 
 ```yaml
 disable_ipv6: false
+sysctl_net_ipv6_conf_accept_ra_rtr_pref: 0
+
 ipv6_disable_sysctl_settings:
   net.ipv6.conf.all.disable_ipv6: 1
   net.ipv6.conf.default.disable_ipv6: 1
+
+ipv6_sysctl_settings:
+  net.ipv6.conf.all.accept_ra: 0
+  net.ipv6.conf.all.accept_redirects: 0
+  net.ipv6.conf.all.accept_source_route: 0
+  net.ipv6.conf.all.forwarding: 0
+  net.ipv6.conf.all.use_tempaddr: 2
+  net.ipv6.conf.default.accept_ra: 0
+  net.ipv6.conf.default.accept_ra_defrtr: 0
+  net.ipv6.conf.default.accept_ra_pinfo: 0
+  net.ipv6.conf.default.accept_ra_rtr_pref: 0
+  net.ipv6.conf.default.accept_redirects: 0
+  net.ipv6.conf.default.accept_source_route: 0
+  net.ipv6.conf.default.autoconf: 0
+  net.ipv6.conf.default.dad_transmits: 0
+  net.ipv6.conf.default.max_addresses: 1
+  net.ipv6.conf.default.router_solicitations: 0
+  net.ipv6.conf.default.use_tempaddr: 2
 ```
 
-If `disable_ipv6: true`, IPv6 will be disabled.
+If `disable_ipv6: true`, IPv6 will be disabled and related sysctl settings
+configured.
+
+`ipv6_sysctl_settings` is the `sysctl` configuration used if the host is using
+IPv6.
+
+[sysctl.conf](https://linux.die.net/man/5/sysctl.conf)
+
+### ./defaults/main/journal.yml
+
+```yaml
+rsyslog_filecreatemode: "0640"
+```
+
+`rsyslog_filecreatemode` set the creation mode with which rsyslogd creates
+new files, see (rsconf1_filecreatemode)[https://www.rsyslog.com/doc/configuration/action/rsconf1_filecreatemode.html].
 
 ### ./defaults/main/limits.yml
 
@@ -263,14 +316,12 @@ If `reboot_ubuntu: true` an Ubuntu node will be rebooted if required.
 
 `redhat_signing_keys` are [RedHat Product Signing Keys](https://access.redhat.com/security/team/key/).
 
-The `epel7_signing_keys`, `epel8_signing_keys` and
-`epel9_signing_keys` are release specific
-[Fedora EPEL signing keys](https://getfedora.org/security/).
+The `epel7_signing_keys`, `epel8_signing_keys` and `epel9_signing_keys` are
+release specific [Fedora EPEL signing keys](https://getfedora.org/security/).
 
 ### ./defaults/main/module_blocklists.yml
 
 ```yaml
-block_blacklisted: false
 fs_modules_blocklist:
   - cramfs
   - freevxfs
@@ -305,17 +356,7 @@ net_modules_blocklist:
   - tipc
 ```
 
-Blocked kernel modules.
-
-Setting `block_blacklisted: true` will block, or disable, any automatic loading
-of `blacklisted` kernel modules. The reasoning behind this is that a blacklisted
-module can still be loaded manually with `modprobe module_name`. Using
-`install module_name /bin/true` prevents this.
-
-This will affect modules that the distribution has blacklisted as
-part of its default setup, or that were added manually at some point, by anyone
-with access to your system. Please verify the affected modules before turning
-this on by running `modprobe --showconfig | grep '^blacklist'`
+Kernel modules to be `blacklisted` and disabled.
 
 > **Note**
 >
@@ -340,19 +381,26 @@ information otherwise prohibited by `hidepid=`.
 ### ./defaults/main/ntp.yml
 
 ```yaml
-enable_timesyncd: true
-fallback_ntp: 2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org
-ntp: "0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org"
+manage_timesyncd: true
+
+fallback_ntp:
+  - ntp.netnod.se
+  - ntp.ubuntu.com
+ntp:
+  - 2.pool.ntp.org
+  - time.nist.gov
 ```
 
-If `enable_timesyncd: true` then configure systemd
+If `manage_timesyncd: true` then configure systemd
 [timesyncd](https://manpages.ubuntu.com/manpages/jammy/man8/systemd-timesyncd.service.8.html),
 otherwise installing a NTP client is recommended.
 
 ### ./defaults/main/packages.yml
 
 ```yaml
+automatic_updates: true
 system_upgrade: true
+
 packages_blocklist:
   - apport*
   - autofs
@@ -374,6 +422,7 @@ packages_blocklist:
   - xinetd
   - yp-tools
   - ypbind
+
 packages_debian:
   - acct
   - apparmor-profiles
@@ -401,6 +450,7 @@ packages_debian:
   - tcpd
   - vlock
   - wamerican
+
 packages_redhat:
   - audispd-plugins
   - audit
@@ -419,13 +469,16 @@ packages_redhat:
   - systemd-journal-remote
   - vlock
   - words
+
 packages_ubuntu:
   - fwupd
   - secureboot-db
   - snapd
 ```
+`automatic_updates: true` will install and configure (dnf-automatic)[https://dnf.readthedocs.io/en/latest/automatic.html] or (unattended-upgrades)[https://wiki.debian.org/UnattendedUpgrades],
+depending on the distribution.
 
-`system_upgrade: 'yes'` will run `apt upgrade` or
+`system_upgrade: true` will run `apt upgrade` or
 `dnf update` if required.
 
 Packages to be installed depending of distribution
@@ -434,7 +487,8 @@ and packages to be removed (`packages_blocklist`).
 ### ./defaults/main/password.yml
 
 ```yaml
-faillock_enable: true
+manage_faillock: true
+
 faillock:
   admin_group: []
   audit: true
@@ -448,17 +502,20 @@ faillock:
   root_unlock_time: 600
   silent: false
   unlock_time: 600
+
 login_defs:
   login_retries: 5
   login_timeout: 60
   pass_max_days: 60
   pass_min_days: 1
   pass_warn_age: 7
+
 password_remember: 5
+
 pwquality:
   dcredit: -1
   dictcheck: 1
-  dictpath: ''
+  dictpath: ""
   difok: 8
   enforce_for_root: true
   enforcing: 1
@@ -476,7 +533,7 @@ pwquality:
   usersubstr: 3
 ```
 
-`faillock_enable` set to `false` for disable faillock library.
+`manage_faillock: true` will enable the faillock library.
 
 `password_remember` set the size of the password history that the user will not be able to reuse.
 
@@ -489,6 +546,8 @@ Configure the [libpwquality](https://manpages.ubuntu.com/manpages/jammy/man5/pwq
 ### ./defaults/main/sshd.yml
 
 ```yaml
+manage_ssh: true
+
 sshd_accept_env: LANG LC_*
 sshd_admin_net:
   - 192.168.0.0/24
@@ -498,7 +557,7 @@ sshd_allow_groups:
   - sudo
 sshd_allow_tcp_forwarding: false
 sshd_allow_users:
-  - {{ ansible_user | default(lookup('ansible.builtin.env', 'USER')) }}
+  - "{{ ansible_user | default(lookup('ansible.builtin.env', 'USER')) }}"
 sshd_authentication_methods: any
 sshd_banner: /etc/issue.net
 sshd_ca_signature_algorithms:
@@ -549,7 +608,7 @@ sshd_kex_algorithms:
   - ecdh-sha2-nistp256
   - diffie-hellman-group-exchange-sha256
 sshd_listen:
-  - 0.0.0.0
+  - "0.0.0.0"
 sshd_log_level: VERBOSE
 sshd_login_grace_time: 20
 sshd_macs:
@@ -563,7 +622,7 @@ sshd_match_local_ports: {}
 sshd_match_users: {}
 sshd_max_auth_tries: 3
 sshd_max_sessions: 3
-sshd_max_startups: '10:30:60'
+sshd_max_startups: 10:30:60
 sshd_password_authentication: false
 sshd_permit_empty_passwords: false
 sshd_permit_root_login: false
@@ -575,15 +634,17 @@ sshd_print_last_log: true
 sshd_print_motd: false
 sshd_print_pam_motd: false
 sshd_rekey_limit: 512M 1h
-sshd_required_rsa_size: 2048
+sshd_required_ecdsa_size: 521
+sshd_required_rsa_size: 4096
 sshd_sftp_enabled: true
 sshd_sftp_only_chroot: true
-sshd_sftp_only_chroot_dir: '%h'
-sshd_sftp_only_group: ''
+sshd_sftp_only_chroot_dir: "%h"
+sshd_sftp_only_group: ""
 sshd_sftp_subsystem: internal-sftp -f LOCAL6 -l INFO
 sshd_strict_modes: true
 sshd_syslog_facility: AUTH
 sshd_tcp_keep_alive: false
+sshd_update_moduli: false
 sshd_use_dns: false
 sshd_use_pam: true
 sshd_use_privilege_separation: sandbox
@@ -599,48 +660,80 @@ sshd_x11_forwarding: false
 For a explanation of the options not described below, please read
 [https://man.openbsd.org/sshd_config](https://man.openbsd.org/sshd_config).
 
-Only the network(s) defined in `sshd_admin_net` are allowed to connect to `sshd_ports`. Note that additional rules need to be set up in order to allow access to additional services.
+Only the network(s) defined in `sshd_admin_net` are allowed to connect to
+`sshd_ports`.
+Note that additional rules need to be set up in order to allow access to
+additional services.
 
-OpenSSH login is allowed only for users whose primary group or supplementary group list matches one of the patterns in `sshd_allow_groups`. OpenSSH login is also allowed for users in `sshd_allow_users`. To do the opposite and deny access, use the `sshd_deny_groups` and `sshd_deny_users` parameters, which in turn have priority over the previous parameters.
+OpenSSH login is allowed only for users whose primary group or supplementary
+group list matches one of the patterns in `sshd_allow_groups`. OpenSSH login
+is also allowed for users in `sshd_allow_users`. To do the opposite and deny
+access, use the `sshd_deny_groups` and `sshd_deny_users` parameters, which in
+turn have priority over the previous parameters.
 
-`sshd_allow_agent_forwarding` specifies whether ssh-agent(1) forwarding is permitted.
+`sshd_allow_agent_forwarding` specifies whether ssh-agent(1) forwarding is
+permitted.
 
-`sshd_allow_tcp_forwarding` specifies whether TCP forwarding is permitted. The available options are `true|yes` or all to allow TCP forwarding, `false|no` to prevent all TCP forwarding, `local` to allow local (from the perspective of ssh(1)) forwarding only or `remote` to allow remote forwarding only.
+`sshd_allow_tcp_forwarding` specifies whether TCP forwarding is permitted.
+The available options are `true` or `all` to allow TCP forwarding,
+`false` to prevent all TCP forwarding, `local` to allow local (from the
+perspective of ssh(1)) forwarding only or `remote` to allow remote forwarding
+only.
 
-`sshd_authentication_methods` specifies the authentication methods that must be successfully completed in order to grant access to a user.
+`sshd_authentication_methods` specifies the authentication methods that must
+be successfully completed in order to grant access to a user.
 
 `sshd_log_level` gives the verbosity level that is used when logging messages.
 
-`sshd_max_auth_tries` and `sshd_max_sessions` specifies the maximum number of SSH authentication attempts permitted per connection and the maximum number of open shell, login or subsystem (e.g. sftp) sessions permitted per network
+`sshd_max_auth_tries` and `sshd_max_sessions` specifies the maximum number of
+SSH authentication attempt s permitted per connection and the maximum number of
+open shell, login or subsystem (e.g. `sftp`) sessions permitted per network
 connection.
 
-`sshd_password_authentication` specifies whether password authentication is allowed.
+`sshd_password_authentication` specifies whether password authentication is
+allowed.
 
 `sshd_ports` specifies the port(s) number that sshd(8) listens on.
 
-`sshd_required_rsa_size`, RequiredRSASize, will only be set if SSH version is higher than 9.1.
+`sshd_required_rsa_size`, `RequiredRSASize`, will only be set if SSH version
+is higher than 9.1.
 
-`sshd_config_d_force_clear` force clear directory `/etc/ssh/sshd_config.d`. Default: `false`.
+`sshd_config_d_force_clear` force clear directory `/etc/ssh/sshd_config.d`.
+Default: `false`.
 
-`sshd_config_force_replace` force replace configuration file `/etc/ssh/sshd_config`. Default: `false`.
+`sshd_config_force_replace` force replace configuration file
+`/etc/ssh/sshd_config`. Default: `false`.
 
-> **Note**
+ **Note**
 >
-> By default, the role checks whether the directory `/etc/ssh/sshd_config.d` exists and whether it is linked via the `Include` parameter in the `/etc/ssh/sshd_config` file, if so, an additional configuration file is created in `/ etc/ssh/sshd_config.d`, if not, the `/etc/ssh/sshd_config` file is overwritten.
+> By default, the role checks whether the directory `/etc/ssh/sshd_config.d`
+> exists and whether it is linked via the `Include` parameter in the
+> `/etc/ssh/sshd_config` file, if so, an additional configuration file is
+> created in `/ etc/ssh/sshd_config.d`, if not, the `/etc/ssh/sshd_config`
+> file is overwritten.
 
 > **Warning**
 >
-> If any `sshd_match_(users|groups|addresses|local_ports)` or `sshd_sftp_only_group` parameters is set, the value `true` will be implicit.
+> If any `sshd_match_(users|groups|addresses|local_ports)` or
+> `sshd_sftp_only_group` parameters is set, the value `true` will be implicit.
 
-`sshd_host_keys_files` host keys for sshd. If empty `['/etc/ssh/ssh_host_rsa_key', '/etc/ssh/ssh_host_ecdsa_key', '/etc/ssh/ssh_host_ed25519_key']` will be used, as far as supported by the installed sshd version.
+`sshd_host_keys_files` host keys for sshd. If empty `['/etc/ssh/ssh_host_rsa_key',
+'/etc/ssh/ssh_host_ec dsa_key', '/etc/ssh/ssh_host_ed25519_key']` will be used,
+as far as supported by the installed sshd version.
 
-`sshd_host_keys_owner` set owner of host keys for sshd. Default: `root`.
-`sshd_host_keys_group` set group of host keys for sshd. Default: `root`.
-`sshd_host_keys_mode` set permission of host keys for sshd. Default: `"0600"`.
+`sshd_host_keys_owner` set owner of host keys for sshd.
 
-`sshd_match_users` add a conditional block for users. If all of the criteria on the Match line are satisfied, the rules/parameters defined on the following lines override those set in the global section of the config file, until either another Match line or the end of the file.
+`sshd_host_keys_group` set group of host keys for sshd.
+
+`sshd_host_keys_mode` set permission of host keys for sshd.
+
+`sshd_match_users` add a conditional block for users. If all of the criteria
+on the Match line are satisfied, the rules/parameters defined on the following
+lines override those set in the global section of th e config file, until either
+another Match line or the end of the file.
 
 Expected configuration structure:
+
 ```yaml
 sshd_match_users:
   - user: <username>
@@ -648,7 +741,10 @@ sshd_match_users:
       - <parameter sshd> <value>
       - <parameter sshd> <value>
 ```
-Example, allow `ubuntu` user access through password authentication and allow `ansible` user access without banner:
+
+Example, allow `ubuntu` user access through password authentication and allow
+`ansible` user access without a banner:
+
 ```yaml
 sshd_match_users:
   - user: ubuntu
@@ -661,7 +757,9 @@ sshd_match_users:
       - AllowUsers ansible
       - Banner none
 ```
-`sshd_match_groups` add a conditional block for groups. More details and examples in the parameter description `sshd_match_users`.
+
+`sshd_match_groups` add a conditional block for groups. More details and
+examples in the parameter description `sshd_match_users`.
 
 Expected configuration structure:
 ```yaml
@@ -672,9 +770,11 @@ sshd_match_groups:
       - <parameter sshd> <value>
 ```
 
-`sshd_match_addresses` add a conditional block for adddresses. More details and examples in the parameter description `sshd_match_users`.
+`sshd_match_addresses` add a conditional block for adddresses. More details and
+examples in the parameter description `sshd_match_users`.
 
 Expected configuration structure:
+
 ```yaml
 sshd_match_addresses:
   - address: <ip>
@@ -682,9 +782,11 @@ sshd_match_addresses:
       - <parameter sshd> <value>
       - <parameter sshd> <value>
 ```
-`sshd_match_local_ports` add a conditional block for ports. More details and examples in the parameter description `sshd_match_users`.
+`sshd_match_local_ports` add a conditional block for ports. More details and
+examples in the parameter description `sshd_match_users`.
 
 Expected configuration structure:
+
 ```yaml
 sshd_match_ports:
   - port: <port>
@@ -693,15 +795,22 @@ sshd_match_ports:
       - <parameter sshd> <value>
 ```
 
-`sshd_print_pam_motd` specifies whether printing of the MOTD via pam (Debian and Ubuntu). Default: `false`.
+`sshd_print_pam_motd` specifies whether printing of the MOTD via `pam`.
 
-`sshd_sftp_enabled` specifies whether enabled sftp configuration. Default: `true`.
-`sshd_sftp_subsystem` Set external subsystem for file  transfer  daemon. Default: `internal-sftp -f LOCAL6 -l INFO`.
-`sshd_sftp_only_group` specifies the name of the group that will have access restricted to the sftp service only. Default: `""`.
-`sshd_sftp_only_chroot` specifies group access will be via chroot isolation. Default: `true`.
-`sshd_sftp_only_chroot_dir` specifies the chroot directory. Accepts the tokens `%%` (a literal `%`), `%h` (home directory of the user), and `%u` (username). Default: `"%h"`.
+`sshd_sftp_enabled` specifies whether enabled sftp configuration.
 
-`sshd_syslog_facility` set the facility code that is used when logging messages from sshd.Default: `AUTH`.
+`sshd_sftp_subsystem` Set external subsystem for file transfer daemon.
+
+`sshd_sftp_only_group` specifies the name of the group that will have access
+restricted to the sftp service only.
+
+`sshd_sftp_only_chroot` specifies group access will be via chroot isolation.
+
+`sshd_sftp_only_chroot_dir` specifies the chroot directory. Accepts the tokens
+`%%` (a literal `%`), `%h` (home directory of the user), and `%u` (username).
+
+`sshd_syslog_facility` set the facility code that is used when logging messages
+from sshd.
 
 ### ./defaults/main/suid_sgid_blocklist.yml
 
@@ -718,7 +827,6 @@ suid_sgid_blocklist:
   - aoss
   - apt
   - apt-get
-  [...]
 ```
 
 If `suid_sgid_permissions: true` loop through `suid_sgid_blocklist` and remove
@@ -732,7 +840,6 @@ and is based on the work by [@GTFOBins](https://github.com/GTFOBins).
 
 ```yaml
 sysctl_dev_tty_ldisc_autoload: 0
-sysctl_net_ipv6_conf_accept_ra_rtr_pref: 0
 
 ipv4_sysctl_settings:
   net.ipv4.conf.all.accept_redirects: 0
@@ -759,24 +866,6 @@ ipv4_sysctl_settings:
   net.ipv4.tcp_syn_retries: 5
   net.ipv4.tcp_synack_retries: 2
   net.ipv4.tcp_syncookies: 1
-
-ipv6_sysctl_settings:
-  net.ipv6.conf.all.accept_ra: 0
-  net.ipv6.conf.all.accept_redirects: 0
-  net.ipv6.conf.all.accept_source_route: 0
-  net.ipv6.conf.all.forwarding: 0
-  net.ipv6.conf.all.use_tempaddr: 2
-  net.ipv6.conf.default.accept_ra: 0
-  net.ipv6.conf.default.accept_ra_defrtr: 0
-  net.ipv6.conf.default.accept_ra_pinfo: 0
-  net.ipv6.conf.default.accept_ra_rtr_pref: 0
-  net.ipv6.conf.default.accept_redirects: 0
-  net.ipv6.conf.default.accept_source_route: 0
-  net.ipv6.conf.default.autoconf: 0
-  net.ipv6.conf.default.dad_transmits: 0
-  net.ipv6.conf.default.max_addresses: 1
-  net.ipv6.conf.default.router_solicitations: 0
-  net.ipv6.conf.default.use_tempaddr: 2
 
 generic_sysctl_settings:
   fs.protected_fifos: 2
@@ -844,7 +933,8 @@ Paths in order to support overriding the default [role templates](https://docs.a
 ### ./defaults/main/ufw.yml
 
 ```yaml
-ufw_enable: true
+manage_ufw: true
+
 ufw_outgoing_traffic:
   - 22
   - 53
@@ -854,18 +944,62 @@ ufw_outgoing_traffic:
   - 853
 ```
 
-`ufw_enable: true` installs and configures `ufw` with related rules. Set it to
-`false` in order to install and configure a firewall manually.
-`ufw_outgoing_traffic` opens the specific `ufw` ports,
-allowing outgoing traffic.
+`manage_ufw: true` installs and configures `ufw` with related rules.
+Set it to `false` in order to install and configure a firewall manually.
+
+`ufw_outgoing_traffic` opens the specific `ufw` ports, allowing outgoing
+traffic.
 
 ### ./defaults/main/umask.yml
 
 ```yaml
+session_timeout: 900
 umask_value: "077"
 ```
 
-Set default [umask value](https://manpages.ubuntu.com/manpages/jammy/man2/umask.2.html).
+`session_timeout` sets, in seconds, the
+[TMOUT](https://www.gnu.org/software/bash/manual/bash.html#index-TMOUT)
+environment variable.
+
+`umask_value` sets the default
+[umask value](https://manpages.ubuntu.com/manpages/jammy/man2/umask.2.html).
+
+### ./defaults/main/usbguard.yml
+
+```yaml
+manage_usbguard: true
+
+usbguard_configuration_file: /etc/usbguard/usbguard-daemon.conf
+usbguard_rulefile: /etc/usbguard/rules.conf
+
+usbguard_auditbackend: LinuxAudit
+usbguard_auditfilepath: /var/log/usbguard/usbguard-audit.log
+usbguard_authorizeddefault: none
+usbguard_devicemanagerbackend: uevent
+usbguard_deviceruleswithport: false
+usbguard_hidepii: false
+usbguard_implicitpolicytarget: block
+usbguard_inserteddevicepolicy: apply-policy
+usbguard_ipcaccesscontrolfiles: /etc/usbguard/IPCAccessControl.d/
+usbguard_ipcallowedgroups:
+  - plugdev
+  - root
+  - wheel
+usbguard_ipcallowedusers:
+  - root
+usbguard_presentcontrollerpolicy: keep
+usbguard_presentdevicepolicy: apply-policy
+usbguard_restorecontrollerdevicestate: false
+```
+
+`manage_usbguard: true` installs and configures
+[USBGuard](https://usbguard.github.io/).
+
+A policy will be generated is any rules can be listed and a policy doesn't
+yet exist.
+
+See the [configuration documentation](https://usbguard.github.io/documentation/configuration.html)
+regarding the available options.
 
 ### ./defaults/main/users.yml
 
@@ -892,7 +1026,7 @@ Users to be removed.
 
 [DISA Security Technical Implementation Guides](https://public.cyber.mil/stigs/downloads/?_dl_facet_stigs=operating-systems%2Cunix-linux)
 
-[SCAP Security Guides](https://static.open-scap.org/)
+[SCAP Security Guides](https://complianceascode.github.io/content-pages/guides/index.html)
 
 [Security focused systemd configuration](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc)
 
