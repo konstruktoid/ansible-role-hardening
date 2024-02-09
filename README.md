@@ -48,7 +48,8 @@ roles:
 
 ```yaml
 ---
-- hosts: localhost
+- name: Include and use the hardening role
+  hosts: localhost
   any_errors_fatal: true
   tasks:
     - name: Include the hardening role
@@ -66,7 +67,8 @@ roles:
 
 ```yaml
 ---
-- hosts: localhost
+- name: Include and use the hardening role
+  hosts: localhost
   any_errors_fatal: true
   tasks:
     - name: Install git
@@ -78,7 +80,7 @@ roles:
     - name: Checkout konstruktoid.hardening
       become: true
       ansible.builtin.git:
-        repo: 'https://github.com/konstruktoid/ansible-role-hardening'
+        repo: https://github.com/konstruktoid/ansible-role-hardening
         dest: /etc/ansible/roles/konstruktoid.hardening
         version: 'v2.0.0'
 
@@ -284,7 +286,8 @@ rsyslog_filecreatemode: "0640"
 ```
 
 `rsyslog_filecreatemode` set the creation mode with which rsyslogd creates
-new files, see (rsconf1_filecreatemode)[https://www.rsyslog.com/doc/configuration/action/rsconf1_filecreatemode.html].
+new files, see
+[rsconf1_filecreatemode](https://www.rsyslog.com/doc/configuration/action/rsconf1_filecreatemode.html).
 
 ### ./defaults/main/limits.yml
 
@@ -314,7 +317,7 @@ epel9_signing_keys:
 
 If `reboot_ubuntu: true` an Ubuntu node will be rebooted if required.
 
-`redhat_signing_keys` are [RedHat Product Signing Keys](https://access.redhat.com/security/team/key/).
+`redhat_signing_keys` are the [RedHat Product Signing Keys](https://access.redhat.com/security/team/key/).
 
 The `epel7_signing_keys`, `epel8_signing_keys` and `epel9_signing_keys` are
 release specific [Fedora EPEL signing keys](https://getfedora.org/security/).
@@ -356,12 +359,13 @@ net_modules_blocklist:
   - tipc
 ```
 
-Kernel modules to be `blacklisted` and disabled.
+Kernel modules to be [blacklisted](https://wiki.debian.org/KernelModuleBlacklisting)
+and disabled using a fake install.
 
 > **Note**
 >
 > Disabling the `usb-storage` module will disable all USB
-> storage devices. If such devices are needed [USBGuard](https://github.com/USBGuard/usbguard),
+> storage devices. If such devices are needed [USBGuard](#defaultsmainusbguardyml),
 > or a similar tool, should be configured accordingly.
 
 ### ./defaults/main/mount.yml
@@ -475,7 +479,9 @@ packages_ubuntu:
   - secureboot-db
   - snapd
 ```
-`automatic_updates: true` will install and configure (dnf-automatic)[https://dnf.readthedocs.io/en/latest/automatic.html] or (unattended-upgrades)[https://wiki.debian.org/UnattendedUpgrades],
+`automatic_updates: true` will install and configure
+[dnf-automatic](https://dnf.readthedocs.io/en/latest/automatic.html)
+or [unattended-upgrades](https://wiki.debian.org/UnattendedUpgrades),
 depending on the distribution.
 
 `system_upgrade: true` will run `apt upgrade` or
@@ -541,7 +547,7 @@ Configure the [pam_faillock](https://manpages.ubuntu.com/manpages/lunar/en/man5/
 
 Configure the [login.defs](https://manpages.ubuntu.com/manpages/lunar/en/man5/login.defs.5.html) configuration.
 
-Configure the [libpwquality](https://manpages.ubuntu.com/manpages/jammy/man5/pwquality.conf.5.html) library.
+Configure the [libpwquality](https://manpages.ubuntu.com/manpages/noble/man5/pwquality.conf.5.html) library.
 
 ### ./defaults/main/sshd.yml
 
@@ -650,6 +656,8 @@ sshd_use_pam: true
 sshd_use_privilege_separation: sandbox
 sshd_x11_forwarding: false
 ```
+
+If `manage_ssh: true` the SSH client and the SSH daemon will be configured.
 
 > **Note**
 >
@@ -827,6 +835,7 @@ suid_sgid_blocklist:
   - aoss
   - apt
   - apt-get
+  [...]
 ```
 
 If `suid_sgid_permissions: true` loop through `suid_sgid_blocklist` and remove
@@ -891,7 +900,8 @@ conntrack_sysctl_settings:
 
 `sysctl` configuration.
 
-[sysctl.conf](https://linux.die.net/man/5/sysctl.conf)
+See [sysctl.conf](https://linux.die.net/man/5/sysctl.conf) and
+the [kernel documentation](https://www.kernel.org/doc/Documentation/sysctl/).
 
 ### ./defaults/main/templates.yml
 
