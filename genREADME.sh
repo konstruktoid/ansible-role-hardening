@@ -13,9 +13,6 @@ Ubuntu server a bit more secure.
 
 Requires Ansible >= ${ANSIBLE_V}.
 
-Available on
-[Ansible Galaxy](https://galaxy.ansible.com/konstruktoid/hardening).
-
 [AlmaLinux 8](https://wiki.almalinux.org/release-notes/#almalinux-8),
 [AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9),
 [Debian 11](https://www.debian.org/releases/bullseye/),
