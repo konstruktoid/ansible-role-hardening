@@ -813,6 +813,20 @@
       when:
         - ansible_os_family == "Debian"
 
+    - name: Verify apt settings
+      ansible.builtin.shell: |
+        set -o pipefail
+        apt-config dump | grep '^{{ item }}'
+      register: apt_config_settings
+      failed_when: apt_config_settings.rc != 0
+      changed_when: apt_config_settings.rc != 0
+      args:
+        executable: /bin/bash
+      when:
+        - ansible_os_family == "Debian"
+      with_items:
+        - "{{ apt_hardening_options }}"
+
     - name: Efi fact
       ansible.builtin.set_fact:
         booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
