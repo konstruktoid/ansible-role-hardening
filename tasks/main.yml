@@ -27,6 +27,7 @@
   ansible.builtin.include_tasks:
     file: sysctl.yml
   when:
+    - manage_sysctl
     - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Disable kernel modules
