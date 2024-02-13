@@ -147,7 +147,7 @@
   failed_when: init_redhat_aide.rc != 0
   when:
     - ansible_os_family == "RedHat"
-    - rhelaidedb.stat.exists
+    - not rhelaidedb.stat.exists
   tags:
     - aide
     - CCE-80675-2
@@ -173,7 +173,7 @@
   failed_when: cp_redhat_aide_db.rc != 0
   when:
     - ansible_os_family == "RedHat"
-    - rhelaidedbnew.stat.exists
+    - not rhelaidedbnew.stat.exists
   tags:
     - aide
 
@@ -186,6 +186,6 @@
   failed_when: init_debian_aide.rc != 0
   when:
     - ansible_os_family == "Debian"
-    - ubuaidedb.stat.exists
+    - not ubuaidedb.stat.exists
   tags:
     - aide
