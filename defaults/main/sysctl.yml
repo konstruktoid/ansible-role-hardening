@@ -1,4 +1,6 @@
 ---
+manage_sysctl: true
+
 sysctl_dev_tty_ldisc_autoload: 0
 
 ipv4_sysctl_settings:
