@@ -1,0 +1,13 @@
+---
+apt_hardening_options:
+  - Acquire::AllowDowngradeToInsecureRepositories "false";
+  - Acquire::AllowInsecureRepositories "false";
+  - Acquire::http::AllowRedirect "false";
+  - APT::Get::AllowUnauthenticated "false";
+  - APT::Get::AutomaticRemove "true";
+  - APT::Install-Recommends "false";
+  - APT::Install-Suggests "false";
+  - APT::Periodic::AutocleanInterval "7";
+  - APT::Sandbox::Seccomp "1";
+  - Unattended-Upgrade::Remove-Unused-Dependencies "true";
+  - Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
