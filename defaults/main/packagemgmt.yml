@@ -1,3 +1,4 @@
+---
 apt_hardening_options:
   - Acquire::AllowDowngradeToInsecureRepositories "false";
   - Acquire::AllowInsecureRepositories "false";
