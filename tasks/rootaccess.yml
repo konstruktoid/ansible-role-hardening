@@ -4,16 +4,12 @@
   ansible.builtin.stat:
     path: /etc/security/access.conf
   register: security_access_conf
-  tags:
-    - access_conf
 
 - name: Stat securetty
   become: true
   ansible.builtin.stat:
     path: /etc/securetty
   register: etc_securetty
-  tags:
-    - securetty
 
 - name: Clean access.conf
   become: true
@@ -24,8 +20,6 @@
     state: absent
   when:
     - security_access_conf.stat.exists
-  tags:
-    - access_conf
 
 - name: Allow localhost root in access.conf
   become: true
@@ -36,8 +30,6 @@
     state: present
   when:
     - security_access_conf.stat.exists
-  tags:
-    - access_conf
 
 - name: Clean securetty
   become: true
@@ -47,8 +39,6 @@
     state: absent
   when:
     - etc_securetty.stat.exists
-  tags:
-    - securetty
 
 - name: Allow console in securetty
   become: true
@@ -59,9 +49,6 @@
     state: present
   when:
     - etc_securetty.stat.exists
-  tags:
-    - securetty
-    - CIS-UBUNTU2004-5.6
 
 - name: Mask systemd debug-shell
   become: true
@@ -70,7 +57,3 @@
     masked: true
   when:
     - ansible_virtualization_type not in ["container", "docker", "podman"]
-  tags:
-    - systemd
-    - debug-shell
-    - CCE-80876-6

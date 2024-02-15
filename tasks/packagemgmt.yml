@@ -10,9 +10,6 @@
   loop: "{{ apt_hardening_options }}"
   when:
     - ansible_os_family == "Debian"
-  tags:
-    - apt
-    - M1045
 
 - name: Run apt update
   become: true
@@ -21,8 +18,6 @@
     cache_valid_time: 1800
   when:
     - ansible_os_family == "Debian"
-  tags:
-    - apt
 
 - name: Run apt upgrade
   become: true
@@ -36,11 +31,6 @@
   notify:
     - Run apt-get clean
     - Run apt-get autoremove
-  tags:
-    - apt
-    - CIS-UBUNTU2004-1.9
-    - D3-SU
-    - M1051
 
 - name: Link dnf.conf
   become: true
@@ -52,9 +42,6 @@
     state: link
   when:
     - ansible_distribution == "Fedora"
-  tags:
-    - dnf
-    - yum
 
 - name: Import RedHat RPM key
   become: true
@@ -65,10 +52,6 @@
     - "{{ redhat_signing_keys }}"
   when:
     - ansible_os_family == "RedHat"
-  tags:
-    - dnf
-    - yum
-    - CCE-80795-8
 
 - name: Set yum.conf gpgcheck
   become: true
@@ -82,12 +65,6 @@
     backrefs: true
   when:
     - ansible_os_family == "RedHat"
-  tags:
-    - dnf
-    - yum
-    - CCE-80790-9
-    - CCE-80792-5
-    - M1045
 
 - name: Set yum.conf clean_requirements
   become: true
@@ -100,10 +77,6 @@
     insertafter: "[main]"
   when:
     - ansible_os_family == "RedHat"
-  tags:
-    - dnf
-    - yum
-    - CCE-82476-3
 
 - name: Set yum.conf localpkg_gpgcheck
   become: true
@@ -116,11 +89,6 @@
     insertafter: "[main]"
   when:
     - ansible_os_family == "RedHat"
-  tags:
-    - dnf
-    - yum
-    - CCE-80791-7
-    - M1045
 
 - name: Comment yum.conf repo_gpgcheck
   become: true
@@ -133,9 +101,6 @@
     insertafter: "[main]"
   when:
     - ansible_os_family == "RedHat"
-  tags:
-    - dnf
-    - yum
 
 - name: RHEL8 package management tasks
   when:
@@ -149,20 +114,12 @@
         key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
       loop:
         - "{{ epel8_signing_keys }}"
-      tags:
-        - dnf
-        - packages
-        - yum
 
     - name: RHEL8 EPEL repo installation
       become: true
       ansible.builtin.dnf:
         name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
         state: present
-      tags:
-        - dnf
-        - packages
-        - yum
 
     - name: Install CodeReady repo for RHEL8
       become: true
@@ -183,20 +140,12 @@
         key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
       loop:
         - "{{ epel7_signing_keys }}"
-      tags:
-        - dnf
-        - packages
-        - yum
 
     - name: RHEL7 EPEL repo installation
       become: true
       ansible.builtin.yum:
         name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
         state: present
-      tags:
-        - dnf
-        - packages
-        - yum
 
     - name: Install Extras and HA for RHEL7
       become: true
@@ -206,10 +155,6 @@
         --enable "rhel-*-extras-rpms"
         --enable "rhel-ha-for-rhel-*-server-rpms"
       changed_when: false
-      tags:
-        - dnf
-        - packages
-        - yum
 
 - name: Stat PowerTools repository files
   ansible.builtin.stat:
@@ -223,10 +168,6 @@
   register: powertools_repo
   when:
     - ansible_os_family == "RedHat"
-  tags:
-    - dnf
-    - packages
-    - yum
 
 - name: Enable the PowerTools repository
   become: true
@@ -239,10 +180,6 @@
   when:
     - ansible_os_family == "RedHat"
     - item.stat.exists
-  tags:
-    - dnf
-    - packages
-    - yum
 
 - name: Update dnf cache
   become: true
@@ -250,9 +187,6 @@
     update_cache: true
   when:
     - ansible_os_family == "RedHat"
-  tags:
-    - dnf
-    - yum
 
 - name: Run dnf upgrade
   become: true
@@ -267,9 +201,3 @@
     - system_upgrade | bool
   notify:
     - Run dnf autoremove
-  tags:
-    - dnf
-    - yum
-    - CCE-80865-9
-    - D3-SU
-    - M1051

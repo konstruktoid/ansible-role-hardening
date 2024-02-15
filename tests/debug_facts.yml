@@ -3,42 +3,30 @@
   ansible.builtin.pip:
     name: jmespath
     state: present
-  tags:
-    - debug
 
 - name: Debug "cpuinfo_rdrand handling, true"
   ansible.builtin.debug:
     msg: cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}, true
   when: ansible_local.cpuinfo.rdrand
-  tags:
-    - debug
 
 - name: Debug "cpuinfo_rdrand handling, false"
   ansible.builtin.debug:
     msg: cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}, false
   when: not ansible_local.cpuinfo.rdrand
-  tags:
-    - debug
 
 - name: Debug "ansible_local['cpuinfo']['rdrand'], true"
   ansible.builtin.debug:
     msg: cpuinfo_rdrand is {{ ansible_local['cpuinfo']['rdrand'] }}, true
   when: ansible_local['cpuinfo']['rdrand']
-  tags:
-    - debug
 
 - name: Debug "ansible_local['cpuinfo']['rdrand'], false"
   ansible.builtin.debug:
     msg: cpuinfo_rdrand is {{ ansible_local['cpuinfo']['rdrand'] }}, false
   when: not ansible_local['cpuinfo']['rdrand']
-  tags:
-    - debug
 
 - name: Debug "cpuinfo_rdrand handling, info"
   ansible.builtin.debug:
     msg: cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}
-  tags:
-    - debug
 
 - name: Stat /var/run/reboot-required
   ansible.builtin.stat:
@@ -56,21 +44,15 @@
   ansible.builtin.debug:
     msg: systemd version is {{ ansible_local.systemd.version }}, <= 100
   when: ansible_local.systemd.version <= 100
-  tags:
-    - debug
 
 - name: Debug "systemd_version handling, >= 100"
   ansible.builtin.debug:
     msg: systemd version is {{ ansible_local.systemd.version }}, >= 100
   when: ansible_local.systemd.version >= 100
-  tags:
-    - debug
 
 - name: Debug "systemd_version handling, info"
   ansible.builtin.debug:
     msg: systemd version is {{ ansible_local.systemd.version }}
-  tags:
-    - debug
 
 - name: Get DSA keys
   ansible.builtin.debug:
@@ -78,8 +60,6 @@
   with_items:
     - "{{ ansible_local['sshkeys'] | json_query('keys.*') }}"
   when: item.type == "DSA"
-  tags:
-    - debug
 
 - name: Get short RSA keys
   ansible.builtin.debug:
@@ -87,8 +67,6 @@
   with_items:
     - "{{ ansible_local['sshkeys'] | json_query('keys.*') }}"
   when: (item.type == "RSA" and item.size <= 2048)
-  tags:
-    - debug
 
 - name: Get owner of old keys
   vars:
@@ -98,5 +76,3 @@
   with_items:
     - "{{ ansible_local['sshkeys'] | json_query('keys.*') }}"
   when: ( item.modified_epoch | int <= old_key | int ) and item.user_id >= 1000
-  tags:
-    - debug

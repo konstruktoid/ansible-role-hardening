@@ -10,10 +10,6 @@
     group: root
   notify:
     - Reload systemd
-  tags:
-    - system
-    - systemd
-    - CCE-80784-2
 
 - name: Configure systemd user.conf
   become: true
@@ -26,6 +22,3 @@
     group: root
   notify:
     - Reload systemd
-  tags:
-    - systemd
-    - users

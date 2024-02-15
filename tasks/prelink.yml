@@ -3,15 +3,11 @@
   ansible.builtin.stat:
     path: /etc/sysconfig/prelink
   register: sysconfig_prelink
-  tags:
-    - prelink
 
 - name: Stat prelink configuration file
   ansible.builtin.stat:
     path: /etc/prelink.conf
   register: etc_prelink
-  tags:
-    - prelink
 
 - name: Disable prelinking
   become: true
@@ -24,8 +20,6 @@
   when:
     - ansible_os_family == "RedHat"
     - sysconfig_prelink.stat.exists
-  tags:
-    - prelink
 
 - name: Return to non-prelinked state
   become: true
@@ -37,6 +31,3 @@
   when: >
     sysconfig_prelink.stat.exists or
     etc_prelink.stat.exists
-  tags:
-    - prelink
-    - CIS-UBUNTU2004-1.5.3

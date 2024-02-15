@@ -8,9 +8,6 @@
     mode: "0644"
     owner: root
     group: root
-  tags:
-    - adduser
-    - users
 
 - name: Add configuration file for useradd
   become: true
@@ -21,11 +18,3 @@
     mode: "0644"
     owner: root
     group: root
-  tags:
-    - useradd
-    - users
-    - CCE-27355-7
-    - CCE-80954-1
-    - CCE-83627-0
-    - CIS-UBUNTU2004-5.5.1.4
-    - UBTU-20-010409

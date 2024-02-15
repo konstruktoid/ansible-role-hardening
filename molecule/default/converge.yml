@@ -4,5 +4,5 @@
   any_errors_fatal: true
   tasks:
     - name: Include Ansible role
-      ansible.builtin.include_role:
+      ansible.builtin.import_role:
         name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"

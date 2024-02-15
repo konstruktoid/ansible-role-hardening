@@ -4,8 +4,6 @@
   ansible.builtin.package:
     name: kmod
     state: present
-  tags:
-    - modprobe
 
 - name: Blacklist kernel file system modules
   become: true
@@ -19,20 +17,6 @@
     create: true
   with_items:
     - "{{ fs_modules_blocklist }}"
-  tags:
-    - modprobe
-    - CCE-80835-2
-    - CCE-81031-7
-    - CIS-UBUNTU2004-1.1.1.1
-    - CIS-UBUNTU2004-1.1.1.2
-    - CIS-UBUNTU2004-1.1.1.3
-    - CIS-UBUNTU2004-1.1.1.4
-    - CIS-UBUNTU2004-1.1.1.5
-    - CIS-UBUNTU2004-1.1.1.5
-    - CIS-UBUNTU2004-1.1.1.6
-    - CIS-UBUNTU2004-1.1.1.7
-    - M1038
-    - M1042
 
 - name: Blacklist kernel network modules
   become: true
@@ -46,17 +30,6 @@
     create: true
   with_items:
     - "{{ net_modules_blocklist }}"
-  tags:
-    - modprobe
-    - CCE-80834-5
-    - CCE-82028-2
-    - CCE-82297-3
-    - CIS-UBUNTU2004-3.4.1
-    - CIS-UBUNTU2004-3.4.2
-    - CIS-UBUNTU2004-3.4.3
-    - CIS-UBUNTU2004-3.4.4
-    - M1038
-    - M1042
 
 - name: Allow USB kernel modules if USBGuard is used
   ansible.builtin.set_fact:
@@ -74,15 +47,6 @@
     create: true
   with_items:
     - "{{ misc_modules_usbguard if manage_usbguard else misc_modules_blocklist }}"
-  tags:
-    - modprobe
-    - CCE-80832-9
-    - CCE-82005-0
-    - CCE-82059-7
-    - CIS-UBUNTU2004-1.1.24
-    - M1034
-    - M1038
-    - M1042
 
 - name: Stat blacklisted kernel modules
   environment:
@@ -96,11 +60,6 @@
   changed_when: false
   failed_when: modprobe_blacklist.rc != 0
   register: modprobe_blacklist
-  tags:
-    - modprobe
-    - M1034
-    - M1038
-    - M1042
 
 - name: Block blacklisted kernel modules
   become: true
@@ -114,8 +73,3 @@
     create: true
   with_items:
     - "{{ modprobe_blacklist.stdout_lines | sort | unique }}"
-  tags:
-    - modprobe
-    - M1034
-    - M1038
-    - M1042

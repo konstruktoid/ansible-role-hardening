@@ -4,11 +4,6 @@
   ansible.builtin.package:
     name: systemd-timesyncd
     state: present
-  tags:
-    - systemd
-    - timesyncd
-    - CIS-UBUNTU2004-2.1.1.1
-    - CIS-UBUNTU2004-2.1.1.2
 
 - name: Configure systemd timesyncd
   become: true
@@ -21,11 +16,6 @@
     group: root
   notify:
     - Reload systemd
-  tags:
-    - systemd
-    - timesyncd
-    - CIS-UBUNTU2004-2.1.1.1
-    - CIS-UBUNTU2004-2.1.1.2
 
 - name: Start timesyncd
   become: true
@@ -34,11 +24,6 @@
     enabled: true
     masked: false
     state: started
-  tags:
-    - systemd
-    - timesyncd
-    - CIS-UBUNTU2004-2.1.1.1
-    - CIS-UBUNTU2004-2.1.1.2
 
 - name: Stat timesyncd status
   ansible.builtin.command:
@@ -46,11 +31,6 @@
   register: timesyncd_status
   changed_when: false
   failed_when: timesyncd_status.rc != 0
-  tags:
-    - systemd
-    - timesyncd
-    - CIS-UBUNTU2004-2.1.1.1
-    - CIS-UBUNTU2004-2.1.1.2
 
 - name: Stat timedatectl show
   ansible.builtin.command:
@@ -58,11 +38,6 @@
   register: timedatectl_show
   changed_when: false
   failed_when: timedatectl_show.rc != 0
-  tags:
-    - systemd
-    - timesyncd
-    - CIS-UBUNTU2004-2.1.1.1
-    - CIS-UBUNTU2004-2.1.1.2
 
 - name: Run timedatectl set-ntp
   become: true
@@ -72,7 +47,3 @@
   when:
     - timedatectl_show.stdout.find('NTP=yes') != -1
     - timesyncd_status.rc == 0
-  tags:
-    - systemd
-    - timesyncd
-    - CIS-UBUNTU2004-2.1.1.2

@@ -10,12 +10,6 @@
     group: root
   notify:
     - Reload systemd
-  tags:
-    - systemd
-    - journald
-    - CIS-UBUNTU2004-4.2.2.1
-    - CIS-UBUNTU2004-4.2.2.2
-    - CIS-UBUNTU2004-4.2.2.3
 
 - name: Disable systemd-journal-remote
   become: true
@@ -33,9 +27,6 @@
     - not "Could not find the requested service" in mask_journal_remote.msg
   when:
     - ansible_virtualization_type not in ["container", "docker", "podman"]
-  tags:
-    - systemd
-    - journald
 
 - name: Configure logrotate(8)
   become: true
@@ -46,8 +37,6 @@
     mode: "0644"
     owner: root
     group: root
-  tags:
-    - logrotate
 
 - name: Configure cron.daily logrotate
   become: true
@@ -57,25 +46,18 @@
     mode: "0750"
     state: present
     create: true
-  tags:
-    - cron
-    - logrotate
 
 - name: Stat rsyslog.conf
   become: true
   ansible.builtin.stat:
     path: /etc/rsyslog.conf
   register: rsyslogconf
-  tags:
-    - rsyslog
 
 - name: Stat rsyslog.d
   become: true
   ansible.builtin.stat:
     path: /etc/rsyslog.d
   register: rsyslogd
-  tags:
-    - rsyslog
 
 - name: Set rsyslog FileCreateMode
   become: true
@@ -92,9 +74,6 @@
         - rsyslogconf.stat.exists
       notify:
         - Validate rsyslogd
-      tags:
-        - rsyslog
-        - CIS-UBUNTU2004-4.2.1.4
 
     - name: Add FileCreateMode file to the rsyslog.d directory
       ansible.builtin.lineinfile:
@@ -109,5 +88,3 @@
         - rsyslogd.stat.isdir
       notify:
         - Validate rsyslogd
-      tags:
-        - rsyslog

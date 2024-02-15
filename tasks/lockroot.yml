@@ -5,6 +5,3 @@
     name: root
     password_lock: true
   no_log: true
-  tags:
-    - users
-    - lock_root

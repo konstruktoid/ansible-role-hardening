@@ -12,18 +12,12 @@
     remove_users is not success and
     not ("not removing" in remove_users.msg or
     "not found" in remove_users.msg)
-  tags:
-    - users
 
 - name: Stat user /home directories
   ansible.builtin.find:
     paths: /home
     file_type: directory
   register: home_directories
-  tags:
-    - users
-    - CIS-UBUNTU2004-6.2.6
-    - M1022
 
 - name: Set user /home directories permission
   become: true
@@ -33,7 +27,3 @@
   loop: "{{ home_directories.files }}"
   loop_control:
     label: "{{ item.path }}"
-  tags:
-    - users
-    - CIS-UBUNTU2004-6.2.6
-    - M1022

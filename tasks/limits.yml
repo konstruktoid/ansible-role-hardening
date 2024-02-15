@@ -8,12 +8,6 @@
     mode: "0644"
     owner: root
     group: root
-  tags:
-    - limits
-    - CCE-80955-8
-    - CCE-81038-2
-    - CIS-UBUNTU2004-1.5.4
-    - UBTU-20-010400
 
 - name: Configure coredump.conf
   become: true
@@ -24,12 +18,6 @@
     mode: "0644"
     owner: root
     group: root
-  tags:
-    - coredump
-    - systemd
-    - CCE-82251-0
-    - CCE-82252-8
-    - CIS-UBUNTU2004-1.5.4
 
 - name: Disable kdump service
   become: true

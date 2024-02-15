@@ -13,9 +13,6 @@
     - ansible_os_family == "Debian"
   notify:
     - Update GRUB
-  tags:
-    - ipv6
-    - CIS-UBUNTU2004-3.1.1
 
 - name: Set RedHat ipv6.disable GRUB cmdline
   become: true
@@ -26,8 +23,6 @@
     - ansible_os_family == "RedHat"
   changed_when: grubby_update_kernel.rc != 0
   failed_when: grubby_update_kernel.rc != 0
-  tags:
-    - ipv6
 
 - name: Make sure we delete the ipv6 sysctl file if this machine doesn't support ipv6
   become: true
@@ -38,5 +33,3 @@
     - not system_has_ipv6
   notify:
     - Restart sysctl
-  tags:
-    - ipv6

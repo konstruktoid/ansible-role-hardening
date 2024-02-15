@@ -4,10 +4,6 @@
   ansible.builtin.stat:
     path: /etc/init.d/rc
   register: initdrc
-  tags:
-    - umask
-    - CIS-UBUNTU2004-5.5.4
-    - M1022
 
 - name: Set default rc umask
   become: true
@@ -18,10 +14,6 @@
     mode: "0755"
   when:
     - initdrc.stat.exists
-  tags:
-    - umask
-    - CIS-UBUNTU2004-5.5.4
-    - M1022
 
 - name: Ensure that a umask line appears in rc
   become: true
@@ -32,20 +24,12 @@
     regexp: umask(\s+.*)
   when:
     - initdrc.stat.exists
-  tags:
-    - umask
 
 - name: Stat bashrc
   become: true
   ansible.builtin.stat:
     path: /etc/bashrc
   register: bashrc
-  tags:
-    - bash
-    - umask
-    - CCE-81036-6
-    - CIS-UBUNTU2004-5.5.4
-    - M1022
 
 - name: Set default bashrc umask
   become: true
@@ -56,12 +40,6 @@
     mode: "0644"
   when:
     - bashrc.stat.exists
-  tags:
-    - bash
-    - umask
-    - CCE-81036-6
-    - CIS-UBUNTU2004-5.5.4
-    - M1022
 
 - name: Ensure that a umask line appears in bashrc
   become: true
@@ -72,20 +50,12 @@
     regexp: umask(\s+.*)
   when:
     - bashrc.stat.exists
-  tags:
-    - umask
 
 - name: Stat bash.bashrc
   become: true
   ansible.builtin.stat:
     path: /etc/bash.bashrc
   register: bash_bashrc
-  tags:
-    - bash
-    - umask
-    - CCE-81036-6
-    - CIS-UBUNTU2004-5.5.4
-    - M1022
 
 - name: Set default bash.bashrc umask
   become: true
@@ -96,12 +66,6 @@
     mode: "0644"
   when:
     - bash_bashrc.stat.exists
-  tags:
-    - bash
-    - umask
-    - CCE-81036-6
-    - CIS-UBUNTU2004-5.5.4
-    - M1022
 
 - name: Ensure that a umask line appears in bash.bashrc
   become: true
@@ -112,19 +76,12 @@
     regexp: umask(\s+.*)
   when:
     - bash_bashrc.stat.exists
-  tags:
-    - umask
 
 - name: Stat csh.cshrc
   become: true
   ansible.builtin.stat:
     path: /etc/csh.cshrc
   register: cshrc
-  tags:
-    - csh
-    - umask
-    - CIS-UBUNTU2004-5.5.4
-    - M1022
 
 - name: Set default csh.cshrc umask
   become: true
@@ -135,11 +92,6 @@
     mode: "0644"
   when:
     - cshrc.stat.exists
-  tags:
-    - csh
-    - umask
-    - CIS-UBUNTU2004-5.5.4
-    - M1022
 
 - name: Ensure that a umask line appears in csh.cshrc
   become: true
@@ -150,8 +102,6 @@
     regexp: umask(\s+.*)
   when:
     - cshrc.stat.exists
-  tags:
-    - umask
 
 - name: Set default profile umask
   become: true
@@ -160,10 +110,6 @@
     replace: umask {{ umask_value }}
     dest: /etc/profile
     mode: "0644"
-  tags:
-    - umask
-    - CIS-UBUNTU2004-5.5.4
-    - M1022
 
 - name: Ensure that a umask line appears in profile
   become: true
@@ -172,8 +118,6 @@
     mode: "0644"
     path: /etc/profile
     regexp: umask(\s+.*)
-  tags:
-    - umask
 
 - name: Find all files in /etc/profile.d
   ansible.builtin.find:
@@ -193,8 +137,6 @@
   loop: "{{ find_profiled_result.files }}"
   loop_control:
     label: "{{ item.path }}"
-  tags:
-    - umask
 
 - name: Configure session timeout
   become: true

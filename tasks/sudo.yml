@@ -1,8 +1,6 @@
 ---
 - name: Configure sudo
   become: true
-  tags:
-    - sudo
   block:
     - name: Configure sudo use_pty
       become: true
@@ -13,8 +11,6 @@
         state: present
         create: true
         validate: visudo -cf %s
-      tags:
-        - CIS-UBUNTU2004-5.2.2
 
     - name: Configure sudo logfile
       become: true
@@ -25,8 +21,6 @@
         state: present
         create: true
         validate: visudo -cf %s
-      tags:
-        - CIS-UBUNTU2004-5.2.3
 
     - name: Configure sudo disable pwfeedback
       become: true
@@ -83,8 +77,6 @@
         state: present
         create: true
         validate: visudo -cf %s
-      tags:
-        - M1028
 
     - name: Configure sudo user password for privilege escalation
       become: true
@@ -99,19 +91,12 @@
         - "!rootpw"
         - "!runaspw"
         - "!targetpw"
-      tags:
-        - V-237642
 
 - name: Create su group sugroup
   become: true
   ansible.builtin.group:
     name: sugroup
     state: present
-  tags:
-    - pam
-    - su
-    - sudo
-    - CIS-UBUNTU2004-5.7
 
 - name: Configure su group
   become: true
@@ -121,8 +106,3 @@
     mode: "0644"
     state: present
     create: true
-  tags:
-    - pam
-    - su
-    - sudo
-    - CIS-UBUNTU2004-5.7

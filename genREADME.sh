@@ -57,7 +57,7 @@ roles:
   any_errors_fatal: true
   tasks:
     - name: Include the hardening role
-      ansible.builtin.include_role:
+      ansible.builtin.import_role:
         name: konstruktoid.hardening
       vars:
         sshd_admin_net:
@@ -89,7 +89,7 @@ roles:
         version: 'v2.0.0'
 
     - name: Include the hardening role
-      ansible.builtin.include_role:
+      ansible.builtin.import_role:
         name: konstruktoid.hardening
       vars:
         sshd_admin_net:

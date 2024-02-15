@@ -8,25 +8,3 @@
     mode: "0644"
     owner: root
     group: root
-  tags:
-    - login
-    - CCE-26486-1
-    - CCE-27002-5
-    - CCE-27051-2
-    - CCE-27123-9
-    - CCE-27124-7
-    - CCE-80205-8
-    - CCE-80647-1
-    - CCE-80648-9
-    - CCE-80652-1
-    - CCE-82888-9
-    - CCE-80892-3
-    - CIS-UBUNTU2004-5.5.1.1
-    - CIS-UBUNTU2004-5.5.1.2
-    - CIS-UBUNTU2004-5.5.1.3
-    - CIS-UBUNTU2004-5.5.4
-    - CIS-UBUNTU2204-5.4.4
-    - UBTU-20-010007
-    - UBTU-20-010008
-    - UBTU-20-010016
-    - UBTU-20-010409

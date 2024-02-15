@@ -8,8 +8,6 @@
     follow: true
     recurse: true
   register: compiler
-  tags:
-    - compilers
 
 - name: Restrict compilers access
   become: true
@@ -21,8 +19,6 @@
     state: file
     follow: true
   loop: "{{ compiler.files }}"
-  tags:
-    - compilers
 
 - name: Ensure restrict compilers access via dpkg-statoverride
   become: true
@@ -33,8 +29,6 @@
   loop: "{{ compiler.files }}"
   when:
     - ansible_os_family == 'Debian'
-  tags:
-    - compilers
 
 - name: Ensure restrict compilers access via DNF post-transaction-actions Plugin
   ansible.builtin.include_tasks:
@@ -42,5 +36,3 @@
   loop: "{{ compiler.files | map(attribute='path') | unique }}"
   when:
     - ansible_os_family == 'RedHat'
-  tags:
-    - compilers

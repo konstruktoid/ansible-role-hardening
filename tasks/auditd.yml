@@ -13,10 +13,6 @@
     - ansible_os_family == "Debian"
   notify:
     - Update GRUB
-  tags:
-    - auditd
-    - CIS-UBUNTU2004-4.1.1.3
-    - CIS-UBUNTU2004-4.1.1.4
 
 - name: Configure RedHat auditd GRUB cmdline
   become: true
@@ -28,10 +24,6 @@
   when:
     - ansible_os_family == "RedHat"
     - ansible_virtualization_type not in ["container", "docker", "podman"]
-  tags:
-    - auditd
-    - CCE-80825-3
-    - CCE-80943-4
 
 - name: Configure auditd action_mail_acct
   become: true
@@ -42,9 +34,6 @@
     mode: "0640"
     state: present
     create: false
-  tags:
-    - auditd
-    - CCE-80678-6
 
 - name: Configure auditd admin_space_left_action
   become: true
@@ -55,8 +44,6 @@
     mode: "0640"
     state: present
     create: false
-  tags:
-    - auditd
 
 - name: Configure auditd disk_error_action
   become: true
@@ -67,9 +54,6 @@
     mode: "0640"
     state: present
     create: false
-  tags:
-    - auditd
-    - CCE-84046-2
 
 - name: Configure auditd disk_full_action
   become: true
@@ -80,9 +64,6 @@
     mode: "0640"
     state: present
     create: false
-  tags:
-    - auditd
-    - CCE-84045-4
 
 - name: Configure auditd flush
   become: true
@@ -93,9 +74,6 @@
     mode: "0640"
     state: present
     create: false
-  tags:
-    - auditd
-    - CCE-84045-4
 
 - name: Configure auditd max_log_file
   become: true
@@ -106,9 +84,6 @@
     mode: "0640"
     state: present
     create: false
-  tags:
-    - auditd
-    - CIS-UBUNTU2004-4.1.2.1
 
 - name: Configure auditd max_log_file_action
   become: true
@@ -119,10 +94,6 @@
     mode: "0640"
     state: present
     create: false
-  tags:
-    - auditd
-    - CCE-80682-8
-    - CIS-UBUNTU2004-4.1.2.2
 
 - name: Configure auditd num_logs
   become: true
@@ -133,8 +104,6 @@
     mode: "0640"
     state: present
     create: false
-  tags:
-    - auditd
 
 - name: Configure auditd space_left
   become: true
@@ -145,8 +114,6 @@
     mode: "0640"
     state: present
     create: false
-  tags:
-    - auditd
 
 - name: Configure auditd space_left_action
   become: true
@@ -157,9 +124,6 @@
     mode: "0640"
     state: present
     create: false
-  tags:
-    - auditd
-    - CCE-80684-4
 
 - name: Configure auditd name_format
   become: true
@@ -170,8 +134,6 @@
     mode: "0640"
     state: present
     create: false
-  tags:
-    - auditd
 
 - name: Enable auditd syslog plugin
   become: true
@@ -182,8 +144,6 @@
     state: present
     mode: "0640"
     create: true
-  tags:
-    - auditd
 
 - name: Add auditd rules
   become: true
@@ -200,24 +160,3 @@
     - Generate auditd rules
     - Restart Debian auditd
     - Restart RedHat auditd
-  tags:
-    - auditd
-    - CCE-80708-1
-    - CIS-UBUNTU2004-4.1.1.2
-    - CIS-UBUNTU2004-4.1.3
-    - CIS-UBUNTU2004-4.1.4
-    - CIS-UBUNTU2004-4.1.5
-    - CIS-UBUNTU2004-4.1.6
-    - CIS-UBUNTU2004-4.1.7
-    - CIS-UBUNTU2004-4.1.8
-    - CIS-UBUNTU2004-4.1.9
-    - CIS-UBUNTU2004-4.1.10
-    - CIS-UBUNTU2004-4.1.11
-    - CIS-UBUNTU2004-4.1.12
-    - CIS-UBUNTU2004-4.1.13
-    - CIS-UBUNTU2004-4.1.14
-    - CIS-UBUNTU2004-4.1.15
-    - CIS-UBUNTU2004-4.1.16
-    - CIS-UBUNTU2004-4.1.17
-    - D3-SDM
-    - D3-SFA

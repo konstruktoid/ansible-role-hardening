@@ -4,7 +4,7 @@
   any_errors_fatal: true
   tasks:
     - name: Include role
-      ansible.builtin.include_role:
+      ansible.builtin.import_role:
         name: konstruktoid.hardening
 
 - name: Debug facts
@@ -12,4 +12,5 @@
   any_errors_fatal: true
   tasks:
     - name: Include debug tasks
-      ansible.builtin.include_tasks: debug_facts.yml
+      ansible.builtin.import_tasks:
+        file: debug_facts.yml
