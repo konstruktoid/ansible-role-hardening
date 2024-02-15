@@ -1,8 +1,5 @@
 ---
 - name: Reboot if required
-  tags:
-    - reboot
-    - ubuntu
   when:
     - reboot_ubuntu
   block:

@@ -8,8 +8,6 @@
     mode: "0755"
     owner: root
     group: root
-  tags:
-    - fact
 
 - name: Add systemd version fact
   become: true
@@ -19,9 +17,6 @@
     mode: "0755"
     owner: root
     group: root
-  tags:
-    - fact
-    - systemd
 
 - name: Add cpuinfo rdrand fact
   become: true
@@ -31,10 +26,6 @@
     mode: "0755"
     owner: root
     group: root
-  tags:
-    - cpuinfo
-    - fact
-    - rdrand
 
 - name: Add ssh keys fact
   become: true
@@ -44,30 +35,18 @@
     mode: "0755"
     owner: root
     group: root
-  tags:
-    - fact
-    - sshd
 
 - name: Stat IPv6 status
   become: true
   ansible.builtin.stat:
     path: /proc/sys/net/ipv6
   register: stat_ipv6
-  tags:
-    - fact
-    - ipv6
 
 - name: Set IPv6 fact
   ansible.builtin.set_fact:
     system_has_ipv6: "{{ stat_ipv6.stat.exists }}"
-  tags:
-    - fact
-    - ipv6
 
 - name: Set sysctl configuration directory as fact
-  tags:
-    - fact
-    - sysctl
   block:
     - name: Stat /usr/lib/sysctl.d/ exists
       ansible.builtin.stat:
@@ -79,9 +58,6 @@
         sysctl_conf_dir: "{{ '/usr/lib/sysctl.d' if usr_lib_sysctl_d.stat.exists else '/etc/sysctl.d' }}"
 
 - name: Set crypto-policies config as fact
-  tags:
-    - fact
-    - crypto-policy
   block:
     - name: Stat crypto-policies config
       ansible.builtin.stat:
@@ -93,11 +69,6 @@
         crypto_policies_config: "{{ stat_crypto_policies_config.stat.exists }}"
 
 - name: Get PAM version
-  tags:
-    - fact
-    - common-account
-    - common-auth
-    - pam
   block:
     - name: Gather package facts
       ansible.builtin.package_facts:
@@ -119,13 +90,6 @@
 - name: Set hashing algorithm for password (yescrypt|sha512)
   ansible.builtin.set_fact:
     password_algorithm: "{{ 'yescrypt' if (pam_version is version('1.4.0', '>=')) else 'sha512' }}"
-  tags:
-    - fact
-    - pam
-    - CIS-UBUNTU2204-5.4.4
-    - M1041
 
 - name: Update current facts
   ansible.builtin.setup:
-  tags:
-    - fact

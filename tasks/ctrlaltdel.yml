@@ -8,10 +8,6 @@
     state: stopped
   when:
     - not ansible_os_family == "RedHat"
-  tags:
-    - ctrl-alt-del
-    - CCE-80785-9
-    - systemd
 
 - name: Disable systemd ctrl-alt-del - RedHat family
   become: true
@@ -23,7 +19,3 @@
   changed_when: false
   when:
     - ansible_os_family == "RedHat"
-  tags:
-    - ctrl-alt-del
-    - CCE-80785-9
-    - systemd

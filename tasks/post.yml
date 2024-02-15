@@ -9,8 +9,6 @@
     group: root
   when:
     - booted_with_efi | bool
-  tags:
-    - grub
 
 - name: Run all notified handlers
   ansible.builtin.meta: flush_handlers
@@ -32,9 +30,6 @@
       register: audit_grubenv
       when:
         - ansible_os_family == "RedHat"
-      tags:
-        - auditd
-        - grub
 
     - name: Update grub2 if missing GRUB settings
       ansible.builtin.command:
@@ -46,9 +41,6 @@
         - ansible_os_family == "RedHat"
         - audit_grubenv.rc != 0
         - ansible_virtualization_type not in ["container", "docker", "podman"]
-      tags:
-        - auditd
-        - grub
 
     - name: Stat Debian auditd GRUB settings
       ansible.builtin.shell:
@@ -58,9 +50,6 @@
       register: audit_grub_cfg
       when:
         - ansible_os_family == "Debian"
-      tags:
-        - auditd
-        - grub
 
     - name: Update GRUB if settings are missing
       ansible.builtin.command:
@@ -71,9 +60,6 @@
       when:
         - ansible_os_family == "Debian"
         - audit_grub_cfg.rc != 0
-      tags:
-        - auditd
-        - grub
 
     - name: Find GRUB config files
       ansible.builtin.find:
@@ -81,9 +67,6 @@
         patterns: "*.cfg,grubenv"
         recurse: true
       register: grub_cfg
-      tags:
-        - grub
-        - CIS-UBUNTU2004-1.4.3
 
     - name: Set GRUB config permissions
       ansible.builtin.file:
@@ -96,6 +79,3 @@
         - "{{ grub_cfg.files | reject('search', '/boot/efi/EFI/ubuntu/grub.cfg') | list }}"
       loop_control:
         label: "{{ item.path }}"
-      tags:
-        - grub
-        - CIS-UBUNTU2004-1.4.3

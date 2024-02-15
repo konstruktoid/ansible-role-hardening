@@ -7,9 +7,6 @@
     install_recommends: false
   when:
     - ansible_os_family == "Debian"
-  tags:
-    - aide
-    - CIS-UBUNTU2004-1.3.1
 
 - name: RedHat family AIDE package installation
   become: true
@@ -18,19 +15,12 @@
     state: present
   when:
     - ansible_os_family == "RedHat"
-  tags:
-    - aide
-    - CCE-80844-4
 
 - name: Stat AIDE cron.daily
   become: true
   ansible.builtin.stat:
     path: /etc/cron.daily/aide
   register: aidecron
-  tags:
-    - aide
-    - CCE-80844-4
-    - CIS-UBUNTU2004-1.3.1
 
 - name: Install AIDE service
   become: true
@@ -43,8 +33,6 @@
     group: root
   when:
     - not aidecron.stat.exists
-  tags:
-    - aide
 
 - name: Install AIDE timer
   become: true
@@ -60,10 +48,6 @@
   notify:
     - Reload systemd
     - Enable aidecheck
-  tags:
-    - aide
-    - CCE-80676-0
-    - CIS-UBUNTU2004-1.3.2
 
 - name: Verify the Audit tools
   become: true
@@ -83,8 +67,6 @@
     - /usr/sbin/autrace
     - /usr/sbin/augenrules
     - /usr/sbin/audispd
-  tags:
-    - aide
 
 - name: Configure AIDE checksums
   become: true
@@ -96,8 +78,6 @@
     mode: "0640"
     create: false
     validate: aide --config-check --config=%s
-  tags:
-    - aide
 
 - name: Add AIDE dir exclusions
   become: true
@@ -113,8 +93,6 @@
       !/var/log/audit
       !/var/log/journal
     validate: aide --config-check --config=%s
-  tags:
-    - aide
 
 - name: Stat Debian aide.db
   become: true
@@ -123,8 +101,6 @@
   register: ubuaidedb
   when:
     - ansible_os_family == "Debian"
-  tags:
-    - aide
 
 - name: Stat RedHat aide.db
   become: true
@@ -135,8 +111,6 @@
   failed_when: false
   when:
     - ansible_os_family == "RedHat"
-  tags:
-    - aide
 
 - name: Initialize RedHat AIDE
   become: true
@@ -148,9 +122,6 @@
   when:
     - ansible_os_family == "RedHat"
     - not rhelaidedb.stat.exists
-  tags:
-    - aide
-    - CCE-80675-2
 
 - name: Stat RedHat aide.db.new.gz
   become: true
@@ -161,8 +132,6 @@
   failed_when: false
   when:
     - ansible_os_family == "RedHat"
-  tags:
-    - aide
 
 - name: Copy RedHat AIDE database
   become: true
@@ -174,8 +143,6 @@
   when:
     - ansible_os_family == "RedHat"
     - not rhelaidedbnew.stat.exists
-  tags:
-    - aide
 
 - name: Initialize Debian AIDE
   become: true
@@ -187,5 +154,3 @@
   when:
     - ansible_os_family == "Debian"
     - not ubuaidedb.stat.exists
-  tags:
-    - aide

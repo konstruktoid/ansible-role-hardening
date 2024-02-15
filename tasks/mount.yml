@@ -7,17 +7,11 @@
     fstype: proc
     opts: rw,nosuid,nodev,noexec,relatime,hidepid={{ hide_pid | int }},gid={{ process_group }}
     state: present
-  tags:
-    - mount
-    - proc
 
 - name: Stat /dev/shm
   ansible.builtin.stat:
     path: /dev/shm
   register: dev_shm
-  tags:
-    - mount
-    - shm
 
 - name: Mount /dev/shm with noexec
   become: true
@@ -29,15 +23,6 @@
     state: present
   when:
     - dev_shm.stat.exists
-  tags:
-    - mount
-    - shm
-    - CCE-80837-8
-    - CCE-80838-6
-    - CCE-80839-4
-    - CIS-UBUNTU2004-1.1.7
-    - CIS-UBUNTU2004-1.1.8
-    - CIS-UBUNTU2004-1.1.9
 
 - name: Add systemd tmp.mount
   become: true
@@ -48,20 +33,11 @@
     mode: "0644"
     owner: root
     group: root
-  tags:
-    - mount
-    - tmp
-    - CCE-82139-7
-    - CCE-82140-5
-    - CCE-82623-0
 
 - name: Stat tmp.mount
   ansible.builtin.stat:
     path: /etc/systemd/system/tmp.mount
   register: tmp_mount
-  tags:
-    - mount
-    - tmp
 
 - name: Unmask and start tmp.mount
   become: true
@@ -74,9 +50,6 @@
       ansible.builtin.systemd:
         name: tmp.mount
         masked: false
-      tags:
-        - mount
-        - tmp
 
     - name: Start tmp.mount
       become: true
@@ -85,6 +58,3 @@
         daemon_reload: true
         state: started
         enabled: true
-      tags:
-        - mount
-        - tmp

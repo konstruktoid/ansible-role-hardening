@@ -18,5 +18,3 @@
     - default_apport.rc is defined
     - default_apport.rc !=0
     - not default_apport.rc == 257
-  tags:
-    - apport

@@ -12,10 +12,6 @@
     - ansible_os_family == "Debian"
   notify:
     - Run rkhunter propupd
-  tags:
-    - packages
-    - rkhunter
-    - M1049
 
 - name: SSH root access should be disabled
   become: true
@@ -29,10 +25,6 @@
     backrefs: true
   notify:
     - Run rkhunter propupd
-  tags:
-    - packages
-    - rkhunter
-    - M1049
 
 - name: SSH v1 should not be used
   become: true
@@ -46,7 +38,3 @@
     backrefs: true
   notify:
     - Run rkhunter propupd
-  tags:
-    - packages
-    - rkhunter
-    - M1049

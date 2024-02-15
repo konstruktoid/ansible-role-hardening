@@ -8,16 +8,10 @@
   failed_when: false
   check_mode: false
   register: sshd_version
-  tags:
-    - sshd
-    - sshd_config
 
 - name: Set ssh version as fact
   ansible.builtin.set_fact:
     ssh_installed_version: "{{ sshd_version.stderr_lines | regex_search('OpenSSH_([0-9+].[0-9]+)', '\\1') | first }}"
-  tags:
-    - sshd
-    - sshd_config
 
 - name: Ensure privilege separation directory exists
   become: true
@@ -29,18 +23,11 @@
     mode: "0755"
   when:
     - ansible_virtualization_type in ["container", "docker", "podman"]
-  tags:
-    - sshd
-    - sshd_config
 
 - name: Stat sysconfig sshd configuration
   ansible.builtin.stat:
     path: /etc/sysconfig/sshd
   register: sysconfig_sshd
-  tags:
-    - sshd
-    - sshd_config
-    - M1041
 
 - name: Remove sshd system crypto policy
   become: true
@@ -50,10 +37,6 @@
     regexp: ^\s*CRYPTO_POLICY.*$
   when:
     - sysconfig_sshd.stat.exists
-  tags:
-    - sshd
-    - CCE-80939-2
-    - M1041
 
 - name: Get sshd Include config
   become: true
@@ -63,27 +46,16 @@
   changed_when: false
   failed_when: false
   check_mode: false
-  tags:
-    - sshd
-    - sshd_config
-    - M1041
 
 - name: Check if sshd_config.d exits
   ansible.builtin.stat:
     path: /etc/ssh/sshd_config.d
   register: sshd_config_d
-  tags:
-    - sshd
-    - sshd_config
-    - M1041
 
 - name: Clear pre-existing custom configurations in /etc/ssh/sshd_config.d
   when:
     - sshd_config_d_force_clear | bool
     - sshd_config_d.stat.exists
-  tags:
-    - sshd
-    - sshd_config
   block:
     - name: Search pre-existing custom configurations in /etc/ssh/sshd_config.d
       become: true
@@ -106,9 +78,6 @@
     owner: root
     group: root
     mode: "0600"
-  tags:
-    - sshd
-    - sshd_config
 
 - name: SSH moduli file
   become: true
@@ -146,8 +115,6 @@
   become: true
   when:
     - not sshd_host_keys_files
-  tags:
-    - sshd
   block:
     - name: Generate SSH RSA keypair
       community.crypto.openssh_keypair:
@@ -214,8 +181,6 @@
   when:
     - sshd_use_pam | bool
     - not (sshd_print_pam_motd | bool)
-  tags:
-    - sshd
 
 - name: Check variable sshd_config_force_replace
   ansible.builtin.set_fact:
@@ -244,45 +209,6 @@
   notify:
     - Restart sshd service
     - Restart ssh service
-  tags:
-    - sshd
-    - sshd_config
-    - CCE-80895-6
-    - CCE-80896-4
-    - CCE-80897-2
-    - CCE-80898-0
-    - CCE-80901-2
-    - CCE-80902-0
-    - CCE-80903-8
-    - CCE-80904-6
-    - CCE-80905-3
-    - CCE-80906-1
-    - CCE-82177-7
-    - CCE-82281-7
-    - CCE-83360-8
-    - CIS-UBUNTU2004-5.3.1
-    - CIS-UBUNTU2004-5.3.4
-    - CIS-UBUNTU2004-5.3.5
-    - CIS-UBUNTU2004-5.3.6
-    - CIS-UBUNTU2004-5.3.7
-    - CIS-UBUNTU2004-5.3.8
-    - CIS-UBUNTU2004-5.3.9
-    - CIS-UBUNTU2004-5.3.10
-    - CIS-UBUNTU2004-5.3.11
-    - CIS-UBUNTU2004-5.3.12
-    - CIS-UBUNTU2004-5.3.13
-    - CIS-UBUNTU2004-5.3.14
-    - CIS-UBUNTU2004-5.3.15
-    - CIS-UBUNTU2004-5.3.16
-    - CIS-UBUNTU2004-5.3.17
-    - CIS-UBUNTU2004-5.3.18
-    - CIS-UBUNTU2004-5.3.19
-    - CIS-UBUNTU2004-5.3.20
-    - CIS-UBUNTU2004-5.3.21
-    - CIS-UBUNTU2004-5.3.22
-    - M1041
-    - UBTU-20-010036
-    - UBTU-20-010037
 
 - name: Configure sshd using sshd_config.d
   become: true
@@ -301,45 +227,6 @@
   notify:
     - Restart sshd service
     - Restart ssh service
-  tags:
-    - sshd
-    - sshd_config
-    - CCE-80895-6
-    - CCE-80896-4
-    - CCE-80897-2
-    - CCE-80898-0
-    - CCE-80901-2
-    - CCE-80902-0
-    - CCE-80903-8
-    - CCE-80904-6
-    - CCE-80905-3
-    - CCE-80906-1
-    - CCE-82177-7
-    - CCE-82281-7
-    - CCE-83360-8
-    - CIS-UBUNTU2004-5.3.1
-    - CIS-UBUNTU2004-5.3.4
-    - CIS-UBUNTU2004-5.3.5
-    - CIS-UBUNTU2004-5.3.6
-    - CIS-UBUNTU2004-5.3.7
-    - CIS-UBUNTU2004-5.3.8
-    - CIS-UBUNTU2004-5.3.9
-    - CIS-UBUNTU2004-5.3.10
-    - CIS-UBUNTU2004-5.3.11
-    - CIS-UBUNTU2004-5.3.12
-    - CIS-UBUNTU2004-5.3.13
-    - CIS-UBUNTU2004-5.3.14
-    - CIS-UBUNTU2004-5.3.15
-    - CIS-UBUNTU2004-5.3.16
-    - CIS-UBUNTU2004-5.3.17
-    - CIS-UBUNTU2004-5.3.18
-    - CIS-UBUNTU2004-5.3.19
-    - CIS-UBUNTU2004-5.3.20
-    - CIS-UBUNTU2004-5.3.21
-    - CIS-UBUNTU2004-5.3.22
-    - M1041
-    - UBTU-20-010036
-    - UBTU-20-010037
 
 - name: Remove possible Subsystem duplicate
   become: true
@@ -351,9 +238,6 @@
     - not (sshd_config_force_replace | bool)
     - sshd_config_d.stat.exists
     - grep_include.rc == 0
-  tags:
-    - sshd
-    - sshd_config
 
 - name: Stat sshd host keys
   become: true
@@ -363,10 +247,6 @@
     patterns: ssh_host_*
     excludes: "*.pub"
   register: ssh_host_keys
-  tags:
-    - sshd
-    - M1022
-    - M1041
 
 - name: Set sshd host key permissions
   become: true
@@ -378,21 +258,11 @@
   loop: "{{ ssh_host_keys.files }}"
   loop_control:
     label: "{{ item.path }}"
-  tags:
-    - sshd
-    - CCE-82424-3
-    - CIS-UBUNTU2004-5.3.2
-    - M1022
-    - M1041
 
 - name: Check if ssh_config.d exits
   ansible.builtin.stat:
     path: /etc/ssh/ssh_config.d
   register: ssh_config_d
-  tags:
-    - ssh
-    - ssh_config
-    - M1041
 
 - name: Configure ssh client
   become: true
@@ -403,8 +273,3 @@
     mode: "0644"
     owner: root
     group: root
-  tags:
-    - ssh
-    - ssh_config
-    - CCE-82880-6
-    - M1041

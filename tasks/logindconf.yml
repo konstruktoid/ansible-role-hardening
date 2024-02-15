@@ -10,6 +10,3 @@
     group: root
   notify:
     - Reload systemd
-  tags:
-    - systemd
-    - logind

@@ -8,11 +8,6 @@
     mode: "0644"
     owner: root
     group: root
-  tags:
-    - motd
-    - CCE-80763-6
-    - CIS-UBUNTU2004-1.7.1
-    - CIS-UBUNTU2004-1.7.4
 
 - name: Add issue and issue.net files
   become: true
@@ -26,10 +21,3 @@
   loop:
     - /etc/issue
     - /etc/issue.net
-  tags:
-    - issue
-    - CCE-80763-6
-    - CIS-UBUNTU2004-1.7.2
-    - CIS-UBUNTU2004-1.7.3
-    - CIS-UBUNTU2004-1.7.5
-    - CIS-UBUNTU2004-1.7.6

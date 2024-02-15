@@ -2,10 +2,6 @@
 - name: Disable wireless interfaces
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  tags:
-    - wireless
-    - CCE-83501-7
-    - CIS-UBUNTU2004-3.1.2
   block:
     - name: Install network-manager
       become: true

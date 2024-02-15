@@ -3,17 +3,11 @@
   ansible.builtin.stat:
     path: /etc/postfix/main.cf
   register: postfix_main_cf
-  tags:
-    - packages
-    - postfix
 
 - name: Configure Postfix
   become: true
   when:
     - postfix_main_cf.stat.exists
-  tags:
-    - packages
-    - postfix
   notify:
     - Restart Postfix
   block:
@@ -23,9 +17,6 @@
         dest: /etc/postfix/main.cf
         line: disable_vrfy_command = yes
         state: present
-      tags:
-        - packages
-        - postfix
 
     - name: Configure Postfix inet_interfaces
       ansible.builtin.lineinfile:
@@ -33,9 +24,6 @@
         dest: /etc/postfix/main.cf
         line: inet_interfaces = loopback-only
         state: present
-      tags:
-        - packages
-        - postfix
 
     - name: Configure Postfix smtpd_banner
       ansible.builtin.lineinfile:
@@ -43,9 +31,6 @@
         dest: /etc/postfix/main.cf
         line: smtpd_banner = \$myhostname - ESMTP
         state: present
-      tags:
-        - packages
-        - postfix
 
     - name: Configure Postfix smtpd_client_restrictions
       ansible.builtin.lineinfile:

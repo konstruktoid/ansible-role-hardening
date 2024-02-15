@@ -7,8 +7,6 @@
       ansible.builtin.stat:
         path: /etc/default/motd-news
       register: motd_news
-      tags:
-        - motd
 
     - name: Disable motd-news
       become: true
@@ -22,8 +20,6 @@
         backrefs: true
       when:
         - motd_news.stat.exists
-      tags:
-        - motd
 
     - name: Find update-motd.d files
       become: true
@@ -31,8 +27,6 @@
         paths: /etc/update-motd.d
         file_type: file
       register: update_motd_permissions
-      tags:
-        - motd
 
     - name: Update motd permissions
       become: true
@@ -41,24 +35,17 @@
         mode: "0444"
       with_items:
         - "{{ update_motd_permissions.files }}"
-      tags:
-        - motd
 
     - name: Set /etc/update-motd.d permission
       become: true
       ansible.builtin.file:
         dest: /etc/update-motd.d
         mode: "0755"
-      tags:
-        - motd
 
     - name: Stat /usr/bin/pro
       ansible.builtin.stat:
         path: /usr/bin/pro
       register: ubuntu_advantage_pro
-      tags:
-        - apt_news
-        - ubuntu-pro
 
     - name: Check apt_news status
       ansible.builtin.shell:
@@ -72,9 +59,6 @@
       failed_when: ubuntu_advantage_pro_state.rc > 1
       when:
         - ubuntu_advantage_pro.stat.exists
-      tags:
-        - apt_news
-        - ubuntu-pro
 
     - name: Disable apt_news
       become: true
@@ -86,16 +70,11 @@
       when:
         - ubuntu_advantage_pro.stat.exists
         - ubuntu_advantage_pro_state.rc != 0
-      tags:
-        - apt_news
-        - ubuntu-pro
 
     - name: Stat apt ESM hook
       ansible.builtin.stat:
         path: /etc/apt/apt.conf.d/20apt-esm-hook.conf
       register: ubuntu_esm_hook
-      tags:
-        - ubuntu-pro
 
     - name: Remove apt ESM hook
       become: true
@@ -104,8 +83,6 @@
         state: absent
       when:
         - ubuntu_esm_hook.stat.exists
-      tags:
-        - ubuntu-pro
 
     - name: Mask motdnews
       become: true
@@ -123,5 +100,3 @@
         - motd-news.timer
       when:
         - ansible_virtualization_type not in ["container", "docker", "podman"]
-      tags:
-        - motd

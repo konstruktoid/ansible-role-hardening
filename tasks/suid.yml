@@ -1,9 +1,5 @@
 ---
 - name: Remove risky suid bits
-  tags:
-    - suid
-    - CIS-UBUNTU2004-6.1.13
-    - CIS-UBUNTU2004-6.1.14
   block:
     - name: Find possible suid binaries
       ansible.builtin.shell:

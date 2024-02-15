@@ -9,9 +9,6 @@
     state: present
     create: false
     backrefs: true
-  tags:
-    - path
-    - M1038
 
 - name: Add path script
   become: true
@@ -22,6 +19,3 @@
     mode: "0644"
     owner: root
     group: root
-  tags:
-    - path
-    - M1038

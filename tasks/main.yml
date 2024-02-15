@@ -1,220 +1,328 @@
 ---
 - name: Install local facts
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: facts.yml
+  tags:
+    - always
 
 - name: Configure systemd resolved
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: resolvedconf.yml
   when:
     - ansible_virtualization_type not in ["container", "docker", "podman"]
+  tags:
+    - dns
+    - resolved
+    - systemd
 
 - name: Install epel-release and python dependencies
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: pre.yml
+  tags:
+    - always
 
 - name: Install and configure UFW
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: ufw.yml
-    apply:
-      environment:
-        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   when:
     - manage_ufw
     - ansible_virtualization_type not in ["container", "docker", "podman"]
+  tags:
+    - ufw
+    - firewall
 
 - name: Configure sysctl
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: sysctl.yml
   when:
     - manage_sysctl
     - ansible_virtualization_type not in ["container", "docker", "podman"]
+  tags:
+    - kernel
+    - sysctl
 
 - name: Disable kernel modules
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: kernelmodules.yml
+  tags:
+    - kernel
 
 - name: Disable IPv6
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: ipv6.yml
   when:
     - disable_ipv6
+  tags:
+    - kernel
+    - ipv6
 
 - name: Configure USBGuard
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: usbguard.yml
   when:
     - manage_usbguard
     - ansible_virtualization_type not in ["container", "docker", "podman"]
+  tags:
+    - usbguard
 
 - name: Configure systemd system and users
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: systemdconf.yml
+  tags:
+    - systemd
 
 - name: Configure systemd journald and logrotate
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: journalconf.yml
+  tags:
+    - journald
+    - logrotate
+    - systemd
 
 - name: Configure systemd timesyncd
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: timesyncd.yml
   when:
     - manage_timesyncd
     - ansible_virtualization_type not in ["container", "docker", "podman"]
+  tags:
+    - systemd
+    - timesyncd
 
 - name: Clean fstab
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: fstab.yml
+  tags:
+    - mounts
 
 - name: Configure shm and tmp mounts
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: mount.yml
+  tags:
+    - mounts
 
 - name: Disable prelink
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: prelink.yml
+  tags:
+    - prelink
 
 - name: Configure package managers, update caches and install updates
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: packagemgmt.yml
+  tags:
+    - apt
+    - dnf
 
 - name: Configure automatic updates
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: automatic_updates.yml
   when:
     - automatic_updates
+  tags:
+    - automatic_updates
 
 - name: Configure hosts.allow and hosts.deny
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: hosts.yml
+  tags:
+    - hosts.allow
+    - hosts.deny
 
 - name: Configure login.defs
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: logindefs.yml
+  tags:
+    - login.defs
 
 - name: Set limits
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: limits.yml
+  tags:
+    - limits
 
 - name: Configure adduser and useradd
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: adduser.yml
+  tags:
+    - adduser
+    - useradd
 
 - name: Restrict root access
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: rootaccess.yml
+  tags:
+    - root_access
 
 - name: Configure needrestart, install and remove various packages
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: packages.yml
+  tags:
+    - package_installation
 
 - name: Configure ssh server and client
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: sshconfig.yml
   when:
     - manage_ssh
+  tags:
+    - ssh
+    - sshd
 
 - name: Configure PAM
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: password.yml
+  tags:
+    - cracklib
+    - crypto_policy
+    - faillock
+    - pam
+    - pwquality
 
 - name: Configure and clean at and cron
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: cron.yml
+  tags:
+    - at
+    - cron
 
 - name: Disable systemd ctrl-alt-del.target
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: ctrlaltdel.yml
   when:
     - ansible_virtualization_type not in ["container", "docker", "podman"]
+  tags:
+    - ctrl-alt-del
+    - systemd
 
 - name: Configure auditd
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: auditd.yml
   when:
     - manage_auditd
+  tags:
+    - auditd
 
 - name: Configure AppArmor
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: apparmor.yml
   when:
     - ansible_virtualization_type not in ["container", "docker", "podman"]
+  tags:
+    - apparmor
 
 - name: Disable wireless interfaces
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: disablewireless.yml
   when:
     - disable_wireless
     - ansible_virtualization_type not in ["container", "docker", "podman"]
+  tags:
+    - wireless
 
 # https://bugs.launchpad.net/ubuntu/+source/aide/+bug/1903298
 - name: Configure AIDE
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: aide.yml
   when: >
     manage_aide | bool and
     (not (ansible_os_family == "Debian" and
     (ansible_lsb.codename == "groovy" or
     ansible_lsb.codename == "hirsute")))
+  tags:
+    - aide
 
 - name: Manage users
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: users.yml
+  tags:
+    - remove_users
 
 - name: Remove suid/sgid permissions
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: suid.yml
   when:
     - suid_sgid_permissions | bool
+  tags:
+    - suid_sgid_permissions
 
 - name: Configure compiler permissions
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: compilers.yml
+  tags:
+    - compilers
 
 - name: Set umask
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: umask.yml
+  tags:
+    - umask
 
 - name: Configure paths
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: path.yml
+  tags:
+    - path
 
 - name: Configure systemd logind
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: logindconf.yml
+  tags:
+    - logind
+    - systemd
 
 - name: Configure rkhunter
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: rkhunter.yml
+  tags:
+    - rkhunter
 
 - name: Add issue message
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: issue.yml
+  tags:
+    - issue
+    - issue.net
+    - motd
 
 - name: Configure apport
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: apport.yml
+  tags:
+    - apport
 
 - name: Lock root account
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: lockroot.yml
+  tags:
+    - root_access
 
 - name: Configure Postfix
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: postfix.yml
+  tags:
+    - postfix
 
 - name: Configure motdnews
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: motdnews.yml
+  tags:
+    - motd-news
 
 - name: Configure sudo
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: sudo.yml
+  tags:
+    - sudo
 
 - name: Miscellaneous extra tasks
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: extras.yml
+  tags:
+    - reboot_ubuntu
 
 - name: Miscellaneous tasks after all handlers
-  ansible.builtin.include_tasks:
+  ansible.builtin.import_tasks:
     file: post.yml
+  tags:
+    - grub

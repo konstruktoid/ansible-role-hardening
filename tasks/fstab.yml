@@ -4,8 +4,6 @@
   ansible.posix.mount:
     path: /tmp
     state: absent
-  tags:
-    - fstab
 
 - name: Remove floppy from fstab
   become: true
@@ -13,5 +11,3 @@
     path: /etc/fstab
     state: absent
     regexp: ^(.*)floppy(.*)$
-  tags:
-    - fstab

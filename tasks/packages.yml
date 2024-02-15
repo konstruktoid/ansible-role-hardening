@@ -2,8 +2,6 @@
 - name: Merge package lists
   ansible.builtin.set_fact:
     packages_merged: "{{ packages_debian + packages_redhat + packages_ubuntu }}"
-  tags:
-    - packages
 
 - name: Generic package removal
   become: true
@@ -14,26 +12,8 @@
   failed_when:
     - package_removal is not success
     - not "No package" in package_removal.msg
-  tags:
-    - packages
-    - CCE-80873-3
-    - CCE-82182-7
-    - CCE-82184-3
-    - CCE-82436-7
-    - CIS-UBUNTU2004-1.1.23
-    - CIS-UBUNTU2004-1.5.3
-    - CIS-UBUNTU2004-2.1.3
-    - CIS-UBUNTU2004-2.1.16
-    - CIS-UBUNTU2004-2.2.2
-    - CIS-UBUNTU2004-2.2.3
-    - CIS-UBUNTU2004-2.2.4
-    - CIS-UBUNTU2004-2.2.6
-    - M1042
 
 - name: Configure needrestart
-  tags:
-    - needrestart
-    - packages
   block:
     - name: Pre register needrestart configuration directory
       become: true
@@ -94,13 +74,6 @@
   notify:
     - Run apt-get clean
     - Run apt-get autoremove
-  tags:
-    - packages
-    - CIS-UBUNTU2004-1.6.1.1
-    - CIS-UBUNTU2004-4.1.1.1
-    - CIS-UBUNTU2004-4.2.1.1
-    - M1049
-    - UBTU-20-010005
 
 - name: Ubuntu package installation
   become: true
@@ -114,8 +87,6 @@
   notify:
     - Run apt-get clean
     - Run apt-get autoremove
-  tags:
-    - packages
 
 - name: Ubuntu update-notifier-common package installation
   become: true
@@ -125,8 +96,6 @@
     install_recommends: false
   when:
     - ansible_distribution == "Ubuntu"
-  tags:
-    - packages
 
 - name: RedHat family package installation
   become: true
@@ -139,13 +108,6 @@
   notify:
     - Enable haveged
     - Run dnf autoremove
-  tags:
-    - packages
-    - CCE-80847-7
-    - CCE-81043-2
-    - CCE-82859-0
-    - CCE-83303-8
-    - M1049
 
 - name: Run apt purge
   become: true
@@ -162,9 +124,6 @@
   notify:
     - Run apt-get clean
     - Run apt-get autoremove
-  tags:
-    - packages
-    - M1042
 
 - name: VirtualBox guest packages installation
   become: true
@@ -183,9 +142,6 @@
   failed_when:
     - virtualbox_packages is not success
     - not "No package matching" in virtualbox_packages.msg
-  tags:
-    - packages
-    - virtualbox
 
 - name: VMWare package installation
   become: true
@@ -194,9 +150,6 @@
     state: present
   when:
     - ansible_virtualization_type == "VMware"
-  tags:
-    - packages
-    - vmware
 
 - name: QEMU package installation
   become: true
@@ -205,9 +158,6 @@
     state: present
   when:
     - ansible_system_vendor == "QEMU"
-  tags:
-    - packages
-    - qemu
 
 - name: Install rng-tools
   become: true
@@ -216,19 +166,12 @@
     state: present
   when:
     - ansible_local.cpuinfo.rdrand
-  tags:
-    - rng-tools
-    - packages
-    - CCE-82968-9
 
 - name: Stat sysstat default
   become: true
   ansible.builtin.stat:
     path: /etc/default/sysstat
   register: default_sysstat
-  tags:
-    - packages
-    - sysstat
 
 - name: Enable sysstat
   become: true
@@ -242,9 +185,6 @@
     backrefs: true
   when:
     - default_sysstat.stat.exists
-  tags:
-    - packages
-    - sysstat
 
 - name: Remove unneeded Debian dependencies
   become: true
@@ -254,8 +194,6 @@
     clean: true
   when:
     - ansible_os_family == "Debian"
-  tags:
-    - packages
 
 - name: Run dnf autoremove
   become: true
@@ -263,6 +201,3 @@
     autoremove: true
   when:
     - ansible_os_family == "RedHat"
-  tags:
-    - dnf
-    - packages
