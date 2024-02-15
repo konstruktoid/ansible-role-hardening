@@ -20,7 +20,7 @@
       when:
         - ansible_python.version.major >= 3
 
-- name: Debian family pre tasks
+- name: RedHat family pre tasks
   become: true
   when:
     - ansible_os_family == "RedHat"
