@@ -28,7 +28,7 @@
         - packages
         - python
 
-- name: Debian family pre tasks
+- name: RedHat family pre tasks
   become: true
   when:
     - ansible_os_family == "RedHat"
