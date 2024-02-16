@@ -24,6 +24,7 @@ provisioner:
           - sudo
         sshd_host_keys_group: ssh_keys
         sshd_update_moduli: true
+        system_upgrade: false
       bookworm:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
