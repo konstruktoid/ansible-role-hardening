@@ -26,7 +26,10 @@
       ansible.builtin.apt:
         upgrade: safe
       register: apt_upgrade_response
-      changed_when: apt_upgrade_response.stdout.find('0 upgraded') == -1 - system_upgrade | bool
+      changed_when:
+        - apt_upgrade_response.stdout.find('0 upgraded') == -1
+      when:
+        - system_upgrade | bool
       notify:
         - Run apt-get clean
         - Run apt-get autoremove
