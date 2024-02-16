@@ -53,8 +53,8 @@
   when:
     - disable_ipv6
   tags:
-    - kernel
     - ipv6
+    - kernel
 
 - name: Configure USBGuard
   ansible.builtin.import_tasks:
@@ -110,9 +110,6 @@
 - name: Configure package managers, update caches and install updates
   ansible.builtin.import_tasks:
     file: packagemgmt.yml
-  tags:
-    - apt
-    - dnf
 
 - name: Configure automatic updates
   ansible.builtin.import_tasks:
@@ -166,7 +163,6 @@
   when:
     - manage_ssh
   tags:
-    - ssh
     - sshd
 
 - name: Configure PAM

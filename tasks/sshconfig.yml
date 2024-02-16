@@ -83,6 +83,8 @@
   become: true
   when:
     - sshd_update_moduli
+  tags:
+    - ssh
   block:
     - name: Stat moduli file
       ansible.builtin.stat:
@@ -259,17 +261,21 @@
   loop_control:
     label: "{{ item.path }}"
 
-- name: Check if ssh_config.d exits
-  ansible.builtin.stat:
-    path: /etc/ssh/ssh_config.d
-  register: ssh_config_d
+- name: Configure ssh
+  tags:
+    - ssh
+  block:
+    - name: Check if ssh_config.d exits
+      ansible.builtin.stat:
+        path: /etc/ssh/ssh_config.d
+      register: ssh_config_d
 
-- name: Configure ssh client
-  become: true
-  ansible.builtin.template:
-    src: "{{ ssh_config_template }}"
-    dest: /etc/ssh/ssh_config
-    backup: true
-    mode: "0644"
-    owner: root
-    group: root
+    - name: Configure ssh client
+      become: true
+      ansible.builtin.template:
+        src: "{{ ssh_config_template }}"
+        dest: /etc/ssh/ssh_config
+        backup: true
+        mode: "0644"
+        owner: root
+        group: root
