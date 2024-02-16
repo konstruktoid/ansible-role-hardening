@@ -1,4 +1,6 @@
 ---
+manage_resolved: true
+
 dns:
   - 1.1.1.2
   - 9.9.9.9

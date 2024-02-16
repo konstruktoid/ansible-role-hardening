@@ -12,18 +12,23 @@
     mode: "0644"
     owner: root
     group: root
-  notify:
-    - Reload systemd
+  register: resolved_conf
 
-- name: Add nameservers to resolv.conf
+- name: Ensure configuration is active
   become: true
-  ansible.builtin.lineinfile:
-    dest: /etc/resolv.conf
-    line: nameserver {{ item }}
-    mode: "0644"
-    owner: root
-    group: root
-    state: present
-  loop: "{{ dns_merged | unique }}"
   when:
-    - ansible_os_family == "RedHat"
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - resolved_conf is changed
+  block:
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: true
+
+    - name: Restart resolved service
+      ansible.builtin.service:
+        name: systemd-resolved
+        state: restarted
+      register: resolved_service
+      failed_when:
+        - resolved_service is not success
+        - not 'Could not find the requested service' in resolved_service.msg
