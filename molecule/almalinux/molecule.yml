@@ -33,6 +33,7 @@ provisioner:
           - vagrant
           - sudo
         suid_sgid_permissions: false
+        system_upgrade: false
 platforms:
   - name: almalinux8
     box: almalinux/8
