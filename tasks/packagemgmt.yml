@@ -1,111 +1,110 @@
 ---
-- name: Configure apt
-  become: true
-  ansible.builtin.lineinfile:
-    dest: /etc/apt/apt.conf.d/98-hardening-ubuntu
-    mode: "0644"
-    state: present
-    create: true
-    line: "{{ item }}"
-  loop: "{{ apt_hardening_options }}"
+- name: Apt configuration and upgrades
   when:
     - ansible_os_family == "Debian"
+  tags:
+    - apt
+  block:
+    - name: Configure apt
+      become: true
+      ansible.builtin.lineinfile:
+        dest: /etc/apt/apt.conf.d/98-hardening-ubuntu
+        mode: "0644"
+        state: present
+        create: true
+        line: "{{ item }}"
+      loop: "{{ apt_hardening_options }}"
 
-- name: Run apt update
-  become: true
-  ansible.builtin.apt:
-    update_cache: true
-    cache_valid_time: 1800
-  when:
-    - ansible_os_family == "Debian"
+    - name: Run apt update
+      become: true
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 1800
 
-- name: Run apt upgrade
-  become: true
-  ansible.builtin.apt:
-    upgrade: safe
-  register: apt_upgrade_response
-  changed_when: apt_upgrade_response.stdout.find('0 upgraded') == -1
-  when:
-    - ansible_os_family == "Debian"
-    - system_upgrade | bool
-  notify:
-    - Run apt-get clean
-    - Run apt-get autoremove
+    - name: Run apt upgrade
+      become: true
+      ansible.builtin.apt:
+        upgrade: safe
+      register: apt_upgrade_response
+      changed_when: apt_upgrade_response.stdout.find('0 upgraded') == -1 - system_upgrade | bool
+      notify:
+        - Run apt-get clean
+        - Run apt-get autoremove
 
-- name: Link dnf.conf
-  become: true
-  ansible.builtin.file:
-    src: /etc/dnf/dnf.conf
-    dest: /etc/yum.conf
-    owner: root
-    group: root
-    state: link
-  when:
-    - ansible_distribution == "Fedora"
-
-- name: Import RedHat RPM key
-  become: true
-  ansible.builtin.rpm_key:
-    state: present
-    key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
-  with_items:
-    - "{{ redhat_signing_keys }}"
+- name: Dnf configuration
   when:
     - ansible_os_family == "RedHat"
+  tags:
+    - dnf
+    - yum
+  block:
+    - name: Link dnf.conf
+      become: true
+      ansible.builtin.file:
+        src: /etc/dnf/dnf.conf
+        dest: /etc/yum.conf
+        owner: root
+        group: root
+        state: link
+      when:
+        - ansible_distribution == "Fedora"
 
-- name: Set yum.conf gpgcheck
-  become: true
-  ansible.builtin.lineinfile:
-    regexp: ^gpgcheck=
-    line: gpgcheck=1
-    dest: /etc/yum.conf
-    mode: "0644"
-    state: present
-    create: false
-    backrefs: true
-  when:
-    - ansible_os_family == "RedHat"
+    - name: Import RedHat RPM key
+      become: true
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
+      with_items:
+        - "{{ redhat_signing_keys }}"
 
-- name: Set yum.conf clean_requirements
-  become: true
-  ansible.builtin.lineinfile:
-    line: clean_requirements_on_remove=True
-    dest: /etc/yum.conf
-    mode: "0644"
-    state: present
-    create: true
-    insertafter: "[main]"
-  when:
-    - ansible_os_family == "RedHat"
+    - name: Set yum.conf gpgcheck
+      become: true
+      ansible.builtin.lineinfile:
+        regexp: ^gpgcheck=
+        line: gpgcheck=1
+        dest: /etc/yum.conf
+        mode: "0644"
+        state: present
+        create: false
+        backrefs: true
 
-- name: Set yum.conf localpkg_gpgcheck
-  become: true
-  ansible.builtin.lineinfile:
-    line: localpkg_gpgcheck=1
-    dest: /etc/yum.conf
-    mode: "0644"
-    state: present
-    create: true
-    insertafter: "[main]"
-  when:
-    - ansible_os_family == "RedHat"
+    - name: Set yum.conf clean_requirements
+      become: true
+      ansible.builtin.lineinfile:
+        line: clean_requirements_on_remove=True
+        dest: /etc/yum.conf
+        mode: "0644"
+        state: present
+        create: true
+        insertafter: "[main]"
 
-- name: Comment yum.conf repo_gpgcheck
-  become: true
-  ansible.builtin.lineinfile:
-    line: "# repo_gpgcheck=1"
-    dest: /etc/yum.conf
-    mode: "0644"
-    state: present
-    create: true
-    insertafter: "[main]"
-  when:
-    - ansible_os_family == "RedHat"
+    - name: Set yum.conf localpkg_gpgcheck
+      become: true
+      ansible.builtin.lineinfile:
+        line: localpkg_gpgcheck=1
+        dest: /etc/yum.conf
+        mode: "0644"
+        state: present
+        create: true
+        insertafter: "[main]"
+
+    - name: Comment yum.conf repo_gpgcheck
+      become: true
+      ansible.builtin.lineinfile:
+        line: "# repo_gpgcheck=1"
+        dest: /etc/yum.conf
+        mode: "0644"
+        state: present
+        create: true
+        insertafter: "[main]"
 
 - name: RHEL8 package management tasks
   when:
     - ansible_distribution == "RedHat"
     - ansible_distribution_major_version == "8"
+  tags:
+    - dnf
+    - yum
   block:
     - name: Import RHEL8 necessary GPG keys
       become: true
@@ -132,6 +131,9 @@
   when:
     - ansible_distribution == "RedHat"
     - ansible_distribution_major_version == "7"
+  tags:
+    - dnf
+    - yum
   block:
     - name: Import RHEL7 necessary GPG keys
       become: true
@@ -156,48 +158,49 @@
         --enable "rhel-ha-for-rhel-*-server-rpms"
       changed_when: false
 
-- name: Stat PowerTools repository files
-  ansible.builtin.stat:
-    path: "{{ item }}"
-  with_items:
-    - /etc/yum.repos.d/almalinux-crb.repo
-    - /etc/yum.repos.d/almalinux-powertools.repo
-    - /etc/yum.repos.d/CentOS-Linux-PowerTools.repo
-    - /etc/yum.repos.d/CentOS-PowerTools.repo
-    - /etc/yum.repos.d/CentOS-Stream-PowerTools.repo
-  register: powertools_repo
+- name: Enable dnf repositories and upgrades
   when:
     - ansible_os_family == "RedHat"
+  tags:
+    - dnf
+    - yum
+  block:
+    - name: Stat PowerTools repository files
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      with_items:
+        - /etc/yum.repos.d/almalinux-crb.repo
+        - /etc/yum.repos.d/almalinux-powertools.repo
+        - /etc/yum.repos.d/CentOS-Linux-PowerTools.repo
+        - /etc/yum.repos.d/CentOS-PowerTools.repo
+        - /etc/yum.repos.d/CentOS-Stream-PowerTools.repo
+      register: powertools_repo
 
-- name: Enable the PowerTools repository
-  become: true
-  ansible.builtin.replace:
-    regexp: ^enabled=.*$
-    replace: enabled=1
-    dest: "{{ item.stat.path }}"
-  with_items:
-    - "{{ powertools_repo.results }}"
-  when:
-    - ansible_os_family == "RedHat"
-    - item.stat.exists
+    - name: Enable the PowerTools repository
+      become: true
+      ansible.builtin.replace:
+        regexp: ^enabled=.*$
+        replace: enabled=1
+        dest: "{{ item.stat.path }}"
+      with_items:
+        - "{{ powertools_repo.results }}"
+      when:
+        - item.stat.exists
 
-- name: Update dnf cache
-  become: true
-  ansible.builtin.dnf:
-    update_cache: true
-  when:
-    - ansible_os_family == "RedHat"
+    - name: Update dnf cache
+      become: true
+      ansible.builtin.dnf:
+        update_cache: true
 
-- name: Run dnf upgrade
-  become: true
-  ansible.builtin.dnf:
-    name: "*" # noqa package-latest
-    state: latest
-    bugfix: true
-    security: true
-    nobest: true
-  when:
-    - ansible_os_family == "RedHat"
-    - system_upgrade | bool
-  notify:
-    - Run dnf autoremove
+    - name: Run dnf upgrade
+      become: true
+      ansible.builtin.dnf:
+        name: "*" # noqa package-latest
+        state: latest
+        bugfix: true
+        security: true
+        nobest: true
+      when:
+        - system_upgrade | bool
+      notify:
+        - Run dnf autoremove
