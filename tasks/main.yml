@@ -9,6 +9,7 @@
   ansible.builtin.import_tasks:
     file: resolvedconf.yml
   when:
+    - manage_resolved
     - ansible_virtualization_type not in ["container", "docker", "podman"]
   tags:
     - dns

@@ -749,6 +749,7 @@
         - DNSSEC={{ dnssec }}
         - DNSOverTLS={{ dns_over_tls }}
       when:
+        - manage_resolved
         - ansible_virtualization_type not in ["container", "docker", "podman"]
 
     - name: Verify systemd timesyncd.conf
