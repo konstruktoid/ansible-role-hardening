@@ -268,9 +268,11 @@
     - logind
     - systemd
 
-- name: Configure rkhunter
+- name: Install and configure rkhunter
   ansible.builtin.import_tasks:
     file: rkhunter.yml
+  when:
+    - manage_rkhunter
   tags:
     - rkhunter
 
