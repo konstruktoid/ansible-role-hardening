@@ -31,15 +31,8 @@ function lint {
 }
 
 function prep {
-  echo "Starting basic preparations."
+  echo "Updating Vagrant boxes."
   vagrant box update --insecure || true
-  echo "Copying the role."
-  set -x
-  sudo mkdir -p /etc/ansible/roles/konstruktoid.hardening/
-  sudo cp -R ./* /etc/ansible/roles/konstruktoid.hardening/
-  sudo rm /etc/ansible/roles/konstruktoid.hardening/{*.log,*.html,*.list}
-  set +x
-  echo "Finished basic preparations."
 }
 
 if [ "$1" == "prep" ]; then
