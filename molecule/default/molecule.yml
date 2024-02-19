@@ -41,6 +41,7 @@ provisioner:
         ansible_python_interpreter: /usr/bin/python3
         disable_wireless: false
         manage_usbguard: false
+        rkhunter_web_cmd: wget
         sshd_admin_net:
           - "0.0.0.0/0"
         sshd_allow_groups:

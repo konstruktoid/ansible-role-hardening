@@ -1,40 +1,94 @@
 ---
-- name: Configure rkhunter
+- name: Install and configure rkhunter
   become: true
-  ansible.builtin.template:
-    src: "{{ rkhunter_template }}"
-    dest: /etc/default/rkhunter
-    backup: true
-    mode: "0644"
-    owner: root
-    group: root
-  when:
-    - ansible_os_family == "Debian"
-  notify:
-    - Run rkhunter propupd
+  block:
+    - name: Install rkhunter
+      ansible.builtin.package:
+        name: rkhunter
+        state: present
 
-- name: SSH root access should be disabled
-  become: true
-  ansible.builtin.lineinfile:
-    regexp: ALLOW_SSH_ROOT_USER
-    line: ALLOW_SSH_ROOT_USER=no
-    dest: /etc/rkhunter.conf
-    mode: "0640"
-    state: present
-    create: false
-    backrefs: true
-  notify:
-    - Run rkhunter propupd
+    - name: Configure default rkhunter
+      ansible.builtin.template:
+        src: "{{ rkhunter_template }}"
+        dest: /etc/default/rkhunter
+        backup: true
+        mode: "0644"
+        owner: root
+        group: root
+      when:
+        - ansible_os_family == "Debian"
+      notify:
+        - Run rkhunter propupd
+        - Update rkhunter databases
 
-- name: SSH v1 should not be used
-  become: true
-  ansible.builtin.lineinfile:
-    regexp: ALLOW_SSH_PROT_V1
-    line: ALLOW_SSH_PROT_V1=0
-    dest: /etc/rkhunter.conf
-    mode: "0640"
-    state: present
-    create: false
-    backrefs: true
-  notify:
-    - Run rkhunter propupd
+    - name: SSH root access should be disabled
+      ansible.builtin.lineinfile:
+        regexp: (^#|^)ALLOW_SSH_ROOT_USER
+        line: ALLOW_SSH_ROOT_USER={{ 'no' if not rkhunter_allow_ssh_root_user else 'yes' }}
+        dest: /etc/rkhunter.conf
+        mode: "0640"
+        state: present
+        create: false
+        backrefs: true
+      notify:
+        - Run rkhunter propupd
+        - Update rkhunter databases
+
+    - name: SSH v1 should not be used
+      ansible.builtin.lineinfile:
+        regexp: (^#|^)ALLOW_SSH_PROT_V1
+        line: ALLOW_SSH_PROT_V1={{ 2 if not rkhunter_allow_ssh_prot_v1 else 1 }}
+        dest: /etc/rkhunter.conf
+        mode: "0640"
+        state: present
+        create: false
+        backrefs: true
+      notify:
+        - Run rkhunter propupd
+        - Update rkhunter databases
+
+    - name: Configure if mirrors file is to be checked for updates
+      ansible.builtin.lineinfile:
+        regexp: (^#|^)UPDATE_MIRRORS
+        line: UPDATE_MIRRORS={{ 1 if rkhunter_update_mirrors else 0 }}
+        dest: /etc/rkhunter.conf
+        mode: "0640"
+        state: present
+        create: false
+        backrefs: true
+      notify:
+        - Run rkhunter propupd
+        - Update rkhunter databases
+
+    - name: Configure which mirrors are to be used
+      ansible.builtin.lineinfile:
+        regexp: (^#|^)MIRRORS_MODE
+        line: MIRRORS_MODE={{ rkhunter_mirrors_mode }}
+        dest: /etc/rkhunter.conf
+        mode: "0640"
+        state: present
+        create: false
+        backrefs: true
+      notify:
+        - Run rkhunter propupd
+        - Update rkhunter databases
+
+    - name: Configure command to use when downloading databases
+      ansible.builtin.lineinfile:
+        regexp: (^#|^)WEB_CMD
+        line: WEB_CMD={{ rkhunter_web_cmd }}
+        dest: /etc/rkhunter.conf
+        mode: "0640"
+        state: present
+        create: false
+        backrefs: true
+      notify:
+        - Run rkhunter propupd
+        - Update rkhunter databases
+
+    - name: Validate configuration
+      ansible.builtin.command:
+        cmd: rkhunter --config-check --enable all --disable none
+      changed_when: false
+      when:
+        - ansible_virtualization_type not in ["container", "docker", "podman"]

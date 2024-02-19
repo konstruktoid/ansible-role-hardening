@@ -52,6 +52,19 @@
   register: rkhunter_propupd
   changed_when: rkhunter_propupd.rc == 0
 
+- name: Update rkhunter databases
+  become: true
+  ansible.builtin.command:
+    cmd: rkhunter --update
+  register: rkhunter_update
+  changed_when:
+    - rkhunter_update.rc == 0
+    - rkhunter_update.rc == 2
+  failed_when:
+    - rkhunter_update.rc == 1
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
+
 - name: Enable aidecheck
   become: true
   ansible.builtin.systemd:
