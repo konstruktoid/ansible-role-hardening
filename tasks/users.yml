@@ -24,6 +24,7 @@
   ansible.builtin.file:
     mode: "0750"
     path: "{{ item.path }}"
+    state: directory
   loop: "{{ home_directories.files }}"
   loop_control:
     label: "{{ item.path }}"

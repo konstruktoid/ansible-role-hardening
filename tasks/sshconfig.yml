@@ -77,6 +77,7 @@
     path: /etc/ssh/sshd_config
     owner: root
     group: root
+    state: file
     mode: "0600"
 
 - name: SSH moduli file
