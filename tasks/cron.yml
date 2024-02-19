@@ -69,6 +69,7 @@
     mode: "0600"
     owner: root
     group: root
+    state: file
   register: crontab_perm
   failed_when:
     - crontab_perm is not success

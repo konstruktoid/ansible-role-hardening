@@ -33,6 +33,7 @@
       ansible.builtin.file:
         dest: "{{ item.path }}"
         mode: "0444"
+        state: file
       with_items:
         - "{{ update_motd_permissions.files }}"
 
@@ -41,6 +42,7 @@
       ansible.builtin.file:
         dest: /etc/update-motd.d
         mode: "0755"
+        state: directory
 
     - name: Stat /usr/bin/pro
       ansible.builtin.stat:
