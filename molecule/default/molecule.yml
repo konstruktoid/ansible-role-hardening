@@ -16,6 +16,7 @@ provisioner:
     host_vars:
       almalinux8:
         disable_wireless: true
+        manage_compilers: false
         manage_timesyncd: false
         sshd_admin_net:
           - "0.0.0.0/0"

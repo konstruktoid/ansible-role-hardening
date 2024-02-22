@@ -2,7 +2,6 @@
 - name: Verify
   hosts: all
   any_errors_fatal: true
-
   tasks:
     - name: Reboot and reconnect
       when:
@@ -1131,3 +1130,34 @@
       register: declare_tmout
       changed_when: false
       failed_when: declare_tmout.rc != 0
+
+    - name: Assert compiler permissions
+      when:
+        - manage_compilers
+      block:
+        - name: Stat available compilers
+          ansible.builtin.find:
+            paths: [/usr/local/sbin, /usr/local/bin, /usr/sbin, /usr/bin, /sbin, /bin, /snap/bin]
+            patterns: "{{ compilers }}"
+            file_type: any
+            follow: true
+          register: compiler
+
+        - name: Check file ownership
+          ansible.builtin.stat:
+            path: "{{ item.path }}"
+            follow: true
+          register: file_stat
+          with_items:
+            - "{{ compiler.files }}"
+
+        - name: Assert compiler ownership, group, mode, and state
+          ansible.builtin.assert:
+            that:
+              - item.stat.exists
+              - item.stat.mode == '0750'
+              - item.stat.uid == 0
+              - item.stat.gid == 0
+            fail_msg: File {{ item.stat.path }} does not have the expected permissions.
+          with_items:
+            - "{{ file_stat.results }}"
