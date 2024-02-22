@@ -1,4 +1,6 @@
 ---
+manage_compilers: true
+
 compilers:
   - as
   - cargo

@@ -246,6 +246,8 @@
 - name: Configure compiler permissions
   ansible.builtin.import_tasks:
     file: compilers.yml
+  when:
+    - manage_compilers
   tags:
     - compilers
 
