@@ -1,76 +1,73 @@
 ---
-- name: Remove cron.deny and at.deny
+- name: Configure scheduled command services
   become: true
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: absent
-  loop:
-    - /etc/at.deny
-    - /etc/cron.deny
+  block:
+    - name: Remove cron.deny and at.deny
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/at.deny
+        - /etc/cron.deny
 
-- name: Clean cron and at
-  become: true
-  ansible.builtin.lineinfile:
-    path: "{{ item }}"
-    regexp: ^(?!root).*$
-    state: absent
-  loop:
-    - /etc/at.allow
-    - /etc/cron.allow
+    - name: Clean cron and at
+      ansible.builtin.lineinfile:
+        path: "{{ item }}"
+        regexp: ^(?!root).*$
+        state: absent
+      loop:
+        - /etc/at.allow
+        - /etc/cron.allow
 
-- name: Allow root cron and at
-  become: true
-  ansible.builtin.lineinfile:
-    path: "{{ item }}"
-    line: root
-    mode: "0600"
-    state: present
-    create: true
-  loop:
-    - /etc/at.allow
-    - /etc/cron.allow
+    - name: Allow root cron and at
+      ansible.builtin.lineinfile:
+        path: "{{ item }}"
+        line: root
+        mode: "0600"
+        state: present
+        create: true
+      loop:
+        - /etc/at.allow
+        - /etc/cron.allow
 
-- name: Mask atd
-  become: true
-  ansible.builtin.systemd:
-    name: atd
-    masked: true
-    enabled: false
-    state: stopped
-  register: mask_atd
-  failed_when:
-    - mask_atd is not success
-    - not "Could not find the requested service" in mask_atd.msg
-  when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - name: Mask atd
+      ansible.builtin.systemd:
+        name: atd
+        masked: true
+        enabled: false
+        state: stopped
+      register: mask_atd
+      failed_when:
+        - mask_atd is not success
+        - not "Could not find the requested service" in mask_atd.msg
+      when:
+        - ansible_virtualization_type not in ["container", "docker", "podman"]
 
-- name: Set cron permissions
-  become: true
-  ansible.builtin.file:
-    path: "{{ item }}"
-    mode: "0700"
-    owner: root
-    group: root
-  register: cron_perm
-  failed_when:
-    - cron_perm is not success
-    - not 'is absent, cannot continue' in cron_perm.msg
-  loop:
-    - /etc/cron.d
-    - /etc/cron.daily
-    - /etc/cron.hourly
-    - /etc/cron.weekly
-    - /etc/cron.monthly
+    - name: Set cron permissions
+      ansible.builtin.file:
+        path: "{{ item }}"
+        mode: "0700"
+        owner: root
+        group: root
+      register: cron_perm
+      failed_when:
+        - cron_perm is not success
+        - not 'is absent, cannot continue' in cron_perm.msg
+      loop:
+        - /etc/cron.d
+        - /etc/cron.daily
+        - /etc/cron.hourly
+        - /etc/cron.weekly
+        - /etc/cron.monthly
 
-- name: Set crontab permissions
-  become: true
-  ansible.builtin.file:
-    path: /etc/crontab
-    mode: "0600"
-    owner: root
-    group: root
-    state: file
-  register: crontab_perm
-  failed_when:
-    - crontab_perm is not success
-    - not 'is absent, cannot continue' in crontab_perm.msg
+    - name: Set crontab permissions
+      ansible.builtin.file:
+        path: /etc/crontab
+        mode: "0600"
+        owner: root
+        group: root
+        state: file
+      register: crontab_perm
+      failed_when:
+        - crontab_perm is not success
+        - not 'is absent, cannot continue' in crontab_perm.msg

@@ -3,7 +3,6 @@
   become: true
   block:
     - name: Configure sudo use_pty
-      become: true
       ansible.builtin.lineinfile:
         line: Defaults use_pty
         dest: /etc/sudoers.d/011_use_pty
@@ -13,7 +12,6 @@
         validate: visudo -cf %s
 
     - name: Configure sudo logfile
-      become: true
       ansible.builtin.lineinfile:
         line: Defaults logfile=/var/log/sudo.log
         dest: /etc/sudoers.d/012_logfile
@@ -23,7 +21,6 @@
         validate: visudo -cf %s
 
     - name: Configure sudo disable pwfeedback
-      become: true
       ansible.builtin.lineinfile:
         line: Defaults !pwfeedback
         dest: /etc/sudoers.d/013_pwfeedback
@@ -33,7 +30,6 @@
         validate: visudo -cf %s
 
     - name: Configure sudo disable visiblepw
-      become: true
       ansible.builtin.lineinfile:
         line: Defaults !visiblepw
         dest: /etc/sudoers.d/014_visiblepw
@@ -43,13 +39,11 @@
         validate: visudo -cf %s
 
     - name: Remove inconsistently named sudoer file
-      become: true
       ansible.builtin.file:
         path: /etc/sudoers.d/15_timeout
         state: absent
 
     - name: Configure sudo passwd_timeout
-      become: true
       ansible.builtin.lineinfile:
         line: Defaults passwd_timeout=1
         dest: /etc/sudoers.d/015_passwdtimeout
@@ -59,7 +53,6 @@
         validate: visudo -cf %s
 
     - name: Configure sudo timestamp_timeout
-      become: true
       ansible.builtin.lineinfile:
         line: Defaults timestamp_timeout=5
         dest: /etc/sudoers.d/016_timestamptimeout
@@ -69,7 +62,6 @@
         validate: visudo -cf %s
 
     - name: Configure sudo timestamp_type
-      become: true
       ansible.builtin.lineinfile:
         line: Defaults timestamp_type=tty
         dest: /etc/sudoers.d/017_timestamptype
@@ -79,7 +71,6 @@
         validate: visudo -cf %s
 
     - name: Configure sudo user password for privilege escalation
-      become: true
       ansible.builtin.lineinfile:
         line: Defaults {{ item }}
         dest: /etc/sudoers.d/018_userpassword

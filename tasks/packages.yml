@@ -14,15 +14,14 @@
     - not "No package" in package_removal.msg
 
 - name: Configure needrestart
+  become: true
   block:
     - name: Pre register needrestart configuration directory
-      become: true
       ansible.builtin.stat:
         path: /etc/needrestart/conf.d
       register: needrestart_directory_created
 
     - name: Create needrestart directory
-      become: true
       ansible.builtin.file:
         path: /etc/needrestart/conf.d
         state: directory
@@ -35,7 +34,6 @@
         - not needrestart_directory_created.stat.exists
 
     - name: Stat needrestart configuration directory
-      become: true
       ansible.builtin.stat:
         path: /etc/needrestart/conf.d
       register: needrestart_directory
@@ -50,7 +48,6 @@
       failed_when: needrestart_restart_set.rc > 1
 
     - name: Configure needrestart
-      become: true
       ansible.builtin.lineinfile:
         path: /etc/needrestart/conf.d/00-restart.conf
         line: $nrconf{restart} = 'l';

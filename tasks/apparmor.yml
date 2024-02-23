@@ -1,61 +1,50 @@
 ---
-- name: Set Debian family AppArmor grub cmdline
+- name: Configure and enable AppArmor
   become: true
-  ansible.builtin.lineinfile:
-    line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX apparmor=1 security=apparmor"
-    dest: /etc/default/grub.d/99-hardening-apparmor.cfg
-    state: present
-    create: true
-    mode: "0640"
-    owner: root
-    group: root
-  when:
-    - ansible_os_family == "Debian"
-  notify:
-    - Update GRUB
+  block:
+    - name: Set Debian family AppArmor grub cmdline
+      ansible.builtin.lineinfile:
+        line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX apparmor=1 security=apparmor"
+        dest: /etc/default/grub.d/99-hardening-apparmor.cfg
+        state: present
+        create: true
+        mode: "0640"
+        owner: root
+        group: root
+      notify:
+        - Update GRUB
 
-- name: Configure pam_apparmor
-  become: true
-  ansible.builtin.lineinfile:
-    line: session optional pam_apparmor.so order=user,group,default
-    dest: /etc/pam.d/apparmor
-    state: present
-    create: true
-    mode: "0640"
-    owner: root
-    group: root
-  when:
-    - ansible_os_family == "Debian"
-  notify:
-    - Update GRUB
+    - name: Configure pam_apparmor
+      ansible.builtin.lineinfile:
+        line: session optional pam_apparmor.so order=user,group,default
+        dest: /etc/pam.d/apparmor
+        state: present
+        create: true
+        mode: "0640"
+        owner: root
+        group: root
+      notify:
+        - Update GRUB
 
-- name: Get AppArmor status
-  become: true
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  ansible.builtin.command:
-    cmd: aa-status --complaining
-  register: get_apparmor_complaining
-  changed_when: get_apparmor_complaining.stdout != "0"
-  when:
-    - ansible_os_family == "Debian"
+    - name: Get AppArmor status
+      environment:
+        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      ansible.builtin.command:
+        cmd: aa-status --complaining
+      register: get_apparmor_complaining
+      changed_when: get_apparmor_complaining.stdout != "0"
 
-- name: Enforce AppArmor profiles
-  become: true
-  ansible.builtin.command:
-    cmd: find /etc/apparmor.d/ -maxdepth 1 -type f -exec aa-enforce {} \;
-  register: enforce_apparmor_profiles
-  changed_when: enforce_apparmor_profiles.rc != 0
-  failed_when: enforce_apparmor_profiles.rc != 0
-  when:
-    - ansible_os_family == "Debian"
-    - get_apparmor_complaining.stdout != "0"
+    - name: Enforce AppArmor profiles
+      ansible.builtin.command:
+        cmd: find /etc/apparmor.d/ -maxdepth 1 -type f -exec aa-enforce {} \;
+      register: enforce_apparmor_profiles
+      changed_when: enforce_apparmor_profiles.rc != 0
+      failed_when: enforce_apparmor_profiles.rc != 0
+      when:
+        - get_apparmor_complaining.stdout != "0"
 
-- name: Enable apparmor
-  become: true
-  ansible.builtin.systemd:
-    name: apparmor
-    enabled: true
-    state: started
-  when:
-    - ansible_os_family == "Debian"
+    - name: Enable apparmor
+      ansible.builtin.systemd:
+        name: apparmor
+        enabled: true
+        state: started
