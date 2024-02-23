@@ -21,8 +21,10 @@
 │       ├── module_blocklists.yml
 │       ├── mount.yml
 │       ├── ntp.yml
+│       ├── packagemgmt.yml
 │       ├── packages.yml
 │       ├── password.yml
+│       ├── rkhunter.yml
 │       ├── sshd.yml
 │       ├── suid_sgid_blocklist.yml
 │       ├── sysctl.yml
@@ -174,5 +176,5 @@
 ├── tox.ini
 └── Vagrantfile
 
-35 directories, 135 files
+35 directories, 137 files
 ```
