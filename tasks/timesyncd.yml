@@ -1,49 +1,48 @@
 ---
-- name: Install systemd timesyncd
+- name: Install and configure systemd timesyncd
   become: true
-  ansible.builtin.package:
-    name: systemd-timesyncd
-    state: present
+  block:
+    - name: Install systemd timesyncd
+      ansible.builtin.package:
+        name: systemd-timesyncd
+        state: present
 
-- name: Configure systemd timesyncd
-  become: true
-  ansible.builtin.template:
-    src: "{{ timesyncd_conf_template }}"
-    dest: /etc/systemd/timesyncd.conf
-    backup: true
-    mode: "0644"
-    owner: root
-    group: root
-  notify:
-    - Reload systemd
+    - name: Configure systemd timesyncd
+      ansible.builtin.template:
+        src: "{{ timesyncd_conf_template }}"
+        dest: /etc/systemd/timesyncd.conf
+        backup: true
+        mode: "0644"
+        owner: root
+        group: root
+      notify:
+        - Reload systemd
 
-- name: Start timesyncd
-  become: true
-  ansible.builtin.systemd:
-    name: systemd-timesyncd
-    enabled: true
-    masked: false
-    state: started
+    - name: Start timesyncd
+      ansible.builtin.systemd:
+        name: systemd-timesyncd
+        enabled: true
+        masked: false
+        state: started
 
-- name: Stat timesyncd status
-  ansible.builtin.command:
-    cmd: systemctl status systemd-timesyncd
-  register: timesyncd_status
-  changed_when: false
-  failed_when: timesyncd_status.rc != 0
+    - name: Stat timesyncd status
+      ansible.builtin.command:
+        cmd: systemctl status systemd-timesyncd
+      register: timesyncd_status
+      changed_when: false
+      failed_when: timesyncd_status.rc != 0
 
-- name: Stat timedatectl show
-  ansible.builtin.command:
-    cmd: timedatectl show
-  register: timedatectl_show
-  changed_when: false
-  failed_when: timedatectl_show.rc != 0
+    - name: Stat timedatectl show
+      ansible.builtin.command:
+        cmd: timedatectl show
+      register: timedatectl_show
+      changed_when: false
+      failed_when: timedatectl_show.rc != 0
 
-- name: Run timedatectl set-ntp
-  become: true
-  ansible.builtin.command:
-    cmd: timedatectl set-ntp true
-  changed_when: false
-  when:
-    - timedatectl_show.stdout.find('NTP=yes') != -1
-    - timesyncd_status.rc == 0
+    - name: Run timedatectl set-ntp
+      ansible.builtin.command:
+        cmd: timedatectl set-ntp true
+      changed_when: false
+      when:
+        - timedatectl_show.stdout.find('NTP=yes') != -1
+        - timesyncd_status.rc == 0

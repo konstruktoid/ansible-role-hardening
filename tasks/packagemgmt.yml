@@ -1,12 +1,12 @@
 ---
 - name: Apt configuration and upgrades
+  become: true
   when:
     - ansible_os_family == "Debian"
   tags:
     - apt
   block:
     - name: Configure apt
-      become: true
       ansible.builtin.lineinfile:
         dest: /etc/apt/apt.conf.d/98-hardening-ubuntu
         mode: "0644"
@@ -16,13 +16,11 @@
       loop: "{{ apt_hardening_options }}"
 
     - name: Run apt update
-      become: true
       ansible.builtin.apt:
         update_cache: true
         cache_valid_time: 1800
 
     - name: Run apt upgrade
-      become: true
       ansible.builtin.apt:
         upgrade: safe
       register: apt_upgrade_response
@@ -35,6 +33,7 @@
         - Run apt-get autoremove
 
 - name: Dnf configuration
+  become: true
   when:
     - ansible_os_family == "RedHat"
   tags:
@@ -42,7 +41,6 @@
     - yum
   block:
     - name: Link dnf.conf
-      become: true
       ansible.builtin.file:
         src: /etc/dnf/dnf.conf
         dest: /etc/yum.conf
@@ -53,7 +51,6 @@
         - ansible_distribution == "Fedora"
 
     - name: Import RedHat RPM key
-      become: true
       ansible.builtin.rpm_key:
         state: present
         key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
@@ -61,7 +58,6 @@
         - "{{ redhat_signing_keys }}"
 
     - name: Set yum.conf gpgcheck
-      become: true
       ansible.builtin.lineinfile:
         regexp: ^gpgcheck=
         line: gpgcheck=1
@@ -72,7 +68,6 @@
         backrefs: true
 
     - name: Set yum.conf clean_requirements
-      become: true
       ansible.builtin.lineinfile:
         line: clean_requirements_on_remove=True
         dest: /etc/yum.conf
@@ -82,7 +77,6 @@
         insertafter: "[main]"
 
     - name: Set yum.conf localpkg_gpgcheck
-      become: true
       ansible.builtin.lineinfile:
         line: localpkg_gpgcheck=1
         dest: /etc/yum.conf
@@ -92,7 +86,6 @@
         insertafter: "[main]"
 
     - name: Comment yum.conf repo_gpgcheck
-      become: true
       ansible.builtin.lineinfile:
         line: "# repo_gpgcheck=1"
         dest: /etc/yum.conf
@@ -102,6 +95,7 @@
         insertafter: "[main]"
 
 - name: RHEL8 package management tasks
+  become: true
   when:
     - ansible_distribution == "RedHat"
     - ansible_distribution_major_version == "8"
@@ -110,7 +104,6 @@
     - yum
   block:
     - name: Import RHEL8 necessary GPG keys
-      become: true
       ansible.builtin.rpm_key:
         state: present
         key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
@@ -118,19 +111,18 @@
         - "{{ epel8_signing_keys }}"
 
     - name: RHEL8 EPEL repo installation
-      become: true
       ansible.builtin.dnf:
         name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
         state: present
 
     - name: Install CodeReady repo for RHEL8
-      become: true
       ansible.builtin.command: >-
         subscription-manager repos
         --enable "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
       changed_when: false
 
 - name: RHEL7 repo tasks
+  become: true
   when:
     - ansible_distribution == "RedHat"
     - ansible_distribution_major_version == "7"
@@ -139,7 +131,6 @@
     - yum
   block:
     - name: Import RHEL7 necessary GPG keys
-      become: true
       ansible.builtin.rpm_key:
         state: present
         key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
@@ -147,13 +138,11 @@
         - "{{ epel7_signing_keys }}"
 
     - name: RHEL7 EPEL repo installation
-      become: true
       ansible.builtin.yum:
         name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
         state: present
 
     - name: Install Extras and HA for RHEL7
-      become: true
       ansible.builtin.command: >-
         subscription-manager repos
         --enable "rhel-*-optional-rpms"
@@ -162,6 +151,7 @@
       changed_when: false
 
 - name: Enable dnf repositories and upgrades
+  become: true
   when:
     - ansible_os_family == "RedHat"
   tags:
@@ -180,7 +170,6 @@
       register: powertools_repo
 
     - name: Enable the PowerTools repository
-      become: true
       ansible.builtin.replace:
         regexp: ^enabled=.*$
         replace: enabled=1
@@ -191,12 +180,10 @@
         - item.stat.exists
 
     - name: Update dnf cache
-      become: true
       ansible.builtin.dnf:
         update_cache: true
 
     - name: Run dnf upgrade
-      become: true
       ansible.builtin.dnf:
         name: "*" # noqa package-latest
         state: latest

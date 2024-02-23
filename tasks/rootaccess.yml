@@ -1,54 +1,54 @@
 ---
-- name: Stat access.conf
+- name: Stat and clean /etc/security/access.conf
   become: true
-  ansible.builtin.stat:
-    path: /etc/security/access.conf
-  register: security_access_conf
+  block:
+    - name: Stat access.conf
+      ansible.builtin.stat:
+        path: /etc/security/access.conf
+      register: security_access_conf
 
-- name: Stat securetty
-  become: true
-  ansible.builtin.stat:
-    path: /etc/securetty
-  register: etc_securetty
+    - name: Clean access.conf
+      ansible.builtin.lineinfile:
+        path: /etc/security/access.conf
+        regexp: ^(?!\+:root:127.0.0.1)$
+        mode: "0644"
+        state: absent
+      when:
+        - security_access_conf.stat.exists
 
-- name: Clean access.conf
-  become: true
-  ansible.builtin.lineinfile:
-    path: /etc/security/access.conf
-    regexp: ^(?!\+:root:127.0.0.1)$
-    mode: "0644"
-    state: absent
-  when:
-    - security_access_conf.stat.exists
+    - name: Allow localhost root in access.conf
+      ansible.builtin.lineinfile:
+        path: /etc/security/access.conf
+        line: +:root:127.0.0.1
+        mode: "0644"
+        state: present
+      when:
+        - security_access_conf.stat.exists
 
-- name: Allow localhost root in access.conf
+- name: Stat and clean /etc/securetty
   become: true
-  ansible.builtin.lineinfile:
-    path: /etc/security/access.conf
-    line: +:root:127.0.0.1
-    mode: "0644"
-    state: present
-  when:
-    - security_access_conf.stat.exists
+  block:
+    - name: Stat securetty
+      ansible.builtin.stat:
+        path: /etc/securetty
+      register: etc_securetty
 
-- name: Clean securetty
-  become: true
-  ansible.builtin.lineinfile:
-    path: /etc/securetty
-    regexp: ^(?!console).*$
-    state: absent
-  when:
-    - etc_securetty.stat.exists
+    - name: Clean securetty
+      ansible.builtin.lineinfile:
+        path: /etc/securetty
+        regexp: ^(?!console).*$
+        state: absent
+      when:
+        - etc_securetty.stat.exists
 
-- name: Allow console in securetty
-  become: true
-  ansible.builtin.lineinfile:
-    path: /etc/securetty
-    line: console
-    mode: "0644"
-    state: present
-  when:
-    - etc_securetty.stat.exists
+    - name: Allow console in securetty
+      ansible.builtin.lineinfile:
+        path: /etc/securetty
+        line: console
+        mode: "0644"
+        state: present
+      when:
+        - etc_securetty.stat.exists
 
 - name: Mask systemd debug-shell
   become: true

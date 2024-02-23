@@ -66,18 +66,17 @@
     - not ansible_distribution == "AlmaLinux"
 
 - name: Install Python pip passlib
+  become: true
   when:
     - python3_passlib.rc is defined
     - python3_passlib.rc != 0
   block:
     - name: Python3-pip installation
-      become: true
       ansible.builtin.package:
         name: python3-pip
         state: present
 
     - name: Pip passlib installation
-      become: true
       ansible.builtin.pip:
         name: passlib
         state: present

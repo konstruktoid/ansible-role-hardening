@@ -1,156 +1,145 @@
 ---
-- name: Debian family AIDE installation
+- name: AIDE installation and configuration
   become: true
-  ansible.builtin.apt:
-    name: aide-common
-    state: present
-    install_recommends: false
-  when:
-    - ansible_os_family == "Debian"
+  block:
+    - name: Debian family AIDE installation
+      ansible.builtin.apt:
+        name: aide-common
+        state: present
+        install_recommends: false
+      when:
+        - ansible_os_family == "Debian"
 
-- name: RedHat family AIDE package installation
-  become: true
-  ansible.builtin.dnf:
-    name: aide
-    state: present
-  when:
-    - ansible_os_family == "RedHat"
+    - name: RedHat family AIDE package installation
+      ansible.builtin.dnf:
+        name: aide
+        state: present
+      when:
+        - ansible_os_family == "RedHat"
 
-- name: Stat AIDE cron.daily
-  become: true
-  ansible.builtin.stat:
-    path: /etc/cron.daily/aide
-  register: aidecron
+    - name: Stat AIDE cron.daily
+      ansible.builtin.stat:
+        path: /etc/cron.daily/aide
+      register: aidecron
 
-- name: Install AIDE service
-  become: true
-  ansible.builtin.template:
-    src: lib/systemd/system/aidecheck.service.j2
-    dest: /lib/systemd/system/aidecheck.service
-    backup: true
-    mode: "0644"
-    owner: root
-    group: root
-  when:
-    - not aidecron.stat.exists
+    - name: Install AIDE service
+      ansible.builtin.template:
+        src: lib/systemd/system/aidecheck.service.j2
+        dest: /lib/systemd/system/aidecheck.service
+        backup: true
+        mode: "0644"
+        owner: root
+        group: root
+      when:
+        - not aidecron.stat.exists
 
-- name: Install AIDE timer
-  become: true
-  ansible.builtin.template:
-    src: lib/systemd/system/aidecheck.timer.j2
-    dest: /lib/systemd/system/aidecheck.timer
-    backup: true
-    mode: "0644"
-    owner: root
-    group: root
-  when:
-    - not aidecron.stat.exists
-  notify:
-    - Reload systemd
-    - Enable aidecheck
+    - name: Install AIDE timer
+      ansible.builtin.template:
+        src: lib/systemd/system/aidecheck.timer.j2
+        dest: /lib/systemd/system/aidecheck.timer
+        backup: true
+        mode: "0644"
+        owner: root
+        group: root
+      when:
+        - not aidecron.stat.exists
+      notify:
+        - Reload systemd
+        - Enable aidecheck
 
-- name: Verify the Audit tools
-  become: true
-  ansible.builtin.lineinfile:
-    dest: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
-    state: present
-    regexp: ^[# ]*{{ item }}
-    line: "{{ item }} p+i+n+u+g+s+b+acl+xattrs+sha512"
-    mode: "0640"
-    create: false
-    validate: aide --config-check --config=%s
-  loop:
-    - /usr/sbin/auditctl
-    - /usr/sbin/auditd
-    - /usr/sbin/ausearch
-    - /usr/sbin/aureport
-    - /usr/sbin/autrace
-    - /usr/sbin/augenrules
-    - /usr/sbin/audispd
+    - name: Verify the Audit tools
+      ansible.builtin.lineinfile:
+        dest: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+        state: present
+        regexp: ^[# ]*{{ item }}
+        line: "{{ item }} p+i+n+u+g+s+b+acl+xattrs+sha512"
+        mode: "0640"
+        create: false
+        validate: aide --config-check --config=%s
+      loop:
+        - /usr/sbin/auditctl
+        - /usr/sbin/auditd
+        - /usr/sbin/ausearch
+        - /usr/sbin/aureport
+        - /usr/sbin/autrace
+        - /usr/sbin/augenrules
+        - /usr/sbin/audispd
 
-- name: Configure AIDE checksums
-  become: true
-  ansible.builtin.lineinfile:
-    dest: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
-    state: present
-    regexp: ^Checksums =
-    line: Checksums = {{ aide_checksums }}
-    mode: "0640"
-    create: false
-    validate: aide --config-check --config=%s
+    - name: Configure AIDE checksums
+      ansible.builtin.lineinfile:
+        dest: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+        state: present
+        regexp: ^Checksums =
+        line: Checksums = {{ aide_checksums }}
+        mode: "0640"
+        create: false
+        validate: aide --config-check --config=%s
 
-- name: Add AIDE dir exclusions
-  become: true
-  ansible.builtin.blockinfile:
-    path: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
-    marker: "# {mark} ANSIBLE MANAGED EXCLUSION BLOCK"
-    backup: true
-    insertafter: EOF
-    block: |
-      !/var/lib/docker
-      !/var/lib/lxcfs
-      !/var/lib/private/systemd
-      !/var/log/audit
-      !/var/log/journal
-    validate: aide --config-check --config=%s
+    - name: Add AIDE dir exclusions
+      ansible.builtin.blockinfile:
+        path: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+        marker: "# {mark} ANSIBLE MANAGED EXCLUSION BLOCK"
+        backup: true
+        insertafter: EOF
+        block: |
+          !/var/lib/docker
+          !/var/lib/lxcfs
+          !/var/lib/private/systemd
+          !/var/log/audit
+          !/var/log/journal
+        validate: aide --config-check --config=%s
 
-- name: Stat Debian aide.db
-  become: true
-  ansible.builtin.stat:
-    path: /var/lib/aide/aide.db
-  register: ubuaidedb
-  when:
-    - ansible_os_family == "Debian"
+    - name: Stat Debian aide.db
+      ansible.builtin.stat:
+        path: /var/lib/aide/aide.db
+      register: ubuaidedb
+      when:
+        - ansible_os_family == "Debian"
 
-- name: Stat RedHat aide.db
-  become: true
-  ansible.builtin.stat:
-    path: /var/lib/aide/aide.db.gz
-  register: rhelaidedb
-  changed_when: false
-  failed_when: false
-  when:
-    - ansible_os_family == "RedHat"
+    - name: Stat RedHat aide.db
+      ansible.builtin.stat:
+        path: /var/lib/aide/aide.db.gz
+      register: rhelaidedb
+      changed_when: false
+      failed_when: false
+      when:
+        - ansible_os_family == "RedHat"
 
-- name: Initialize RedHat AIDE
-  become: true
-  ansible.builtin.command:
-    cmd: aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
-  register: init_redhat_aide
-  changed_when: init_redhat_aide.rc != 0
-  failed_when: init_redhat_aide.rc != 0
-  when:
-    - ansible_os_family == "RedHat"
-    - not rhelaidedb.stat.exists
+    - name: Initialize RedHat AIDE
+      ansible.builtin.command:
+        cmd: aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
+      register: init_redhat_aide
+      changed_when: init_redhat_aide.rc != 0
+      failed_when: init_redhat_aide.rc != 0
+      when:
+        - ansible_os_family == "RedHat"
+        - not rhelaidedb.stat.exists
 
-- name: Stat RedHat aide.db.new.gz
-  become: true
-  ansible.builtin.stat:
-    path: /var/lib/aide/aide.db.new.gz
-  register: rhelaidedbnew
-  changed_when: false
-  failed_when: false
-  when:
-    - ansible_os_family == "RedHat"
+    - name: Stat RedHat aide.db.new.gz
+      ansible.builtin.stat:
+        path: /var/lib/aide/aide.db.new.gz
+      register: rhelaidedbnew
+      changed_when: false
+      failed_when: false
+      when:
+        - ansible_os_family == "RedHat"
 
-- name: Copy RedHat AIDE database
-  become: true
-  ansible.builtin.command:
-    cmd: cp /var/lib/aide/aide.db.gz /var/lib/aide/aide.db.new.gz
-  register: cp_redhat_aide_db
-  changed_when: cp_redhat_aide_db.rc != 0
-  failed_when: cp_redhat_aide_db.rc != 0
-  when:
-    - ansible_os_family == "RedHat"
-    - not rhelaidedbnew.stat.exists
+    - name: Copy RedHat AIDE database
+      ansible.builtin.command:
+        cmd: cp /var/lib/aide/aide.db.gz /var/lib/aide/aide.db.new.gz
+      register: cp_redhat_aide_db
+      changed_when: cp_redhat_aide_db.rc != 0
+      failed_when: cp_redhat_aide_db.rc != 0
+      when:
+        - ansible_os_family == "RedHat"
+        - not rhelaidedbnew.stat.exists
 
-- name: Initialize Debian AIDE
-  become: true
-  ansible.builtin.command:
-    cmd: aideinit --force --yes
-  register: init_debian_aide
-  changed_when: init_debian_aide.rc != 0
-  failed_when: init_debian_aide.rc != 0
-  when:
-    - ansible_os_family == "Debian"
-    - not ubuaidedb.stat.exists
+    - name: Initialize Debian AIDE
+      ansible.builtin.command:
+        cmd: aideinit --force --yes
+      register: init_debian_aide
+      changed_when: init_debian_aide.rc != 0
+      failed_when: init_debian_aide.rc != 0
+      when:
+        - ansible_os_family == "Debian"
+        - not ubuaidedb.stat.exists
