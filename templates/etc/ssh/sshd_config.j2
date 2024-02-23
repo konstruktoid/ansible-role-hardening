@@ -51,6 +51,12 @@ RequiredRSASize {{ sshd_required_rsa_size }}
 # Authentication
 #######################################################
 
+{% if sshd_authorized_principals_file %}
+AuthorizedPrincipalsFile {{ sshd_authorized_principals_file }}
+{% endif %}
+{% if sshd_trusted_user_ca_keys_file %}
+TrustedUserCAKeys {{ sshd_trusted_user_ca_keys_file }}
+{% endif %}
 PermitRootLogin {{ 'yes' if (sshd_permit_root_login | bool) else 'no' }}
 {% if ssh_installed_version is version('7.4', '<') %}
 UseLogin no
