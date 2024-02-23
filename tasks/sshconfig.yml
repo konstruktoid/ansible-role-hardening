@@ -195,6 +195,19 @@
     sshd_match_local_ports | length > 0 or
     (sshd_sftp_only_group is defined and sshd_sftp_only_group | length != 0)
 
+- name: Create trusted ca keys
+  ansible.builtin.lineinfile:
+    dest: "{{ sshd_trusted_user_ca_keys_file }}"
+    line: |
+      {{ sshd_trusted_user_ca_keys_base64 | b64decode }}
+    create: true
+    mode: "0600"
+    owner: root
+    group: root
+  when:
+    - sshd_trusted_user_ca_keys_base64
+    - sshd_trusted_user_ca_keys_file
+
 - name: Configure sshd
   become: true
   ansible.builtin.template:

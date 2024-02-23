@@ -12,6 +12,7 @@ sshd_allow_tcp_forwarding: false
 sshd_allow_users:
   - "{{ ansible_user | default(lookup('ansible.builtin.env', 'USER')) }}"
 sshd_authentication_methods: any
+sshd_authorized_principals_file: /etc/ssh/auth_principals/%u
 sshd_banner: /etc/issue.net
 sshd_ca_signature_algorithms:
   - ecdsa-sha2-nistp256
@@ -97,6 +98,8 @@ sshd_sftp_subsystem: internal-sftp -f LOCAL6 -l INFO
 sshd_strict_modes: true
 sshd_syslog_facility: AUTH
 sshd_tcp_keep_alive: false
+sshd_trusted_user_ca_keys_base64: ""
+sshd_trusted_user_ca_keys_file: /etc/ssh/trusted-user-ca-keys.pem
 sshd_update_moduli: false
 sshd_use_dns: false
 sshd_use_pam: true
