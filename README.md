@@ -50,7 +50,7 @@ roles:
   any_errors_fatal: true
   tasks:
     - name: Include the hardening role
-      ansible.builtin.include_role:
+      ansible.builtin.import_role:
         name: konstruktoid.hardening
       vars:
         sshd_admin_net:
@@ -82,7 +82,7 @@ roles:
         version: 'v2.0.0'
 
     - name: Include the hardening role
-      ansible.builtin.include_role:
+      ansible.builtin.import_role:
         name: konstruktoid.hardening
       vars:
         sshd_admin_net:
@@ -120,7 +120,7 @@ manage_aide: true
 aide_checksums: sha512
 ```
 
-If `manage_aide: true` then [AIDE](https://aide.github.io/) will be installed
+If `manage_aide: true`, then [AIDE](https://aide.github.io/) will be installed
 and configured.
 
 `aide_checksums` modifies the AIDE `Checksums` variable. Note that the
@@ -149,8 +149,8 @@ grub_audit_backlog_cmdline: audit_backlog_limit=8192
 grub_audit_cmdline: audit=1
 ```
 
-If `manage_auditd: true` then the audit daemon (`auditd`) will configured and
-enabled at boot using GRUB.
+If `manage_auditd: true`, then the [Linux Audit System](https://github.com/linux-audit/audit-userspace)
+will configured and enabled at boot using GRUB.
 
 When `auditd_apply_audit_rules: 'yes'`, the role applies the auditd rules
 from the included template file.
@@ -182,6 +182,8 @@ sending the message to syslog.
 ### ./defaults/main/compilers.yml
 
 ```yaml
+manage_compilers: true
+
 compilers:
   - as
   - cargo
@@ -195,7 +197,8 @@ compilers:
   - rustc
 ```
 
-List of compilers that will be restricted to the root user.
+If `manage_compilers: true`, then the listed compilers will be restricted
+to the root user.
 
 ### ./defaults/main/crypto_policies.yml
 
@@ -218,6 +221,8 @@ If `true`, turn off all wireless interfaces.
 ### ./defaults/main/dns.yml
 
 ```yaml
+manage_resolved: true
+
 dns:
   - 1.1.1.2
   - 9.9.9.9
@@ -228,6 +233,8 @@ dnssec: allow-downgrade
 dns_over_tls: opportunistic
 ```
 
+If `manage_resolved: true`, configure [systemd-resolved](https://www.freedesktop.org/software/systemd/man/latest/resolved.conf.html).
+
 IPv4 and IPv6 addresses to use as system and fallback DNS servers.
 If `dnssec` is set to "allow-downgrade" DNSSEC validation is attempted, but if
 the server does not support DNSSEC properly, DNSSEC mode is automatically
@@ -235,9 +242,6 @@ disabled.
 
 If `dns_over_tls` is true, all connections to the server will be encrypted if
 the DNS server supports DNS-over-TLS and has a valid certificate.
-
-[systemd](https://github.com/konstruktoid/hardening/blob/master/systemd.adoc#etcsystemdresolvedconf)
-option.
 
 ### ./defaults/main/ipv6.yml
 
@@ -295,7 +299,7 @@ limit_nproc_hard: 1024
 limit_nproc_soft: 512
 ```
 
-Maximum number of processes and open files.
+Set maximum number of processes and open files.
 
 ### ./defaults/main/misc.yml
 
@@ -330,6 +334,7 @@ fs_modules_blocklist:
   - jffs2
   - squashfs
   - udf
+
 misc_modules_blocklist:
   - bluetooth
   - bnep
@@ -348,6 +353,7 @@ misc_modules_blocklist:
   - usb-storage
   - uvcvideo
   - v4l2_common
+
 net_modules_blocklist:
   - atm
   - dccp
@@ -392,9 +398,28 @@ ntp:
   - time.nist.gov
 ```
 
-If `manage_timesyncd: true` then configure systemd
+If `manage_timesyncd: true`, then configure systemd
 [timesyncd](https://manpages.ubuntu.com/manpages/jammy/man8/systemd-timesyncd.service.8.html),
 otherwise installing a NTP client is recommended.
+
+### ./defaults/main/packagemgmt.yml
+
+```yaml
+apt_hardening_options:
+  - Acquire::AllowDowngradeToInsecureRepositories "false";
+  - Acquire::AllowInsecureRepositories "false";
+  - Acquire::http::AllowRedirect "false";
+  - APT::Get::AllowUnauthenticated "false";
+  - APT::Get::AutomaticRemove "true";
+  - APT::Install-Recommends "false";
+  - APT::Install-Suggests "false";
+  - APT::Periodic::AutocleanInterval "7";
+  - APT::Sandbox::Seccomp "1";
+  - Unattended-Upgrade::Remove-Unused-Dependencies "true";
+  - Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+```
+
+Configure the [APT suite of tools](https://manpages.debian.org/bookworm/apt/apt.conf.5.en.html).
 
 ### ./defaults/main/packages.yml
 
@@ -444,7 +469,6 @@ packages_debian:
   - needrestart
   - openssh-server
   - postfix
-  - rkhunter
   - rsyslog
   - sysstat
   - systemd-journal-remote
@@ -464,7 +488,6 @@ packages_redhat:
   - postfix
   - psacct
   - python3-dnf-plugin-post-transaction-actions
-  - rkhunter
   - rsyslog
   - rsyslog-gnutls
   - systemd-journal-remote
@@ -476,6 +499,7 @@ packages_ubuntu:
   - secureboot-db
   - snapd
 ```
+
 `automatic_updates: true` will install and configure
 [dnf-automatic](https://dnf.readthedocs.io/en/latest/automatic.html)
 or [unattended-upgrades](https://wiki.debian.org/UnattendedUpgrades),
@@ -546,6 +570,20 @@ Configure the [login.defs](https://manpages.ubuntu.com/manpages/lunar/en/man5/lo
 
 Configure the [libpwquality](https://manpages.ubuntu.com/manpages/noble/man5/pwquality.conf.5.html) library.
 
+### ./defaults/main/rkhunter.yml
+
+```yaml
+manage_rkhunter: true
+
+rkhunter_allow_ssh_prot_v1: false
+rkhunter_allow_ssh_root_user: false
+rkhunter_mirrors_mode: "0"
+rkhunter_update_mirrors: true
+rkhunter_web_cmd: curl -fsSL
+```
+
+If `manage_rkhunter: true`, then configure [rkhunter](https://rkhunter.sourceforge.net/).
+
 ### ./defaults/main/sshd.yml
 
 ```yaml
@@ -562,6 +600,7 @@ sshd_allow_tcp_forwarding: false
 sshd_allow_users:
   - "{{ ansible_user | default(lookup('ansible.builtin.env', 'USER')) }}"
 sshd_authentication_methods: any
+sshd_authorized_principals_file: /etc/ssh/auth_principals/%u
 sshd_banner: /etc/issue.net
 sshd_ca_signature_algorithms:
   - ecdsa-sha2-nistp256
@@ -647,6 +686,8 @@ sshd_sftp_subsystem: internal-sftp -f LOCAL6 -l INFO
 sshd_strict_modes: true
 sshd_syslog_facility: AUTH
 sshd_tcp_keep_alive: false
+sshd_trusted_user_ca_keys_base64: ""
+sshd_trusted_user_ca_keys_file: /etc/ssh/trusted-user-ca-keys.pem
 sshd_update_moduli: false
 sshd_use_dns: false
 sshd_use_pam: true
@@ -709,7 +750,7 @@ Default: `false`.
 `sshd_config_force_replace` force replace configuration file
 `/etc/ssh/sshd_config`. Default: `false`.
 
- **Note**
+**Note**
 >
 > By default, the role checks whether the directory `/etc/ssh/sshd_config.d`
 > exists and whether it is linked via the `Include` parameter in the
@@ -804,7 +845,7 @@ sshd_match_ports:
 
 `sshd_sftp_enabled` specifies whether enabled sftp configuration.
 
-`sshd_sftp_subsystem` Set external subsystem for file transfer daemon.
+`sshd_sftp_subsystem` sets the subsystem for file transfer daemon.
 
 `sshd_sftp_only_group` specifies the name of the group that will have access
 restricted to the sftp service only.
@@ -814,7 +855,7 @@ restricted to the sftp service only.
 `sshd_sftp_only_chroot_dir` specifies the chroot directory. Accepts the tokens
 `%%` (a literal `%`), `%h` (home directory of the user), and `%u` (username).
 
-`sshd_syslog_facility` set the facility code that is used when logging messages
+`sshd_syslog_facility` sets the facility code that is used when logging messages
 from sshd.
 
 `sshd_update_moduli`, if set to `true`, will download a updated
@@ -850,6 +891,8 @@ and is based on the work by [@GTFOBins](https://github.com/GTFOBins).
 ### ./defaults/main/sysctl.yml
 
 ```yaml
+manage_sysctl: true
+
 sysctl_dev_tty_ldisc_autoload: 0
 
 ipv4_sysctl_settings:
@@ -900,7 +943,7 @@ conntrack_sysctl_settings:
   net.netfilter.nf_conntrack_tcp_loose: 0
 ```
 
-`sysctl` configuration.
+If `manage_sysctl: true`, then update the `sysctl` configuration.
 
 See [sysctl.conf](https://linux.die.net/man/5/sysctl.conf) and
 the [kernel documentation](https://www.kernel.org/doc/Documentation/sysctl/).
@@ -1007,7 +1050,7 @@ usbguard_restorecontrollerdevicestate: false
 `manage_usbguard: true` installs and configures
 [USBGuard](https://usbguard.github.io/).
 
-A policy will be generated is any rules can be listed and a policy doesn't
+A policy will be generated if any rules can be listed and a policy doesn't
 yet exist.
 
 See the [configuration documentation](https://usbguard.github.io/documentation/configuration.html)
