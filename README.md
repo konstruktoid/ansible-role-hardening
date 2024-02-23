@@ -750,7 +750,7 @@ Default: `false`.
 `sshd_config_force_replace` force replace configuration file
 `/etc/ssh/sshd_config`. Default: `false`.
 
-**Note**
+> **Note**
 >
 > By default, the role checks whether the directory `/etc/ssh/sshd_config.d`
 > exists and whether it is linked via the `Include` parameter in the
