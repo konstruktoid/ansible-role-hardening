@@ -52,11 +52,11 @@ roles:
 
 \`\`\`yaml
 ---
-- name: Include and use the hardening role
+- name: Import and use the hardening role
   hosts: localhost
   any_errors_fatal: true
   tasks:
-    - name: Include the hardening role
+    - name: Import the hardening role
       ansible.builtin.import_role:
         name: konstruktoid.hardening
       vars:
@@ -71,32 +71,43 @@ roles:
 
 \`\`\`yaml
 ---
-- name: Include and use the hardening role
+- name: Checkout and configure konstruktoid.hardening
   hosts: localhost
   any_errors_fatal: true
   tasks:
-    - name: Install git
+    - name: Clone hardening repository
       become: true
-      ansible.builtin.package:
-        name: git
-        state: present
+      tags:
+        - always
+      block:
+        - name: Install git
+          ansible.builtin.package:
+            name: git
+            state: present
 
-    - name: Checkout konstruktoid.hardening
-      become: true
-      ansible.builtin.git:
-        repo: https://github.com/konstruktoid/ansible-role-hardening
-        dest: /etc/ansible/roles/konstruktoid.hardening
-        version: 'v2.0.0'
+        - name: Checkout konstruktoid.hardening
+          become: true
+          ansible.builtin.git:
+            repo: https://github.com/konstruktoid/ansible-role-hardening
+            dest: /etc/ansible/roles/konstruktoid.hardening
+            version: 'v2.0.0'
+
+        - name: Remove git
+          ansible.builtin.package:
+            name: git
+            state: absent
 
     - name: Include the hardening role
-      ansible.builtin.import_role:
+      ansible.builtin.include_role:
         name: konstruktoid.hardening
       vars:
-        sshd_admin_net:
-          - 10.0.2.0/24
-          - 192.168.0.0/24
-          - 192.168.1.0/24
-        suid_sgid_permissions: false
+        sshd_allow_groups:
+          - ubuntu
+          - vagrant
+        sshd_login_grace_time: 60
+        sshd_max_auth_tries: 10
+        sshd_use_dns: false
+        sshd_update_moduli: true
 \`\`\`
 
 ## Note regarding UFW firewall rules
