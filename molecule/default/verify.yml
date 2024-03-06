@@ -42,6 +42,17 @@
           ansible.builtin.set_fact:
             crypto_policies_config: "{{ stat_crypto_policies_config.stat.exists }}"
 
+    - name: Set sysctl configuration directory as fact
+      block:
+        - name: Stat /usr/lib/sysctl.d/ exists
+          ansible.builtin.stat:
+            path: /usr/lib/sysctl.d/
+          register: usr_lib_sysctl_d
+
+        - name: Set sysctl fact
+          ansible.builtin.set_fact:
+            usr_lib_sysctl_d_dir: "{{ true if usr_lib_sysctl_d.stat.exists else false }}"
+
     - name: Ensure test groups exists
       become: true
       ansible.builtin.group:
@@ -66,16 +77,6 @@
       loop:
         - testuser01
         - testuser02
-
-    - name: Set sysctl configuration directory as fact
-      tags:
-        - fact
-        - sysctl
-      block:
-        - name: Stat /usr/lib/sysctl.d/ exists
-          ansible.builtin.stat:
-            path: /usr/lib/sysctl.d/
-          register: usr_lib_sysctl_d
 
     - name: Get installed sshd version
       environment:
@@ -458,6 +459,10 @@
         - GSSAPIAuthentication {{ 'yes' if (sshd_gssapi_authentication | bool) else 'no' }}
         - HashKnownHosts yes
         - RekeyLimit {{ sshd_rekey_limit }}
+
+    - name: Print sysctl configuration directory
+      ansible.builtin.debug:
+        msg: "{{ sysctl_conf_dir }}"
 
     - name: Merge sysctl settings
       ansible.builtin.set_fact:
