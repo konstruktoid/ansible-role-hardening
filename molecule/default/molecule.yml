@@ -36,6 +36,7 @@ provisioner:
           - sudo
         sshd_host_keys_group: ssh_keys
         sshd_update_moduli: true
+        sysctl_conf_dir: /etc/sysctl.d/
         system_upgrade: false
       bookworm:
         ansible_become_pass: vagrant
@@ -59,6 +60,7 @@ provisioner:
           - sudo
         sshd_update_moduli: true
         suid_sgid_permissions: false
+        sysctl_conf_dir: /etc/sysctl.d/
         umask_value: "027"
       jammy:
         disable_ipv6: true
