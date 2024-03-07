@@ -905,6 +905,7 @@ and is based on the work by [@GTFOBins](https://github.com/GTFOBins).
 
 ```yaml
 manage_sysctl: true
+sysctl_conf_dir: "{{ '/usr/lib/sysctl.d' if usr_lib_sysctl_d_dir else '/etc/sysctl.d' }}"
 
 sysctl_dev_tty_ldisc_autoload: 0
 
@@ -957,6 +958,8 @@ conntrack_sysctl_settings:
 ```
 
 If `manage_sysctl: true`, then update the `sysctl` configuration.
+
+`sysctl_conf_dir` is where the `sysctl` configuration will be placed.
 
 See [sysctl.conf](https://linux.die.net/man/5/sysctl.conf) and
 the [kernel documentation](https://www.kernel.org/doc/Documentation/sysctl/).
