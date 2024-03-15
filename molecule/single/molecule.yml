@@ -17,7 +17,7 @@ provisioner:
   log: true
   inventory:
     host_vars:
-      focal:
+      noble:
         disable_ipv6: true
         sshd_admin_net:
           - "0.0.0.0/0"
@@ -38,8 +38,8 @@ provisioner:
         suid_sgid_permissions: false
         umask_value: "027"
 platforms:
-  - name: focal
-    box: bento/ubuntu-20.04
+  - name: noble
+    box: ubuntu/noble64
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:

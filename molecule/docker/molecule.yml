@@ -36,7 +36,7 @@ provisioner:
           - sudo
         sshd_update_moduli: true
         system_upgrade: false
-      jammy:
+      noble:
         disable_ipv6: true
         disable_wireless: true
         sshd_admin_net:
@@ -66,8 +66,8 @@ platforms:
     privileged: true
     volume_mounts:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
-  - name: jammy
-    image: docker.io/ubuntu:jammy
+  - name: noble
+    image: docker.io/ubuntu:noble
     privileged: true
     volume_mounts:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
