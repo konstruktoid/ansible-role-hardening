@@ -341,5 +341,5 @@
 -w /usr/sbin/useradd -p x -F key=user-modification
 -w /usr/sbin/usermod -p x -F key=user-modification
 
-# Put in immutable mode
--e 2
+# Set the auditd flag
+-e {{ auditd_enable_flag }}
