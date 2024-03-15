@@ -151,6 +151,7 @@ auditd_action_mail_acct: root
 auditd_admin_space_left_action: suspend
 auditd_disk_error_action: suspend
 auditd_disk_full_action: suspend
+auditd_enable_flag: 2
 auditd_flush: incremental_async
 auditd_max_log_file: 20
 auditd_max_log_file_action: rotate
@@ -173,6 +174,9 @@ from the included template file.
 `auditd_admin_space_left_action` defines what action to take when the system has
 detected that it is low on disk space. `suspend` will cause the audit daemon to
 stop writing records to the disk.
+
+`auditd_enable_flag` sets the enabled flag. If `0` is passed, temporarily disable auditing.
+`1` will enable auditing and `2` will lock the audit configuration.
 
 `auditd_flush: sync` tells the audit daemon to keep both the data and meta-data
 fully sync'd with every write to disk.
