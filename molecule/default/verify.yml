@@ -1169,3 +1169,13 @@
           when:
             - not item.stat.islnk
             - not item.stat.mimetype == "inode/symlink"
+
+    - name: Verify journald settings
+      ansible.builtin.shell: grep "^{{ item }}$" /etc/systemd/journald.conf
+      register: journald_conf
+      failed_when: journald_conf.rc != 0
+      changed_when: journald_conf.rc != 0
+      with_items:
+        - Storage={{ journald_storage }}
+        - ForwardToSyslog={{ 'yes' if journald_forwardtosyslog else 'no' }}
+        - Compress={{ 'yes' if journald_compress else 'no' }}
