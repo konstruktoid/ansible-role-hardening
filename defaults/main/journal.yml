@@ -1,2 +1,6 @@
 ---
 rsyslog_filecreatemode: "0640"
+
+journald_compress: true
+journald_forwardtosyslog: false
+journald_storage: persistent

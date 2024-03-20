@@ -301,11 +301,27 @@ IPv6.
 
 ```yaml
 rsyslog_filecreatemode: "0640"
+
+journald_compress: true
+journald_forwardtosyslog: false
+journald_storage: persistent
 ```
 
-`rsyslog_filecreatemode` set the creation mode with which rsyslogd creates
+`rsyslog_filecreatemode` sets the creation mode with which rsyslogd creates
 new files, see
 [rsconf1_filecreatemode](https://www.rsyslog.com/doc/configuration/action/rsconf1_filecreatemode.html).
+
+`journald_compress` can take a boolean value. If enabled (the default), data
+objects are compressed before they are written to the file system.
+
+`journald_storage` controls where to store journal data. One of `volatile`,
+`persistent`, `auto` and `none`.
+
+`journald_forwardtosyslog` control whether log messages received by the journal
+daemon shall be forwarded to a traditional syslog daemon.
+
+See [journald.conf](https://www.freedesktop.org/software/systemd/man/latest/journald.conf.html)
+for more information.
 
 ### ./defaults/main/limits.yml
 
