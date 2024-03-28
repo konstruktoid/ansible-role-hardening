@@ -1010,12 +1010,37 @@
         - manage_ufw
         - ansible_virtualization_type not in ["container", "docker", "podman"]
 
-    - name: Verify aide configuration
+    - name: Verify AIDE configuration
       become: true
       when:
         - manage_aide
       block:
-        - name: Aide config check
+        - name: Get AIDE include config
+          ansible.builtin.command:
+            cmd: grep -m1 -E "^@@(x_include|include) \/" "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+          register: grep_aide_include
+          changed_when: false
+          failed_when: false
+          check_mode: false
+
+        - name: Debug AIDE include grep
+          ansible.builtin.debug:
+            msg: "{{ grep_aide_include }}"
+
+        - name: Set AIDE include as fact
+          ansible.builtin.set_fact:
+            aide_include_d: "{{ 'false' if grep_aide_include.rc != 0 else grep_aide_include.stdout.split()[1] }}"
+
+        - name: Debug AIDE include path
+          ansible.builtin.debug:
+            msg: "{{ aide_include_d }}"
+
+        - name: Check if AIDE include directory exits
+          ansible.builtin.stat:
+            path: "{{ aide_include_d }}"
+          register: aide_config_d
+
+        - name: AIDE config check
           become: true
           ansible.builtin.command:
             cmd: aide --config-check --config="{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
@@ -1023,7 +1048,7 @@
           changed_when: false
           failed_when: aide_config.rc != 0
 
-        - name: Verify aide settings
+        - name: Verify AIDE settings
           ansible.builtin.shell: |
             set -o pipefail
             grep "^{{ item }}$" "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
@@ -1045,6 +1070,33 @@
             - "!/var/lib/private/systemd"
             - "!/var/log/audit"
             - "!/var/log/journal"
+          when:
+            - not aide_config_d.stat.exists
+
+        - name: Verify AIDE settings as includes
+          ansible.builtin.shell: |
+            set -o pipefail
+            grep "^{{ item }}$" {{ aide_include_d }}/99_*
+          register: aide_settings
+          changed_when: false
+          failed_when: aide_settings.rc != 0
+          args:
+            executable: /bin/bash
+          with_items:
+            - /usr/sbin/auditctl p+i+n+u+g+s+b+acl+xattrs+sha512
+            - /usr/sbin/auditd p+i+n+u+g+s+b+acl+xattrs+sha512
+            - /usr/sbin/ausearch p+i+n+u+g+s+b+acl+xattrs+sha512
+            - /usr/sbin/aureport p+i+n+u+g+s+b+acl+xattrs+sha512
+            - /usr/sbin/autrace p+i+n+u+g+s+b+acl+xattrs+sha512
+            - /usr/sbin/augenrules p+i+n+u+g+s+b+acl+xattrs+sha512
+            - /usr/sbin/audispd p+i+n+u+g+s+b+acl+xattrs+sha512
+            - "!/var/lib/docker"
+            - "!/var/lib/lxcfs"
+            - "!/var/lib/private/systemd"
+            - "!/var/log/audit"
+            - "!/var/log/journal"
+          when:
+            - aide_config_d.stat.exists
 
     - name: Create hash password
       block:

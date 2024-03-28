@@ -47,13 +47,42 @@
         - Reload systemd
         - Enable aidecheck
 
-    - name: Verify the Audit tools
+    - name: Configure AIDE checksums
       ansible.builtin.lineinfile:
-        dest: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+        path: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
         state: present
+        regexp: ^Checksums =
+        line: Checksums = {{ aide_checksums }}
+        mode: "0640"
+        create: false
+        validate: aide --config-check --config=%s
+
+    - name: Get AIDE include config
+      ansible.builtin.command:
+        cmd: grep -m1 -E "^@@(x_include|include) \/" "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+      register: grep_aide_include
+      changed_when: false
+      failed_when: false
+      check_mode: false
+
+    - name: Set AIDE include directory as fact
+      ansible.builtin.set_fact:
+        aide_include_d: "{{ 'false' if grep_aide_include.rc != 0 else grep_aide_include.stdout.split()[1] }}"
+
+    - name: Check if AIDE include directory exits
+      ansible.builtin.stat:
+        path: "{{ aide_include_d }}"
+      register: aide_config_d
+
+    - name: Add auditd tools
+      ansible.builtin.lineinfile:
+        path: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+        state: "{{ 'present' if not aide_config_d.stat.exists else 'absent' }}"
         regexp: ^[# ]*{{ item }}
         line: "{{ item }} p+i+n+u+g+s+b+acl+xattrs+sha512"
         mode: "0640"
+        owner: root
+        group: root
         create: false
         validate: aide --config-check --config=%s
       loop:
@@ -64,30 +93,59 @@
         - /usr/sbin/autrace
         - /usr/sbin/augenrules
         - /usr/sbin/audispd
-
-    - name: Configure AIDE checksums
-      ansible.builtin.lineinfile:
-        dest: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
-        state: present
-        regexp: ^Checksums =
-        line: Checksums = {{ aide_checksums }}
-        mode: "0640"
-        create: false
-        validate: aide --config-check --config=%s
+      when:
+        - not aide_config_d.stat.exists
 
     - name: Add AIDE dir exclusions
-      ansible.builtin.blockinfile:
+      ansible.builtin.lineinfile:
         path: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
-        marker: "# {mark} ANSIBLE MANAGED EXCLUSION BLOCK"
-        backup: true
-        insertafter: EOF
-        block: |
-          !/var/lib/docker
-          !/var/lib/lxcfs
-          !/var/lib/private/systemd
-          !/var/log/audit
-          !/var/log/journal
+        line: "!{{ item }}"
+        state: "{{ 'present' if not aide_config_d.stat.exists else 'absent' }}"
+        mode: "0640"
+        owner: root
+        group: root
+        create: false
         validate: aide --config-check --config=%s
+      with_items:
+        - "{{ aide_dir_exclusions }}"
+      when:
+        - not aide_config_d.stat.exists
+
+    - name: Add auditd tools in include directory
+      ansible.builtin.lineinfile:
+        path: "{{ aide_include_d }}/99_aide_auditd"
+        state: present
+        line: "{{ item }} p+i+n+u+g+s+b+acl+xattrs+sha512"
+        mode: "0640"
+        owner: root
+        group: root
+        create: true
+        validate: aide --config-check --config=%s
+      loop:
+        - /usr/sbin/auditctl
+        - /usr/sbin/auditd
+        - /usr/sbin/ausearch
+        - /usr/sbin/aureport
+        - /usr/sbin/autrace
+        - /usr/sbin/augenrules
+        - /usr/sbin/audispd
+      when:
+        - aide_config_d.stat.exists
+
+    - name: Add AIDE dir exclusions
+      ansible.builtin.lineinfile:
+        path: "{{ aide_include_d }}/99_aide_exclusions"
+        line: "!{{ item }}"
+        state: present
+        mode: "0640"
+        owner: root
+        group: root
+        create: true
+        validate: aide --config-check --config=%s
+      with_items:
+        - "{{ aide_dir_exclusions }}"
+      when:
+        - aide_config_d.stat.exists
 
     - name: Stat Debian aide.db
       ansible.builtin.stat:
