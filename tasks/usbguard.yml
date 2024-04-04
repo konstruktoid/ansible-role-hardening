@@ -1,6 +1,14 @@
 ---
+- name: Stat USB device directory
+  ansible.builtin.stat:
+    path: /sys/bus/usb/devices
+  register: usb_devices
+
 - name: Install and configure USBGuard
   become: true
+  when:
+    - usb_devices.stat.exists
+    - usb_devices.stat.isdir
   block:
     - name: Debian family USBGuard installation
       ansible.builtin.apt:
