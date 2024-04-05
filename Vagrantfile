@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
     bullseye_vlan.vm.provision "shell",
       inline: "ip link set dev eth0 down; ip link set eth0 name eth0.101; ip link set dev eth0.101 up; dhclient -r eth0.101; dhclient eth0.101"
     bullseye_vlan.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install python3-pip && python3 -m pip install ansible"
+      inline: "apt-get update && apt-get -y install curl python3-pip && python3 -m pip install ansible"
     bullseye_vlan.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -37,7 +37,7 @@ Vagrant.configure("2") do |config|
     bullseye.vm.boot_timeout = 600
     bullseye.vbguest.auto_update = false
     bullseye.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install python3-pip && python3 -m pip install ansible"
+      inline: "apt-get update && apt-get -y install curl python3-pip && python3 -m pip install ansible"
     bullseye.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -58,7 +58,7 @@ Vagrant.configure("2") do |config|
     focal.vm.hostname = "focal"
     focal.vm.boot_timeout = 600
     focal.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install python3-pip && python3 -m pip install ansible"
+      inline: "apt-get update && apt-get -y install curl python3-pip && python3 -m pip install ansible"
     focal.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -77,7 +77,7 @@ Vagrant.configure("2") do |config|
     jammy.vm.hostname = "jammy"
     jammy.vm.boot_timeout = 600
     jammy.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install python3-pip && python3 -m pip install ansible"
+      inline: "apt-get update && apt-get -y install curl python3-pip && python3 -m pip install ansible"
     jammy.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -91,7 +91,7 @@ Vagrant.configure("2") do |config|
    end
 
   config.vm.define "almalinux" do |almalinux|
-    almalinux.vm.box = "almalinux/8"
+    almalinux.vm.box = "almalinux/9"
     almalinux.ssh.insert_key = true
     almalinux.vbguest.auto_update = false
     almalinux.vm.provider "virtualbox" do |c|
@@ -100,7 +100,7 @@ Vagrant.configure("2") do |config|
     end
     almalinux.vm.hostname = "almalinux"
     almalinux.vm.provision "shell",
-      inline: "dnf clean all && dnf install -y python3-pip && python3 -m pip install -U pip && python3 -m pip install ansible"
+      inline: "dnf clean all && dnf install -y curl python3-pip && python3 -m pip install -U pip && python3 -m pip install ansible"
     almalinux.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
