@@ -38,7 +38,7 @@ None.
 ```yaml
 roles:
   - name: konstruktoid.hardening
-    version: 'v2.0.0'
+    version: 'v2.0.3'
     src: https://github.com/konstruktoid/ansible-role-hardening.git
     scm: git
 ```
@@ -85,7 +85,7 @@ roles:
           ansible.builtin.git:
             repo: https://github.com/konstruktoid/ansible-role-hardening
             dest: /etc/ansible/roles/konstruktoid.hardening
-            version: 'v2.0.0'
+            version: 'v2.0.3'
 
         - name: Remove git
           ansible.builtin.package:
