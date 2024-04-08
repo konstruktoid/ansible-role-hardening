@@ -1,5 +1,11 @@
 # Testing
 
+Before running any test:
+- ensure [Vagrant](https://www.vagrantup.com/),
+  [VirtualBox](https://www.virtualbox.org/) and/or
+  [Docker](https://www.docker.com/) is installed.
+- ensure all Python [requirements](./requirements-dev.txt) are installed.
+
 ## Distribution boxes used by Molecule and Vagrant
 
 ```console
