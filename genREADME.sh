@@ -174,6 +174,8 @@ Apache License Version 2.0
 {
 echo "# Testing
 
+Ensure all [requirements](./requirements-dev.txt) are installed before testing.
+
 ## Distribution boxes used by Molecule and Vagrant
 "
 

@@ -1,5 +1,7 @@
 # Testing
 
+Ensure all [requirements](./requirements-dev.txt) are installed before testing.
+
 ## Distribution boxes used by Molecule and Vagrant
 
 ```console

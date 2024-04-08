@@ -1,8 +1,6 @@
 ansible
 ansible-lint
-ansible-playbook-grapher
 jmespath
-molecule
-molecule-vagrant
+molecule-plugins[docker]
+molecule-plugins[vagrant]
 passlib
-pytest-molecule
