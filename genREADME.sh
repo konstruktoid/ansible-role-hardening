@@ -179,6 +179,7 @@ Before running any test:
   [VirtualBox](https://www.virtualbox.org/) and/or
   [Docker](https://www.docker.com/) is installed.
 - ensure all Python [requirements](./requirements-dev.txt) are installed.
+- ensure that the role is installed as \`konstruktoid.hardening\`
 
 ## Distribution boxes used by Molecule and Vagrant
 "

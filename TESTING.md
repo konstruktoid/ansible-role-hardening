@@ -5,6 +5,7 @@ Before running any test:
   [VirtualBox](https://www.virtualbox.org/) and/or
   [Docker](https://www.docker.com/) is installed.
 - ensure all Python [requirements](./requirements-dev.txt) are installed.
+- ensure that the role is installed as `konstruktoid.hardening`
 
 ## Distribution boxes used by Molecule and Vagrant
 
@@ -21,8 +22,6 @@ docker.io/ubuntu:jammy
 generic/rhel8
 ubuntu/focal64
 ubuntu/jammy64
-ubuntu/lunar64
-ubuntu/mantic64
 ubuntu/noble64
 ```
 
@@ -43,4 +42,7 @@ py310-ansibledevel
 py311-ansible8
 py311-ansible9
 py311-ansibledevel
+py312-ansible8
+py312-ansible9
+py312-ansibledevel
 ```
