@@ -1,40 +1,38 @@
 ---
-- name: Create custom facts directory
+- name: Add custom facts
   become: true
-  ansible.builtin.file:
-    path: /etc/ansible/facts.d
-    recurse: true
-    state: directory
-    mode: "0755"
-    owner: root
-    group: root
+  block:
+    - name: Create custom facts directory
+      ansible.builtin.file:
+        path: /etc/ansible/facts.d
+        state: directory
+        mode: "0755"
+        owner: root
+        group: root
 
-- name: Add systemd version fact
-  become: true
-  ansible.builtin.template:
-    src: etc/ansible/facts.d/systemd.fact
-    dest: /etc/ansible/facts.d/systemd.fact
-    mode: "0755"
-    owner: root
-    group: root
+    - name: Add systemd version fact
+      ansible.builtin.template:
+        src: etc/ansible/facts.d/systemd.fact
+        dest: /etc/ansible/facts.d/systemd.fact
+        mode: "0755"
+        owner: root
+        group: root
 
-- name: Add cpuinfo rdrand fact
-  become: true
-  ansible.builtin.template:
-    src: etc/ansible/facts.d/cpuinfo.fact
-    dest: /etc/ansible/facts.d/cpuinfo.fact
-    mode: "0755"
-    owner: root
-    group: root
+    - name: Add cpuinfo rdrand fact
+      ansible.builtin.template:
+        src: etc/ansible/facts.d/cpuinfo.fact
+        dest: /etc/ansible/facts.d/cpuinfo.fact
+        mode: "0755"
+        owner: root
+        group: root
 
-- name: Add ssh keys fact
-  become: true
-  ansible.builtin.template:
-    src: etc/ansible/facts.d/sshkeys.fact
-    dest: /etc/ansible/facts.d/sshkeys.fact
-    mode: "0755"
-    owner: root
-    group: root
+    - name: Add ssh keys fact
+      ansible.builtin.template:
+        src: etc/ansible/facts.d/sshkeys.fact
+        dest: /etc/ansible/facts.d/sshkeys.fact
+        mode: "0755"
+        owner: root
+        group: root
 
 - name: Stat IPv6 status
   become: true
