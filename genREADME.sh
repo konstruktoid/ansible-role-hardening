@@ -5,24 +5,28 @@ if [ -z "${ANSIBLE_V}" ]; then
 fi
 
 {
-echo "# Hardening - the Ansible role
+echo "# Ansible Role for Server Hardening
 
-An [Ansible](https://www.ansible.com/) role to make a AlmaLinux, Debian, or
-Ubuntu server a bit more secure.
-[systemd edition](https://freedesktop.org/wiki/Software/systemd/).
+This is an [Ansible](https://www.ansible.com/) role designed to enhance the
+security of servers running on AlmaLinux, Debian, or Ubuntu.
 
-Requires Ansible >= ${ANSIBLE_V}.
+It's [systemd](https://freedesktop.org/wiki/Software/systemd/) focused
+and requires Ansible version 2.15 or higher.
 
-[AlmaLinux 8](https://wiki.almalinux.org/release-notes/#almalinux-8),
-[AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9),
-[Debian 11](https://www.debian.org/releases/bullseye/),
-[Debian 12](https://www.debian.org/releases/bookworm/),
-[Ubuntu 20.04](https://releases.ubuntu.com/focal/) and
-[Ubuntu 22.04](https://releases.ubuntu.com/jammy/) are supported.
+The role supports the following operating systems:
+- [AlmaLinux 8](https://wiki.almalinux.org/release-notes/#almalinux-8)
+- [AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9)
+- [Debian 11 (Bullseye)](https://www.debian.org/releases/bullseye/)
+- [Debian 12 (Bookworm)](https://www.debian.org/releases/bookworm/)
+- [Ubuntu 20.04 (Focal Fossa)](https://releases.ubuntu.com/focal/)
+- [Ubuntu 22.04 (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/)
 
-There are also hardened Ubuntu AWS Amazon Machine Images and Azure virtual
-machine images available in the [konstruktoid/hardened-images](https://github.com/konstruktoid/hardened-images)
-repository, built using [Packer](https://www.packer.io/) and this role.
+For those using AWS or Azure, there are also hardened Ubuntu Amazon
+Machine Images (AMIs) and Azure virtual machine images available.
+
+These are available in the [konstruktoid/hardened-images](https://github.com/konstruktoid/hardened-images)
+repository. These images are built using [Packer](https://www.packer.io/) and
+this Ansible role is used for configuration.
 
 > **Note**
 >
