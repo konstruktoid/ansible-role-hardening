@@ -1,14 +1,14 @@
 ---
 collections:
   - name: ansible.posix
-    version: '1.5.4'
+    version: 1.5.4
     source: https://github.com/ansible-collections/ansible.posix.git
     type: git
   - name: community.crypto
-    version: '2.18.0'
+    version: 2.18.0
     source: https://github.com/ansible-collections/community.crypto.git
     type: git
   - name: community.general
-    version: '8.5.0'
+    version: 8.5.0
     source: https://github.com/ansible-collections/community.general.git
     type: git
