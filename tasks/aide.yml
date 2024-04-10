@@ -77,7 +77,7 @@
     - name: Add auditd tools
       ansible.builtin.lineinfile:
         path: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
-        state: "{{ 'present' if not aide_config_d.stat.exists else 'absent' }}"
+        state: "{{ 'absent' if aide_config_d.stat.exists else 'present' }}"
         regexp: ^[# ]*{{ item }}
         line: "{{ item }} p+i+n+u+g+s+b+acl+xattrs+sha512"
         mode: "0640"
@@ -100,7 +100,7 @@
       ansible.builtin.lineinfile:
         path: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
         line: "!{{ item }}"
-        state: "{{ 'present' if not aide_config_d.stat.exists else 'absent' }}"
+        state: "{{ 'absent' if aide_config_d.stat.exists else 'present' }}"
         mode: "0640"
         owner: root
         group: root

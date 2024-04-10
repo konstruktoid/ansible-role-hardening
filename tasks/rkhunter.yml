@@ -24,7 +24,7 @@
     - name: SSH root access should be disabled
       ansible.builtin.lineinfile:
         regexp: (^#|^)ALLOW_SSH_ROOT_USER
-        line: ALLOW_SSH_ROOT_USER={{ 'no' if not rkhunter_allow_ssh_root_user else 'yes' }}
+        line: ALLOW_SSH_ROOT_USER={{ 'yes' if rkhunter_allow_ssh_root_user else 'no' }}
         dest: /etc/rkhunter.conf
         mode: "0640"
         state: present
@@ -37,7 +37,7 @@
     - name: SSH v1 should not be used
       ansible.builtin.lineinfile:
         regexp: (^#|^)ALLOW_SSH_PROT_V1
-        line: ALLOW_SSH_PROT_V1={{ 2 if not rkhunter_allow_ssh_prot_v1 else 1 }}
+        line: ALLOW_SSH_PROT_V1={{ 1 if rkhunter_allow_ssh_prot_v1 else 2 }}
         dest: /etc/rkhunter.conf
         mode: "0640"
         state: present
