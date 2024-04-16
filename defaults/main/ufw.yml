@@ -8,3 +8,5 @@ ufw_outgoing_traffic:
   - 123
   - 443
   - 853
+
+ufw_rate_limit: false

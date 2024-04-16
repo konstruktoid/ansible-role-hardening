@@ -37,6 +37,7 @@ provisioner:
               - Banner none
         suid_sgid_permissions: false
         umask_value: "027"
+        ufw_rate_limit: true
 platforms:
   - name: noble
     box: ubuntu/noble64

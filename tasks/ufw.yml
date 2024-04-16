@@ -41,6 +41,13 @@
   when:
     - ansible_os_family == "RedHat"
 
+- name: Get available physical interfaces
+  ansible.builtin.command:
+    cmd: find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n'
+  register: physical_interfaces
+  changed_when: false
+  failed_when: physical_interfaces.rc != 0
+
 - name: Set UFW IPT_SYSCTL
   become: true
   ansible.builtin.lineinfile:
@@ -98,67 +105,73 @@
   failed_when: ufw_not_managed.rc > 1
   register: ufw_not_managed
 
-- name: Allow sshd port from administrator networks
+- name: Create UFW rules
   become: true
-  community.general.ufw:
-    rule: limit
-    from_ip: "{{ item.0 }}"
-    to_port: "{{ item.1 | int }}"
-    proto: tcp
-    comment: ansible managed
-  loop: "{{ sshd_admin_net | product(sshd_ports) | list }}"
+  block:
+    - name: Set rate limit on physical interfaces
+      community.general.ufw:
+        rule: limit
+        interface: "{{ item }}"
+        direction: in
+        comment: ansible managed
+      loop: "{{ physical_interfaces.stdout_lines }}"
+      when:
+        - ufw_rate_limit
 
-- name: Allow outgoing specified ports
-  become: true
-  community.general.ufw:
-    rule: allow
-    to_port: "{{ item | int }}"
-    direction: out
-    comment: ansible managed
-  loop: "{{ ufw_outgoing_traffic }}"
+    - name: Allow sshd port from administrator networks
+      community.general.ufw:
+        rule: limit
+        from_ip: "{{ item.0 }}"
+        to_port: "{{ item.1 | int }}"
+        proto: tcp
+        comment: ansible managed
+      loop: "{{ sshd_admin_net | product(sshd_ports) | list }}"
 
-- name: Deny IPv4 loopback network traffic
-  become: true
-  community.general.ufw:
-    rule: deny
-    from_ip: 127.0.0.0/8
-    comment: ansible managed
+    - name: Allow outgoing specified ports
+      community.general.ufw:
+        rule: allow
+        to_port: "{{ item | int }}"
+        direction: out
+        comment: ansible managed
+      loop: "{{ ufw_outgoing_traffic }}"
 
-- name: Deny IPv6 loopback network traffic
-  become: true
-  when:
-    - not disable_ipv6
-  community.general.ufw:
-    rule: deny
-    from_ip: ::1
-    comment: ansible managed
+    - name: Deny IPv4 loopback network traffic
+      community.general.ufw:
+        rule: deny
+        from_ip: 127.0.0.0/8
+        comment: ansible managed
 
-- name: Allow loopback traffic in
-  become: true
-  community.general.ufw:
-    rule: allow
-    interface: lo
-    direction: in
-    comment: ansible managed
+    - name: Deny IPv6 loopback network traffic
+      when:
+        - not disable_ipv6
+      community.general.ufw:
+        rule: deny
+        from_ip: ::1
+        comment: ansible managed
 
-- name: Allow loopback traffic out
-  become: true
-  community.general.ufw:
-    rule: allow
-    interface: lo
-    direction: out
-    comment: ansible managed
+    - name: Allow loopback traffic in
+      community.general.ufw:
+        rule: allow
+        interface: lo
+        direction: in
+        comment: ansible managed
 
-- name: Delete unmanaged UFW rules
-  become: true
-  ansible.builtin.command:
-    cmd: ufw delete {{ item }}
-  register: ufw_delete
-  changed_when: ufw_delete.rc != 0
-  failed_when: ufw_delete.rc != 0
-  when:
-    - ufw_not_managed.stdout_lines | length > 0
-  loop: "{{ ufw_not_managed.stdout_lines }}"
+    - name: Allow loopback traffic out
+      community.general.ufw:
+        rule: allow
+        interface: lo
+        direction: out
+        comment: ansible managed
+
+    - name: Delete unmanaged UFW rules
+      ansible.builtin.command:
+        cmd: ufw delete {{ item }}
+      register: ufw_delete
+      changed_when: ufw_delete.rc != 0
+      failed_when: ufw_delete.rc != 0
+      when:
+        - ufw_not_managed.stdout_lines | length > 0
+      loop: "{{ ufw_not_managed.stdout_lines }}"
 
 - name: Configure conntrack sysctl
   become: true
