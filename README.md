@@ -1038,6 +1038,8 @@ ufw_outgoing_traffic:
   - 123
   - 443
   - 853
+
+ufw_rate_limit: false
 ```
 
 `manage_ufw: true` installs and configures `ufw` with related rules.
@@ -1045,6 +1047,9 @@ Set it to `false` in order to install and configure a firewall manually.
 
 `ufw_outgoing_traffic` opens the specific `ufw` ports, allowing outgoing
 traffic.
+
+`ufw_rate_limit`, if `true`, will set connection rate limiting on all available
+_physical_ network interfaces.
 
 ### ./defaults/main/umask.yml
 
