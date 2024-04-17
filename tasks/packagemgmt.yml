@@ -25,7 +25,7 @@
         upgrade: safe
       register: apt_upgrade_response
       changed_when:
-        - apt_upgrade_response.stdout.find('0 upgraded') == -1
+        - "'0 upgraded, 0 newly installed, 0 to remove' not in apt_upgrade_response.stdout"
       when:
         - system_upgrade | bool
       notify:
