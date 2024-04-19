@@ -108,10 +108,11 @@ platforms:
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
-      - "vbguest.installer_options = { allow_kernel_upgrade: true }"
+      - "vbguest.installer_options = { allow_kernel_upgrade: false }"
+      - vbguest.auto_update = false
     memory: 1024
   - name: jammy
-    box: ubuntu/jammy64
+    box: bento/ubuntu-22.04
     config_options:
       vm.boot_timeout: 600
       synced_folder: false
@@ -119,7 +120,8 @@ platforms:
       - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
       - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
     instance_raw_config_args:
-      - "vbguest.installer_options = { allow_kernel_upgrade: true }"
+      - "vbguest.installer_options = { allow_kernel_upgrade: false }"
+      - vbguest.auto_update = false
     memory: 1024
 verifier:
   name: ansible

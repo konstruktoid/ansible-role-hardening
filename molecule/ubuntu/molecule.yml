@@ -30,21 +30,22 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
-      noble:
-        sshd_admin_net:
-          - "0.0.0.0/0"
-        sshd_allow_groups:
-          - vagrant
+#      noble:
+#        sshd_admin_net:
+#          - "0.0.0.0/0"
+#        sshd_allow_groups:
+#          - vagrant
 platforms:
   - name: focal
-    box: ubuntu/focal64
+    box: bento/ubuntu-20.04
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
-      - "vbguest.installer_options = { allow_kernel_upgrade: true }"
+      - "vbguest.installer_options = { allow_kernel_upgrade: false }"
+      - vbguest.auto_update = false
     memory: 1024
   - name: jammy
-    box: ubuntu/jammy64
+    box: bento/ubuntu-22.04
     config_options:
       vm.boot_timeout: 600
       synced_folder: false
@@ -52,19 +53,21 @@ platforms:
       - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
       - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
     instance_raw_config_args:
-      - "vbguest.installer_options = { allow_kernel_upgrade: true }"
+      - "vbguest.installer_options = { allow_kernel_upgrade: false }"
+      - vbguest.auto_update = false
     memory: 1024
-  - name: noble
-    box: ubuntu/noble64
-    config_options:
-      vm.boot_timeout: 600
-      synced_folder: false
-    provider_raw_config_args:
-      - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
-      - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
-    instance_raw_config_args:
-      - "vbguest.installer_options = { allow_kernel_upgrade: true }"
-    memory: 1024
+#  - name: noble
+#    box: bento/noble64
+#    config_options:
+#      vm.boot_timeout: 600
+#      synced_folder: false
+#    provider_raw_config_args:
+#      - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
+#      - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
+#    instance_raw_config_args:
+#      - "vbguest.installer_options = { allow_kernel_upgrade: false }"
+#      - vbguest.auto_update = false
+#    memory: 1024
 verifier:
   name: ansible
 scenario:
