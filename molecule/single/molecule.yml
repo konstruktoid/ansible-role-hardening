@@ -17,7 +17,7 @@ provisioner:
   log: true
   inventory:
     host_vars:
-      noble:
+      jammy:
         disable_ipv6: true
         sshd_admin_net:
           - "0.0.0.0/0"
@@ -39,12 +39,13 @@ provisioner:
         umask_value: "027"
         ufw_rate_limit: true
 platforms:
-  - name: noble
-    box: ubuntu/noble64
+  - name: jammy
+    box: bento/ubuntu-22.04
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
-      - "vbguest.installer_options = { allow_kernel_upgrade: true }"
+      - "vbguest.installer_options = { allow_kernel_upgrade: false }"
+      - vbguest.auto_update = false
     memory: 1024
 verifier:
   name: ansible
