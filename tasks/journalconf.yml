@@ -28,6 +28,28 @@
   when:
     - ansible_virtualization_type not in ["container", "docker", "podman"]
 
+- name: Stat journald tmpfiles configuration directory
+  ansible.builtin.stat:
+    path: /etc/tmpfiles.d/
+  register: tmpfiles_d
+
+- name: Set restrictive permssions on journal files
+  become: true
+  ansible.builtin.blockinfile:
+    path: /etc/tmpfiles.d/systemd.conf
+    mode: "0644"
+    owner: root
+    group: root
+    create: true
+    block: |
+      z /run/log/journal 2640 root systemd-journal - -
+      Z /run/log/journal/%m ~2640 root systemd-journal - -
+      z /var/log/journal 2640 root systemd-journal - -
+      z /var/log/journal/%m 2640 root systemd-journal - -
+      z /var/log/journal/%m/system.journal 0640 root systemd-journal - -
+  when:
+    - tmpfiles_d.stat.exists
+
 - name: Configure logrotate(8)
   become: true
   ansible.builtin.template:

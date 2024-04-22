@@ -1231,3 +1231,46 @@
         - Storage={{ journald_storage }}
         - ForwardToSyslog={{ 'yes' if journald_forwardtosyslog else 'no' }}
         - Compress={{ 'yes' if journald_compress else 'no' }}
+
+    - name: Verify journal permissions
+      become: true
+      block:
+        - name: Find journal directories
+          become: true
+          ansible.builtin.shell:
+            cmd: |
+              set -o pipefail
+              find /run/log/journal /var/log/journal -type d -printf "%m %p %CY%Cm%Cd\n" | awk '$1 > "2640" {print $0}'
+          args:
+            executable: /bin/bash
+          changed_when: false
+          register: journal_dirs_find
+          failed_when:
+            - journal_dirs_find.rc != 0
+            - "'No such file or directory' not in journal_dirs_find.stderr"
+
+        - name: Return directories with incorrect permissions
+          ansible.builtin.debug:
+            msg: "{{ journal_dirs_find.stdout_lines }} - {{ journal_dirs_find.stdout_lines | length }}"
+          when:
+            - journal_dirs_find.stdout_lines | length > 0
+
+        - name: Find journal files
+          become: true
+          ansible.builtin.shell:
+            cmd: |
+              set -o pipefail
+              find /run/log/journal /var/log/journal -type f -printf "%m %p %CY%Cm%Cd\n" | awk '$1 > "644" {print $0}'
+          changed_when: false
+          args:
+            executable: /bin/bash
+          register: journal_file_find
+          failed_when:
+            - journal_file_find.rc != 0
+            - "'No such file or directory' not in journal_file_find.stderr"
+
+        - name: Return files with incorrect permissions
+          ansible.builtin.debug:
+            msg: "{{ journal_file_find.stdout_lines }} - {{ journal_file_find.stdout_lines | length }}"
+          when:
+            - journal_file_find.stdout_lines | length > 0
