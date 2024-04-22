@@ -52,6 +52,29 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define "bookworm" do |bookworm|
+    bookworm.vm.box = "debian/bookworm64"
+    bookworm.ssh.insert_key = true
+    bookworm.vm.hostname = "bookworm"
+    bookworm.vm.boot_timeout = 600
+    bookworm.vbguest.auto_update = false
+    bookworm.vm.provision "shell",
+    # Remove EXTERNALLY-MANAGED to ignore PEP 668 implementation in Deb12
+      inline: "apt-get update && apt-get -y install python3-pip curl && rm -rf /usr/lib/python3.11/EXTERNALLY-MANAGED && python3 -m pip install ansible" 
+    bookworm.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.limit = "all"
+      a.playbook = "tests/test.yml"
+      a.extra_vars = {
+        "ansible_become_pass" => "vagrant",
+        "ansible_python_interpreter" => "/usr/bin/python3",
+        "sshd_admin_net" => ["0.0.0.0/0"],
+        "sshd_allow_groups" => ["vagrant", "sudo", "debian", "ubuntu"],
+        "system_upgrade" => "false",
+     }
+    end
+  end
+
   config.vm.define "focal" do |focal|
     focal.vm.box = "ubuntu/focal64"
     focal.ssh.insert_key = true
