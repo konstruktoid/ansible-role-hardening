@@ -328,6 +328,24 @@ daemon shall be forwarded to a traditional syslog daemon.
 See [journald.conf](https://www.freedesktop.org/software/systemd/man/latest/journald.conf.html)
 for more information.
 
+### ./defaults/main/kernel.yml
+
+```yaml
+allow_virtual_system_calls: true
+enable_page_poisoning: true
+page_table_isolation: true
+slub_debugger_poisoning: false
+```
+
+`allow_virtual_system_calls` will allow virtual system calls if `true` else no vsyscall mapping will be set, see [CONFIG_LEGACY_VSYSCALL_NONE](https://www.kernelconfig.io/config_legacy_vsyscall_none).
+
+`enable_page_poisoning: true` will enable [CONFIG_PAGE_POISONING](https://www.kernelconfig.io/config_page_poisoning)
+
+`page_table_isolation` is a countermeasure against attacks on the shared
+user/kernel address space, see [CONFIG_PAGE_TABLE_ISOLATION](https://www.kernelconfig.io/config_page_table_isolation)
+
+`slub_debugger_poisoning`, if set to `true`, prevents many types of use-after-free vulnerabilities and it also prevents leak of data and detection of corrupted memory. See [Short users guide for SLUB](https://github.com/torvalds/linux/blob/master/Documentation/mm/slub.rst#some-more-sophisticated-uses-of-slab_debug).
+
 ### ./defaults/main/limits.yml
 
 ```yaml

@@ -686,6 +686,92 @@
             - ansible_os_family == "Debian"
             - disable_ipv6
 
+        - name: Verify RedHat GRUB virtual system call settings
+          ansible.builtin.shell:
+            cmd: |
+              set -o pipefail
+              grubby --info="/boot/vmlinuz-$(uname -r)" | grep "vsyscall=none"
+          register: audit_grubenv
+          failed_when: audit_grubenv.rc != 0
+          changed_when: audit_grubenv.rc != 0
+          when:
+            - ansible_os_family == "RedHat"
+            - not allow_virtual_system_calls
+
+        - name: Verify Debian GRUB virtual system call settings
+          ansible.builtin.shell:
+            cmd: grep "linux.*vsyscall=none" /boot/grub/grub.cfg
+          register: page_grub_cfg
+          failed_when: page_grub_cfg.rc != 0
+          changed_when: page_grub_cfg.rc != 0
+          when:
+            - ansible_os_family == "Debian"
+            - not allow_virtual_system_calls
+
+        - name: Verify RedHat GRUB page poisoning settings
+          ansible.builtin.shell:
+            cmd: |
+              set -o pipefail
+              grubby --info="/boot/vmlinuz-$(uname -r)" | grep "page_poison=1"
+          register: audit_grubenv
+          failed_when: audit_grubenv.rc != 0
+          changed_when: audit_grubenv.rc != 0
+          when:
+            - ansible_os_family == "RedHat"
+            - enable_page_poisoning
+
+        - name: Verify Debian GRUB page poisoning settings
+          ansible.builtin.shell:
+            cmd: grep "linux.*page_poison=1" /boot/grub/grub.cfg
+          register: page_grub_cfg
+          failed_when: page_grub_cfg.rc != 0
+          changed_when: page_grub_cfg.rc != 0
+          when:
+            - ansible_os_family == "Debian"
+            - enable_page_poisoning
+
+        - name: Verify RedHat GRUB page table isolation settings
+          ansible.builtin.shell:
+            cmd: |
+              set -o pipefail
+              grubby --info="/boot/vmlinuz-$(uname -r)" | grep "pti={{ 'on' if page_table_isolation else 'auto' }}"
+          register: audit_grubenv
+          failed_when: audit_grubenv.rc != 0
+          changed_when: audit_grubenv.rc != 0
+          when:
+            - ansible_os_family == "RedHat"
+
+        - name: Verify Debian GRUB page table isolation settings
+          ansible.builtin.shell:
+            cmd: grep "linux.*pti={{ 'on' if page_table_isolation else 'auto' }}" /boot/grub/grub.cfg
+          register: page_grub_cfg
+          failed_when: page_grub_cfg.rc != 0
+          changed_when: page_grub_cfg.rc != 0
+          when:
+            - ansible_os_family == "Debian"
+
+        - name: Verify RedHat GRUB SLUB debugger settings
+          ansible.builtin.shell:
+            cmd: |
+              set -o pipefail
+              grubby --info="/boot/vmlinuz-$(uname -r)" | grep "slub_debug=P"
+          register: audit_grubenv
+          failed_when: audit_grubenv.rc != 0
+          changed_when: audit_grubenv.rc != 0
+          when:
+            - ansible_os_family == "RedHat"
+            - slub_debugger_poisoning
+
+        - name: Verify Debian GRUB SLUB debugger settings
+          ansible.builtin.shell:
+            cmd: grep "linux.*slub_debug=P" /boot/grub/grub.cfg
+          register: page_grub_cfg
+          failed_when: page_grub_cfg.rc != 0
+          changed_when: page_grub_cfg.rc != 0
+          when:
+            - ansible_os_family == "Debian"
+            - slub_debugger_poisoning
+
     - name: IPv6 sysctl configuration
       become: true
       when:
