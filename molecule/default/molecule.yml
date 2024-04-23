@@ -27,6 +27,7 @@ provisioner:
         sshd_update_moduli: true
         suid_sgid_permissions: false
       almalinux9:
+        enable_page_poisoning: true
         manage_resolved: false
         manage_timesyncd: false
         sshd_admin_net:
@@ -38,8 +39,10 @@ provisioner:
         sshd_update_moduli: true
         sysctl_conf_dir: /etc/sysctl.d/
         system_upgrade: false
+        slub_debugger_poisoning: true
         ufw_rate_limit: true
       bookworm:
+        allow_virtual_system_calls: false
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
         disable_wireless: false
@@ -67,6 +70,7 @@ provisioner:
       jammy:
         disable_ipv6: true
         disable_wireless: true
+        enable_page_poisoning: true
         sshd_admin_net:
           - "0.0.0.0/0"
         sshd_allow_groups:
@@ -83,6 +87,7 @@ provisioner:
             rules:
               - AllowUsers testuser02
               - Banner none
+        slub_debugger_poisoning: true
 platforms:
   - name: almalinux8
     box: almalinux/8

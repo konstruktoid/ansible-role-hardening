@@ -1,0 +1,5 @@
+---
+allow_virtual_system_calls: true
+enable_page_poisoning: true
+page_table_isolation: true
+slub_debugger_poisoning: false

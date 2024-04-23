@@ -42,6 +42,12 @@
     - kernel
     - sysctl
 
+- name: Configure kernel settings
+  ansible.builtin.import_tasks:
+    file: kernel.yml
+  tags:
+    - kernel
+
 - name: Disable kernel modules
   ansible.builtin.import_tasks:
     file: kernelmodules.yml
