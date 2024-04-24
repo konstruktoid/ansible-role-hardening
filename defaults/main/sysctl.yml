@@ -35,8 +35,10 @@ generic_sysctl_settings:
   fs.protected_hardlinks: 1
   fs.protected_symlinks: 1
   fs.suid_dumpable: 0
+  kernel.core_pattern: "|/bin/false"
   kernel.core_uses_pid: 1
   kernel.dmesg_restrict: 1
+  kernel.kexec_load_disabled: 0
   kernel.kptr_restrict: 2
   kernel.panic: 60
   kernel.panic_on_oops: 60
@@ -46,6 +48,7 @@ generic_sysctl_settings:
   kernel.unprivileged_bpf_disabled: 1
   kernel.yama.ptrace_scope: 2
   net.core.bpf_jit_harden: 2
+  user.max_user_namespaces: 62967
 
 conntrack_sysctl_settings:
   net.netfilter.nf_conntrack_max: 2000000
