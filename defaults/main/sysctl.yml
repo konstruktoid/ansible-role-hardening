@@ -38,7 +38,6 @@ generic_sysctl_settings:
   kernel.core_pattern: "|/bin/false"
   kernel.core_uses_pid: 1
   kernel.dmesg_restrict: 1
-  kernel.kexec_load_disabled: 0
   kernel.kptr_restrict: 2
   kernel.panic: 60
   kernel.panic_on_oops: 60
