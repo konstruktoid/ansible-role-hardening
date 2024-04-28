@@ -11,8 +11,8 @@ The role supports the following operating systems:
 - [AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9)
 - [Debian 11 (Bullseye)](https://www.debian.org/releases/bullseye/)
 - [Debian 12 (Bookworm)](https://www.debian.org/releases/bookworm/)
-- [Ubuntu 20.04 (Focal Fossa)](https://releases.ubuntu.com/focal/)
 - [Ubuntu 22.04 (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/)
+- [Ubuntu 24.04 (Noble Numbat)](https://releases.ubuntu.com/noble/)
 
 For those using AWS or Azure, there are also hardened Ubuntu Amazon
 Machine Images (AMIs) and Azure virtual machine images available.

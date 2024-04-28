@@ -17,7 +17,7 @@ provisioner:
   log: true
   inventory:
     host_vars:
-      jammy:
+      noble:
         disable_ipv6: true
         sshd_admin_net:
           - "0.0.0.0/0"
@@ -39,8 +39,8 @@ provisioner:
         umask_value: "027"
         ufw_rate_limit: true
 platforms:
-  - name: jammy
-    box: bento/ubuntu-22.04
+  - name: noble
+    box: bento/ubuntu-24.04
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
