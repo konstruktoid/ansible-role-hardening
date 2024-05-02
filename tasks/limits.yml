@@ -22,13 +22,16 @@
 - name: Disable kdump service
   become: true
   ansible.builtin.systemd:
-    name: kdump.service
-    enabled: "no"
+    name: "{{ item }}"
+    enabled: false
     state: stopped
-    masked: "yes"
+    masked: true
   register: mask_kdump
   failed_when:
     - mask_kdump is not success
     - not "Could not find the requested service" in mask_kdump.msg
+  loop:
+    - kdump.service
+    - kdump-tools.service
   when:
     - ansible_virtualization_type not in ["container", "docker", "podman"]
