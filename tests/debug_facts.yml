@@ -3,6 +3,7 @@
   ansible.builtin.pip:
     name: jmespath
     state: present
+    extra_args: "{{ '--break-system-packages' if (ansible_python_version is version('3.11', '>=')) else '--user' }}"
 
 - name: Debug "cpuinfo_rdrand handling, true"
   ansible.builtin.debug:
