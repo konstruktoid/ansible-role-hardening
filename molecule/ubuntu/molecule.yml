@@ -17,13 +17,6 @@ provisioner:
   log: true
   inventory:
     host_vars:
-      focal:
-        sshd_admin_net:
-          - "0.0.0.0/0"
-        sshd_allow_groups:
-          - vagrant
-          - sudo
-        umask_value: "027"
       jammy:
         sshd_admin_net:
           - "0.0.0.0/0"
@@ -36,14 +29,6 @@ provisioner:
         sshd_allow_groups:
           - vagrant
 platforms:
-  - name: focal
-    box: bento/ubuntu-20.04
-    config_options:
-      vm.boot_timeout: 600
-    instance_raw_config_args:
-      - "vbguest.installer_options = { allow_kernel_upgrade: false }"
-      - vbguest.auto_update = false
-    memory: 1024
   - name: jammy
     box: bento/ubuntu-22.04
     config_options:
@@ -57,7 +42,7 @@ platforms:
       - vbguest.auto_update = false
     memory: 1024
   - name: noble
-    box: bento/noble64
+    box: bento/ubuntu-24.04
     config_options:
       vm.boot_timeout: 600
       synced_folder: false
