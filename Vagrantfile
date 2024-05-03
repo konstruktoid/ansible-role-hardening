@@ -1,5 +1,6 @@
 Vagrant.configure("2") do |config|
-  config.vbguest.installer_options = { allow_kernel_upgrade: true }
+  config.vbguest.installer_options = { allow_kernel_upgrade: false }
+  config.vbguest.auto_update = false
   config.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--uart1", "0x3F8", "4"]
     vb.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
@@ -10,7 +11,6 @@ Vagrant.configure("2") do |config|
     bullseye_vlan.ssh.insert_key = true
     bullseye_vlan.vm.hostname = "bullseye-vlan"
     bullseye_vlan.vm.boot_timeout = 600
-    bullseye_vlan.vbguest.auto_update = false
     bullseye_vlan.vm.provision "shell",
       inline: "ip link set dev eth0 down; ip link set eth0 name eth0.101; ip link set dev eth0.101 up; dhclient -r eth0.101; dhclient eth0.101"
     bullseye_vlan.vm.provision "shell",
@@ -35,7 +35,6 @@ Vagrant.configure("2") do |config|
     bullseye.ssh.insert_key = true
     bullseye.vm.hostname = "bullseye"
     bullseye.vm.boot_timeout = 600
-    bullseye.vbguest.auto_update = false
     bullseye.vm.provision "shell",
       inline: "apt-get update && apt-get -y install curl python3-pip && python3 -m pip install ansible"
     bullseye.vm.provision "ansible" do |a|
@@ -57,10 +56,9 @@ Vagrant.configure("2") do |config|
     bookworm.ssh.insert_key = true
     bookworm.vm.hostname = "bookworm"
     bookworm.vm.boot_timeout = 600
-    bookworm.vbguest.auto_update = false
     bookworm.vm.provision "shell",
-    # Remove EXTERNALLY-MANAGED to ignore PEP 668 implementation in Deb12
-      inline: "apt-get update && apt-get -y install python3-pip curl && rm -rf /usr/lib/python3.11/EXTERNALLY-MANAGED && python3 -m pip install ansible" 
+    # Remove EXTERNALLY-MANAGED to ignore PEP 668
+      inline: "apt-get update && apt-get -y install python3-pip curl && rm -rf /usr/lib/python3.11/EXTERNALLY-MANAGED && python3 -m pip install ansible"
     bookworm.vm.provision "ansible" do |a|
       a.verbose = "v"
       a.limit = "all"
@@ -75,27 +73,8 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "focal" do |focal|
-    focal.vm.box = "ubuntu/focal64"
-    focal.ssh.insert_key = true
-    focal.vm.hostname = "focal"
-    focal.vm.boot_timeout = 600
-    focal.vm.provision "shell",
-      inline: "apt-get update && apt-get -y install curl python3-pip && python3 -m pip install ansible"
-    focal.vm.provision "ansible" do |a|
-      a.verbose = "v"
-      a.limit = "all"
-      a.playbook = "tests/test.yml"
-      a.extra_vars = {
-        "sshd_admin_net" => ["0.0.0.0/0"],
-        "sshd_allow_groups" => ["vagrant", "sudo", "ubuntu"],
-        "ansible_python_interpreter" => "/usr/bin/python3",
-      }
-     end
-   end
-
   config.vm.define "jammy" do |jammy|
-    jammy.vm.box = "ubuntu/jammy64"
+    jammy.vm.box = "bento/ubuntu-22.04"
     jammy.ssh.insert_key = true
     jammy.vm.hostname = "jammy"
     jammy.vm.boot_timeout = 600
@@ -113,10 +92,29 @@ Vagrant.configure("2") do |config|
      end
    end
 
+  config.vm.define "noble" do |noble|
+    noble.vm.box = "bento/ubuntu-24.04"
+    noble.ssh.insert_key = true
+    noble.vm.hostname = "noble"
+    noble.vm.boot_timeout = 600
+    noble.vm.provision "shell",
+    # Ignore PEP 668
+      inline: "apt-get update && apt-get -y install python3-pip curl && python3 -m pip install --break-system-packages ansible"
+    noble.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.limit = "all"
+      a.playbook = "tests/test.yml"
+      a.extra_vars = {
+        "sshd_admin_net" => ["0.0.0.0/0"],
+        "sshd_allow_groups" => ["vagrant", "sudo", "ubuntu"],
+        "ansible_python_interpreter" => "/usr/bin/python3",
+      }
+     end
+   end
+
   config.vm.define "almalinux" do |almalinux|
     almalinux.vm.box = "almalinux/9"
     almalinux.ssh.insert_key = true
-    almalinux.vbguest.auto_update = false
     almalinux.vm.provider "virtualbox" do |c|
       c.default_nic_type = "82543GC"
       c.memory = 2048
