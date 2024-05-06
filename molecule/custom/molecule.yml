@@ -1,0 +1,120 @@
+---
+dependency:
+  name: galaxy
+  enabled: true
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      callback_whitelist: profile_tasks
+  playbooks:
+    converge: ../default/converge.yml
+    verify: ../default/verify.yml
+  log: true
+  inventory:
+    host_vars:
+      jammy:
+        automatic_updates: true
+        fallback_ntp:
+          - 169.254.169.123
+        journald_storage: persistent
+        manage_timesyncd: false
+        manage_resolved: false
+        manage_ufw: false
+        ntp_servers:
+          - 169.254.169.123
+        sshd_admin_net:
+          - "0.0.0.0/0"
+        system_upgrade: true
+        packages_blocklist:
+          - apport*
+          - autofs
+          - avahi*
+          - avahi-*
+          - beep
+          - git
+          - pastebinit
+          - popularity-contest
+          - prelink
+          - rpcbind
+          - rsh*
+          - rsync
+          - talk*
+          - telnet*
+          - tftp*
+          - tuned
+          - whoopsie
+          - xinetd
+          - yp-tools
+          - ypbind
+        packages_debian:
+          - auditd
+          - cracklib-runtime
+          - libpam-pwquality
+        packages_redhat:
+          - audit
+          - cracklib
+          - libpwquality
+          - python3-dnf-plugin-post-transaction-actions
+        packages_ubuntu: []
+        pass_max_days: 365
+        pass_min_days: 7
+        sshd_max_sessions: 4
+        suid_sgid_permissions: false
+        umask_value: "027"
+platforms:
+  - name: jammy
+    box: bento/ubuntu-22.04
+    config_options:
+      vm.boot_timeout: 600
+      synced_folder: false
+    provider_raw_config_args:
+      - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
+      - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
+    instance_raw_config_args:
+      - "vbguest.installer_options = { allow_kernel_upgrade: false }"
+      - vbguest.auto_update = false
+    memory: 1024
+verifier:
+  name: ansible
+scenario:
+  name: custom
+  create_sequence:
+    - dependency
+    - create
+    - prepare
+  check_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - create
+    - prepare
+    - converge
+    - check
+    - destroy
+  converge_sequence:
+    - dependency
+    - create
+    - prepare
+    - converge
+  destroy_sequence:
+    - dependency
+    - cleanup
+    - destroy
+  test_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
