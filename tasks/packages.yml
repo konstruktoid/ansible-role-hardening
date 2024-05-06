@@ -68,6 +68,7 @@
     update_cache: true
   when:
     - ansible_os_family == "Debian"
+    - packages_debian | length > 0
   notify:
     - Run apt-get clean
     - Run apt-get autoremove
@@ -81,6 +82,7 @@
     update_cache: true
   when:
     - ansible_distribution == "Ubuntu"
+    - packages_ubuntu | length > 0
   notify:
     - Run apt-get clean
     - Run apt-get autoremove
@@ -102,6 +104,7 @@
     update_cache: true
   when:
     - ansible_os_family == "RedHat"
+    - packages_redhat | length > 0
   notify:
     - Enable haveged
     - Run dnf autoremove
