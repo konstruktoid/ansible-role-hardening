@@ -28,6 +28,10 @@
       ansible.builtin.include_vars:
         file: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/inventory/host_vars/{{ ansible_hostname }}"
 
+    - name: Merge package lists
+      ansible.builtin.set_fact:
+        packages_merged: "{{ packages_debian + packages_redhat + packages_ubuntu }}"
+
     - name: Set crypto-policies config as fact
       tags:
         - fact
@@ -922,19 +926,48 @@
       ansible.builtin.set_fact:
         booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
 
-    - name: Verify cracklib password list
-      environment:
-        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      ansible.builtin.shell: |
-        set -o pipefail
-        grep '/usr/share/dict/passwords' /var/cache/cracklib/src-dicts
-      args:
-        executable: /bin/bash
-      register: cracklib_passwords
-      failed_when: cracklib_passwords.rc != 0
-      changed_when: cracklib_passwords.rc != 0
+    - name: Print packages
+      ansible.builtin.debug:
+        msg: "{{ packages_merged }}"
+
+    - name: Verify cracklib
       when:
-        - ansible_os_family == "Debian"
+        - '"cracklib" in packages_merged'
+        - '"cracklib-runtime" in packages_merged'
+      block:
+        - name: Update Debian cracklib
+          become: true
+          ansible.builtin.shell: |
+            update-cracklib
+          register: update_debian_cracklib
+          changed_when: update_debian_cracklib.rc == 0
+          when:
+            - ansible_os_family == "Debian"
+
+        - name: Update RedHat cracklib
+          environment:
+            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          become: true
+          ansible.builtin.command:
+            cmd: create-cracklib-dict /usr/share/dict/*
+          register: update_redhat_cracklib
+          changed_when: update_redhat_cracklib.rc == 0
+          when:
+            - ansible_os_family == "RedHat"
+
+        - name: Verify cracklib password list
+          environment:
+            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          ansible.builtin.shell: |
+            set -o pipefail
+            grep '/usr/share/dict/passwords' /var/cache/cracklib/src-dicts
+          args:
+            executable: /bin/bash
+          register: cracklib_passwords
+          failed_when: cracklib_passwords.rc != 0
+          changed_when: cracklib_passwords.rc != 0
+          when:
+            - ansible_os_family == "Debian"
 
     - name: Verify username password list
       environment:
