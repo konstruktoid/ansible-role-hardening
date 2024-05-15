@@ -18,7 +18,7 @@ provisioner:
   inventory:
     host_vars:
       noble:
-        disable_ipv6: true
+        kernel_lockdown: true
         sshd_admin_net:
           - "0.0.0.0/0"
         sshd_allow_groups:
@@ -35,7 +35,6 @@ provisioner:
             rules:
               - AllowUsers testuser02
               - Banner none
-        suid_sgid_permissions: false
         umask_value: "027"
         ufw_rate_limit: true
 platforms:
@@ -44,7 +43,6 @@ platforms:
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
-      - "vbguest.installer_options = { allow_kernel_upgrade: false }"
       - vbguest.auto_update = false
     memory: 1024
 verifier:

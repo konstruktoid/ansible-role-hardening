@@ -18,8 +18,8 @@ The role supports the following operating systems:
 - [AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9)
 - [Debian 11 (Bullseye)](https://www.debian.org/releases/bullseye/)
 - [Debian 12 (Bookworm)](https://www.debian.org/releases/bookworm/)
-- [Ubuntu 20.04 (Focal Fossa)](https://releases.ubuntu.com/focal/)
 - [Ubuntu 22.04 (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/)
+- [Ubuntu 24.04 (Noble Numbat)](https://releases.ubuntu.com/noble/)
 
 For those using AWS or Azure, there are also hardened Ubuntu Amazon
 Machine Images (AMIs) and Azure virtual machine images available.
@@ -29,11 +29,9 @@ repository. These images are built using [Packer](https://www.packer.io/) and
 this Ansible role is used for configuration.
 
 > **Note**
->
 > Do not use this role without first testing in a non-operational environment.
 
 > **Note**
->
 > There is a [SLSA](https://slsa.dev/) artifact present under the
 > [slsa action workflow](https://github.com/konstruktoid/ansible-role-hardening/actions/workflows/slsa.yml)
 > for verification.
@@ -50,7 +48,7 @@ None.
 ---
 roles:
   - name: konstruktoid.hardening
-    version: v2.0.4
+    version: v2.1.0
     src: https://github.com/konstruktoid/ansible-role-hardening.git
     scm: git
 \`\`\`
@@ -97,7 +95,7 @@ roles:
           ansible.builtin.git:
             repo: https://github.com/konstruktoid/ansible-role-hardening
             dest: /etc/ansible/roles/konstruktoid.hardening
-            version: v2.0.4
+            version: v2.1.0
 
         - name: Remove git
           ansible.builtin.package:
