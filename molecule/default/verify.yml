@@ -1393,3 +1393,34 @@
             msg: "{{ journal_file_find.stdout_lines }} - {{ journal_file_find.stdout_lines | length }}"
           when:
             - journal_file_find.stdout_lines | length > 0
+
+    - name: Verify kernel lockdown
+      when:
+        - kernel_lockdown is defined
+        - ansible_kernel is version("5.4", ">=")
+        - ansible_virtualization_type not in ["container", "docker", "podman"]
+      block:
+        - name: Set kernel lockdown mode as fact
+          ansible.builtin.set_fact:
+            kernel_lockdown: >-
+              {% if kernel_lockdown == "integrity" %}
+                integrity
+              {% elif kernel_lockdown == "confidentiality" %}
+                confidentiality
+              {% elif kernel_lockdown %}
+                integrity
+              {% else %}
+                none
+              {% endif %}
+
+        - name: Verify kernel lockdown
+          become: true
+          ansible.builtin.command:
+            cmd: grep "\[{{ kernel_lockdown | trim }}\]"  /sys/kernel/security/lockdown
+          register: kernel_lockdown
+          failed_when: kernel_lockdown.rc != 0
+          changed_when: false
+
+        - name: Print kernel lockdown
+          ansible.builtin.debug:
+            msg: "{{ kernel_lockdown.stdout }}"

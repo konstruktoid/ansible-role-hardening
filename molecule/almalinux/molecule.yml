@@ -18,6 +18,7 @@ provisioner:
   inventory:
     host_vars:
       almalinux8:
+        kernel_lockdown: integrity
         manage_timesyncd: false
         sshd_admin_net:
           - "0.0.0.0/0"
@@ -26,6 +27,7 @@ provisioner:
           - sudo
         suid_sgid_permissions: false
       almalinux9:
+        kernel_lockdown: true
         manage_timesyncd: false
         sshd_admin_net:
           - "0.0.0.0/0"

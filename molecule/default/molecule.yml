@@ -16,6 +16,7 @@ provisioner:
     host_vars:
       almalinux8:
         disable_wireless: true
+        kernel_lockdown: integrity
         manage_compilers: false
         manage_timesyncd: false
         sshd_admin_net:
@@ -46,6 +47,7 @@ provisioner:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
         disable_wireless: false
+        kernel_lockdown: confidentiality
         manage_usbguard: false
         rkhunter_web_cmd: wget
         sshd_admin_net:
@@ -59,6 +61,7 @@ provisioner:
         disable_ipv6: true
         disable_wireless: true
         enable_page_poisoning: true
+        kernel_lockdown: false
         sshd_admin_net:
           - "0.0.0.0/0"
         sshd_allow_groups:
@@ -78,6 +81,7 @@ provisioner:
         slub_debugger_poisoning: true
       noble:
         disable_wireless: true
+        kernel_lockdown: true
         sshd_admin_net:
           - "0.0.0.0/0"
         sshd_allow_groups:
@@ -117,7 +121,6 @@ platforms:
       - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
       - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
     instance_raw_config_args:
-      - "vbguest.installer_options = { allow_kernel_upgrade: false }"
       - vbguest.auto_update = false
     memory: 1024
   - name: noble
@@ -125,7 +128,6 @@ platforms:
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
-      - "vbguest.installer_options = { allow_kernel_upgrade: false }"
       - vbguest.auto_update = false
     memory: 1024
 verifier:

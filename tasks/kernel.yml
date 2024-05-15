@@ -103,3 +103,45 @@
         - ansible_os_family == "RedHat"
         - ansible_virtualization_type not in ["container", "docker", "podman"]
         - slub_debugger_poisoning
+
+    - name: Configure kernel lockdown
+      when:
+        - kernel_lockdown is defined
+        - ansible_kernel is version("5.4", ">=")
+      block:
+        - name: Set kernel lockdown mode as fact
+          ansible.builtin.set_fact:
+            kernel_lockdown: >-
+              {% if kernel_lockdown == "integrity" %}
+                integrity
+              {% elif kernel_lockdown == "confidentiality" %}
+                confidentiality
+              {% elif kernel_lockdown %}
+                integrity
+              {% else %}
+                none
+              {% endif %}
+
+        - name: Configure kernel lockdown mode
+          ansible.builtin.lineinfile:
+            line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX lockdown={{ kernel_lockdown | trim }}"
+            dest: /etc/default/grub.d/99-hardening-lockdown.cfg
+            state: present
+            create: true
+            mode: "0640"
+            owner: root
+            group: root
+          when:
+            - ansible_os_family == "Debian"
+          notify:
+            - Update GRUB
+
+        - name: Configure kernel lockdown mode using grubby
+          ansible.builtin.command:
+            cmd: grubby --update-kernel=ALL --args="lockdown={{ kernel_lockdown | trim }}"
+          register: grubby_kernel_lockdown
+          changed_when: grubby_kernel_lockdown.rc != 0
+          failed_when: grubby_kernel_lockdown.rc != 0
+          when:
+            - ansible_os_family == "RedHat"
+            - ansible_virtualization_type not in ["container", "docker", "podman"]
