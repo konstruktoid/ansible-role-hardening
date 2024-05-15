@@ -22,11 +22,9 @@ repository. These images are built using [Packer](https://www.packer.io/) and
 this Ansible role is used for configuration.
 
 > **Note**
->
 > Do not use this role without first testing in a non-operational environment.
 
 > **Note**
->
 > There is a [SLSA](https://slsa.dev/) artifact present under the
 > [slsa action workflow](https://github.com/konstruktoid/ansible-role-hardening/actions/workflows/slsa.yml)
 > for verification.
@@ -333,6 +331,7 @@ for more information.
 ```yaml
 allow_virtual_system_calls: true
 enable_page_poisoning: true
+kernel_lockdown: false
 page_table_isolation: true
 slub_debugger_poisoning: false
 ```
@@ -341,10 +340,16 @@ slub_debugger_poisoning: false
 
 `enable_page_poisoning: true` will enable [CONFIG_PAGE_POISONING](https://www.kernelconfig.io/config_page_poisoning)
 
+`kernel_lockdown` configures the [kernel lockdown feature](https://wiki.archlinux.org/title/Security#Kernel_lockdown_mode).
+Valid values are `false`, `true`, `integrity` and `confidentiality`. If `true`,
+the kernel will be locked down in `integrity` mode.
+
 `page_table_isolation` is a countermeasure against attacks on the shared
 user/kernel address space, see [CONFIG_PAGE_TABLE_ISOLATION](https://www.kernelconfig.io/config_page_table_isolation)
 
-`slub_debugger_poisoning`, if set to `true`, prevents many types of use-after-free vulnerabilities and it also prevents leak of data and detection of corrupted memory. See [Short users guide for SLUB](https://github.com/torvalds/linux/blob/master/Documentation/mm/slub.rst#some-more-sophisticated-uses-of-slab_debug).
+`slub_debugger_poisoning`, if set to `true`, prevents many types of
+use-after-free vulnerabilities and it also prevents leak of data and detection
+of corrupted memory. See [Short users guide for SLUB](https://github.com/torvalds/linux/blob/master/Documentation/mm/slub.rst#some-more-sophisticated-uses-of-slab_debug).
 
 ### ./defaults/main/limits.yml
 
