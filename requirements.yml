@@ -9,6 +9,6 @@ collections:
     source: https://github.com/ansible-collections/community.crypto.git
     type: git
   - name: community.general
-    version: 8.6.0
+    version: 8.6.1
     source: https://github.com/ansible-collections/community.general.git
     type: git
