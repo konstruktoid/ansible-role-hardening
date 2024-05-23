@@ -138,7 +138,7 @@
         - "{{ epel7_signing_keys }}"
 
     - name: RHEL7 EPEL repo installation
-      ansible.builtin.yum:
+      ansible.builtin.dnf:
         name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
         state: present
 
