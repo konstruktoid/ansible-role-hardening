@@ -7,6 +7,7 @@ It's [systemd](https://freedesktop.org/wiki/Software/systemd/) focused
 and requires Ansible version 2.15 or higher.
 
 The role supports the following operating systems:
+
 - [AlmaLinux 8](https://wiki.almalinux.org/release-notes/#almalinux-8)
 - [AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9)
 - [Debian 11 (Bullseye)](https://www.debian.org/releases/bullseye/)
@@ -41,7 +42,7 @@ None.
 ---
 roles:
   - name: konstruktoid.hardening
-    version: v2.0.4
+    version: v2.1.0
     src: https://github.com/konstruktoid/ansible-role-hardening.git
     scm: git
 ```
@@ -69,7 +70,7 @@ roles:
 
 ```yaml
 ---
-- name: Checkout and configure konstrukoid.hardening
+- name: Checkout and configure konstruktoid.hardening
   hosts: localhost
   any_errors_fatal: true
   tasks:
@@ -88,7 +89,7 @@ roles:
           ansible.builtin.git:
             repo: https://github.com/konstruktoid/ansible-role-hardening
             dest: /etc/ansible/roles/konstruktoid.hardening
-            version: v2.0.4
+            version: v2.1.0
 
         - name: Remove git
           ansible.builtin.package:
@@ -101,14 +102,13 @@ roles:
       vars:
         sshd_allow_groups:
           - ubuntu
-          - vagrant
         sshd_login_grace_time: 60
         sshd_max_auth_tries: 10
         sshd_use_dns: false
         sshd_update_moduli: true
 ```
 
-## Note regarding UFW firewall rules
+## Note regarding UFW rules
 
 Instead of resetting `ufw` every run and by doing so causing network traffic
 disruption, the role deletes every `ufw` rule without
@@ -117,6 +117,9 @@ disruption, the role deletes every `ufw` rule without
 The role also sets default deny policies, which means that firewall rules
 needs to be created for any additional ports except those specified in
 the `sshd_ports` and `ufw_outgoing_traffic` variables.
+
+See [ufw(8)](https://manpages.ubuntu.com/manpages/noble/en/man8/ufw.8.html)
+for more information.
 
 ## Task Execution and Structure
 
@@ -134,6 +137,12 @@ See [TESTING.md](TESTING.md).
 manage_aide: true
 
 aide_checksums: sha512
+aide_dir_exclusions:
+  - /var/lib/docker
+  - /var/lib/lxcfs
+  - /var/lib/private/systemd
+  - /var/log/audit
+  - /var/log/journal
 ```
 
 If `manage_aide: true`, then [AIDE](https://aide.github.io/) will be installed
@@ -141,6 +150,9 @@ and configured.
 
 `aide_checksums` modifies the AIDE `Checksums` variable. Note that the
 `Checksums` variable might not be present depending on distribution.
+
+`aide_dir_exclusions` is a list of directories that will be excluded from the
+AIDE database.
 
 [aide.conf(5)](https://linux.die.net/man/5/aide.conf)
 
@@ -178,8 +190,9 @@ from the included template file.
 detected that it is low on disk space. `suspend` will cause the audit daemon to
 stop writing records to the disk.
 
-`auditd_enable_flag` sets the enabled flag. If `0` is passed, temporarily disable auditing.
-`1` will enable auditing and `2` will lock the audit configuration.
+`auditd_enable_flag` sets the enabled flag. If `0` is passed, temporarily
+disable auditing. `1` will enable auditing and `2` will lock the audit
+configuration.
 
 `auditd_flush: sync` tells the audit daemon to keep both the data and meta-data
 fully sync'd with every write to disk.
@@ -336,7 +349,8 @@ page_table_isolation: true
 slub_debugger_poisoning: false
 ```
 
-`allow_virtual_system_calls` will allow virtual system calls if `true` else no vsyscall mapping will be set, see [CONFIG_LEGACY_VSYSCALL_NONE](https://www.kernelconfig.io/config_legacy_vsyscall_none).
+`allow_virtual_system_calls` will allow virtual system calls if `true` else no
+vsyscall mapping will be set, see [CONFIG_LEGACY_VSYSCALL_NONE](https://www.kernelconfig.io/config_legacy_vsyscall_none).
 
 `enable_page_poisoning: true` will enable [CONFIG_PAGE_POISONING](https://www.kernelconfig.io/config_page_poisoning)
 
@@ -360,7 +374,7 @@ limit_nproc_hard: 1024
 limit_nproc_soft: 512
 ```
 
-Set maximum number of processes and open files.
+Set maximum number of processes and open files, see [limits.conf(5)](https://www.man7.org/linux/man-pages/man5/limits.conf.5.html).
 
 ### ./defaults/main/misc.yml
 
@@ -460,7 +474,7 @@ ntp:
 ```
 
 If `manage_timesyncd: true`, then configure systemd
-[timesyncd](https://manpages.ubuntu.com/manpages/jammy/man8/systemd-timesyncd.service.8.html),
+[timesyncd](https://manpages.ubuntu.com/manpages/noble/man8/systemd-timesyncd.service.8.html),
 otherwise installing a NTP client is recommended.
 
 ### ./defaults/main/packagemgmt.yml
@@ -623,13 +637,13 @@ pwquality:
 
 `manage_faillock: true` will enable the faillock library.
 
-`password_remember` set the size of the password history that the user will not be able to reuse.
+`password_remember` set the size of the password history that the user will not
+be able to reuse.
 
-Configure the [pam_faillock](https://manpages.ubuntu.com/manpages/lunar/en/man5/faillock.conf.5.html) library.
-
-Configure the [login.defs](https://manpages.ubuntu.com/manpages/lunar/en/man5/login.defs.5.html) configuration.
-
-Configure the [libpwquality](https://manpages.ubuntu.com/manpages/noble/man5/pwquality.conf.5.html) library.
+The variables `faillock`, `login_defs` and `pwquality` are used to configure the
+[pam_faillock](https://manpages.ubuntu.com/manpages/noble/en/man5/faillock.conf.5.html),
+[login.defs](https://manpages.ubuntu.com/manpages/noble/en/man5/login.defs.5.html)
+and [libpwquality](https://manpages.ubuntu.com/manpages/noble/man5/pwquality.conf.5.html).
 
 ### ./defaults/main/rkhunter.yml
 
@@ -869,6 +883,7 @@ sshd_match_users:
 examples in the parameter description `sshd_match_users`.
 
 Expected configuration structure:
+
 ```yaml
 sshd_match_groups:
   - group: <groupname>
@@ -889,6 +904,7 @@ sshd_match_addresses:
       - <parameter sshd> <value>
       - <parameter sshd> <value>
 ```
+
 `sshd_match_local_ports` add a conditional block for ports. More details and
 examples in the parameter description `sshd_match_users`.
 
@@ -1066,6 +1082,8 @@ ufw_outgoing_traffic:
 
 ufw_rate_limit: false
 ```
+
+See the note regarding [required comments](#note-regarding-ufw-rules).
 
 `manage_ufw: true` installs and configures `ufw` with related rules.
 Set it to `false` in order to install and configure a firewall manually.
