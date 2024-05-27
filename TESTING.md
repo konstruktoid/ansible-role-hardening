@@ -12,7 +12,8 @@ Before running any test:
 ```console
 almalinux/8
 almalinux/9
-bento/ubuntu-20.04
+bento/ubuntu-22.04
+bento/ubuntu-24.04
 debian/bookworm64
 debian/bullseye64
 debian/testing64
@@ -20,9 +21,6 @@ docker.io/almalinux:9
 docker.io/debian:bookworm
 docker.io/ubuntu:jammy
 generic/rhel8
-ubuntu/focal64
-ubuntu/jammy64
-ubuntu/noble64
 ```
 
 If the [runTests.sh](runTests.sh) script is executed as `runTests.sh vagrant`,
@@ -38,11 +36,14 @@ repository if the host is using [Ubuntu](https://ubuntu.com/ "Ubuntu").
 devel
 py310-ansible8
 py310-ansible9
+py310-ansible10
 py310-ansibledevel
 py311-ansible8
 py311-ansible9
+py311-ansible10
 py311-ansibledevel
 py312-ansible8
 py312-ansible9
+py312-ansible10
 py312-ansibledevel
 ```

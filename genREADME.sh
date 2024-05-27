@@ -108,7 +108,6 @@ roles:
       vars:
         sshd_allow_groups:
           - ubuntu
-          - vagrant
         sshd_login_grace_time: 60
         sshd_max_auth_tries: 10
         sshd_use_dns: false
@@ -124,6 +123,9 @@ disruption, the role deletes every \`ufw\` rule without
 The role also sets default deny policies, which means that firewall rules
 needs to be created for any additional ports except those specified in
 the \`sshd_ports\` and \`ufw_outgoing_traffic\` variables.
+
+See [ufw(8)](https://manpages.ubuntu.com/manpages/noble/en/man8/ufw.8.html)
+for more information.
 
 ## Task Execution and Structure
 

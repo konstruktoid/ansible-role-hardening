@@ -3,6 +3,12 @@
 
 ```sh
 .
+├── LICENSE
+├── README.md
+├── SECURITY.md
+├── STRUCTURE.md
+├── TESTING.md
+├── Vagrantfile
 ├── action-lint
 │   ├── Dockerfile
 │   └── entrypoint.sh
@@ -16,6 +22,7 @@
 │       ├── dns.yml
 │       ├── ipv6.yml
 │       ├── journal.yml
+│       ├── kernel.yml
 │       ├── limits.yml
 │       ├── misc.yml
 │       ├── module_blocklists.yml
@@ -41,11 +48,12 @@
 ├── genREADME.sh
 ├── handlers
 │   └── main.yml
-├── LICENSE
 ├── meta
 │   └── main.yml
 ├── molecule
 │   ├── almalinux
+│   │   └── molecule.yml
+│   ├── custom
 │   │   └── molecule.yml
 │   ├── debian
 │   │   └── molecule.yml
@@ -62,13 +70,10 @@
 │   └── ubuntu
 │       └── molecule.yml
 ├── postChecks.sh
-├── README.md
 ├── renovate.json
 ├── requirements-dev.txt
 ├── requirements.yml
 ├── runTests.sh
-├── SECURITY.md
-├── STRUCTURE.md
 ├── tasks
 │   ├── adduser.yml
 │   ├── aide.yml
@@ -76,8 +81,8 @@
 │   ├── apport.yml
 │   ├── auditd.yml
 │   ├── automatic_updates.yml
-│   ├── compilers_dnf_post_transaction_actions_plugin.yml
 │   ├── compilers.yml
+│   ├── compilers_dnf_post_transaction_actions_plugin.yml
 │   ├── cron.yml
 │   ├── ctrlaltdel.yml
 │   ├── disablewireless.yml
@@ -88,6 +93,7 @@
 │   ├── ipv6.yml
 │   ├── issue.yml
 │   ├── journalconf.yml
+│   ├── kernel.yml
 │   ├── kernelmodules.yml
 │   ├── limits.yml
 │   ├── lockroot.yml
@@ -100,10 +106,10 @@
 │   ├── packages.yml
 │   ├── password.yml
 │   ├── path.yml
-│   ├── postfix.yml
 │   ├── post.yml
-│   ├── prelink.yml
+│   ├── postfix.yml
 │   ├── pre.yml
+│   ├── prelink.yml
 │   ├── resolvedconf.yml
 │   ├── rkhunter.yml
 │   ├── rootaccess.yml
@@ -168,13 +174,11 @@
 │           └── system
 │               ├── aidecheck.service.j2
 │               └── aidecheck.timer.j2
-├── TESTING.md
 ├── tests
 │   ├── debug_facts.yml
 │   ├── inventory
 │   └── test.yml
-├── tox.ini
-└── Vagrantfile
+└── tox.ini
 
-35 directories, 137 files
+37 directories, 140 files
 ```
