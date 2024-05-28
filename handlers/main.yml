@@ -19,7 +19,7 @@
   changed_when: service_auditd_restart.rc == 0
   when:
     - ansible_os_family == "RedHat"
-    - ansible_virtualization_type not in ["contaier", "docker", "podman"]
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
   tags:
     - CCE-80872-5
 
