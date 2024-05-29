@@ -47,6 +47,15 @@
   when:
     - ansible_os_family == "Debian"
   block:
+    - name: Install unattended-upgrades
+      ansible.builtin.apt:
+        name: unattended-upgrades
+        state: present
+        update_cache: true
+      notify:
+        - Run apt-get clean
+        - Run apt-get autoremove
+
     - name: Configure unattended-upgrades package lists updates
       ansible.builtin.lineinfile:
         dest: /etc/apt/apt.conf.d/20auto-upgrades
