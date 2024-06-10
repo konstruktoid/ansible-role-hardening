@@ -14,19 +14,6 @@ provisioner:
   log: true
   inventory:
     host_vars:
-      almalinux8:
-        disable_wireless: true
-        kernel_lockdown: integrity
-        manage_compilers: false
-        manage_timesyncd: false
-        sshd_admin_net:
-          - "0.0.0.0/0"
-        sshd_allow_groups:
-          - vagrant
-          - sudo
-        sshd_host_keys_group: ssh_keys
-        sshd_update_moduli: true
-        suid_sgid_permissions: false
       almalinux9:
         enable_page_poisoning: true
         manage_resolved: false
@@ -93,13 +80,6 @@ provisioner:
         umask_value: "027"
         ufw_rate_limit: true
 platforms:
-  - name: almalinux8
-    box: almalinux/8
-    config_options:
-      vm.boot_timeout: 600
-    instance_raw_config_args:
-      - vbguest.auto_update = false
-    memory: 2048
   - name: almalinux9
     box: almalinux/9
     config_options:
