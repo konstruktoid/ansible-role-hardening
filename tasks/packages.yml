@@ -192,6 +192,7 @@
     autoclean: true
     autoremove: true
     clean: true
+  changed_when: false
   when:
     - ansible_os_family == "Debian"
 
