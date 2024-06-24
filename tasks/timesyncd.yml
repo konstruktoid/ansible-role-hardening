@@ -24,6 +24,10 @@
         enabled: true
         masked: false
         state: started
+      register: timesyncd_start
+      changed_when:
+        - not timesyncd_start.enabled == true
+        - not timesyncd_start.state == 'started'
 
     - name: Stat timesyncd status
       ansible.builtin.command:
