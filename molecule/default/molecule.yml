@@ -19,7 +19,7 @@ provisioner:
         manage_resolved: false
         manage_timesyncd: false
         sshd_admin_net:
-          - "0.0.0.0/0"
+          - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
@@ -38,7 +38,7 @@ provisioner:
         manage_usbguard: false
         rkhunter_web_cmd: wget
         sshd_admin_net:
-          - "0.0.0.0/0"
+          - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
@@ -50,7 +50,7 @@ provisioner:
         enable_page_poisoning: true
         kernel_lockdown: false
         sshd_admin_net:
-          - "0.0.0.0/0"
+          - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
@@ -70,7 +70,7 @@ provisioner:
         disable_wireless: true
         kernel_lockdown: true
         sshd_admin_net:
-          - "0.0.0.0/0"
+          - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo

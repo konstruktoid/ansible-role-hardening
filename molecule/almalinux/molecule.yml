@@ -21,7 +21,7 @@ provisioner:
         kernel_lockdown: integrity
         manage_timesyncd: false
         sshd_admin_net:
-          - "0.0.0.0/0"
+          - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
@@ -30,7 +30,7 @@ provisioner:
         kernel_lockdown: true
         manage_timesyncd: false
         sshd_admin_net:
-          - "0.0.0.0/0"
+          - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
