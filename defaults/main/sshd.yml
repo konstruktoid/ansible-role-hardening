@@ -62,7 +62,7 @@ sshd_kex_algorithms:
   - ecdh-sha2-nistp256
   - diffie-hellman-group-exchange-sha256
 sshd_listen:
-  - "0.0.0.0"
+  - 0.0.0.0
 sshd_log_level: VERBOSE
 sshd_login_grace_time: 20
 sshd_macs:

@@ -20,13 +20,13 @@ provisioner:
       jammy:
         kernel_lockdown: confidentiality
         sshd_admin_net:
-          - "0.0.0.0/0"
+          - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
       noble:
         sshd_admin_net:
-          - "0.0.0.0/0"
+          - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
 platforms:

@@ -28,7 +28,7 @@ provisioner:
         ntp_servers:
           - 169.254.169.123
         sshd_admin_net:
-          - "0.0.0.0/0"
+          - 0.0.0.0/0
         system_upgrade: true
         packages_blocklist:
           - apport*
