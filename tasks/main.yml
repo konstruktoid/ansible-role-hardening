@@ -122,7 +122,7 @@
   ansible.builtin.import_tasks:
     file: automatic_updates.yml
   when:
-    - automatic_updates
+    - automatic_updates.enabled
   tags:
     - automatic_updates
 

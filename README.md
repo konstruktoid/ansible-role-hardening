@@ -212,6 +212,23 @@ sending the message to syslog.
 
 [auditd.conf(5)](https://man7.org/linux/man-pages/man5/auditd.conf.5.html)
 
+### ./defaults/main/automatic_updates.yml
+
+```yaml
+automatic_updates:
+  enabled: true
+  reboot: false
+```
+
+`automatic_updates.enabled: true` will install and configure
+[dnf-automatic](https://dnf.readthedocs.io/en/latest/automatic.html)
+or [unattended-upgrades](https://wiki.debian.org/UnattendedUpgrades),
+depending on the distribution.
+
+`automatic_updates.reboot: true` will reboot the system if required, see
+[Unattended-Upgrade::Automatic-Reboot](https://help.ubuntu.com/community/AutomaticSecurityUpdates)
+and [dnf_automatic: reboot](https://dnf.readthedocs.io/en/latest/automatic.html).
+
 ### ./defaults/main/compilers.yml
 
 ```yaml
@@ -499,7 +516,6 @@ Configure the [APT suite of tools](https://manpages.debian.org/bookworm/apt/apt.
 ### ./defaults/main/packages.yml
 
 ```yaml
-automatic_updates: true
 system_upgrade: true
 
 packages_blocklist:
@@ -574,11 +590,6 @@ packages_ubuntu:
   - secureboot-db
   - snapd
 ```
-
-`automatic_updates: true` will install and configure
-[dnf-automatic](https://dnf.readthedocs.io/en/latest/automatic.html)
-or [unattended-upgrades](https://wiki.debian.org/UnattendedUpgrades),
-depending on the distribution.
 
 `system_upgrade: true` will run `apt upgrade` or
 `dnf update` if required.

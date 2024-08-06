@@ -1,5 +1,4 @@
 ---
-automatic_updates: true
 system_upgrade: true
 
 packages_blocklist:
