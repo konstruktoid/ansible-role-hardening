@@ -27,5 +27,6 @@ sysctl_main_config_template: etc/sysctl/sysctl.main.conf.j2
 system_conf_template: etc/systemd/system.conf.j2
 timesyncd_conf_template: etc/systemd/timesyncd.conf.j2
 tmp_mount_template: etc/systemd/tmp.mount.j2
+unattended_upgrades_template: etc/apt/apt.conf.d/50unattended-upgrades.j2
 user_conf_template: etc/systemd/user.conf.j2
 useradd_template: etc/default/useradd.j2

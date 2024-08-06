@@ -1,0 +1,4 @@
+---
+automatic_updates:
+  enabled: true
+  reboot: false

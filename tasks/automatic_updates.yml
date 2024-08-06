@@ -34,6 +34,17 @@
         mode: "0644"
         create: true
 
+    - name: Configure reboot after updates
+      community.general.ini_file:
+        dest: /etc/dnf/automatic.conf
+        section: commands
+        option: reboot
+        value: "{{ 'when-needed' if automatic_updates.reboot else 'never' }}"
+        owner: root
+        group: root
+        mode: "0644"
+        create: true
+
     - name: Enable dnf-automatic timer
       ansible.builtin.systemd:
         name: dnf-automatic.timer
@@ -77,3 +88,11 @@
         group: root
         mode: "0644"
         create: true
+
+    - name: Configure unattended-upgrades
+      ansible.builtin.template:
+        src: "{{ unattended_upgrades_template }}"
+        dest: /etc/apt/apt.conf.d/50unattended-upgrades
+        mode: "0644"
+        owner: root
+        group: root
