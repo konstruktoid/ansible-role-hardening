@@ -110,8 +110,6 @@
         group: root
         state: directory
         mode: "0755"
-      when:
-        - ansible_virtualization_type in ["container", "docker", "podman"]
       tags:
         - sshd
         - sshd_config

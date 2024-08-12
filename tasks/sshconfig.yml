@@ -21,8 +21,6 @@
     group: root
     state: directory
     mode: "0755"
-  when:
-    - ansible_virtualization_type in ["container", "docker", "podman"]
 
 - name: Stat sysconfig sshd configuration
   ansible.builtin.stat:
