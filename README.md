@@ -220,13 +220,13 @@ automatic_updates:
   reboot: false
 ```
 
-`automatic_updates.enabled: true` will install and configure
+If `automatic_updates` is enabled it will install and configure
 [dnf-automatic](https://dnf.readthedocs.io/en/latest/automatic.html)
 or [unattended-upgrades](https://wiki.debian.org/UnattendedUpgrades),
 depending on the distribution.
 
-`automatic_updates.reboot: true` will reboot the system if required, see
-[Unattended-Upgrade::Automatic-Reboot](https://help.ubuntu.com/community/AutomaticSecurityUpdates)
+If the `reboot` option is set to `true`, it will reboot the system if needed,
+see [Unattended-Upgrade::Automatic-Reboot](https://help.ubuntu.com/community/AutomaticSecurityUpdates)
 and [dnf_automatic: reboot](https://dnf.readthedocs.io/en/latest/automatic.html).
 
 ### ./defaults/main/compilers.yml
