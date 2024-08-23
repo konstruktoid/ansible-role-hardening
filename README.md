@@ -217,6 +217,7 @@ sending the message to syslog.
 ```yaml
 automatic_updates:
   enabled: true
+  only_security: true
   reboot: false
 ```
 

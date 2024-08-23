@@ -1,4 +1,5 @@
 ---
 automatic_updates:
   enabled: true
+  only_security: true
   reboot: false
