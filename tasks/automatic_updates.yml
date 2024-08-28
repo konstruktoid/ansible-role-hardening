@@ -89,15 +89,20 @@
         mode: "0644"
         create: true
 
-    - name: Calculate random reboot time for reboot
+    - name: Set base time and margin for reboot calculation
       ansible.builtin.set_fact:
         reboot_base_time: "{{ automatic_updates.reboot_from_time.split(':') }}"
-        random_margin: "{{ range(-1 * (reboot_time_margin_mins | int), reboot_time_margin_mins | int) | random }}"
+        reboot_time_margin_mins: "{{ automatic_updates.reboot_time_margin_mins | int }}"
+
+    - name: Calculate random margin
+      ansible.builtin.set_fact:
+        random_margin: "{{ range(-reboot_time_margin_mins, reboot_time_margin_mins) | random }}"
+
+    - name: Calculate total minutes, hours, and minute for reboot
+      ansible.builtin.set_fact:
         total_minutes: "{{ (reboot_base_time[0] | int) * 60 + (reboot_base_time[1] | int) + random_margin }}"
         reboot_hour: "{{ (total_minutes // 60) % 24 }}"
         reboot_minute: "{{ total_minutes % 60 }}"
-      vars:
-        reboot_time_margin_mins: "{{ automatic_updates.reboot_time_margin_mins }}"
 
     - name: Configure unattended-upgrades
       ansible.builtin.template:
