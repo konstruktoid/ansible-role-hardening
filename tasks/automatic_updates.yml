@@ -96,7 +96,7 @@
 
     - name: Calculate random margin
       ansible.builtin.set_fact:
-        random_margin: "{{ range(-1 * reboot_time_margin_mins, reboot_time_margin_mins) | random }}"
+        random_margin: "{{ range(-1 * reboot_time_margin_mins, reboot_time_margin_mins) | random  | int}}"
 
     - name: Calculate total minutes, hours, and minutes for reboot
       ansible.builtin.set_fact:
