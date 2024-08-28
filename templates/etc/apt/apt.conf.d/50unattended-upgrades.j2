@@ -1,6 +1,6 @@
 Unattended-Upgrade::Allowed-Origins {
         {% if not automatic_updates.only_security %}
-            "${distro_id}:${distro_codename}";
+        "${distro_id}:${distro_codename}";
         {% endif %}
         "${distro_id}:${distro_codename}-security";
         "${distro_id}ESMApps:${distro_codename}-apps-security";

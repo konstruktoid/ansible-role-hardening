@@ -104,7 +104,7 @@
 
     - name: Translates to hours, and minutes
       ansible.builtin.set_fact:
-        reboot_hour: "{{ ( (total_minutes | int) // 60) % 24 }}"
+        reboot_hour: "{{ ((total_minutes | int) // 60) % 24 }}"
         reboot_minute: "{{ (total_minutes | int) % 60 }}"
 
     - name: Configure unattended-upgrades
