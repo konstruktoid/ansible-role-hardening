@@ -220,7 +220,7 @@ automatic_updates:
   only_security: true
   reboot: false
   reboot_from_time: "2:00"
-  reboot_time_margin: "0:20"
+  reboot_time_margin_mins: "20"
 ```
 
 If `automatic_updates` is enabled it will install and configure
@@ -234,7 +234,9 @@ and [dnf_automatic: reboot](https://dnf.readthedocs.io/en/latest/automatic.html)
 
 The reboot is by default scheduled randomly betweem 2:00-2:20AM, server time. The 
 reboot time is chosen randomly from `reboot_from_time`, adding a random time within
-`reboot_time_margin` to avoid overloading hypervisors.
+`reboot_time_margin_mins` to avoid overloading hypervisors.
+
+When overwriting any part of `automatic_updates`, you need to re-specify all values above.
 
 ### ./defaults/main/compilers.yml
 
