@@ -232,6 +232,7 @@ If the `reboot` option is set to `true`, it will reboot the system if needed,
 see [Unattended-Upgrade::Automatic-Reboot](https://help.ubuntu.com/community/AutomaticSecurityUpdates)
 and [dnf_automatic: reboot](https://dnf.readthedocs.io/en/latest/automatic.html).
 
+The reboot time scheduling is currently only supported on Debian-based distros.
 The reboot is by default scheduled randomly betweem 2:00-2:20AM, server time. The 
 reboot time is chosen randomly from `reboot_from_time`, adding a random time within
 `reboot_time_margin_mins` to avoid overloading hypervisors.
