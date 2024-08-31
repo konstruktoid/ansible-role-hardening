@@ -18,7 +18,12 @@ provisioner:
   inventory:
     host_vars:
       jammy:
-        automatic_updates: true
+        automatic_updates:
+          enabled: true
+          only_security: true
+          reboot: false
+          reboot_from_time: "2:00"
+          reboot_time_margin_mins: "20"
         fallback_ntp:
           - 169.254.169.123
         journald_storage: persistent
