@@ -2,6 +2,29 @@
 - name: Configure scheduled command services
   become: true
   block:
+    - name: Template rsyslog.conf
+      become: true
+      ansible.builtin.template:
+        src: "{{ logrotate_rsyslog_conf_template }}"
+        dest: /etc/logrotate.d/rsyslog
+        backup: true
+        mode: "0644"
+        owner: root
+        group: root
+
+    - name: Don't send cron logs to syslog
+      become: true
+      ansible.builtin.template:
+        src: "{{ rsyslogd_template }}"
+        dest: /etc/rsyslog.d/50-default.conf
+        backup: true
+        mode: "0644"
+        owner: root
+        group: root
+      notify:
+        - Validate rsyslogd
+        - Restart rsyslogd
+
     - name: Remove cron.deny and at.deny
       ansible.builtin.file:
         path: "{{ item }}"

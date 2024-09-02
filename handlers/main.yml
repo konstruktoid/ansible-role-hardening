@@ -214,3 +214,9 @@
     cmd: rsyslogd -N3 -f /etc/rsyslog.conf
   register: validate_rsyslogd
   changed_when: validate_rsyslogd.rc == 0
+
+- name: Restart rsyslogd
+  become: true
+  ansible.builtin.service:
+    name: rsyslog
+    state: restarted
