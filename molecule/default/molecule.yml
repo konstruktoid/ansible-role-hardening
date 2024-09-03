@@ -69,6 +69,14 @@ provisioner:
       noble:
         disable_wireless: true
         kernel_lockdown: true
+        logind:
+          killuserprocesses: true
+          killexcludeusers:
+            - root
+            - vagrant
+          idleaction: lock
+          idleactionsec: 15min
+          removeipc: true
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:

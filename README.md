@@ -233,7 +233,7 @@ see [Unattended-Upgrade::Automatic-Reboot](https://help.ubuntu.com/community/Aut
 and [dnf_automatic: reboot](https://dnf.readthedocs.io/en/latest/automatic.html).
 
 The reboot time scheduling is currently only supported on Debian-based distros.
-The reboot is by default scheduled randomly betweem 2:00-2:20AM, server time. The 
+The reboot is by default scheduled randomly betweem 2:00-2:20AM, server time. The
 reboot time is chosen randomly from `reboot_from_time`, adding a random time within
 `reboot_time_margin_mins` to avoid overloading hypervisors.
 
@@ -402,6 +402,32 @@ limit_nproc_soft: 512
 ```
 
 Set maximum number of processes and open files, see [limits.conf(5)](https://www.man7.org/linux/man-pages/man5/limits.conf.5.html).
+
+### ./defaults/main/logind.yml
+
+```yaml
+logind:
+  killuserprocesses: true
+  killexcludeusers:
+    - root
+  idleaction: lock
+  idleactionsec: 15min
+  removeipc: true
+```
+
+Configure [logind](https://www.freedesktop.org/software/systemd/man/latest/logind.conf.html).
+
+`killuserprocesses` takes a boolean argument. Configures whether the processes
+of a user should be killed when the user logs out.
+
+`killexcludeusers` takes a list of usernames that override the
+`killuserprocesses` setting.
+
+`idleaction` and `idleactionsec` configures the action to take when the system
+is idle and the delay after which the action configured in `idleaction` is taken.
+
+`removeipc` takes a boolean argument. If enabled, the user may not consume IPC
+resources after the last of the user's sessions terminated.
 
 ### ./defaults/main/misc.yml
 
