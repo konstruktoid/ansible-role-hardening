@@ -1,12 +1,22 @@
 ---
 - name: Configure systemd logind
   become: true
-  ansible.builtin.template:
-    src: "{{ logind_conf_template }}"
-    dest: /etc/systemd/logind.conf
-    backup: true
-    mode: "0644"
-    owner: root
-    group: root
-  notify:
-    - Reload systemd
+  block:
+    - name: Create logind.conf.d drop-in directory
+      ansible.builtin.file:
+        path: /etc/systemd/logind.conf.d
+        state: directory
+        mode: "0755"
+        owner: root
+        group: root
+
+    - name: Configure systemd logind
+      ansible.builtin.template:
+        src: "{{ logind_conf_template }}"
+        dest: /etc/systemd/logind.conf.d/zz-logind-hardening.conf
+        backup: true
+        mode: "0644"
+        owner: root
+        group: root
+      notify:
+        - Reload systemd
