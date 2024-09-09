@@ -323,6 +323,12 @@
   tags:
     - sudo
 
+- name: Set netplan permissions
+  ansible.builtin.import_tasks:
+    file: netplan.yml
+  tags:
+    - netplan
+
 - name: Miscellaneous extra tasks
   ansible.builtin.import_tasks:
     file: extras.yml

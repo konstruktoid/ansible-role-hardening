@@ -1438,3 +1438,25 @@
         - name: Print kernel lockdown
           ansible.builtin.debug:
             msg: "{{ kernel_lockdown.stdout }}"
+
+    - name: Verify netplan files permissions
+      become: true
+      block:
+        - name: Find all netplan configuration files
+          ansible.builtin.find:
+            paths:
+              - /etc/netplan
+              - /lib/netplan
+              - /run/netplan
+            recurse: true
+            patterns: "*.yaml"
+          register: netplan_configuration
+
+        - name: Assert netplan files permissions
+          ansible.builtin.assert:
+            that:
+              - item.mode == "0600"
+            success_msg: "{{ item.path }} has correct permissions: {{ item.mode }}"
+            fail_msg: "{{ item.path }} permissions are incorrect: {{ item.mode }}"
+          with_items:
+            - "{{ netplan_configuration.files }}"
