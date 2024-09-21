@@ -115,6 +115,7 @@ platforms:
     box: bento/ubuntu-24.04
     config_options:
       vm.boot_timeout: 600
+      ssh.key_type: ed25519
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 1024
