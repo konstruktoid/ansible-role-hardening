@@ -1,7 +1,7 @@
 ---
 collections:
   - name: ansible.posix
-    version: 1.6.0
+    version: 1.6.1
     source: https://github.com/ansible-collections/ansible.posix.git
     type: git
   - name: community.crypto
