@@ -220,7 +220,7 @@ automatic_updates:
   only_security: true
   reboot: false
   reboot_from_time: "2:00"
-  reboot_time_margin_mins: "20"
+  reboot_time_margin_mins: 20
 ```
 
 If `automatic_updates` is enabled it will install and configure

@@ -67,6 +67,12 @@ provisioner:
               - Banner none
         slub_debugger_poisoning: true
       noble:
+        automatic_updates:
+          enabled: true
+          only_security: true
+          reboot: true
+          reboot_from_time: "2:00"
+          reboot_time_margin_mins: 1
         disable_wireless: true
         kernel_lockdown: true
         logind:

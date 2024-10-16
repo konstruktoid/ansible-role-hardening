@@ -1460,3 +1460,14 @@
             fail_msg: "{{ item.path }} permissions are incorrect: {{ item.mode }}"
           with_items:
             - "{{ netplan_configuration.files }}"
+
+    - name: Verify unattended-upgrades settings
+      ansible.builtin.command:
+        cmd: grep -E 'Unattended-Upgrade::Automatic-Reboot-Time "02:[0-5][0-9]"' /etc/apt/apt.conf.d/50unattended-upgrades
+      register: unattended_upgrades
+      failed_when: unattended_upgrades.rc != 0
+      changed_when: unattended_upgrades.rc != 0
+      when:
+        - ansible_os_family == "Debian"
+        - automatic_updates.enabled
+        - automatic_updates.reboot
