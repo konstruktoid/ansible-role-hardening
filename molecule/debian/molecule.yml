@@ -20,6 +20,7 @@ provisioner:
       bookworm:
         ansible_python_interpreter: /usr/bin/python3
         kernel_lockdown: integrity
+        rkhunter_web_cmd:
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
@@ -30,6 +31,7 @@ provisioner:
       bullseye:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
+        rkhunter_web_cmd:
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
@@ -40,6 +42,7 @@ provisioner:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
         kernel_lockdown: confidentiality
+        rkhunter_web_cmd:
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
