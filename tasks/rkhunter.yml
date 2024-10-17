@@ -82,6 +82,8 @@
         state: present
         create: false
         backrefs: true
+      when:
+        - rkhunter_web_cmd is defined
       notify:
         - Run rkhunter propupd
         - Update rkhunter databases

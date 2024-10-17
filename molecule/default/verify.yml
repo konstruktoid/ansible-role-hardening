@@ -479,8 +479,8 @@
         executable: /bin/bash
       with_dict: "{{ sysctl_settings | dict2items | rejectattr('key', 'search', 'nf_conntrack') | items2dict }}"
       register: sysctl_file_config
+      changed_when: false
       failed_when: sysctl_file_config.rc != 0
-      changed_when: sysctl_file_config.rc != 0
       when:
         - ansible_virtualization_type not in ["container", "docker", "podman"]
 
@@ -493,17 +493,18 @@
         executable: /bin/bash
       with_dict: "{{ sysctl_settings | dict2items | rejectattr('key', 'search', 'nf_conntrack') | items2dict }}"
       register: sysctl_runtime_config
+      changed_when: false
       failed_when: sysctl_runtime_config.rc != 0
-      changed_when: sysctl_runtime_config.rc != 0
       when:
         - ansible_virtualization_type not in ["container", "docker", "podman"]
 
     - name: Get crypto-policies value
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      ansible.builtin.shell: grep "^{{ crypto_policy | upper }}$" /etc/crypto-policies/config
+      ansible.builtin.shell:
+        cmd: grep "^{{ crypto_policy | upper }}$" /etc/crypto-policies/config
       register: crypto_policy_set
-      changed_when: crypto_policy_set.rc != 0
+      changed_when: false
       failed_when: crypto_policy_set.rc != 0
       when:
         - crypto_policies_config
@@ -513,10 +514,11 @@
         - ansible_virtualization_type not in ["container", "docker", "podman"]
       block:
         - name: Verify noexec /dev/shm
-          ansible.builtin.shell: grep '^tmpfs\s/dev/shm.*noexec' /proc/mounts
+          ansible.builtin.shell:
+            cmd: grep '^tmpfs\s/dev/shm.*noexec' /proc/mounts
           register: dev_shm_noexec
+          changed_when: false
           failed_when: dev_shm_noexec.rc != 0
-          changed_when: dev_shm_noexec.rc != 0
 
         - name: Verify /proc
           ansible.builtin.shell: |
@@ -525,8 +527,8 @@
           args:
             executable: /bin/bash
           register: proc_opts
+          changed_when: false
           failed_when: proc_opts.rc != 0
-          changed_when: proc_opts.rc != 0
           tags:
             - skip_ansible_lint
 
@@ -535,15 +537,16 @@
           ansible.builtin.systemd:
             name: tmp.mount
           register: tmp_mount
+          changed_when: false
           failed_when: not 'nosuid,nodev,noexec' in tmp_mount.status.Options
-          changed_when: not 'nosuid,nodev,noexec' in tmp_mount.status.Options
 
         - name: Verify /tmp
           become: true
-          ansible.builtin.shell: grep '^tmpfs\s/tmp\s.*nosuid,nodev,noexec' /proc/mounts
+          ansible.builtin.shell:
+            cmd: grep '^tmpfs\s/tmp\s.*nosuid,nodev,noexec' /proc/mounts
           register: mounts_tmp
+          changed_when: false
           failed_when: mounts_tmp.rc != 0
-          changed_when: mounts_tmp.rc != 0
 
     - name: Get PAM version
       tags:
@@ -582,8 +585,8 @@
       become: true
       ansible.builtin.shell: grep "^{{ item }}$" /etc/login.defs
       register: login_defs
+      changed_when: false
       failed_when: login_defs.rc != 0
-      changed_when: login_defs.rc != 0
       with_items:
         - ENCRYPT_METHOD {{ password_algorithm | upper }}
         - FAILLOG_ENAB yes
@@ -653,16 +656,17 @@
             set -o pipefail
             grubby --info="/boot/vmlinuz-$(uname -r)" | grep "^args.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
           register: audit_grubenv
+          changed_when: false
           failed_when: audit_grubenv.rc != 0
-          changed_when: audit_grubenv.rc != 0
           when:
             - ansible_os_family == "RedHat"
 
         - name: Verify Debian audit GRUB settings
-          ansible.builtin.shell: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
+          ansible.builtin.shell:
+            cmd: grep "linux.*{{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}" /boot/grub/grub.cfg
           register: audit_grub_cfg
+          changed_when: false
           failed_when: audit_grub_cfg.rc != 0
-          changed_when: audit_grub_cfg.rc != 0
           when:
             - ansible_os_family == "Debian"
 
@@ -672,8 +676,8 @@
               set -o pipefail
               grubby --info="/boot/vmlinuz-$(uname -r)" | grep "ipv6.disable=1"
           register: audit_grubenv
+          changed_when: false
           failed_when: audit_grubenv.rc != 0
-          changed_when: audit_grubenv.rc != 0
           when:
             - ansible_os_family == "RedHat"
             - disable_ipv6
@@ -682,8 +686,8 @@
           ansible.builtin.shell:
             cmd: grep "linux.*ipv6.disable=1" /boot/grub/grub.cfg
           register: audit_grub_cfg
+          changed_when: false
           failed_when: audit_grub_cfg.rc != 0
-          changed_when: audit_grub_cfg.rc != 0
           when:
             - ansible_os_family == "Debian"
             - disable_ipv6
@@ -694,8 +698,8 @@
               set -o pipefail
               grubby --info="/boot/vmlinuz-$(uname -r)" | grep "vsyscall=none"
           register: audit_grubenv
+          changed_when: false
           failed_when: audit_grubenv.rc != 0
-          changed_when: audit_grubenv.rc != 0
           when:
             - ansible_os_family == "RedHat"
             - not allow_virtual_system_calls
@@ -704,8 +708,8 @@
           ansible.builtin.shell:
             cmd: grep "linux.*vsyscall=none" /boot/grub/grub.cfg
           register: page_grub_cfg
+          changed_when: false
           failed_when: page_grub_cfg.rc != 0
-          changed_when: page_grub_cfg.rc != 0
           when:
             - ansible_os_family == "Debian"
             - not allow_virtual_system_calls
@@ -716,8 +720,8 @@
               set -o pipefail
               grubby --info="/boot/vmlinuz-$(uname -r)" | grep "page_poison=1"
           register: audit_grubenv
+          changed_when: false
           failed_when: audit_grubenv.rc != 0
-          changed_when: audit_grubenv.rc != 0
           when:
             - ansible_os_family == "RedHat"
             - enable_page_poisoning
@@ -726,8 +730,8 @@
           ansible.builtin.shell:
             cmd: grep "linux.*page_poison=1" /boot/grub/grub.cfg
           register: page_grub_cfg
+          changed_when: false
           failed_when: page_grub_cfg.rc != 0
-          changed_when: page_grub_cfg.rc != 0
           when:
             - ansible_os_family == "Debian"
             - enable_page_poisoning
@@ -738,8 +742,8 @@
               set -o pipefail
               grubby --info="/boot/vmlinuz-$(uname -r)" | grep "pti={{ 'on' if page_table_isolation else 'auto' }}"
           register: audit_grubenv
+          changed_when: false
           failed_when: audit_grubenv.rc != 0
-          changed_when: audit_grubenv.rc != 0
           when:
             - ansible_os_family == "RedHat"
 
@@ -747,8 +751,8 @@
           ansible.builtin.shell:
             cmd: grep "linux.*pti={{ 'on' if page_table_isolation else 'auto' }}" /boot/grub/grub.cfg
           register: page_grub_cfg
+          changed_when: false
           failed_when: page_grub_cfg.rc != 0
-          changed_when: page_grub_cfg.rc != 0
           when:
             - ansible_os_family == "Debian"
 
@@ -758,8 +762,8 @@
               set -o pipefail
               grubby --info="/boot/vmlinuz-$(uname -r)" | grep "slub_debug=P"
           register: audit_grubenv
+          changed_when: false
           failed_when: audit_grubenv.rc != 0
-          changed_when: audit_grubenv.rc != 0
           when:
             - ansible_os_family == "RedHat"
             - slub_debugger_poisoning
@@ -768,8 +772,8 @@
           ansible.builtin.shell:
             cmd: grep "linux.*slub_debug=P" /boot/grub/grub.cfg
           register: page_grub_cfg
+          changed_when: false
           failed_when: page_grub_cfg.rc != 0
-          changed_when: page_grub_cfg.rc != 0
           when:
             - ansible_os_family == "Debian"
             - slub_debugger_poisoning
@@ -786,8 +790,8 @@
           args:
             executable: /bin/bash
           register: sysctl_ipv6_config
+          changed_when: false
           failed_when: sysctl_ipv6_config.rc != 0
-          changed_when: sysctl_ipv6_config.rc != 0
           with_items:
             - net.ipv6.conf.all.disable_ipv6 = 1
             - net.ipv6.conf.default.disable_ipv6 = 1
@@ -804,7 +808,7 @@
             executable: /bin/bash
           with_dict: "{{ ipv6_disable_sysctl_settings }}"
           register: sysctl_ipv6
-          changed_when: sysctl_ipv6.rc != 0
+          changed_when: false
           failed_when: sysctl_ipv6.rc != 0
           when:
             - system_has_ipv6
@@ -822,7 +826,7 @@
       become: true
       ansible.builtin.stat:
         path: "{{ item.path }}"
-      changed_when: item.mode | int > 644
+      changed_when: false
       failed_when: item.mode | int > 644
       with_items:
         - "{{ perm_grub_cfg.files | reject('search', '/boot/efi/EFI/.*/grub.cfg') | list }}"
@@ -831,10 +835,11 @@
 
     - name: Verify systemd resolved.conf
       become: true
-      ansible.builtin.shell: grep "^{{ item }}$" /etc/systemd/resolved.conf
+      ansible.builtin.shell:
+        cmd: grep "^{{ item }}$" /etc/systemd/resolved.conf
       register: systemd_resolved_conf
+      changed_when: false
       failed_when: systemd_resolved_conf.rc != 0
-      changed_when: systemd_resolved_conf.rc != 0
       with_items:
         - DNS={{ dns | join(' ') }}
         - FallbackDNS={{ fallback_dns | join(' ') }}
@@ -846,10 +851,11 @@
 
     - name: Verify systemd timesyncd.conf
       become: true
-      ansible.builtin.shell: grep "^{{ item }}$" /etc/systemd/timesyncd.conf
+      ansible.builtin.shell:
+        cmd: grep "^{{ item }}$" /etc/systemd/timesyncd.conf
       register: systemd_timesyncd_conf
+      changed_when: false
       failed_when: systemd_timesyncd_conf.rc != 0
-      changed_when: systemd_timesyncd_conf.rc != 0
       with_items:
         - NTP={{ ntp | join(' ') }}
         - FallbackNTP={{ fallback_ntp | join(' ') }}
@@ -911,8 +917,8 @@
         set -o pipefail
         apt-config dump | grep '^{{ item }}'
       register: apt_config_settings
+      changed_when: false
       failed_when: apt_config_settings.rc != 0
-      changed_when: apt_config_settings.rc != 0
       args:
         executable: /bin/bash
       when:
@@ -939,6 +945,7 @@
             update-cracklib
           register: update_debian_cracklib
           changed_when: update_debian_cracklib.rc == 0
+          failed_when: update_debian_cracklib.rc != 0
           when:
             - ansible_os_family == "Debian"
 
@@ -950,6 +957,7 @@
             cmd: create-cracklib-dict /usr/share/dict/*
           register: update_redhat_cracklib
           changed_when: update_redhat_cracklib.rc == 0
+          failed_when: update_redhat_cracklib.rc != 0
           when:
             - ansible_os_family == "RedHat"
 
@@ -962,8 +970,8 @@
           args:
             executable: /bin/bash
           register: cracklib_passwords
+          changed_when: false
           failed_when: cracklib_passwords.rc != 0
-          changed_when: cracklib_passwords.rc != 0
           when:
             - ansible_os_family == "Debian"
 
@@ -976,8 +984,8 @@
       args:
         executable: /bin/bash
       register: username_passwords
+      changed_when: false
       failed_when: username_passwords.rc != 0
-      changed_when: username_passwords.rc != 0
       when:
         - ansible_virtualization_type not in ["container", "docker", "podman"]
 
@@ -1006,8 +1014,8 @@
           args:
             executable: /bin/bash
           register: modprobe_blockblacklisted
+          changed_when: false
           failed_when: modprobe_blockblacklisted.rc != 0
-          changed_when: modprobe_blockblacklisted.rc != 0
           with_items:
             - "{{ modprobe_blacklist.stdout_lines | sort | unique }}"
 
@@ -1016,8 +1024,8 @@
         set -o pipefail
         sudo -l | grep "{{ item }}"
       register: sudo_settings
+      changed_when: false
       failed_when: sudo_settings.rc != 0
-      changed_when: sudo_settings.rc != 0
       args:
         executable: /bin/bash
       with_items:
@@ -1281,6 +1289,7 @@
         cmd: grep roletestuser /etc/shadow
       register: roletestuser_pass
       changed_when: false
+      failed_when: roletestuser_pass.rc != 0
 
     - name: Print test user
       ansible.builtin.debug:
@@ -1340,10 +1349,11 @@
             - not item.stat.mimetype == "inode/symlink"
 
     - name: Verify journald settings
-      ansible.builtin.shell: grep "^{{ item }}$" /etc/systemd/journald.conf
+      ansible.builtin.shell:
+        cmd: grep "^{{ item }}$" /etc/systemd/journald.conf
       register: journald_conf
+      changed_when: false
       failed_when: journald_conf.rc != 0
-      changed_when: journald_conf.rc != 0
       with_items:
         - Storage={{ journald_storage }}
         - ForwardToSyslog={{ 'yes' if journald_forwardtosyslog else 'no' }}
@@ -1355,9 +1365,9 @@
         systemd-analyze cat-config systemd/logind.conf | grep "^{{ item }}"
       args:
         executable: /bin/bash
-      register: journald_conf
-      failed_when: journald_conf.rc != 0
-      changed_when: journald_conf.rc != 0
+      register: logind_conf
+      changed_when: false
+      failed_when: logind_conf.rc != 0
       with_items:
         - KillUserProcesses={{ 'true' if logind.killuserprocesses else 'false' }}
         - KillExcludeUsers={{ logind.killexcludeusers | join(' ') }}
@@ -1394,10 +1404,10 @@
             cmd: |
               set -o pipefail
               find /run/log/journal /var/log/journal -type f -printf "%m %p %CY%Cm%Cd\n" | awk '$1 > "644" {print $0}'
-          changed_when: false
           args:
             executable: /bin/bash
           register: journal_file_find
+          changed_when: false
           failed_when:
             - journal_file_find.rc != 0
             - "'No such file or directory' not in journal_file_find.stderr"
@@ -1432,8 +1442,8 @@
           ansible.builtin.command:
             cmd: grep "\[{{ kernel_lockdown | trim }}\]"  /sys/kernel/security/lockdown
           register: kernel_lockdown
-          failed_when: kernel_lockdown.rc != 0
           changed_when: false
+          failed_when: kernel_lockdown.rc != 0
 
         - name: Print kernel lockdown
           ansible.builtin.debug:
@@ -1463,10 +1473,13 @@
 
     - name: Verify unattended-upgrades settings
       ansible.builtin.command:
-        cmd: grep -E 'Unattended-Upgrade::Automatic-Reboot-Time "02:[0-5][0-9]"' /etc/apt/apt.conf.d/50unattended-upgrades
+        cmd: grep -Eo '^{{ item }}$' /etc/apt/apt.conf.d/50unattended-upgrades
       register: unattended_upgrades
+      changed_when: false
       failed_when: unattended_upgrades.rc != 0
-      changed_when: unattended_upgrades.rc != 0
+      loop:
+        - Unattended-Upgrade::Automatic-Reboot "true";
+        - Unattended-Upgrade::Automatic-Reboot-Time "02:00";
       when:
         - ansible_os_family == "Debian"
         - automatic_updates.enabled
