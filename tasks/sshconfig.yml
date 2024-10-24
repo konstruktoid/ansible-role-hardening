@@ -16,11 +16,26 @@
 - name: Ensure privilege separation directory exists
   become: true
   ansible.builtin.file:
-    path: /run/sshd
+    path: "{{ item.path }}"
     owner: root
     group: root
     state: directory
-    mode: "0755"
+    mode: "{{ item.mode }}"
+  loop:
+    - { path: /run/sshd, mode: "0755" }
+    - { path: /usr/share/empty.sshd, mode: "0711" }
+    - { path: /var/empty, mode: "0755" }
+    - { path: /var/empty/sshd, mode: "0711" }
+
+- name: Configure sshd using sshd_config.d
+  become: true
+  ansible.builtin.template:
+    src: "{{ sshd_tmpfiles_template }}"
+    dest: /usr/lib/tmpfiles.d/ssh.conf
+    backup: true
+    mode: "0644"
+    owner: root
+    group: root
 
 - name: Stat sysconfig sshd configuration
   ansible.builtin.stat:
