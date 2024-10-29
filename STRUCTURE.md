@@ -16,6 +16,7 @@
 │   └── main
 │       ├── aide.yml
 │       ├── auditd.yml
+│       ├── automatic_updates.yml
 │       ├── compilers.yml
 │       ├── crypto_policies.yml
 │       ├── disablewireless.yml
@@ -24,6 +25,7 @@
 │       ├── journal.yml
 │       ├── kernel.yml
 │       ├── limits.yml
+│       ├── logind.yml
 │       ├── misc.yml
 │       ├── module_blocklists.yml
 │       ├── mount.yml
@@ -102,6 +104,7 @@
 │   ├── main.yml
 │   ├── motdnews.yml
 │   ├── mount.yml
+│   ├── netplan.yml
 │   ├── packagemgmt.yml
 │   ├── packages.yml
 │   ├── password.yml
@@ -131,6 +134,9 @@
 │   │   │       ├── cpuinfo.fact
 │   │   │       ├── sshkeys.fact
 │   │   │       └── systemd.fact
+│   │   ├── apt
+│   │   │   └── apt.conf.d
+│   │   │       └── 50unattended-upgrades.j2
 │   │   ├── audit
 │   │   │   └── rules.d
 │   │   │       └── hardening.rules.j2
@@ -169,16 +175,20 @@
 │   │       ├── timesyncd.conf.j2
 │   │       ├── tmp.mount.j2
 │   │       └── user.conf.j2
-│   └── lib
-│       └── systemd
-│           └── system
-│               ├── aidecheck.service.j2
-│               └── aidecheck.timer.j2
+│   ├── lib
+│   │   └── systemd
+│   │       └── system
+│   │           ├── aidecheck.service.j2
+│   │           └── aidecheck.timer.j2
+│   └── usr
+│       └── lib
+│           └── tmpfiles.d
+│               └── ssh.conf.j2
 ├── tests
 │   ├── debug_facts.yml
 │   ├── inventory
 │   └── test.yml
 └── tox.ini
 
-37 directories, 140 files
+42 directories, 145 files
 ```

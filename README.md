@@ -8,7 +8,6 @@ and requires Ansible version 2.15 or higher.
 
 The role supports the following operating systems:
 
-- [AlmaLinux 8](https://wiki.almalinux.org/release-notes/#almalinux-8)
 - [AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9)
 - [Debian 11 (Bullseye)](https://www.debian.org/releases/bullseye/)
 - [Debian 12 (Bookworm)](https://www.debian.org/releases/bookworm/)
@@ -42,7 +41,7 @@ None.
 ---
 roles:
   - name: konstruktoid.hardening
-    version: v2.1.0
+    version: v2.2.0
     src: https://github.com/konstruktoid/ansible-role-hardening.git
     scm: git
 ```
@@ -89,7 +88,7 @@ roles:
           ansible.builtin.git:
             repo: https://github.com/konstruktoid/ansible-role-hardening
             dest: /etc/ansible/roles/konstruktoid.hardening
-            version: v2.1.0
+            version: v2.2.0
 
         - name: Remove git
           ansible.builtin.package:
@@ -108,7 +107,7 @@ roles:
         sshd_update_moduli: true
 ```
 
-## Note regarding UFW rules
+## Note regarding UFW firewall rules
 
 Instead of resetting `ufw` every run and by doing so causing network traffic
 disruption, the role deletes every `ufw` rule without
@@ -236,8 +235,6 @@ The reboot time scheduling is currently only supported on Debian-based distros.
 The reboot is by default scheduled randomly betweem 2:00-2:20AM, server time. The
 reboot time is chosen randomly from `reboot_from_time`, adding a random time within
 `reboot_time_margin_mins` to avoid overloading hypervisors.
-
-When overwriting any part of `automatic_updates`, you need to re-specify all values above.
 
 ### ./defaults/main/compilers.yml
 
@@ -1103,11 +1100,13 @@ resolved_conf_template: etc/systemd/resolved.conf.j2
 rkhunter_template: etc/default/rkhunter.j2
 ssh_config_template: etc/ssh/ssh_config.j2
 sshd_config_template: etc/ssh/sshd_config.j2
+sshd_tmpfiles_template: usr/lib/tmpfiles.d/ssh.conf.j2
 sysctl_ipv6_config_template: etc/sysctl/sysctl.ipv6.conf.j2
 sysctl_main_config_template: etc/sysctl/sysctl.main.conf.j2
 system_conf_template: etc/systemd/system.conf.j2
 timesyncd_conf_template: etc/systemd/timesyncd.conf.j2
 tmp_mount_template: etc/systemd/tmp.mount.j2
+unattended_upgrades_template: etc/apt/apt.conf.d/50unattended-upgrades.j2
 user_conf_template: etc/systemd/user.conf.j2
 useradd_template: etc/default/useradd.j2
 ```
@@ -1130,7 +1129,7 @@ ufw_outgoing_traffic:
 ufw_rate_limit: false
 ```
 
-See the note regarding [required comments](#note-regarding-ufw-rules).
+See the note regarding [required comments](#note-regarding-ufw-firewall-rules).
 
 `manage_ufw: true` installs and configures `ufw` with related rules.
 Set it to `false` in order to install and configure a firewall manually.

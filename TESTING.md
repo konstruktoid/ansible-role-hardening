@@ -10,7 +10,6 @@ Before running any test:
 ## Distribution boxes used by Molecule and Vagrant
 
 ```console
-almalinux/8
 almalinux/9
 bento/ubuntu-22.04
 bento/ubuntu-24.04

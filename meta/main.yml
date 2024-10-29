@@ -12,7 +12,6 @@ galaxy_info:
         - bullseye
     - name: EL
       versions:
-        - "8"
         - "9"
     - name: Ubuntu
       versions:
