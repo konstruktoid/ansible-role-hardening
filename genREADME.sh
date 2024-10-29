@@ -14,7 +14,7 @@ It's [systemd](https://freedesktop.org/wiki/Software/systemd/) focused
 and requires Ansible version 2.15 or higher.
 
 The role supports the following operating systems:
-- [AlmaLinux 8](https://wiki.almalinux.org/release-notes/#almalinux-8)
+
 - [AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9)
 - [Debian 11 (Bullseye)](https://www.debian.org/releases/bullseye/)
 - [Debian 12 (Bookworm)](https://www.debian.org/releases/bookworm/)
@@ -48,7 +48,7 @@ None.
 ---
 roles:
   - name: konstruktoid.hardening
-    version: v2.1.0
+    version: v2.2.0
     src: https://github.com/konstruktoid/ansible-role-hardening.git
     scm: git
 \`\`\`
@@ -95,7 +95,7 @@ roles:
           ansible.builtin.git:
             repo: https://github.com/konstruktoid/ansible-role-hardening
             dest: /etc/ansible/roles/konstruktoid.hardening
-            version: v2.1.0
+            version: v2.2.0
 
         - name: Remove git
           ansible.builtin.package:
