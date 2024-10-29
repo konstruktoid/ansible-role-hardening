@@ -1149,7 +1149,10 @@ umask_value: "077"
 
 `session_timeout` sets, in seconds, the
 [TMOUT](https://www.gnu.org/software/bash/manual/bash.html#index-TMOUT)
-environment variable.
+environment variable if systemd version is 252 or lower.
+
+If systemd version is higher than 252, the `session_timeout` value will be set
+as [StopIdleSessionSec](https://www.freedesktop.org/software/systemd/man/latest/logind.conf.html#StopIdleSessionSec=).
 
 `umask_value` sets the default
 [umask value](https://manpages.ubuntu.com/manpages/jammy/man2/umask.2.html).

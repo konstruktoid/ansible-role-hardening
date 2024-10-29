@@ -1313,6 +1313,8 @@
       register: declare_tmout
       changed_when: false
       failed_when: declare_tmout.rc != 0
+      when:
+        - ansible_local.systemd.version | int < 252
 
     - name: Assert compiler permissions
       when:
@@ -1374,6 +1376,20 @@
         - IdleAction={{ logind.idleaction }}
         - IdleActionSec={{ logind.idleactionsec }}
         - RemoveIPC={{ 'true' if logind.removeipc else 'false' }}
+
+    - name: Verify StopIdleSessionSec setting
+      ansible.builtin.shell: |
+        set -o pipefail
+        systemd-analyze cat-config systemd/logind.conf | grep "^{{ item }}"
+      args:
+        executable: /bin/bash
+      register: stopidlesession
+      changed_when: false
+      failed_when: stopidlesession.rc != 0
+      with_items:
+        - StopIdleSessionSec={{ session_timeout }}
+      when:
+        - ansible_local.systemd.version | int >= 252
 
     - name: Verify journal permissions
       become: true

@@ -148,4 +148,5 @@
     create: false
     insertbefore: ^export
   when:
+    - ansible_local.systemd.version | int < 252
     - session_timeout
