@@ -1129,7 +1129,7 @@ ufw_outgoing_traffic:
 ufw_rate_limit: false
 ```
 
-See the note regarding [required comments](#note-regarding-ufw-rules).
+See the note regarding [required comments](#note-regarding-ufw-firewall-rules).
 
 `manage_ufw: true` installs and configures `ufw` with related rules.
 Set it to `false` in order to install and configure a firewall manually.
