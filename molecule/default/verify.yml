@@ -1390,6 +1390,7 @@
         - StopIdleSessionSec={{ session_timeout }}
       when:
         - ansible_local.systemd.version | int >= 252
+        - ansible_virtualization_type not in ["container", "docker", "podman"]
 
     - name: Verify journal permissions
       become: true
