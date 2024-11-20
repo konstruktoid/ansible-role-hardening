@@ -194,6 +194,19 @@
         - DefaultLimitNOFILE={{ limit_nofile_hard }}
         - DefaultLimitNPROC={{ limit_nproc_hard }}
 
+    - name: Verify masked Ctrl-Alt-Del
+      become: true
+      ansible.builtin.systemd:
+        name: ctrl-alt-del.target
+        masked: true
+        enabled: false
+        state: stopped
+      check_mode: true
+      register: ctrl_alt_del_target
+      failed_when: ctrl_alt_del_target is changed
+      when:
+        - ansible_virtualization_type not in ["container", "docker", "podman"]
+
     - name: Verify systemd user.conf
       become: true
       ansible.builtin.lineinfile:
