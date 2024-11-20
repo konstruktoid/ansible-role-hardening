@@ -1,5 +1,5 @@
 ---
-suid_sgid_permissions: true
+manage_suid_sgid_permissions: true
 suid_sgid_blocklist:
   - 7z
   - aa-exec

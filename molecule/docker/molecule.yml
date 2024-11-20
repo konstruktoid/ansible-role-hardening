@@ -44,7 +44,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
         sshd_match_users:
           - user: testuser01
             rules:

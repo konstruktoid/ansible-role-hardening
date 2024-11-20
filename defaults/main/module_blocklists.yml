@@ -1,4 +1,6 @@
 ---
+manage_kernel_modules: true
+
 fs_modules_blocklist:
   - cramfs
   - freevxfs

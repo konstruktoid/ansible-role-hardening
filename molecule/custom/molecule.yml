@@ -69,7 +69,7 @@ provisioner:
         pass_max_days: 365
         pass_min_days: 7
         sshd_max_sessions: 4
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
         umask_value: "027"
 platforms:
   - name: jammy

@@ -25,7 +25,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
         system_upgrade: false
 platforms:
   - name: almalinux9

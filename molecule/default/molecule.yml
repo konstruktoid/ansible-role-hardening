@@ -54,7 +54,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
         sshd_match_users:
           - user: testuser01
             rules:
@@ -89,7 +89,7 @@ provisioner:
           - vagrant
           - sudo
         sshd_update_moduli: true
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
         sysctl_conf_dir: /etc/sysctl.d/
         umask_value: "027"
         ufw_rate_limit: true

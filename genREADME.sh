@@ -69,7 +69,7 @@ roles:
           - 10.0.2.0/24
           - 192.168.0.0/24
           - 192.168.1.0/24
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
 \`\`\`
 
 ### Local playbook using git checkout

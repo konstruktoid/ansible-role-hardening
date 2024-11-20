@@ -1,4 +1,5 @@
 ---
+manage_logind: true
 logind:
   killuserprocesses: true
   killexcludeusers:

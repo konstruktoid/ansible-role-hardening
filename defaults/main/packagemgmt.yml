@@ -1,4 +1,5 @@
 ---
+manage_package_managers: true
 apt_hardening_options:
   - Acquire::AllowDowngradeToInsecureRepositories "false";
   - Acquire::AllowInsecureRepositories "false";
