@@ -1,3 +1,4 @@
 ---
+manage_umask: true
 session_timeout: 900
 umask_value: "077"

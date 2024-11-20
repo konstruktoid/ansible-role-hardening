@@ -62,7 +62,7 @@ roles:
           - 10.0.2.0/24
           - 192.168.0.0/24
           - 192.168.1.0/24
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
 ```
 
 ### Local playbook using git checkout
@@ -987,7 +987,7 @@ repository.
 ### ./defaults/main/suid_sgid_blocklist.yml
 
 ```yaml
-suid_sgid_permissions: true
+manage_suid_sgid_permissions: true
 suid_sgid_blocklist:
   - 7z
   - aa-exec
@@ -1002,7 +1002,7 @@ suid_sgid_blocklist:
   [...]
 ```
 
-If `suid_sgid_permissions: true` loop through `suid_sgid_blocklist` and remove
+If `manage_suid_sgid_permissions: true` loop through `suid_sgid_blocklist` and remove
 any SUID/SGID permissions.
 
 A complete file list is available in

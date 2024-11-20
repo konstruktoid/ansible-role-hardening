@@ -26,7 +26,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
         system_upgrade: false
       bullseye:
         ansible_become_pass: vagrant
@@ -37,7 +37,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
       testing:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
@@ -48,7 +48,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
         sshd_update_moduli: true
 platforms:
   - name: bookworm

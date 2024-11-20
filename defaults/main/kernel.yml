@@ -1,4 +1,5 @@
 ---
+manage_kernel: true
 allow_virtual_system_calls: true
 enable_page_poisoning: true
 kernel_lockdown: false
