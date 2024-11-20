@@ -1,21 +1,14 @@
 ---
 - name: Disable systemd ctrl-alt-del
-  become: true
   ansible.builtin.systemd:
     name: ctrl-alt-del.target
-    masked: true
-    enabled: false
-    state: stopped
-  when:
-    - not ansible_os_family == "RedHat"
+  register: ctrl_alt_del_target
 
-- name: Disable systemd ctrl-alt-del - RedHat family
+- name: Disable systemd ctrl-alt-del
   become: true
-  ansible.builtin.systemd:
-    name: ctrl-alt-del.target
-    masked: true
-    enabled: false
-    state: stopped
-  changed_when: false
-  when:
-    - ansible_os_family == "RedHat"
+  ansible.builtin.file:
+    src: /dev/null
+    path: "{{ ctrl_alt_del_target.status.FragmentPath }}"
+    state: link
+    owner: root
+    group: root
