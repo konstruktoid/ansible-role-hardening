@@ -1,5 +1,5 @@
 ---
-- name: Disable systemd ctrl-alt-del
+- name: Get ctrl-alt-del systemd information
   ansible.builtin.systemd:
     name: ctrl-alt-del.target
   register: ctrl_alt_del_target
@@ -12,3 +12,4 @@
     state: link
     owner: root
     group: root
+    force: true
