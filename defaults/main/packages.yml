@@ -1,5 +1,4 @@
 ---
-manage_packages: true
 system_upgrade: true
 
 packages_blocklist:

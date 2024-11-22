@@ -131,8 +131,6 @@
 - name: Configure package managers, update caches and install updates
   ansible.builtin.import_tasks:
     file: packagemgmt.yml
-  when:
-    - manage_package_managers
 
 - name: Configure automatic updates
   ansible.builtin.import_tasks:
@@ -187,8 +185,6 @@
 - name: Configure needrestart, install and remove various packages
   ansible.builtin.import_tasks:
     file: packages.yml
-  when:
-    - manage_packages
   tags:
     - package_installation
 
@@ -203,8 +199,6 @@
 - name: Configure PAM
   ansible.builtin.import_tasks:
     file: password.yml
-  when:
-    - manage_pam
   tags:
     - cracklib
     - crypto_policy
@@ -297,8 +291,6 @@
 - name: Set umask
   ansible.builtin.import_tasks:
     file: umask.yml
-  when:
-    - manage_umask
   tags:
     - umask
 
@@ -372,8 +364,6 @@
 - name: Configure sudo
   ansible.builtin.import_tasks:
     file: sudo.yml
-  when:
-    - manage_sudo
   tags:
     - sudo
 

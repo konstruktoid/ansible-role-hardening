@@ -4,7 +4,7 @@ This is an [Ansible](https://www.ansible.com/) role designed to enhance the
 security of servers running on AlmaLinux, Debian, or Ubuntu.
 
 It's [systemd](https://freedesktop.org/wiki/Software/systemd/) focused
-and requires Ansible version 2.18 or higher.
+and requires Ansible version 2.15 or higher.
 
 The role supports the following operating systems:
 
@@ -41,7 +41,7 @@ None.
 ---
 roles:
   - name: konstruktoid.hardening
-    version: v2.2.0
+    version: v2.3.0
     src: https://github.com/konstruktoid/ansible-role-hardening.git
     scm: git
 ```
@@ -88,7 +88,7 @@ roles:
           ansible.builtin.git:
             repo: https://github.com/konstruktoid/ansible-role-hardening
             dest: /etc/ansible/roles/konstruktoid.hardening
-            version: v2.2.0
+            version: v2.3.0
 
         - name: Remove git
           ansible.builtin.package:
@@ -130,6 +130,15 @@ See [TESTING.md](TESTING.md).
 
 ## Role Variables with defaults
 
+### ./defaults/main/adduser.yml
+
+```yaml
+manage_adduser_conf: true
+```
+
+If `manage_adduser_conf` is set to `true`, the role will configure
+`adduser` and `useradd` using the available templates.
+
 ### ./defaults/main/aide.yml
 
 ```yaml
@@ -154,6 +163,24 @@ and configured.
 AIDE database.
 
 [aide.conf(5)](https://linux.die.net/man/5/aide.conf)
+
+### ./defaults/main/apparmor.yml
+
+```yaml
+manage_apparmor: true
+```
+
+If `manage_apparmor: true`, then available [AppArmor](https://apparmor.net/)
+profiles will set to enforce mode.
+
+### ./defaults/main/apport.yml
+
+```yaml
+disable_apport: true
+```
+
+If `disable_apport: true`, then the [Apport](https://wiki.ubuntu.com/Apport)
+crash reporting system will be disabled.
 
 ### ./defaults/main/auditd.yml
 
@@ -257,6 +284,14 @@ compilers:
 If `manage_compilers: true`, then the listed compilers will be restricted
 to the root user.
 
+### ./defaults/main/cron.yml
+
+```yaml
+manage_cron: true
+```
+
+If `manage_cron: true`, then `at` and `cron` will be restricted to the root user.
+
 ### ./defaults/main/crypto_policies.yml
 
 ```yaml
@@ -266,6 +301,15 @@ crypto_policy: DEFAULT:NO-SHA1
 
 Set and use [cryptographic policies](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/using-the-system-wide-cryptographic-policies_security-hardening)
 if `/etc/crypto-policies/config` exists and `set_crypto_policy: true`.
+
+### ./defaults/main/ctrlaltdel.yml
+
+```yaml
+disable_ctrlaltdel: true
+```
+
+If `disable_ctrlaltdel: true`, then the `ctrl-alt-del` systemd target will be
+disabled.
 
 ### ./defaults/main/disablewireless.yml
 
@@ -299,6 +343,24 @@ disabled.
 
 If `dns_over_tls` is true, all connections to the server will be encrypted if
 the DNS server supports DNS-over-TLS and has a valid certificate.
+
+### ./defaults/main/fstab.yml
+
+```yaml
+manage_fstab: true
+```
+
+If `manage_fstab: true`, then any floppy devices will be removed from
+`/etc/fstab`.
+
+### ./defaults/main/hosts.yml
+
+```yaml
+manage_hosts: true
+```
+
+If `manage_hosts: true`, then `hosts.allow` and `hosts.deny` will be configured
+using the available templates.
 
 ### ./defaults/main/ipv6.yml
 
@@ -337,15 +399,29 @@ IPv6.
 
 [sysctl.conf](https://linux.die.net/man/5/sysctl.conf)
 
+### ./defaults/main/issue.yml
+
+```yaml
+manage_issue: true
+```
+
+If `manage_issue: true`, then `/etc/issue`, `/etc/issue.net` and `/etc/motd`
+will be replaced with the available templates.
+
 ### ./defaults/main/journal.yml
 
 ```yaml
+manage_journal: true
+
 rsyslog_filecreatemode: "0640"
 
 journald_compress: true
 journald_forwardtosyslog: false
 journald_storage: persistent
 ```
+
+If `manage_journal: true`, then `journald` will be configured and
+the `rsyslog_filecreatemode` will be set.
 
 `rsyslog_filecreatemode` sets the creation mode with which rsyslogd creates
 new files, see
@@ -366,12 +442,15 @@ for more information.
 ### ./defaults/main/kernel.yml
 
 ```yaml
+manage_kernel: true
 allow_virtual_system_calls: true
 enable_page_poisoning: true
 kernel_lockdown: false
 page_table_isolation: true
 slub_debugger_poisoning: false
 ```
+
+If `manage_kernel: true`, then the following kernel settings will be configured.
 
 `allow_virtual_system_calls` will allow virtual system calls if `true` else no
 vsyscall mapping will be set, see [CONFIG_LEGACY_VSYSCALL_NONE](https://www.kernelconfig.io/config_legacy_vsyscall_none).
@@ -392,17 +471,32 @@ of corrupted memory. See [Short users guide for SLUB](https://github.com/torvald
 ### ./defaults/main/limits.yml
 
 ```yaml
+manage_limits: true
 limit_nofile_hard: 1024
 limit_nofile_soft: 512
 limit_nproc_hard: 1024
 limit_nproc_soft: 512
 ```
 
-Set maximum number of processes and open files, see [limits.conf(5)](https://www.man7.org/linux/man-pages/man5/limits.conf.5.html).
+If `manage_limits: true`, then `/etc/security/limits.conf` and `/etc/systemd/coredump.conf`
+will be configured using the available templates and the `kdump` service will be
+disabled.
+
+The variables sets the maximum number of processes and open files, see
+[limits.conf(5)](https://www.man7.org/linux/man-pages/man5/limits.conf.5.html).
+
+### ./defaults/main/lockroot.yml
+
+```yaml
+disable_root_account: true
+```
+
+If `disable_root_account: true`, then the root account will be locked.
 
 ### ./defaults/main/logind.yml
 
 ```yaml
+manage_logind: true
 logind:
   killuserprocesses: true
   killexcludeusers:
@@ -412,7 +506,7 @@ logind:
   removeipc: true
 ```
 
-Configure [logind](https://www.freedesktop.org/software/systemd/man/latest/logind.conf.html).
+If `manage_logind: true`, then the role will configure [logind](https://www.freedesktop.org/software/systemd/man/latest/logind.conf.html).
 
 `killuserprocesses` takes a boolean argument. Configures whether the processes
 of a user should be killed when the user logs out.
@@ -425,6 +519,15 @@ is idle and the delay after which the action configured in `idleaction` is taken
 
 `removeipc` takes a boolean argument. If enabled, the user may not consume IPC
 resources after the last of the user's sessions terminated.
+
+### ./defaults/main/logindefs.yml
+
+```yaml
+manage_login_defs: true
+```
+
+If `manage_login_defs: true` the `/etc/login.defs` will be replaced by
+the available template.
 
 ### ./defaults/main/misc.yml
 
@@ -451,6 +554,8 @@ release specific [Fedora EPEL signing keys](https://getfedora.org/security/).
 ### ./defaults/main/module_blocklists.yml
 
 ```yaml
+manage_kernel_modules: true
+
 fs_modules_blocklist:
   - cramfs
   - freevxfs
@@ -487,8 +592,8 @@ net_modules_blocklist:
   - tipc
 ```
 
-Kernel modules to be [blacklisted](https://wiki.debian.org/KernelModuleBlacklisting)
-and disabled using a fake install.
+If `manage_kernel_modules: true`, then the listed modules will be blocked and
+[blacklisted](https://wiki.debian.org/KernelModuleBlacklisting).
 
 > **Note**
 >
@@ -496,12 +601,28 @@ and disabled using a fake install.
 > storage devices. If such devices are needed [USBGuard](#defaultsmainusbguardyml),
 > or a similar tool, should be configured accordingly.
 
+### ./defaults/main/motdnews.yml
+
+```yaml
+manage_motdnews: true
+```
+
+If `manage_motdnews: true`, then `apt-news`, `motd-news` and [Ubuntu Pro](https://ubuntu.com/pro)
+will be disabled.
+
 ### ./defaults/main/mount.yml
 
 ```yaml
+manage_mounts: true
 hide_pid: 2
 process_group: root
 ```
+
+If `manage_mounts: true`, `/proc` will be mounted with the
+`nosuid,nodev,noexec,hidepid` options,
+`/dev/shm` will be mounted with the `nosuid,nodev,noexec` options and `/tmp`
+will be mounted with the `nosuid,nodev,noexec` options using the available
+template.
 
 `hide_pid` sets `/proc/<pid>/` access mode.
 
@@ -509,6 +630,15 @@ The `process_group` setting configures the group authorized to learn processes
 information otherwise prohibited by `hidepid=`.
 
 [/proc mount options](https://www.kernel.org/doc/html/latest/filesystems/proc.html#mount-options)
+
+### ./defaults/main/netplan.yml
+
+```yaml
+manage_netplan: true
+```
+
+If `manage_netplan: true`, then any available `netplan` configuration files
+will have the permissions set to `0600`.
 
 ### ./defaults/main/ntp.yml
 
@@ -530,6 +660,7 @@ otherwise installing a NTP client is recommended.
 ### ./defaults/main/packagemgmt.yml
 
 ```yaml
+manage_package_managers: true
 apt_hardening_options:
   - Acquire::AllowDowngradeToInsecureRepositories "false";
   - Acquire::AllowInsecureRepositories "false";
@@ -544,7 +675,10 @@ apt_hardening_options:
   - Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
 ```
 
-Configure the [APT suite of tools](https://manpages.debian.org/bookworm/apt/apt.conf.5.en.html).
+If `manage_package_managers: true`, then `apt` and `dnf` will be configured to
+use for example GPG verification and clean requirements on remove.
+
+`apt_hardening_options` configures the [APT suite of tools](https://manpages.debian.org/bookworm/apt/apt.conf.5.en.html).
 
 ### ./defaults/main/packages.yml
 
@@ -633,6 +767,7 @@ and packages to be removed (`packages_blocklist`).
 ### ./defaults/main/password.yml
 
 ```yaml
+manage_pam: true
 manage_faillock: true
 
 faillock:
@@ -679,6 +814,9 @@ pwquality:
   usersubstr: 3
 ```
 
+If `manage_pam: true`, then the role will configure the
+[Pluggable Authentication Modules](https://linux.die.net/man/8/pam).
+
 `manage_faillock: true` will enable the faillock library.
 
 `password_remember` set the size of the password history that the user will not
@@ -688,6 +826,33 @@ The variables `faillock`, `login_defs` and `pwquality` are used to configure the
 [pam_faillock](https://manpages.ubuntu.com/manpages/noble/en/man5/faillock.conf.5.html),
 [login.defs](https://manpages.ubuntu.com/manpages/noble/en/man5/login.defs.5.html)
 and [libpwquality](https://manpages.ubuntu.com/manpages/noble/man5/pwquality.conf.5.html).
+
+### ./defaults/main/path.yml
+
+```yaml
+manage_path: true
+```
+
+If `manage_path: true`, then the `PATH` variable will be set in `/etc/environment`
+and `/etc/profile.d/initpath.sh` will be created.
+
+### ./defaults/main/postfix.yml
+
+```yaml
+manage_postfix: true
+```
+
+If `manage_postfix: true`, then the [Postfix](http://www.postfix.org/) mail
+server will be configured if `/etc/postfix/main.cf` exists.
+
+### ./defaults/main/prelink.yml
+
+```yaml
+disable_prelink: true
+```
+
+If `disable_prelink: true`, then the prelinking will be disabled.
+Recommended for systems using `aide`.
 
 ### ./defaults/main/rkhunter.yml
 
@@ -701,7 +866,17 @@ rkhunter_update_mirrors: true
 rkhunter_web_cmd: curl -fsSL
 ```
 
-If `manage_rkhunter: true`, then configure [rkhunter](https://rkhunter.sourceforge.net/).
+If `manage_rkhunter: true`, then [Rootkit Hunter](http://rkhunter.sourceforge.net/)
+will be installed and configured.
+
+### ./defaults/main/rootaccess.yml
+
+```yaml
+manage_root_access: true
+```
+
+If `manage_root_access: true`, then the root user will only be able to login
+using a console and the systemd `debug-shell` will be masked.
 
 ### ./defaults/main/sshd.yml
 
@@ -984,6 +1159,27 @@ from sshd.
 from the [konstruktoid/ssh-moduli](https://github.com/konstruktoid/ssh-moduli)
 repository.
 
+### ./defaults/main/sudo.yml
+
+```yaml
+manage_sudo: true
+```
+
+If `manage_sudo: true`, then the following defaults will be set:
+
+```console
+!pwfeedback
+!rootpw
+!runaspw
+!targetpw
+!visiblepw
+logfile=/var/log/sudo.log
+passwd_timeout=1
+timestamp_timeout=5
+timestamp_type=tty
+use_pty
+```
+
 ### ./defaults/main/suid_sgid_blocklist.yml
 
 ```yaml
@@ -998,7 +1194,6 @@ suid_sgid_blocklist:
   - ansible-test
   - aoss
   - apt
-  - apt-get
   [...]
 ```
 
@@ -1073,6 +1268,16 @@ If `manage_sysctl: true`, then update the `sysctl` configuration.
 
 See [sysctl.conf](https://linux.die.net/man/5/sysctl.conf) and
 the [kernel documentation](https://www.kernel.org/doc/Documentation/sysctl/).
+
+### ./defaults/main/systemdconf.yml
+
+```yaml
+manage_systemd: true
+```
+
+If `manage_systemd: true`, then the role will configure
+`/etc/systemd/system.conf` and `/etc/systemd/user.conf` using the available
+templates.
 
 ### ./defaults/main/templates.yml
 
@@ -1197,6 +1402,7 @@ regarding the available options.
 ### ./defaults/main/users.yml
 
 ```yaml
+manage_users: true
 delete_users:
   - games
   - gnats
@@ -1207,7 +1413,8 @@ delete_users:
   - uucp
 ```
 
-Users to be removed.
+If `manage_users: true`, then the listed users will be removed and any home
+directories will have the permissions set to `0750`.
 
 ## Recommended Reading
 

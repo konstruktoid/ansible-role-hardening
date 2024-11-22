@@ -1,6 +1,8 @@
 ---
 - name: Configure sudo
   become: true
+  when:
+    - manage_sudo
   block:
     - name: Configure sudo use_pty
       ansible.builtin.lineinfile:
