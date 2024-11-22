@@ -1,15 +1,33 @@
 ---
-- name: Get ctrl-alt-del systemd information
+- name: Get ctrl-alt-del.target information
   ansible.builtin.systemd:
     name: ctrl-alt-del.target
   register: ctrl_alt_del_target
 
+- name: Comment out ctrl-alt-del alias
+  become: true
+  ansible.builtin.lineinfile:
+    regexp: ^Alias=ctrl-alt-del.target
+    line: "# Alias=ctrl-alt-del.target"
+    dest: "{{ ctrl_alt_del_target.status.FragmentPath }}"
+    mode: "0644"
+    state: present
+    create: false
+    backrefs: true
+
+- name: Reload systemd
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
+
 - name: Disable systemd ctrl-alt-del
   become: true
-  ansible.builtin.file:
-    src: /dev/null
-    path: "{{ ctrl_alt_del_target.status.FragmentPath }}"
-    state: link
-    owner: root
-    group: root
-    force: true
+  ansible.builtin.systemd:
+    name: ctrl-alt-del.target
+    masked: true
+    enabled: false
+    state: stopped
+  register: ctrl_alt_del_target_state
+  failed_when:
+    - ctrl_alt_del_target_state.failed
+    - not "already exists and is a symlink" in ctrl_alt_del_target_state.msg
