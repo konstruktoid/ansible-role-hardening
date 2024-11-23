@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  ansible-lint-main-scheduled:
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner
