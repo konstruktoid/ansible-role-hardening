@@ -1,6 +1,5 @@
 # Structure
 
-
 ```sh
 .
 ├── LICENSE
@@ -14,29 +13,47 @@
 │   └── entrypoint.sh
 ├── defaults
 │   └── main
+│       ├── adduser.yml
 │       ├── aide.yml
+│       ├── apparmor.yml
+│       ├── apport.yml
 │       ├── auditd.yml
 │       ├── automatic_updates.yml
 │       ├── compilers.yml
+│       ├── cron.yml
 │       ├── crypto_policies.yml
+│       ├── ctrlaltdel.yml
 │       ├── disablewireless.yml
 │       ├── dns.yml
+│       ├── fstab.yml
+│       ├── hosts.yml
 │       ├── ipv6.yml
+│       ├── issue.yml
 │       ├── journal.yml
 │       ├── kernel.yml
 │       ├── limits.yml
+│       ├── lockroot.yml
 │       ├── logind.yml
+│       ├── logindefs.yml
 │       ├── misc.yml
 │       ├── module_blocklists.yml
+│       ├── motdnews.yml
 │       ├── mount.yml
+│       ├── netplan.yml
 │       ├── ntp.yml
 │       ├── packagemgmt.yml
 │       ├── packages.yml
 │       ├── password.yml
+│       ├── path.yml
+│       ├── postfix.yml
+│       ├── prelink.yml
 │       ├── rkhunter.yml
+│       ├── rootaccess.yml
 │       ├── sshd.yml
+│       ├── sudo.yml
 │       ├── suid_sgid_blocklist.yml
 │       ├── sysctl.yml
+│       ├── systemdconf.yml
 │       ├── templates.yml
 │       ├── ufw.yml
 │       ├── umask.yml
@@ -190,5 +207,5 @@
 │   └── test.yml
 └── tox.ini
 
-42 directories, 145 files
+42 directories, 163 files
 ```

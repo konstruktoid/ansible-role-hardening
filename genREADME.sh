@@ -48,7 +48,7 @@ None.
 ---
 roles:
   - name: konstruktoid.hardening
-    version: v2.2.0
+    version: v2.3.0
     src: https://github.com/konstruktoid/ansible-role-hardening.git
     scm: git
 \`\`\`
@@ -95,7 +95,7 @@ roles:
           ansible.builtin.git:
             repo: https://github.com/konstruktoid/ansible-role-hardening
             dest: /etc/ansible/roles/konstruktoid.hardening
-            version: v2.2.0
+            version: v2.3.0
 
         - name: Remove git
           ansible.builtin.package:
