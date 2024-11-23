@@ -621,8 +621,8 @@ process_group: root
 If `manage_mounts: true`, `/proc` will be mounted with the
 `nosuid,nodev,noexec,hidepid` options,
 `/dev/shm` will be mounted with the `nosuid,nodev,noexec` options and `/tmp`
-will be mounted with the `nosuid,nodev,noexec` options using the available
-template.
+will be mounted as `tmpfs` with the `nosuid,nodev,noexec` options using the
+available template.
 
 `hide_pid` sets `/proc/<pid>/` access mode.
 
