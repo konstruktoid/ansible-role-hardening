@@ -4,7 +4,7 @@ This is an [Ansible](https://www.ansible.com/) role designed to enhance the
 security of servers running on AlmaLinux, Debian, or Ubuntu.
 
 It's [systemd](https://freedesktop.org/wiki/Software/systemd/) focused
-and requires Ansible version 2.15 or higher.
+and requires Ansible version 2.18 or higher.
 
 The role supports the following operating systems:
 

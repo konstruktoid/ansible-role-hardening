@@ -148,5 +148,6 @@
     create: false
     insertbefore: ^export
   when:
-    - ansible_local.systemd.version | int < 252
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_systemd.version | int < 252
     - session_timeout

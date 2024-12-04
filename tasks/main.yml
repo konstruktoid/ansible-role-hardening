@@ -306,6 +306,7 @@
   ansible.builtin.import_tasks:
     file: logindconf.yml
   when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
     - manage_logind
   tags:
     - logind
