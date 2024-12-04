@@ -1331,7 +1331,8 @@
       changed_when: false
       failed_when: declare_tmout.rc != 0
       when:
-        - ansible_local.systemd.version | int < 252
+        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_systemd.version | int < 252
 
     - name: Assert compiler permissions
       when:
@@ -1393,6 +1394,8 @@
         - IdleAction={{ logind.idleaction }}
         - IdleActionSec={{ logind.idleactionsec }}
         - RemoveIPC={{ 'true' if logind.removeipc else 'false' }}
+      when:
+        - ansible_virtualization_type not in ["container", "docker", "podman"]
 
     - name: Verify StopIdleSessionSec setting
       ansible.builtin.shell: |
@@ -1406,8 +1409,8 @@
       with_items:
         - StopIdleSessionSec={{ session_timeout }}
       when:
-        - ansible_local.systemd.version | int >= 252
         - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_systemd.version | int >= 252
 
     - name: Verify journal permissions
       become: true
