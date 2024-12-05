@@ -10,7 +10,6 @@ Before running any test:
 ## Distribution boxes used by Molecule and Vagrant
 
 ```console
-almalinux/8
 almalinux/9
 bento/ubuntu-22.04
 bento/ubuntu-24.04
@@ -34,16 +33,8 @@ repository if the host is using [Ubuntu](https://ubuntu.com/ "Ubuntu").
 
 ```console
 devel
-py310-ansible8
-py310-ansible9
-py310-ansible10
-py310-ansibledevel
-py311-ansible8
-py311-ansible9
-py311-ansible10
-py311-ansibledevel
-py312-ansible8
-py312-ansible9
-py312-ansible10
+py312-ansible11
 py312-ansibledevel
+py313-ansible11
+py313-ansibledevel
 ```

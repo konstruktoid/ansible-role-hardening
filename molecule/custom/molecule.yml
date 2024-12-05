@@ -18,7 +18,12 @@ provisioner:
   inventory:
     host_vars:
       jammy:
-        automatic_updates: true
+        automatic_updates:
+          enabled: true
+          only_security: true
+          reboot: true
+          reboot_from_time: "2:00"
+          reboot_time_margin_mins: 1
         fallback_ntp:
           - 169.254.169.123
         journald_storage: persistent
@@ -64,7 +69,7 @@ provisioner:
         pass_max_days: 365
         pass_min_days: 7
         sshd_max_sessions: 4
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
         umask_value: "027"
 platforms:
   - name: jammy

@@ -54,7 +54,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
         sshd_match_users:
           - user: testuser01
             rules:
@@ -67,15 +67,29 @@ provisioner:
               - Banner none
         slub_debugger_poisoning: true
       noble:
+        automatic_updates:
+          enabled: true
+          only_security: true
+          reboot: true
+          reboot_from_time: "2:00"
+          reboot_time_margin_mins: 1
         disable_wireless: true
         kernel_lockdown: true
+        logind:
+          killuserprocesses: true
+          killexcludeusers:
+            - root
+            - vagrant
+          idleaction: lock
+          idleactionsec: 15min
+          removeipc: true
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
         sshd_update_moduli: true
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
         sysctl_conf_dir: /etc/sysctl.d/
         umask_value: "027"
         ufw_rate_limit: true
@@ -84,11 +98,14 @@ platforms:
     box: almalinux/9
     config_options:
       vm.boot_timeout: 600
+      ssh.key_type: ed25519
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 2048
   - name: bookworm
     box: debian/bookworm64
+    config_options:
+      ssh.key_type: ed25519
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 1024
@@ -96,6 +113,7 @@ platforms:
     box: bento/ubuntu-22.04
     config_options:
       vm.boot_timeout: 600
+      ssh.key_type: ed25519
       synced_folder: false
     provider_raw_config_args:
       - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
@@ -107,6 +125,7 @@ platforms:
     box: bento/ubuntu-24.04
     config_options:
       vm.boot_timeout: 600
+      ssh.key_type: ed25519
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 1024

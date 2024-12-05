@@ -1,11 +1,12 @@
 ---
 name: Molecule testing workflow
 on:
+  push:
   workflow_dispatch:
   schedule:
     - cron: "30 5 * * */3"
 jobs:
-  Molecule:
+  molecule-docker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

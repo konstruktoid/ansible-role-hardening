@@ -22,6 +22,7 @@ resolved_conf_template: etc/systemd/resolved.conf.j2
 rkhunter_template: etc/default/rkhunter.j2
 ssh_config_template: etc/ssh/ssh_config.j2
 sshd_config_template: etc/ssh/sshd_config.j2
+sshd_tmpfiles_template: usr/lib/tmpfiles.d/ssh.conf.j2
 sysctl_ipv6_config_template: etc/sysctl/sysctl.ipv6.conf.j2
 sysctl_main_config_template: etc/sysctl/sysctl.main.conf.j2
 system_conf_template: etc/systemd/system.conf.j2

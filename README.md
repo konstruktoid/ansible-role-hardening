@@ -4,11 +4,10 @@ This is an [Ansible](https://www.ansible.com/) role designed to enhance the
 security of servers running on AlmaLinux, Debian, or Ubuntu.
 
 It's [systemd](https://freedesktop.org/wiki/Software/systemd/) focused
-and requires Ansible version 2.15 or higher.
+and requires Ansible version 2.18 or higher.
 
 The role supports the following operating systems:
 
-- [AlmaLinux 8](https://wiki.almalinux.org/release-notes/#almalinux-8)
 - [AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9)
 - [Debian 11 (Bullseye)](https://www.debian.org/releases/bullseye/)
 - [Debian 12 (Bookworm)](https://www.debian.org/releases/bookworm/)
@@ -42,7 +41,7 @@ None.
 ---
 roles:
   - name: konstruktoid.hardening
-    version: v2.1.0
+    version: v2.3.0
     src: https://github.com/konstruktoid/ansible-role-hardening.git
     scm: git
 ```
@@ -63,7 +62,7 @@ roles:
           - 10.0.2.0/24
           - 192.168.0.0/24
           - 192.168.1.0/24
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
 ```
 
 ### Local playbook using git checkout
@@ -89,7 +88,7 @@ roles:
           ansible.builtin.git:
             repo: https://github.com/konstruktoid/ansible-role-hardening
             dest: /etc/ansible/roles/konstruktoid.hardening
-            version: v2.1.0
+            version: v2.3.0
 
         - name: Remove git
           ansible.builtin.package:
@@ -108,7 +107,7 @@ roles:
         sshd_update_moduli: true
 ```
 
-## Note regarding UFW rules
+## Note regarding UFW firewall rules
 
 Instead of resetting `ufw` every run and by doing so causing network traffic
 disruption, the role deletes every `ufw` rule without
@@ -130,6 +129,15 @@ See [STRUCTURE.md](STRUCTURE.md) for tree of the role structure.
 See [TESTING.md](TESTING.md).
 
 ## Role Variables with defaults
+
+### ./defaults/main/adduser.yml
+
+```yaml
+manage_adduser_conf: true
+```
+
+If `manage_adduser_conf` is set to `true`, the role will configure
+`adduser` and `useradd` using the available templates.
 
 ### ./defaults/main/aide.yml
 
@@ -155,6 +163,24 @@ and configured.
 AIDE database.
 
 [aide.conf(5)](https://linux.die.net/man/5/aide.conf)
+
+### ./defaults/main/apparmor.yml
+
+```yaml
+manage_apparmor: true
+```
+
+If `manage_apparmor: true`, then available [AppArmor](https://apparmor.net/)
+profiles will set to enforce mode.
+
+### ./defaults/main/apport.yml
+
+```yaml
+disable_apport: true
+```
+
+If `disable_apport: true`, then the [Apport](https://wiki.ubuntu.com/Apport)
+crash reporting system will be disabled.
 
 ### ./defaults/main/auditd.yml
 
@@ -217,7 +243,10 @@ sending the message to syslog.
 ```yaml
 automatic_updates:
   enabled: true
+  only_security: true
   reboot: false
+  reboot_from_time: "2:00"
+  reboot_time_margin_mins: 20
 ```
 
 If `automatic_updates` is enabled it will install and configure
@@ -228,6 +257,11 @@ depending on the distribution.
 If the `reboot` option is set to `true`, it will reboot the system if needed,
 see [Unattended-Upgrade::Automatic-Reboot](https://help.ubuntu.com/community/AutomaticSecurityUpdates)
 and [dnf_automatic: reboot](https://dnf.readthedocs.io/en/latest/automatic.html).
+
+The reboot time scheduling is currently only supported on Debian-based distros.
+The reboot is by default scheduled randomly betweem 2:00-2:20AM, server time. The
+reboot time is chosen randomly from `reboot_from_time`, adding a random time within
+`reboot_time_margin_mins` to avoid overloading hypervisors.
 
 ### ./defaults/main/compilers.yml
 
@@ -250,6 +284,14 @@ compilers:
 If `manage_compilers: true`, then the listed compilers will be restricted
 to the root user.
 
+### ./defaults/main/cron.yml
+
+```yaml
+manage_cron: true
+```
+
+If `manage_cron: true`, then `at` and `cron` will be restricted to the root user.
+
 ### ./defaults/main/crypto_policies.yml
 
 ```yaml
@@ -259,6 +301,15 @@ crypto_policy: DEFAULT:NO-SHA1
 
 Set and use [cryptographic policies](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/using-the-system-wide-cryptographic-policies_security-hardening)
 if `/etc/crypto-policies/config` exists and `set_crypto_policy: true`.
+
+### ./defaults/main/ctrlaltdel.yml
+
+```yaml
+disable_ctrlaltdel: true
+```
+
+If `disable_ctrlaltdel: true`, then the `ctrl-alt-del` systemd target will be
+disabled.
 
 ### ./defaults/main/disablewireless.yml
 
@@ -292,6 +343,24 @@ disabled.
 
 If `dns_over_tls` is true, all connections to the server will be encrypted if
 the DNS server supports DNS-over-TLS and has a valid certificate.
+
+### ./defaults/main/fstab.yml
+
+```yaml
+manage_fstab: true
+```
+
+If `manage_fstab: true`, then any floppy devices will be removed from
+`/etc/fstab`.
+
+### ./defaults/main/hosts.yml
+
+```yaml
+manage_hosts: true
+```
+
+If `manage_hosts: true`, then `hosts.allow` and `hosts.deny` will be configured
+using the available templates.
 
 ### ./defaults/main/ipv6.yml
 
@@ -330,15 +399,29 @@ IPv6.
 
 [sysctl.conf](https://linux.die.net/man/5/sysctl.conf)
 
+### ./defaults/main/issue.yml
+
+```yaml
+manage_issue: true
+```
+
+If `manage_issue: true`, then `/etc/issue`, `/etc/issue.net` and `/etc/motd`
+will be replaced with the available templates.
+
 ### ./defaults/main/journal.yml
 
 ```yaml
+manage_journal: true
+
 rsyslog_filecreatemode: "0640"
 
 journald_compress: true
 journald_forwardtosyslog: false
 journald_storage: persistent
 ```
+
+If `manage_journal: true`, then `journald` will be configured and
+the `rsyslog_filecreatemode` will be set.
 
 `rsyslog_filecreatemode` sets the creation mode with which rsyslogd creates
 new files, see
@@ -359,12 +442,15 @@ for more information.
 ### ./defaults/main/kernel.yml
 
 ```yaml
+manage_kernel: true
 allow_virtual_system_calls: true
 enable_page_poisoning: true
 kernel_lockdown: false
 page_table_isolation: true
 slub_debugger_poisoning: false
 ```
+
+If `manage_kernel: true`, then the following kernel settings will be configured.
 
 `allow_virtual_system_calls` will allow virtual system calls if `true` else no
 vsyscall mapping will be set, see [CONFIG_LEGACY_VSYSCALL_NONE](https://www.kernelconfig.io/config_legacy_vsyscall_none).
@@ -385,13 +471,63 @@ of corrupted memory. See [Short users guide for SLUB](https://github.com/torvald
 ### ./defaults/main/limits.yml
 
 ```yaml
+manage_limits: true
 limit_nofile_hard: 1024
 limit_nofile_soft: 512
 limit_nproc_hard: 1024
 limit_nproc_soft: 512
 ```
 
-Set maximum number of processes and open files, see [limits.conf(5)](https://www.man7.org/linux/man-pages/man5/limits.conf.5.html).
+If `manage_limits: true`, then `/etc/security/limits.conf` and `/etc/systemd/coredump.conf`
+will be configured using the available templates and the `kdump` service will be
+disabled.
+
+The variables sets the maximum number of processes and open files, see
+[limits.conf(5)](https://www.man7.org/linux/man-pages/man5/limits.conf.5.html).
+
+### ./defaults/main/lockroot.yml
+
+```yaml
+disable_root_account: true
+```
+
+If `disable_root_account: true`, then the root account will be locked.
+
+### ./defaults/main/logind.yml
+
+```yaml
+manage_logind: true
+logind:
+  killuserprocesses: true
+  killexcludeusers:
+    - root
+  idleaction: lock
+  idleactionsec: 15min
+  removeipc: true
+```
+
+If `manage_logind: true`, then the role will configure [logind](https://www.freedesktop.org/software/systemd/man/latest/logind.conf.html).
+
+`killuserprocesses` takes a boolean argument. Configures whether the processes
+of a user should be killed when the user logs out.
+
+`killexcludeusers` takes a list of usernames that override the
+`killuserprocesses` setting.
+
+`idleaction` and `idleactionsec` configures the action to take when the system
+is idle and the delay after which the action configured in `idleaction` is taken.
+
+`removeipc` takes a boolean argument. If enabled, the user may not consume IPC
+resources after the last of the user's sessions terminated.
+
+### ./defaults/main/logindefs.yml
+
+```yaml
+manage_login_defs: true
+```
+
+If `manage_login_defs: true` the `/etc/login.defs` will be replaced by
+the available template.
 
 ### ./defaults/main/misc.yml
 
@@ -418,6 +554,8 @@ release specific [Fedora EPEL signing keys](https://getfedora.org/security/).
 ### ./defaults/main/module_blocklists.yml
 
 ```yaml
+manage_kernel_modules: true
+
 fs_modules_blocklist:
   - cramfs
   - freevxfs
@@ -454,8 +592,8 @@ net_modules_blocklist:
   - tipc
 ```
 
-Kernel modules to be [blacklisted](https://wiki.debian.org/KernelModuleBlacklisting)
-and disabled using a fake install.
+If `manage_kernel_modules: true`, then the listed modules will be blocked and
+[blacklisted](https://wiki.debian.org/KernelModuleBlacklisting).
 
 > **Note**
 >
@@ -463,12 +601,28 @@ and disabled using a fake install.
 > storage devices. If such devices are needed [USBGuard](#defaultsmainusbguardyml),
 > or a similar tool, should be configured accordingly.
 
+### ./defaults/main/motdnews.yml
+
+```yaml
+manage_motdnews: true
+```
+
+If `manage_motdnews: true`, then `apt-news`, `motd-news` and [Ubuntu Pro](https://ubuntu.com/pro)
+will be disabled.
+
 ### ./defaults/main/mount.yml
 
 ```yaml
+manage_mounts: true
 hide_pid: 2
 process_group: root
 ```
+
+If `manage_mounts: true`, `/proc` will be mounted with the
+`nosuid,nodev,noexec,hidepid` options,
+`/dev/shm` will be mounted with the `nosuid,nodev,noexec` options and `/tmp`
+will be mounted as `tmpfs` with the `nosuid,nodev,noexec` options using the
+available template.
 
 `hide_pid` sets `/proc/<pid>/` access mode.
 
@@ -476,6 +630,15 @@ The `process_group` setting configures the group authorized to learn processes
 information otherwise prohibited by `hidepid=`.
 
 [/proc mount options](https://www.kernel.org/doc/html/latest/filesystems/proc.html#mount-options)
+
+### ./defaults/main/netplan.yml
+
+```yaml
+manage_netplan: true
+```
+
+If `manage_netplan: true`, then any available `netplan` configuration files
+will have the permissions set to `0600`.
 
 ### ./defaults/main/ntp.yml
 
@@ -497,6 +660,7 @@ otherwise installing a NTP client is recommended.
 ### ./defaults/main/packagemgmt.yml
 
 ```yaml
+manage_package_managers: true
 apt_hardening_options:
   - Acquire::AllowDowngradeToInsecureRepositories "false";
   - Acquire::AllowInsecureRepositories "false";
@@ -511,7 +675,10 @@ apt_hardening_options:
   - Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
 ```
 
-Configure the [APT suite of tools](https://manpages.debian.org/bookworm/apt/apt.conf.5.en.html).
+If `manage_package_managers: true`, then `apt` and `dnf` will be configured to
+use for example GPG verification and clean requirements on remove.
+
+`apt_hardening_options` configures the [APT suite of tools](https://manpages.debian.org/bookworm/apt/apt.conf.5.en.html).
 
 ### ./defaults/main/packages.yml
 
@@ -600,6 +767,7 @@ and packages to be removed (`packages_blocklist`).
 ### ./defaults/main/password.yml
 
 ```yaml
+manage_pam: true
 manage_faillock: true
 
 faillock:
@@ -646,6 +814,9 @@ pwquality:
   usersubstr: 3
 ```
 
+If `manage_pam: true`, then the role will configure the
+[Pluggable Authentication Modules](https://linux.die.net/man/8/pam).
+
 `manage_faillock: true` will enable the faillock library.
 
 `password_remember` set the size of the password history that the user will not
@@ -655,6 +826,33 @@ The variables `faillock`, `login_defs` and `pwquality` are used to configure the
 [pam_faillock](https://manpages.ubuntu.com/manpages/noble/en/man5/faillock.conf.5.html),
 [login.defs](https://manpages.ubuntu.com/manpages/noble/en/man5/login.defs.5.html)
 and [libpwquality](https://manpages.ubuntu.com/manpages/noble/man5/pwquality.conf.5.html).
+
+### ./defaults/main/path.yml
+
+```yaml
+manage_path: true
+```
+
+If `manage_path: true`, then the `PATH` variable will be set in `/etc/environment`
+and `/etc/profile.d/initpath.sh` will be created.
+
+### ./defaults/main/postfix.yml
+
+```yaml
+manage_postfix: true
+```
+
+If `manage_postfix: true`, then the [Postfix](http://www.postfix.org/) mail
+server will be configured if `/etc/postfix/main.cf` exists.
+
+### ./defaults/main/prelink.yml
+
+```yaml
+disable_prelink: true
+```
+
+If `disable_prelink: true`, then the prelinking will be disabled.
+Recommended for systems using `aide`.
 
 ### ./defaults/main/rkhunter.yml
 
@@ -668,7 +866,17 @@ rkhunter_update_mirrors: true
 rkhunter_web_cmd: curl -fsSL
 ```
 
-If `manage_rkhunter: true`, then configure [rkhunter](https://rkhunter.sourceforge.net/).
+If `manage_rkhunter: true`, then [Rootkit Hunter](http://rkhunter.sourceforge.net/)
+will be installed and configured.
+
+### ./defaults/main/rootaccess.yml
+
+```yaml
+manage_root_access: true
+```
+
+If `manage_root_access: true`, then the root user will only be able to login
+using a console and the systemd `debug-shell` will be masked.
 
 ### ./defaults/main/sshd.yml
 
@@ -951,10 +1159,31 @@ from sshd.
 from the [konstruktoid/ssh-moduli](https://github.com/konstruktoid/ssh-moduli)
 repository.
 
+### ./defaults/main/sudo.yml
+
+```yaml
+manage_sudo: true
+```
+
+If `manage_sudo: true`, then the following defaults will be set:
+
+```console
+!pwfeedback
+!rootpw
+!runaspw
+!targetpw
+!visiblepw
+logfile=/var/log/sudo.log
+passwd_timeout=1
+timestamp_timeout=5
+timestamp_type=tty
+use_pty
+```
+
 ### ./defaults/main/suid_sgid_blocklist.yml
 
 ```yaml
-suid_sgid_permissions: true
+manage_suid_sgid_permissions: true
 suid_sgid_blocklist:
   - 7z
   - aa-exec
@@ -965,11 +1194,10 @@ suid_sgid_blocklist:
   - ansible-test
   - aoss
   - apt
-  - apt-get
   [...]
 ```
 
-If `suid_sgid_permissions: true` loop through `suid_sgid_blocklist` and remove
+If `manage_suid_sgid_permissions: true` loop through `suid_sgid_blocklist` and remove
 any SUID/SGID permissions.
 
 A complete file list is available in
@@ -1041,6 +1269,16 @@ If `manage_sysctl: true`, then update the `sysctl` configuration.
 See [sysctl.conf](https://linux.die.net/man/5/sysctl.conf) and
 the [kernel documentation](https://www.kernel.org/doc/Documentation/sysctl/).
 
+### ./defaults/main/systemdconf.yml
+
+```yaml
+manage_systemd: true
+```
+
+If `manage_systemd: true`, then the role will configure
+`/etc/systemd/system.conf` and `/etc/systemd/user.conf` using the available
+templates.
+
 ### ./defaults/main/templates.yml
 
 ```yaml
@@ -1067,11 +1305,13 @@ resolved_conf_template: etc/systemd/resolved.conf.j2
 rkhunter_template: etc/default/rkhunter.j2
 ssh_config_template: etc/ssh/ssh_config.j2
 sshd_config_template: etc/ssh/sshd_config.j2
+sshd_tmpfiles_template: usr/lib/tmpfiles.d/ssh.conf.j2
 sysctl_ipv6_config_template: etc/sysctl/sysctl.ipv6.conf.j2
 sysctl_main_config_template: etc/sysctl/sysctl.main.conf.j2
 system_conf_template: etc/systemd/system.conf.j2
 timesyncd_conf_template: etc/systemd/timesyncd.conf.j2
 tmp_mount_template: etc/systemd/tmp.mount.j2
+unattended_upgrades_template: etc/apt/apt.conf.d/50unattended-upgrades.j2
 user_conf_template: etc/systemd/user.conf.j2
 useradd_template: etc/default/useradd.j2
 ```
@@ -1097,7 +1337,7 @@ ufw_incoming_traffic:
 ufw_rate_limit: false
 ```
 
-See the note regarding [required comments](#note-regarding-ufw-rules).
+See the note regarding [required comments](#note-regarding-ufw-firewall-rules).
 
 `manage_ufw: true` installs and configures `ufw` with related rules.
 Set it to `false` in order to install and configure a firewall manually.
@@ -1122,7 +1362,10 @@ umask_value: "077"
 
 `session_timeout` sets, in seconds, the
 [TMOUT](https://www.gnu.org/software/bash/manual/bash.html#index-TMOUT)
-environment variable.
+environment variable if systemd version is 252 or lower.
+
+If systemd version is higher than 252, the `session_timeout` value will be set
+as [StopIdleSessionSec](https://www.freedesktop.org/software/systemd/man/latest/logind.conf.html#StopIdleSessionSec=).
 
 `umask_value` sets the default
 [umask value](https://manpages.ubuntu.com/manpages/jammy/man2/umask.2.html).
@@ -1167,6 +1410,7 @@ regarding the available options.
 ### ./defaults/main/users.yml
 
 ```yaml
+manage_users: true
 delete_users:
   - games
   - gnats
@@ -1177,7 +1421,8 @@ delete_users:
   - uucp
 ```
 
-Users to be removed.
+If `manage_users: true`, then the listed users will be removed and any home
+directories will have the permissions set to `0750`.
 
 ## Recommended Reading
 

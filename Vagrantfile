@@ -9,6 +9,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "bullseye_vlan" do |bullseye_vlan|
     bullseye_vlan.vm.box = "debian/bullseye64"
     bullseye_vlan.ssh.insert_key = true
+    bullseye_vlan.ssh.key_type = "ed25519"
     bullseye_vlan.vm.hostname = "bullseye-vlan"
     bullseye_vlan.vm.boot_timeout = 600
     bullseye_vlan.vm.provision "shell",
@@ -33,6 +34,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "bullseye" do |bullseye|
     bullseye.vm.box = "debian/bullseye64"
     bullseye.ssh.insert_key = true
+    bullseye.ssh.key_type = "ed25519"
     bullseye.vm.hostname = "bullseye"
     bullseye.vm.boot_timeout = 600
     bullseye.vm.provision "shell",
@@ -54,6 +56,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "bookworm" do |bookworm|
     bookworm.vm.box = "debian/bookworm64"
     bookworm.ssh.insert_key = true
+    bookworm.ssh.key_type = "ed25519"
     bookworm.vm.hostname = "bookworm"
     bookworm.vm.boot_timeout = 600
     bookworm.vm.provision "shell",
@@ -76,6 +79,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "jammy" do |jammy|
     jammy.vm.box = "bento/ubuntu-22.04"
     jammy.ssh.insert_key = true
+    jammy.ssh.key_type = "ed25519"
     jammy.vm.hostname = "jammy"
     jammy.vm.boot_timeout = 600
     jammy.vm.provision "shell",
@@ -95,6 +99,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "noble" do |noble|
     noble.vm.box = "bento/ubuntu-24.04"
     noble.ssh.insert_key = true
+    noble.ssh.key_type = "ed25519"
     noble.vm.hostname = "noble"
     noble.vm.boot_timeout = 600
     noble.vm.provision "shell",
@@ -115,6 +120,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "almalinux" do |almalinux|
     almalinux.vm.box = "almalinux/9"
     almalinux.ssh.insert_key = true
+    almalinux.ssh.key_type = "ed25519"
     almalinux.vm.provider "virtualbox" do |c|
       c.default_nic_type = "82543GC"
       c.memory = 2048

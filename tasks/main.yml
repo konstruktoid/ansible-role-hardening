@@ -45,12 +45,16 @@
 - name: Configure kernel settings
   ansible.builtin.import_tasks:
     file: kernel.yml
+  when:
+    - manage_kernel
   tags:
     - kernel
 
 - name: Disable kernel modules
   ansible.builtin.import_tasks:
     file: kernelmodules.yml
+  when:
+    - manage_kernel_modules
   tags:
     - kernel
 
@@ -75,12 +79,16 @@
 - name: Configure systemd system and users
   ansible.builtin.import_tasks:
     file: systemdconf.yml
+  when:
+    - manage_systemd
   tags:
     - systemd
 
 - name: Configure systemd journald and logrotate
   ansible.builtin.import_tasks:
     file: journalconf.yml
+  when:
+    - manage_journal
   tags:
     - journald
     - logrotate
@@ -99,18 +107,24 @@
 - name: Clean fstab
   ansible.builtin.import_tasks:
     file: fstab.yml
+  when:
+    - manage_fstab
   tags:
     - mounts
 
 - name: Configure shm and tmp mounts
   ansible.builtin.import_tasks:
     file: mount.yml
+  when:
+    - manage_mounts
   tags:
     - mounts
 
 - name: Disable prelink
   ansible.builtin.import_tasks:
     file: prelink.yml
+  when:
+    - disable_prelink
   tags:
     - prelink
 
@@ -129,6 +143,8 @@
 - name: Configure hosts.allow and hosts.deny
   ansible.builtin.import_tasks:
     file: hosts.yml
+  when:
+    - manage_hosts
   tags:
     - hosts.allow
     - hosts.deny
@@ -136,18 +152,24 @@
 - name: Configure login.defs
   ansible.builtin.import_tasks:
     file: logindefs.yml
+  when:
+    - manage_login_defs
   tags:
     - login.defs
 
 - name: Set limits
   ansible.builtin.import_tasks:
     file: limits.yml
+  when:
+    - manage_limits
   tags:
     - limits
 
 - name: Configure adduser and useradd
   ansible.builtin.import_tasks:
     file: adduser.yml
+  when:
+    - manage_adduser_conf
   tags:
     - adduser
     - useradd
@@ -155,6 +177,8 @@
 - name: Restrict root access
   ansible.builtin.import_tasks:
     file: rootaccess.yml
+  when:
+    - manage_root_access
   tags:
     - root_access
 
@@ -185,6 +209,8 @@
 - name: Configure and clean at and cron
   ansible.builtin.import_tasks:
     file: cron.yml
+  when:
+    - manage_cron
   tags:
     - at
     - cron
@@ -193,6 +219,7 @@
   ansible.builtin.import_tasks:
     file: ctrlaltdel.yml
   when:
+    - disable_ctrlaltdel
     - ansible_virtualization_type not in ["container", "docker", "podman"]
   tags:
     - ctrl-alt-del
@@ -210,6 +237,7 @@
   ansible.builtin.import_tasks:
     file: apparmor.yml
   when:
+    - manage_apparmor
     - ansible_virtualization_type not in ["container", "docker", "podman"]
     - ansible_os_family == "Debian"
   tags:
@@ -239,6 +267,8 @@
 - name: Manage users
   ansible.builtin.import_tasks:
     file: users.yml
+  when:
+    - manage_users
   tags:
     - remove_users
 
@@ -246,7 +276,7 @@
   ansible.builtin.import_tasks:
     file: suid.yml
   when:
-    - suid_sgid_permissions | bool
+    - manage_suid_sgid_permissions
   tags:
     - suid_sgid_permissions
 
@@ -267,12 +297,17 @@
 - name: Configure paths
   ansible.builtin.import_tasks:
     file: path.yml
+  when:
+    - manage_path
   tags:
     - path
 
 - name: Configure systemd logind
   ansible.builtin.import_tasks:
     file: logindconf.yml
+  when:
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - manage_logind
   tags:
     - logind
     - systemd
@@ -288,6 +323,8 @@
 - name: Add issue message
   ansible.builtin.import_tasks:
     file: issue.yml
+  when:
+    - manage_issue
   tags:
     - issue
     - issue.net
@@ -296,24 +333,32 @@
 - name: Configure apport
   ansible.builtin.import_tasks:
     file: apport.yml
+  when:
+    - disable_apport
   tags:
     - apport
 
 - name: Lock root account
   ansible.builtin.import_tasks:
     file: lockroot.yml
+  when:
+    - disable_root_account
   tags:
     - root_access
 
 - name: Configure Postfix
   ansible.builtin.import_tasks:
     file: postfix.yml
+  when:
+    - manage_postfix
   tags:
     - postfix
 
 - name: Configure motdnews
   ansible.builtin.import_tasks:
     file: motdnews.yml
+  when:
+    - manage_motdnews
   tags:
     - motd-news
 
@@ -322,6 +367,14 @@
     file: sudo.yml
   tags:
     - sudo
+
+- name: Set netplan permissions
+  ansible.builtin.import_tasks:
+    file: netplan.yml
+  when:
+    - manage_netplan
+  tags:
+    - netplan
 
 - name: Miscellaneous extra tasks
   ansible.builtin.import_tasks:

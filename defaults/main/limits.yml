@@ -1,4 +1,5 @@
 ---
+manage_limits: true
 limit_nofile_hard: 1024
 limit_nofile_soft: 512
 limit_nproc_hard: 1024

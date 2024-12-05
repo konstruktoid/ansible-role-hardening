@@ -20,32 +20,35 @@ provisioner:
       bookworm:
         ansible_python_interpreter: /usr/bin/python3
         kernel_lockdown: integrity
+        rkhunter_web_cmd:
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
         system_upgrade: false
       bullseye:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
+        rkhunter_web_cmd:
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
       testing:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
         kernel_lockdown: confidentiality
+        rkhunter_web_cmd:
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
-        suid_sgid_permissions: false
+        manage_suid_sgid_permissions: false
         sshd_update_moduli: true
 platforms:
   - name: bookworm

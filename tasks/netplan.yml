@@ -1,0 +1,22 @@
+---
+- name: Find and set permissions of netplan configuration files
+  become: true
+  block:
+    - name: Find all netplan configuration files
+      ansible.builtin.find:
+        paths:
+          - /etc/netplan
+          - /lib/netplan
+          - /run/netplan
+        recurse: true
+        patterns: "*.yaml"
+      register: netplan_configuration
+
+    - name: Set permissions of netplan configuration files
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        mode: "0600"
+        owner: root
+        group: root
+      with_items:
+        - "{{ netplan_configuration.files }}"

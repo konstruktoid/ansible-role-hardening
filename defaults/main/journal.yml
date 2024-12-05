@@ -1,4 +1,6 @@
 ---
+manage_journal: true
+
 rsyslog_filecreatemode: "0640"
 
 journald_compress: true

@@ -15,13 +15,10 @@ sshd_authentication_methods: any
 sshd_authorized_principals_file: /etc/ssh/auth_principals/%u
 sshd_banner: /etc/issue.net
 sshd_ca_signature_algorithms:
-  - ecdsa-sha2-nistp256
   - ecdsa-sha2-nistp384
   - ecdsa-sha2-nistp521
   - ssh-ed25519
-  - rsa-sha2-256
   - rsa-sha2-512
-  - ssh-rsa
 sshd_kbd_interactive_authentication: false
 sshd_ciphers:
   - chacha20-poly1305@openssh.com
@@ -40,13 +37,10 @@ sshd_host_key_algorithms:
   - ssh-ed25519-cert-v01@openssh.com
   - ssh-rsa-cert-v01@openssh.com
   - ssh-ed25519
-  - ssh-rsa
   - ecdsa-sha2-nistp521-cert-v01@openssh.com
   - ecdsa-sha2-nistp384-cert-v01@openssh.com
-  - ecdsa-sha2-nistp256-cert-v01@openssh.com
   - ecdsa-sha2-nistp521
   - ecdsa-sha2-nistp384
-  - ecdsa-sha2-nistp256
 sshd_host_keys_files: []
 sshd_host_keys_group: root
 sshd_host_keys_mode: "0600"
@@ -57,10 +51,10 @@ sshd_ignore_user_known_hosts: true
 sshd_kerberos_authentication: false
 sshd_kex_algorithms:
   - curve25519-sha256@libssh.org
+  - diffie-hellman-group16-sha512
+  - diffie-hellman-group18-sha512
   - ecdh-sha2-nistp521
   - ecdh-sha2-nistp384
-  - ecdh-sha2-nistp256
-  - diffie-hellman-group-exchange-sha256
 sshd_listen:
   - 0.0.0.0
 sshd_log_level: VERBOSE
