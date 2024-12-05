@@ -1122,7 +1122,8 @@
       failed_when: >
         'deny (incoming)' not in ufw_status.stdout or
         'deny (outgoing)' not in ufw_status.stdout or
-        'disabled (routed)' not in ufw_status.stdout
+        'disabled (routed)' not in ufw_status.stdout or
+        not all(port in ufw_status.stdout for port in ufw_incoming_traffic | map('string'))
       when:
         - manage_ufw
         - ansible_virtualization_type not in ["container", "docker", "podman"]

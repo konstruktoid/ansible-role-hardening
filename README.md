@@ -1091,6 +1091,9 @@ ufw_outgoing_traffic:
   - 443
   - 853
 
+ufw_incoming_traffic:
+  - 22  # SSH port is required and will always be enabled
+
 ufw_rate_limit: false
 ```
 
@@ -1101,6 +1104,11 @@ Set it to `false` in order to install and configure a firewall manually.
 
 `ufw_outgoing_traffic` opens the specific `ufw` ports, allowing outgoing
 traffic.
+
+`ufw_incoming_traffic` opens the specific `ufw` ports, allowing incoming
+traffic. Note that port 22 (SSH) will always be enabled for incoming traffic
+regardless of this setting to ensure SSH access is maintained. Any additional
+ports listed here will be opened in addition to SSH.
 
 `ufw_rate_limit`, if `true`, will set connection rate limiting on all available
 _physical_ network interfaces.

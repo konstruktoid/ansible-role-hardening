@@ -37,6 +37,10 @@ provisioner:
               - Banner none
         umask_value: "027"
         ufw_rate_limit: true
+        ufw_incoming_traffic:
+          - 22
+          - 80
+          - 443
 platforms:
   - name: noble
     box: bento/ubuntu-24.04
