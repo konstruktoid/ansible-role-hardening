@@ -7,8 +7,6 @@
   when:
     - ansible_os_family == "Debian"
     - ansible_virtualization_type not in ["container", "docker", "podman"]
-  tags:
-    - CCE-80872-5
 
 # https://github.com/ansible/ansible/issues/22171
 - name: Restart RedHat auditd # noqa command-instead-of-module
@@ -20,8 +18,6 @@
   when:
     - ansible_os_family == "RedHat"
     - ansible_virtualization_type not in ["container", "docker", "podman"]
-  tags:
-    - CCE-80872-5
 
 - name: Generate auditd rules
   become: true
