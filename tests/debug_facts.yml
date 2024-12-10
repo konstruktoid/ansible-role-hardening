@@ -5,29 +5,9 @@
     state: present
     extra_args: "{{ '--break-system-packages' if (ansible_python_version is version('3.11', '>=')) else '--user' }}"
 
-- name: Debug "cpuinfo_rdrand handling, true"
+- name: Debug rdrand handling
   ansible.builtin.debug:
-    msg: cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}, true
-  when: ansible_local.cpuinfo.rdrand
-
-- name: Debug "cpuinfo_rdrand handling, false"
-  ansible.builtin.debug:
-    msg: cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}, false
-  when: not ansible_local.cpuinfo.rdrand
-
-- name: Debug "ansible_local['cpuinfo']['rdrand'], true"
-  ansible.builtin.debug:
-    msg: cpuinfo_rdrand is {{ ansible_local['cpuinfo']['rdrand'] }}, true
-  when: ansible_local['cpuinfo']['rdrand']
-
-- name: Debug "ansible_local['cpuinfo']['rdrand'], false"
-  ansible.builtin.debug:
-    msg: cpuinfo_rdrand is {{ ansible_local['cpuinfo']['rdrand'] }}, false
-  when: not ansible_local['cpuinfo']['rdrand']
-
-- name: Debug "cpuinfo_rdrand handling, info"
-  ansible.builtin.debug:
-    msg: cpuinfo_rdrand is {{ ansible_local.cpuinfo.rdrand }}
+    msg: "{{ 'rdrand present' if ('rdrand' in ansible_flags) else 'rdrand not present' }}"
 
 - name: Stat /var/run/reboot-required
   ansible.builtin.stat:
