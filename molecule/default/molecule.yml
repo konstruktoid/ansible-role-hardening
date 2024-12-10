@@ -98,11 +98,14 @@ platforms:
     box: almalinux/9
     config_options:
       vm.boot_timeout: 600
+      ssh.key_type: ed25519
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 2048
   - name: bookworm
     box: debian/bookworm64
+    config_options:
+      ssh.key_type: ed25519
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 1024
@@ -110,6 +113,7 @@ platforms:
     box: bento/ubuntu-22.04
     config_options:
       vm.boot_timeout: 600
+      ssh.key_type: ed25519
       synced_folder: false
     provider_raw_config_args:
       - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
