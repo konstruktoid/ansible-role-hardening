@@ -159,13 +159,24 @@
   when:
     - ansible_system_vendor == "QEMU"
 
-- name: Install rng-tools
+- name: Install and start rngd
   become: true
-  ansible.builtin.package:
-    name: rng-tools
-    state: present
   when:
-    - ansible_local.cpuinfo.rdrand
+    - "'rdrand' in ansible_flags"
+    - ansible_virtualization_type not in ["container", "docker", "podman"]
+  block:
+    - name: Install rngd
+      ansible.builtin.package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - "{{ 'rng-tools5' if (ansible_os_family == 'Debian') else 'rng-tools' }}"
+
+    - name: Start and enable rngd service
+      ansible.builtin.systemd:
+        name: rngd
+        state: started
+        enabled: true
 
 - name: Stat sysstat default
   become: true

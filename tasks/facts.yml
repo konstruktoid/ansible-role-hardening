@@ -10,14 +10,6 @@
         owner: root
         group: root
 
-    - name: Add cpuinfo rdrand fact
-      ansible.builtin.template:
-        src: etc/ansible/facts.d/cpuinfo.fact
-        dest: /etc/ansible/facts.d/cpuinfo.fact
-        mode: "0755"
-        owner: root
-        group: root
-
     - name: Add ssh keys fact
       ansible.builtin.template:
         src: etc/ansible/facts.d/sshkeys.fact
