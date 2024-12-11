@@ -9,6 +9,7 @@ suid_sgid_blocklist:
   - ansible-playbook
   - ansible-test
   - aoss
+  - apache2ctl
   - apt
   - apt-get
   - ar
@@ -16,8 +17,8 @@ suid_sgid_blocklist:
   - arj
   - arp
   - as
-  - ascii85
   - ascii-xfr
+  - ascii85
   - ash
   - aspell
   - at
@@ -86,6 +87,7 @@ suid_sgid_blocklist:
   - cut
   - dash
   - date
+  - dc
   - dd
   - debugfs
   - dialog
@@ -109,6 +111,7 @@ suid_sgid_blocklist:
   - efax
   - elvish
   - emacs
+  - enscript
   - env
   - eqn
   - espeak
@@ -171,10 +174,11 @@ suid_sgid_blocklist:
   - kubectl
   - latex
   - latexmk
-  - ldconfig
   - ld.so
+  - ldconfig
   - less
   - lftp
+  - links
   - ln
   - loginctl
   - logsave
@@ -190,6 +194,7 @@ suid_sgid_blocklist:
   - make
   - man
   - mawk
+  - minicom
   - mksh
   - mksh-static
   - mlocate
@@ -212,6 +217,7 @@ suid_sgid_blocklist:
   - nasm
   - nawk
   - nc
+  - ncdu
   - ncftp
   - neofetch
   - netfilter-persistent
@@ -227,6 +233,7 @@ suid_sgid_blocklist:
   - nroff
   - nsenter
   - ntfs-3g
+  - ntpdate
   - octave
   - od
   - openssl
@@ -284,6 +291,7 @@ suid_sgid_blocklist:
   - ruby
   - run-mailcap
   - run-parts
+  - runscript
   - rview
   - rvim
   - sash
@@ -323,6 +331,7 @@ suid_sgid_blocklist:
   - strace
   - strings
   - su
+  - sudo
   - sysctl
   - systemctl
   - systemd-resolve
@@ -366,6 +375,7 @@ suid_sgid_blocklist:
   - uuencode
   - vagrant
   - valgrind
+  - varnishncsa
   - vi
   - view
   - vigr
