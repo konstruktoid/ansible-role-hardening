@@ -1193,7 +1193,7 @@ suid_sgid_blocklist:
   - ansible-playbook
   - ansible-test
   - aoss
-  - apt
+  - apache2ctl
   [...]
 ```
 
