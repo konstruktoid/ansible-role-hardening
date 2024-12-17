@@ -331,7 +331,6 @@ suid_sgid_blocklist:
   - strace
   - strings
   - su
-  - sudo
   - sysctl
   - systemctl
   - systemd-resolve
