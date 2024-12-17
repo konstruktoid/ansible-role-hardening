@@ -1324,12 +1324,12 @@ Paths in order to support overriding the default [role templates](https://docs.a
 manage_ufw: true
 
 ufw_outgoing_traffic:
-  - 22
-  - 53
-  - 80
-  - 123
-  - 443
-  - 853
+  - { port: 22, proto: 'tcp' }  # SSH (tcp only)
+  - 53                          # DNS (both tcp and udp)
+  - { port: 80, proto: 'tcp' }  # HTTP (tcp and udp)
+  - { port: 123, proto: 'udp' } # NTP (udp only)
+  - { port: 443, proto: 'tcp' } # HTTPS (tcp only)
+  - { port: 853, proto: 'tcp' } # DNS over TLS
 
 ufw_rate_limit: false
 ```
