@@ -2,11 +2,11 @@
 manage_ufw: true
 
 ufw_outgoing_traffic:
-  - 22
+  - { port: 22, proto: 'tcp' }
   - 53
-  - 80
-  - 123
-  - 443
-  - 853
+  - { port: 80, proto: 'tcp' }
+  - { port: 123, proto: 'udp' }
+  - { port: 443, proto: 'tcp' }
+  - { port: 853, proto: 'tcp' }
 
 ufw_rate_limit: false
