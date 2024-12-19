@@ -1324,12 +1324,12 @@ Paths in order to support overriding the default [role templates](https://docs.a
 manage_ufw: true
 
 ufw_outgoing_traffic:
-  - { port: 22, proto: 'tcp' }  # SSH (tcp only)
-  - 53                          # DNS (both tcp and udp)
-  - { port: 80, proto: 'tcp' }  # HTTP (tcp and udp)
-  - { port: 123, proto: 'udp' } # NTP (udp only)
-  - { port: 443, proto: 'tcp' } # HTTPS (tcp only)
-  - { port: 853, proto: 'tcp' } # DNS over TLS
+  - { port: 22, proto: "tcp" }
+  - 53
+  - { port: 80, proto: "tcp" }
+  - { port: 123, proto: "udp" }
+  - { port: 443, proto: "tcp" }
+  - 853
 
 ufw_rate_limit: false
 ```
@@ -1340,7 +1340,8 @@ See the note regarding [required comments](#note-regarding-ufw-firewall-rules).
 Set it to `false` in order to install and configure a firewall manually.
 
 `ufw_outgoing_traffic` opens the specific `ufw` ports, allowing outgoing
-traffic.
+traffic. If only a port number is specified, the protocol will be set to both
+`tcp` and `udp`.
 
 `ufw_rate_limit`, if `true`, will set connection rate limiting on all available
 _physical_ network interfaces.

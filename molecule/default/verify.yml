@@ -1138,20 +1138,6 @@
         - disable_wireless
         - ansible_virtualization_type not in ["container", "docker", "podman"]
 
-    - name: Get UFW status
-      become: true
-      ansible.builtin.command:
-        cmd: ufw status verbose
-      changed_when: false
-      register: ufw_status
-      failed_when: >
-        'deny (incoming)' not in ufw_status.stdout or
-        'deny (outgoing)' not in ufw_status.stdout or
-        'disabled (routed)' not in ufw_status.stdout
-      when:
-        - manage_ufw
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
-
     - name: Verify AIDE configuration
       become: true
       when:
@@ -1522,27 +1508,43 @@
         - automatic_updates.enabled
         - automatic_updates.reboot
 
-    - name: Verify UFW outgoing rules
+    - name: Verify UFW
       become: true
-      ansible.builtin.shell: |
-        set -o pipefail
-        ufw status verbose | grep -E "^(To|ALLOW)\s+([0-9]{1,5}/(tcp|udp))\s+ALLOW OUT"
-      register: ufw_outgoing_rules
-      changed_when: false
-      failed_when: false
       when:
         - manage_ufw
         - ansible_virtualization_type not in ["container", "docker", "podman"]
+      block:
+        - name: Get UFW status
+          become: true
+          ansible.builtin.command:
+            cmd: ufw status verbose
+          changed_when: false
+          register: ufw_status
+          failed_when: >
+            'deny (incoming)' not in ufw_status.stdout or
+            'deny (outgoing)' not in ufw_status.stdout or
+            'disabled (routed)' not in ufw_status.stdout
 
-    - name: Assert UFW outgoing rules exist
-      ansible.builtin.assert:
-        that:
-          - "'80/tcp' in ufw_outgoing_rules.stdout"
-          - "'443/tcp' in ufw_outgoing_rules.stdout"
-          - "'53/tcp' in ufw_outgoing_rules.stdout"
-          - "'53/udp' in ufw_outgoing_rules.stdout"
-          - "'22/tcp' in ufw_outgoing_rules.stdout"
-        fail_msg: "Expected UFW outgoing rules not found"
-      when:
-        - manage_ufw
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - name: Get UFW outgoing rules
+          ansible.builtin.shell: |
+            set -o pipefail
+            ufw status verbose | grep -E "([0-9]{1,5}(/tcp|/udp|\s))\s+ALLOW OUT.*# ansible managed$"
+          args:
+            executable: /bin/bash
+          register: ufw_outgoing_rules
+          changed_when: false
+
+        - name: Print UFW outgoing rules
+          ansible.builtin.debug:
+            msg: "{{ ufw_outgoing_rules.stdout }}"
+
+        - name: Assert UFW outgoing rules
+          ansible.builtin.assert:
+            that:
+              - "'22/tcp' in ufw_outgoing_rules.stdout"
+              - "'53' in ufw_outgoing_rules.stdout"
+              - "'80/tcp' in ufw_outgoing_rules.stdout"
+              - "'123/udp' in ufw_outgoing_rules.stdout"
+              - "'443/tcp' in ufw_outgoing_rules.stdout"
+              - "'853' in ufw_outgoing_rules.stdout"
+            fail_msg: "Expected UFW outgoing rules not found"
