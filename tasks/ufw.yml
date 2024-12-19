@@ -131,16 +131,10 @@
       community.general.ufw:
         rule: allow
         to_port: "{{ item.port | default(item) | int }}"
-        proto: "{{ item.proto | default(proto) }}"
+        proto: "{{ item.proto | default(omit) }}"
         direction: out
         comment: ansible managed
       loop: "{{ ufw_outgoing_traffic }}"
-      loop_control:
-        loop_var: item
-      vars:
-        # If protocol not specified, loop through both tcp and udp
-        proto: "{{ item.proto | default(['tcp', 'udp']) }}"
-      when: proto is string or proto == ['tcp', 'udp']
 
     - name: Deny IPv4 loopback network traffic
       community.general.ufw:
