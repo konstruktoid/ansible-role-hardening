@@ -319,6 +319,7 @@
 -w /bin/systemctl -p x -F key=systemd-tools
 -w /etc/systemd -p wa -F key=systemd
 -w /lib/systemd -p wa -F key=systemd
+-w /var/lib/systemd/credential.secret -p wa -F key=systemd
 
 # Time changes
 -a always,exit -F arch=b32 -S adjtimex,settimeofday,stime,clock_settime -F key=time-change
