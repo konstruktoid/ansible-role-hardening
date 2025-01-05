@@ -5,7 +5,7 @@ collections:
     source: https://github.com/ansible-collections/ansible.posix.git
     type: git
   - name: community.crypto
-    version: 2.22.3
+    version: 2.23.0
     source: https://github.com/ansible-collections/community.crypto.git
     type: git
   - name: community.general
