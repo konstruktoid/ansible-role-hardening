@@ -25,20 +25,16 @@
   when:
     - ansible_os_family == "RedHat"
   block:
-    - name: Update subscription info on RHEL
-      ansible.builtin.command:
-        cmd: subscription-manager refresh --force
-      changed_when: false
-      when: ansible_distribution == "RedHat"
+    - name: Import necessary signing key
+      ansible.builtin.rpm_key:
+        state: present
+        key: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
 
-    - name: RedHat family EPEL installation
+    - name: Install EPEL repository RPM
       ansible.builtin.dnf:
-        name: epel-release
+        name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
         state: present
         update_cache: true
-      when: >
-        (not (ansible_distribution == "Fedora" or
-        ansible_distribution == "RedHat"))
 
     - name: Install python2-rpm
       ansible.builtin.dnf:
@@ -50,6 +46,13 @@
     - name: Install python3-rpm
       ansible.builtin.dnf:
         name: python3-rpm
+        state: present
+      when:
+        - ansible_python.version.major >= 3
+
+    - name: Install python3-packaging
+      ansible.builtin.dnf:
+        name: python3-packaging
         state: present
       when:
         - ansible_python.version.major >= 3

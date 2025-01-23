@@ -1,16 +1,8 @@
 ---
 - name: Include the konstruktoid.hardening role
-  hosts: all
+  hosts: localhost
   any_errors_fatal: true
   tasks:
-    - name: Include role
+    - name: Import role
       ansible.builtin.import_role:
         name: konstruktoid.hardening
-
-- name: Debug facts
-  hosts: all
-  any_errors_fatal: true
-  tasks:
-    - name: Include debug tasks
-      ansible.builtin.import_tasks:
-        file: debug_facts.yml

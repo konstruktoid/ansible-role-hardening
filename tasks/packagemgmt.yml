@@ -53,13 +53,6 @@
       when:
         - ansible_distribution == "Fedora"
 
-    - name: Import RedHat RPM key
-      ansible.builtin.rpm_key:
-        state: present
-        key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
-      with_items:
-        - "{{ redhat_signing_keys }}"
-
     - name: Set yum.conf gpgcheck
       ansible.builtin.lineinfile:
         regexp: ^gpgcheck=
@@ -96,62 +89,6 @@
         state: present
         create: true
         insertafter: "[main]"
-
-- name: RHEL8 package management tasks
-  become: true
-  when:
-    - ansible_distribution == "RedHat"
-    - ansible_distribution_major_version == "8"
-  tags:
-    - dnf
-    - yum
-  block:
-    - name: Import RHEL8 necessary GPG keys
-      ansible.builtin.rpm_key:
-        state: present
-        key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
-      loop:
-        - "{{ epel8_signing_keys }}"
-
-    - name: RHEL8 EPEL repo installation
-      ansible.builtin.dnf:
-        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-        state: present
-
-    - name: Install CodeReady repo for RHEL8
-      ansible.builtin.command: >-
-        subscription-manager repos
-        --enable "codeready-builder-for-rhel-8-{{ ansible_architecture }}-rpms"
-      changed_when: false
-
-- name: RHEL7 repo tasks
-  become: true
-  when:
-    - ansible_distribution == "RedHat"
-    - ansible_distribution_major_version == "7"
-  tags:
-    - dnf
-    - yum
-  block:
-    - name: Import RHEL7 necessary GPG keys
-      ansible.builtin.rpm_key:
-        state: present
-        key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ item }}
-      loop:
-        - "{{ epel7_signing_keys }}"
-
-    - name: RHEL7 EPEL repo installation
-      ansible.builtin.dnf:
-        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-        state: present
-
-    - name: Install Extras and HA for RHEL7
-      ansible.builtin.command: >-
-        subscription-manager repos
-        --enable "rhel-*-optional-rpms"
-        --enable "rhel-*-extras-rpms"
-        --enable "rhel-ha-for-rhel-*-server-rpms"
-      changed_when: false
 
 - name: Enable dnf repositories and upgrades
   become: true
