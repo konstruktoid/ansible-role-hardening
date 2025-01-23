@@ -176,6 +176,8 @@
         - num_logs = {{ auditd_num_logs }}
         - space_left = {{ auditd_space_left }}
         - space_left_action = {{ auditd_space_left_action }}
+      when:
+        - manage_auditd
 
     - name: Verify systemd system.conf
       become: true
@@ -361,7 +363,7 @@
           - "{{ 'Protocol 2' if (ssh_installed_version is version('7.6', '<'))}}"
           - PubkeyAuthentication yes
           - RekeyLimit {{ sshd_rekey_limit }}
-          - "{{ 'RequiredRSASize ' + (sshd_required_rsa_size | string) if (ssh_installed_version is version('9.1', '>'))}}"
+          - "{{ 'RequiredRSASize ' + (sshd_required_rsa_size | string) if (ssh_installed_version is version('9.1', '>') and (not crypto_policies_config or not set_crypto_policy)) }}"  # noqa: yaml[line-length]
           - StrictModes {{ 'yes' if (sshd_strict_modes | bool) else 'no' }}
           - "{{ 'Subsystem sftp ' + sshd_sftp_subsystem if (sshd_sftp_enabled | bool)}}"
           - SyslogFacility {{ sshd_syslog_facility }}
@@ -677,6 +679,7 @@
           failed_when: audit_grubenv.rc != 0
           when:
             - ansible_os_family == "RedHat"
+            - manage_auditd
 
         - name: Verify Debian audit GRUB settings
           ansible.builtin.shell:
@@ -686,6 +689,7 @@
           failed_when: audit_grub_cfg.rc != 0
           when:
             - ansible_os_family == "Debian"
+            - manage_auditd
 
         - name: Verify RedHat GRUB IPv6 settings
           ansible.builtin.shell:

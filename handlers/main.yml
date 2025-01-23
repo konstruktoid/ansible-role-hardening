@@ -152,15 +152,6 @@
     - dnf
     - packages
 
-- name: Enable haveged
-  become: true
-  ansible.builtin.systemd:
-    name: haveged
-    enabled: true
-    state: started
-  when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
-
 - name: Reboot node
   become: true
   ansible.builtin.reboot:
