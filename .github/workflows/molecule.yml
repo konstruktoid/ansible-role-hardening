@@ -16,9 +16,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get --assume-yes --no-install-recommends install python3-pip
-          python3 -m pip install --user -U 'ansible-compat==24.10' 'ansible==11.1' 'ansible-lint==25.1.0' \
-            jmespath 'molecule==25.1' 'molecule-plugins[docker]==23.7' passlib
-          python3 -m pip install --user 'requests==2.28.1'
+          python3 -m pip install --user -U 'ansible-compat==24.10' ansible ansible-lint \
+            jmespath molecule==25.1 molecule-plugins[docker] passlib
 
       - name: Run ansible-lint
         run: |
