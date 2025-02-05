@@ -707,7 +707,6 @@ packages_debian:
   - libpam-apparmor
   - libpam-cap
   - libpam-modules
-  - libpam-pwquality
   - libpam-tmpdir
   - lsb-release
   - needrestart
@@ -726,7 +725,6 @@ packages_redhat:
   - cracklib
   - gnupg2
   - haveged
-  - libpwquality
   - openssh-server
   - needrestart
   - postfix
@@ -755,6 +753,7 @@ and packages to be removed (`packages_blocklist`).
 ```yaml
 manage_pam: true
 manage_faillock: true
+manage_pwquality: true
 
 faillock:
   admin_group: []
@@ -804,6 +803,9 @@ If `manage_pam: true`, then the role will configure the
 [Pluggable Authentication Modules](https://linux.die.net/man/8/pam).
 
 `manage_faillock: true` will enable the faillock library.
+
+`manage_pwquality: true` will install and configure the
+[pwquality library](https://linux.die.net/man/5/pwquality.conf).
 
 `password_remember` set the size of the password history that the user will not
 be able to reuse.
