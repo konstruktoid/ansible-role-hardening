@@ -363,7 +363,7 @@
           - "{{ 'Protocol 2' if (ssh_installed_version is version('7.6', '<'))}}"
           - PubkeyAuthentication yes
           - RekeyLimit {{ sshd_rekey_limit }}
-          - "{{ 'RequiredRSASize ' + (sshd_required_rsa_size | string) if (ssh_installed_version is version('9.1', '>') and (not crypto_policies_config or not set_crypto_policy)) }}"  # noqa: yaml[line-length]
+          - "{{ 'RequiredRSASize ' + (sshd_required_rsa_size | string) if (ssh_installed_version is version('9.1', '>') and (not crypto_policies_config or not set_crypto_policy)) }}" # noqa: yaml[line-length]
           - StrictModes {{ 'yes' if (sshd_strict_modes | bool) else 'no' }}
           - "{{ 'Subsystem sftp ' + sshd_sftp_subsystem if (sshd_sftp_enabled | bool)}}"
           - SyslogFacility {{ sshd_syslog_facility }}
@@ -539,7 +539,7 @@
           changed_when: false
           failed_when: dev_shm_noexec.rc != 0
 
-        - name: Verify /proc
+        - name: Verify /proc hidepid
           ansible.builtin.shell: |
             set -o pipefail
             grep -E '^proc\s/proc proc rw,nosuid,nodev,noexec,relatime.*hidepid=({{ hide_pid }}|invisible)' /proc/mounts
@@ -548,6 +548,20 @@
           register: proc_opts
           changed_when: false
           failed_when: proc_opts.rc != 0
+          tags:
+            - skip_ansible_lint
+
+        - name: Verify /proc process group
+          ansible.builtin.shell: |
+            set -o pipefail
+            grep -E '^proc\s/proc proc rw,nosuid,nodev,noexec.*gid={{ process_group }}' /proc/mounts
+          args:
+            executable: /bin/bash
+          register: proc_opts
+          changed_when: false
+          failed_when: proc_opts.rc != 0
+          when:
+            - process_group != 0
           tags:
             - skip_ansible_lint
 

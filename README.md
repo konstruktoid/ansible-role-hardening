@@ -601,7 +601,7 @@ will be disabled.
 ```yaml
 manage_mounts: true
 hide_pid: 2
-process_group: root
+process_group: 0
 ```
 
 If `manage_mounts: true`, `/proc` will be mounted with the

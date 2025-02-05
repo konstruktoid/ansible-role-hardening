@@ -51,6 +51,7 @@ provisioner:
         disable_wireless: true
         enable_page_poisoning: true
         kernel_lockdown: false
+        process_group: 27
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
