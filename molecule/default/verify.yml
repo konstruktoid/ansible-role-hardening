@@ -678,6 +678,8 @@
       register: verify_pwquality
       failed_when: verify_pwquality is changed
       loop: "{{ pwquality_parameters | select() }}"
+      when:
+        - manage_pwquality
 
     - name: Verify GRUB settings
       become: true

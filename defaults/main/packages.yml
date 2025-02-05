@@ -37,7 +37,6 @@ packages_debian:
   - libpam-apparmor
   - libpam-cap
   - libpam-modules
-  - libpam-pwquality
   - libpam-tmpdir
   - lsb-release
   - needrestart
@@ -56,7 +55,6 @@ packages_redhat:
   - cracklib
   - gnupg2
   - haveged
-  - libpwquality
   - openssh-server
   - needrestart
   - postfix
