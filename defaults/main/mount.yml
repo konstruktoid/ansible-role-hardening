@@ -1,4 +1,4 @@
 ---
 manage_mounts: true
 hide_pid: 2
-process_group: root
+process_group: 0
