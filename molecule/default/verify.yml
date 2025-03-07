@@ -1421,6 +1421,14 @@
     - name: Verify journal permissions
       become: true
       block:
+        - name: Verify tmpfiles settings
+          ansible.builtin.shell:
+            cmd: grep -E "^z /var/log/journal {{ journald_permissions }} {{ journald_user }} {{ journald_group }} - -$" /etc/tmpfiles.d/systemd.conf
+          register: journal_tmpfiles
+          changed_when: false
+          failed_when:
+            - journal_tmpfiles.rc != 0
+
         - name: Find journal directories
           become: true
           ansible.builtin.shell:
