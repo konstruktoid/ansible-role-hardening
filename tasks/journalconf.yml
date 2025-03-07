@@ -42,11 +42,11 @@
     group: root
     create: true
     block: |
-      z /run/log/journal 2640 root systemd-journal - -
-      Z /run/log/journal/%m ~2640 root systemd-journal - -
-      z /var/log/journal 2640 root systemd-journal - -
-      z /var/log/journal/%m 2640 root systemd-journal - -
-      z /var/log/journal/%m/system.journal 0640 root systemd-journal - -
+      Z /run/log/journal/%m ~{{ journald_permissions }} {{ journald_user }} {{ journald_group }} - -
+      z /run/log/journal {{ journald_permissions }} {{ journald_user }} {{ journald_group }} - -
+      z /var/log/journal {{ journald_permissions }} {{ journald_user }} {{ journald_group }} - -
+      z /var/log/journal/%m {{ journald_permissions }} {{ journald_user }} {{ journald_group }} - -
+      z /var/log/journal/%m/system.journal 0640 {{ journald_user }} {{ journald_group }} - -
   when:
     - tmpfiles_d.stat.exists
 
