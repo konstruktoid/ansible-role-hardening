@@ -418,6 +418,10 @@ rsyslog_filecreatemode: "0640"
 journald_compress: true
 journald_forwardtosyslog: false
 journald_storage: persistent
+
+journald_permissions: "2640"
+journald_group: "systemd-journal"
+journald_user: "root"
 ```
 
 If `manage_journal: true`, then `journald` will be configured and
@@ -435,6 +439,14 @@ objects are compressed before they are written to the file system.
 
 `journald_forwardtosyslog` control whether log messages received by the journal
 daemon shall be forwarded to a traditional syslog daemon.
+
+`journald_permissions` sets the file permissions for the journal files and
+directories.
+
+`journald_group` and `journald_user` sets the group and user for the journal
+files and directories.
+
+Permissions, user and group are set using [tmpfiles.d](https://www.man7.org/linux/man-pages/man5/tmpfiles.d.5.html).
 
 See [journald.conf](https://www.freedesktop.org/software/systemd/man/latest/journald.conf.html)
 for more information.
