@@ -1428,6 +1428,8 @@
           changed_when: false
           failed_when:
             - journal_tmpfiles.rc != 0
+          when:
+            - ansible_virtualization_type not in ["container", "docker", "podman"]
 
         - name: Find journal directories
           become: true
