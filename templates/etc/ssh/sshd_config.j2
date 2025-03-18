@@ -106,6 +106,7 @@ GSSAPICleanupCredentials yes
 TCPKeepAlive {{ 'yes' if (sshd_tcp_keep_alive | bool) else 'no' }}
 ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
 ClientAliveInterval {{ sshd_client_alive_interval | int }}
+GatewayPorts {{ 'yes' if (sshd_gateway_ports | bool) else 'no' }}
 PermitTunnel {{ 'yes' if (sshd_permit_tunnel | bool) else 'no' }}
 {% if ssh_installed_version is version('6.2', '>=') %}
 AllowTcpForwarding {{ sshd_allow_tcp_forwarding if (sshd_allow_tcp_forwarding in ('yes', 'no', 'local', 'all', 'remote')) else ('yes' if (sshd_allow_tcp_forwarding | bool) else 'no') }}
