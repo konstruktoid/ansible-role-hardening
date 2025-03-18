@@ -32,6 +32,7 @@ sshd_config_force_replace: false
 sshd_debian_banner: false
 sshd_deny_groups: []
 sshd_deny_users: []
+sshd_gateway_ports: false
 sshd_gssapi_authentication: false
 sshd_host_key_algorithms:
   - ssh-ed25519-cert-v01@openssh.com
