@@ -31,6 +31,12 @@ provisioner:
           - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
+      plucky:
+        manage_auditd: false
+        sshd_admin_net:
+          - 0.0.0.0/0
+        sshd_allow_groups:
+          - vagrant
 platforms:
   - name: jammy
     box: bento/ubuntu-22.04
@@ -45,6 +51,17 @@ platforms:
     memory: 1024
   - name: noble
     box: bento/ubuntu-24.04
+    config_options:
+      vm.boot_timeout: 600
+      ssh.key_type: ed25519
+    instance_raw_config_args:
+      - vbguest.auto_update = false
+    provider_raw_config_args:
+      - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
+      - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
+    memory: 1024
+  - name: plucky
+    box: konstruktoid/ubuntu-25.04
     config_options:
       vm.boot_timeout: 600
       ssh.key_type: ed25519
