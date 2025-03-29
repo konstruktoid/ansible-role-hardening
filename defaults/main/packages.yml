@@ -31,6 +31,7 @@ packages_debian:
   - audispd-plugins
   - auditd
   - cracklib-runtime
+  - curl
   - debsums
   - gnupg2
   - haveged
@@ -53,6 +54,7 @@ packages_redhat:
   - audispd-plugins
   - audit
   - cracklib
+  - curl
   - gnupg2
   - haveged
   - openssh-server
