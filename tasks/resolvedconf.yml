@@ -3,6 +3,29 @@
   ansible.builtin.set_fact:
     dns_merged: "{{ dns + fallback_dns }}"
 
+- name: Install systemd-resolved
+  become: true
+  ansible.builtin.apt:
+    name: systemd-resolved
+    state: present
+    install_recommends: false
+    update_cache: true
+  register: apt_resolved
+  failed_when:
+    - apt_resolved is failed
+    - not "'No package matching' in apt_resolved.msg"
+  when:
+    - ansible_os_family == "Debian"
+
+- name: Install systemd-resolved
+  become: true
+  ansible.builtin.dnf:
+    name: systemd-resolved
+    state: present
+    update_cache: true
+  when:
+    - ansible_os_family == "RedHat"
+
 - name: Configure systemd resolved
   become: true
   ansible.builtin.template:
@@ -28,7 +51,3 @@
       ansible.builtin.service:
         name: systemd-resolved
         state: restarted
-      register: resolved_service
-      failed_when:
-        - resolved_service is not success
-        - not 'Could not find the requested service' in resolved_service.msg
