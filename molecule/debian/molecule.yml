@@ -30,16 +30,6 @@ provisioner:
           - sudo
         manage_suid_sgid_permissions: false
         system_upgrade: false
-      bullseye:
-        ansible_become_pass: vagrant
-        ansible_python_interpreter: /usr/bin/python3
-        rkhunter_web_cmd:
-        sshd_admin_net:
-          - 0.0.0.0/0
-        sshd_allow_groups:
-          - vagrant
-          - sudo
-        manage_suid_sgid_permissions: false
       testing:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
@@ -55,11 +45,6 @@ provisioner:
 platforms:
   - name: bookworm
     box: debian/bookworm64
-    instance_raw_config_args:
-      - vbguest.auto_update = false
-    memory: 1024
-  - name: bullseye
-    box: debian/bullseye64
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 1024
