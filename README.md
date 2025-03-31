@@ -334,7 +334,8 @@ dnssec: allow-downgrade
 dns_over_tls: opportunistic
 ```
 
-If `manage_resolved: true`, configure [systemd-resolved](https://www.freedesktop.org/software/systemd/man/latest/resolved.conf.html).
+If `manage_resolved: true`, install and configure
+[systemd-resolved](https://www.freedesktop.org/software/systemd/man/latest/resolved.conf.html).
 
 IPv4 and IPv6 addresses to use as system and fallback DNS servers.
 If `dnssec` is set to "allow-downgrade" DNSSEC validation is attempted, but if
