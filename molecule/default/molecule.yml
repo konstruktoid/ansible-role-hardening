@@ -46,29 +46,6 @@ provisioner:
           - sudo
         sshd_update_moduli: true
         system_upgrade: false
-      jammy:
-        disable_ipv6: true
-        disable_wireless: true
-        enable_page_poisoning: true
-        kernel_lockdown: false
-        process_group: 27
-        sshd_admin_net:
-          - 0.0.0.0/0
-        sshd_allow_groups:
-          - vagrant
-          - sudo
-        manage_suid_sgid_permissions: false
-        sshd_match_users:
-          - user: testuser01
-            rules:
-              - AllowUsers testuser01
-              - AuthenticationMethods password
-              - PasswordAuthentication yes
-          - user: testuser02
-            rules:
-              - AllowUsers testuser02
-              - Banner none
-        slub_debugger_poisoning: true
       noble:
         automatic_updates:
           enabled: true
@@ -86,6 +63,7 @@ provisioner:
           idleaction: lock
           idleactionsec: 15min
           removeipc: true
+        slub_debugger_poisoning: true
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
@@ -98,7 +76,7 @@ provisioner:
         ufw_rate_limit: true
 platforms:
   - name: almalinux9
-    box: almalinux/9
+    box: bento/almalinux-9
     config_options:
       vm.boot_timeout: 600
       ssh.key_type: ed25519
@@ -109,18 +87,6 @@ platforms:
     box: debian/bookworm64
     config_options:
       ssh.key_type: ed25519
-    instance_raw_config_args:
-      - vbguest.auto_update = false
-    memory: 1024
-  - name: jammy
-    box: bento/ubuntu-22.04
-    config_options:
-      vm.boot_timeout: 600
-      ssh.key_type: ed25519
-      synced_folder: false
-    provider_raw_config_args:
-      - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
-      - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 1024

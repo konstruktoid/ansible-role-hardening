@@ -60,7 +60,7 @@ provisioner:
         system_upgrade: false
 platforms:
   - name: almalinux9
-    box: almalinux/9
+    box: bento/almalinux-9
     config_options:
       vm.boot_timeout: 600
     instance_raw_config_args:
