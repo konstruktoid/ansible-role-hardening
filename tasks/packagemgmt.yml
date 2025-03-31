@@ -18,16 +18,23 @@
         - manage_package_managers
 
     - name: Run apt update
+      become: true
       ansible.builtin.apt:
         update_cache: true
-        cache_valid_time: 1800
+      register: cache_updated
+      changed_when: false
+      until:
+        - cache_updated is success
 
     - name: Run apt upgrade
+      become: true
       ansible.builtin.apt:
         upgrade: safe
       register: apt_upgrade_response
       changed_when:
         - "'0 upgraded, 0 newly installed, 0 to remove' not in apt_upgrade_response.stdout"
+      until:
+        - apt_upgrade_response is success
       when:
         - system_upgrade | bool
       notify:
