@@ -2,6 +2,17 @@
 - name: Configure and enable AppArmor
   become: true
   block:
+    - name: AppArmor sysctl settings
+      ansible.builtin.template:
+        src: "{{ sysctl_apparmor_config_template }}"
+        dest: "{{ sysctl_conf_dir }}/zz-apparmor-hardening.conf"
+        mode: "0644"
+        owner: root
+        group: root
+        backup: false
+      notify:
+        - Restart sysctl
+
     - name: Set Debian family AppArmor grub cmdline
       ansible.builtin.lineinfile:
         line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX apparmor=1 security=apparmor"
