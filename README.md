@@ -1214,6 +1214,38 @@ sysctl_conf_dir: "{{ '/usr/lib/sysctl.d' if usr_lib_sysctl_d_dir else '/etc/sysc
 
 sysctl_dev_tty_ldisc_autoload: 0
 
+apparmor_sysctl_settings:
+  kernel.apparmor_display_secid_mode: 0
+  kernel.apparmor_restrict_unprivileged_io_uring: 0
+  kernel.apparmor_restrict_unprivileged_unconfined: 1
+  kernel.apparmor_restrict_unprivileged_userns: 1
+  kernel.apparmor_restrict_unprivileged_userns_complain: 0
+  kernel.apparmor_restrict_unprivileged_userns_force: 0
+  kernel.unprivileged_userns_apparmor_policy: 1
+
+conntrack_sysctl_settings:
+  net.netfilter.nf_conntrack_max: 2000000
+  net.netfilter.nf_conntrack_tcp_loose: 0
+
+generic_sysctl_settings:
+  fs.protected_fifos: 2
+  fs.protected_hardlinks: 1
+  fs.protected_symlinks: 1
+  fs.suid_dumpable: 0
+  kernel.core_pattern: "|/bin/false"
+  kernel.core_uses_pid: 1
+  kernel.dmesg_restrict: 1
+  kernel.kptr_restrict: 2
+  kernel.panic: 60
+  kernel.panic_on_oops: 60
+  kernel.perf_event_paranoid: 3
+  kernel.randomize_va_space: 2
+  kernel.sysrq: 0
+  kernel.unprivileged_bpf_disabled: 1
+  kernel.yama.ptrace_scope: 2
+  net.core.bpf_jit_harden: 2
+  user.max_user_namespaces: 62967
+
 ipv4_sysctl_settings:
   net.ipv4.conf.all.accept_redirects: 0
   net.ipv4.conf.all.accept_source_route: 0
@@ -1239,29 +1271,6 @@ ipv4_sysctl_settings:
   net.ipv4.tcp_syn_retries: 5
   net.ipv4.tcp_synack_retries: 2
   net.ipv4.tcp_syncookies: 1
-
-generic_sysctl_settings:
-  fs.protected_fifos: 2
-  fs.protected_hardlinks: 1
-  fs.protected_symlinks: 1
-  fs.suid_dumpable: 0
-  kernel.core_pattern: "|/bin/false"
-  kernel.core_uses_pid: 1
-  kernel.dmesg_restrict: 1
-  kernel.kptr_restrict: 2
-  kernel.panic: 60
-  kernel.panic_on_oops: 60
-  kernel.perf_event_paranoid: 3
-  kernel.randomize_va_space: 2
-  kernel.sysrq: 0
-  kernel.unprivileged_bpf_disabled: 1
-  kernel.yama.ptrace_scope: 2
-  net.core.bpf_jit_harden: 2
-  user.max_user_namespaces: 62967
-
-conntrack_sysctl_settings:
-  net.netfilter.nf_conntrack_max: 2000000
-  net.netfilter.nf_conntrack_tcp_loose: 0
 ```
 
 If `manage_sysctl: true`, then update the `sysctl` configuration.

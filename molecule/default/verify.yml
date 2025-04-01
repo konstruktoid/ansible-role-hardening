@@ -489,6 +489,13 @@
       ansible.builtin.set_fact:
         sysctl_settings: "{{ generic_sysctl_settings | combine(ipv4_sysctl_settings) }}"
 
+    - name: Merge Apparmor sysctl settings
+      ansible.builtin.set_fact:
+        sysctl_settings: "{{ sysctl_settings | combine(apparmor_sysctl_settings) }}"
+      when:
+        - manage_apparmor
+        - ansible_os_family == "Debian"
+
     - name: Verify sysctl configuration
       become: true
       ansible.builtin.shell: |
