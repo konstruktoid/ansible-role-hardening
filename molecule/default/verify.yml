@@ -186,6 +186,7 @@
             cmd: |
               set -o pipefail
               auditctl -l | grep "^{{ item }}$"
+          changed_when: false
           args:
             executable: /bin/bash
           loop:
@@ -200,6 +201,7 @@
             cmd: |
               set -o pipefail
               grep "^{{ item }}$" /etc/audit/audit.rules
+          changed_when: false
           args:
             executable: /bin/bash
           loop:
