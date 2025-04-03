@@ -158,6 +158,7 @@
     - name: Verify auditd
       become: true
       when:
+        - ansible_virtualization_type not in ["container", "docker", "podman"]
         - manage_auditd
       block:
         - name: Verify auditd configuration
