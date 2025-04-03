@@ -155,29 +155,59 @@
       when:
         - ansible_virtualization_type not in ["container", "docker", "podman"]
 
-    - name: Verify auditd configuration
+    - name: Verify auditd
       become: true
-      ansible.builtin.lineinfile:
-        dest: /etc/audit/auditd.conf
-        line: "{{ item }}"
-        state: present
-      check_mode: true
-      register: auditd_conf
-      failed_when: auditd_conf is changed
-      with_items:
-        - action_mail_acct = {{ auditd_action_mail_acct }}
-        - admin_space_left_action = {{ auditd_admin_space_left_action }}
-        - disk_error_action = {{ auditd_disk_error_action }}
-        - disk_full_action = {{ auditd_disk_full_action }}
-        - flush = {{ auditd_flush }}
-        - max_log_file = {{ auditd_max_log_file }}
-        - max_log_file_action = {{ auditd_max_log_file_action }}
-        - name_format = hostname
-        - num_logs = {{ auditd_num_logs }}
-        - space_left = {{ auditd_space_left }}
-        - space_left_action = {{ auditd_space_left_action }}
       when:
+        - ansible_virtualization_type not in ["container", "docker", "podman"]
         - manage_auditd
+      block:
+        - name: Verify auditd configuration
+          ansible.builtin.lineinfile:
+            dest: /etc/audit/auditd.conf
+            line: "{{ item }}"
+            state: present
+          check_mode: true
+          register: auditd_conf
+          failed_when: auditd_conf is changed
+          with_items:
+            - action_mail_acct = {{ auditd_action_mail_acct }}
+            - admin_space_left_action = {{ auditd_admin_space_left_action }}
+            - disk_error_action = {{ auditd_disk_error_action }}
+            - disk_full_action = {{ auditd_disk_full_action }}
+            - flush = {{ auditd_flush }}
+            - max_log_file = {{ auditd_max_log_file }}
+            - max_log_file_action = {{ auditd_max_log_file_action }}
+            - name_format = hostname
+            - num_logs = {{ auditd_num_logs }}
+            - space_left = {{ auditd_space_left }}
+            - space_left_action = {{ auditd_space_left_action }}
+
+        - name: Verify auditd rules
+          ansible.builtin.shell:
+            cmd: |
+              set -o pipefail
+              auditctl -l | grep "^{{ item }}$"
+          changed_when: false
+          args:
+            executable: /bin/bash
+          loop:
+            - "-w /sbin/auditctl -p x -k audittools"
+            - "-w /usr/bin/sudo -p x -k actions"
+            - "-w /etc/localtime -p wa -k localtime"
+            - "-w /var/lib/systemd/credential.secret -p wa -k systemd"
+            - "-w {{ sysctl_conf_dir }}/zz-ipv6-hardening.conf -p wa -k sysctl"
+
+        - name: Verify auditd settings
+          ansible.builtin.shell:
+            cmd: |
+              set -o pipefail
+              grep "^{{ item }}$" /etc/audit/audit.rules
+          changed_when: false
+          args:
+            executable: /bin/bash
+          loop:
+            - "-f {{ auditd_mode | int }}"
+            - "-e {{ auditd_enable_flag }}"
 
     - name: Verify systemd system.conf
       become: true

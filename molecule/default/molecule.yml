@@ -27,7 +27,7 @@ provisioner:
           - sudo
         sshd_host_keys_group: ssh_keys
         sshd_update_moduli: true
-        sysctl_conf_dir: /etc/sysctl.d/
+        sysctl_conf_dir: /etc/sysctl.d
         system_upgrade: false
         slub_debugger_poisoning: true
         ufw_rate_limit: true
@@ -71,7 +71,7 @@ provisioner:
           - sudo
         sshd_update_moduli: true
         manage_suid_sgid_permissions: false
-        sysctl_conf_dir: /etc/sysctl.d/
+        sysctl_conf_dir: /etc/sysctl.d
         umask_value: "027"
         ufw_rate_limit: true
 platforms:
