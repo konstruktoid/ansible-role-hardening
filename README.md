@@ -1341,6 +1341,7 @@ ufw_outgoing_traffic:
   - { port: 123, proto: "udp" }
   - { port: 443, proto: "tcp" }
   - 853
+  - { port: 4460, proto: "tcp" }
 
 ufw_rate_limit: false
 ```
