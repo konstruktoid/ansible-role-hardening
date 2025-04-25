@@ -171,7 +171,8 @@ manage_apparmor: true
 ```
 
 If `manage_apparmor: true`, then available [AppArmor](https://apparmor.net/)
-profiles will set to enforce mode.
+profiles will set to enforce mode and related AppArmor sysctl settings
+configured.
 
 ### ./defaults/main/apport.yml
 
@@ -690,6 +691,7 @@ packages_blocklist:
   - avahi*
   - avahi-*
   - beep
+  - ftp
   - git
   - pastebinit
   - popularity-contest
@@ -700,6 +702,7 @@ packages_blocklist:
   - talk*
   - telnet*
   - tftp*
+  - tnftp
   - tuned
   - whoopsie
   - xinetd
