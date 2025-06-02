@@ -16,21 +16,16 @@ provisioner:
   log: true
   inventory:
     host_vars:
-      almalinux9:
-        enable_page_poisoning: true
-        manage_resolved: false
+      almalinux10:
+        crypto_policy: DEFAULT
+        manage_rkhunter: false
         manage_timesyncd: false
+        manage_ufw: false
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
-        sshd_host_keys_group: ssh_keys
-        sshd_update_moduli: true
-        sysctl_conf_dir: /etc/sysctl.d
-        system_upgrade: false
-        slub_debugger_poisoning: true
-        ufw_rate_limit: true
       bookworm:
         allow_virtual_system_calls: false
         ansible_become_pass: vagrant
@@ -75,8 +70,8 @@ provisioner:
         umask_value: "027"
         ufw_rate_limit: true
 platforms:
-  - name: almalinux9
-    box: bento/almalinux-9
+  - name: almalinux10
+    box: almalinux/10-kitten-x86_64_v2
     config_options:
       vm.boot_timeout: 600
       ssh.key_type: ed25519
