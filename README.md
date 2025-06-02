@@ -719,7 +719,6 @@ packages_debian:
   - cracklib-runtime
   - debsums
   - gnupg2
-  - haveged
   - libpam-apparmor
   - libpam-cap
   - libpam-modules
@@ -740,7 +739,6 @@ packages_redhat:
   - audit
   - cracklib
   - gnupg2
-  - haveged
   - openssh-server
   - needrestart
   - postfix
