@@ -20,44 +20,22 @@ provisioner:
   inventory:
     host_vars:
       almalinux9:
-        kernel_lockdown: true
-        manage_timesyncd: false
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
-        manage_suid_sgid_permissions: false
         system_upgrade: false
       almalinux10:
         crypto_policy: DEFAULT
-        kernel_lockdown: true
-        manage_auditd: false
         manage_rkhunter: false
         manage_timesyncd: false
-        packages_redhat:
-          - audispd-plugins
-          - audit
-          - cracklib
-          - gnupg2
-          - libpwquality
-          - openssh-server
-          - postfix
-          - psacct
-          - python3-dnf-plugin-post-transaction-actions
-          - rsyslog
-          - rsyslog-gnutls
-          - systemd-journal-remote
-          - vlock
-          - words
+        manage_ufw: false
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
-        manage_suid_sgid_permissions: false
-        manage_ufw: false
-        system_upgrade: false
 platforms:
   - name: almalinux9
     box: bento/almalinux-9

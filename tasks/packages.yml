@@ -216,13 +216,3 @@
       when:
         - needrestart_directory.stat.exists
         - needrestart_restart_set.rc != 0
-
-- name: Enable haveged
-  become: true
-  ansible.builtin.systemd:
-    name: haveged
-    enabled: true
-    state: started
-  when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
-    - "'haveged' in ansible_facts.services"
