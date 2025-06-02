@@ -22,7 +22,6 @@ provisioner:
       bookworm:
         ansible_python_interpreter: /usr/bin/python3
         kernel_lockdown: integrity
-        rkhunter_web_cmd:
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
@@ -34,14 +33,17 @@ provisioner:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
         kernel_lockdown: confidentiality
-        rkhunter_web_cmd:
+        manage_apparmor: false
+        manage_auditd: false
+        manage_compilers: false
+        manage_suid_sgid_permissions: false
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
-        manage_suid_sgid_permissions: false
         sshd_update_moduli: true
+        system_upgrade: false
 platforms:
   - name: bookworm
     box: debian/bookworm64
