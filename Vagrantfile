@@ -1,21 +1,13 @@
 $prep = <<SCRIPT
 set -exu -o pipefail
 
-echo 'export PATH=$PATH:/usr/local/bin:~/.local/bin' | tee -a /home/vagrant/.bashrc
-echo 'export PATH=$PATH:/usr/local/bin:~/.local/bin' | tee -a /etc/profile
-export PATH=$PATH:/usr/local/bin:~/.local/bin
 
 if [ -x "$(which apt-get)" ]; then
   apt-get update
   apt-get install --assume-yes --no-install-recommends curl git gnupg2 \
-    software-properties-common python3-apt python3-dev python3-pip python3.11-venv
+    software-properties-common python3-apt python3-dev
 else
-  if [ $(grep PLATFORM_ID /etc/os-release | awk -F ':' '{print $NF}' | tr -d '[a-z]"') -lt 10 ]; then
-    dnf install --assumeyes python3.11
-  fi
-
-  dnf install --assumeyes curl git python3 python3-pip python3-devel \
-    python3-packaging
+  dnf install --assumeyes curl git python3-devel python3-packaging
 fi
 
 mkdir -p /tmp/vagrant-ansible/inventory
@@ -24,16 +16,12 @@ mkdir -p /usr/share/ansible/roles
 echo "localhost ansible_connection=local" | tee /tmp/vagrant-ansible/inventory/localhost_inventory
 ln -sf /vagrant /usr/share/ansible/roles/konstruktoid.hardening
 
-PYTHON_BIN="$(ls -1 $(which python3)* | grep -o 'python3.[0-9][0-9]' | sort -r | head -n 1)"
-echo "${PYTHON_BIN}"
-
-if [ ! $("${PYTHON_BIN}" -m pipx --version) ]; then
-  "${PYTHON_BIN}" -m pip install pipx # --break-system-packages pipx
-fi
-
-"${PYTHON_BIN}" -m pipx ensurepath --force
-"${PYTHON_BIN}" -m pipx install --global --include-deps ansible
-sudo -u vagrant -i ansible-galaxy install --role-file=/vagrant/requirements.yml --force
+sudo -u vagrant -i bash -c "curl -LsSf https://astral.sh/uv/install.sh | sh && \
+  uv venv --python 3.11 /var/tmp/venv && \
+  echo 'export PATH=/var/tmp/venv/bin:/home/vagrant/.local/bin:$PATH' | tee -a /home/vagrant/.bashrc && \
+  echo 'export VIRTUAL_ENV=/var/tmp/venv' | tee -a /home/vagrant/.bashrc && \
+  VIRTUAL_ENV=/var/tmp/venv uv pip install -r /vagrant/requirements-dev.txt && \
+  ansible-galaxy install --role-file=/vagrant/requirements.yml --force"
 SCRIPT
 
 Vagrant.configure("2") do |config|
@@ -46,10 +34,10 @@ Vagrant.configure("2") do |config|
   end
 
   hosts = [
-    { name: "almalinux9", box: "bento/almalinux-9", python: "/usr/bin/python3.11" },
-    { name: "almalinux10", box: "almalinux/10-kitten-x86_64_v2", python: "/usr/bin/python3" },
-    { name: "bookworm", box: "debian/bookworm64", python: "/usr/bin/python3" },
-    { name: "noble", box: "bento/ubuntu-24.04", python: "/usr/bin/python3" },
+    { name: "almalinux9", box: "bento/almalinux-9", python: "/var/tmp/venv/bin/python3" },
+    { name: "almalinux10", box: "almalinux/10-kitten-x86_64_v2", python: "/var/tmp/venv/bin/python3" },
+    { name: "bookworm", box: "debian/bookworm64", python: "/var/tmp/venv/bin/python3" },
+    { name: "noble", box: "bento/ubuntu-24.04", python: "/var/tmp/venv/bin/python3" },
   ]
 
   hosts.each do |host|
