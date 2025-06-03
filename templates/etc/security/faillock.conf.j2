@@ -5,7 +5,7 @@
 # pam_faillock configuration file
 # See faillock.conf(5) for more information
 
-dir = {{ faillock.dir }}
+dir={{ faillock.dir }}
 {% if (faillock.audit | bool) %}
 audit
 {% endif%}
@@ -23,13 +23,13 @@ local_users_only
 nodelay
 {% endif %}
 {% endif %}
-deny = {{ faillock.deny }}
-fail_interval = {{ faillock.fail_interval }}
-unlock_time = {{ faillock.unlock_time }}
+deny={{ faillock.deny }}
+fail_interval={{ faillock.fail_interval }}
+unlock_time={{ faillock.unlock_time }}
 {% if (faillock.even_deny_root | bool) %}
 even_deny_root
 {% endif %}
-root_unlock_time = {{ faillock.root_unlock_time }}
+root_unlock_time={{ faillock.root_unlock_time }}
 {% for group in faillock.admin_group %}
-admin_group = {{ group }}
+admin_group={{ group }}
 {% endfor %}
