@@ -22,7 +22,7 @@ function lint {
   echo "# Running ansible-lint"
   ansible-lint --version
 
-  if ! ansible-lint --exclude .git --exclude .github --exclude tests/ -vv; then
+  if ! ansible-lint --exclude .git --exclude .github --exclude tests/; then
     echo 'ansible-lint failed.'
     exit 1
   fi
@@ -47,13 +47,15 @@ ANSIBLE_V0="$(ansible --version | grep '^ansible' | awk '{print $NF}')"
 if [ "$1" == "vagrant" ]; then
   prep
 
-  grep config.vm.define Vagrantfile | grep -o '".*"' | tr -d '"' | while read -r v; do
+  vagrant status | grep 'not created' | awk '{print $1}' | while read -r v; do
+    echo "Creating ${v}."
     vagrant up "${v}"
   done
 
   wait
 
-  grep config.vm.define Vagrantfile | grep -o '".*"' | tr -d '"' | while read -r v; do
+  vagrant status | grep 'not created' | awk '{print $1}' | while read -r v; do
+    echo "Reloading ${v}."
     vagrant reload "${v}"
   done
 
