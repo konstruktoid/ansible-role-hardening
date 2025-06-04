@@ -37,7 +37,6 @@ provisioner:
             rules:
               - AllowUsers testuser02
               - Banner none
-        umask_value: "027"
         ufw_rate_limit: true
 platforms:
   - name: noble

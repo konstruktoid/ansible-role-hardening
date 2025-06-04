@@ -142,6 +142,9 @@
         type: rsa
         size: "{{ sshd_required_rsa_size }}"
         path: /etc/ssh/ssh_host_rsa_key
+        mode: "0600"
+        owner: root
+        group: "{{ 'ssh_keys' if ansible_os_family == 'RedHat' else 'root' }}"
         regenerate: partial_idempotence
 
     - name: Generate SSH ECDSA keypair
@@ -150,6 +153,9 @@
         type: ecdsa
         size: "{{ sshd_required_ecdsa_size }}"
         path: /etc/ssh/ssh_host_ecdsa_key
+        mode: "0600"
+        owner: root
+        group: "{{ 'ssh_keys' if ansible_os_family == 'RedHat' else 'root' }}"
         regenerate: partial_idempotence
       when:
         - ssh_installed_version is version('6.0', '>=')
@@ -159,6 +165,9 @@
         state: present
         type: ed25519
         path: /etc/ssh/ssh_host_ed25519_key
+        mode: "0600"
+        owner: root
+        group: "{{ 'ssh_keys' if ansible_os_family == 'RedHat' else 'root' }}"
         regenerate: partial_idempotence
       when:
         - ssh_installed_version is version('6.5', '>=')

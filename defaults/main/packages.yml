@@ -9,6 +9,7 @@ packages_blocklist:
   - beep
   - ftp
   - git
+  - inetutils-telnet
   - pastebinit
   - popularity-contest
   - prelink
