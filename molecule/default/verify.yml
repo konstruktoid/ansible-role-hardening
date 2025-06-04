@@ -1149,7 +1149,7 @@
     - name: Set faillock_parameters
       ansible.builtin.set_fact:
         faillock_parameters:
-          - dir = {{ faillock.dir }}
+          - dir={{ faillock.dir }}
           - "{{ 'audit' if (faillock.audit | bool) }}"
           - "{{ 'silent' if (faillock.silent | bool) }}"
           - "{{ 'no_log_info' if (faillock.no_log_info | bool) }}"
@@ -1158,14 +1158,14 @@
             {%- if (pam_version is version('1.5.1', '>=')) -%}
               {{ 'nodelay' if (faillock.nodelay | bool) }}
             {%- endif -%}
-          - deny = {{ faillock.deny }}
-          - fail_interval = {{ faillock.fail_interval }}
-          - unlock_time = {{ faillock.unlock_time }}
+          - deny={{ faillock.deny }}
+          - fail_interval={{ faillock.fail_interval }}
+          - unlock_time={{ faillock.unlock_time }}
           - "{{ 'even_deny_root' if (faillock.even_deny_root | bool) }}"
-          - root_unlock_time = {{ faillock.root_unlock_time }}
+          - root_unlock_time={{ faillock.root_unlock_time }}
           - >-
             {%- for group in faillock.admin_group -%}
-              admin_group = {{ group }}
+              admin_group={{ group }}
             {%- endfor -%}
       when:
         - faillockconf.stat.exists
