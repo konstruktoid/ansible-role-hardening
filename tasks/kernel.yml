@@ -4,7 +4,8 @@
   block:
     - name: Configure virtual system calls
       ansible.builtin.lineinfile:
-        line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX vsyscall=none"
+        line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX vsyscall={{ 'none' if not allow_virtual_system_calls else 'emulate' }}"
+        regexp: "^GRUB_CMDLINE_LINUX="
         dest: /etc/default/grub.d/99-hardening-vsyscall.cfg
         state: present
         create: true
@@ -13,24 +14,23 @@
         group: root
       when:
         - ansible_os_family == "Debian"
-        - not allow_virtual_system_calls
       notify:
         - Update GRUB
 
     - name: Configure virtual system calls using grubby
       ansible.builtin.command:
-        cmd: grubby --update-kernel=ALL --args="vsyscall=none"
+        cmd: grubby --update-kernel=ALL --args="vsyscall={{ 'none' if not allow_virtual_system_calls else 'emulate' }}"
       register: grubby_update_kernel
       changed_when: grubby_update_kernel.rc != 0
       failed_when: grubby_update_kernel.rc != 0
       when:
         - ansible_os_family == "RedHat"
         - ansible_virtualization_type not in ["container", "docker", "podman"]
-        - not allow_virtual_system_calls
 
     - name: Configure page poisoning
       ansible.builtin.lineinfile:
-        line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX page_poison=1"
+        line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX page_poison={{ '1' if enable_page_poisoning else '0' }}"
+        regexp: "^GRUB_CMDLINE_LINUX="
         dest: /etc/default/grub.d/99-hardening-page-poison.cfg
         state: present
         create: true
@@ -39,24 +39,23 @@
         group: root
       when:
         - ansible_os_family == "Debian"
-        - enable_page_poisoning
       notify:
         - Update GRUB
 
     - name: Configure page poisoning using grubby
       ansible.builtin.command:
-        cmd: grubby --update-kernel=ALL --args="page_poison=1"
+        cmd: grubby --update-kernel=ALL --args="page_poison={{ '1' if enable_page_poisoning else '0' }}"
       register: grubby_update_kernel
       changed_when: grubby_update_kernel.rc != 0
       failed_when: grubby_update_kernel.rc != 0
       when:
         - ansible_os_family == "RedHat"
         - ansible_virtualization_type not in ["container", "docker", "podman"]
-        - enable_page_poisoning
 
     - name: Configure page table isolation
       ansible.builtin.lineinfile:
         line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX pti={{ 'on' if page_table_isolation else 'auto' }}"
+        regexp: "^GRUB_CMDLINE_LINUX="
         dest: /etc/default/grub.d/99-hardening-pti.cfg
         state: present
         create: true
@@ -81,6 +80,7 @@
     - name: Configure SLUB debugger poisoning
       ansible.builtin.lineinfile:
         line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX slub_debug=P"
+        regexp: "^GRUB_CMDLINE_LINUX="
         dest: /etc/default/grub.d/99-hardening-slub-debug.cfg
         state: present
         create: true
@@ -126,6 +126,7 @@
           ansible.builtin.lineinfile:
             line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX lockdown={{ kernel_lockdown | trim }}"
             dest: /etc/default/grub.d/99-hardening-lockdown.cfg
+            regexp: "^GRUB_CMDLINE_LINUX="
             state: present
             create: true
             mode: "0640"
