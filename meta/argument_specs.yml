@@ -1,0 +1,1405 @@
+argument_specs:
+  main:
+    short_description: AlmaLinux, Debian and Ubuntu hardening.
+    description:
+      - AlmaLinux, Debian and Ubuntu hardening.
+      - Focused on using C(systemd) services and options.
+    author:
+      - konstruktoid
+    options:
+      adduser_conf_template:
+        description: "adduser_conf_template description"
+        type: "str"
+        default: "etc/adduser.conf.j2"
+      common_account_template:
+        description: "common_account_template description"
+        type: "str"
+        default: "etc/pam.d/common-account.j2"
+      common_auth_template:
+        description: "common_auth_template description"
+        type: "str"
+        default: "etc/pam.d/common-auth.j2"
+      common_password_template:
+        description: "common_password_template description"
+        type: "str"
+        default: "etc/pam.d/common-password.j2"
+      coredump_conf_template:
+        description: "coredump_conf_template description"
+        type: "str"
+        default: "etc/systemd/coredump.conf.j2"
+      faillock_conf_template:
+        description: "faillock_conf_template description"
+        type: "str"
+        default: "etc/security/faillock.conf.j2"
+      hardening_rules_template:
+        description: "hardening_rules_template description"
+        type: "str"
+        default: "etc/audit/rules.d/hardening.rules.j2"
+      hosts_allow_template:
+        description: "hosts_allow_template description"
+        type: "str"
+        default: "etc/hosts.allow.j2"
+      hosts_deny_template:
+        description: "hosts_deny_template description"
+        type: "str"
+        default: "etc/hosts.deny.j2"
+      initpath_sh_template:
+        description: "initpath_sh_template description"
+        type: "str"
+        default: "etc/profile.d/initpath.sh.j2"
+      issue_template:
+        description: "issue_template description"
+        type: "str"
+        default: "etc/issue.j2"
+      journald_conf_template:
+        description: "journald_conf_template description"
+        type: "str"
+        default: "etc/systemd/journald.conf.j2"
+      limits_conf_template:
+        description: "limits_conf_template description"
+        type: "str"
+        default: "etc/security/limits.conf.j2"
+      login_defs_template:
+        description: "login_defs_template description"
+        type: "str"
+        default: "etc/login.defs.j2"
+      login_template:
+        description: "login_template description"
+        type: "str"
+        default: "etc/pam.d/login.j2"
+      logind_conf_template:
+        description: "logind_conf_template description"
+        type: "str"
+        default: "etc/systemd/logind.conf.j2"
+      logrotate_conf_template:
+        description: "logrotate_conf_template description"
+        type: "str"
+        default: "etc/logrotate.conf.j2"
+      motd_template:
+        description: "motd_template description"
+        type: "str"
+        default: "etc/motd.j2"
+      pwquality_conf_template:
+        description: "pwquality_conf_template description"
+        type: "str"
+        default: "etc/security/pwquality.conf.j2"
+      resolved_conf_template:
+        description: "resolved_conf_template description"
+        type: "str"
+        default: "etc/systemd/resolved.conf.j2"
+      rkhunter_template:
+        description: "rkhunter_template description"
+        type: "str"
+        default: "etc/default/rkhunter.j2"
+      ssh_config_template:
+        description: "ssh_config_template description"
+        type: "str"
+        default: "etc/ssh/ssh_config.j2"
+      sshd_config_template:
+        description: "sshd_config_template description"
+        type: "str"
+        default: "etc/ssh/sshd_config.j2"
+      sshd_tmpfiles_template:
+        description: "sshd_tmpfiles_template description"
+        type: "str"
+        default: "usr/lib/tmpfiles.d/ssh.conf.j2"
+      sysctl_apparmor_config_template:
+        description: "sysctl_apparmor_config_template description"
+        type: "str"
+        default: "etc/sysctl/sysctl.apparmor.conf.j2"
+      sysctl_ipv6_config_template:
+        description: "sysctl_ipv6_config_template description"
+        type: "str"
+        default: "etc/sysctl/sysctl.ipv6.conf.j2"
+      sysctl_main_config_template:
+        description: "sysctl_main_config_template description"
+        type: "str"
+        default: "etc/sysctl/sysctl.main.conf.j2"
+      system_conf_template:
+        description: "system_conf_template description"
+        type: "str"
+        default: "etc/systemd/system.conf.j2"
+      timesyncd_conf_template:
+        description: "timesyncd_conf_template description"
+        type: "str"
+        default: "etc/systemd/timesyncd.conf.j2"
+      tmp_mount_template:
+        description: "tmp_mount_template description"
+        type: "str"
+        default: "etc/systemd/tmp.mount.j2"
+      unattended_upgrades_template:
+        description: "unattended_upgrades_template description"
+        type: "str"
+        default: "etc/apt/apt.conf.d/50unattended-upgrades.j2"
+      user_conf_template:
+        description: "user_conf_template description"
+        type: "str"
+        default: "etc/systemd/user.conf.j2"
+      useradd_template:
+        description: "useradd_template description"
+        type: "str"
+        default: "etc/default/useradd.j2"
+      manage_pam:
+        description: "manage_pam description"
+        type: "bool"
+        default: "True"
+      manage_faillock:
+        description: "manage_faillock description"
+        type: "bool"
+        default: "True"
+      manage_pwquality:
+        description: "manage_pwquality description"
+        type: "bool"
+        default: "True"
+      faillock.admin_group:
+        description: "faillock.admin_group description"
+        type: "list"
+        elements: "str"
+        default: "[]"
+      faillock.audit:
+        description: "faillock.audit description"
+        type: "bool"
+        default: "True"
+      faillock.deny:
+        description: "faillock.deny description"
+        type: "int"
+        default: "5"
+      faillock.dir:
+        description: "faillock.dir description"
+        type: "str"
+        default: "/var/run/faillock"
+      faillock.even_deny_root:
+        description: "faillock.even_deny_root description"
+        type: "bool"
+        default: "True"
+      faillock.fail_interval:
+        description: "faillock.fail_interval description"
+        type: "int"
+        default: "900"
+      faillock.local_users_only:
+        description: "faillock.local_users_only description"
+        type: "bool"
+        default: "True"
+      faillock.no_log_info:
+        description: "faillock.no_log_info description"
+        type: "bool"
+        default: "False"
+      faillock.nodelay:
+        description: "faillock.nodelay description"
+        type: "bool"
+        default: "True"
+      faillock.root_unlock_time:
+        description: "faillock.root_unlock_time description"
+        type: "int"
+        default: "600"
+      faillock.silent:
+        description: "faillock.silent description"
+        type: "bool"
+        default: "False"
+      faillock.unlock_time:
+        description: "faillock.unlock_time description"
+        type: "int"
+        default: "600"
+      login_defs.login_retries:
+        description: "login_defs.login_retries description"
+        type: "int"
+        default: "5"
+      login_defs.login_timeout:
+        description: "login_defs.login_timeout description"
+        type: "int"
+        default: "60"
+      login_defs.pass_max_days:
+        description: "login_defs.pass_max_days description"
+        type: "int"
+        default: "60"
+      login_defs.pass_min_days:
+        description: "login_defs.pass_min_days description"
+        type: "int"
+        default: "1"
+      login_defs.pass_warn_age:
+        description: "login_defs.pass_warn_age description"
+        type: "int"
+        default: "7"
+      password_remember:
+        description: "password_remember description"
+        type: "int"
+        default: "24"
+      pwquality.dcredit:
+        description: "pwquality.dcredit description"
+        type: "int"
+        default: "-1"
+      pwquality.dictcheck:
+        description: "pwquality.dictcheck description"
+        type: "int"
+        default: "1"
+      pwquality.dictpath:
+        description: "pwquality.dictpath description"
+        type: "str"
+        default: ""
+      pwquality.difok:
+        description: "pwquality.difok description"
+        type: "int"
+        default: "8"
+      pwquality.enforce_for_root:
+        description: "pwquality.enforce_for_root description"
+        type: "bool"
+        default: "True"
+      pwquality.enforcing:
+        description: "pwquality.enforcing description"
+        type: "int"
+        default: "1"
+      pwquality.gecoscheck:
+        description: "pwquality.gecoscheck description"
+        type: "int"
+        default: "1"
+      pwquality.lcredit:
+        description: "pwquality.lcredit description"
+        type: "int"
+        default: "-1"
+      pwquality.local_users_only:
+        description: "pwquality.local_users_only description"
+        type: "bool"
+        default: "True"
+      pwquality.maxclassrepeat:
+        description: "pwquality.maxclassrepeat description"
+        type: "int"
+        default: "4"
+      pwquality.maxrepeat:
+        description: "pwquality.maxrepeat description"
+        type: "int"
+        default: "3"
+      pwquality.maxsequence:
+        description: "pwquality.maxsequence description"
+        type: "int"
+        default: "3"
+      pwquality.minclass:
+        description: "pwquality.minclass description"
+        type: "int"
+        default: "4"
+      pwquality.minlen:
+        description: "pwquality.minlen description"
+        type: "int"
+        default: "15"
+      pwquality.ocredit:
+        description: "pwquality.ocredit description"
+        type: "int"
+        default: "-1"
+      pwquality.retry:
+        description: "pwquality.retry description"
+        type: "int"
+        default: "3"
+      pwquality.ucredit:
+        description: "pwquality.ucredit description"
+        type: "int"
+        default: "-1"
+      pwquality.usercheck:
+        description: "pwquality.usercheck description"
+        type: "int"
+        default: "1"
+      pwquality.usersubstr:
+        description: "pwquality.usersubstr description"
+        type: "int"
+        default: "3"
+      disable_root_account:
+        description: "disable_root_account description"
+        type: "bool"
+        default: "True"
+      manage_aide:
+        description: "manage_aide description"
+        type: "bool"
+        default: "True"
+      aide_checksums:
+        description: "aide_checksums description"
+        type: "str"
+        default: "sha512"
+      aide_dir_exclusions:
+        description: "aide_dir_exclusions description"
+        type: "list"
+        elements: "str"
+        default: "['/var/lib/docker', '/var/lib/lxcfs', '/var/lib/private/systemd', '/var/log/audit', '/var/log/journal']"
+      manage_timesyncd:
+        description: "manage_timesyncd description"
+        type: "bool"
+        default: "True"
+      fallback_ntp:
+        description: "fallback_ntp description"
+        type: "list"
+        elements: "str"
+        default: "['ntp.netnod.se', 'ntp.ubuntu.com']"
+      ntp:
+        description: "ntp description"
+        type: "list"
+        elements: "str"
+        default: "['2.pool.ntp.org', 'time.nist.gov']"
+      manage_cron:
+        description: "manage_cron description"
+        type: "bool"
+        default: "True"
+      manage_sudo:
+        description: "manage_sudo description"
+        type: "bool"
+        default: "True"
+      manage_rkhunter:
+        description: "manage_rkhunter description"
+        type: "bool"
+        default: "True"
+      rkhunter_allow_ssh_prot_v1:
+        description: "rkhunter_allow_ssh_prot_v1 description"
+        type: "bool"
+        default: "False"
+      rkhunter_allow_ssh_root_user:
+        description: "rkhunter_allow_ssh_root_user description"
+        type: "bool"
+        default: "False"
+      rkhunter_mirrors_mode:
+        description: "rkhunter_mirrors_mode description"
+        type: "str"
+        default: "0"
+      rkhunter_update_mirrors:
+        description: "rkhunter_update_mirrors description"
+        type: "bool"
+        default: "True"
+      rkhunter_web_cmd:
+        description: "rkhunter_web_cmd description"
+        type: "str"
+        default: "curl -fsSL"
+      manage_path:
+        description: "manage_path description"
+        type: "bool"
+        default: "True"
+      set_crypto_policy:
+        description: "set_crypto_policy description"
+        type: "bool"
+        default: "True"
+      crypto_policy:
+        description: "crypto_policy description"
+        type: "str"
+        default: "DEFAULT:NO-SHA1"
+      manage_ssh:
+        description: "manage_ssh description"
+        type: "bool"
+        default: "True"
+      sshd_accept_env:
+        description: "sshd_accept_env description"
+        type: "str"
+        default: "LANG LC_*"
+      sshd_admin_net:
+        description: "sshd_admin_net description"
+        type: "list"
+        elements: "str"
+        default: "['192.168.0.0/24', '192.168.1.0/24']"
+      sshd_allow_agent_forwarding:
+        description: "sshd_allow_agent_forwarding description"
+        type: "bool"
+        default: "False"
+      sshd_allow_groups:
+        description: "sshd_allow_groups description"
+        type: "list"
+        elements: "str"
+        default: "['sudo']"
+      sshd_allow_tcp_forwarding:
+        description: "sshd_allow_tcp_forwarding description"
+        type: "bool"
+        default: "False"
+      sshd_allow_users:
+        description: "sshd_allow_users description"
+        type: "list"
+        elements: "str"
+      sshd_authentication_methods:
+        description: "sshd_authentication_methods description"
+        type: "str"
+        default: "any"
+      sshd_authorized_principals_file:
+        description: "sshd_authorized_principals_file description"
+        type: "str"
+        default: "/etc/ssh/auth_principals/%u"
+      sshd_banner:
+        description: "sshd_banner description"
+        type: "str"
+        default: "/etc/issue.net"
+      sshd_ca_signature_algorithms:
+        description: "sshd_ca_signature_algorithms description"
+        type: "list"
+        elements: "str"
+        default: "['ecdsa-sha2-nistp384', 'ecdsa-sha2-nistp521', 'ssh-ed25519', 'rsa-sha2-512']"
+      sshd_kbd_interactive_authentication:
+        description: "sshd_kbd_interactive_authentication description"
+        type: "bool"
+        default: "False"
+      sshd_ciphers:
+        description: "sshd_ciphers description"
+        type: "list"
+        elements: "str"
+        default: "['chacha20-poly1305@openssh.com', 'aes256-gcm@openssh.com', 'aes256-ctr']"
+      sshd_client_alive_count_max:
+        description: "sshd_client_alive_count_max description"
+        type: "int"
+        default: "1"
+      sshd_client_alive_interval:
+        description: "sshd_client_alive_interval description"
+        type: "int"
+        default: "200"
+      sshd_compression:
+        description: "sshd_compression description"
+        type: "bool"
+        default: "False"
+      sshd_config_d_force_clear:
+        description: "sshd_config_d_force_clear description"
+        type: "bool"
+        default: "False"
+      sshd_config_force_replace:
+        description: "sshd_config_force_replace description"
+        type: "bool"
+        default: "False"
+      sshd_debian_banner:
+        description: "sshd_debian_banner description"
+        type: "bool"
+        default: "False"
+      sshd_deny_groups:
+        description: "sshd_deny_groups description"
+        type: "list"
+        elements: "str"
+        default: "[]"
+      sshd_deny_users:
+        description: "sshd_deny_users description"
+        type: "list"
+        elements: "str"
+        default: "[]"
+      sshd_gateway_ports:
+        description: "sshd_gateway_ports description"
+        type: "bool"
+        default: "False"
+      sshd_gssapi_authentication:
+        description: "sshd_gssapi_authentication description"
+        type: "bool"
+        default: "False"
+      sshd_host_key_algorithms:
+        description: "sshd_host_key_algorithms description"
+        type: "list"
+        elements: "str"
+        default: "['ssh-ed25519-cert-v01@openssh.com', 'ssh-rsa-cert-v01@openssh.com', 'ssh-ed25519', 'ecdsa-sha2-nistp521-cert-v01@openssh.com', 'ecdsa-sha2-nistp384-cert-v01@openssh.com', 'ecdsa-sha2-nistp521', 'ecdsa-sha2-nistp384']"
+      sshd_host_keys_files:
+        description: "sshd_host_keys_files description"
+        type: "list"
+        elements: "str"
+        default: "[]"
+      sshd_host_keys_group:
+        description: "sshd_host_keys_group description"
+        type: "str"
+        default: "root"
+      sshd_host_keys_mode:
+        description: "sshd_host_keys_mode description"
+        type: "str"
+        default: "0600"
+      sshd_host_keys_owner:
+        description: "sshd_host_keys_owner description"
+        type: "str"
+        default: "root"
+      sshd_hostbased_authentication:
+        description: "sshd_hostbased_authentication description"
+        type: "bool"
+        default: "False"
+      sshd_ignore_rhosts:
+        description: "sshd_ignore_rhosts description"
+        type: "bool"
+        default: "True"
+      sshd_ignore_user_known_hosts:
+        description: "sshd_ignore_user_known_hosts description"
+        type: "bool"
+        default: "True"
+      sshd_kerberos_authentication:
+        description: "sshd_kerberos_authentication description"
+        type: "bool"
+        default: "False"
+      sshd_kex_algorithms:
+        description: "sshd_kex_algorithms description"
+        type: "list"
+        elements: "str"
+        default: "['curve25519-sha256@libssh.org', 'diffie-hellman-group16-sha512', 'diffie-hellman-group18-sha512', 'ecdh-sha2-nistp521', 'ecdh-sha2-nistp384']"
+      sshd_listen:
+        description: "sshd_listen description"
+        type: "list"
+        elements: "str"
+        default: "['0.0.0.0']"
+      sshd_log_level:
+        description: "sshd_log_level description"
+        type: "str"
+        default: "VERBOSE"
+      sshd_login_grace_time:
+        description: "sshd_login_grace_time description"
+        type: "int"
+        default: "20"
+      sshd_macs:
+        description: "sshd_macs description"
+        type: "list"
+        elements: "str"
+        default: "['hmac-sha2-512-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', 'hmac-sha2-512', 'hmac-sha2-256']"
+      sshd_max_auth_tries:
+        description: "sshd_max_auth_tries description"
+        type: "int"
+        default: "3"
+      sshd_max_sessions:
+        description: "sshd_max_sessions description"
+        type: "int"
+        default: "3"
+      sshd_max_startups:
+        description: "sshd_max_startups description"
+        type: "str"
+        default: "10:30:60"
+      sshd_password_authentication:
+        description: "sshd_password_authentication description"
+        type: "bool"
+        default: "False"
+      sshd_permit_empty_passwords:
+        description: "sshd_permit_empty_passwords description"
+        type: "bool"
+        default: "False"
+      sshd_permit_root_login:
+        description: "sshd_permit_root_login description"
+        type: "bool"
+        default: "False"
+      sshd_permit_tunnel:
+        description: "sshd_permit_tunnel description"
+        type: "bool"
+        default: "False"
+      sshd_permit_user_environment:
+        description: "sshd_permit_user_environment description"
+        type: "bool"
+        default: "False"
+      sshd_ports:
+        description: "sshd_ports description"
+        type: "list"
+        elements: "str"
+        default: "[22]"
+      sshd_print_last_log:
+        description: "sshd_print_last_log description"
+        type: "bool"
+        default: "True"
+      sshd_print_motd:
+        description: "sshd_print_motd description"
+        type: "bool"
+        default: "False"
+      sshd_print_pam_motd:
+        description: "sshd_print_pam_motd description"
+        type: "bool"
+        default: "False"
+      sshd_rekey_limit:
+        description: "sshd_rekey_limit description"
+        type: "str"
+        default: "512M 1h"
+      sshd_required_ecdsa_size:
+        description: "sshd_required_ecdsa_size description"
+        type: "int"
+        default: "521"
+      sshd_required_rsa_size:
+        description: "sshd_required_rsa_size description"
+        type: "int"
+        default: "4096"
+      sshd_sftp_enabled:
+        description: "sshd_sftp_enabled description"
+        type: "bool"
+        default: "True"
+      sshd_sftp_only_chroot:
+        description: "sshd_sftp_only_chroot description"
+        type: "bool"
+        default: "True"
+      sshd_sftp_only_chroot_dir:
+        description: "sshd_sftp_only_chroot_dir description"
+        type: "str"
+        default: "%h"
+      sshd_sftp_only_group:
+        description: "sshd_sftp_only_group description"
+        type: "str"
+        default: ""
+      sshd_sftp_subsystem:
+        description: "sshd_sftp_subsystem description"
+        type: "str"
+        default: "internal-sftp -f LOCAL6 -l INFO"
+      sshd_strict_modes:
+        description: "sshd_strict_modes description"
+        type: "bool"
+        default: "True"
+      sshd_syslog_facility:
+        description: "sshd_syslog_facility description"
+        type: "str"
+        default: "AUTH"
+      sshd_tcp_keep_alive:
+        description: "sshd_tcp_keep_alive description"
+        type: "bool"
+        default: "False"
+      sshd_trusted_user_ca_keys_base64:
+        description: "sshd_trusted_user_ca_keys_base64 description"
+        type: "str"
+        default: ""
+      sshd_trusted_user_ca_keys_file:
+        description: "sshd_trusted_user_ca_keys_file description"
+        type: "str"
+        default: "/etc/ssh/trusted-user-ca-keys.pem"
+      sshd_update_moduli:
+        description: "sshd_update_moduli description"
+        type: "bool"
+        default: "False"
+      sshd_use_dns:
+        description: "sshd_use_dns description"
+        type: "bool"
+        default: "False"
+      sshd_use_pam:
+        description: "sshd_use_pam description"
+        type: "bool"
+        default: "True"
+      sshd_use_privilege_separation:
+        description: "sshd_use_privilege_separation description"
+        type: "str"
+        default: "sandbox"
+      sshd_x11_forwarding:
+        description: "sshd_x11_forwarding description"
+        type: "bool"
+        default: "False"
+      disable_apport:
+        description: "disable_apport description"
+        type: "bool"
+        default: "True"
+      manage_issue:
+        description: "manage_issue description"
+        type: "bool"
+        default: "True"
+      manage_kernel_modules:
+        description: "manage_kernel_modules description"
+        type: "bool"
+        default: "True"
+      fs_modules_blocklist:
+        description: "fs_modules_blocklist description"
+        type: "list"
+        elements: "str"
+        default: "['cramfs', 'freevxfs', 'hfs', 'hfsplus', 'jffs2', 'squashfs', 'udf']"
+      misc_modules_blocklist:
+        description: "misc_modules_blocklist description"
+        type: "list"
+        elements: "str"
+        default: "['bluetooth', 'bnep', 'btusb', 'can', 'cpia2', 'firewire-core', 'floppy', 'ksmbd', 'n_hdlc', 'net-pf-31', 'pcspkr', 'soundcore', 'thunderbolt', 'usb-midi', 'usb-storage', 'uvcvideo', 'v4l2_common']"
+      net_modules_blocklist:
+        description: "net_modules_blocklist description"
+        type: "list"
+        elements: "str"
+        default: "['atm', 'dccp', 'sctp', 'rds', 'tipc']"
+      manage_compilers:
+        description: "manage_compilers description"
+        type: "bool"
+        default: "True"
+      compilers:
+        description: "compilers description"
+        type: "list"
+        elements: "str"
+        default: "['as', 'cargo', 'cc', 'cc-[0-9]*', 'clang-[0-9]*', 'gcc', 'gcc-[0-9]*', 'go', 'make', 'rustc']"
+      manage_login_defs:
+        description: "manage_login_defs description"
+        type: "bool"
+        default: "True"
+      disable_ipv6:
+        description: "disable_ipv6 description"
+        type: "bool"
+        default: "False"
+      sysctl_net_ipv6_conf_accept_ra_rtr_pref:
+        description: "sysctl_net_ipv6_conf_accept_ra_rtr_pref description"
+        type: "int"
+        default: "0"
+      ipv6_disable_sysctl_settings.net.ipv6.conf.all.disable_ipv6:
+        description: "ipv6_disable_sysctl_settings.net.ipv6.conf.all.disable_ipv6 description"
+        type: "int"
+        default: "1"
+      ipv6_disable_sysctl_settings.net.ipv6.conf.default.disable_ipv6:
+        description: "ipv6_disable_sysctl_settings.net.ipv6.conf.default.disable_ipv6 description"
+        type: "int"
+        default: "1"
+      ipv6_sysctl_settings.net.ipv6.conf.all.accept_ra:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.all.accept_ra description"
+        type: "int"
+        default: "0"
+      ipv6_sysctl_settings.net.ipv6.conf.all.accept_redirects:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.all.accept_redirects description"
+        type: "int"
+        default: "0"
+      ipv6_sysctl_settings.net.ipv6.conf.all.accept_source_route:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.all.accept_source_route description"
+        type: "int"
+        default: "0"
+      ipv6_sysctl_settings.net.ipv6.conf.all.forwarding:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.all.forwarding description"
+        type: "int"
+        default: "0"
+      ipv6_sysctl_settings.net.ipv6.conf.all.use_tempaddr:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.all.use_tempaddr description"
+        type: "int"
+        default: "2"
+      ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra description"
+        type: "int"
+        default: "0"
+      ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_defrtr:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_defrtr description"
+        type: "int"
+        default: "0"
+      ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_pinfo:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_pinfo description"
+        type: "int"
+        default: "0"
+      ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_rtr_pref:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_rtr_pref description"
+        type: "int"
+        default: "0"
+      ipv6_sysctl_settings.net.ipv6.conf.default.accept_redirects:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.default.accept_redirects description"
+        type: "int"
+        default: "0"
+      ipv6_sysctl_settings.net.ipv6.conf.default.accept_source_route:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.default.accept_source_route description"
+        type: "int"
+        default: "0"
+      ipv6_sysctl_settings.net.ipv6.conf.default.autoconf:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.default.autoconf description"
+        type: "int"
+        default: "0"
+      ipv6_sysctl_settings.net.ipv6.conf.default.dad_transmits:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.default.dad_transmits description"
+        type: "int"
+        default: "0"
+      ipv6_sysctl_settings.net.ipv6.conf.default.max_addresses:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.default.max_addresses description"
+        type: "int"
+        default: "1"
+      ipv6_sysctl_settings.net.ipv6.conf.default.router_solicitations:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.default.router_solicitations description"
+        type: "int"
+        default: "0"
+      ipv6_sysctl_settings.net.ipv6.conf.default.use_tempaddr:
+        description: "ipv6_sysctl_settings.net.ipv6.conf.default.use_tempaddr description"
+        type: "int"
+        default: "2"
+      manage_apparmor:
+        description: "manage_apparmor description"
+        type: "bool"
+        default: "True"
+      manage_hosts:
+        description: "manage_hosts description"
+        type: "bool"
+        default: "True"
+      manage_ufw:
+        description: "manage_ufw description"
+        type: "bool"
+        default: "True"
+      ufw_outgoing_traffic:
+        description: "ufw_outgoing_traffic description"
+        type: "list"
+        elements: "str"
+        default: "[{'port': 22, 'proto': 'tcp'}, 53, {'port': 80, 'proto': 'tcp'}, {'port': 123, 'proto': 'udp'}, {'port': 443, 'proto': 'tcp'}, 853, {'port': 4460, 'proto': 'tcp'}]"
+      ufw_rate_limit:
+        description: "ufw_rate_limit description"
+        type: "bool"
+        default: "False"
+      manage_journal:
+        description: "manage_journal description"
+        type: "bool"
+        default: "True"
+      rsyslog_filecreatemode:
+        description: "rsyslog_filecreatemode description"
+        type: "str"
+        default: "0640"
+      journald_compress:
+        description: "journald_compress description"
+        type: "bool"
+        default: "True"
+      journald_forwardtosyslog:
+        description: "journald_forwardtosyslog description"
+        type: "bool"
+        default: "False"
+      journald_storage:
+        description: "journald_storage description"
+        type: "str"
+        default: "persistent"
+      journald_permissions:
+        description: "journald_permissions description"
+        type: "str"
+        default: "2640"
+      journald_group:
+        description: "journald_group description"
+        type: "str"
+        default: "systemd-journal"
+      journald_user:
+        description: "journald_user description"
+        type: "str"
+        default: "root"
+      manage_sysctl:
+        description: "manage_sysctl description"
+        type: "bool"
+        default: "True"
+      usr_lib_sysctl_d_dir:
+        description: "usr_lib_sysctl_d_dir description"
+        type: "bool"
+        default: "False"
+      sysctl_conf_dir:
+        description: "sysctl_conf_dir description"
+        type: "str"
+        default: "{{ '/usr/lib/sysctl.d' if usr_lib_sysctl_d_dir else '/etc/sysctl.d' }}"
+      sysctl_dev_tty_ldisc_autoload:
+        description: "sysctl_dev_tty_ldisc_autoload description"
+        type: "int"
+        default: "0"
+      apparmor_sysctl_settings.kernel.apparmor_display_secid_mode:
+        description: "apparmor_sysctl_settings.kernel.apparmor_display_secid_mode description"
+        type: "int"
+        default: "0"
+      apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_io_uring:
+        description: "apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_io_uring description"
+        type: "int"
+        default: "0"
+      apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_unconfined:
+        description: "apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_unconfined description"
+        type: "int"
+        default: "1"
+      apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns:
+        description: "apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns description"
+        type: "int"
+        default: "1"
+      apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns_complain:
+        description: "apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns_complain description"
+        type: "int"
+        default: "0"
+      apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns_force:
+        description: "apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns_force description"
+        type: "int"
+        default: "0"
+      apparmor_sysctl_settings.kernel.unprivileged_userns_apparmor_policy:
+        description: "apparmor_sysctl_settings.kernel.unprivileged_userns_apparmor_policy description"
+        type: "int"
+        default: "1"
+      conntrack_sysctl_settings.net.netfilter.nf_conntrack_max:
+        description: "conntrack_sysctl_settings.net.netfilter.nf_conntrack_max description"
+        type: "int"
+        default: "2000000"
+      conntrack_sysctl_settings.net.netfilter.nf_conntrack_tcp_loose:
+        description: "conntrack_sysctl_settings.net.netfilter.nf_conntrack_tcp_loose description"
+        type: "int"
+        default: "0"
+      generic_sysctl_settings.fs.protected_fifos:
+        description: "generic_sysctl_settings.fs.protected_fifos description"
+        type: "int"
+        default: "2"
+      generic_sysctl_settings.fs.protected_hardlinks:
+        description: "generic_sysctl_settings.fs.protected_hardlinks description"
+        type: "int"
+        default: "1"
+      generic_sysctl_settings.fs.protected_symlinks:
+        description: "generic_sysctl_settings.fs.protected_symlinks description"
+        type: "int"
+        default: "1"
+      generic_sysctl_settings.fs.suid_dumpable:
+        description: "generic_sysctl_settings.fs.suid_dumpable description"
+        type: "int"
+        default: "0"
+      generic_sysctl_settings.kernel.core_pattern:
+        description: "generic_sysctl_settings.kernel.core_pattern description"
+        type: "str"
+        default: "|/bin/false"
+      generic_sysctl_settings.kernel.core_uses_pid:
+        description: "generic_sysctl_settings.kernel.core_uses_pid description"
+        type: "int"
+        default: "1"
+      generic_sysctl_settings.kernel.dmesg_restrict:
+        description: "generic_sysctl_settings.kernel.dmesg_restrict description"
+        type: "int"
+        default: "1"
+      generic_sysctl_settings.kernel.kptr_restrict:
+        description: "generic_sysctl_settings.kernel.kptr_restrict description"
+        type: "int"
+        default: "2"
+      generic_sysctl_settings.kernel.panic:
+        description: "generic_sysctl_settings.kernel.panic description"
+        type: "int"
+        default: "60"
+      generic_sysctl_settings.kernel.panic_on_oops:
+        description: "generic_sysctl_settings.kernel.panic_on_oops description"
+        type: "int"
+        default: "60"
+      generic_sysctl_settings.kernel.perf_event_paranoid:
+        description: "generic_sysctl_settings.kernel.perf_event_paranoid description"
+        type: "int"
+        default: "3"
+      generic_sysctl_settings.kernel.randomize_va_space:
+        description: "generic_sysctl_settings.kernel.randomize_va_space description"
+        type: "int"
+        default: "2"
+      generic_sysctl_settings.kernel.sysrq:
+        description: "generic_sysctl_settings.kernel.sysrq description"
+        type: "int"
+        default: "0"
+      generic_sysctl_settings.kernel.unprivileged_bpf_disabled:
+        description: "generic_sysctl_settings.kernel.unprivileged_bpf_disabled description"
+        type: "int"
+        default: "1"
+      generic_sysctl_settings.kernel.yama.ptrace_scope:
+        description: "generic_sysctl_settings.kernel.yama.ptrace_scope description"
+        type: "int"
+        default: "2"
+      generic_sysctl_settings.net.core.bpf_jit_harden:
+        description: "generic_sysctl_settings.net.core.bpf_jit_harden description"
+        type: "int"
+        default: "2"
+      generic_sysctl_settings.user.max_user_namespaces:
+        description: "generic_sysctl_settings.user.max_user_namespaces description"
+        type: "int"
+        default: "62967"
+      ipv4_sysctl_settings.net.ipv4.conf.all.accept_redirects:
+        description: "ipv4_sysctl_settings.net.ipv4.conf.all.accept_redirects description"
+        type: "int"
+        default: "0"
+      ipv4_sysctl_settings.net.ipv4.conf.all.accept_source_route:
+        description: "ipv4_sysctl_settings.net.ipv4.conf.all.accept_source_route description"
+        type: "int"
+        default: "0"
+      ipv4_sysctl_settings.net.ipv4.conf.all.log_martians:
+        description: "ipv4_sysctl_settings.net.ipv4.conf.all.log_martians description"
+        type: "int"
+        default: "1"
+      ipv4_sysctl_settings.net.ipv4.conf.all.rp_filter:
+        description: "ipv4_sysctl_settings.net.ipv4.conf.all.rp_filter description"
+        type: "int"
+        default: "1"
+      ipv4_sysctl_settings.net.ipv4.conf.all.secure_redirects:
+        description: "ipv4_sysctl_settings.net.ipv4.conf.all.secure_redirects description"
+        type: "int"
+        default: "0"
+      ipv4_sysctl_settings.net.ipv4.conf.all.send_redirects:
+        description: "ipv4_sysctl_settings.net.ipv4.conf.all.send_redirects description"
+        type: "int"
+        default: "0"
+      ipv4_sysctl_settings.net.ipv4.conf.all.shared_media:
+        description: "ipv4_sysctl_settings.net.ipv4.conf.all.shared_media description"
+        type: "int"
+        default: "0"
+      ipv4_sysctl_settings.net.ipv4.conf.default.accept_redirects:
+        description: "ipv4_sysctl_settings.net.ipv4.conf.default.accept_redirects description"
+        type: "int"
+        default: "0"
+      ipv4_sysctl_settings.net.ipv4.conf.default.accept_source_route:
+        description: "ipv4_sysctl_settings.net.ipv4.conf.default.accept_source_route description"
+        type: "int"
+        default: "0"
+      ipv4_sysctl_settings.net.ipv4.conf.default.log_martians:
+        description: "ipv4_sysctl_settings.net.ipv4.conf.default.log_martians description"
+        type: "int"
+        default: "1"
+      ipv4_sysctl_settings.net.ipv4.conf.default.rp_filter:
+        description: "ipv4_sysctl_settings.net.ipv4.conf.default.rp_filter description"
+        type: "int"
+        default: "1"
+      ipv4_sysctl_settings.net.ipv4.conf.default.secure_redirects:
+        description: "ipv4_sysctl_settings.net.ipv4.conf.default.secure_redirects description"
+        type: "int"
+        default: "0"
+      ipv4_sysctl_settings.net.ipv4.conf.default.send_redirects:
+        description: "ipv4_sysctl_settings.net.ipv4.conf.default.send_redirects description"
+        type: "int"
+        default: "0"
+      ipv4_sysctl_settings.net.ipv4.conf.default.shared_media:
+        description: "ipv4_sysctl_settings.net.ipv4.conf.default.shared_media description"
+        type: "int"
+        default: "0"
+      ipv4_sysctl_settings.net.ipv4.icmp_echo_ignore_broadcasts:
+        description: "ipv4_sysctl_settings.net.ipv4.icmp_echo_ignore_broadcasts description"
+        type: "int"
+        default: "1"
+      ipv4_sysctl_settings.net.ipv4.icmp_ignore_bogus_error_responses:
+        description: "ipv4_sysctl_settings.net.ipv4.icmp_ignore_bogus_error_responses description"
+        type: "int"
+        default: "1"
+      ipv4_sysctl_settings.net.ipv4.ip_forward:
+        description: "ipv4_sysctl_settings.net.ipv4.ip_forward description"
+        type: "int"
+        default: "0"
+      ipv4_sysctl_settings.net.ipv4.tcp_challenge_ack_limit:
+        description: "ipv4_sysctl_settings.net.ipv4.tcp_challenge_ack_limit description"
+        type: "int"
+        default: "2147483647"
+      ipv4_sysctl_settings.net.ipv4.tcp_invalid_ratelimit:
+        description: "ipv4_sysctl_settings.net.ipv4.tcp_invalid_ratelimit description"
+        type: "int"
+        default: "500"
+      ipv4_sysctl_settings.net.ipv4.tcp_max_syn_backlog:
+        description: "ipv4_sysctl_settings.net.ipv4.tcp_max_syn_backlog description"
+        type: "int"
+        default: "20480"
+      ipv4_sysctl_settings.net.ipv4.tcp_rfc1337:
+        description: "ipv4_sysctl_settings.net.ipv4.tcp_rfc1337 description"
+        type: "int"
+        default: "1"
+      ipv4_sysctl_settings.net.ipv4.tcp_syn_retries:
+        description: "ipv4_sysctl_settings.net.ipv4.tcp_syn_retries description"
+        type: "int"
+        default: "5"
+      ipv4_sysctl_settings.net.ipv4.tcp_synack_retries:
+        description: "ipv4_sysctl_settings.net.ipv4.tcp_synack_retries description"
+        type: "int"
+        default: "2"
+      ipv4_sysctl_settings.net.ipv4.tcp_syncookies:
+        description: "ipv4_sysctl_settings.net.ipv4.tcp_syncookies description"
+        type: "int"
+        default: "1"
+      manage_usbguard:
+        description: "manage_usbguard description"
+        type: "bool"
+        default: "True"
+      usbguard_configuration_file:
+        description: "usbguard_configuration_file description"
+        type: "str"
+        default: "/etc/usbguard/usbguard-daemon.conf"
+      usbguard_rulefile:
+        description: "usbguard_rulefile description"
+        type: "str"
+        default: "/etc/usbguard/rules.conf"
+      usbguard_auditbackend:
+        description: "usbguard_auditbackend description"
+        type: "str"
+        default: "LinuxAudit"
+      usbguard_auditfilepath:
+        description: "usbguard_auditfilepath description"
+        type: "str"
+        default: "/var/log/usbguard/usbguard-audit.log"
+      usbguard_authorizeddefault:
+        description: "usbguard_authorizeddefault description"
+        type: "str"
+        default: "none"
+      usbguard_devicemanagerbackend:
+        description: "usbguard_devicemanagerbackend description"
+        type: "str"
+        default: "uevent"
+      usbguard_deviceruleswithport:
+        description: "usbguard_deviceruleswithport description"
+        type: "bool"
+        default: "False"
+      usbguard_hidepii:
+        description: "usbguard_hidepii description"
+        type: "bool"
+        default: "False"
+      usbguard_implicitpolicytarget:
+        description: "usbguard_implicitpolicytarget description"
+        type: "str"
+        default: "block"
+      usbguard_inserteddevicepolicy:
+        description: "usbguard_inserteddevicepolicy description"
+        type: "str"
+        default: "apply-policy"
+      usbguard_ipcaccesscontrolfiles:
+        description: "usbguard_ipcaccesscontrolfiles description"
+        type: "str"
+        default: "/etc/usbguard/IPCAccessControl.d/"
+      usbguard_ipcallowedgroups:
+        description: "usbguard_ipcallowedgroups description"
+        type: "list"
+        elements: "str"
+        default: "['plugdev', 'root', 'wheel']"
+      usbguard_ipcallowedusers:
+        description: "usbguard_ipcallowedusers description"
+        type: "list"
+        elements: "str"
+        default: "['root']"
+      usbguard_presentcontrollerpolicy:
+        description: "usbguard_presentcontrollerpolicy description"
+        type: "str"
+        default: "keep"
+      usbguard_presentdevicepolicy:
+        description: "usbguard_presentdevicepolicy description"
+        type: "str"
+        default: "apply-policy"
+      usbguard_restorecontrollerdevicestate:
+        description: "usbguard_restorecontrollerdevicestate description"
+        type: "bool"
+        default: "False"
+      manage_suid_sgid_permissions:
+        description: "manage_suid_sgid_permissions description"
+        type: "bool"
+        default: "True"
+      suid_sgid_blocklist:
+        description: "suid_sgid_blocklist description"
+        type: "list"
+        elements: "str"
+        default: "['7z', 'aa-exec', 'ab', 'agetty', 'alpine', 'ansible-playbook', 'ansible-test', 'aoss', 'apache2ctl', 'apt', 'apt-get', 'ar', 'aria2c', 'arj', 'arp', 'as', 'ascii-xfr', 'ascii85', 'ash', 'aspell', 'at', 'atobm', 'awk', 'aws', 'base32', 'base58', 'base64', 'basenc', 'basez', 'bash', 'batcat', 'bc', 'bconsole', 'bpftrace', 'bridge', 'bsd-write', 'bundle', 'bundler', 'busctl', 'busybox', 'byebug', 'bzip2', 'c89', 'c99', 'cabal', 'cancel', 'capsh', 'cat', 'cdist', 'certbot', 'chage', 'check_by_ssh', 'check_cups', 'check_log', 'check_memory', 'check_raid', 'check_ssl_cert', 'check_statusfile', 'chfn', 'chmod', 'choom', 'chown', 'chroot', 'chsh', 'clamscan', 'cmp', 'cobc', 'column', 'comm', 'composer', 'cowsay', 'cowthink', 'cp', 'cpan', 'cpio', 'cpulimit', 'crash', 'crontab', 'csh', 'csplit', 'csvtool', 'cupsfilter', 'curl', 'cut', 'dash', 'date', 'dc', 'dd', 'debugfs', 'dialog', 'diff', 'dig', 'distcc', 'dmesg', 'dmidecode', 'dmsetup', 'dnf', 'docker', 'dos2unix', 'dosbox', 'dotnet', 'dpkg', 'dstat', 'dvips', 'easy_install', 'eb', 'ed', 'efax', 'elvish', 'emacs', 'enscript', 'env', 'eqn', 'espeak', 'ex', 'exiftool', 'expand', 'expect', 'facter', 'file', 'find', 'finger', 'fish', 'flock', 'fmt', 'fold', 'fping', 'ftp', 'fusermount', 'gawk', 'gcc', 'gcloud', 'gcore', 'gdb', 'gem', 'genie', 'genisoimage', 'ghc', 'ghci', 'gimp', 'ginsh', 'git', 'grc', 'grep', 'gtester', 'gzip', 'hd', 'head', 'hexdump', 'highlight', 'hping3', 'iconv', 'iftop', 'install', 'ionice', 'ip', 'irb', 'ispell', 'jjs', 'joe', 'join', 'journalctl', 'jq', 'jrunscript', 'jtag', 'julia', 'knife', 'ksh', 'ksshell', 'ksu', 'kubectl', 'latex', 'latexmk', 'ld.so', 'ldconfig', 'less', 'lftp', 'links', 'ln', 'loginctl', 'logsave', 'look', 'lp', 'ltrace', 'lua', 'lualatex', 'luatex', 'lwp-download', 'lwp-request', 'mail', 'make', 'man', 'mawk', 'minicom', 'mksh', 'mksh-static', 'mlocate', 'more', 'mosquitto', 'mount', 'mount.nfs', 'msfconsole', 'msgattrib', 'msgcat', 'msgconv', 'msgfilter', 'msgmerge', 'msguniq', 'mtr', 'multitime', 'mv', 'mysql', 'nano', 'nasm', 'nawk', 'nc', 'ncdu', 'ncftp', 'neofetch', 'netfilter-persistent', 'newgrp', 'nft', 'nice', 'nl', 'nm', 'nmap', 'node', 'nohup', 'npm', 'nroff', 'nsenter', 'ntfs-3g', 'ntpdate', 'octave', 'od', 'openssl', 'openvpn', 'openvt', 'opkg', 'pandoc', 'paste', 'pax', 'pdb', 'pdflatex', 'pdftex', 'perf', 'perl', 'perlbug', 'pexec', 'pg', 'php', 'pic', 'pico', 'pidstat', 'ping', 'ping6', 'pip', 'pkexec', 'pkg', 'posh', 'pppd', 'pr', 'pry', 'psad', 'psftp', 'psql', 'ptx', 'puppet', 'pwsh', 'python', 'rake', 'rbash', 'rc', 'readelf', 'red', 'redcarpet', 'redis', 'restic', 'rev', 'rlogin', 'rlwrap', 'rpm', 'rpmdb', 'rpmquery', 'rpmverify', 'rsync', 'rtorrent', 'ruby', 'run-mailcap', 'run-parts', 'runscript', 'rview', 'rvim', 'sash', 'scanmem', 'scp', 'screen', 'script', 'scrot', 'sed', 'service', 'setarch', 'setfacl', 'setlock', 'sftp', 'sg', 'sh', 'shuf', 'slsh', 'smbclient', 'snap', 'socat', 'socket', 'soelim', 'softlimit', 'sort', 'split', 'sqlite3', 'sqlmap', 'ss', 'ssh', 'ssh-agent', 'ssh-keygen', 'ssh-keyscan', 'sshpass', 'start-stop-daemon', 'stdbuf', 'strace', 'strings', 'su', 'sysctl', 'systemctl', 'systemd-resolve', 'tac', 'tail', 'tar', 'task', 'taskset', 'tasksh', 'tbl', 'tclsh', 'tcpdump', 'tcsh', 'tdbtool', 'tee', 'telnet', 'terraform', 'tex', 'tftp', 'tic', 'time', 'timedatectl', 'timeout', 'tmate', 'tmux', 'top', 'torify', 'torsocks', 'traceroute6.iputils', 'troff', 'tshark', 'ul', 'umount', 'unexpand', 'uniq', 'unshare', 'unsquashfs', 'unzip', 'update-alternatives', 'uudecode', 'uuencode', 'vagrant', 'valgrind', 'varnishncsa', 'vi', 'view', 'vigr', 'vim', 'vimdiff', 'vipw', 'virsh', 'volatility', 'w3m', 'wall', 'watch', 'wc', 'wget', 'whiptail', 'whois', 'wireshark', 'wish', 'write', 'xargs', 'xdg-user-dir', 'xdotool', 'xelatex', 'xetex', 'xmodmap', 'xmore', 'xpad', 'xxd', 'xz', 'yarn', 'yash', 'yelp', 'yum', 'zathura', 'zip', 'zsh', 'zsoelim', 'zypper']"
+      disable_ctrlaltdel:
+        description: "disable_ctrlaltdel description"
+        type: "bool"
+        default: "True"
+      disable_prelink:
+        description: "disable_prelink description"
+        type: "bool"
+        default: "True"
+      manage_users:
+        description: "manage_users description"
+        type: "bool"
+        default: "True"
+      delete_users:
+        description: "delete_users description"
+        type: "list"
+        elements: "str"
+        default: "['games', 'gnats', 'irc', 'list', 'news', 'sync', 'uucp']"
+      manage_limits:
+        description: "manage_limits description"
+        type: "bool"
+        default: "True"
+      limit_nofile_hard:
+        description: "limit_nofile_hard description"
+        type: "int"
+        default: "1024"
+      limit_nofile_soft:
+        description: "limit_nofile_soft description"
+        type: "int"
+        default: "512"
+      limit_nproc_hard:
+        description: "limit_nproc_hard description"
+        type: "int"
+        default: "1024"
+      limit_nproc_soft:
+        description: "limit_nproc_soft description"
+        type: "int"
+        default: "512"
+      manage_adduser_conf:
+        description: "manage_adduser_conf description"
+        type: "bool"
+        default: "True"
+      manage_postfix:
+        description: "manage_postfix description"
+        type: "bool"
+        default: "True"
+      manage_package_managers:
+        description: "manage_package_managers description"
+        type: "bool"
+        default: "True"
+      apt_hardening_options:
+        description: "apt_hardening_options description"
+        type: "list"
+        elements: "str"
+      manage_fstab:
+        description: "manage_fstab description"
+        type: "bool"
+        default: "True"
+      manage_mounts:
+        description: "manage_mounts description"
+        type: "bool"
+        default: "True"
+      hide_pid:
+        description: "hide_pid description"
+        type: "int"
+        default: "2"
+      process_group:
+        description: "process_group description"
+        type: "int"
+        default: "0"
+      automatic_updates.enabled:
+        description: "automatic_updates.enabled description"
+        type: "bool"
+        default: "True"
+      automatic_updates.only_security:
+        description: "automatic_updates.only_security description"
+        type: "bool"
+        default: "True"
+      automatic_updates.reboot:
+        description: "automatic_updates.reboot description"
+        type: "bool"
+        default: "False"
+      automatic_updates.reboot_from_time:
+        description: "automatic_updates.reboot_from_time description"
+        type: "str"
+        default: "2:00"
+      automatic_updates.reboot_time_margin_mins:
+        description: "automatic_updates.reboot_time_margin_mins description"
+        type: "int"
+        default: "20"
+      manage_netplan:
+        description: "manage_netplan description"
+        type: "bool"
+        default: "True"
+      manage_resolved:
+        description: "manage_resolved description"
+        type: "bool"
+        default: "True"
+      dns:
+        description: "dns description"
+        type: "list"
+        elements: "str"
+        default: "['1.1.1.2', '9.9.9.9']"
+      fallback_dns:
+        description: "fallback_dns description"
+        type: "list"
+        elements: "str"
+        default: "['1.0.0.2', '149.112.112.112']"
+      dnssec:
+        description: "dnssec description"
+        type: "str"
+        default: "allow-downgrade"
+      dns_over_tls:
+        description: "dns_over_tls description"
+        type: "str"
+        default: "opportunistic"
+      manage_root_access:
+        description: "manage_root_access description"
+        type: "bool"
+        default: "True"
+      reboot_ubuntu:
+        description: "reboot_ubuntu description"
+        type: "bool"
+        default: "False"
+      manage_motdnews:
+        description: "manage_motdnews description"
+        type: "bool"
+        default: "True"
+      system_upgrade:
+        description: "system_upgrade description"
+        type: "bool"
+        default: "True"
+      packages_blocklist:
+        description: "packages_blocklist description"
+        type: "list"
+        elements: "str"
+        default: "['apport*', 'autofs', 'avahi*', 'avahi-*', 'beep', 'ftp', 'git', 'inetutils-telnet', 'pastebinit', 'popularity-contest', 'prelink', 'rpcbind', 'rsh*', 'rsync', 'talk*', 'telnet*', 'tftp*', 'tnftp', 'tuned', 'whoopsie', 'xinetd', 'yp-tools', 'ypbind']"
+      packages_debian:
+        description: "packages_debian description"
+        type: "list"
+        elements: "str"
+        default: "['acct', 'apparmor-profiles', 'apparmor-utils', 'apt-show-versions', 'audispd-plugins', 'auditd', 'cracklib-runtime', 'curl', 'debsums', 'gnupg2', 'libpam-apparmor', 'libpam-cap', 'libpam-modules', 'libpam-tmpdir', 'lsb-release', 'needrestart', 'openssh-server', 'postfix', 'rsyslog', 'sysstat', 'systemd-journal-remote', 'tcpd', 'vlock', 'wamerican']"
+      packages_redhat:
+        description: "packages_redhat description"
+        type: "list"
+        elements: "str"
+        default: "['audispd-plugins', 'audit', 'cracklib', 'curl', 'gnupg2', 'openssh-server', 'needrestart', 'postfix', 'psacct', 'python3-dnf-plugin-post-transaction-actions', 'rsyslog', 'rsyslog-gnutls', 'systemd-journal-remote', 'vlock', 'words']"
+      packages_ubuntu:
+        description: "packages_ubuntu description"
+        type: "list"
+        elements: "str"
+        default: "['fwupd', 'secureboot-db', 'snapd']"
+      manage_logind:
+        description: "manage_logind description"
+        type: "bool"
+        default: "True"
+      logind.killuserprocesses:
+        description: "logind.killuserprocesses description"
+        type: "bool"
+        default: "True"
+      logind.killexcludeusers:
+        description: "logind.killexcludeusers description"
+        type: "list"
+        elements: "str"
+        default: "['root']"
+      logind.idleaction:
+        description: "logind.idleaction description"
+        type: "str"
+        default: "lock"
+      logind.idleactionsec:
+        description: "logind.idleactionsec description"
+        type: "str"
+        default: "15min"
+      logind.removeipc:
+        description: "logind.removeipc description"
+        type: "bool"
+        default: "True"
+      disable_wireless:
+        description: "disable_wireless description"
+        type: "bool"
+        default: "False"
+      manage_auditd:
+        description: "manage_auditd description"
+        type: "bool"
+        default: "True"
+      auditd_apply_audit_rules:
+        description: "auditd_apply_audit_rules description"
+        type: "bool"
+        default: "True"
+      auditd_action_mail_acct:
+        description: "auditd_action_mail_acct description"
+        type: "str"
+        default: "root"
+      auditd_admin_space_left_action:
+        description: "auditd_admin_space_left_action description"
+        type: "str"
+        default: "suspend"
+      auditd_disk_error_action:
+        description: "auditd_disk_error_action description"
+        type: "str"
+        default: "suspend"
+      auditd_disk_full_action:
+        description: "auditd_disk_full_action description"
+        type: "str"
+        default: "suspend"
+      auditd_enable_flag:
+        description: "auditd_enable_flag description"
+        type: "int"
+        default: "2"
+      auditd_flush:
+        description: "auditd_flush description"
+        type: "str"
+        default: "incremental_async"
+      auditd_max_log_file:
+        description: "auditd_max_log_file description"
+        type: "int"
+        default: "20"
+      auditd_max_log_file_action:
+        description: "auditd_max_log_file_action description"
+        type: "str"
+        default: "rotate"
+      auditd_mode:
+        description: "auditd_mode description"
+        type: "int"
+        default: "1"
+      auditd_num_logs:
+        description: "auditd_num_logs description"
+        type: "int"
+        default: "5"
+      auditd_space_left:
+        description: "auditd_space_left description"
+        type: "int"
+        default: "75"
+      auditd_space_left_action:
+        description: "auditd_space_left_action description"
+        type: "str"
+        default: "email"
+      grub_audit_backlog_cmdline:
+        description: "grub_audit_backlog_cmdline description"
+        type: "str"
+        default: "audit_backlog_limit=8192"
+      grub_audit_cmdline:
+        description: "grub_audit_cmdline description"
+        type: "str"
+        default: "audit=1"
+      manage_systemd:
+        description: "manage_systemd description"
+        type: "bool"
+        default: "True"
+      session_timeout:
+        description: "session_timeout description"
+        type: "int"
+        default: "900"
+      umask_value:
+        description: "umask_value description"
+        type: "str"
+        default: "077"
+      manage_kernel:
+        description: "manage_kernel description"
+        type: "bool"
+        default: "True"
+      allow_virtual_system_calls:
+        description: "allow_virtual_system_calls description"
+        type: "bool"
+        default: "True"
+      enable_page_poisoning:
+        description: "enable_page_poisoning description"
+        type: "bool"
+        default: "True"
+      kernel_lockdown:
+        description: "kernel_lockdown description"
+        type: "bool"
+        default: "False"
+      page_table_isolation:
+        description: "page_table_isolation description"
+        type: "bool"
+        default: "True"
+      slub_debugger_poisoning:
+        description: "slub_debugger_poisoning description"
+        type: "bool"
+        default: "False"
