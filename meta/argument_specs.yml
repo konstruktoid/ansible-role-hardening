@@ -1393,8 +1393,14 @@ argument_specs:
         default: "True"
       kernel_lockdown:
         description: "kernel_lockdown description"
-        type: "bool"
+        type: "str"
         default: "False"
+        choices:
+          - "confidentiality"
+          - "False"
+          - "integrity"
+          - "none"
+          - "True"
       page_table_isolation:
         description: "page_table_isolation description"
         type: "bool"
