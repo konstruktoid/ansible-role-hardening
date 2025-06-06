@@ -107,6 +107,7 @@
     - name: Configure kernel lockdown
       when:
         - kernel_lockdown is defined
+        - kernel_lockdown is not false
         - ansible_kernel is version("5.4", ">=")
       block:
         - name: Set kernel lockdown mode as fact
@@ -116,10 +117,8 @@
                 integrity
               {% elif kernel_lockdown == "confidentiality" %}
                 confidentiality
-              {% elif kernel_lockdown %}
-                integrity
               {% else %}
-                none
+                integrity
               {% endif %}
 
         - name: Configure kernel lockdown mode
