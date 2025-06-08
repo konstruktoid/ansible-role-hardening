@@ -4,657 +4,667 @@ argument_specs:
     short_description: AlmaLinux, Debian and Ubuntu hardening.
     description:
       - AlmaLinux, Debian and Ubuntu hardening.
-      - Focused on using C(systemd) services and options.
+      - Focused on using systemd services and options.
     author:
       - konstruktoid
     options:
       adduser_conf_template:
-        description: "adduser_conf_template description"
+        description: "/etc/adduser.conf template location."
         type: "str"
         default: "etc/adduser.conf.j2"
       common_account_template:
-        description: "common_account_template description"
+        description: "PAM common-account template location."
         type: "str"
         default: "etc/pam.d/common-account.j2"
       common_auth_template:
-        description: "common_auth_template description"
+        description: "PAM common-auth template location."
         type: "str"
         default: "etc/pam.d/common-auth.j2"
       common_password_template:
-        description: "common_password_template description"
+        description: "PAM common-password template location."
         type: "str"
         default: "etc/pam.d/common-password.j2"
       coredump_conf_template:
-        description: "coredump_conf_template description"
+        description: "systemd coredump.conf template location."
         type: "str"
         default: "etc/systemd/coredump.conf.j2"
       faillock_conf_template:
-        description: "faillock_conf_template description"
+        description: "faillock.conf template location."
         type: "str"
         default: "etc/security/faillock.conf.j2"
       hardening_rules_template:
-        description: "hardening_rules_template description"
+        description: "auditd rules template location."
         type: "str"
         default: "etc/audit/rules.d/hardening.rules.j2"
       hosts_allow_template:
-        description: "hosts_allow_template description"
+        description: "/etc/hosts.allow template location."
         type: "str"
         default: "etc/hosts.allow.j2"
       hosts_deny_template:
-        description: "hosts_deny_template description"
+        description: "/etc/hosts.deny template location."
         type: "str"
         default: "etc/hosts.deny.j2"
       initpath_sh_template:
-        description: "initpath_sh_template description"
+        description: "profile initpath.sh template location."
         type: "str"
         default: "etc/profile.d/initpath.sh.j2"
       issue_template:
-        description: "issue_template description"
+        description: "/etc/issue template location."
         type: "str"
         default: "etc/issue.j2"
       journald_conf_template:
-        description: "journald_conf_template description"
+        description: "systemd journald.conf template location."
         type: "str"
         default: "etc/systemd/journald.conf.j2"
       limits_conf_template:
-        description: "limits_conf_template description"
+        description: "limits.conf template location."
         type: "str"
         default: "etc/security/limits.conf.j2"
       login_defs_template:
-        description: "login_defs_template description"
+        description: "/etc/login.defs template location."
         type: "str"
         default: "etc/login.defs.j2"
       login_template:
-        description: "login_template description"
+        description: "login template location"
         type: "str"
         default: "etc/pam.d/login.j2"
       logind_conf_template:
-        description: "logind_conf_template description"
+        description: "systemd logind.conf template location."
         type: "str"
         default: "etc/systemd/logind.conf.j2"
       logrotate_conf_template:
-        description: "logrotate_conf_template description"
+        description: "logrotate.conf template location."
         type: "str"
         default: "etc/logrotate.conf.j2"
       motd_template:
-        description: "motd_template description"
+        description: "/etc/motd template location."
         type: "str"
         default: "etc/motd.j2"
       pwquality_conf_template:
-        description: "pwquality_conf_template description"
+        description: "pwquality.conf template location."
         type: "str"
         default: "etc/security/pwquality.conf.j2"
       resolved_conf_template:
-        description: "resolved_conf_template description"
+        description: "systemd resolved.conf template location."
         type: "str"
         default: "etc/systemd/resolved.conf.j2"
       rkhunter_template:
-        description: "rkhunter_template description"
+        description: "rkhunter configuration template location."
         type: "str"
         default: "etc/default/rkhunter.j2"
       ssh_config_template:
-        description: "ssh_config_template description"
+        description: "OpenSSH ssh_config template location."
         type: "str"
         default: "etc/ssh/ssh_config.j2"
       sshd_config_template:
-        description: "sshd_config_template description"
+        description: "OpenSSH sshd_config template location."
         type: "str"
         default: "etc/ssh/sshd_config.j2"
       sshd_tmpfiles_template:
-        description: "sshd_tmpfiles_template description"
+        description: "OpenSSH tmpfiles template location."
         type: "str"
         default: "usr/lib/tmpfiles.d/ssh.conf.j2"
       sysctl_apparmor_config_template:
-        description: "sysctl_apparmor_config_template description"
+        description: "AppArmor sysctl configuration template location."
         type: "str"
         default: "etc/sysctl/sysctl.apparmor.conf.j2"
       sysctl_ipv6_config_template:
-        description: "sysctl_ipv6_config_template description"
+        description: "IPv6 sysctl configuration template location."
         type: "str"
         default: "etc/sysctl/sysctl.ipv6.conf.j2"
       sysctl_main_config_template:
-        description: "sysctl_main_config_template description"
+        description: "main sysctl configuration template location."
         type: "str"
         default: "etc/sysctl/sysctl.main.conf.j2"
       system_conf_template:
-        description: "system_conf_template description"
+        description: "systemd system.conf template location."
         type: "str"
         default: "etc/systemd/system.conf.j2"
       timesyncd_conf_template:
-        description: "timesyncd_conf_template description"
+        description: "systemd timesyncd.conf template location."
         type: "str"
         default: "etc/systemd/timesyncd.conf.j2"
       tmp_mount_template:
-        description: "tmp_mount_template description"
+        description: "tmp.mount template location."
         type: "str"
         default: "etc/systemd/tmp.mount.j2"
       unattended_upgrades_template:
-        description: "unattended_upgrades_template description"
+        description: "APT unattended-upgrades template location."
         type: "str"
         default: "etc/apt/apt.conf.d/50unattended-upgrades.j2"
       user_conf_template:
-        description: "user_conf_template description"
+        description: "systemd user.conf template location."
         type: "str"
         default: "etc/systemd/user.conf.j2"
       useradd_template:
-        description: "useradd_template description"
+        description: "useradd template location."
         type: "str"
         default: "etc/default/useradd.j2"
       manage_pam:
-        description: "manage_pam description"
+        description: "If True, manage PAM configuration files."
         type: "bool"
         default: "True"
       manage_faillock:
-        description: "manage_faillock description"
+        description: "If True, enable and manage faillock."
         type: "bool"
         default: "True"
       manage_pwquality:
-        description: "manage_pwquality description"
+        description: "If True, enable and manage pwquality."
         type: "bool"
         default: "True"
       faillock.admin_group:
-        description: "faillock.admin_group description"
+        description: "Members of the group will be handled the same as the root account"
         type: "list"
         elements: "str"
         default: "[]"
       faillock.audit:
-        description: "faillock.audit description"
+        description: "Will log the user name into the system log if the user is not found"
         type: "bool"
         default: "True"
       faillock.deny:
-        description: "faillock.deny description"
+        description: "Deny access if the number of login failures exceeds the value of this option."
         type: "int"
-        default: "5"
+        default: 5
       faillock.dir:
-        description: "faillock.dir description"
+        description: "Where the user files with the failure records are kept."
         type: "str"
         default: "/var/run/faillock"
       faillock.even_deny_root:
-        description: "faillock.even_deny_root description"
+        description: "Root account can become locked as well as regular accounts."
         type: "bool"
         default: "True"
       faillock.fail_interval:
-        description: "faillock.fail_interval description"
+        description: "The length of the interval during which the consecutive authentication failures must happen for the user account to lock out."
         type: "int"
-        default: "900"
+        default: 900
       faillock.local_users_only:
-        description: "faillock.local_users_only description"
+        description: "Only track failed user authentications attempts for local users in /etc/passwd."
         type: "bool"
         default: "True"
       faillock.no_log_info:
-        description: "faillock.no_log_info description"
+        description: "Don't log informative messages via syslog(3)."
         type: "bool"
         default: "False"
       faillock.nodelay:
-        description: "faillock.nodelay description"
+        description: "Don't enforce a delay after authentication failures."
         type: "bool"
         default: "True"
       faillock.root_unlock_time:
-        description: "faillock.root_unlock_time description"
+        description: "Allow access after N seconds to root account after the account is locked."
         type: "int"
-        default: "600"
+        default: 600
       faillock.silent:
-        description: "faillock.silent description"
+        description: "Don't print informative messages to the user."
         type: "bool"
         default: "False"
       faillock.unlock_time:
-        description: "faillock.unlock_time description"
+        description: "Allow access after N seconds to user accounts after the account is locked."
         type: "int"
-        default: "600"
+        default: 600
       login_defs.login_retries:
-        description: "login_defs.login_retries description"
+        description: "Maximum number of login retries in case of bad password."
         type: "int"
-        default: "5"
+        default: 5
       login_defs.login_timeout:
-        description: "login_defs.login_timeout description"
+        description: "Max time in seconds for login."
         type: "int"
-        default: "60"
+        default: 60
       login_defs.pass_max_days:
-        description: "login_defs.pass_max_days description"
+        description: "The maximum number of days a password may be used. If the password is older than this, a password change will be forced."
         type: "int"
-        default: "60"
+        default: 60
       login_defs.pass_min_days:
-        description: "login_defs.pass_min_days description"
+        description: "The minimum number of days allowed between password changes. If a user tries to change their password before this time, the change will be denied."
         type: "int"
-        default: "1"
+        default: 1
       login_defs.pass_warn_age:
-        description: "login_defs.pass_warn_age description"
+        description: "The number of days before password expiration that the user will be warned about the impending expiration."
         type: "int"
-        default: "7"
+        default: 7
       password_remember:
-        description: "password_remember description"
+        description: "The number of previous passwords to remember and not allow the user to reuse."
         type: "int"
-        default: "24"
+        default: 24
       pwquality.dcredit:
-        description: "pwquality.dcredit description"
+        description: "The maximum credit for having digits in the new password."
         type: "int"
         default: "-1"
       pwquality.dictcheck:
-        description: "pwquality.dictcheck description"
-        type: "int"
-        default: "1"
+        description: "Check whether the password matches a word in a dictionary."
+        type: "bool"
+        default: "True"
       pwquality.dictpath:
-        description: "pwquality.dictpath description"
+        description: "The path to the dictionary file used for password strength checking."
         type: "str"
         default: ""
       pwquality.difok:
-        description: "pwquality.difok description"
+        description: "The number of characters that must be different between the new password and the old one."
         type: "int"
-        default: "8"
+        default: 8
       pwquality.enforce_for_root:
-        description: "pwquality.enforce_for_root description"
+        description: "The module will return error on failed check even if the user changing the password is root."
         type: "bool"
         default: "True"
       pwquality.enforcing:
-        description: "pwquality.enforcing description"
+        description: "Reject the password if it fails the checks, otherwise only print the warning."
         type: "int"
-        default: "1"
+        default: 1
       pwquality.gecoscheck:
-        description: "pwquality.gecoscheck description"
+        description: "Check whether the password matches a word in the GECOS field of the user account."
         type: "int"
-        default: "1"
+        default: 1
       pwquality.lcredit:
-        description: "pwquality.lcredit description"
+        description: "The maximum credit for having lowercase letters in the new password."
         type: "int"
         default: "-1"
       pwquality.local_users_only:
-        description: "pwquality.local_users_only description"
+        description: "The module will not test the password quality for users that are not present in the C(/etc/passwd) file."
         type: "bool"
         default: "True"
       pwquality.maxclassrepeat:
-        description: "pwquality.maxclassrepeat description"
+        description: "Reject passwords which contain more than N consecutive characters of the same class."
         type: "int"
-        default: "4"
+        default: 4
       pwquality.maxrepeat:
-        description: "pwquality.maxrepeat description"
+        description: "Reject passwords which contain more than N consecutive characters."
         type: "int"
-        default: "3"
+        default: 3
       pwquality.maxsequence:
-        description: "pwquality.maxsequence description"
+        description: "Reject passwords which contain monotonic character sequences longer than N."
         type: "int"
-        default: "3"
+        default: 3
       pwquality.minclass:
-        description: "pwquality.minclass description"
+        description: "The minimum number of character classes that must be present in the new password."
         type: "int"
-        default: "4"
+        default: 4
       pwquality.minlen:
-        description: "pwquality.minlen description"
+        description: "The minimum length of the new password."
         type: "int"
         default: "15"
       pwquality.ocredit:
-        description: "pwquality.ocredit description"
+        description: "This is the maximum credit for having other characters in the new password."
         type: "int"
         default: "-1"
       pwquality.retry:
-        description: "pwquality.retry description"
+        description: "The number of times the user is allowed to retry entering a password that passes the checks."
         type: "int"
         default: "3"
       pwquality.ucredit:
-        description: "pwquality.ucredit description"
+        description: "The maximum credit for having uppercase letters in the new password."
         type: "int"
         default: "-1"
       pwquality.usercheck:
-        description: "pwquality.usercheck description"
+        description: "Check whether the password (with possible modifications) contains the user name in some form."
         type: "int"
         default: "1"
       pwquality.usersubstr:
-        description: "pwquality.usersubstr description"
+        description: "Check whether the password contains a substring of at least N length"
         type: "int"
         default: "3"
       disable_root_account:
-        description: "disable_root_account description"
+        description: "If True, disable the root account."
         type: "bool"
         default: "True"
       manage_aide:
-        description: "manage_aide description"
+        description: "If True, manage AIDE installation and configuration."
         type: "bool"
         default: "True"
       aide_checksums:
-        description: "aide_checksums description"
+        description: "Modifies the AIDE C(Checksums) variable."
         type: "str"
         default: "sha512"
       aide_dir_exclusions:
-        description: "aide_dir_exclusions description"
+        description: "AIDE directories to exclude from checks."
         type: "list"
         elements: "str"
         default: "['/var/lib/docker', '/var/lib/lxcfs', '/var/lib/private/systemd', '/var/log/audit', '/var/log/journal']"
       manage_timesyncd:
-        description: "manage_timesyncd description"
+        description: "If True, manage systemd-timesyncd installation and configuration."
         type: "bool"
         default: "True"
       fallback_ntp:
-        description: "fallback_ntp description"
+        description: "A space-separated list of NTP server host names or IP addresses to be used as the fallback NTP servers."
         type: "list"
         elements: "str"
         default: "['ntp.netnod.se', 'ntp.ubuntu.com']"
       ntp:
-        description: "ntp description"
+        description: "A space-separated list of NTP server host names or IP addresses to be used as the primary NTP servers."
         type: "list"
         elements: "str"
         default: "['2.pool.ntp.org', 'time.nist.gov']"
       manage_cron:
-        description: "manage_cron description"
+        description: "If True, then C(at) and C(cron) will be restricted to the root user."
         type: "bool"
         default: "True"
       manage_sudo:
-        description: "manage_sudo description"
+        description: "If True, then manage sudo configuration."
         type: "bool"
         default: "True"
       manage_rkhunter:
-        description: "manage_rkhunter description"
+        description: "If True, manage rkhunter installation and configuration."
         type: "bool"
         default: "True"
       rkhunter_allow_ssh_prot_v1:
-        description: "rkhunter_allow_ssh_prot_v1 description"
+        description: "If the SSH protocol version 1 is allowed."
         type: "bool"
         default: "False"
       rkhunter_allow_ssh_root_user:
-        description: "rkhunter_allow_ssh_root_user description"
+        description: "If the root user is allowed to login via SSH."
         type: "bool"
         default: "False"
       rkhunter_mirrors_mode:
-        description: "rkhunter_mirrors_mode description"
-        type: "str"
-        default: "0"
+        description: "Which mirrors are to be used for rkhunter updates."
+        type: "int"
+        default: 0
+        choices:
+          - 0
+          - 1
+          - 2
       rkhunter_update_mirrors:
-        description: "rkhunter_update_mirrors description"
+        description: "If True,  the mirrors file is to be checked for updates as well."
         type: "bool"
         default: "True"
       rkhunter_web_cmd:
-        description: "rkhunter_web_cmd description"
+        description: "The command to use for downloading files from the Internet."
         type: "str"
         default: "curl -fsSL"
       manage_path:
-        description: "manage_path description"
+        description: "If True, then the C(PATH) variable will be set in C(/etc/environment) and C(/etc/profile.d/initpath.sh) will be created."
         type: "bool"
         default: "True"
       set_crypto_policy:
-        description: "set_crypto_policy description"
+        description: "Set and use cryptographic policies if C(/etc/crypto-policies/config) exists and C(set_crypto_policy: true)."
         type: "bool"
         default: "True"
       crypto_policy:
-        description: "crypto_policy description"
+        description: "The cryptographic policy to set if C(set_crypto_policy: true)."
         type: "str"
         default: "DEFAULT:NO-SHA1"
       manage_ssh:
-        description: "manage_ssh description"
+        description: "If True, manage OpenSSH client and server configuration."
         type: "bool"
         default: "True"
       sshd_accept_env:
-        description: "sshd_accept_env description"
+        description: "Specifies what environment variables sent by the client will be copied into the session."
         type: "str"
         default: "LANG LC_*"
       sshd_admin_net:
-        description: "sshd_admin_net description"
+        description: "Only the network(s) defined in C(sshd_admin_net) are allowed to connect to C(sshd_ports)."
         type: "list"
         elements: "str"
         default: "['192.168.0.0/24', '192.168.1.0/24']"
       sshd_allow_agent_forwarding:
-        description: "sshd_allow_agent_forwarding description"
+        description: "Specifies whether ssh-agent(1) forwarding is permitted."
         type: "bool"
         default: "False"
       sshd_allow_groups:
-        description: "sshd_allow_groups description"
+        description: "If specified, login is allowed only for users whose primary group or supplementary group list matches one of the patterns."
         type: "list"
         elements: "str"
         default: "['sudo']"
       sshd_allow_tcp_forwarding:
-        description: "sshd_allow_tcp_forwarding description"
-        type: "bool"
+        description: "Specifies whether TCP forwarding is permitted."
+        type: "str"
         default: "False"
+        choices:
+          - "all"
+          - "False"
+          - "local"
+          - "remote"
+          - "True"
       sshd_allow_users:
-        description: "sshd_allow_users description"
+        description: "If specified, login is allowed only for users whose user name matches one of the patterns."
         type: "list"
         elements: "str"
       sshd_authentication_methods:
-        description: "sshd_authentication_methods description"
+        description: "The authentication methods that must be successfully completed in order to grant access to a user."
         type: "str"
         default: "any"
       sshd_authorized_principals_file:
-        description: "sshd_authorized_principals_file description"
+        description: "OpenSSH sshd_authorized_principals_file description"
         type: "str"
         default: "/etc/ssh/auth_principals/%u"
       sshd_banner:
-        description: "sshd_banner description"
+        description: "OpenSSH sshd_banner description"
         type: "str"
         default: "/etc/issue.net"
       sshd_ca_signature_algorithms:
-        description: "sshd_ca_signature_algorithms description"
+        description: "OpenSSH sshd_ca_signature_algorithms description"
         type: "list"
         elements: "str"
         default: "['ecdsa-sha2-nistp384', 'ecdsa-sha2-nistp521', 'ssh-ed25519', 'rsa-sha2-512']"
       sshd_kbd_interactive_authentication:
-        description: "sshd_kbd_interactive_authentication description"
+        description: "OpenSSH sshd_kbd_interactive_authentication description"
         type: "bool"
         default: "False"
       sshd_ciphers:
-        description: "sshd_ciphers description"
+        description: "OpenSSH sshd_ciphers description"
         type: "list"
         elements: "str"
         default: "['chacha20-poly1305@openssh.com', 'aes256-gcm@openssh.com', 'aes256-ctr']"
       sshd_client_alive_count_max:
-        description: "sshd_client_alive_count_max description"
+        description: "OpenSSH sshd_client_alive_count_max description"
         type: "int"
         default: "1"
       sshd_client_alive_interval:
-        description: "sshd_client_alive_interval description"
+        description: "OpenSSH sshd_client_alive_interval description"
         type: "int"
         default: "200"
       sshd_compression:
-        description: "sshd_compression description"
+        description: "OpenSSH sshd_compression description"
         type: "bool"
         default: "False"
       sshd_config_d_force_clear:
-        description: "sshd_config_d_force_clear description"
+        description: "OpenSSH sshd_config_d_force_clear description"
         type: "bool"
         default: "False"
       sshd_config_force_replace:
-        description: "sshd_config_force_replace description"
+        description: "OpenSSH sshd_config_force_replace description"
         type: "bool"
         default: "False"
       sshd_debian_banner:
-        description: "sshd_debian_banner description"
+        description: "OpenSSH sshd_debian_banner description"
         type: "bool"
         default: "False"
       sshd_deny_groups:
-        description: "sshd_deny_groups description"
+        description: "OpenSSH sshd_deny_groups description"
         type: "list"
         elements: "str"
         default: "[]"
       sshd_deny_users:
-        description: "sshd_deny_users description"
+        description: "OpenSSH sshd_deny_users description"
         type: "list"
         elements: "str"
         default: "[]"
       sshd_gateway_ports:
-        description: "sshd_gateway_ports description"
+        description: "OpenSSH sshd_gateway_ports description"
         type: "bool"
         default: "False"
       sshd_gssapi_authentication:
-        description: "sshd_gssapi_authentication description"
+        description: "OpenSSH sshd_gssapi_authentication description"
         type: "bool"
         default: "False"
       sshd_host_key_algorithms:
-        description: "sshd_host_key_algorithms description"
+        description: "OpenSSH sshd_host_key_algorithms description"
         type: "list"
         elements: "str"
         default: "['ssh-ed25519-cert-v01@openssh.com', 'ssh-rsa-cert-v01@openssh.com', 'ssh-ed25519', 'ecdsa-sha2-nistp521-cert-v01@openssh.com', 'ecdsa-sha2-nistp384-cert-v01@openssh.com',
           'ecdsa-sha2-nistp521', 'ecdsa-sha2-nistp384']"
       sshd_host_keys_files:
-        description: "sshd_host_keys_files description"
+        description: "OpenSSH sshd_host_keys_files description"
         type: "list"
         elements: "str"
         default: "[]"
       sshd_host_keys_group:
-        description: "sshd_host_keys_group description"
+        description: "OpenSSH sshd_host_keys_group description"
         type: "str"
         default: "root"
       sshd_host_keys_mode:
-        description: "sshd_host_keys_mode description"
+        description: "OpenSSH sshd_host_keys_mode description"
         type: "str"
         default: "0600"
       sshd_host_keys_owner:
-        description: "sshd_host_keys_owner description"
+        description: "OpenSSH sshd_host_keys_owner description"
         type: "str"
         default: "root"
       sshd_hostbased_authentication:
-        description: "sshd_hostbased_authentication description"
+        description: "OpenSSH sshd_hostbased_authentication description"
         type: "bool"
         default: "False"
       sshd_ignore_rhosts:
-        description: "sshd_ignore_rhosts description"
+        description: "OpenSSH sshd_ignore_rhosts description"
         type: "bool"
         default: "True"
       sshd_ignore_user_known_hosts:
-        description: "sshd_ignore_user_known_hosts description"
+        description: "OpenSSH sshd_ignore_user_known_hosts description"
         type: "bool"
         default: "True"
       sshd_kerberos_authentication:
-        description: "sshd_kerberos_authentication description"
+        description: "OpenSSH sshd_kerberos_authentication description"
         type: "bool"
         default: "False"
       sshd_kex_algorithms:
-        description: "sshd_kex_algorithms description"
+        description: "OpenSSH sshd_kex_algorithms description"
         type: "list"
         elements: "str"
         default: "['curve25519-sha256@libssh.org', 'diffie-hellman-group16-sha512', 'diffie-hellman-group18-sha512', 'ecdh-sha2-nistp521', 'ecdh-sha2-nistp384']"
       sshd_listen:
-        description: "sshd_listen description"
+        description: "OpenSSH sshd_listen description"
         type: "list"
         elements: "str"
         default: "['0.0.0.0']"
       sshd_log_level:
-        description: "sshd_log_level description"
+        description: "OpenSSH sshd_log_level description"
         type: "str"
         default: "VERBOSE"
       sshd_login_grace_time:
-        description: "sshd_login_grace_time description"
+        description: "OpenSSH sshd_login_grace_time description"
         type: "int"
         default: "20"
       sshd_macs:
-        description: "sshd_macs description"
+        description: "OpenSSH sshd_macs description"
         type: "list"
         elements: "str"
         default: "['hmac-sha2-512-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', 'hmac-sha2-512', 'hmac-sha2-256']"
       sshd_max_auth_tries:
-        description: "sshd_max_auth_tries description"
+        description: "OpenSSH sshd_max_auth_tries description"
         type: "int"
         default: "3"
       sshd_max_sessions:
-        description: "sshd_max_sessions description"
+        description: "OpenSSH sshd_max_sessions description"
         type: "int"
         default: "3"
       sshd_max_startups:
-        description: "sshd_max_startups description"
+        description: "OpenSSH sshd_max_startups description"
         type: "str"
         default: "10:30:60"
       sshd_password_authentication:
-        description: "sshd_password_authentication description"
+        description: "OpenSSH sshd_password_authentication description"
         type: "bool"
         default: "False"
       sshd_permit_empty_passwords:
-        description: "sshd_permit_empty_passwords description"
+        description: "OpenSSH sshd_permit_empty_passwords description"
         type: "bool"
         default: "False"
       sshd_permit_root_login:
-        description: "sshd_permit_root_login description"
+        description: "OpenSSH sshd_permit_root_login description"
         type: "bool"
         default: "False"
       sshd_permit_tunnel:
-        description: "sshd_permit_tunnel description"
+        description: "OpenSSH sshd_permit_tunnel description"
         type: "bool"
         default: "False"
       sshd_permit_user_environment:
-        description: "sshd_permit_user_environment description"
+        description: "OpenSSH sshd_permit_user_environment description"
         type: "bool"
         default: "False"
       sshd_ports:
-        description: "sshd_ports description"
+        description: "OpenSSH sshd_ports description"
         type: "list"
         elements: "str"
         default: "[22]"
       sshd_print_last_log:
-        description: "sshd_print_last_log description"
+        description: "OpenSSH sshd_print_last_log description"
         type: "bool"
         default: "True"
       sshd_print_motd:
-        description: "sshd_print_motd description"
+        description: "OpenSSH sshd_print_motd description"
         type: "bool"
         default: "False"
       sshd_print_pam_motd:
-        description: "sshd_print_pam_motd description"
+        description: "OpenSSH sshd_print_pam_motd description"
         type: "bool"
         default: "False"
       sshd_rekey_limit:
-        description: "sshd_rekey_limit description"
+        description: "OpenSSH sshd_rekey_limit description"
         type: "str"
         default: "512M 1h"
       sshd_required_ecdsa_size:
-        description: "sshd_required_ecdsa_size description"
+        description: "OpenSSH sshd_required_ecdsa_size description"
         type: "int"
         default: "521"
       sshd_required_rsa_size:
-        description: "sshd_required_rsa_size description"
+        description: "OpenSSH sshd_required_rsa_size description"
         type: "int"
         default: "4096"
       sshd_sftp_enabled:
-        description: "sshd_sftp_enabled description"
+        description: "OpenSSH sshd_sftp_enabled description"
         type: "bool"
         default: "True"
       sshd_sftp_only_chroot:
-        description: "sshd_sftp_only_chroot description"
+        description: "OpenSSH sshd_sftp_only_chroot description"
         type: "bool"
         default: "True"
       sshd_sftp_only_chroot_dir:
-        description: "sshd_sftp_only_chroot_dir description"
+        description: "OpenSSH sshd_sftp_only_chroot_dir description"
         type: "str"
         default: "%h"
       sshd_sftp_only_group:
-        description: "sshd_sftp_only_group description"
+        description: "OpenSSH sshd_sftp_only_group description"
         type: "str"
         default: ""
       sshd_sftp_subsystem:
-        description: "sshd_sftp_subsystem description"
+        description: "OpenSSH sshd_sftp_subsystem description"
         type: "str"
         default: "internal-sftp -f LOCAL6 -l INFO"
       sshd_strict_modes:
-        description: "sshd_strict_modes description"
+        description: "OpenSSH sshd_strict_modes description"
         type: "bool"
         default: "True"
       sshd_syslog_facility:
-        description: "sshd_syslog_facility description"
+        description: "OpenSSH sshd_syslog_facility description"
         type: "str"
         default: "AUTH"
       sshd_tcp_keep_alive:
-        description: "sshd_tcp_keep_alive description"
+        description: "OpenSSH sshd_tcp_keep_alive description"
         type: "bool"
         default: "False"
       sshd_trusted_user_ca_keys_base64:
-        description: "sshd_trusted_user_ca_keys_base64 description"
+        description: "OpenSSH sshd_trusted_user_ca_keys_base64 description"
         type: "str"
         default: ""
       sshd_trusted_user_ca_keys_file:
-        description: "sshd_trusted_user_ca_keys_file description"
+        description: "OpenSSH sshd_trusted_user_ca_keys_file description"
         type: "str"
         default: "/etc/ssh/trusted-user-ca-keys.pem"
       sshd_update_moduli:
-        description: "sshd_update_moduli description"
+        description: "OpenSSH sshd_update_moduli description"
         type: "bool"
         default: "False"
       sshd_use_dns:
-        description: "sshd_use_dns description"
+        description: "OpenSSH sshd_use_dns description"
         type: "bool"
         default: "False"
       sshd_use_pam:
-        description: "sshd_use_pam description"
+        description: "OpenSSH sshd_use_pam description"
         type: "bool"
         default: "True"
       sshd_use_privilege_separation:
-        description: "sshd_use_privilege_separation description"
+        description: "OpenSSH sshd_use_privilege_separation description"
         type: "str"
         default: "sandbox"
       sshd_x11_forwarding:
-        description: "sshd_x11_forwarding description"
+        description: "OpenSSH sshd_x11_forwarding description"
         type: "bool"
         default: "False"
       disable_apport:

@@ -6,7 +6,8 @@
 # See pwquality.conf(5) for more information
 
 dcredit = {{ pwquality.dcredit }}
-dictcheck = {{ pwquality.dictcheck }}
+dictcheck = {{ '1' if pwquality.dictcheck else '0' }}
+{% if pwquality.dictcheck and pwquality.dictpath == "" %}
 {% if pwquality.dictpath != "" %}
 dictpath = {{ pwquality.dictpath }}
 {% endif %}
