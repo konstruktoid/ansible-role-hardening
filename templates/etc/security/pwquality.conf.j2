@@ -7,7 +7,6 @@
 
 dcredit = {{ pwquality.dcredit }}
 dictcheck = {{ '1' if pwquality.dictcheck else '0' }}
-{% if pwquality.dictcheck and pwquality.dictpath == "" %}
 {% if pwquality.dictpath != "" %}
 dictpath = {{ pwquality.dictpath }}
 {% endif %}
@@ -15,8 +14,8 @@ difok = {{ pwquality.difok }}
 {% if (pwquality.enforce_for_root | bool) %}
 enforce_for_root
 {% endif %}
-enforcing = {{ pwquality.enforcing }}
-gecoscheck = {{ pwquality.gecoscheck }}
+enforcing = {{ '1' if pwquality.enforcing else '0' }}
+gecoscheck = {{ '1' if pwquality.gecoscheck else '0' }}
 lcredit = {{ pwquality.lcredit }}
 {% if (pwquality.local_users_only | bool) %}
 local_users_only
@@ -29,5 +28,5 @@ minlen = {{ pwquality.minlen }}
 ocredit = {{ pwquality.ocredit }}
 retry = {{ pwquality.retry }}
 ucredit = {{ pwquality.ucredit }}
-usercheck = {{ pwquality.usercheck }}
+usercheck = {{ '1' if pwquality.usercheck else '0' }}
 usersubstr = {{ pwquality.usersubstr }}
