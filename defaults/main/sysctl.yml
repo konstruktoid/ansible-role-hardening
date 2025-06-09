@@ -22,6 +22,7 @@ conntrack_sysctl_settings:
 generic_sysctl_settings:
   fs.protected_fifos: 2
   fs.protected_hardlinks: 1
+  fs.protected_regular: 2
   fs.protected_symlinks: 1
   fs.suid_dumpable: 0
   kernel.core_pattern: "|/bin/false"
@@ -29,8 +30,8 @@ generic_sysctl_settings:
   kernel.dmesg_restrict: 1
   kernel.kptr_restrict: 2
   kernel.panic: 60
-  kernel.panic_on_oops: 60
-  kernel.perf_event_paranoid: 3
+  kernel.panic_on_oops: 1
+  kernel.perf_event_paranoid: 2
   kernel.randomize_va_space: 2
   kernel.sysrq: 0
   kernel.unprivileged_bpf_disabled: 1
