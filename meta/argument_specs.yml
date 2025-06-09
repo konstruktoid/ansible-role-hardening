@@ -10,135 +10,135 @@ argument_specs:
     options:
       adduser_conf_template:
         description: "/etc/adduser.conf template location."
-        type: "str"
+        type: "path"
         default: "etc/adduser.conf.j2"
       common_account_template:
         description: "PAM common-account template location."
-        type: "str"
+        type: "path"
         default: "etc/pam.d/common-account.j2"
       common_auth_template:
         description: "PAM common-auth template location."
-        type: "str"
+        type: "path"
         default: "etc/pam.d/common-auth.j2"
       common_password_template:
         description: "PAM common-password template location."
-        type: "str"
+        type: "path"
         default: "etc/pam.d/common-password.j2"
       coredump_conf_template:
         description: "systemd coredump.conf template location."
-        type: "str"
+        type: "path"
         default: "etc/systemd/coredump.conf.j2"
       faillock_conf_template:
         description: "faillock.conf template location."
-        type: "str"
+        type: "path"
         default: "etc/security/faillock.conf.j2"
       hardening_rules_template:
         description: "auditd rules template location."
-        type: "str"
+        type: "path"
         default: "etc/audit/rules.d/hardening.rules.j2"
       hosts_allow_template:
         description: "/etc/hosts.allow template location."
-        type: "str"
+        type: "path"
         default: "etc/hosts.allow.j2"
       hosts_deny_template:
         description: "/etc/hosts.deny template location."
-        type: "str"
+        type: "path"
         default: "etc/hosts.deny.j2"
       initpath_sh_template:
         description: "profile initpath.sh template location."
-        type: "str"
+        type: "path"
         default: "etc/profile.d/initpath.sh.j2"
       issue_template:
         description: "/etc/issue template location."
-        type: "str"
+        type: "path"
         default: "etc/issue.j2"
       journald_conf_template:
         description: "systemd journald.conf template location."
-        type: "str"
+        type: "path"
         default: "etc/systemd/journald.conf.j2"
       limits_conf_template:
         description: "limits.conf template location."
-        type: "str"
+        type: "path"
         default: "etc/security/limits.conf.j2"
       login_defs_template:
         description: "/etc/login.defs template location."
-        type: "str"
+        type: "path"
         default: "etc/login.defs.j2"
       login_template:
         description: "login template location"
-        type: "str"
+        type: "path"
         default: "etc/pam.d/login.j2"
       logind_conf_template:
         description: "systemd logind.conf template location."
-        type: "str"
+        type: "path"
         default: "etc/systemd/logind.conf.j2"
       logrotate_conf_template:
         description: "logrotate.conf template location."
-        type: "str"
+        type: "path"
         default: "etc/logrotate.conf.j2"
       motd_template:
         description: "/etc/motd template location."
-        type: "str"
+        type: "path"
         default: "etc/motd.j2"
       pwquality_conf_template:
         description: "pwquality.conf template location."
-        type: "str"
+        type: "path"
         default: "etc/security/pwquality.conf.j2"
       resolved_conf_template:
         description: "systemd resolved.conf template location."
-        type: "str"
+        type: "path"
         default: "etc/systemd/resolved.conf.j2"
       rkhunter_template:
         description: "rkhunter configuration template location."
-        type: "str"
+        type: "path"
         default: "etc/default/rkhunter.j2"
       ssh_config_template:
         description: "OpenSSH ssh_config template location."
-        type: "str"
+        type: "path"
         default: "etc/ssh/ssh_config.j2"
       sshd_config_template:
         description: "OpenSSH sshd_config template location."
-        type: "str"
+        type: "path"
         default: "etc/ssh/sshd_config.j2"
       sshd_tmpfiles_template:
         description: "OpenSSH tmpfiles template location."
-        type: "str"
+        type: "path"
         default: "usr/lib/tmpfiles.d/ssh.conf.j2"
       sysctl_apparmor_config_template:
         description: "AppArmor sysctl configuration template location."
-        type: "str"
+        type: "path"
         default: "etc/sysctl/sysctl.apparmor.conf.j2"
       sysctl_ipv6_config_template:
         description: "IPv6 sysctl configuration template location."
-        type: "str"
+        type: "path"
         default: "etc/sysctl/sysctl.ipv6.conf.j2"
       sysctl_main_config_template:
         description: "main sysctl configuration template location."
-        type: "str"
+        type: "path"
         default: "etc/sysctl/sysctl.main.conf.j2"
       system_conf_template:
         description: "systemd system.conf template location."
-        type: "str"
+        type: "path"
         default: "etc/systemd/system.conf.j2"
       timesyncd_conf_template:
         description: "systemd timesyncd.conf template location."
-        type: "str"
+        type: "path"
         default: "etc/systemd/timesyncd.conf.j2"
       tmp_mount_template:
         description: "tmp.mount template location."
-        type: "str"
+        type: "path"
         default: "etc/systemd/tmp.mount.j2"
       unattended_upgrades_template:
         description: "APT unattended-upgrades template location."
-        type: "str"
+        type: "path"
         default: "etc/apt/apt.conf.d/50unattended-upgrades.j2"
       user_conf_template:
         description: "systemd user.conf template location."
-        type: "str"
+        type: "path"
         default: "etc/systemd/user.conf.j2"
       useradd_template:
         description: "useradd template location."
-        type: "str"
+        type: "path"
         default: "etc/default/useradd.j2"
       manage_pam:
         description: "If True, manage PAM configuration files."
@@ -228,14 +228,14 @@ argument_specs:
       pwquality.dcredit:
         description: "The maximum credit for having digits in the new password."
         type: "int"
-        default: "-1"
+        default: -1
       pwquality.dictcheck:
         description: "Check whether the password matches a word in a dictionary."
         type: "bool"
         default: "True"
       pwquality.dictpath:
         description: "The path to the dictionary file used for password strength checking."
-        type: "str"
+        type: "path"
         default: ""
       pwquality.difok:
         description: "The number of characters that must be different between the new password and the old one."
@@ -247,16 +247,16 @@ argument_specs:
         default: "True"
       pwquality.enforcing:
         description: "Reject the password if it fails the checks, otherwise only print the warning."
-        type: "int"
-        default: 1
+        type: "bool"
+        default: "True"
       pwquality.gecoscheck:
         description: "Check whether the password matches a word in the GECOS field of the user account."
-        type: "int"
-        default: 1
+        type: "bool"
+        default: "True"
       pwquality.lcredit:
         description: "The maximum credit for having lowercase letters in the new password."
         type: "int"
-        default: "-1"
+        default: -1
       pwquality.local_users_only:
         description: "The module will not test the password quality for users that are not present in the C(/etc/passwd) file."
         type: "bool"
@@ -280,27 +280,27 @@ argument_specs:
       pwquality.minlen:
         description: "The minimum length of the new password."
         type: "int"
-        default: "15"
+        default: 15
       pwquality.ocredit:
         description: "This is the maximum credit for having other characters in the new password."
         type: "int"
-        default: "-1"
+        default: -1
       pwquality.retry:
         description: "The number of times the user is allowed to retry entering a password that passes the checks."
         type: "int"
-        default: "3"
+        default: 3
       pwquality.ucredit:
         description: "The maximum credit for having uppercase letters in the new password."
         type: "int"
-        default: "-1"
+        default: -1
       pwquality.usercheck:
         description: "Check whether the password (with possible modifications) contains the user name in some form."
-        type: "int"
-        default: "1"
+        type: "bool"
+        default: "True"
       pwquality.usersubstr:
         description: "Check whether the password contains a substring of at least N length"
         type: "int"
-        default: "3"
+        default: 3
       disable_root_account:
         description: "If True, disable the root account."
         type: "bool"
@@ -394,7 +394,7 @@ argument_specs:
         elements: "str"
         default: "['192.168.0.0/24', '192.168.1.0/24']"
       sshd_allow_agent_forwarding:
-        description: "Specifies whether ssh-agent(1) forwarding is permitted."
+        description: "Specifies whether ssh-agent forwarding is permitted."
         type: "bool"
         default: "False"
       sshd_allow_groups:
@@ -421,531 +421,619 @@ argument_specs:
         type: "str"
         default: "any"
       sshd_authorized_principals_file:
-        description: "OpenSSH sshd_authorized_principals_file description"
-        type: "str"
+        description: "Specifies a file that lists principal names that are accepted for certificate authentication."
+        type: "path"
         default: "/etc/ssh/auth_principals/%u"
       sshd_banner:
-        description: "OpenSSH sshd_banner description"
-        type: "str"
+        description: "The contents of the specified file are sent to the remote user before authentication."
+        type: "path"
         default: "/etc/issue.net"
       sshd_ca_signature_algorithms:
-        description: "OpenSSH sshd_ca_signature_algorithms description"
+        description: "Specifies which algorithms are allowed for signing of certificates by certificate authorities."
         type: "list"
         elements: "str"
         default: "['ecdsa-sha2-nistp384', 'ecdsa-sha2-nistp521', 'ssh-ed25519', 'rsa-sha2-512']"
       sshd_kbd_interactive_authentication:
-        description: "OpenSSH sshd_kbd_interactive_authentication description"
+        description: "Specifies whether to allow keyboard-interactive authentication."
         type: "bool"
         default: "False"
       sshd_ciphers:
-        description: "OpenSSH sshd_ciphers description"
+        description: "Specifies the ciphers allowed. Multiple ciphers must be comma-separated."
         type: "list"
         elements: "str"
         default: "['chacha20-poly1305@openssh.com', 'aes256-gcm@openssh.com', 'aes256-ctr']"
       sshd_client_alive_count_max:
-        description: "OpenSSH sshd_client_alive_count_max description"
+        description: "Sets the number of client alive messages which may be sent without sshd receiving any messages back from the client."
         type: "int"
-        default: "1"
+        default: 1
       sshd_client_alive_interval:
-        description: "OpenSSH sshd_client_alive_interval description"
+        description: "Sets a timeout interval in seconds after which if no data has been received from the client, sshd will send a message channel to request a response
+          from the client."
         type: "int"
-        default: "200"
+        default: 200
       sshd_compression:
-        description: "OpenSSH sshd_compression description"
+        description: "Specifies whether compression is enabled."
         type: "bool"
         default: "False"
       sshd_config_d_force_clear:
-        description: "OpenSSH sshd_config_d_force_clear description"
+        description: "Clear pre-existing custom configurations in /etc/ssh/sshd_config.d"
         type: "bool"
         default: "False"
       sshd_config_force_replace:
-        description: "OpenSSH sshd_config_force_replace description"
+        description: "Force replace configuration file C(/etc/ssh/sshd_config)."
         type: "bool"
         default: "False"
       sshd_debian_banner:
-        description: "OpenSSH sshd_debian_banner description"
+        description: "Specifies whether the distribution-specified extra version suffix is included during initial protocol handshake."
         type: "bool"
         default: "False"
       sshd_deny_groups:
-        description: "OpenSSH sshd_deny_groups description"
+        description: "Login is disallowed for users whose primary group or supplementary group list matches one of the patterns."
         type: "list"
         elements: "str"
         default: "[]"
       sshd_deny_users:
-        description: "OpenSSH sshd_deny_users description"
+        description: "Login is disallowed for users whose user name matches one of the patterns."
         type: "list"
         elements: "str"
         default: "[]"
       sshd_gateway_ports:
-        description: "OpenSSH sshd_gateway_ports description"
+        description: "Specifies whether remote hosts are allowed to connect to ports forwarded for the client."
         type: "bool"
         default: "False"
       sshd_gssapi_authentication:
-        description: "OpenSSH sshd_gssapi_authentication description"
+        description: "Specifies whether user authentication based on GSSAPI is allowed."
         type: "bool"
         default: "False"
       sshd_host_key_algorithms:
-        description: "OpenSSH sshd_host_key_algorithms description"
+        description: "Specifies the host key algorithms that the server offers."
         type: "list"
         elements: "str"
         default: "['ssh-ed25519-cert-v01@openssh.com', 'ssh-rsa-cert-v01@openssh.com', 'ssh-ed25519', 'ecdsa-sha2-nistp521-cert-v01@openssh.com', 'ecdsa-sha2-nistp384-cert-v01@openssh.com',
           'ecdsa-sha2-nistp521', 'ecdsa-sha2-nistp384']"
       sshd_host_keys_files:
-        description: "OpenSSH sshd_host_keys_files description"
+        description: "Specifies a file containing a private host key used by SSH. If empty C(RSA), C(ECDSA), and C(ED25519) will be used, if supported by the installed
+          sshd version."
         type: "list"
         elements: "str"
         default: "[]"
       sshd_host_keys_group:
-        description: "OpenSSH sshd_host_keys_group description"
+        description: "Owner group of the host keys."
         type: "str"
         default: "root"
       sshd_host_keys_mode:
-        description: "OpenSSH sshd_host_keys_mode description"
+        description: "Host keys file mode."
         type: "str"
         default: "0600"
       sshd_host_keys_owner:
-        description: "OpenSSH sshd_host_keys_owner description"
+        description: "Owner of the host keys."
         type: "str"
         default: "root"
       sshd_hostbased_authentication:
-        description: "OpenSSH sshd_hostbased_authentication description"
+        description: "Specifies whether rhosts or /etc/hosts.equiv authentication together with successful public key client host authentication is allowed."
         type: "bool"
         default: "False"
       sshd_ignore_rhosts:
-        description: "OpenSSH sshd_ignore_rhosts description"
+        description: "Specifies that .rhosts and .shosts files will not be used in HostbasedAuthentication."
         type: "bool"
         default: "True"
       sshd_ignore_user_known_hosts:
-        description: "OpenSSH sshd_ignore_user_known_hosts description"
+        description: "Specifies whether sshd should ignore the user's ~/.ssh/known_hosts during HostbasedAuthentication and use only the system-wide known hosts file
+          /etc/ssh/known_hosts."
         type: "bool"
         default: "True"
       sshd_kerberos_authentication:
-        description: "OpenSSH sshd_kerberos_authentication description"
+        description: "Specifies whether the password provided by the user for PasswordAuthentication will be validated through the Kerberos KDC."
         type: "bool"
         default: "False"
       sshd_kex_algorithms:
-        description: "OpenSSH sshd_kex_algorithms description"
+        description: "Specifies the available KEX (Key Exchange) algorithms."
         type: "list"
         elements: "str"
         default: "['curve25519-sha256@libssh.org', 'diffie-hellman-group16-sha512', 'diffie-hellman-group18-sha512', 'ecdh-sha2-nistp521', 'ecdh-sha2-nistp384']"
       sshd_listen:
-        description: "OpenSSH sshd_listen description"
+        description: "Specifies the addresses sshd should listen on."
         type: "list"
         elements: "str"
         default: "['0.0.0.0']"
       sshd_log_level:
-        description: "OpenSSH sshd_log_level description"
+        description: "Gives the verbosity level that is used when logging messages from sshd."
         type: "str"
-        default: "VERBOSE"
+        default: "verbose"
+        choices:
+          - "debug"
+          - "debug1"
+          - "debug2"
+          - "debug3"
+          - "error"
+          - "fatal"
+          - "info"
+          - "quiet"
+          - "verbose"
       sshd_login_grace_time:
-        description: "OpenSSH sshd_login_grace_time description"
+        description: "The server disconnects after this time if the user has not successfully logged in."
         type: "int"
-        default: "20"
+        default: 20
       sshd_macs:
-        description: "OpenSSH sshd_macs description"
+        description: "Specifies the available MAC (Message Authentication Code) algorithms."
         type: "list"
         elements: "str"
         default: "['hmac-sha2-512-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', 'hmac-sha2-512', 'hmac-sha2-256']"
       sshd_max_auth_tries:
-        description: "OpenSSH sshd_max_auth_tries description"
+        description: "Specifies the maximum number of authentication attempts permitted per connection."
         type: "int"
-        default: "3"
+        default: 3
       sshd_max_sessions:
-        description: "OpenSSH sshd_max_sessions description"
+        description: "Specifies the maximum number of open sessions permitted per network connection."
         type: "int"
-        default: "3"
+        default: 3
       sshd_max_startups:
-        description: "OpenSSH sshd_max_startups description"
+        description: "Specifies the maximum number of concurrent unauthenticated connections to the SSH daemon."
         type: "str"
         default: "10:30:60"
       sshd_password_authentication:
-        description: "OpenSSH sshd_password_authentication description"
+        description: "Specifies whether password authentication is allowed."
         type: "bool"
         default: "False"
       sshd_permit_empty_passwords:
-        description: "OpenSSH sshd_permit_empty_passwords description"
+        description: "Specifies whether the server allows login to accounts with empty password strings."
         type: "bool"
         default: "False"
       sshd_permit_root_login:
-        description: "OpenSSH sshd_permit_root_login description"
+        description: "Specifies whether root can log in using ssh, if True then the option is set to prohibit-password."
         type: "bool"
         default: "False"
       sshd_permit_tunnel:
-        description: "OpenSSH sshd_permit_tunnel description"
+        description: "Specifies whether tun device forwarding is allowed."
         type: "bool"
         default: "False"
       sshd_permit_user_environment:
-        description: "OpenSSH sshd_permit_user_environment description"
+        description: "Specifies whether user environment variables are processed by sshd."
         type: "bool"
         default: "False"
       sshd_ports:
-        description: "OpenSSH sshd_ports description"
+        description: "Specifies the port number that sshd listens on."
         type: "list"
         elements: "str"
         default: "[22]"
       sshd_print_last_log:
-        description: "OpenSSH sshd_print_last_log description"
+        description: "Specifies whether sshd should print the last user login when a user logs in interactively."
         type: "bool"
         default: "True"
       sshd_print_motd:
-        description: "OpenSSH sshd_print_motd description"
+        description: "Specifies whether sshd should print /etc/motd when a user logs in interactively."
         type: "bool"
         default: "False"
       sshd_print_pam_motd:
-        description: "OpenSSH sshd_print_pam_motd description"
+        description: "Specifies whether pam_motd should be enabled for sshd."
         type: "bool"
         default: "False"
       sshd_rekey_limit:
-        description: "OpenSSH sshd_rekey_limit description"
+        description: "Specifies the maximum amount of data that may be transmitted before the session key is renegotiated, optionally followed a maximum amount of
+          time that may pass before the session key is renegotiated."
         type: "str"
         default: "512M 1h"
       sshd_required_ecdsa_size:
-        description: "OpenSSH sshd_required_ecdsa_size description"
+        description: "Required ECDSA key size when generating new host keys."
         type: "int"
-        default: "521"
+        default: 521
       sshd_required_rsa_size:
-        description: "OpenSSH sshd_required_rsa_size description"
+        description: "Required RSA key size when generating new host keys."
         type: "int"
-        default: "4096"
+        default: 4096
       sshd_sftp_enabled:
-        description: "OpenSSH sshd_sftp_enabled description"
+        description: "Specifies whether the SFTP subsystem should be enabled."
         type: "bool"
         default: "True"
-      sshd_sftp_only_chroot:
-        description: "OpenSSH sshd_sftp_only_chroot description"
+      sshd_sftp_chroot:
+        description: "Specifies whether the SFTP subsystem should chroot users."
         type: "bool"
         default: "True"
-      sshd_sftp_only_chroot_dir:
-        description: "OpenSSH sshd_sftp_only_chroot_dir description"
+      sshd_sftp_chroot_dir:
+        description: "Specifies the pathname of a directory to chroot to after authentication."
         type: "str"
         default: "%h"
       sshd_sftp_only_group:
-        description: "OpenSSH sshd_sftp_only_group description"
+        description: "Specifies the name of the group that will have access restricted to the sftp service only."
         type: "str"
         default: ""
       sshd_sftp_subsystem:
-        description: "OpenSSH sshd_sftp_subsystem description"
+        description: "Specifies the SFTP subsystem to use."
         type: "str"
         default: "internal-sftp -f LOCAL6 -l INFO"
       sshd_strict_modes:
-        description: "OpenSSH sshd_strict_modes description"
+        description: "Specifies whether sshd should check file modes and ownership of the user's files and home directory before accepting login."
         type: "bool"
         default: "True"
       sshd_syslog_facility:
-        description: "OpenSSH sshd_syslog_facility description"
+        description: "Gives the facility code that is used when logging messages from sshd."
         type: "str"
-        default: "AUTH"
+        default: "auth"
+        choices:
+          - "auth"
+          - "daemon"
+          - "user"
+          - "local0"
+          - "local1"
+          - "local2"
+          - "local3"
+          - "local4"
+          - "local5"
+          - "local6"
+          - "local7"
       sshd_tcp_keep_alive:
-        description: "OpenSSH sshd_tcp_keep_alive description"
+        description: "Specifies whether the system should send TCP keepalive messages to the other side."
         type: "bool"
         default: "False"
       sshd_trusted_user_ca_keys_base64:
-        description: "OpenSSH sshd_trusted_user_ca_keys_base64 description"
+        description: "Public keys of trusted certificate authoritites in base64 format."
         type: "str"
         default: ""
       sshd_trusted_user_ca_keys_file:
-        description: "OpenSSH sshd_trusted_user_ca_keys_file description"
-        type: "str"
+        description: "Specifies a file containing public keys of certificate authorities that are trusted to sign user certificates for authentication."
+        type: "path"
         default: "/etc/ssh/trusted-user-ca-keys.pem"
       sshd_update_moduli:
-        description: "OpenSSH sshd_update_moduli description"
+        description: "Specifies whether the moduli file should be updated."
         type: "bool"
         default: "False"
+      sshd_update_moduli_url:
+        description: "Specifies the URL to download the moduli file from."
+        type: "str"
+        default: "https://raw.githubusercontent.com/konstruktoid/ssh-moduli/main/moduli"
       sshd_use_dns:
-        description: "OpenSSH sshd_use_dns description"
+        description: "Specifies whether sshd should look up the remote host name, and to check that the resolved host name for the remote IP address maps back to
+          the very same IP address."
         type: "bool"
         default: "False"
       sshd_use_pam:
-        description: "OpenSSH sshd_use_pam description"
+        description: "If true, this will enable PAM authentication using KbdInteractiveAuthentication and PasswordAuthentication in addition to PAM account and session
+          module processing for all authentication types."
         type: "bool"
         default: "True"
       sshd_use_privilege_separation:
-        description: "OpenSSH sshd_use_privilege_separation description"
+        description: "Specifies whether sshd separates privileges by creating an unprivileged child process to deal with incoming network traffic."
         type: "str"
         default: "sandbox"
+        choices:
+          - "yes"
+          - "no"
+          - "sandbox"
       sshd_x11_forwarding:
-        description: "OpenSSH sshd_x11_forwarding description"
+        description: "Specifies whether X11 forwarding is permitted."
         type: "bool"
         default: "False"
       disable_apport:
-        description: "disable_apport description"
+        description: "If True, disable the C(Apport) crash reporting system."
         type: "bool"
         default: "True"
       manage_issue:
-        description: "manage_issue description"
+        description: "If True, then C(/etc/issue), C(/etc/issue.net) and C(/etc/motd) will be replaced with the available templates."
         type: "bool"
         default: "True"
       manage_kernel_modules:
-        description: "manage_kernel_modules description"
+        description: "If True, then the listed modules will be blocked and blacklisted."
         type: "bool"
         default: "True"
       fs_modules_blocklist:
-        description: "fs_modules_blocklist description"
+        description: "Filesystem kernel modules to block and blacklist."
         type: "list"
         elements: "str"
         default: "['cramfs', 'freevxfs', 'hfs', 'hfsplus', 'jffs2', 'squashfs', 'udf']"
       misc_modules_blocklist:
-        description: "misc_modules_blocklist description"
+        description: "Misc kernel modules to block and blacklist."
         type: "list"
         elements: "str"
         default: "['bluetooth', 'bnep', 'btusb', 'can', 'cpia2', 'firewire-core', 'floppy', 'ksmbd', 'n_hdlc', 'net-pf-31', 'pcspkr', 'soundcore', 'thunderbolt',
           'usb-midi', 'usb-storage', 'uvcvideo', 'v4l2_common']"
       net_modules_blocklist:
-        description: "net_modules_blocklist description"
+        description: "Network kernel modules to block and blacklist."
         type: "list"
         elements: "str"
         default: "['atm', 'dccp', 'sctp', 'rds', 'tipc']"
       manage_compilers:
-        description: "manage_compilers description"
+        description: "If True, then the listed compilers will restricted to the root user."
         type: "bool"
         default: "True"
       compilers:
-        description: "compilers description"
+        description: "Compilers to restrict to the root user."
         type: "list"
         elements: "str"
         default: "['as', 'cargo', 'cc', 'cc-[0-9]*', 'clang-[0-9]*', 'gcc', 'gcc-[0-9]*', 'go', 'make', 'rustc']"
       manage_login_defs:
-        description: "manage_login_defs description"
+        description: "If True, then manage C(/etc/login.defs) configuration."
         type: "bool"
         default: "True"
       disable_ipv6:
-        description: "disable_ipv6 description"
+        description: "If True, disable IPv6 on the system."
         type: "bool"
         default: "False"
       sysctl_net_ipv6_conf_accept_ra_rtr_pref:
-        description: "sysctl_net_ipv6_conf_accept_ra_rtr_pref description"
+        description: "If 0, the system denies IPv6 router solicitations."
         type: "int"
-        default: "0"
+        default: 0
       ipv6_disable_sysctl_settings.net.ipv6.conf.all.disable_ipv6:
-        description: "ipv6_disable_sysctl_settings.net.ipv6.conf.all.disable_ipv6 description"
+        description: "If 1, the system disables IPv6 on all interfaces."
         type: "int"
-        default: "1"
+        default: 1
       ipv6_disable_sysctl_settings.net.ipv6.conf.default.disable_ipv6:
-        description: "ipv6_disable_sysctl_settings.net.ipv6.conf.default.disable_ipv6 description"
+        description: "If 1, the system disables IPv6 on the default interface."
         type: "int"
-        default: "1"
+        default: 1
       ipv6_sysctl_settings.net.ipv6.conf.all.accept_ra:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.all.accept_ra description"
+        description: "If 0, the system does not accept IPv6 router advertisements."
         type: "int"
-        default: "0"
+        default: 0
       ipv6_sysctl_settings.net.ipv6.conf.all.accept_redirects:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.all.accept_redirects description"
+        description: "If 0, the system does not accept IPv6 redirects."
         type: "int"
-        default: "0"
+        default: 0
       ipv6_sysctl_settings.net.ipv6.conf.all.accept_source_route:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.all.accept_source_route description"
+        description: "If 0, deny forwarding of IPv6 Source Routed Packets"
         type: "int"
-        default: "0"
+        default: 0
       ipv6_sysctl_settings.net.ipv6.conf.all.forwarding:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.all.forwarding description"
+        description: "If 0, denies IPv6 forwarding."
         type: "int"
-        default: "0"
+        default: 0
       ipv6_sysctl_settings.net.ipv6.conf.all.use_tempaddr:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.all.use_tempaddr description"
+        description: "Preference for IPv6 Privacy Extensions on all interfaces."
         type: "int"
-        default: "2"
+        default: 2
+        choices:
+          - 0
+          - 1
+          - 2
       ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra description"
+        description: "If 0, the system does not accept IPv6 router advertisements on the default interface."
         type: "int"
-        default: "0"
+        default: 0
       ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_defrtr:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_defrtr description"
+        description: "If 0, the system does not accept default routers from IPv6 router advertisements on the default interface."
         type: "int"
-        default: "0"
+        default: 0
       ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_pinfo:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_pinfo description"
+        description: "If 0, the system does not accept prefix information from IPv6 router advertisements on the default interface."
         type: "int"
-        default: "0"
+        default: 0
       ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_rtr_pref:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_rtr_pref description"
+        description: "If 0, the system does not accept router preference from IPv6 router advertisments on the default interface."
         type: "int"
-        default: "0"
+        default: 0
       ipv6_sysctl_settings.net.ipv6.conf.default.accept_redirects:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.default.accept_redirects description"
+        description: "If 0, the system does not accept IPv6 redirects on the default interface."
         type: "int"
-        default: "0"
+        default: 0
       ipv6_sysctl_settings.net.ipv6.conf.default.accept_source_route:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.default.accept_source_route description"
+        description: "If 0, deny forwarding of IPv6 Source Routed Packets on the default interface."
         type: "int"
-        default: "0"
+        default: 0
       ipv6_sysctl_settings.net.ipv6.conf.default.autoconf:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.default.autoconf description"
+        description: "If 0, the system doesn't autoconfigure addresses using Prefix Information in Router Advertisements."
         type: "int"
-        default: "0"
+        default: 0
       ipv6_sysctl_settings.net.ipv6.conf.default.dad_transmits:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.default.dad_transmits description"
+        description: "The amount of Duplicate Address Detection probes to send."
         type: "int"
-        default: "0"
+        default: 0
       ipv6_sysctl_settings.net.ipv6.conf.default.max_addresses:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.default.max_addresses description"
+        description: "Maximum number of autoconfigured IPv6 addresses per interface."
         type: "int"
-        default: "1"
+        default: 1
       ipv6_sysctl_settings.net.ipv6.conf.default.router_solicitations:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.default.router_solicitations description"
+        description: "Number of Router Solicitations to send until assuming no routers are present."
         type: "int"
-        default: "0"
+        default: 0
       ipv6_sysctl_settings.net.ipv6.conf.default.use_tempaddr:
-        description: "ipv6_sysctl_settings.net.ipv6.conf.default.use_tempaddr description"
+        description: "Preference for IPv6 Privacy Extensions on the default interface."
         type: "int"
-        default: "2"
+        default: 2
+        choices:
+          - 0
+          - 1
+          - 2
       manage_apparmor:
-        description: "manage_apparmor description"
+        description: "If True, manage C(AppArmor) installation and configuration."
         type: "bool"
         default: "True"
       manage_hosts:
-        description: "manage_hosts description"
+        description: "If True, manage C(/etc/hosts.allow) and C(/etc/hosts.deny) configuration."
         type: "bool"
         default: "True"
       manage_ufw:
-        description: "manage_ufw description"
+        description: "If True, manage C(UFW) installation and configuration."
         type: "bool"
         default: "True"
       ufw_outgoing_traffic:
-        description: "ufw_outgoing_traffic description"
+        description: "Allowed outgoing ports and protocols."
         type: "list"
         elements: "str"
         default: "[{'port': 22, 'proto': 'tcp'}, 53, {'port': 80, 'proto': 'tcp'}, {'port': 123, 'proto': 'udp'}, {'port': 443, 'proto': 'tcp'}, 853, {'port': 4460,
           'proto': 'tcp'}]"
       ufw_rate_limit:
-        description: "ufw_rate_limit description"
+        description: "If True, rate limiting is enabled for incoming connections."
         type: "bool"
         default: "False"
       manage_journal:
-        description: "manage_journal description"
+        description: "If True, manage C(systemd-journald) installation and configuration."
         type: "bool"
         default: "True"
       rsyslog_filecreatemode:
-        description: "rsyslog_filecreatemode description"
+        description: "Set the file creation mode for rsyslog log files."
         type: "str"
         default: "0640"
       journald_compress:
-        description: "journald_compress description"
+        description: "If True, journal files will be compressed."
         type: "bool"
         default: "True"
       journald_forwardtosyslog:
-        description: "journald_forwardtosyslog description"
+        description: "If True, forward journal messages to syslog."
         type: "bool"
         default: "False"
       journald_storage:
-        description: "journald_storage description"
+        description: "Controls where to store journal data."
         type: "str"
         default: "persistent"
+        choices:
+          - "auto"
+          - "none"
+          - "persistent"
+          - "volatile"
       journald_permissions:
-        description: "journald_permissions description"
+        description: "Sets the permissions for journal files and directories."
         type: "str"
         default: "2640"
       journald_group:
-        description: "journald_group description"
+        description: "The group that has access to the journal files."
         type: "str"
         default: "systemd-journal"
       journald_user:
-        description: "journald_user description"
+        description: "The user that has access to the journal files."
         type: "str"
         default: "root"
       manage_sysctl:
-        description: "manage_sysctl description"
+        description: "If True, manage C(sysctl) settings."
         type: "bool"
         default: "True"
       usr_lib_sysctl_d_dir:
-        description: "usr_lib_sysctl_d_dir description"
+        description: "If True, use C(/usr/lib/sysctl.d) as the sysctl configuration directory, otherwise use C(/etc/sysctl.d)."
         type: "bool"
         default: "False"
       sysctl_conf_dir:
-        description: "sysctl_conf_dir description"
+        description: "Sets the sysctl configuration directory."
         type: "str"
         default: "{{ '/usr/lib/sysctl.d' if usr_lib_sysctl_d_dir else '/etc/sysctl.d' }}"
       sysctl_dev_tty_ldisc_autoload:
-        description: "sysctl_dev_tty_ldisc_autoload description"
+        description: "If 0, restrict loading TTY line disciplines to the CAP_SYS_MODULE capability."
         type: "int"
-        default: "0"
+        default: 0
       apparmor_sysctl_settings.kernel.apparmor_display_secid_mode:
-        description: "apparmor_sysctl_settings.kernel.apparmor_display_secid_mode description"
+        description: "If 1, AppArmor will provide a human-readable mapping of internal security IDs."
         type: "int"
-        default: "0"
+        default: 0
       apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_io_uring:
-        description: "apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_io_uring description"
+        description: "If 1, restrict unprivileged io_uring operations."
         type: "int"
-        default: "0"
+        default: 0
       apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_unconfined:
-        description: "apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_unconfined description"
+        description: "If 1, enforces extra security restrictions on unprivileged unconfined processes."
         type: "int"
-        default: "1"
+        default: 1
       apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns:
-        description: "apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns description"
+        description: "If 1, restricts unprivileged user namespaces."
         type: "int"
-        default: "1"
+        default: 1
       apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns_complain:
-        description: "apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns_complain description"
+        description: "If 1, unprivileged user namespaces will be put into complain mode."
         type: "int"
-        default: "0"
+        default: 0
       apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns_force:
-        description: "apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns_force description"
+        description: "If 1, all confined applications will have the user namespace mediation enforced."
         type: "int"
-        default: "0"
+        default: 0
       apparmor_sysctl_settings.kernel.unprivileged_userns_apparmor_policy:
-        description: "apparmor_sysctl_settings.kernel.unprivileged_userns_apparmor_policy description"
+        description: "If 1, unprivileged user namespaces will be restricted to the AppArmor policy."
         type: "int"
-        default: "1"
+        default: 1
       conntrack_sysctl_settings.net.netfilter.nf_conntrack_max:
-        description: "conntrack_sysctl_settings.net.netfilter.nf_conntrack_max description"
+        description: "The maximum number of connections that the system’s connection tracking table can hold at any time."
         type: "int"
-        default: "2000000"
+        default: 2000000
       conntrack_sysctl_settings.net.netfilter.nf_conntrack_tcp_loose:
-        description: "conntrack_sysctl_settings.net.netfilter.nf_conntrack_tcp_loose description"
+        description: "If 0, the system will not allow TCP connections to be established without a SYN packet."
         type: "int"
-        default: "0"
+        default: 0
       generic_sysctl_settings.fs.protected_fifos:
-        description: "generic_sysctl_settings.fs.protected_fifos description"
+        description: "Avoid unintentional writes to an attacker-controlled FIFO, where a program expected to create a regular file."
         type: "int"
-        default: "2"
+        default: 2
+        choices:
+          - 0
+          - 1
+          - 2
+      generic_sysctl_settings.fs.protected_regular:
+        description: "Avoid unintentional writes to an attacker-controlled regular file, where a program expected to create one."
+        type: "int"
+        default: 2
+        choices:
+          - 0
+          - 1
+          - 2
       generic_sysctl_settings.fs.protected_hardlinks:
-        description: "generic_sysctl_settings.fs.protected_hardlinks description"
+        description: "Restrict hard links to files that are not owned by the user."
         type: "int"
-        default: "1"
+        default: 1
+        choices:
+          - 0
+          - 1
       generic_sysctl_settings.fs.protected_symlinks:
-        description: "generic_sysctl_settings.fs.protected_symlinks description"
+        description: "Restrict symbolic links to files that are not owned by the user."
         type: "int"
-        default: "1"
+        default: 1
+        choices:
+          - 0
+          - 1
       generic_sysctl_settings.fs.suid_dumpable:
-        description: "generic_sysctl_settings.fs.suid_dumpable description"
+        description: "Set the core dump mode for setuid or otherwise protected/tainted binaries."
         type: "int"
-        default: "0"
+        default: 0
+        choices:
+          - 0
+          - 1
+          - 2
       generic_sysctl_settings.kernel.core_pattern:
-        description: "generic_sysctl_settings.kernel.core_pattern description"
+        description: "Specify a core dumpfile pattern name."
         type: "str"
         default: "|/bin/false"
       generic_sysctl_settings.kernel.core_uses_pid:
-        description: "generic_sysctl_settings.kernel.core_uses_pid description"
+        description: "If 1, the core dump file name will include the PID of the process that created it."
         type: "int"
-        default: "1"
+        default: 1
       generic_sysctl_settings.kernel.dmesg_restrict:
-        description: "generic_sysctl_settings.kernel.dmesg_restrict description"
+        description: "If 1, unprivileged users are prevented from using dmesg to view messages from the kernel’s log buffer."
         type: "int"
-        default: "1"
+        default: 1
       generic_sysctl_settings.kernel.kptr_restrict:
-        description: "generic_sysctl_settings.kernel.kptr_restrict description"
+        description: "Whether restrictions are placed on exposing kernel addresses via /proc and other interfaces."
         type: "int"
-        default: "2"
+        default: 2
+        choices:
+          - 0
+          - 1
+          - 2
       generic_sysctl_settings.kernel.panic:
-        description: "generic_sysctl_settings.kernel.panic description"
+        description: "The value in this file determines the behaviour of the kernel on a panic."
         type: "int"
-        default: "60"
+        default: 60
+        choices:
+          - -1
+          - 0
+          - 60
       generic_sysctl_settings.kernel.panic_on_oops:
-        description: "generic_sysctl_settings.kernel.panic_on_oops description"
+        description: "If 1, Panic immediately. If the panic sysctl is also non-zero then the machine will be rebooted."
         type: "int"
-        default: "60"
+        default: 1
       generic_sysctl_settings.kernel.perf_event_paranoid:
-        description: "generic_sysctl_settings.kernel.perf_event_paranoid description"
+        description: "Controls use of the performance events system by unprivileged users."
         type: "int"
-        default: "3"
+        default: 2
+        choices:
+          - -1
+          - 0
+          - 1
+          - 2
       generic_sysctl_settings.kernel.randomize_va_space:
-        description: "generic_sysctl_settings.kernel.randomize_va_space description"
+        description: "Select the type of process address space randomization that is used in the system."
         type: "int"
         default: "2"
+        choices:
+          - 0
+          - 1
+          - 2
       generic_sysctl_settings.kernel.sysrq:
-        description: "generic_sysctl_settings.kernel.sysrq description"
+        description: "If 1, the magic SysRq key is enabled."
         type: "int"
-        default: "0"
+        default: 0
       generic_sysctl_settings.kernel.unprivileged_bpf_disabled:
         description: "generic_sysctl_settings.kernel.unprivileged_bpf_disabled description"
         type: "int"
