@@ -11,7 +11,7 @@ This is an [Ansible](https://www.ansible.com/) role designed to enhance the
 security of servers running on AlmaLinux, Debian, or Ubuntu.
 
 It's [systemd](https://freedesktop.org/wiki/Software/systemd/) focused
-and requires Ansible version 2.15 or higher.
+and requires Ansible version ${ANSIBLE_V} or higher.
 
 The role supports the following operating systems:
 
@@ -36,84 +36,6 @@ this Ansible role is used for configuration.
 > [slsa action workflow](https://github.com/konstruktoid/ansible-role-hardening/actions/workflows/slsa.yml)
 > for verification.
 
-## Dependencies
-
-None.
-
-## Examples
-
-### Requirements
-
-\`\`\`yaml
----
-roles:
-  - name: konstruktoid.hardening
-    version: v2.3.0
-    src: https://github.com/konstruktoid/ansible-role-hardening.git
-    scm: git
-\`\`\`
-
-### Playbook
-
-\`\`\`yaml
----
-- name: Import and use the hardening role
-  hosts: localhost
-  any_errors_fatal: true
-  tasks:
-    - name: Import the hardening role
-      ansible.builtin.import_role:
-        name: konstruktoid.hardening
-      vars:
-        sshd_admin_net:
-          - 10.0.2.0/24
-          - 192.168.0.0/24
-          - 192.168.1.0/24
-        manage_suid_sgid_permissions: false
-\`\`\`
-
-### Local playbook using git checkout
-
-\`\`\`yaml
----
-- name: Checkout and configure konstruktoid.hardening
-  hosts: localhost
-  any_errors_fatal: true
-  tasks:
-    - name: Clone hardening repository
-      become: true
-      tags:
-        - always
-      block:
-        - name: Install git
-          ansible.builtin.package:
-            name: git
-            state: present
-
-        - name: Checkout konstruktoid.hardening
-          become: true
-          ansible.builtin.git:
-            repo: https://github.com/konstruktoid/ansible-role-hardening
-            dest: /etc/ansible/roles/konstruktoid.hardening
-            version: v2.3.0
-
-        - name: Remove git
-          ansible.builtin.package:
-            name: git
-            state: absent
-
-    - name: Include the hardening role
-      ansible.builtin.include_role:
-        name: konstruktoid.hardening
-      vars:
-        sshd_allow_groups:
-          - ubuntu
-        sshd_login_grace_time: 60
-        sshd_max_auth_tries: 10
-        sshd_use_dns: false
-        sshd_update_moduli: true
-\`\`\`
-
 ## Note regarding UFW firewall rules
 
 Instead of resetting \`ufw\` every run and by doing so causing network traffic
@@ -134,18 +56,11 @@ See [STRUCTURE.md](STRUCTURE.md) for tree of the role structure.
 ## Role testing
 
 See [TESTING.md](TESTING.md).
-"
-echo '## Role Variables with defaults'
 
-for variables in $(find ./defaults -type f | sort); do
-  echo; echo "### $variables"
-  echo
-  echo '```yaml'
-  grep -vE '^#|---|\.\.\.' "$variables"
-  echo '```'
-done
+<!-- BEGIN_ANSIBLE_DOCS -->
 
-echo
+<!-- END_ANSIBLE_DOCS -->"
+
 echo "## Recommended Reading
 
 [Comparing the DISA STIG and CIS Benchmark values](https://github.com/konstruktoid/publications/blob/master/ubuntu_comparing_guides_benchmarks.md)
@@ -190,7 +105,7 @@ Before running any test:
 "
 
 echo '```console'
-git grep -E 'box:|box =|image:' Vagrantfile molecule/ | awk '{print $NF}' |\
+git grep -E 'box:|box =|image:' molecule/ | awk '{print $NF}' |\
   tr -d '"' | sort | uniq
 echo '```'
 
@@ -221,3 +136,5 @@ echo '```sh'
 tree .
 echo '```'
 } > ./STRUCTURE.md
+
+aar-doc . markdown
