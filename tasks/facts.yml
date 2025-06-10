@@ -72,10 +72,8 @@
         - "'pam' in ansible_facts.packages"
 
 - name: Set hashing algorithm for password (yescrypt|sha512)
-  when:
-    - manage_pam
   ansible.builtin.set_fact:
-    password_algorithm: "{{ 'yescrypt' if (pam_version is version('1.4.0', '>=')) else 'sha512' }}"
+    password_algorithm: "{{ 'yescrypt' if (pam_version is defined and pam_version is version('1.4.0', '>=')) else 'sha512' }}"
 
 - name: Update current facts
   ansible.builtin.setup:
