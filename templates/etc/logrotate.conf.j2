@@ -15,4 +15,6 @@ compresscmd /usr/bin/xz
 uncompresscmd /usr/bin/unxz
 compressext .xz
 
+{% if ansible_os_family != 'Suse' %}
 include /etc/logrotate.d
+{% endif %}

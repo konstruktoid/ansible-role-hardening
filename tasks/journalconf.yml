@@ -68,6 +68,8 @@
     mode: "0750"
     state: present
     create: true
+  when:
+    - ansible_os_family != 'Suse'
 
 - name: Stat rsyslog.conf
   become: true
