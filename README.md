@@ -114,43 +114,10 @@ Focused on using systemd services and options.
 | manage_pam | If True, manage PAM configuration files. | bool | no | True |
 | manage_faillock | If True, enable and manage faillock. | bool | no | True |
 | manage_pwquality | If True, enable and manage pwquality. | bool | no | True |
-| faillock.admin_group | Members of the group will be handled the same as the root account | list of 'str' | no | [] |
-| faillock.audit | Will log the user name into the system log if the user is not found | bool | no | True |
-| faillock.deny | Deny access if the number of login failures exceeds the value of this option. | int | no | 5 |
-| faillock.dir | Where the user files with the failure records are kept. | str | no | /var/run/faillock |
-| faillock.even_deny_root | Root account can become locked as well as regular accounts. | bool | no | True |
-| faillock.fail_interval | The length of the interval during which the consecutive authentication failures must happen for the user account to lock out. | int | no | 900 |
-| faillock.local_users_only | Only track failed user authentications attempts for local users in /etc/passwd. | bool | no | True |
-| faillock.no_log_info | Don't log informative messages via syslog(3). | bool | no | False |
-| faillock.nodelay | Don't enforce a delay after authentication failures. | bool | no | True |
-| faillock.root_unlock_time | Allow access after N seconds to root account after the account is locked. | int | no | 600 |
-| faillock.silent | Don't print informative messages to the user. | bool | no | False |
-| faillock.unlock_time | Allow access after N seconds to user accounts after the account is locked. | int | no | 600 |
-| login_defs.login_retries | Maximum number of login retries in case of bad password. | int | no | 5 |
-| login_defs.login_timeout | Max time in seconds for login. | int | no | 60 |
-| login_defs.pass_max_days | The maximum number of days a password may be used. If the password is older than this, a password change will be forced. | int | no | 60 |
-| login_defs.pass_min_days | The minimum number of days allowed between password changes. If a user tries to change their password before this time, the change will be denied. | int | no | 1 |
-| login_defs.pass_warn_age | The number of days before password expiration that the user will be warned about the impending expiration. | int | no | 7 |
+| faillock | Faillock configuration options. | dict of 'faillock' options | no | [{'admin_group': []}, {'audit': True}, {'deny': 5}, {'dir': '/var/run/faillock'}, {'even_deny_root': True}, {'fail_interval': 900}, {'local_users_only': True}, {'no_log_info': False}, {'nodelay': True}, {'root_unlock_time': 600}, {'silent': False}, {'unlock_time': 600}] |
+| login.defs | login.defs configuration options. | dict of 'login.defs' options | no | {'login_retries': 5, 'login_timeout': 60, 'pass_max_days': 60, 'pass_min_days': 1, 'pass_warn_age': 7} |
 | password_remember | The number of previous passwords to remember and not allow the user to reuse. | int | no | 24 |
-| pwquality.dcredit | The maximum credit for having digits in the new password. | int | no | -1 |
-| pwquality.dictcheck | Check whether the password matches a word in a dictionary. | bool | no | True |
-| pwquality.dictpath | The path to the dictionary file used for password strength checking. | path | no |  |
-| pwquality.difok | The number of characters that must be different between the new password and the old one. | int | no | 8 |
-| pwquality.enforce_for_root | The module will return error on failed check even if the user changing the password is root. | bool | no | True |
-| pwquality.enforcing | Reject the password if it fails the checks, otherwise only print the warning. | bool | no | True |
-| pwquality.gecoscheck | Check whether the password matches a word in the GECOS field of the user account. | bool | no | True |
-| pwquality.lcredit | The maximum credit for having lowercase letters in the new password. | int | no | -1 |
-| pwquality.local_users_only | The module will not test the password quality for users that are not present in the `/etc/passwd` file. | bool | no | True |
-| pwquality.maxclassrepeat | Reject passwords which contain more than N consecutive characters of the same class. | int | no | 4 |
-| pwquality.maxrepeat | Reject passwords which contain more than N consecutive characters. | int | no | 3 |
-| pwquality.maxsequence | Reject passwords which contain monotonic character sequences longer than N. | int | no | 3 |
-| pwquality.minclass | The minimum number of character classes that must be present in the new password. | int | no | 4 |
-| pwquality.minlen | The minimum length of the new password. | int | no | 15 |
-| pwquality.ocredit | This is the maximum credit for having other characters in the new password. | int | no | -1 |
-| pwquality.retry | The number of times the user is allowed to retry entering a password that passes the checks. | int | no | 3 |
-| pwquality.ucredit | The maximum credit for having uppercase letters in the new password. | int | no | -1 |
-| pwquality.usercheck | Check whether the password (with possible modifications) contains the user name in some form. | bool | no | True |
-| pwquality.usersubstr | Check whether the password contains a substring of at least N length | int | no | 3 |
+| pwquality | pwquality configuration options. | dict of 'pwquality' options | no | {'dcredit': -1, 'dictcheck': True, 'dictpath': '', 'difok': 8, 'enforce_for_root': True, 'enforcing': True, 'gecoscheck': True, 'lcredit': -1, 'local_users_only': True, 'maxclassrepeat': 4, 'maxrepeat': 3, 'maxsequence': 3, 'minclass': 4, 'minlen': 15, 'ocredit': -1, 'retry': 3, 'ucredit': -1, 'usercheck': True, 'usersubstr': 3} |
 | disable_root_account | If True, disable the root account. | bool | no | True |
 | manage_aide | If True, manage AIDE installation and configuration. | bool | no | True |
 | aide_checksums | Modifies the AIDE `Checksums` variable. | str | no | sha512 |
@@ -214,7 +181,7 @@ Focused on using systemd services and options.
 | sshd_permit_root_login | Specifies whether root can log in using ssh, if True then the option is set to prohibit-password. | bool | no | False |
 | sshd_permit_tunnel | Specifies whether tun device forwarding is allowed. | bool | no | False |
 | sshd_permit_user_environment | Specifies whether user environment variables are processed by sshd. | bool | no | False |
-| sshd_ports | Specifies the port number that sshd listens on. | list of 'str' | no | [22] |
+| sshd_ports | Specifies the port number that sshd listens on. | list of 'int' | no | [22] |
 | sshd_print_last_log | Specifies whether sshd should print the last user login when a user logs in interactively. | bool | no | True |
 | sshd_print_motd | Specifies whether sshd should print /etc/motd when a user logs in interactively. | bool | no | False |
 | sshd_print_pam_motd | Specifies whether pam_motd should be enabled for sshd. | bool | no | False |
@@ -306,97 +273,98 @@ Focused on using systemd services and options.
 | generic_sysctl_settings.kernel.perf_event_paranoid | Controls use of the performance events system by unprivileged users. | int | no | 2 |
 | generic_sysctl_settings.kernel.randomize_va_space | Select the type of process address space randomization that is used in the system. | int | no | 2 |
 | generic_sysctl_settings.kernel.sysrq | If 1, the magic SysRq key is enabled. | int | no | 0 |
-| generic_sysctl_settings.kernel.unprivileged_bpf_disabled | generic_sysctl_settings.kernel.unprivileged_bpf_disabled description | int | no | 1 |
-| generic_sysctl_settings.kernel.yama.ptrace_scope | generic_sysctl_settings.kernel.yama.ptrace_scope description | int | no | 2 |
-| generic_sysctl_settings.net.core.bpf_jit_harden | generic_sysctl_settings.net.core.bpf_jit_harden description | int | no | 2 |
-| generic_sysctl_settings.user.max_user_namespaces | generic_sysctl_settings.user.max_user_namespaces description | int | no | 62967 |
-| ipv4_sysctl_settings.net.ipv4.conf.all.accept_redirects | ipv4_sysctl_settings.net.ipv4.conf.all.accept_redirects description | int | no | 0 |
-| ipv4_sysctl_settings.net.ipv4.conf.all.accept_source_route | ipv4_sysctl_settings.net.ipv4.conf.all.accept_source_route description | int | no | 0 |
-| ipv4_sysctl_settings.net.ipv4.conf.all.log_martians | ipv4_sysctl_settings.net.ipv4.conf.all.log_martians description | int | no | 1 |
-| ipv4_sysctl_settings.net.ipv4.conf.all.rp_filter | ipv4_sysctl_settings.net.ipv4.conf.all.rp_filter description | int | no | 1 |
-| ipv4_sysctl_settings.net.ipv4.conf.all.secure_redirects | ipv4_sysctl_settings.net.ipv4.conf.all.secure_redirects description | int | no | 0 |
-| ipv4_sysctl_settings.net.ipv4.conf.all.send_redirects | ipv4_sysctl_settings.net.ipv4.conf.all.send_redirects description | int | no | 0 |
-| ipv4_sysctl_settings.net.ipv4.conf.all.shared_media | ipv4_sysctl_settings.net.ipv4.conf.all.shared_media description | int | no | 0 |
-| ipv4_sysctl_settings.net.ipv4.conf.default.accept_redirects | ipv4_sysctl_settings.net.ipv4.conf.default.accept_redirects description | int | no | 0 |
-| ipv4_sysctl_settings.net.ipv4.conf.default.accept_source_route | ipv4_sysctl_settings.net.ipv4.conf.default.accept_source_route description | int | no | 0 |
-| ipv4_sysctl_settings.net.ipv4.conf.default.log_martians | ipv4_sysctl_settings.net.ipv4.conf.default.log_martians description | int | no | 1 |
-| ipv4_sysctl_settings.net.ipv4.conf.default.rp_filter | ipv4_sysctl_settings.net.ipv4.conf.default.rp_filter description | int | no | 1 |
-| ipv4_sysctl_settings.net.ipv4.conf.default.secure_redirects | ipv4_sysctl_settings.net.ipv4.conf.default.secure_redirects description | int | no | 0 |
+| generic_sysctl_settings.kernel.unprivileged_bpf_disabled | Controls whether BPF programs are disabled for unprivileged users. | int | no | 1 |
+| generic_sysctl_settings.kernel.yama.ptrace_scope | Select the what processes can be debugged with ptrace. | int | no | 2 |
+| generic_sysctl_settings.net.core.bpf_jit_harden | Level of hardening applied to the BPF JIT compiler. | int | no | 2 |
+| generic_sysctl_settings.user.max_user_namespaces | The maximum number of user namespaces that can be created by a user. | int | no | 62967 |
+| ipv4_sysctl_settings.net.ipv4.conf.all.accept_redirects | If 0, the system does not accept IPv4 redirects. | int | no | 0 |
+| ipv4_sysctl_settings.net.ipv4.conf.all.accept_source_route | If 0, deny IPv4 source routing. | int | no | 0 |
+| ipv4_sysctl_settings.net.ipv4.conf.all.log_martians | If 1, log packets with un-routable source addresses to the kernel log. | int | no | 1 |
+| ipv4_sysctl_settings.net.ipv4.conf.all.rp_filter | Set the reverse path filtering mode for all interfaces. | int | no | 1 |
+| ipv4_sysctl_settings.net.ipv4.conf.all.secure_redirects | If 1, accept ICMP redirect messages only to gateways listed in the interface's current gateway list. Overridden by shared_media. | int | no | 1 |
+| ipv4_sysctl_settings.net.ipv4.conf.all.send_redirects | If 0, the system does not send ICMP redirect messages. | int | no | 0 |
+| ipv4_sysctl_settings.net.ipv4.conf.all.shared_media | If 1, indicates that the media is shared with different subnets, overrides secure_redirects. | int | no | 1 |
+| ipv4_sysctl_settings.net.ipv4.conf.default.accept_redirects | If 0, the system does not accept IPv4 redirects on the default interface. | int | no | 0 |
+| ipv4_sysctl_settings.net.ipv4.conf.default.accept_source_route | If 0, deny IPv4 source routing on the default interface. | int | no | 0 |
+| ipv4_sysctl_settings.net.ipv4.conf.default.log_martians | If 1, log packets with un-routable source addresses to the kernel log on the default interface. | int | no | 1 |
+| ipv4_sysctl_settings.net.ipv4.conf.default.rp_filter | Set the reverse path filtering mode for the default interface. | int | no | 1 |
+| ipv4_sysctl_settings.net.ipv4.conf.default.secure_redirects | If 1, accept ICMP redirect messages only to gateways listed in the interface's current gateway list on the default interface. Overridden by shared_media. | int | no | 1 |
 | ipv4_sysctl_settings.net.ipv4.conf.default.send_redirects | ipv4_sysctl_settings.net.ipv4.conf.default.send_redirects description | int | no | 0 |
-| ipv4_sysctl_settings.net.ipv4.conf.default.shared_media | ipv4_sysctl_settings.net.ipv4.conf.default.shared_media description | int | no | 0 |
-| ipv4_sysctl_settings.net.ipv4.icmp_echo_ignore_broadcasts | ipv4_sysctl_settings.net.ipv4.icmp_echo_ignore_broadcasts description | int | no | 1 |
-| ipv4_sysctl_settings.net.ipv4.icmp_ignore_bogus_error_responses | ipv4_sysctl_settings.net.ipv4.icmp_ignore_bogus_error_responses description | int | no | 1 |
-| ipv4_sysctl_settings.net.ipv4.ip_forward | ipv4_sysctl_settings.net.ipv4.ip_forward description | int | no | 0 |
-| ipv4_sysctl_settings.net.ipv4.tcp_challenge_ack_limit | ipv4_sysctl_settings.net.ipv4.tcp_challenge_ack_limit description | int | no | 2147483647 |
-| ipv4_sysctl_settings.net.ipv4.tcp_invalid_ratelimit | ipv4_sysctl_settings.net.ipv4.tcp_invalid_ratelimit description | int | no | 500 |
-| ipv4_sysctl_settings.net.ipv4.tcp_max_syn_backlog | ipv4_sysctl_settings.net.ipv4.tcp_max_syn_backlog description | int | no | 20480 |
-| ipv4_sysctl_settings.net.ipv4.tcp_rfc1337 | ipv4_sysctl_settings.net.ipv4.tcp_rfc1337 description | int | no | 1 |
-| ipv4_sysctl_settings.net.ipv4.tcp_syn_retries | ipv4_sysctl_settings.net.ipv4.tcp_syn_retries description | int | no | 5 |
-| ipv4_sysctl_settings.net.ipv4.tcp_synack_retries | ipv4_sysctl_settings.net.ipv4.tcp_synack_retries description | int | no | 2 |
-| ipv4_sysctl_settings.net.ipv4.tcp_syncookies | ipv4_sysctl_settings.net.ipv4.tcp_syncookies description | int | no | 1 |
-| manage_usbguard | manage_usbguard description | bool | no | True |
-| usbguard_configuration_file | usbguard_configuration_file description | str | no | /etc/usbguard/usbguard-daemon.conf |
-| usbguard_rulefile | usbguard_rulefile description | str | no | /etc/usbguard/rules.conf |
-| usbguard_auditbackend | usbguard_auditbackend description | str | no | LinuxAudit |
-| usbguard_auditfilepath | usbguard_auditfilepath description | str | no | /var/log/usbguard/usbguard-audit.log |
-| usbguard_authorizeddefault | usbguard_authorizeddefault description | str | no | none |
-| usbguard_devicemanagerbackend | usbguard_devicemanagerbackend description | str | no | uevent |
-| usbguard_deviceruleswithport | usbguard_deviceruleswithport description | bool | no | False |
-| usbguard_hidepii | usbguard_hidepii description | bool | no | False |
-| usbguard_implicitpolicytarget | usbguard_implicitpolicytarget description | str | no | block |
-| usbguard_inserteddevicepolicy | usbguard_inserteddevicepolicy description | str | no | apply-policy |
-| usbguard_ipcaccesscontrolfiles | usbguard_ipcaccesscontrolfiles description | str | no | /etc/usbguard/IPCAccessControl.d/ |
-| usbguard_ipcallowedgroups | usbguard_ipcallowedgroups description | list of 'str' | no | ['plugdev', 'root', 'wheel'] |
-| usbguard_ipcallowedusers | usbguard_ipcallowedusers description | list of 'str' | no | ['root'] |
-| usbguard_presentcontrollerpolicy | usbguard_presentcontrollerpolicy description | str | no | keep |
-| usbguard_presentdevicepolicy | usbguard_presentdevicepolicy description | str | no | apply-policy |
-| usbguard_restorecontrollerdevicestate | usbguard_restorecontrollerdevicestate description | bool | no | False |
-| manage_suid_sgid_permissions | manage_suid_sgid_permissions description | bool | no | True |
-| suid_sgid_blocklist | suid_sgid_blocklist description | list of 'str' | no | ['7z', 'aa-exec', 'ab', 'agetty', 'alpine', 'ansible-playbook', 'ansible-test', 'aoss', 'apache2ctl', 'apt', 'apt-get', 'ar', 'aria2c', 'arj', 'arp', 'as', 'ascii-xfr', 'ascii85', 'ash', 'aspell', 'at', 'atobm', 'awk', 'aws', 'base32', 'base58', 'base64', 'basenc', 'basez', 'bash', 'batcat', 'bc', 'bconsole', 'bpftrace', 'bridge', 'bsd-write', 'bundle', 'bundler', 'busctl', 'busybox', 'byebug', 'bzip2', 'c89', 'c99', 'cabal', 'cancel', 'capsh', 'cat', 'cdist', 'certbot', 'chage', 'check_by_ssh', 'check_cups', 'check_log', 'check_memory', 'check_raid', 'check_ssl_cert', 'check_statusfile', 'chfn', 'chmod', 'choom', 'chown', 'chroot', 'chsh', 'clamscan', 'cmp', 'cobc', 'column', 'comm', 'composer', 'cowsay', 'cowthink', 'cp', 'cpan', 'cpio', 'cpulimit', 'crash', 'crontab', 'csh', 'csplit', 'csvtool', 'cupsfilter', 'curl', 'cut', 'dash', 'date', 'dc', 'dd', 'debugfs', 'dialog', 'diff', 'dig', 'distcc', 'dmesg', 'dmidecode', 'dmsetup', 'dnf', 'docker', 'dos2unix', 'dosbox', 'dotnet', 'dpkg', 'dstat', 'dvips', 'easy_install', 'eb', 'ed', 'efax', 'elvish', 'emacs', 'enscript', 'env', 'eqn', 'espeak', 'ex', 'exiftool', 'expand', 'expect', 'facter', 'file', 'find', 'finger', 'fish', 'flock', 'fmt', 'fold', 'fping', 'ftp', 'fusermount', 'gawk', 'gcc', 'gcloud', 'gcore', 'gdb', 'gem', 'genie', 'genisoimage', 'ghc', 'ghci', 'gimp', 'ginsh', 'git', 'grc', 'grep', 'gtester', 'gzip', 'hd', 'head', 'hexdump', 'highlight', 'hping3', 'iconv', 'iftop', 'install', 'ionice', 'ip', 'irb', 'ispell', 'jjs', 'joe', 'join', 'journalctl', 'jq', 'jrunscript', 'jtag', 'julia', 'knife', 'ksh', 'ksshell', 'ksu', 'kubectl', 'latex', 'latexmk', 'ld.so', 'ldconfig', 'less', 'lftp', 'links', 'ln', 'loginctl', 'logsave', 'look', 'lp', 'ltrace', 'lua', 'lualatex', 'luatex', 'lwp-download', 'lwp-request', 'mail', 'make', 'man', 'mawk', 'minicom', 'mksh', 'mksh-static', 'mlocate', 'more', 'mosquitto', 'mount', 'mount.nfs', 'msfconsole', 'msgattrib', 'msgcat', 'msgconv', 'msgfilter', 'msgmerge', 'msguniq', 'mtr', 'multitime', 'mv', 'mysql', 'nano', 'nasm', 'nawk', 'nc', 'ncdu', 'ncftp', 'neofetch', 'netfilter-persistent', 'newgrp', 'nft', 'nice', 'nl', 'nm', 'nmap', 'node', 'nohup', 'npm', 'nroff', 'nsenter', 'ntfs-3g', 'ntpdate', 'octave', 'od', 'openssl', 'openvpn', 'openvt', 'opkg', 'pandoc', 'paste', 'pax', 'pdb', 'pdflatex', 'pdftex', 'perf', 'perl', 'perlbug', 'pexec', 'pg', 'php', 'pic', 'pico', 'pidstat', 'ping', 'ping6', 'pip', 'pkexec', 'pkg', 'posh', 'pppd', 'pr', 'pry', 'psad', 'psftp', 'psql', 'ptx', 'puppet', 'pwsh', 'python', 'rake', 'rbash', 'rc', 'readelf', 'red', 'redcarpet', 'redis', 'restic', 'rev', 'rlogin', 'rlwrap', 'rpm', 'rpmdb', 'rpmquery', 'rpmverify', 'rsync', 'rtorrent', 'ruby', 'run-mailcap', 'run-parts', 'runscript', 'rview', 'rvim', 'sash', 'scanmem', 'scp', 'screen', 'script', 'scrot', 'sed', 'service', 'setarch', 'setfacl', 'setlock', 'sftp', 'sg', 'sh', 'shuf', 'slsh', 'smbclient', 'snap', 'socat', 'socket', 'soelim', 'softlimit', 'sort', 'split', 'sqlite3', 'sqlmap', 'ss', 'ssh', 'ssh-agent', 'ssh-keygen', 'ssh-keyscan', 'sshpass', 'start-stop-daemon', 'stdbuf', 'strace', 'strings', 'su', 'sysctl', 'systemctl', 'systemd-resolve', 'tac', 'tail', 'tar', 'task', 'taskset', 'tasksh', 'tbl', 'tclsh', 'tcpdump', 'tcsh', 'tdbtool', 'tee', 'telnet', 'terraform', 'tex', 'tftp', 'tic', 'time', 'timedatectl', 'timeout', 'tmate', 'tmux', 'top', 'torify', 'torsocks', 'traceroute6.iputils', 'troff', 'tshark', 'ul', 'umount', 'unexpand', 'uniq', 'unshare', 'unsquashfs', 'unzip', 'update-alternatives', 'uudecode', 'uuencode', 'vagrant', 'valgrind', 'varnishncsa', 'vi', 'view', 'vigr', 'vim', 'vimdiff', 'vipw', 'virsh', 'volatility', 'w3m', 'wall', 'watch', 'wc', 'wget', 'whiptail', 'whois', 'wireshark', 'wish', 'write', 'xargs', 'xdg-user-dir', 'xdotool', 'xelatex', 'xetex', 'xmodmap', 'xmore', 'xpad', 'xxd', 'xz', 'yarn', 'yash', 'yelp', 'yum', 'zathura', 'zip', 'zsh', 'zsoelim', 'zypper'] |
-| disable_ctrlaltdel | disable_ctrlaltdel description | bool | no | True |
-| disable_prelink | disable_prelink description | bool | no | True |
-| manage_users | manage_users description | bool | no | True |
-| delete_users | delete_users description | list of 'str' | no | ['games', 'gnats', 'irc', 'list', 'news', 'sync', 'uucp'] |
-| manage_limits | manage_limits description | bool | no | True |
-| limit_nofile_hard | limit_nofile_hard description | int | no | 1024 |
-| limit_nofile_soft | limit_nofile_soft description | int | no | 512 |
-| limit_nproc_hard | limit_nproc_hard description | int | no | 1024 |
-| limit_nproc_soft | limit_nproc_soft description | int | no | 512 |
-| manage_adduser_conf | manage_adduser_conf description | bool | no | True |
-| manage_postfix | manage_postfix description | bool | no | True |
-| manage_package_managers | manage_package_managers description | bool | no | True |
-| apt_hardening_options | apt_hardening_options description | list of 'str' | no |  |
-| manage_fstab | manage_fstab description | bool | no | True |
-| manage_mounts | manage_mounts description | bool | no | True |
-| hide_pid | hide_pid description | int | no | 2 |
-| process_group | process_group description | int | no | 0 |
-| automatic_updates.enabled | automatic_updates.enabled description | bool | no | True |
-| automatic_updates.only_security | automatic_updates.only_security description | bool | no | True |
-| automatic_updates.reboot | automatic_updates.reboot description | bool | no | False |
-| automatic_updates.reboot_from_time | automatic_updates.reboot_from_time description | str | no | 2:00 |
-| automatic_updates.reboot_time_margin_mins | automatic_updates.reboot_time_margin_mins description | int | no | 20 |
-| manage_netplan | manage_netplan description | bool | no | True |
-| manage_resolved | manage_resolved description | bool | no | True |
-| dns | dns description | list of 'str' | no | ['1.1.1.2', '9.9.9.9'] |
-| fallback_dns | fallback_dns description | list of 'str' | no | ['1.0.0.2', '149.112.112.112'] |
-| dnssec | dnssec description | str | no | allow-downgrade |
-| dns_over_tls | dns_over_tls description | str | no | opportunistic |
-| manage_root_access | manage_root_access description | bool | no | True |
-| reboot_ubuntu | reboot_ubuntu description | bool | no | False |
-| manage_motdnews | manage_motdnews description | bool | no | True |
-| system_upgrade | system_upgrade description | bool | no | True |
-| packages_blocklist | packages_blocklist description | list of 'str' | no | ['apport*', 'autofs', 'avahi*', 'avahi-*', 'beep', 'ftp', 'git', 'inetutils-telnet', 'pastebinit', 'popularity-contest', 'prelink', 'rpcbind', 'rsh*', 'rsync', 'talk*', 'telnet*', 'tftp*', 'tnftp', 'tuned', 'whoopsie', 'xinetd', 'yp-tools', 'ypbind'] |
-| packages_debian | packages_debian description | list of 'str' | no | ['acct', 'apparmor-profiles', 'apparmor-utils', 'apt-show-versions', 'audispd-plugins', 'auditd', 'cracklib-runtime', 'curl', 'debsums', 'gnupg2', 'libpam-apparmor', 'libpam-cap', 'libpam-modules', 'libpam-tmpdir', 'lsb-release', 'needrestart', 'openssh-server', 'postfix', 'rsyslog', 'sysstat', 'systemd-journal-remote', 'tcpd', 'vlock', 'wamerican'] |
-| packages_redhat | packages_redhat description | list of 'str' | no | ['audispd-plugins', 'audit', 'cracklib', 'curl', 'gnupg2', 'openssh-server', 'needrestart', 'postfix', 'psacct', 'python3-dnf-plugin-post-transaction-actions', 'rsyslog', 'rsyslog-gnutls', 'systemd-journal-remote', 'vlock', 'words'] |
-| packages_ubuntu | packages_ubuntu description | list of 'str' | no | ['fwupd', 'secureboot-db', 'snapd'] |
-| manage_logind | manage_logind description | bool | no | True |
-| logind.killuserprocesses | logind.killuserprocesses description | bool | no | True |
-| logind.killexcludeusers | logind.killexcludeusers description | list of 'str' | no | ['root'] |
-| logind.idleaction | logind.idleaction description | str | no | lock |
-| logind.idleactionsec | logind.idleactionsec description | str | no | 15min |
-| logind.removeipc | logind.removeipc description | bool | no | True |
-| disable_wireless | disable_wireless description | bool | no | False |
-| manage_auditd | manage_auditd description | bool | no | True |
+| ipv4_sysctl_settings.net.ipv4.conf.default.shared_media | If 1, indicates that the media is shared with different subnets, overrides secure_redirects on the default interface. | int | no | 1 |
+| ipv4_sysctl_settings.net.ipv4.icmp_echo_ignore_broadcasts | If 1, the system ignores ICMP echo requests sent to broadcast addresses. | int | no | 1 |
+| ipv4_sysctl_settings.net.ipv4.icmp_ignore_bogus_error_responses | If 1, the system ignores bogus ICMP responses. | int | no | 1 |
+| ipv4_sysctl_settings.net.ipv4.ip_forward | If 1, the system forwards IPv4 packets between interfaces. | int | no | 0 |
+| ipv4_sysctl_settings.net.ipv4.tcp_challenge_ack_limit | Set the TCP challenge ACK limit. | int | no | 2147483647 |
+| ipv4_sysctl_settings.net.ipv4.tcp_invalid_ratelimit | The maximal rate for sending duplicate acknowledgments in response to incoming TCP packets, in milliseconds. | int | no | 500 |
+| ipv4_sysctl_settings.net.ipv4.tcp_max_syn_backlog | The number of SYN requests the kernel can queue before it starts dropping them. | int | no | 20480 |
+| ipv4_sysctl_settings.net.ipv4.tcp_rfc1337 | If 1, the system will not accept TCP connections that are vulnerable to the TCP sequence number attack described in RFC 1337. | int | no | 1 |
+| ipv4_sysctl_settings.net.ipv4.tcp_syn_retries | Number of times initial SYNs for an active TCP connection attempt will be retransmitted. Should not be higher than 127. | int | no | 5 |
+| ipv4_sysctl_settings.net.ipv4.tcp_synack_retries | Number of times SYNACKs for a passive TCP connection attempt will be retransmitted. Should not be higher than 255. | int | no | 5 |
+| ipv4_sysctl_settings.net.ipv4.tcp_syncookies | If 1, the system will use TCP SYN cookies to protect against SYN flood attacks. | int | no | 1 |
+| ipv4_sysctl_settings.net.ipv4.tcp_timestamps | Enable timestamps as defined in RFC1323. | int | no | 1 |
+| manage_usbguard | If True, manage `USBGuard` installation and configuration. | bool | no | True |
+| usbguard_configuration_file | USBGuard configuration file path. | path | no | /etc/usbguard/usbguard-daemon.conf |
+| usbguard_rulefile | USBGuard rule file path. | path | no | /etc/usbguard/rules.conf |
+| usbguard_auditbackend | USBGuard audit events log backend. | str | no | LinuxAudit |
+| usbguard_auditfilepath | USBGuard audit events log file path. | path | no | /var/log/usbguard/usbguard-audit.log |
+| usbguard_authorizeddefault | Default authorized controller devices. | str | no | none |
+| usbguard_devicemanagerbackend | Which device manager backend implementation to use. | str | no | uevent |
+| usbguard_deviceruleswithport | Generate device specific rules including the 'via-port' attribute. | bool | no | False |
+| usbguard_hidepii | Hide personally identifiable information such as device serial numbers and hashes of descriptors from audit entries. | bool | no | False |
+| usbguard_implicitpolicytarget | How to treat USB devices that don’t match any rule in the policy. | str | no | block |
+| usbguard_inserteddevicepolicy | How to treat USB devices that are already connected after the daemon starts. | str | no | apply-policy |
+| usbguard_ipcaccesscontrolfiles | The files at this location will be interpreted by the daemon as IPC access control definition files. | path | no | /etc/usbguard/IPCAccessControl.d/ |
+| usbguard_ipcallowedgroups | A list of groupnames that the daemon will accept IPC connections from. | list of 'str' | no | ['plugdev', 'root', 'wheel'] |
+| usbguard_ipcallowedusers | A list of usernames that the daemon will accept IPC connections from. | list of 'str' | no | ['root'] |
+| usbguard_presentcontrollerpolicy | How to treat USB controller devices that are already connected when the daemon starts. | str | no | keep |
+| usbguard_presentdevicepolicy | How to treat USB devices that are already connected when the daemon starts. | str | no | apply-policy |
+| usbguard_restorecontrollerdevicestate | Control whether the daemon will try to restore the attribute values to the state before modification on shutdown. | bool | no | False |
+| manage_suid_sgid_permissions | If True, remove suid and sgid permissions on the binaries listed in suid_sgid_blocklist. | bool | no | True |
+| suid_sgid_blocklist | List of binaries to remove suid and sgid permissions from. | list of 'str' | no | ['7z', 'aa-exec', 'ab', 'agetty', 'alpine', 'ansible-playbook', 'ansible-test', 'aoss', 'apache2ctl', 'apt', 'apt-get', 'ar', 'aria2c', 'arj', 'arp', 'as', 'ascii-xfr', 'ascii85', 'ash', 'aspell', 'at', 'atobm', 'awk', 'aws', 'base32', 'base58', 'base64', 'basenc', 'basez', 'bash', 'batcat', 'bc', 'bconsole', 'bpftrace', 'bridge', 'bsd-write', 'bundle', 'bundler', 'busctl', 'busybox', 'byebug', 'bzip2', 'c89', 'c99', 'cabal', 'cancel', 'capsh', 'cat', 'cdist', 'certbot', 'chage', 'check_by_ssh', 'check_cups', 'check_log', 'check_memory', 'check_raid', 'check_ssl_cert', 'check_statusfile', 'chfn', 'chmod', 'choom', 'chown', 'chroot', 'chsh', 'clamscan', 'cmp', 'cobc', 'column', 'comm', 'composer', 'cowsay', 'cowthink', 'cp', 'cpan', 'cpio', 'cpulimit', 'crash', 'crontab', 'csh', 'csplit', 'csvtool', 'cupsfilter', 'curl', 'cut', 'dash', 'date', 'dc', 'dd', 'debugfs', 'dialog', 'diff', 'dig', 'distcc', 'dmesg', 'dmidecode', 'dmsetup', 'dnf', 'docker', 'dos2unix', 'dosbox', 'dotnet', 'dpkg', 'dstat', 'dvips', 'easy_install', 'eb', 'ed', 'efax', 'elvish', 'emacs', 'enscript', 'env', 'eqn', 'espeak', 'ex', 'exiftool', 'expand', 'expect', 'facter', 'file', 'find', 'finger', 'fish', 'flock', 'fmt', 'fold', 'fping', 'ftp', 'fusermount', 'gawk', 'gcc', 'gcloud', 'gcore', 'gdb', 'gem', 'genie', 'genisoimage', 'ghc', 'ghci', 'gimp', 'ginsh', 'git', 'grc', 'grep', 'gtester', 'gzip', 'hd', 'head', 'hexdump', 'highlight', 'hping3', 'iconv', 'iftop', 'install', 'ionice', 'ip', 'irb', 'ispell', 'jjs', 'joe', 'join', 'journalctl', 'jq', 'jrunscript', 'jtag', 'julia', 'knife', 'ksh', 'ksshell', 'ksu', 'kubectl', 'latex', 'latexmk', 'ld.so', 'ldconfig', 'less', 'lftp', 'links', 'ln', 'loginctl', 'logsave', 'look', 'lp', 'ltrace', 'lua', 'lualatex', 'luatex', 'lwp-download', 'lwp-request', 'mail', 'make', 'man', 'mawk', 'minicom', 'mksh', 'mksh-static', 'mlocate', 'more', 'mosquitto', 'mount', 'mount.nfs', 'msfconsole', 'msgattrib', 'msgcat', 'msgconv', 'msgfilter', 'msgmerge', 'msguniq', 'mtr', 'multitime', 'mv', 'mysql', 'nano', 'nasm', 'nawk', 'nc', 'ncdu', 'ncftp', 'neofetch', 'netfilter-persistent', 'newgrp', 'nft', 'nice', 'nl', 'nm', 'nmap', 'node', 'nohup', 'npm', 'nroff', 'nsenter', 'ntfs-3g', 'ntpdate', 'octave', 'od', 'openssl', 'openvpn', 'openvt', 'opkg', 'pandoc', 'paste', 'pax', 'pdb', 'pdflatex', 'pdftex', 'perf', 'perl', 'perlbug', 'pexec', 'pg', 'php', 'pic', 'pico', 'pidstat', 'ping', 'ping6', 'pip', 'pkexec', 'pkg', 'posh', 'pppd', 'pr', 'pry', 'psad', 'psftp', 'psql', 'ptx', 'puppet', 'pwsh', 'python', 'rake', 'rbash', 'rc', 'readelf', 'red', 'redcarpet', 'redis', 'restic', 'rev', 'rlogin', 'rlwrap', 'rpm', 'rpmdb', 'rpmquery', 'rpmverify', 'rsync', 'rtorrent', 'ruby', 'run-mailcap', 'run-parts', 'runscript', 'rview', 'rvim', 'sash', 'scanmem', 'scp', 'screen', 'script', 'scrot', 'sed', 'service', 'setarch', 'setfacl', 'setlock', 'sftp', 'sg', 'sh', 'shuf', 'slsh', 'smbclient', 'snap', 'socat', 'socket', 'soelim', 'softlimit', 'sort', 'split', 'sqlite3', 'sqlmap', 'ss', 'ssh', 'ssh-agent', 'ssh-keygen', 'ssh-keyscan', 'sshpass', 'start-stop-daemon', 'stdbuf', 'strace', 'strings', 'su', 'sysctl', 'systemctl', 'systemd-resolve', 'tac', 'tail', 'tar', 'task', 'taskset', 'tasksh', 'tbl', 'tclsh', 'tcpdump', 'tcsh', 'tdbtool', 'tee', 'telnet', 'terraform', 'tex', 'tftp', 'tic', 'time', 'timedatectl', 'timeout', 'tmate', 'tmux', 'top', 'torify', 'torsocks', 'traceroute6.iputils', 'troff', 'tshark', 'ul', 'umount', 'unexpand', 'uniq', 'unshare', 'unsquashfs', 'unzip', 'update-alternatives', 'uudecode', 'uuencode', 'vagrant', 'valgrind', 'varnishncsa', 'vi', 'view', 'vigr', 'vim', 'vimdiff', 'vipw', 'virsh', 'volatility', 'w3m', 'wall', 'watch', 'wc', 'wget', 'whiptail', 'whois', 'wireshark', 'wish', 'write', 'xargs', 'xdg-user-dir', 'xdotool', 'xelatex', 'xetex', 'xmodmap', 'xmore', 'xpad', 'xxd', 'xz', 'yarn', 'yash', 'yelp', 'yum', 'zathura', 'zip', 'zsh', 'zsoelim', 'zypper'] |
+| disable_ctrlaltdel | Disable the Ctrl+Alt+Del key combination to reboot the system. | bool | no | True |
+| disable_prelink | Disable prelinking of binaries. | bool | no | True |
+| manage_users | If True, then the listed users will be removed and any home directories will have the permissions set to 0750. | bool | no | True |
+| delete_users | List of users to delete. | list of 'str' | no | ['games', 'gnats', 'irc', 'list', 'news', 'sync', 'uucp'] |
+| manage_limits | If True, manage system limits. | bool | no | True |
+| limit_nofile_hard | Maximum number of open files, hard resource limit | int | no | 1024 |
+| limit_nofile_soft | Maximum number of open files, soft resource limit | int | no | 512 |
+| limit_nproc_hard | Maximum number of processes, hard resource limit | int | no | 1024 |
+| limit_nproc_soft | Maximum number of processes, soft resource limit | int | no | 512 |
+| manage_adduser_conf | If True, the role will configure `adduser` and `useradd` using the available templates. | bool | no | True |
+| manage_postfix | If True, then the Postfix mail server will be configured if `/etc/postfix/main.cf` exists. | bool | no | True |
+| manage_package_managers | If True, then `apt` and `dnf` will be configured to use for example GPG verification and clean requirements on remove. | bool | no | True |
+| apt_hardening_options | Options used to configure the APT suite of tools. | list of 'str' | no | [ 'Acquire::AllowDowngradeToInsecureRepositories "false";', 'Acquire::AllowInsecureRepositories "false";', 'Acquire::http::AllowRedirect "false";', 'APT::Get::AllowUnauthenticated "false";', 'APT::Get::AutomaticRemove "true";', 'APT::Install-Recommends "false";', 'APT::Install-Suggests "false";', 'APT::Periodic::AutocleanInterval "7";', 'APT::Sandbox::Seccomp "1";', 'Unattended-Upgrade::Remove-Unused-Dependencies "true";', 'Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";' ] |
+| manage_fstab | If True, then any floppy devices will be removed from `/etc/fstab`. | bool | no | True |
+| manage_mounts | If True, `/proc` will be mounted with the `nosuid,nodev,noexec,hidepid` options, `/dev/shm` will be mounted with the `nosuid,nodev,noexec` options and `/tmp` will be mounted as tmpfs with the `nosuid,nodev,noexec` options using the available template. | bool | no | True |
+| hide_pid | This option controls who can access the information in `/proc/pid` directories | int | no | 2 |
+| process_group | Specifies the ID of a group whose members are authorized to learn process information otherwise prohibited by hidepid. | int | no | 0 |
+| automatic_updates.enabled | If True, install and configure `dnf-automatic` or `unattended-upgrades`, depending on the distribution. | bool | no | True |
+| automatic_updates.only_security | If True, only security updates will be installed automatically. | bool | no | True |
+| automatic_updates.reboot | If True, it will reboot the system if needed. | bool | no | False |
+| automatic_updates.reboot_from_time | If system reboot is enabled, the variable sets the reboot time, with added random minutes from `reboot_time_margin_mins`. | str | no | 2:00 |
+| automatic_updates.reboot_time_margin_mins | Add minutes to the reboot time, set using `automatic_updates.reboot_from_time`. | int | no | 20 |
+| manage_netplan | If True, then any available netplan configuration files will have the permissions set to 0600. | bool | no | True |
+| manage_resolved | If True, then the systemd-resolved service will be installed and configured. | bool | no | True |
+| dns | A list of addresses to use as system DNS servers. | list of 'str' | no | ['1.1.1.2', '9.9.9.9'] |
+| fallback_dns | A list of addresses to use as the fallback DNS servers. | list of 'str' | no | ['1.0.0.2', '149.112.112.112'] |
+| dnssec | Set the DNSSEC mode for systemd-resolved. | str | no | allow-downgrade |
+| dns_over_tls | Set the DNS over TLS mode for systemd-resolved. | str | no | opportunistic |
+| manage_root_access | If True, then the root user will only be able to login using a console and the systemd debug-shell will be masked. | bool | no | True |
+| reboot_ubuntu | If True, an Ubuntu node will be rebooted if required. | bool | no | False |
+| manage_motdnews | If True, then `apt-news`, `motd-news` and Ubuntu Pro will be disabled. | bool | no | True |
+| system_upgrade | If True, then the system will be upgraded to the latest version using `apt` or `dnf`. | bool | no | True |
+| packages_blocklist | Packages that will be removed from the system if they are installed. | list of 'str' | no | ['apport*', 'autofs', 'avahi*', 'avahi-*', 'beep', 'ftp', 'git', 'inetutils-telnet', 'pastebinit', 'popularity-contest', 'prelink', 'rpcbind', 'rsh*', 'rsync', 'talk*', 'telnet*', 'tftp*', 'tnftp', 'tuned', 'whoopsie', 'xinetd', 'yp-tools', 'ypbind'] |
+| packages_debian | Packages to install on Debian-based systems. | list of 'str' | no | ['acct', 'apparmor-profiles', 'apparmor-utils', 'apt-show-versions', 'audispd-plugins', 'auditd', 'cracklib-runtime', 'curl', 'debsums', 'gnupg2', 'libpam-apparmor', 'libpam-cap', 'libpam-modules', 'libpam-tmpdir', 'lsb-release', 'needrestart', 'openssh-server', 'postfix', 'rsyslog', 'sysstat', 'systemd-journal-remote', 'tcpd', 'vlock', 'wamerican'] |
+| packages_redhat | Packages to install on Red Hat-based systems. | list of 'str' | no | ['audispd-plugins', 'audit', 'cracklib', 'curl', 'gnupg2', 'openssh-server', 'needrestart', 'postfix', 'psacct', 'python3-dnf-plugin-post-transaction-actions', 'rsyslog', 'rsyslog-gnutls', 'systemd-journal-remote', 'vlock', 'words'] |
+| packages_ubuntu | Packages to install on Ubuntu-based systems. | list of 'str' | no | ['fwupd', 'secureboot-db', 'snapd'] |
+| manage_logind | If True, then the systemd-logind service will be configured using the available template. | bool | no | True |
+| logind.killuserprocesses | Configures whether the processes of a user should be killed when the user logs out. | bool | no | True |
+| logind.killexcludeusers | A list of usernames that override the KillUserProcesses setting. | list of 'str' | no | ['root'] |
+| logind.idleaction | Configures the action to take when the system is idle. | str | no | lock |
+| logind.idleactionsec | Configures the delay after which the action configured in `IdleAction` is taken after the system is idle. | str | no | 15min |
+| logind.removeipc | Controls whether System V and POSIX IPC objects belonging to the user shall be removed when the user fully logs out. | bool | no | True |
+| disable_wireless | If True, turn off all wireless interfaces. | bool | no | False |
+| manage_auditd | If True, then the Linux Audit System will configured and enabled at boot using GRUB. | bool | no | True |
 | auditd_apply_audit_rules | auditd_apply_audit_rules description | bool | no | True |
 | auditd_action_mail_acct | auditd_action_mail_acct description | str | no | root |
 | auditd_admin_space_left_action | auditd_admin_space_left_action description | str | no | suspend |
@@ -421,6 +389,57 @@ Focused on using systemd services and options.
 | kernel_lockdown | kernel_lockdown description | str | no | False |
 | page_table_isolation | page_table_isolation description | bool | no | True |
 | slub_debugger_poisoning | slub_debugger_poisoning description | bool | no | False |
+
+#### Options for main > faillock
+
+|Option|Description|Type|Required|Default|
+|---|---|---|---|---|
+| admin_group | Members of the group will be handled the same as the root account | list of 'str' | no |  |
+| audit | Will log the user name into the system log if the user is not found | bool | no |  |
+| deny | Deny access if the number of login failures exceeds the value of this option. | int | no |  |
+| dir | Where the user files with the failure records are kept. | path | no |  |
+| even_deny_root | Root account can become locked as well as regular accounts. | bool | no |  |
+| fail_interval | The length of the interval during which the consecutive authentication failures must happen for the user account to lock out. | int | no |  |
+| local_users_only | Only track failed user authentications attempts for local users in /etc/passwd. | bool | no |  |
+| no_log_info | Don't log informative messages via syslog(3). | bool | no |  |
+| nodelay | Don't enforce a delay after authentication failures. | bool | no |  |
+| root_unlock_time | Allow access after N seconds to root account after the account is locked. | int | no |  |
+| silent | Don't print informative messages to the user. | bool | no |  |
+| unlock_time | Allow access after N seconds to user accounts after the account is locked. | int | no |  |
+
+#### Options for main > login.defs
+
+|Option|Description|Type|Required|Default|
+|---|---|---|---|---|
+| login_retries | Maximum number of login retries in case of bad password. | int | no |  |
+| login_timeout | Max time in seconds for login. | int | no |  |
+| pass_max_days | The maximum number of days a password may be used. If the password is older than this, a password change will be forced. | int | no |  |
+| pass_min_days | The minimum number of days allowed between password changes. If a user tries to change their password before this time, the change will be denied. | int | no |  |
+| pass_warn_age | The number of days before password expiration that the user will be warned about the impending expiration. | int | no |  |
+
+#### Options for main > pwquality
+
+|Option|Description|Type|Required|Default|
+|---|---|---|---|---|
+| dcredit | The maximum credit for having digits in the new password. | int | no |  |
+| dictcheck | Check whether the password matches a word in a dictionary. | bool | no |  |
+| dictpath | The path to the dictionary file used for password strength checking. | path | no |  |
+| difok | The number of characters that must be different between the new password and the old one. | int | no |  |
+| enforce_for_root | The module will return error on failed check even if the user changing the password is root. | bool | no |  |
+| enforcing | Reject the password if it fails the checks, otherwise only print the warning. | bool | no |  |
+| gecoscheck | Check whether the password matches a word in the GECOS field of the user account. | bool | no |  |
+| lcredit | The maximum credit for having lowercase letters in the new password. | int | no |  |
+| local_users_only | The module will not test the password quality for users that are not present in the `/etc/passwd` file. | bool | no |  |
+| maxclassrepeat | Reject passwords which contain more than N consecutive characters of the same class. | int | no |  |
+| maxrepeat | Reject passwords which contain more than N consecutive characters. | int | no |  |
+| maxsequence | Reject passwords which contain monotonic character sequences longer than N. | int | no |  |
+| minclass | The minimum number of character classes that must be present in the new password. | int | no |  |
+| minlen | The minimum length of the new password. | int | no |  |
+| ocredit | This is the maximum credit for having other characters in the new password. | int | no |  |
+| retry | The number of times the user is allowed to retry entering a password that passes the checks. | int | no |  |
+| ucredit | The maximum credit for having uppercase letters in the new password. | int | no |  |
+| usercheck | Check whether the password (with possible modifications) contains the user name in some form. | bool | no |  |
+| usersubstr | Check whether the password contains a substring of at least N length | int | no |  |
 
 #### Choices for main > rkhunter_mirrors_mode
 
@@ -573,6 +592,154 @@ Focused on using systemd services and options.
 | 0 |
 | 1 |
 | 2 |
+
+#### Choices for main > generic_sysctl_settings.kernel.unprivileged_bpf_disabled
+
+|Choice|
+|---|
+| 0 |
+| 1 |
+| 2 |
+
+#### Choices for main > generic_sysctl_settings.kernel.yama.ptrace_scope
+
+|Choice|
+|---|
+| 0 |
+| 1 |
+| 2 |
+| 3 |
+
+#### Choices for main > generic_sysctl_settings.net.core.bpf_jit_harden
+
+|Choice|
+|---|
+| 0 |
+| 1 |
+| 2 |
+
+#### Choices for main > ipv4_sysctl_settings.net.ipv4.conf.all.rp_filter
+
+|Choice|
+|---|
+| 0 |
+| 1 |
+| 2 |
+
+#### Choices for main > ipv4_sysctl_settings.net.ipv4.conf.default.rp_filter
+
+|Choice|
+|---|
+| 0 |
+| 1 |
+| 2 |
+
+#### Choices for main > ipv4_sysctl_settings.net.ipv4.tcp_timestamps
+
+|Choice|
+|---|
+| 0 |
+| 1 |
+| 2 |
+
+#### Choices for main > usbguard_auditbackend
+
+|Choice|
+|---|
+| FileAudit |
+| LinuxAudit |
+
+#### Choices for main > usbguard_authorizeddefault
+
+|Choice|
+|---|
+| all |
+| internal |
+| keep |
+| none |
+
+#### Choices for main > usbguard_devicemanagerbackend
+
+|Choice|
+|---|
+| uevent |
+| umockdev |
+
+#### Choices for main > usbguard_implicitpolicytarget
+
+|Choice|
+|---|
+| allow |
+| block |
+| reject |
+
+#### Choices for main > usbguard_inserteddevicepolicy
+
+|Choice|
+|---|
+| apply-policy |
+| block |
+| reject |
+
+#### Choices for main > usbguard_presentcontrollerpolicy
+
+|Choice|
+|---|
+| allow |
+| apply-policy |
+| block |
+| keep |
+| reject |
+
+#### Choices for main > usbguard_presentdevicepolicy
+
+|Choice|
+|---|
+| allow |
+| apply-policy |
+| block |
+| keep |
+| reject |
+
+#### Choices for main > hide_pid
+
+|Choice|
+|---|
+| 0 |
+| 1 |
+| 2 |
+
+#### Choices for main > dnssec
+
+|Choice|
+|---|
+| allow-downgrade |
+| False |
+| True |
+
+#### Choices for main > dns_over_tls
+
+|Choice|
+|---|
+| opportunistic |
+| False |
+| True |
+
+#### Choices for main > logind.idleaction
+
+|Choice|
+|---|
+| halt |
+| hibernate |
+| hybrid-sleep |
+| ignore |
+| kexec |
+| lock |
+| poweroff |
+| reboot |
+| suspend |
+| suspend-then-hibernate |
+| sleep |
 
 #### Choices for main > kernel_lockdown
 
