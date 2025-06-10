@@ -51,8 +51,6 @@
         crypto_policies_config: "{{ stat_crypto_policies_config.stat.exists }}"
 
 - name: Get PAM version
-  when:
-    - manage_pam
   block:
     - name: Gather package facts
       ansible.builtin.package_facts:
@@ -68,12 +66,12 @@
       ansible.builtin.set_fact:
         pam_version: "{{ ansible_facts.packages['pam'][0].version }}"
       when:
-        - ansible_os_family == "RedHat"
+        - ansible_os_family in ["RedHat", "Suse"]
         - "'pam' in ansible_facts.packages"
 
 - name: Set hashing algorithm for password (yescrypt|sha512)
   ansible.builtin.set_fact:
-    password_algorithm: "{{ 'yescrypt' if (pam_version is defined and pam_version is version('1.4.0', '>=')) else 'sha512' }}"
+    password_algorithm: "{{ 'yescrypt' if (pam_version is version('1.4.0', '>=')) else 'sha512' }}"
 
 - name: Update current facts
   ansible.builtin.setup:
