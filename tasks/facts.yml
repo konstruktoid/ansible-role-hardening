@@ -79,6 +79,3 @@
 
 - name: Update current facts
   ansible.builtin.setup:
-
-- name: Initialize service facts
-  ansible.builtin.service_facts:
