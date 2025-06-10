@@ -1511,11 +1511,10 @@
 
     - name: Verify kernel lockdown
       when:
-        - kernel_lockdown is defined
         - ansible_kernel is version("5.4", ">=")
         - ansible_virtualization_type not in ["container", "docker", "podman"]
       block:
-        - name: Set kernel lockdown mode as fact
+        - name: Set kernel lockdown mode if defined
           ansible.builtin.set_fact:
             kernel_lockdown: >-
               {% if kernel_lockdown == "integrity" %}
@@ -1524,9 +1523,16 @@
                 confidentiality
               {% elif kernel_lockdown %}
                 integrity
-              {% else %}
-                none
               {% endif %}
+          when:
+            - kernel_lockdown is defined
+            - kernel_lockdown is not false
+
+        - name: Set kernel lockdown mode if not defined or false
+          ansible.builtin.set_fact:
+            kernel_lockdown: none
+          when:
+            - kernel_lockdown is not defined or kernel_lockdown is false
 
         - name: Verify kernel lockdown
           become: true

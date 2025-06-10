@@ -21,7 +21,7 @@ provisioner:
     host_vars:
       bookworm:
         ansible_python_interpreter: /usr/bin/python3
-        kernel_lockdown: integrity
+        manage_kernel: true
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:

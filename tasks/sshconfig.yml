@@ -142,6 +142,7 @@
         type: rsa
         size: "{{ sshd_required_rsa_size }}"
         path: /etc/ssh/ssh_host_rsa_key
+
         mode: "{{ sshd_host_keys_mode }}"
         owner: "{{ sshd_host_keys_owner }}"
         group: "{{ 'ssh_keys' if (ansible_os_family == 'RedHat' and ansible_distribution_major_version < '10') else sshd_host_keys_group }}"
