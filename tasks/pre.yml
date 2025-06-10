@@ -57,35 +57,6 @@
       when:
         - ansible_python.version.major >= 3
 
-- name: SUSE family pre tasks
-  become: true
-  when:
-    - ansible_os_family == "Suse"
-  block:
-    - name: Install python2-rpm
-      community.general.zypper:
-        name: python2-rpm
-        state: present
-        update_cache: true
-      when:
-        - ansible_python.version.major <= 2
-
-    - name: Install python3-rpm
-      community.general.zypper:
-        name: python3-rpm
-        state: present
-        update_cache: true
-      when:
-        - ansible_python.version.major >= 3
-
-    - name: Install python3-packaging
-      community.general.zypper:
-        name: python3-packaging
-        state: present
-        update_cache: true
-      when:
-        - ansible_python.version.major >= 3
-
 - name: Install python3-passlib
   become: true
   ansible.builtin.package:

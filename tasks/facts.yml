@@ -52,6 +52,15 @@
 
 - name: Get PAM version
   block:
+    - name: Install python3-rpm for SUSE
+      become: true
+      when:
+        - ansible_os_family in ["RedHat", "Suse"]
+        - ansible_python.version.major >= 3
+      ansible.builtin.package:
+        name: python3-rpm
+        state: present
+
     - name: Gather package facts
       ansible.builtin.package_facts:
 
