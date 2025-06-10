@@ -52,7 +52,7 @@
 
 - name: Get PAM version
   block:
-    - name: Install python3-rpm for SUSE
+    - name: Install python3-rpm for RPM-based distros
       become: true
       when:
         - ansible_os_family in ["RedHat", "Suse"]
