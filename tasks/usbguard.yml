@@ -27,9 +27,7 @@
 
     - name: Suse family USBGuard package installation
       community.general.zypper:
-        name:
-          - usbguard
-          - usbguard-tools
+        name: usbguard
         state: present
       when:
         - ansible_os_family == "Suse"
