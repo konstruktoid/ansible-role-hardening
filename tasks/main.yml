@@ -185,6 +185,8 @@
 - name: Configure needrestart, install and remove various packages
   ansible.builtin.import_tasks:
     file: packages.yml
+  when:
+    - manage_packages
   tags:
     - package_installation
 
@@ -199,6 +201,8 @@
 - name: Configure PAM
   ansible.builtin.import_tasks:
     file: password.yml
+  when:
+    - manage_pam
   tags:
     - cracklib
     - crypto_policy

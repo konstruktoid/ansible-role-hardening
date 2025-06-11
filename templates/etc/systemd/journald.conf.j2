@@ -5,3 +5,6 @@
 Compress={{ 'yes' if journald_compress else 'no' }}
 ForwardToSyslog={{ 'yes' if journald_forwardtosyslog else 'no' }}
 Storage={{ journald_storage }}
+{% if journald_system_max_use is defined %}
+SystemMaxUse={{ journald_system_max_use }}
+{% endif %}
