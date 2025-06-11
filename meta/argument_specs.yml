@@ -9,7 +9,7 @@ argument_specs:
       - konstruktoid
     options:
       adduser_conf_template:
-        description: "/etc/adduser.conf template location."
+        description: "adduser.conf template location."
         type: "path"
         default: "etc/adduser.conf.j2"
       common_account_template:
@@ -206,14 +206,14 @@ argument_specs:
           unlock_time:
             description: "Allow access after N seconds to user accounts after the account is locked."
             type: "int"
-      login.defs:
+      login_defs:
         type: "dict"
         default:
-          login_retries: 5
-          login_timeout: 60
-          pass_max_days: 60
-          pass_min_days: 1
-          pass_warn_age: 7
+          - login_retries: 5
+          - login_timeout: 60
+          - pass_max_days: 60
+          - pass_min_days: 1
+          - pass_warn_age: 7
         description: "login.defs configuration options."
         options:
           login_retries:
@@ -239,25 +239,25 @@ argument_specs:
       pwquality:
         type: "dict"
         default:
-          dcredit: -1
-          dictcheck: true
-          dictpath: ""
-          difok: 8
-          enforce_for_root: true
-          enforcing: true
-          gecoscheck: true
-          lcredit: -1
-          local_users_only: true
-          maxclassrepeat: 4
-          maxrepeat: 3
-          maxsequence: 3
-          minclass: 4
-          minlen: 15
-          ocredit: -1
-          retry: 3
-          ucredit: -1
-          usercheck: true
-          usersubstr: 3
+          - dcredit: -1
+          - dictcheck: true
+          - dictpath: ""
+          - difok: 8
+          - enforce_for_root: true
+          - enforcing: true
+          - gecoscheck: true
+          - lcredit: -1
+          - local_users_only: true
+          - maxclassrepeat: 4
+          - maxrepeat: 3
+          - maxsequence: 3
+          - minclass: 4
+          - minlen: 15
+          - ocredit: -1
+          - retry: 3
+          - ucredit: -1
+          - usercheck: true
+          - usersubstr: 3
         description: "pwquality configuration options."
         options:
           dcredit:
@@ -768,86 +768,104 @@ argument_specs:
         description: "If 0, the system denies IPv6 router solicitations."
         type: "int"
         default: 0
-      ipv6_disable_sysctl_settings.net.ipv6.conf.all.disable_ipv6:
-        description: "If 1, the system disables IPv6 on all interfaces."
-        type: "int"
-        default: 1
-      ipv6_disable_sysctl_settings.net.ipv6.conf.default.disable_ipv6:
-        description: "If 1, the system disables IPv6 on the default interface."
-        type: "int"
-        default: 1
-      ipv6_sysctl_settings.net.ipv6.conf.all.accept_ra:
-        description: "If 0, the system does not accept IPv6 router advertisements."
-        type: "int"
-        default: 0
-      ipv6_sysctl_settings.net.ipv6.conf.all.accept_redirects:
-        description: "If 0, the system does not accept IPv6 redirects."
-        type: "int"
-        default: 0
-      ipv6_sysctl_settings.net.ipv6.conf.all.accept_source_route:
-        description: "If 0, deny forwarding of IPv6 Source Routed Packets"
-        type: "int"
-        default: 0
-      ipv6_sysctl_settings.net.ipv6.conf.all.forwarding:
-        description: "If 0, denies IPv6 forwarding."
-        type: "int"
-        default: 0
-      ipv6_sysctl_settings.net.ipv6.conf.all.use_tempaddr:
-        description: "Preference for IPv6 Privacy Extensions on all interfaces."
-        type: "int"
-        default: 2
-        choices:
-          - 0
-          - 1
-          - 2
-      ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra:
-        description: "If 0, the system does not accept IPv6 router advertisements on the default interface."
-        type: "int"
-        default: 0
-      ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_defrtr:
-        description: "If 0, the system does not accept default routers from IPv6 router advertisements on the default interface."
-        type: "int"
-        default: 0
-      ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_pinfo:
-        description: "If 0, the system does not accept prefix information from IPv6 router advertisements on the default interface."
-        type: "int"
-        default: 0
-      ipv6_sysctl_settings.net.ipv6.conf.default.accept_ra_rtr_pref:
-        description: "If 0, the system does not accept router preference from IPv6 router advertisments on the default interface."
-        type: "int"
-        default: 0
-      ipv6_sysctl_settings.net.ipv6.conf.default.accept_redirects:
-        description: "If 0, the system does not accept IPv6 redirects on the default interface."
-        type: "int"
-        default: 0
-      ipv6_sysctl_settings.net.ipv6.conf.default.accept_source_route:
-        description: "If 0, deny forwarding of IPv6 Source Routed Packets on the default interface."
-        type: "int"
-        default: 0
-      ipv6_sysctl_settings.net.ipv6.conf.default.autoconf:
-        description: "If 0, the system doesn't autoconfigure addresses using Prefix Information in Router Advertisements."
-        type: "int"
-        default: 0
-      ipv6_sysctl_settings.net.ipv6.conf.default.dad_transmits:
-        description: "The amount of Duplicate Address Detection probes to send."
-        type: "int"
-        default: 0
-      ipv6_sysctl_settings.net.ipv6.conf.default.max_addresses:
-        description: "Maximum number of autoconfigured IPv6 addresses per interface."
-        type: "int"
-        default: 1
-      ipv6_sysctl_settings.net.ipv6.conf.default.router_solicitations:
-        description: "Number of Router Solicitations to send until assuming no routers are present."
-        type: "int"
-        default: 0
-      ipv6_sysctl_settings.net.ipv6.conf.default.use_tempaddr:
-        description: "Preference for IPv6 Privacy Extensions on the default interface."
-        type: "int"
-        default: 2
-        choices:
-          - 0
-          - 1
-          - 2
+      ipv6_disable_sysctl_settings:
+        type: "dict"
+        default:
+          - net.ipv6.conf.all.disable_ipv6: 1
+          - net.ipv6.conf.default.disable_ipv6: 1
+        description: "IPv6 sysctl settings to disable IPv6."
+        options:
+          net.ipv6.conf.all.disable_ipv6:
+            description: "If 1, the system disables IPv6 on all interfaces."
+            type: "int"
+          net.ipv6.conf.default.disable_ipv6:
+            description: "If 1, the system disables IPv6 on the default interface."
+            type: "int"
+      ipv6_sysctl_settings:
+        type: "dict"
+        default:
+          - net.ipv6.conf.all.accept_ra: 0
+          - net.ipv6.conf.all.accept_redirects: 0
+          - net.ipv6.conf.all.accept_source_route: 0
+          - net.ipv6.conf.all.forwarding: 0
+          - net.ipv6.conf.all.use_tempaddr: 2
+          - net.ipv6.conf.default.accept_ra: 0
+          - net.ipv6.conf.default.accept_ra_defrtr: 0
+          - net.ipv6.conf.default.accept_ra_pinfo: 0
+          - net.ipv6.conf.default.accept_ra_rtr_pref: 0
+          - net.ipv6.conf.default.accept_redirects: 0
+          - net.ipv6.conf.default.accept_source_route: 0
+          - net.ipv6.conf.default.autoconf: 0
+          - net.ipv6.conf.default.dad_transmits: 0
+          - net.ipv6.conf.default.max_addresses: 1
+          - net.ipv6.conf.default.router_solicitations: 0
+          - net.ipv6.conf.default.use_tempaddr: 2
+        description: "IPv6 sysctl settings."
+        options:
+          net.ipv6.conf.all.accept_ra:
+            description: "If 0, the system does not accept IPv6 router advertisements."
+            type: "int"
+          net.ipv6.conf.all.accept_redirects:
+            description: "If 0, the system does not accept IPv6 redirects."
+            type: "int"
+          net.ipv6.conf.all.accept_source_route:
+            description: "If 0, deny forwarding of IPv6 Source Routed Packets"
+            type: "int"
+          net.ipv6.conf.all.forwarding:
+            description: "If 0, denies IPv6 forwarding."
+            type: "int"
+          net.ipv6.conf.all.use_tempaddr:
+            description: "Preference for IPv6 Privacy Extensions on all interfaces."
+            type: "int"
+            default: 2
+            choices:
+              - 0
+              - 1
+              - 2
+          net.ipv6.conf.default.accept_ra:
+            description: "If 0, the system does not accept IPv6 router advertisements on the default interface."
+            type: "int"
+          net.ipv6.conf.default.accept_ra_defrtr:
+            description: "If 0, the system does not accept default routers from IPv6 router advertisements on the default interface."
+            type: "int"
+          net.ipv6.conf.default.accept_ra_pinfo:
+            description: "If 0, the system does not accept prefix information from IPv6 router advertisements on the default interface."
+            type: "int"
+          net.ipv6.conf.default.accept_ra_rtr_pref:
+            description: "If 0, the system does not accept router preference from IPv6 router advertisments on the default interface."
+            type: "int"
+          net.ipv6.conf.default.accept_redirects:
+            description: "If 0, the system does not accept IPv6 redirects on the default interface."
+            type: "int"
+            default: 0
+          net.ipv6.conf.default.accept_source_route:
+            description: "If 0, deny forwarding of IPv6 Source Routed Packets on the default interface."
+            type: "int"
+            default: 0
+          net.ipv6.conf.default.autoconf:
+            description: "If 0, the system doesn't autoconfigure addresses using Prefix Information in Router Advertisements."
+            type: "int"
+            default: 0
+          net.ipv6.conf.default.dad_transmits:
+            description: "The amount of Duplicate Address Detection probes to send."
+            type: "int"
+            default: 0
+          net.ipv6.conf.default.max_addresses:
+            description: "Maximum number of autoconfigured IPv6 addresses per interface."
+            type: "int"
+            default: 1
+          net.ipv6.conf.default.router_solicitations:
+            description: "Number of Router Solicitations to send until assuming no routers are present."
+            type: "int"
+            default: 0
+          net.ipv6.conf.default.use_tempaddr:
+            description: "Preference for IPv6 Privacy Extensions on the default interface."
+            type: "int"
+            default: 2
+            choices:
+              - 0
+              - 1
+              - 2
       manage_apparmor:
         description: "If True, manage C(AppArmor) installation and configuration."
         type: "bool"
@@ -923,113 +941,133 @@ argument_specs:
         description: "If 0, restrict loading TTY line disciplines to the CAP_SYS_MODULE capability."
         type: "int"
         default: 0
-      apparmor_sysctl_settings.kernel.apparmor_display_secid_mode:
-        description: "If 1, AppArmor will provide a human-readable mapping of internal security IDs."
-        type: "int"
-        default: 0
-      apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_io_uring:
-        description: "If 1, restrict unprivileged io_uring operations."
-        type: "int"
-        default: 0
-      apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_unconfined:
-        description: "If 1, enforces extra security restrictions on unprivileged unconfined processes."
-        type: "int"
-        default: 1
-      apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns:
-        description: "If 1, restricts unprivileged user namespaces."
-        type: "int"
-        default: 1
-      apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns_complain:
-        description: "If 1, unprivileged user namespaces will be put into complain mode."
-        type: "int"
-        default: 0
-      apparmor_sysctl_settings.kernel.apparmor_restrict_unprivileged_userns_force:
-        description: "If 1, all confined applications will have the user namespace mediation enforced."
-        type: "int"
-        default: 0
-      apparmor_sysctl_settings.kernel.unprivileged_userns_apparmor_policy:
-        description: "If 1, unprivileged user namespaces will be restricted to the AppArmor policy."
-        type: "int"
-        default: 1
-      conntrack_sysctl_settings.net.netfilter.nf_conntrack_max:
-        description: "The maximum number of connections that the system’s connection tracking table can hold at any time."
-        type: "int"
-        default: 2000000
-      conntrack_sysctl_settings.net.netfilter.nf_conntrack_tcp_loose:
-        description: "If 0, the system will not allow TCP connections to be established without a SYN packet."
-        type: "int"
-        default: 0
-      generic_sysctl_settings.fs.protected_fifos:
+      apparmor_sysctl_settings:
+        type: "dict"
+        default:
+          - kernel.apparmor_diplay_secid_mode: 0
+          - kernel.apparmor_restrict_unprivileged_io_uring: 0
+          - kernel.apparmor_restrict_unprivileged_unconfined: 1
+          - kernel.apparmor_restrict_unprivileged_userns: 1
+          - kernel.apparmor_restrict_unprivileged_userns_complain: 0
+          - kernel.apparmor_restrict_unprivileged_userns_force: 0
+          - kernel.unprivileged_userns_apparmor_policy: 1
+        description: "AppArmor sysctl settings."
+        options:
+          kernel.apparmor_display_secid_mode:
+            description: "If 1, AppArmor will provide a human-readable mapping of internal security IDs."
+            type: "int"
+          kernel.apparmor_restrict_unprivileged_io_uring:
+            description: "If 1, restrict unprivileged io_uring operations."
+            type: "int"
+          kernel.apparmor_restrict_unprivileged_unconfined:
+            description: "If 1, enforces extra security restrictions on unprivileged unconfined processes."
+            type: "int"
+          kernel.apparmor_restrict_unprivileged_userns:
+            description: "If 1, restricts unprivileged user namespaces."
+            type: "int"
+          kernel.apparmor_restrict_unprivileged_userns_complain:
+            description: "If 1, unprivileged user namespaces will be put into complain mode."
+            type: "int"
+          kernel.apparmor_restrict_unprivileged_userns_force:
+            description: "If 1, all confined applications will have the user namespace mediation enforced."
+            type: "int"
+          kernel.unprivileged_userns_apparmor_policy:
+            description: "If 1, unprivileged user namespaces will be restricted to the AppArmor policy."
+            type: "int"
+      conntrack_sysctl_settings:
+        type: "dict"
+        default:
+          - net.netfilter.nf_conntrack_max: 2000000
+          - net.netfilter.nf_conntrack_tcp_loose: 0
+        description: "Connection tracking sysctl settings."
+        options:
+          net.netfilter.nf_conntrack_max:
+            description: "The maximum number of connections that the system’s connection tracking table can hold at any time."
+            type: "int"
+          net.netfilter.nf_conntrack_tcp_loose:
+            description: "If 0, the system will not allow TCP connections to be established without a SYN packet."
+            type: "int"
+      generic_sysctl_settings:
+        type: "dict"
+        default:
+          - fs.protected_fifos: 2
+          - fs.protected_regular: 2
+          - fs.protected_hardlinks: 1
+          - fs.protected_symlinks: 1
+          - fs.suid_dumpable: 0
+          - kernel.core_pattern: "|/bin/false"
+          - kernel.core_uses_pid: 1
+          - kernel.dmesg_restrict: 1
+          - kernel.kptr_restrict: 2
+          - kernel.panic: 60
+          - kernel.panic_on_oops: 1
+          - kernel.perf_event_paranoid: 2
+          - kernel.randomize_va_space: 2
+          - kernel.sysrq: 0
+          - kernel.unprivileged_bpf_disabled: 1
+          - kernel.yama.ptrace_scope: 2
+          - net.core.bpf_jit_harden: 2
+          - user.max_user_namespaces: 62967
+      fs.protected_fifos:
         description: "Avoid unintentional writes to an attacker-controlled FIFO, where a program expected to create a regular file."
         type: "int"
-        default: 2
         choices:
           - 0
           - 1
           - 2
-      generic_sysctl_settings.fs.protected_regular:
+      fs.protected_regular:
         description: "Avoid unintentional writes to an attacker-controlled regular file, where a program expected to create one."
         type: "int"
-        default: 2
         choices:
           - 0
           - 1
           - 2
-      generic_sysctl_settings.fs.protected_hardlinks:
+      fs.protected_hardlinks:
         description: "Restrict hard links to files that are not owned by the user."
         type: "int"
-        default: 1
         choices:
           - 0
           - 1
-      generic_sysctl_settings.fs.protected_symlinks:
+      fs.protected_symlinks:
         description: "Restrict symbolic links to files that are not owned by the user."
         type: "int"
-        default: 1
         choices:
           - 0
           - 1
-      generic_sysctl_settings.fs.suid_dumpable:
+      fs.suid_dumpable:
         description: "Set the core dump mode for setuid or otherwise protected/tainted binaries."
         type: "int"
-        default: 0
         choices:
           - 0
           - 1
           - 2
-      generic_sysctl_settings.kernel.core_pattern:
+      kernel.core_pattern:
         description: "Specify a core dumpfile pattern name."
         type: "str"
-        default: "|/bin/false"
-      generic_sysctl_settings.kernel.core_uses_pid:
+      kernel.core_uses_pid:
         description: "If 1, the core dump file name will include the PID of the process that created it."
         type: "int"
-        default: 1
-      generic_sysctl_settings.kernel.dmesg_restrict:
+      kernel.dmesg_restrict:
         description: "If 1, unprivileged users are prevented from using dmesg to view messages from the kernel’s log buffer."
         type: "int"
-        default: 1
-      generic_sysctl_settings.kernel.kptr_restrict:
+      kernel.kptr_restrict:
         description: "Whether restrictions are placed on exposing kernel addresses via /proc and other interfaces."
         type: "int"
-        default: 2
         choices:
           - 0
           - 1
           - 2
-      generic_sysctl_settings.kernel.panic:
+      kernel.panic:
         description: "The value in this file determines the behaviour of the kernel on a panic."
         type: "int"
-        default: 60
         choices:
           - -1
           - 0
           - 60
-      generic_sysctl_settings.kernel.panic_on_oops:
+      kernel.panic_on_oops:
         description: "If 1, Panic immediately. If the panic sysctl is also non-zero then the machine will be rebooted."
         type: "int"
-        default: 1
-      generic_sysctl_settings.kernel.perf_event_paranoid:
+      kernel.perf_event_paranoid:
         description: "Controls use of the performance events system by unprivileged users."
         type: "int"
         default: 2
@@ -1038,27 +1076,24 @@ argument_specs:
           - 0
           - 1
           - 2
-      generic_sysctl_settings.kernel.randomize_va_space:
+      kernel.randomize_va_space:
         description: "Select the type of process address space randomization that is used in the system."
         type: "int"
-        default: "2"
         choices:
           - 0
           - 1
           - 2
-      generic_sysctl_settings.kernel.sysrq:
+      kernel.sysrq:
         description: "If 1, the magic SysRq key is enabled."
         type: "int"
-        default: 0
-      generic_sysctl_settings.kernel.unprivileged_bpf_disabled:
+      kernel.unprivileged_bpf_disabled:
         description: "Controls whether BPF programs are disabled for unprivileged users."
         type: "int"
-        default: 1
         choices:
           - 0
           - 1
           - 2
-      generic_sysctl_settings.kernel.yama.ptrace_scope:
+      kernel.yama.ptrace_scope:
         description: "Select the what processes can be debugged with ptrace."
         type: "int"
         default: 2
@@ -1067,131 +1102,134 @@ argument_specs:
           - 1
           - 2
           - 3
-      generic_sysctl_settings.net.core.bpf_jit_harden:
+      net.core.bpf_jit_harden:
         description: "Level of hardening applied to the BPF JIT compiler."
         type: "int"
-        default: 2
         choices:
           - 0
           - 1
           - 2
-      generic_sysctl_settings.user.max_user_namespaces:
+      user.max_user_namespaces:
         description: "The maximum number of user namespaces that can be created by a user."
         type: "int"
-        default: 62967
-      ipv4_sysctl_settings.net.ipv4.conf.all.accept_redirects:
-        description: "If 0, the system does not accept IPv4 redirects."
-        type: "int"
-        default: 0
-      ipv4_sysctl_settings.net.ipv4.conf.all.accept_source_route:
-        description: "If 0, deny IPv4 source routing."
-        type: "int"
-        default: 0
-      ipv4_sysctl_settings.net.ipv4.conf.all.log_martians:
-        description: "If 1, log packets with un-routable source addresses to the kernel log."
-        type: "int"
-        default: 1
-      ipv4_sysctl_settings.net.ipv4.conf.all.rp_filter:
-        description: "Set the reverse path filtering mode for all interfaces."
-        type: "int"
-        default: 1
-        choices:
-          - 0
-          - 1
-          - 2
-      ipv4_sysctl_settings.net.ipv4.conf.all.secure_redirects:
-        description: "If 1, accept ICMP redirect messages only to gateways listed in the interface's current gateway list. Overridden by shared_media."
-        type: "int"
-        default: 1
-      ipv4_sysctl_settings.net.ipv4.conf.all.send_redirects:
-        description: "If 0, the system does not send ICMP redirect messages."
-        type: "int"
-        default: 0
-      ipv4_sysctl_settings.net.ipv4.conf.all.shared_media:
-        description: "If 1, indicates that the media is shared with different subnets, overrides secure_redirects."
-        type: "int"
-        default: 1
-      ipv4_sysctl_settings.net.ipv4.conf.default.accept_redirects:
-        description: "If 0, the system does not accept IPv4 redirects on the default interface."
-        type: "int"
-        default: 0
-      ipv4_sysctl_settings.net.ipv4.conf.default.accept_source_route:
-        description: "If 0, deny IPv4 source routing on the default interface."
-        type: "int"
-        default: 0
-      ipv4_sysctl_settings.net.ipv4.conf.default.log_martians:
-        description: "If 1, log packets with un-routable source addresses to the kernel log on the default interface."
-        type: "int"
-        default: 1
-      ipv4_sysctl_settings.net.ipv4.conf.default.rp_filter:
-        description: "Set the reverse path filtering mode for the default interface."
-        type: "int"
-        default: 1
-        choices:
-          - 0
-          - 1
-          - 2
-      ipv4_sysctl_settings.net.ipv4.conf.default.secure_redirects:
-        description: "If 1, accept ICMP redirect messages only to gateways listed in the interface's current gateway list on the default interface. Overridden by
-          shared_media."
-        type: "int"
-        default: 1
-      ipv4_sysctl_settings.net.ipv4.conf.default.send_redirects:
-        description: "ipv4_sysctl_settings.net.ipv4.conf.default.send_redirects description"
-        type: "int"
-        default: "0"
-      ipv4_sysctl_settings.net.ipv4.conf.default.shared_media:
-        description: "If 1, indicates that the media is shared with different subnets, overrides secure_redirects on the default interface."
-        type: "int"
-        default: 1
-      ipv4_sysctl_settings.net.ipv4.icmp_echo_ignore_broadcasts:
-        description: "If 1, the system ignores ICMP echo requests sent to broadcast addresses."
-        type: "int"
-        default: 1
-      ipv4_sysctl_settings.net.ipv4.icmp_ignore_bogus_error_responses:
-        description: "If 1, the system ignores bogus ICMP responses."
-        type: "int"
-        default: 1
-      ipv4_sysctl_settings.net.ipv4.ip_forward:
-        description: "If 1, the system forwards IPv4 packets between interfaces."
-        type: "int"
-        default: 0
-      ipv4_sysctl_settings.net.ipv4.tcp_challenge_ack_limit:
-        description: "Set the TCP challenge ACK limit."
-        type: "int"
-        default: 2147483647
-      ipv4_sysctl_settings.net.ipv4.tcp_invalid_ratelimit:
-        description: "The maximal rate for sending duplicate acknowledgments in response to incoming TCP packets, in milliseconds."
-        type: "int"
-        default: 500
-      ipv4_sysctl_settings.net.ipv4.tcp_max_syn_backlog:
-        description: "The number of SYN requests the kernel can queue before it starts dropping them."
-        type: "int"
-        default: 20480
-      ipv4_sysctl_settings.net.ipv4.tcp_rfc1337:
-        description: "If 1, the system will not accept TCP connections that are vulnerable to the TCP sequence number attack described in RFC 1337."
-        type: "int"
-        default: 1
-      ipv4_sysctl_settings.net.ipv4.tcp_syn_retries:
-        description: "Number of times initial SYNs for an active TCP connection attempt will be retransmitted. Should not be higher than 127."
-        type: "int"
-        default: 5
-      ipv4_sysctl_settings.net.ipv4.tcp_synack_retries:
-        description: "Number of times SYNACKs for a passive TCP connection attempt will be retransmitted. Should not be higher than 255."
-        type: "int"
-        default: 5
-      ipv4_sysctl_settings.net.ipv4.tcp_syncookies:
-        description: "If 1, the system will use TCP SYN cookies to protect against SYN flood attacks."
-        type: "int"
-        default: 1
-      ipv4_sysctl_settings.net.ipv4.tcp_timestamps:
-        description: "Enable timestamps as defined in RFC1323."
-        type: "int"
-        default: 1
-        choices:
-          - 0
-          - 1
-          - 2
+      ipv4_sysctl_settings:
+        type: "dict"
+        default:
+          - net.ipv4.conf.all.accept_redirects: 0
+          - net.ipv4.conf.all.accept_source_route: 0
+          - net.ipv4.conf.all.log_martians: 1
+          - net.ipv4.conf.all.rp_filter: 1
+          - net.ipv4.conf.all.secure_redirects: 1
+          - net.ipv4.conf.all.send_redirects: 0
+          - net.ipv4.conf.all.shared_media: 1
+          - net.ipv4.conf.default.accept_redirects: 0
+          - net.ipv4.conf.default.accept_source_route: 0
+          - net.ipv4.conf.default.log_martians: 1
+          - net.ipv4.conf.default.rp_filter: 1
+          - net.ipv4.conf.default.secure_redirects: 1
+          - net.ipv4.conf.default.send_redirects: 0
+          - net.ipv4.conf.default.shared_media: 1
+          - net.ipv4.icmp_echo_ignore_broadcasts: 1
+          - net.ipv4.icmp_ignore_bogus_error_responses: 1
+          - net.ipv4.ip_forward: 0
+          - net.ipv4.tcp_challenge_ack_limit: 2147483647
+          - net.ipv4.tcp_invalid_ratelimit: 500
+          - net.ipv4.tcp_max_syn_backlog: 20480
+          - net.ipv4.tcp_rfc1337: 1
+          - net.ipv4.tcp_syn_retries: 5
+          - net.ipv4.tcp_synack_retries: 5
+          - net.ipv4.tcp_syncookies: 1
+          - net.ipv4.tcp_timestamps: 1
+        description: "IPv4 sysctl settings."
+        options:
+          net.ipv4.conf.all.accept_redirects:
+            description: "If 0, the system does not accept IPv4 redirects."
+            type: "int"
+          net.ipv4.conf.all.accept_source_route:
+            description: "If 0, deny IPv4 source routing."
+            type: "int"
+          net.ipv4.conf.all.log_martians:
+            description: "If 1, log packets with un-routable source addresses to the kernel log."
+            type: "int"
+          net.ipv4.conf.all.rp_filter:
+            description: "Set the reverse path filtering mode for all interfaces."
+            type: "int"
+            choices:
+              - 0
+              - 1
+              - 2
+          net.ipv4.conf.all.secure_redirects:
+            description: "If 1, accept ICMP redirect messages only to gateways listed in the interface's current gateway list. Overridden by shared_media."
+            type: "int"
+          net.ipv4.conf.all.send_redirects:
+            description: "If 0, the system does not send ICMP redirect messages."
+            type: "int"
+          net.ipv4.conf.all.shared_media:
+            description: "If 1, indicates that the media is shared with different subnets, overrides secure_redirects."
+            type: "int"
+          net.ipv4.conf.default.accept_redirects:
+            description: "If 0, the system does not accept IPv4 redirects on the default interface."
+            type: "int"
+          net.ipv4.conf.default.accept_source_route:
+            description: "If 0, deny IPv4 source routing on the default interface."
+            type: "int"
+          net.ipv4.conf.default.log_martians:
+            description: "If 1, log packets with un-routable source addresses to the kernel log on the default interface."
+            type: "int"
+          net.ipv4.conf.default.rp_filter:
+            description: "Set the reverse path filtering mode for the default interface."
+            type: "int"
+            choices:
+              - 0
+              - 1
+              - 2
+          net.ipv4.conf.default.secure_redirects:
+            description: "If 1, accept ICMP redirect messages only to gateways listed in the interface's current gateway list on the default interface. Overridden
+              by shared_media."
+            type: "int"
+          net.ipv4.conf.default.send_redirects:
+            description: "net.ipv4.conf.default.send_redirects description"
+            type: "int"
+          net.ipv4.conf.default.shared_media:
+            description: "If 1, indicates that the media is shared with different subnets, overrides secure_redirects on the default interface."
+            type: "int"
+          net.ipv4.icmp_echo_ignore_broadcasts:
+            description: "If 1, the system ignores ICMP echo requests sent to broadcast addresses."
+            type: "int"
+          net.ipv4.icmp_ignore_bogus_error_responses:
+            description: "If 1, the system ignores bogus ICMP responses."
+            type: "int"
+          net.ipv4.ip_forward:
+            description: "If 1, the system forwards IPv4 packets between interfaces."
+            type: "int"
+          net.ipv4.tcp_challenge_ack_limit:
+            description: "Set the TCP challenge ACK limit."
+            type: "int"
+          net.ipv4.tcp_invalid_ratelimit:
+            description: "The maximal rate for sending duplicate acknowledgments in response to incoming TCP packets, in milliseconds."
+            type: "int"
+          net.ipv4.tcp_max_syn_backlog:
+            description: "The number of SYN requests the kernel can queue before it starts dropping them."
+            type: "int"
+          net.ipv4.tcp_rfc1337:
+            description: "If 1, the system will not accept TCP connections that are vulnerable to the TCP sequence number attack described in RFC 1337."
+            type: "int"
+          net.ipv4.tcp_syn_retries:
+            description: "Number of times initial SYNs for an active TCP connection attempt will be retransmitted. Should not be higher than 127."
+            type: "int"
+          net.ipv4.tcp_synack_retries:
+            description: "Number of times SYNACKs for a passive TCP connection attempt will be retransmitted. Should not be higher than 255."
+            type: "int"
+          net.ipv4.tcp_syncookies:
+            description: "If 1, the system will use TCP SYN cookies to protect against SYN flood attacks."
+            type: "int"
+          net.ipv4.tcp_timestamps:
+            description: "Enable timestamps as defined in RFC1323."
+            type: "int"
+            choices:
+              - 0
+              - 1
+              - 2
       manage_usbguard:
         description: "If True, manage C(USBGuard) installation and configuration."
         type: "bool"
@@ -1405,26 +1443,31 @@ argument_specs:
         description: "Specifies the ID of a group whose members are authorized to learn process information otherwise prohibited by hidepid."
         type: "int"
         default: 0
-      automatic_updates.enabled:
-        description: "If True, install and configure C(dnf-automatic) or C(unattended-upgrades), depending on the distribution."
-        type: "bool"
-        default: "True"
-      automatic_updates.only_security:
-        description: "If True, only security updates will be installed automatically."
-        type: "bool"
-        default: "True"
-      automatic_updates.reboot:
-        description: "If True, it will reboot the system if needed."
-        type: "bool"
-        default: "False"
-      automatic_updates.reboot_from_time:
-        description: "If system reboot is enabled, the variable sets the reboot time, with added random minutes from C(reboot_time_margin_mins)."
-        type: "str"
-        default: "2:00"
-      automatic_updates.reboot_time_margin_mins:
-        description: "Add minutes to the reboot time, set using C(automatic_updates.reboot_from_time)."
-        type: "int"
-        default: 20
+      automatic_updates:
+        type: "dict"
+        default:
+          - enabled: true
+          - only_security: true
+          - reboot: false
+          - reboot_from_time: "2:00"
+          - reboot_time_margin_mins: 20
+        description: "Configure automatic updates."
+        options:
+          enabled:
+            description: "If True, install and configure C(dnf-automatic) or C(unattended-upgrades), depending on the distribution."
+            type: "bool"
+          only_security:
+            description: "If True, only security updates will be installed automatically."
+            type: "bool"
+          reboot:
+            description: "If True, it will reboot the system if needed."
+            type: "bool"
+          reboot_from_time:
+            description: "If system reboot is enabled, the variable sets the reboot time, with added random minutes from C(reboot_time_margin_mins)."
+            type: "str"
+          reboot_time_margin_mins:
+            description: "Add minutes to the reboot time, set using C(reboot_from_time)."
+            type: "int"
       manage_netplan:
         description: "If True, then any available netplan configuration files will have the permissions set to 0600."
         type: "bool"
@@ -1503,39 +1546,44 @@ argument_specs:
         description: "If True, then the systemd-logind service will be configured using the available template."
         type: "bool"
         default: "True"
-      logind.killuserprocesses:
-        description: "Configures whether the processes of a user should be killed when the user logs out."
-        type: "bool"
-        default: "True"
-      logind.killexcludeusers:
-        description: "A list of usernames that override the KillUserProcesses setting."
-        type: "list"
-        elements: "str"
-        default: "['root']"
-      logind.idleaction:
-        description: "Configures the action to take when the system is idle."
-        type: "str"
-        default: "lock"
-        choices:
-          - "halt"
-          - "hibernate"
-          - "hybrid-sleep"
-          - "ignore"
-          - "kexec"
-          - "lock"
-          - "poweroff"
-          - "reboot"
-          - "suspend"
-          - "suspend-then-hibernate"
-          - "sleep"
-      logind.idleactionsec:
-        description: "Configures the delay after which the action configured in C(IdleAction) is taken after the system is idle."
-        type: "str"
-        default: "15min"
-      logind.removeipc:
-        description: "Controls whether System V and POSIX IPC objects belonging to the user shall be removed when the user fully logs out."
-        type: "bool"
-        default: "True"
+      logind:
+        type: "dict"
+        default:
+          - killuserprocesses: true
+          - killexcludeusers: ["root"]
+          - idleaction: "lock"
+          - idleactionsec: "15min"
+          - removeipc: true
+        description: "Configure systemd-logind settings."
+        options:
+          killuserprocesses:
+            description: "Configures whether the processes of a user should be killed when the user logs out."
+            type: "bool"
+          killexcludeusers:
+            description: "A list of usernames that override the KillUserProcesses setting."
+            type: "list"
+            elements: "str"
+          idleaction:
+            description: "Configures the action to take when the system is idle."
+            type: "str"
+            choices:
+              - "halt"
+              - "hibernate"
+              - "hybrid-sleep"
+              - "ignore"
+              - "kexec"
+              - "lock"
+              - "poweroff"
+              - "reboot"
+              - "suspend"
+              - "suspend-then-hibernate"
+              - "sleep"
+          idleactionsec:
+            description: "Configures the delay after which the action configured in C(IdleAction) is taken after the system is idle."
+            type: "str"
+          removeipc:
+            description: "Controls whether System V and POSIX IPC objects belonging to the user shall be removed when the user fully logs out."
+            type: "bool"
       disable_wireless:
         description: "If True, turn off all wireless interfaces."
         type: "bool"
@@ -1545,91 +1593,150 @@ argument_specs:
         type: "bool"
         default: "True"
       auditd_apply_audit_rules:
-        description: "auditd_apply_audit_rules description"
+        description: "If True, the role applies the auditd rules from the included template file."
         type: "bool"
         default: "True"
       auditd_action_mail_acct:
-        description: "auditd_action_mail_acct description"
+        description: "This option should contain a valid email address or alias."
         type: "str"
         default: "root"
       auditd_admin_space_left_action:
-        description: "auditd_admin_space_left_action description"
+        description: "This parameter tells the system what action to take when the system has detected that it is starting to get low on disk space."
         type: "str"
         default: "suspend"
+        choices:
+          - "email"
+          - "exec"
+          - "halt"
+          - "ignore"
+          - "rotate"
+          - "single"
+          - "suspend"
+          - "syslog"
       auditd_disk_error_action:
-        description: "auditd_disk_error_action description"
+        description: "This parameter tells the system what action to take whenever there is an error detected when writing audit events to disk or rotating logs."
         type: "str"
         default: "suspend"
+        choices:
+          - "email"
+          - "exec"
+          - "halt"
+          - "ignore"
+          - "rotate"
+          - "single"
+          - "suspend"
+          - "syslog"
       auditd_disk_full_action:
-        description: "auditd_disk_full_action description"
+        description: "This parameter tells the system what action to take when the system has detected that the partition to which log files are written has become
+          full."
         type: "str"
         default: "suspend"
+        choices:
+          - "email"
+          - "exec"
+          - "halt"
+          - "ignore"
+          - "rotate"
+          - "single"
+          - "suspend"
+          - "syslog"
       auditd_enable_flag:
-        description: "auditd_enable_flag description"
+        description: "Set enabled flag for auditd service."
         type: "int"
-        default: "2"
+        default: 2
+        choices:
+          - 0
+          - 1
+          - 2
       auditd_flush:
-        description: "auditd_flush description"
+        description: "When to flush the audit records to disk."
         type: "str"
         default: "incremental_async"
+        choices:
+          - "data"
+          - "incremental_async"
+          - "incremental"
+          - "none"
+          - "sync"
       auditd_max_log_file:
-        description: "auditd_max_log_file description"
+        description: "This keyword specifies the maximum file size in megabytes. When this limit is reached, it will trigger a configurable action."
         type: "int"
-        default: "20"
+        default: 20
       auditd_max_log_file_action:
-        description: "auditd_max_log_file_action description"
+        description: "This parameter tells the system what action to take when the system has detected that the max file size limit has been reached."
         type: "str"
         default: "rotate"
+        choices:
+          - "ignore"
+          - "keep_logs"
+          - "rotate"
+          - "syslog"
+          - "suspend"
       auditd_mode:
-        description: "auditd_mode description"
+        description: "Set failure mode."
         type: "int"
-        default: "1"
+        default: 1
+        choices:
+          - 0
+          - 1
+          - 2
       auditd_num_logs:
-        description: "auditd_num_logs description"
+        description: "Specifies the number of log files to keep if rotate is given as the max_log_file_action."
         type: "int"
-        default: "5"
+        default: 5
       auditd_space_left:
-        description: "auditd_space_left description"
+        description: "If the free space in the filesystem containing log_file drops below this value (in megabytes), the audit daemon takes the action specified by
+          space_left_action."
         type: "int"
-        default: "75"
+        default: 75
       auditd_space_left_action:
-        description: "auditd_space_left_action description"
+        description: "This parameter tells the system what action to take when the system has detected that it is starting to get low on disk space."
         type: "str"
         default: "email"
+        choices:
+          - "email"
+          - "exec"
+          - "halt"
+          - "ignore"
+          - "rotate"
+          - "single"
+          - "suspend"
+          - "syslog"
       grub_audit_backlog_cmdline:
-        description: "grub_audit_backlog_cmdline description"
+        description: "Set the audit backlog limit in the GRUB command line."
         type: "str"
         default: "audit_backlog_limit=8192"
       grub_audit_cmdline:
-        description: "grub_audit_cmdline description"
+        description: "Enable auditd in the GRUB command line."
         type: "str"
         default: "audit=1"
       manage_systemd:
-        description: "manage_systemd description"
+        description: "If True, then the role will configure /etc/systemd/system.conf and /etc/systemd/user.conf using the available templates."
         type: "bool"
         default: "True"
       session_timeout:
-        description: "session_timeout description"
+        description: "Sets, in seconds, the TMOUT environment variable if systemd version is 252 or lower. If systemd version is higher than 252, the session_timeout
+          value will be set as StopIdleSessionSec."
         type: "int"
-        default: "900"
+        default: 900
       umask_value:
-        description: "umask_value description"
-        type: "str"
+        description: "Sets the default umask value."
+        type: "int"
         default: "077"
       manage_kernel:
-        description: "manage_kernel description"
+        description: "If True, then additional kernel settings will be configured."
         type: "bool"
         default: "True"
       allow_virtual_system_calls:
-        description: "allow_virtual_system_calls description"
+        description: "Allow virtual system calls (vsyscall)."
         type: "bool"
         default: "True"
       enable_page_poisoning:
-        description: "enable_page_poisoning description"
+        description: "Enable kernel page poisoning."
         type: "bool"
         default: "True"
       kernel_lockdown:
-        description: "kernel_lockdown description"
+        description: "Configures kernel_lockdown."
         type: "str"
         default: "False"
         choices:
@@ -1639,10 +1746,10 @@ argument_specs:
           - "none"
           - "True"
       page_table_isolation:
-        description: "page_table_isolation description"
+        description: "Enable page table isolation (PTI)."
         type: "bool"
         default: "True"
       slub_debugger_poisoning:
-        description: "slub_debugger_poisoning description"
+        description: "Enable SLUB debugger poisoning."
         type: "bool"
         default: "False"
