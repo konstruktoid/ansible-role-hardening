@@ -424,6 +424,7 @@ journald_storage: persistent
 journald_permissions: "2640"
 journald_group: "systemd-journal"
 journald_user: "root"
+journald_system_max_use: ""
 ```
 
 If `manage_journal: true`, then `journald` will be configured and
@@ -683,6 +684,7 @@ use for example GPG verification and clean requirements on remove.
 ### ./defaults/main/packages.yml
 
 ```yaml
+manage_packages: true
 system_upgrade: true
 
 packages_blocklist:
@@ -765,6 +767,7 @@ and packages to be removed (`packages_blocklist`).
 ### ./defaults/main/password.yml
 
 ```yaml
+manage_password: true
 manage_pam: true
 manage_faillock: true
 manage_pwquality: true
