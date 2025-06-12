@@ -52,6 +52,15 @@
 
 - name: Get PAM version
   block:
+    - name: Install python3-rpm for RPM-based distros
+      become: true
+      when:
+        - ansible_os_family in ["RedHat", "Suse"]
+        - ansible_python.version.major >= 3
+      ansible.builtin.package:
+        name: python3-rpm
+        state: present
+
     - name: Gather package facts
       ansible.builtin.package_facts:
 
@@ -66,7 +75,7 @@
       ansible.builtin.set_fact:
         pam_version: "{{ ansible_facts.packages['pam'][0].version }}"
       when:
-        - ansible_os_family == "RedHat"
+        - ansible_os_family in ["RedHat", "Suse"]
         - "'pam' in ansible_facts.packages"
 
 - name: Set hashing algorithm for password (yescrypt|sha512)

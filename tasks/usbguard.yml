@@ -25,6 +25,13 @@
       when:
         - ansible_os_family == "RedHat"
 
+    - name: Suse family USBGuard package installation
+      community.general.zypper:
+        name: usbguard
+        state: present
+      when:
+        - ansible_os_family == "Suse"
+
     - name: Configure RuleFile
       ansible.builtin.lineinfile:
         regexp: (^|^#)RuleFile
