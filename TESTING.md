@@ -10,16 +10,15 @@ Before running any test:
 ## Distribution boxes used by Molecule and Vagrant
 
 ```console
-almalinux/9
+almalinux/10-kitten-x86_64_v2
+bento/almalinux-9
 bento/ubuntu-22.04
 bento/ubuntu-24.04
 debian/bookworm64
-debian/bullseye64
 debian/testing64
-docker.io/almalinux:9
 docker.io/debian:bookworm
 docker.io/ubuntu:jammy
-generic/rhel8
+konstruktoid/ubuntu-25.04
 ```
 
 If the [runTests.sh](runTests.sh) script is executed as `runTests.sh vagrant`,

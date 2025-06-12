@@ -11,7 +11,7 @@ This is an [Ansible](https://www.ansible.com/) role designed to enhance the
 security of servers running on AlmaLinux, Debian, or Ubuntu.
 
 It's [systemd](https://freedesktop.org/wiki/Software/systemd/) focused
-and requires Ansible version 2.15 or higher.
+and requires Ansible version ${ANSIBLE_V} or higher.
 
 The role supports the following operating systems:
 
@@ -48,7 +48,7 @@ None.
 ---
 roles:
   - name: konstruktoid.hardening
-    version: v2.3.0
+    version: v3.3.0
     src: https://github.com/konstruktoid/ansible-role-hardening.git
     scm: git
 \`\`\`
@@ -95,7 +95,7 @@ roles:
           ansible.builtin.git:
             repo: https://github.com/konstruktoid/ansible-role-hardening
             dest: /etc/ansible/roles/konstruktoid.hardening
-            version: v2.3.0
+            version: v3.3.0
 
         - name: Remove git
           ansible.builtin.package:
@@ -190,7 +190,7 @@ Before running any test:
 "
 
 echo '```console'
-git grep -E 'box:|box =|image:' Vagrantfile molecule/ | awk '{print $NF}' |\
+git grep -E 'box:|box =|image:' molecule/ | awk '{print $NF}' |\
   tr -d '"' | sort | uniq
 echo '```'
 

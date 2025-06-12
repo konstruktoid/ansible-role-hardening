@@ -1,7 +1,9 @@
 # Structure
 
+
 ```sh
 .
+├── CODEOWNERS
 ├── LICENSE
 ├── README.md
 ├── SECURITY.md
@@ -68,7 +70,9 @@
 ├── handlers
 │   └── main.yml
 ├── meta
-│   └── main.yml
+│   ├── argument_specs.yml
+│   ├── main.yml
+│   └── requirements.yml -> ../requirements.yml
 ├── molecule
 │   ├── almalinux
 │   │   └── molecule.yml
@@ -81,8 +85,6 @@
 │   │   ├── molecule.yml
 │   │   └── verify.yml
 │   ├── docker
-│   │   └── molecule.yml
-│   ├── redhat
 │   │   └── molecule.yml
 │   ├── single
 │   │   └── molecule.yml
@@ -148,9 +150,7 @@
 │   │   ├── adduser.conf.j2
 │   │   ├── ansible
 │   │   │   └── facts.d
-│   │   │       ├── cpuinfo.fact
-│   │   │       ├── sshkeys.fact
-│   │   │       └── systemd.fact
+│   │   │       └── sshkeys.fact
 │   │   ├── apt
 │   │   │   └── apt.conf.d
 │   │   │       └── 50unattended-upgrades.j2
@@ -181,6 +181,7 @@
 │   │   │   ├── ssh_config.j2
 │   │   │   └── sshd_config.j2
 │   │   ├── sysctl
+│   │   │   ├── sysctl.apparmor.conf.j2
 │   │   │   ├── sysctl.ipv6.conf.j2
 │   │   │   └── sysctl.main.conf.j2
 │   │   └── systemd
@@ -207,5 +208,5 @@
 │   └── test.yml
 └── tox.ini
 
-42 directories, 163 files
+41 directories, 164 files
 ```

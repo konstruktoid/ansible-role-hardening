@@ -28,8 +28,8 @@ HostKey {{ key }}
 Protocol 2
 {% endif %}
 StrictModes {{ 'yes' if (sshd_strict_modes | bool) else 'no' }}
-SyslogFacility {{ sshd_syslog_facility }}
-LogLevel {{ sshd_log_level }}
+SyslogFacility {{ sshd_syslog_facility | upper }}
+LogLevel {{ sshd_log_level | upper }}
 
 #######################################################
 # Cryptography
@@ -57,7 +57,7 @@ AuthorizedPrincipalsFile {{ sshd_authorized_principals_file }}
 {% if sshd_trusted_user_ca_keys_file %}
 TrustedUserCAKeys {{ sshd_trusted_user_ca_keys_file }}
 {% endif %}
-PermitRootLogin {{ 'yes' if (sshd_permit_root_login | bool) else 'no' }}
+PermitRootLogin {{ 'prohibit-password' if (sshd_permit_root_login | bool) else 'no' }}
 {% if ssh_installed_version is version('7.4', '<') %}
 UseLogin no
 {% endif %}

@@ -31,12 +31,12 @@ provisioner:
       jammy:
         disable_ipv6: true
         disable_wireless: true
+        manage_suid_sgid_permissions: false
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
-        manage_suid_sgid_permissions: false
         sshd_match_users:
           - user: testuser01
             rules:
