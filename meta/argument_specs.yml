@@ -1008,110 +1008,112 @@ argument_specs:
           - kernel.yama.ptrace_scope: 2
           - net.core.bpf_jit_harden: 2
           - user.max_user_namespaces: 62967
-      fs.protected_fifos:
-        description: "Avoid unintentional writes to an attacker-controlled FIFO, where a program expected to create a regular file."
-        type: "int"
-        choices:
-          - 0
-          - 1
-          - 2
-      fs.protected_regular:
-        description: "Avoid unintentional writes to an attacker-controlled regular file, where a program expected to create one."
-        type: "int"
-        choices:
-          - 0
-          - 1
-          - 2
-      fs.protected_hardlinks:
-        description: "Restrict hard links to files that are not owned by the user."
-        type: "int"
-        choices:
-          - 0
-          - 1
-      fs.protected_symlinks:
-        description: "Restrict symbolic links to files that are not owned by the user."
-        type: "int"
-        choices:
-          - 0
-          - 1
-      fs.suid_dumpable:
-        description: "Set the core dump mode for setuid or otherwise protected/tainted binaries."
-        type: "int"
-        choices:
-          - 0
-          - 1
-          - 2
-      kernel.core_pattern:
-        description: "Specify a core dumpfile pattern name."
-        type: "str"
-      kernel.core_uses_pid:
-        description: "If 1, the core dump file name will include the PID of the process that created it."
-        type: "int"
-      kernel.dmesg_restrict:
-        description: "If 1, unprivileged users are prevented from using dmesg to view messages from the kernel’s log buffer."
-        type: "int"
-      kernel.kptr_restrict:
-        description: "Whether restrictions are placed on exposing kernel addresses via /proc and other interfaces."
-        type: "int"
-        choices:
-          - 0
-          - 1
-          - 2
-      kernel.panic:
-        description: "The value in this file determines the behaviour of the kernel on a panic."
-        type: "int"
-        choices:
-          - -1
-          - 0
-          - 60
-      kernel.panic_on_oops:
-        description: "If 1, Panic immediately. If the panic sysctl is also non-zero then the machine will be rebooted."
-        type: "int"
-      kernel.perf_event_paranoid:
-        description: "Controls use of the performance events system by unprivileged users."
-        type: "int"
-        default: 2
-        choices:
-          - -1
-          - 0
-          - 1
-          - 2
-      kernel.randomize_va_space:
-        description: "Select the type of process address space randomization that is used in the system."
-        type: "int"
-        choices:
-          - 0
-          - 1
-          - 2
-      kernel.sysrq:
-        description: "If 1, the magic SysRq key is enabled."
-        type: "int"
-      kernel.unprivileged_bpf_disabled:
-        description: "Controls whether BPF programs are disabled for unprivileged users."
-        type: "int"
-        choices:
-          - 0
-          - 1
-          - 2
-      kernel.yama.ptrace_scope:
-        description: "Select the what processes can be debugged with ptrace."
-        type: "int"
-        default: 2
-        choices:
-          - 0
-          - 1
-          - 2
-          - 3
-      net.core.bpf_jit_harden:
-        description: "Level of hardening applied to the BPF JIT compiler."
-        type: "int"
-        choices:
-          - 0
-          - 1
-          - 2
-      user.max_user_namespaces:
-        description: "The maximum number of user namespaces that can be created by a user."
-        type: "int"
+        description: "Generic sysctl settings."
+        options:
+          fs.protected_fifos:
+            description: "Avoid unintentional writes to an attacker-controlled FIFO, where a program expected to create a regular file."
+            type: "int"
+            choices:
+              - 0
+              - 1
+              - 2
+          fs.protected_regular:
+            description: "Avoid unintentional writes to an attacker-controlled regular file, where a program expected to create one."
+            type: "int"
+            choices:
+              - 0
+              - 1
+              - 2
+          fs.protected_hardlinks:
+            description: "Restrict hard links to files that are not owned by the user."
+            type: "int"
+            choices:
+              - 0
+              - 1
+          fs.protected_symlinks:
+            description: "Restrict symbolic links to files that are not owned by the user."
+            type: "int"
+            choices:
+              - 0
+              - 1
+          fs.suid_dumpable:
+            description: "Set the core dump mode for setuid or otherwise protected/tainted binaries."
+            type: "int"
+            choices:
+              - 0
+              - 1
+              - 2
+          kernel.core_pattern:
+            description: "Specify a core dumpfile pattern name."
+            type: "str"
+          kernel.core_uses_pid:
+            description: "If 1, the core dump file name will include the PID of the process that created it."
+            type: "int"
+          kernel.dmesg_restrict:
+            description: "If 1, unprivileged users are prevented from using dmesg to view messages from the kernel’s log buffer."
+            type: "int"
+          kernel.kptr_restrict:
+            description: "Whether restrictions are placed on exposing kernel addresses via /proc and other interfaces."
+            type: "int"
+            choices:
+              - 0
+              - 1
+              - 2
+          kernel.panic:
+            description: "The value in this file determines the behaviour of the kernel on a panic."
+            type: "int"
+            choices:
+              - -1
+              - 0
+              - 60
+          kernel.panic_on_oops:
+            description: "If 1, Panic immediately. If the panic sysctl is also non-zero then the machine will be rebooted."
+            type: "int"
+          kernel.perf_event_paranoid:
+            description: "Controls use of the performance events system by unprivileged users."
+            type: "int"
+            default: 2
+            choices:
+              - -1
+              - 0
+              - 1
+              - 2
+          kernel.randomize_va_space:
+            description: "Select the type of process address space randomization that is used in the system."
+            type: "int"
+            choices:
+              - 0
+              - 1
+              - 2
+          kernel.sysrq:
+            description: "If 1, the magic SysRq key is enabled."
+            type: "int"
+          kernel.unprivileged_bpf_disabled:
+            description: "Controls whether BPF programs are disabled for unprivileged users."
+            type: "int"
+            choices:
+              - 0
+              - 1
+              - 2
+          kernel.yama.ptrace_scope:
+            description: "Select the what processes can be debugged with ptrace."
+            type: "int"
+            default: 2
+            choices:
+              - 0
+              - 1
+              - 2
+              - 3
+          net.core.bpf_jit_harden:
+            description: "Level of hardening applied to the BPF JIT compiler."
+            type: "int"
+            choices:
+              - 0
+              - 1
+              - 2
+          user.max_user_namespaces:
+            description: "The maximum number of user namespaces that can be created by a user."
+            type: "int"
       ipv4_sysctl_settings:
         type: "dict"
         default:
