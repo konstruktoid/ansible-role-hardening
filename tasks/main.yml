@@ -202,7 +202,7 @@
   ansible.builtin.import_tasks:
     file: password.yml
   when:
-    - manage_pam
+    - manage_password
   tags:
     - cracklib
     - crypto_policy

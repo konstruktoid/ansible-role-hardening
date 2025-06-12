@@ -10,3 +10,4 @@ journald_storage: persistent
 journald_permissions: "2640"
 journald_group: "systemd-journal"
 journald_user: "root"
+journald_system_max_use: ""
