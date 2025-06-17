@@ -111,7 +111,7 @@
 
     - name: Update moduli file
       ansible.builtin.get_url:
-        url: https://raw.githubusercontent.com/konstruktoid/ssh-moduli/main/moduli
+        url: "{{ sshd_update_moduli_url }}"
         dest: "{{ '/etc/ssh/' if ssh_moduli.stat.exists else '/etc/' }}"
         owner: root
         group: root
@@ -142,9 +142,10 @@
         type: rsa
         size: "{{ sshd_required_rsa_size }}"
         path: /etc/ssh/ssh_host_rsa_key
-        mode: "0600"
-        owner: root
-        group: "{{ 'ssh_keys' if (ansible_os_family == 'RedHat' and ansible_distribution_major_version < '10') else 'root' }}"
+
+        mode: "{{ sshd_host_keys_mode }}"
+        owner: "{{ sshd_host_keys_owner }}"
+        group: "{{ 'ssh_keys' if (ansible_os_family == 'RedHat' and ansible_distribution_major_version < '10') else sshd_host_keys_group }}"
         regenerate: partial_idempotence
 
     - name: Generate SSH ECDSA keypair
@@ -153,9 +154,9 @@
         type: ecdsa
         size: "{{ sshd_required_ecdsa_size }}"
         path: /etc/ssh/ssh_host_ecdsa_key
-        mode: "0600"
-        owner: root
-        group: "{{ 'ssh_keys' if (ansible_os_family == 'RedHat' and ansible_distribution_major_version < '10') else 'root' }}"
+        mode: "{{ sshd_host_keys_mode }}"
+        owner: "{{ sshd_host_keys_owner }}"
+        group: "{{ 'ssh_keys' if (ansible_os_family == 'RedHat' and ansible_distribution_major_version < '10') else sshd_host_keys_group }}"
         regenerate: partial_idempotence
       when:
         - ssh_installed_version is version('6.0', '>=')
@@ -165,9 +166,9 @@
         state: present
         type: ed25519
         path: /etc/ssh/ssh_host_ed25519_key
-        mode: "0600"
-        owner: root
-        group: "{{ 'ssh_keys' if (ansible_os_family == 'RedHat' and ansible_distribution_major_version < '10') else 'root' }}"
+        mode: "{{ sshd_host_keys_mode }}"
+        owner: "{{ sshd_host_keys_owner }}"
+        group: "{{ 'ssh_keys' if (ansible_os_family == 'RedHat' and ansible_distribution_major_version < '10') else sshd_host_keys_group }}"
         regenerate: partial_idempotence
       when:
         - ssh_installed_version is version('6.5', '>=')
