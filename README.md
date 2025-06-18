@@ -314,6 +314,7 @@ journald_storage: persistent
 journald_permissions: "2640"
 journald_group: "systemd-journal"
 journald_user: "root"
+journald_system_max_use: ""
 ```
 
 ### ./defaults/main/kernel.yml
@@ -463,6 +464,7 @@ apt_hardening_options:
 ### ./defaults/main/packages.yml
 
 ```yaml
+manage_packages: true
 system_upgrade: true
 
 packages_blocklist:
@@ -542,6 +544,7 @@ packages_ubuntu:
 ### ./defaults/main/password.yml
 
 ```yaml
+manage_password: true
 manage_pam: true
 manage_faillock: true
 manage_pwquality: true

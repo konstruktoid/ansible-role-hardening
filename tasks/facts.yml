@@ -66,7 +66,7 @@
       ansible.builtin.set_fact:
         pam_version: "{{ ansible_facts.packages['pam'][0].version }}"
       when:
-        - ansible_os_family == "RedHat"
+        - ansible_os_family in ["RedHat", "Suse"]
         - "'pam' in ansible_facts.packages"
 
 - name: Set hashing algorithm for password (yescrypt|sha512)
