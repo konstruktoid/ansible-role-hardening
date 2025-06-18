@@ -58,7 +58,7 @@ sshd_kex_algorithms:
   - ecdh-sha2-nistp384
 sshd_listen:
   - 0.0.0.0
-sshd_log_level: VERBOSE
+sshd_log_level: verbose
 sshd_login_grace_time: 20
 sshd_macs:
   - hmac-sha2-512-etm@openssh.com
@@ -86,16 +86,17 @@ sshd_rekey_limit: 512M 1h
 sshd_required_ecdsa_size: 521
 sshd_required_rsa_size: 4096
 sshd_sftp_enabled: true
-sshd_sftp_only_chroot: true
-sshd_sftp_only_chroot_dir: "%h"
+sshd_sftp_chroot: true
+sshd_sftp_chroot_dir: "%h"
 sshd_sftp_only_group: ""
 sshd_sftp_subsystem: internal-sftp -f LOCAL6 -l INFO
 sshd_strict_modes: true
-sshd_syslog_facility: AUTH
+sshd_syslog_facility: auth
 sshd_tcp_keep_alive: false
 sshd_trusted_user_ca_keys_base64: ""
 sshd_trusted_user_ca_keys_file: /etc/ssh/trusted-user-ca-keys.pem
 sshd_update_moduli: false
+sshd_update_moduli_url: https://raw.githubusercontent.com/konstruktoid/ssh-moduli/main/moduli
 sshd_use_dns: false
 sshd_use_pam: true
 sshd_use_privilege_separation: sandbox

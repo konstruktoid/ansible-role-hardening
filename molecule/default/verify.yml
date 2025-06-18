@@ -377,7 +377,7 @@
             {%- endif -%}
           - KerberosAuthentication {{ 'yes' if (sshd_kerberos_authentication | bool) else 'no' }}
           - "{{ 'KexAlgorithms ' + sshd_kex_algorithms | join(',') if (not crypto_policies_config or not set_crypto_policy)}}"
-          - LogLevel {{ sshd_log_level }}
+          - LogLevel {{ sshd_log_level | upper }}
           - LoginGraceTime {{ sshd_login_grace_time | int }}
           - "{{ 'MACs ' + sshd_macs | join(',') if (not crypto_policies_config or not set_crypto_policy)}}"
           - MaxAuthTries {{ sshd_max_auth_tries | int }}
@@ -396,7 +396,7 @@
           - "{{ 'RequiredRSASize ' + (sshd_required_rsa_size | string) if (ssh_installed_version is version('9.1', '>') and (not crypto_policies_config or not set_crypto_policy)) }}" # noqa: yaml[line-length]
           - StrictModes {{ 'yes' if (sshd_strict_modes | bool) else 'no' }}
           - "{{ 'Subsystem sftp ' + sshd_sftp_subsystem if (sshd_sftp_enabled | bool)}}"
-          - SyslogFacility {{ sshd_syslog_facility }}
+          - SyslogFacility {{ sshd_syslog_facility | upper }}
           - TCPKeepAlive {{ 'yes' if (sshd_tcp_keep_alive | bool) else 'no' }}
           - UseDNS {{ 'yes' if (sshd_use_dns | bool) else 'no' }}
           - "{{ 'UseLogin no' if (ssh_installed_version is version('7.4', '<'))}}"
@@ -678,7 +678,7 @@
       ansible.builtin.set_fact:
         pwquality_parameters:
           - dcredit = {{ pwquality.dcredit }}
-          - dictcheck = {{ pwquality.dictcheck }}
+          - dictcheck = {{ '1' if pwquality.dictcheck else '0' }}
           - >-
             {%- if pwquality.dictpath != "" -%}
               dictpath = {{ pwquality.dictpath }}
@@ -688,8 +688,8 @@
             {%- if (pwquality.enforce_for_root | bool) -%}
               enforce_for_root
             {%- endif -%}
-          - enforcing = {{ pwquality.enforcing }}
-          - gecoscheck = {{ pwquality.gecoscheck }}
+          - enforcing = {{ '1' if pwquality.enforcing else '0' }}
+          - gecoscheck = {{ '1' if pwquality.gecoscheck else '0' }}
           - lcredit = {{ pwquality.lcredit }}
           - >-
             {%- if (pwquality.local_users_only | bool) -%}
@@ -702,7 +702,7 @@
           - ocredit = {{ pwquality.ocredit }}
           - retry = {{ pwquality.retry }}
           - ucredit = {{ pwquality.ucredit }}
-          - usercheck = {{ pwquality.usercheck }}
+          - usercheck = {{ '1' if pwquality.usercheck else '0' }}
           - usersubstr = {{ pwquality.usersubstr }}
 
     - name: Verify pwquality.conf settings
@@ -1120,31 +1120,6 @@
       ansible.builtin.stat:
         path: /etc/security/faillock.conf
       register: faillockconf
-
-    - name: Get PAM version
-      when:
-        - faillockconf.stat.exists
-      tags:
-        - common-account
-        - common-auth
-        - pam
-      block:
-        - name: Gather package facts
-          ansible.builtin.package_facts:
-
-        - name: Get libpam version in Debian family
-          ansible.builtin.set_fact:
-            pam_version: "{{ ansible_facts.packages['libpam-modules'][0].version }}"
-          when:
-            - ansible_os_family == "Debian"
-            - "'libpam-modules' in ansible_facts.packages"
-
-        - name: Get libpam version in RedHat family
-          ansible.builtin.set_fact:
-            pam_version: "{{ ansible_facts.packages['pam'][0].version }}"
-          when:
-            - ansible_os_family == "RedHat"
-            - "'pam' in ansible_facts.packages"
 
     - name: Set faillock_parameters
       ansible.builtin.set_fact:
