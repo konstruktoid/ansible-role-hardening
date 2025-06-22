@@ -1,0 +1,88 @@
+## Role Arguments
+
+{% for entrypoint in argument_specs.keys() %}
+
+### Entrypoint: {{ entrypoint }}
+
+{{ argument_specs[entrypoint].short_description | ansible_doc_markup }}
+
+{% if "description" in argument_specs[entrypoint] %}
+{%- if argument_specs[entrypoint].description is string -%}
+{{ argument_specs[entrypoint].description | ansible_doc_markup }}
+{% else %}
+{%- for line in argument_specs[entrypoint].description -%}
+{{ line | ansible_doc_markup }}
+
+{% endfor -%}
+{% endif -%}
+{% endif -%}
+
+{% if entrypoint_options[entrypoint] %}
+{%- set path, options=entrypoint_options[entrypoint][0] -%}
+|Option|Description|Default|
+|---|---|---|
+{%- for name, details in options.items() %}
+| {{ name }} | {{ details.display_description | ansible_doc_markup }} | {{ details.display_default }} |
+{%- endfor %}
+
+{% if entrypoint_options[entrypoint] | length > 1 -%}
+{% for path, options in entrypoint_options[entrypoint][1:] -%}
+#### Options for {{ path | join(" > ") }}
+
+|Option|Description|Default|
+|---|---|---|
+{%- for name, details in options.items() %}
+| {{ name }} | {{ details.display_description | ansible_doc_markup }} | {{ details.display_default }} |
+{%- endfor %}
+
+{% endfor -%}
+
+{% endif -%}
+
+{% if entrypoint in entrypoint_choices -%}
+{% for path, choices in entrypoint_choices[entrypoint] -%}
+#### Choices for {{ path | join(" > ") }}
+
+|Choice|
+|---|
+{%- for item in choices %}
+| {{ item }} |
+{%- endfor %}
+
+{% endfor -%}
+{% endif -%}
+{% else -%}
+
+This entrypoint has no options.
+
+{% endif -%}
+
+{%- if "examples" in argument_specs[entrypoint] -%}
+
+#### Examples
+
+{{ argument_specs[entrypoint].examples }}
+
+{%- endif -%}
+{% endfor %}
+
+## Dependencies
+
+{%- if ("dependencies" in metadata) and (metadata.dependencies | length > 0) %}
+{%- for dependency in metadata.dependencies %}
+- {{ dependency }}
+{%- endfor %}
+{%- else %}
+None.
+{%- endif %}
+
+## Author and Project Information
+
+{%- if "company" in metadata.galaxy_info %}
+{{ metadata.galaxy_info.author }} @ {{ metadata.galaxy_info.company }}
+{%- else %}
+{{ metadata.galaxy_info.author }}
+{%- endif %}
+{% if metadata.galaxy_info.issue_tracker_url is defined and metadata.galaxy_info.issue_tracker_url | length > 0 %}
+Issues: [tracker]({{ metadata.galaxy_info.issue_tracker_url }})
+{%- endif -%}

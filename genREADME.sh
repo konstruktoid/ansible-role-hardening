@@ -223,9 +223,9 @@ tree .
 echo '```'
 } > ./STRUCTURE.md
 
-aar-doc "$(pwd)" markdown
+aar-doc --output-template aar-doc_template.j2 "$(pwd)" markdown
 
-python3 genDefault.py meta/argument_specs.yml | tee defaults/main.yml
+python3 genDefault.py meta/argument_specs.yml > defaults/main.yml
 
 ansible-lint --fix . &>/dev/null
 ansible-lint --fix .

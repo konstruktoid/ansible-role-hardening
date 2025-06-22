@@ -10,6 +10,7 @@
 ├── STRUCTURE.md
 ├── TESTING.md
 ├── Vagrantfile
+├── aar-doc_template.j2
 ├── action-lint
 │   ├── Dockerfile
 │   └── entrypoint.sh
@@ -163,5 +164,5 @@
 │   └── test.yml
 └── tox.ini
 
-40 directories, 120 files
+40 directories, 121 files
 ```
