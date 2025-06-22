@@ -43,10 +43,6 @@ this Ansible role is used for configuration.
 > well.
 
 
-## Dependencies
-
-None.
-
 ## Examples
 
 ### Requirements
@@ -141,6 +137,7 @@ See [STRUCTURE.md](STRUCTURE.md) for tree of the role structure.
 ## Role testing
 
 See [TESTING.md](TESTING.md).
+
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 <!-- END_ANSIBLE_DOCS -->

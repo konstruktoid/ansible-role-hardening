@@ -36,10 +36,6 @@ this Ansible role is used for configuration.
 > well.
 
 
-## Dependencies
-
-None.
-
 ## Examples
 
 ### Requirements
@@ -134,17 +130,8 @@ See [STRUCTURE.md](STRUCTURE.md) for tree of the role structure.
 ## Role testing
 
 See [TESTING.md](TESTING.md).
+
 ## Role Arguments
-
-
-
-### Entrypoint: main
-
-AlmaLinux, Debian and Ubuntu hardening.
-
-AlmaLinux, Debian and Ubuntu hardening.
-
-Focused on using systemd services and options.
 
 |Option|Description|Default|
 |---|---|---|
@@ -964,9 +951,6 @@ Focused on using systemd services and options.
 
 ## Dependencies
 None.
-
-## Author and Project Information
-konstruktoid
 
 
 ## Recommended Reading

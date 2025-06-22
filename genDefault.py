@@ -26,6 +26,8 @@ def main():
     defaults = spec["argument_specs"]["main"]["options"]
     defaults = dict(sorted(defaults.items()))
 
+    print("---")
+
     for k, v in defaults.items():
         if v["type"] not in ["dict", "list"]:
             if v["type"] == "bool":
@@ -47,8 +49,10 @@ def main():
                     elif v["options"][sk]["type"] == "int":
                         subvalue_default = int(sv)
                     elif v["options"][sk]["type"] in ["str", "path"]:
-                        subvalue_default = f"\"{sv}\""
-                    print(f"  {sk}: {subvalue_default} # {v['options'][sk]['description']}")
+                        subvalue_default = f'"{sv}"'
+                    print(
+                        f"  {sk}: {subvalue_default} # {v['options'][sk]['description']}",
+                    )
 
         if v["type"] == "list":
             try:

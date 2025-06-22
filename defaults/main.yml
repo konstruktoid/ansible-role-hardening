@@ -1,4 +1,5 @@
 ---
+
 # adduser.conf template location.
 adduser_conf_template: "etc/adduser.conf.j2"
 
