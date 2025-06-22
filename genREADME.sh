@@ -38,7 +38,7 @@ this Ansible role is used for configuration.
 
 > **Note**
 > All options and defaults are documented in [defaults/main.yml](defaults/main.yml)
-> and [meta/argument_specs.yml](meta/arguement_specs.yml).
+> and [meta/argument_specs.yml](meta/argument_specs.yml).
 > \`ansible-doc -t role\` can be used to view the documentation for this role as
 > well.
 

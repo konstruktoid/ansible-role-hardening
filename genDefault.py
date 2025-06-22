@@ -26,7 +26,6 @@ def main():
     defaults = spec["argument_specs"]["main"]["options"]
     defaults = dict(sorted(defaults.items()))
 
-    # sort defaults by key
     for k, v in defaults.items():
         if v["type"] not in ["dict", "list"]:
             if v["type"] == "bool":
