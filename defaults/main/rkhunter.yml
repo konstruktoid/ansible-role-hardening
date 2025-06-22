@@ -1,8 +1,0 @@
----
-manage_rkhunter: true
-
-rkhunter_allow_ssh_prot_v1: false
-rkhunter_allow_ssh_root_user: false
-rkhunter_mirrors_mode: 0
-rkhunter_update_mirrors: true
-rkhunter_web_cmd: curl -fsSL

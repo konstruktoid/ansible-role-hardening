@@ -1,9 +1,0 @@
----
-manage_logind: true
-logind:
-  killuserprocesses: true
-  killexcludeusers:
-    - root
-  idleaction: lock
-  idleactionsec: 15min
-  removeipc: true

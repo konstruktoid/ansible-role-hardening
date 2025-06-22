@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ -z "${ANSIBLE_V}" ]; then
   ANSIBLE_V="$(grep min_ansible_version meta/main.yml | awk '{print $NF}' | tr -d '\"')"
@@ -35,6 +35,13 @@ this Ansible role is used for configuration.
 > There is a [SLSA](https://slsa.dev/) artifact present under the
 > [slsa action workflow](https://github.com/konstruktoid/ansible-role-hardening/actions/workflows/slsa.yml)
 > for verification.
+
+> **Note**
+> All options and defaults are documented in [defaults/main.yml](defaults/main.yml)
+> and [meta/argument_specs.yml](meta/arguement_specs.yml).
+> \`ansible-doc -t role\` can be used to view the documentation for this role as
+> well.
+
 
 ## Dependencies
 
@@ -134,16 +141,10 @@ See [STRUCTURE.md](STRUCTURE.md) for tree of the role structure.
 ## Role testing
 
 See [TESTING.md](TESTING.md).
-"
-echo '## Role Variables with defaults'
+<!-- BEGIN_ANSIBLE_DOCS -->
 
-for variables in $(find ./defaults -type f | sort); do
-  echo; echo "### $variables"
-  echo
-  echo '```yaml'
-  grep -vE '^#|---|\.\.\.' "$variables"
-  echo '```'
-done
+<!-- END_ANSIBLE_DOCS -->
+"
 
 echo
 echo "## Recommended Reading
@@ -221,3 +222,10 @@ echo '```sh'
 tree .
 echo '```'
 } > ./STRUCTURE.md
+
+aar-doc "$(pwd)" markdown
+
+python3 genDefault.py meta/argument_specs.yml | tee defaults/main.yml
+
+ansible-lint --fix . &>/dev/null
+ansible-lint --fix .
