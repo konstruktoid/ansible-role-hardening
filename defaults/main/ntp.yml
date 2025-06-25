@@ -1,9 +1,0 @@
----
-manage_timesyncd: true
-
-fallback_ntp:
-  - ntp.netnod.se
-  - ntp.ubuntu.com
-ntp:
-  - 2.pool.ntp.org
-  - time.nist.gov

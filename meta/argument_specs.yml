@@ -155,7 +155,7 @@ argument_specs:
       faillock:
         type: "dict"
         default:
-          - admin_group: []
+          - admin_group: ""
           - audit: true
           - deny: 5
           - dir: "/var/run/faillock"
@@ -171,8 +171,7 @@ argument_specs:
         options:
           admin_group:
             description: "Members of the group will be handled the same as the root account"
-            type: "list"
-            elements: "str"
+            type: "str"
           audit:
             description: "Will log the user name into the system log if the user is not found"
             type: "bool"
@@ -575,6 +574,22 @@ argument_specs:
         type: "list"
         elements: "str"
         default: "['hmac-sha2-512-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', 'hmac-sha2-512', 'hmac-sha2-256']"
+      sshd_match_addresses:
+        description: "Add a conditional block for addresses. If all of the criteria on the Match line are satisfied, the rules/parameters defined override those set
+          in the global section of the config file, until either another Match line or the end of the file."
+        type: "list"
+      sshd_match_groups:
+        description: "Add a conditional block for groups. If all of the criteria on the Match line are satisfied, the rules/parameters defined override those set
+          in the global section of the config file, until either another Match line or the end of the file."
+        type: "list"
+      sshd_match_local_ports:
+        description: "Add a conditional block for ports. If all of the criteria on the Match line are satisfied, the rules/parameters defined override those set in
+          the global section of the config file, until either another Match line or the end of the file."
+        type: "list"
+      sshd_match_users:
+        description: "Add a conditional block for users. If all of the criteria on the Match line are satisfied, the rules/parameters defined override those set in
+          the global section of the config file, until either another Match line or the end of the file."
+        type: "list"
       sshd_max_auth_tries:
         description: "Specifies the maximum number of authentication attempts permitted per connection."
         type: "int"
@@ -925,6 +940,10 @@ argument_specs:
         description: "The user that has access to the journal files."
         type: "str"
         default: "root"
+      journald_system_max_use:
+        description: "How much disk space the journal may use up at most."
+        type: "str"
+        default: ""
       manage_sysctl:
         description: "If True, manage C(sysctl) settings."
         type: "bool"
@@ -944,7 +963,7 @@ argument_specs:
       apparmor_sysctl_settings:
         type: "dict"
         default:
-          - kernel.apparmor_diplay_secid_mode: 0
+          - kernel.apparmor_display_secid_mode: 0
           - kernel.apparmor_restrict_unprivileged_io_uring: 0
           - kernel.apparmor_restrict_unprivileged_unconfined: 1
           - kernel.apparmor_restrict_unprivileged_userns: 1
@@ -1755,3 +1774,11 @@ argument_specs:
         description: "Enable SLUB debugger poisoning."
         type: "bool"
         default: "False"
+      manage_password:
+        description: "Manage PAM and various password settings."
+        type: "bool"
+        default: "True"
+      manage_packages:
+        description: "If True, then the role will install the packages listed in C(packages_debian), C(packages_redhat) and C(packages_ubuntu)."
+        type: "bool"
+        default: "True"

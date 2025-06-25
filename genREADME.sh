@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+set -o pipefail
 
 if [ -z "${ANSIBLE_V}" ]; then
   ANSIBLE_V="$(grep min_ansible_version meta/main.yml | awk '{print $NF}' | tr -d '\"')"
@@ -36,9 +38,12 @@ this Ansible role is used for configuration.
 > [slsa action workflow](https://github.com/konstruktoid/ansible-role-hardening/actions/workflows/slsa.yml)
 > for verification.
 
-## Dependencies
+> **Note**
+> All options and defaults are documented in [defaults/main.yml](defaults/main.yml)
+> and [meta/argument_specs.yml](meta/argument_specs.yml).
+> \`ansible-doc -t role\` can be used to view the documentation for this role as
+> well.
 
-None.
 
 ## Examples
 
@@ -65,11 +70,26 @@ roles:
       ansible.builtin.import_role:
         name: konstruktoid.hardening
       vars:
+        kernel_lockdown: true
+        manage_suid_sgid_permissions: false
         sshd_admin_net:
           - 10.0.2.0/24
           - 192.168.0.0/24
           - 192.168.1.0/24
-        manage_suid_sgid_permissions: false
+        sshd_allow_groups:
+          - sudo
+        sshd_update_moduli: true
+        sshd_match_users:
+          - user: testuser01
+            rules:
+              - AllowUsers testuser01
+              - AuthenticationMethods password
+              - PasswordAuthentication yes
+          - user: testuser02
+            rules:
+              - AllowUsers testuser02
+              - Banner none
+        ufw_rate_limit: true
 \`\`\`
 
 ### Local playbook using git checkout
@@ -134,16 +154,11 @@ See [STRUCTURE.md](STRUCTURE.md) for tree of the role structure.
 ## Role testing
 
 See [TESTING.md](TESTING.md).
-"
-echo '## Role Variables with defaults'
 
-for variables in $(find ./defaults -type f | sort); do
-  echo; echo "### $variables"
-  echo
-  echo '```yaml'
-  grep -vE '^#|---|\.\.\.' "$variables"
-  echo '```'
-done
+<!-- BEGIN_ANSIBLE_DOCS -->
+
+<!-- END_ANSIBLE_DOCS -->
+"
 
 echo
 echo "## Recommended Reading
@@ -221,3 +236,10 @@ echo '```sh'
 tree .
 echo '```'
 } > ./STRUCTURE.md
+
+aar-doc --output-template aar-doc_template.j2 "$(pwd)" markdown
+
+python3 genDefault.py meta/argument_specs.yml > defaults/main.yml || exit 1
+
+ansible-lint --fix . &>/dev/null
+ansible-lint --fix .

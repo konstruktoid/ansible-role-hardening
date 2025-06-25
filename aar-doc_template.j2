@@ -1,0 +1,60 @@
+## Role Arguments
+{% for entrypoint in argument_specs.keys() %}
+{% if entrypoint_options[entrypoint] %}
+{%- set path, options=entrypoint_options[entrypoint][0] -%}
+|Option|Description|Default|
+|---|---|---|
+{%- for name, details in options.items() %}
+| {{ name }} | {{ details.display_description | ansible_doc_markup }} | {{ details.display_default }} |
+{%- endfor %}
+
+{% if entrypoint_options[entrypoint] | length > 1 -%}
+{% for path, options in entrypoint_options[entrypoint][1:] -%}
+#### Options for {{ path | join(" > ") }}
+
+|Option|Description|Default|
+|---|---|---|
+{%- for name, details in options.items() %}
+| {{ name }} | {{ details.display_description | ansible_doc_markup }} | {{ details.display_default }} |
+{%- endfor %}
+
+{% endfor -%}
+
+{% endif -%}
+
+{% if entrypoint in entrypoint_choices -%}
+{% for path, choices in entrypoint_choices[entrypoint] -%}
+#### Choices for {{ path | join(" > ") }}
+
+|Choice|
+|---|
+{%- for item in choices %}
+| {{ item }} |
+{%- endfor %}
+
+{% endfor -%}
+{% endif -%}
+{% else -%}
+
+This entrypoint has no options.
+
+{% endif -%}
+
+{%- if "examples" in argument_specs[entrypoint] -%}
+
+#### Examples
+
+{{ argument_specs[entrypoint].examples }}
+
+{%- endif -%}
+{% endfor %}
+
+## Dependencies
+
+{%- if ("dependencies" in metadata) and (metadata.dependencies | length > 0) %}
+{%- for dependency in metadata.dependencies %}
+- {{ dependency }}
+{%- endfor %}
+{%- else %}
+None.
+{%- endif %}
