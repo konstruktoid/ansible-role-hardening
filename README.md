@@ -61,11 +61,26 @@ roles:
       ansible.builtin.import_role:
         name: konstruktoid.hardening
       vars:
+        kernel_lockdown: true
+        manage_suid_sgid_permissions: false
         sshd_admin_net:
           - 10.0.2.0/24
           - 192.168.0.0/24
           - 192.168.1.0/24
-        manage_suid_sgid_permissions: false
+        sshd_allow_groups:
+          - sudo
+        sshd_update_moduli: true
+        sshd_match_users:
+          - user: testuser01
+            rules:
+              - AllowUsers testuser01
+              - AuthenticationMethods password
+              - PasswordAuthentication yes
+          - user: testuser02
+            rules:
+              - AllowUsers testuser02
+              - Banner none
+        ufw_rate_limit: true
 ```
 
 ### Local playbook using git checkout
@@ -171,7 +186,7 @@ See [TESTING.md](TESTING.md).
 | manage_pam | If True, manage PAM configuration files. | True |
 | manage_faillock | If True, enable and manage faillock. | True |
 | manage_pwquality | If True, enable and manage pwquality. | True |
-| faillock | Faillock configuration options. | [{'admin_group': []}, {'audit': True}, {'deny': 5}, {'dir': '/var/run/faillock'}, {'even_deny_root': True}, {'fail_interval': 900}, {'local_users_only': True}, {'no_log_info': False}, {'nodelay': True}, {'root_unlock_time': 600}, {'silent': False}, {'unlock_time': 600}] |
+| faillock | Faillock configuration options. | [{'admin_group': ''}, {'audit': True}, {'deny': 5}, {'dir': '/var/run/faillock'}, {'even_deny_root': True}, {'fail_interval': 900}, {'local_users_only': True}, {'no_log_info': False}, {'nodelay': True}, {'root_unlock_time': 600}, {'silent': False}, {'unlock_time': 600}] |
 | login_defs | login.defs configuration options. | [{'login_retries': 5}, {'login_timeout': 60}, {'pass_max_days': 60}, {'pass_min_days': 1}, {'pass_warn_age': 7}] |
 | password_remember | The number of previous passwords to remember and not allow the user to reuse. | 24 |
 | pwquality | pwquality configuration options. | [{'dcredit': -1}, {'dictcheck': True}, {'dictpath': ''}, {'difok': 8}, {'enforce_for_root': True}, {'enforcing': True}, {'gecoscheck': True}, {'lcredit': -1}, {'local_users_only': True}, {'maxclassrepeat': 4}, {'maxrepeat': 3}, {'maxsequence': 3}, {'minclass': 4}, {'minlen': 15}, {'ocredit': -1}, {'retry': 3}, {'ucredit': -1}, {'usercheck': True}, {'usersubstr': 3}] |
@@ -230,6 +245,10 @@ See [TESTING.md](TESTING.md).
 | sshd_log_level | Gives the verbosity level that is used when logging messages from sshd. | verbose |
 | sshd_login_grace_time | The server disconnects after this time if the user has not successfully logged in. | 20 |
 | sshd_macs | Specifies the available MAC (Message Authentication Code) algorithms. | ['hmac-sha2-512-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', 'hmac-sha2-512', 'hmac-sha2-256'] |
+| sshd_match_addresses | Add a conditional block for addresses. If all of the criteria on the Match line are satisfied, the rules/parameters defined override those set in the global section of the config file, until either another Match line or the end of the file. |  |
+| sshd_match_groups | Add a conditional block for groups. If all of the criteria on the Match line are satisfied, the rules/parameters defined override those set in the global section of the config file, until either another Match line or the end of the file. |  |
+| sshd_match_local_ports | Add a conditional block for ports. If all of the criteria on the Match line are satisfied, the rules/parameters defined override those set in the global section of the config file, until either another Match line or the end of the file. |  |
+| sshd_match_users | Add a conditional block for users. If all of the criteria on the Match line are satisfied, the rules/parameters defined override those set in the global section of the config file, until either another Match line or the end of the file. |  |
 | sshd_max_auth_tries | Specifies the maximum number of authentication attempts permitted per connection. | 3 |
 | sshd_max_sessions | Specifies the maximum number of open sessions permitted per network connection. | 3 |
 | sshd_max_startups | Specifies the maximum number of concurrent unauthenticated connections to the SSH daemon. | 10:30:60 |
