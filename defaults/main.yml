@@ -136,7 +136,7 @@ enable_page_poisoning: true
 
 # Faillock configuration options.
 faillock:
-  admin_group: 0 # Members of the group will be handled the same as the root account
+  admin_group: "" # Members of the group will be handled the same as the root account
   audit: true # Will log the user name into the system log if the user is not found
   deny: 5 # Deny access if the number of login failures exceeds the value of this option.
   dir: "/var/run/faillock" # Where the user files with the failure records are kept.
@@ -314,7 +314,7 @@ login_template: "etc/pam.d/login.j2"
 # Configure systemd-logind settings.
 logind:
   killuserprocesses: true # Configures whether the processes of a user should be killed when the user logs out.
-  killexcludeusers: true # A list of usernames that override the KillUserProcesses setting.
+  killexcludeusers: ['root'] # A list of usernames that override the KillUserProcesses setting.
   idleaction: "lock" # Configures the action to take when the system is idle.
   idleactionsec: "15min" # Configures the delay after which the action configured in C(IdleAction) is taken after the system is idle.
   removeipc: true # Controls whether System V and POSIX IPC objects belonging to the user shall be removed when the user fully logs out.
@@ -719,6 +719,14 @@ sshd_login_grace_time: 20
 
 # Specifies the available MAC (Message Authentication Code) algorithms.
 sshd_macs: ["hmac-sha2-512-etm@openssh.com", "hmac-sha2-256-etm@openssh.com", "hmac-sha2-512", "hmac-sha2-256"]
+# Add a conditional block for addresses. If all of the criteria on the Match line are satisfied, the rules/parameters defined override those set in the global section of the config file, until either another Match line or the end of the file.
+sshd_match_addresses: []
+# Add a conditional block for groups. If all of the criteria on the Match line are satisfied, the rules/parameters defined override those set in the global section of the config file, until either another Match line or the end of the file.
+sshd_match_groups: []
+# Add a conditional block for ports. If all of the criteria on the Match line are satisfied, the rules/parameters defined override those set in the global section of the config file, until either another Match line or the end of the file.
+sshd_match_local_ports: []
+# Add a conditional block for users. If all of the criteria on the Match line are satisfied, the rules/parameters defined override those set in the global section of the config file, until either another Match line or the end of the file.
+sshd_match_users: []
 # Specifies the maximum number of authentication attempts permitted per connection.
 sshd_max_auth_tries: 3
 
