@@ -158,6 +158,7 @@ Match Group {{ sshd_sftp_only_group }}
     X11Forwarding no
 {% endif %}
 {% endif %}
+{% if sshd_match_addresses %}
 {% for item in sshd_match_addresses %}
 {%+ if loop.first +%}
 #######################################################
@@ -169,6 +170,8 @@ Match Address {{ item.address }}
     {{ rule | indent(4) }}
   {% endfor %}
 {% endfor %}
+{% endif %}
+{% if sshd_match_groups %}
 {% for item in sshd_match_groups %}
 {%+ if loop.first +%}
 #######################################################
@@ -180,6 +183,8 @@ Match Group {{ item.group }}
     {{ rule | indent(4) }}
   {% endfor %}
 {% endfor %}
+{% endif %}
+{% if sshd_match_users %}
 {% for item in sshd_match_users %}
 {%+ if loop.first +%}
 #######################################################
@@ -191,6 +196,8 @@ Match User {{ item.user }}
     {{ rule | indent(4) }}
   {% endfor %}
 {% endfor %}
+{% endif %}
+{% if sshd_match_local_ports %}
 {% for item in sshd_match_local_ports %}
 {%+ if loop.first +%}
 #######################################################
@@ -202,3 +209,4 @@ Match LocalPort {{ item.port }}
     {{ rule | indent(4) }}
   {% endfor %}
 {% endfor %}
+{% endif %}
