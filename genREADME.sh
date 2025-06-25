@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -o pipefail
+
 if [ -z "${ANSIBLE_V}" ]; then
   ANSIBLE_V="$(grep min_ansible_version meta/main.yml | awk '{print $NF}' | tr -d '\"')"
 fi
@@ -68,11 +70,26 @@ roles:
       ansible.builtin.import_role:
         name: konstruktoid.hardening
       vars:
+        kernel_lockdown: true
+        manage_suid_sgid_permissions: false
         sshd_admin_net:
           - 10.0.2.0/24
           - 192.168.0.0/24
           - 192.168.1.0/24
-        manage_suid_sgid_permissions: false
+        sshd_allow_groups:
+          - sudo
+        sshd_update_moduli: true
+        sshd_match_users:
+          - user: testuser01
+            rules:
+              - AllowUsers testuser01
+              - AuthenticationMethods password
+              - PasswordAuthentication yes
+          - user: testuser02
+            rules:
+              - AllowUsers testuser02
+              - Banner none
+        ufw_rate_limit: true
 \`\`\`
 
 ### Local playbook using git checkout
@@ -222,7 +239,7 @@ echo '```'
 
 aar-doc --output-template aar-doc_template.j2 "$(pwd)" markdown
 
-python3 genDefault.py meta/argument_specs.yml > defaults/main.yml
+python3 genDefault.py meta/argument_specs.yml > defaults/main.yml || exit 1
 
 ansible-lint --fix . &>/dev/null
 ansible-lint --fix .

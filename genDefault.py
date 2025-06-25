@@ -42,17 +42,19 @@ def main():
         if v["type"] == "dict":
             print(f"\n# {v['description']}\n{k}:")
 
-            for sv in v["default"]:
-                for sk, sv in sorted(sv.items()):
-                    if v["options"][sk]["type"] == "bool":
-                        subvalue_default = str(sv).lower()
-                    elif v["options"][sk]["type"] == "int":
-                        subvalue_default = int(sv)
-                    elif v["options"][sk]["type"] in ["str", "path"]:
-                        subvalue_default = f'"{sv}"'
-                    print(
-                        f"  {sk}: {subvalue_default} # {v['options'][sk]['description']}",
-                    )
+            if type(v["default"]) is not str:
+                for sv in v["default"]:
+                    for sk, sv in sorted(sv.items()):
+                        if v["options"][sk]["type"] == "bool":
+                            subvalue_default = str(sv).lower()
+                        elif v["options"][sk]["type"] == "int":
+                            subvalue_default = int(sv)
+                        elif v["options"][sk]["type"] in ["str", "path"]:
+                            subvalue_default = f'"{sv}"'
+
+                        print(
+                            f"  {sk}: {subvalue_default} # {v['options'][sk]['description']}",
+                        )
 
         if v["type"] == "list":
             try:
