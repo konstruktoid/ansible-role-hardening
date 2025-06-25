@@ -339,7 +339,7 @@
           - "{{ 'AcceptEnv ' + sshd_accept_env if (sshd_accept_env is defined and sshd_accept_env | length != 0)}}"
           - AddressFamily {{ 'inet' if (disable_ipv6 | bool) else 'any' }}
           - AllowGroups {{ sshd_allow_groups | join(' ') }}
-          - AllowUsers {{ sshd_allow_users | join(' ') }}
+          - "{{ 'AllowUsers ' + (sshd_allow_users | join(' ')) if (sshd_allow_users is defined and sshd_allow_users | length != 0) }}"
           - AllowAgentForwarding {{ 'yes' if (sshd_allow_agent_forwarding | bool) else 'no' }}
           - >-
             {%- if (ssh_installed_version is version('6.2', '>=')) -%}
@@ -1139,9 +1139,9 @@
           - "{{ 'even_deny_root' if (faillock.even_deny_root | bool) }}"
           - root_unlock_time={{ faillock.root_unlock_time }}
           - >-
-            {%- for group in faillock.admin_group -%}
-              admin_group={{ group }}
-            {%- endfor -%}
+            {%- if faillock.admin_group is defined and faillock.admin_group | length > 0 -%}
+              admin_group={{ faillock.admin_group }}
+            {%- endif -%}
       when:
         - faillockconf.stat.exists
 
