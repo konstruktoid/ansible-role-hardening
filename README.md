@@ -351,7 +351,7 @@ See [TESTING.md](TESTING.md).
 | manage_mounts | If True, `/proc` will be mounted with the `nosuid,nodev,noexec,hidepid` options, `/dev/shm` will be mounted with the `nosuid,nodev,noexec` options and `/tmp` will be mounted as tmpfs with the `nosuid,nodev,noexec` options using the available template. | True |
 | hide_pid | This option controls who can access the information in `/proc/pid` directories | 2 |
 | process_group | Specifies the ID of a group whose members are authorized to learn process information otherwise prohibited by hidepid. | 0 |
-| automatic_updates | Configure automatic updates. | [{'enabled': True}, {'only_security': True}, {'reboot': False}, {'reboot_from_time': '2:00'}, {'reboot_time_margin_mins': 20}] |
+| automatic_updates | Configure automatic updates. | [{'enabled': True}, {'only_security': True}, {'reboot': False}, {'reboot_from_time': '2:00'}, {'reboot_time_margin_mins': 20}, {'custom_origins': ['']}] |
 | manage_netplan | If True, then any available netplan configuration files will have the permissions set to 0600. | True |
 | manage_resolved | If True, then the systemd-resolved service will be installed and configured. | True |
 | dns | A list of addresses to use as system DNS servers. | ['1.1.1.2', '9.9.9.9'] |
@@ -557,6 +557,33 @@ See [TESTING.md](TESTING.md).
 | reboot | If True, it will reboot the system if needed. |  |
 | reboot_from_time | If system reboot is enabled, the variable sets the reboot time, with added random minutes from `reboot_time_margin_mins`. |  |
 | reboot_time_margin_mins | Add minutes to the reboot time, set using `reboot_from_time`. |  |
+| custom_origins | Add custom origins for automatic updates in a list (see example above) |  |
+
+
+Getting necessary information for custom_origins on Debian based system:
+```bash
+apt-cache policy
+
+Package files:
+ 100 /var/lib/dpkg/status
+     release a=now
+ 500 https://download.docker.com/linux/debian bookworm/stable amd64 Packages
+     release o=Docker,a=bookworm,l=Docker CE,c=stable,b=amd64
+     origin download.docker.com
+...
+```
+
+custom_origins example for Debian12 (bookworm) with Docker repository
+
+```yaml
+automatic_updates:
+  # example for Debian12 (bookworm) with Docker repository
+  custom_origins:
+    - name: "Docker"
+      description: "Docker repository"
+      archive: "bookworm"
+```
+
 
 #### Options for main > logind
 
