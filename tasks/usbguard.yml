@@ -183,7 +183,7 @@
       block:
         - name: Write policy
           ansible.builtin.lineinfile:
-            path: /etc/usbguard/rules.conf
+            path: "{{ usbguard_rulefile }}"
             line: "{{ item }}"
             owner: root
             group: root
