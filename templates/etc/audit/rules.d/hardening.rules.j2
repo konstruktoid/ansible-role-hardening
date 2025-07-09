@@ -64,141 +64,141 @@
 -a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=unset -F key=actions
 
 # Access to su, sudo, and sudoers files
--w /bin/su -p x -F key=actions
--w /etc/sudoers.d/ -p wa -F key=actions
--w /etc/sudoers -p wa -F key=actions
--w /usr/bin/sudo -p x -F key=actions
+-a always,exit -F path=/bin/su -F perm=x -F key=actions
+-a always,exit -F dir=/etc/sudoers.d/ -F perm=wa -F key=actions
+-a always,exit -F path=/etc/sudoers -F perm=wa -F key=actions
+-a always,exit -F path=/usr/bin/sudo -F perm=x -F key=actions
 
 # Actions by root in /home/ not owned by root
 -a always,exit -S all -F dir=/home/ -F uid=0 -C auid!=obj_uid -F key=admin-user-home
 
 # Access to AppArmor tools and configuration
--w /sbin/apparmor_parser -p x -F key=apparmor-tools
--w /usr/sbin/aa-complain -p x -F key=apparmor-tools
--w /usr/sbin/aa-disable -p x -F key=apparmor-tools
--w /usr/sbin/aa-enforce -p x -F key=apparmor-tools
--w /etc/apparmor.d -p wa -F key=apparmor
--w /etc/apparmor -p wa -F key=apparmor
+-a always,exit -F path=/sbin/apparmor_parser -F perm=x -F key=apparmor-tools
+-a always,exit -F path=/usr/sbin/aa-complain -F perm=x -F key=apparmor-tools
+-a always,exit -F path=/usr/sbin/aa-disable -F perm=x -F key=apparmor-tools
+-a always,exit -F path=/usr/sbin/aa-enforce -F perm=x -F key=apparmor-tools
+-a always,exit -F dir=/etc/apparmor.d -F perm=wa -F key=apparmor
+-a always,exit -F dir=/etc/apparmor -F perm=wa -F key=apparmor
 
 # Changes to audit configuration and tools
--w /etc/audisp -p wa -F key=audispconfig
--w /etc/audit -p wa -F key=auditconfig
--w /etc/libaudit.conf -p wa -F key=auditconfig
--w /var/log/audit -p rwxa -F key=auditlog
--w /sbin/auditctl -p x -F key=audittools
--w /sbin/auditd -p x -F key=audittools
+-a always,exit -F path=/etc/audisp -F perm=wa -F key=audispconfig
+-a always,exit -F path=/etc/audit -F perm=wa -F key=auditconfig
+-a always,exit -F path=/etc/libaudit.conf -F perm=wa -F key=auditconfig
+-a always,exit -F path=/var/log/audit -F perm=rwxa -F key=auditlog
+-a always,exit -F path=/sbin/auditctl -F perm=x -F key=audittools
+-a always,exit -F path=/sbin/auditd -F perm=x -F key=audittools
 
 # Network configuration changes
 -a always,exit -F arch=b32 -S sethostname,setdomainname -F key=audit_rules_networkconfig_modification
 -a always,exit -F arch=b64 -S sethostname,setdomainname -F key=audit_rules_networkconfig_modification
--w /etc/hosts -p wa -F key=audit_rules_networkconfig_modification
--w /etc/issue.net -p wa -F key=audit_rules_networkconfig_modification
--w /etc/issue -p wa -F key=audit_rules_networkconfig_modification
--w /etc/sysconfig/network -p wa -F key=audit_rules_networkconfig_modification
+-a always,exit -F path=/etc/hosts -F perm=wa -F key=audit_rules_networkconfig_modification
+-a always,exit -F path=/etc/issue.net -F perm=wa -F key=audit_rules_networkconfig_modification
+-a always,exit -F path=/etc/issue -F perm=wa -F key=audit_rules_networkconfig_modification
+-a always,exit -F path=/etc/sysconfig/network -F perm=wa -F key=audit_rules_networkconfig_modification
 
 # User/group file modifications
--w /etc/group -p wa -F key=audit_rules_usergroup_modification
--w /etc/gshadow -p wa -F key=audit_rules_usergroup_modification
--w /etc/passwd -p wa -F key=audit_rules_usergroup_modification
--w /etc/security/opasswd -p wa -F key=audit_rules_usergroup_modification
--w /etc/shadow -p wa -F key=audit_rules_usergroup_modification
+-a always,exit -F path=/etc/group -F perm=wa -F key=audit_rules_usergroup_modification
+-a always,exit -F path=/etc/gshadow -F perm=wa -F key=audit_rules_usergroup_modification
+-a always,exit -F path=/etc/passwd -F perm=wa -F key=audit_rules_usergroup_modification
+-a always,exit -F path=/etc/security/opasswd -F perm=wa -F key=audit_rules_usergroup_modification
+-a always,exit -F path=/etc/shadow -F perm=wa -F key=audit_rules_usergroup_modification
 
 # System time modifications
 -a always,exit -F arch=b32 -S adjtimex,settimeofday,stime -F key=audit_time_rules
 -a always,exit -F arch=b64 -S adjtimex,settimeofday -F key=audit_time_rules
--w /etc/localtime -p wa -F key=audit_time_rules
+-a always,exit -F path=/etc/localtime -F perm=wa -F key=audit_time_rules
 
 # Cron configuration modifications
--w /etc/cron.allow -p wa -F key=cron
--w /etc/cron.daily -p wa -F key=cron
--w /etc/cron.deny -p wa -F key=cron
--w /etc/cron.d -p wa -F key=cron
--w /etc/cron.hourly -p wa -F key=cron
--w /etc/cron.monthly -p wa -F key=cron
--w /etc/crontab -p wa -F key=cron
--w /etc/cron.weekly -p wa -F key=cron
--w /var/spool/cron/crontabs -p rwxa -F key=cron
+-a always,exit -F path=/etc/cron.allow -F perm=wa -F key=cron
+-a always,exit -F path=/etc/cron.daily -F perm=wa -F key=cron
+-a always,exit -F path=/etc/cron.deny -F perm=wa -F key=cron
+-a always,exit -F path=/etc/cron.d -F perm=wa -F key=cron
+-a always,exit -F path=/etc/cron.hourly -F perm=wa -F key=cron
+-a always,exit -F path=/etc/cron.monthly -F perm=wa -F key=cron
+-a always,exit -F path=/etc/crontab -F perm=wa -F key=cron
+-a always,exit -F path=/etc/cron.weekly -F perm=wa -F key=cron
+-a always,exit -F path=/var/spool/cron/crontabs -F perm=rwxa -F key=cron
 
 # File deletion and renaming by users
 -a always,exit -F arch=b32 -S rename,renameat,unlink,unlinkat -F auid>=1000 -F auid!=unset -F key=delete
 -a always,exit -F arch=b64 -S rename,renameat,unlink,unlinkat -F auid>=1000 -F auid!=unset -F key=delete
 
 # Group file modifications and group commands
--w /etc/group -p wa -F key=group-modification
--w /etc/gshadow -p wa -F key=group-modification
--w /etc/passwd -p wa -F key=group-modification
--w /etc/security/opasswd -p wa -F key=group-modification
--w /etc/shadow -p wa -F key=group-modification
--w /usr/sbin/addgroup -p x -F key=group-modification
--w /usr/sbin/groupadd -p x -F key=group-modification
--w /usr/sbin/groupmod -p x -F key=group-modification
+-a always,exit -F path=/etc/group -F perm=wa -F key=group-modification
+-a always,exit -F path=/etc/gshadow -F perm=wa -F key=group-modification
+-a always,exit -F path=/etc/passwd -F perm=wa -F key=group-modification
+-a always,exit -F path=/etc/security/opasswd -F perm=wa -F key=group-modification
+-a always,exit -F path=/etc/shadow -F perm=wa -F key=group-modification
+-a always,exit -F path=/usr/sbin/addgroup -F perm=x -F key=group-modification
+-a always,exit -F path=/usr/sbin/groupadd -F perm=x -F key=group-modification
+-a always,exit -F path=/usr/sbin/groupmod -F perm=x -F key=group-modification
 
 # Startup scripts
--w /etc/init.d -p wa -F key=init
--w /etc/init -p wa -F key=init
--w /etc/inittab -p wa -F key=init
+-a always,exit -F dir=/etc/init.d -F perm=wa -F key=init
+-a always,exit -F path=/etc/init -F perm=wa -F key=init
+-a always,exit -F path=/etc/inittab -F perm=wa -F key=init
 
 # Library lookup paths
--w /etc/ld.so.conf.d/ -p wa -F key=libpath
--w /etc/ld.so.conf -p wa -F key=libpath
+-a always,exit -F dir=/etc/ld.so.conf.d/ -F perm=wa -F key=libpath
+-a always,exit -F path=/etc/ld.so.conf -F perm=wa -F key=libpath
 
 # Local time
--w /etc/localtime -p wa -F key=localtime
+-a always,exit -F path=/etc/localtime -F perm=wa -F key=localtime
 
 # Login monitoring
--w /etc/login.defs -p wa -F key=login
--w /etc/securetty -p wa -F key=login
+-a always,exit -F path=/etc/login.defs -F perm=wa -F key=login
+-a always,exit -F path=/etc/securetty -F perm=wa -F key=login
 {% if faillock.dir %}
--w {{ faillock.dir }} -p wa -F key=login
+-a always,exit -F dir={{ faillock.dir }} -F perm=wa -F key=login
 {% else %}
--w /var/run/faillock -p wa -F key=login
+-a always,exit -F path=/var/run/faillock -F perm=wa -F key=login
 {% endif %}
--w /var/log/faillog -p wa -F key=login
--w /var/log/lastlog -p wa -F key=login
--w /var/log/tallylog -p wa -F key=login
--w /var/log/faillock -p wa -F key=login
--w /var/log/sudo.log -p wa -F key=login
+-a always,exit -F path=/var/log/faillog -F perm=wa -F key=login
+-a always,exit -F path=/var/log/lastlog -F perm=wa -F key=login
+-a always,exit -F path=/var/log/tallylog -F perm=wa -F key=login
+-a always,exit -F path=/var/log/faillock -F perm=wa -F key=login
+-a always,exit -F path=/var/log/sudo.log -F perm=wa -F key=login
 
 # SELinux configuration
--w /etc/selinux/ -p wa -F key=MAC-policy
--w /usr/share/selinux/ -p wa -F key=MAC-policy
+-a always,exit -F dir=/etc/selinux/ -F perm=wa -F key=MAC-policy
+-a always,exit -F dir=/usr/share/selinux/ -F perm=wa -F key=MAC-policy
 
 # Mail and Postfix
--w /etc/aliases -p wa -F key=mail
--w /etc/postfix -p wa -F key=mail
+-a always,exit -F path=/etc/aliases -F perm=wa -F key=mail
+-a always,exit -F path=/etc/postfix -F perm=wa -F key=mail
 
 # Kernel module configuration and tools
--w /etc/modprobe.conf -p wa -F key=modprobe
--w /etc/modprobe.d -p wa -F key=modprobe
--w /etc/modules -p wa -F key=modprobe
+-a always,exit -F path=/etc/modprobe.conf -F perm=wa -F key=modprobe
+-a always,exit -F dir=/etc/modprobe.d -F perm=wa -F key=modprobe
+-a always,exit -F path=/etc/modules -F perm=wa -F key=modprobe
 -a always,exit -F arch=b32 -S create_module -F key=module-change
 -a always,exit -F arch=b64 -S create_module -F key=module-change
 -a always,exit -F arch=b32 -S delete_module,finit_module,init_module -F key=modules
 -a always,exit -F arch=b32 -S query_module -F auid>=1000 -F auid!=unset -F key=modules
 -a always,exit -F arch=b64 -S delete_module,finit_module,init_module -F key=modules
 -a always,exit -F arch=b64 -S query_module -F auid>=1000 -F auid!=unset -F key=modules
--w /bin/kmod -p x -F key=modules
--w /sbin/insmod -p x -F key=modules
--w /sbin/modprobe -p x -F key=modules
--w /sbin/rmmod -p x -F key=modules
--w /usr/bin/kmod -p x -F key=modules
--w /usr/sbin/insmod -p x -F key=modules
--w /usr/sbin/modprobe -p x -F key=modules
--w /usr/sbin/rmmod -p x -F key=modules
+-a always,exit -F path=/bin/kmod -F perm=x -F key=modules
+-a always,exit -F path=/sbin/insmod -F perm=x -F key=modules
+-a always,exit -F path=/sbin/modprobe -F perm=x -F key=modules
+-a always,exit -F path=/sbin/rmmod -F perm=x -F key=modules
+-a always,exit -F path=/usr/bin/kmod -F perm=x -F key=modules
+-a always,exit -F path=/usr/sbin/insmod -F perm=x -F key=modules
+-a always,exit -F path=/usr/sbin/modprobe -F perm=x -F key=modules
+-a always,exit -F path=/usr/sbin/rmmod -F perm=x -F key=modules
 
 # Mount events for accounts with UID => 1000
 -a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=unset -F key=mounts
 -a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=unset -F key=mounts
 
 # PAM configuration files
--w /etc/pam.d -p wa -F key=pam
--w /etc/security/limits.conf -p wa -F key=pam
--w /etc/security/namespace.conf -p wa -F key=pam
--w /etc/security/namespace.init -p wa -F key=pam
--w /etc/security/pam_env.conf -p wa -F key=pam
+-a always,exit -F dir=/etc/pam.d -F perm=wa -F key=pam
+-a always,exit -F path=/etc/security/limits.conf -F perm=wa -F key=pam
+-a always,exit -F path=/etc/security/namespace.conf -F perm=wa -F key=pam
+-a always,exit -F path=/etc/security/namespace.init -F perm=wa -F key=pam
+-a always,exit -F path=/etc/security/pam_env.conf -F perm=wa -F key=pam
 
 # Password modification
--w /usr/bin/passwd -p x -F key=passwd-modification
+-a always,exit -F path=/usr/bin/passwd -F perm=x -F key=passwd-modification
 
 #  Permission modifications by non-root users
 -a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=unset -F key=perm_mod
@@ -211,10 +211,10 @@
 -a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=unset -F key=perm_mod
 
 # Power management commands
--w /sbin/halt -p x -F key=power
--w /sbin/poweroff -p x -F key=power
--w /sbin/reboot -p x -F key=power
--w /sbin/shutdown -p x -F key=power
+-a always,exit -F path=/sbin/halt -F perm=x -F key=power
+-a always,exit -F path=/sbin/poweroff -F perm=x -F key=power
+-a always,exit -F path=/sbin/reboot -F perm=x -F key=power
+-a always,exit -F path=/sbin/shutdown -F perm=x -F key=power
 
 # Privileged command usage by non-root users
 -a always,exit -F path=/bin/fusermount -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
@@ -296,40 +296,40 @@
 -a always,exit -F path=/usr/sbin/vlock-main -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
 
 # Process and session initiation
--w /var/log/btmp -p wa -F key=session
--w /var/log/wtmp -p wa -F key=session
--w /var/run/utmp -p wa -F key=session
+-a always,exit -F path=/var/log/btmp -F perm=wa -F key=session
+-a always,exit -F path=/var/log/wtmp -F perm=wa -F key=session
+-a always,exit -F path=/var/run/utmp -F perm=wa -F key=session
 
 # Creation of special files
 -a always,exit -F arch=b32 -S mknod -S mknodat -F key=specialfiles
 -a always,exit -F arch=b64 -S mknod -S mknodat -F key=specialfiles
 
 # SSH configuration and tools
--w /etc/ssh/sshd_config.d/ -p rwxa -F key=sshd
--w /etc/ssh/sshd_config -p rwxa -F key=sshd
+-a always,exit -F dir=/etc/ssh/sshd_config.d/ -F perm=rwxa -F key=sshd
+-a always,exit -F path=/etc/ssh/sshd_config -F perm=rwxa -F key=sshd
 
 # Sysctl configuration
--w /etc/sysctl.conf -p wa -F key=sysctl
--w {{ sysctl_conf_dir }}/zz-ipv6-hardening.conf -p wa -F key=sysctl
--w {{ sysctl_conf_dir }}/zz-main-hardening.conf -p wa -F key=sysctl
--w {{ sysctl_conf_dir }}/zz-ufw-hardening.conf -p wa -F key=sysctl
+-a always,exit -F path=/etc/sysctl.conf -F perm=wa -F key=sysctl
+-a always,exit -F path={{ sysctl_conf_dir }}/zz-ipv6-hardening.conf -F perm=wa -F key=sysctl
+-a always,exit -F path={{ sysctl_conf_dir }}/zz-main-hardening.conf -F perm=wa -F key=sysctl
+-a always,exit -F path={{ sysctl_conf_dir }}/zz-ufw-hardening.conf -F perm=wa -F key=sysctl
 
 # Systemd configuration and tools
--w /bin/journalctl -p x -F key=systemd-tools
--w /bin/systemctl -p x -F key=systemd-tools
--w /etc/systemd -p wa -F key=systemd
--w /lib/systemd -p wa -F key=systemd
--w /var/lib/systemd/credential.secret -p wa -F key=systemd
+-a always,exit -F path=/bin/journalctl -F perm=x -F key=systemd-tools
+-a always,exit -F path=/bin/systemctl -F perm=x -F key=systemd-tools
+-a always,exit -F dir=/etc/systemd -F perm=wa -F key=systemd
+-a always,exit -F dir=/lib/systemd -F perm=wa -F key=systemd
+-a always,exit -F path=/var/lib/systemd/credential.secret -F perm=wa -F key=systemd
 
 # Time changes
 -a always,exit -F arch=b32 -S adjtimex,settimeofday,stime,clock_settime -F key=time-change
 -a always,exit -F arch=b64 -S adjtimex,settimeofday,clock_settime -F key=time-change
--w /etc/localtime -p wa -F key=time-change
--w /etc/timezone -p wa -F key=time-changezone
+-a always,exit -F path=/etc/localtime -F perm=wa -F key=time-change
+-a always,exit -F path=/etc/timezone -F perm=wa -F key=time-changezone
 
 # /tmp directories
--w /tmp -p wxa -F key=tmp
--w /var/tmp -p wxa -F key=tmp
+-a always,exit -F dir=/tmp -F perm=wxa -F key=tmp
+-a always,exit -F dir=/var/tmp -F perm=wxa -F key=tmp
 
 # User modifications
 -a always,exit -F arch=b32 -S execve -C euid!=uid -F auid!=unset -F key=user_emulation
@@ -338,9 +338,9 @@
 -a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -k setuid
 -a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -k setgid
 -a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -k setgid
--w /usr/sbin/adduser -p x -F key=user-modification
--w /usr/sbin/useradd -p x -F key=user-modification
--w /usr/sbin/usermod -p x -F key=user-modification
+-a always,exit -F path=/usr/sbin/adduser -F perm=x -F key=user-modification
+-a always,exit -F path=/usr/sbin/useradd -F perm=x -F key=user-modification
+-a always,exit -F path=/usr/sbin/usermod -F perm=x -F key=user-modification
 
 # Set the auditd flag
 -e {{ auditd_enable_flag }}
