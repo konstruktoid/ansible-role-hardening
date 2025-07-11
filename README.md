@@ -180,7 +180,7 @@ See [TESTING.md](TESTING.md).
 | system_conf_template | systemd system.conf template location. | etc/systemd/system.conf.j2 |
 | timesyncd_conf_template | systemd timesyncd.conf template location. | etc/systemd/timesyncd.conf.j2 |
 | tmp_mount_template | tmp.mount template location. | etc/systemd/tmp.mount.j2 |
-| unattended_upgrades_template | APT unattended-upgrades template location. | etc/apt/apt.conf.d/50unattended-upgrades.j2 |
+| unattended_upgrades_template | APT unattended-upgrades template location. | etc/apt/apt.conf.d/52unattended-upgrades-local.j2 |
 | user_conf_template | systemd user.conf template location. | etc/systemd/user.conf.j2 |
 | useradd_template | useradd template location. | etc/default/useradd.j2 |
 | manage_pam | If True, manage PAM configuration files. | True |
@@ -363,7 +363,7 @@ See [TESTING.md](TESTING.md).
 | manage_motdnews | If True, then `apt-news`, `motd-news` and Ubuntu Pro will be disabled. | True |
 | system_upgrade | If True, then the system will be upgraded to the latest version using `apt` or `dnf`. | True |
 | packages_blocklist | Packages that will be removed from the system if they are installed. | ['apport*', 'autofs', 'avahi*', 'avahi-*', 'beep', 'ftp', 'git', 'inetutils-telnet', 'pastebinit', 'popularity-contest', 'prelink', 'rpcbind', 'rsh*', 'rsync', 'talk*', 'telnet*', 'tftp*', 'tnftp', 'tuned', 'whoopsie', 'xinetd', 'yp-tools', 'ypbind'] |
-| packages_debian | Packages to install on Debian-based systems. | ['acct', 'apparmor-profiles', 'apparmor-utils', 'apt-show-versions', 'audispd-plugins', 'auditd', 'cracklib-runtime', 'curl', 'debsums', 'gnupg2', 'libpam-apparmor', 'libpam-cap', 'libpam-modules', 'libpam-tmpdir', 'lsb-release', 'needrestart', 'openssh-server', 'postfix', 'rsyslog', 'sysstat', 'systemd-journal-remote', 'tcpd', 'vlock', 'wamerican'] |
+| packages_debian | Packages to install on Debian-based systems. | ['acct', 'apparmor-profiles', 'apparmor-utils', 'apt-listchanges', 'apt-show-versions', 'audispd-plugins', 'auditd', 'cracklib-runtime', 'curl', 'debsums', 'gnupg2', 'libpam-apparmor', 'libpam-cap', 'libpam-modules', 'libpam-tmpdir', 'lsb-release', 'needrestart', 'openssh-server', 'postfix', 'rsyslog', 'sysstat', 'systemd-journal-remote', 'tcpd', 'vlock', 'wamerican'] |
 | packages_redhat | Packages to install on Red Hat-based systems. | ['audispd-plugins', 'audit', 'cracklib', 'curl', 'gnupg2', 'openssh-server', 'needrestart', 'postfix', 'psacct', 'python3-dnf-plugin-post-transaction-actions', 'rsyslog', 'rsyslog-gnutls', 'systemd-journal-remote', 'vlock', 'words'] |
 | packages_ubuntu | Packages to install on Ubuntu-based systems. | ['fwupd', 'secureboot-db', 'snapd'] |
 | manage_logind | If True, then the systemd-logind service will be configured using the available template. | True |

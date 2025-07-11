@@ -110,7 +110,7 @@
     - name: Configure unattended-upgrades
       ansible.builtin.template:
         src: "{{ unattended_upgrades_template }}"
-        dest: /etc/apt/apt.conf.d/50unattended-upgrades
+        dest: /etc/apt/apt.conf.d/52unattended-upgrades-local
         mode: "0644"
         owner: root
         group: root

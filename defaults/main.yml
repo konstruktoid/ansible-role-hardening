@@ -495,6 +495,7 @@ packages_debian:
   - "acct"
   - "apparmor-profiles"
   - "apparmor-utils"
+  - "apt-listchanges"
   - "apt-show-versions"
   - "audispd-plugins"
   - "auditd"
@@ -1281,7 +1282,7 @@ ufw_rate_limit: false
 umask_value: 77
 
 # APT unattended-upgrades template location.
-unattended_upgrades_template: "etc/apt/apt.conf.d/50unattended-upgrades.j2"
+unattended_upgrades_template: "etc/apt/apt.conf.d/52unattended-upgrades-local.j2"
 
 # USBGuard audit events log backend.
 usbguard_auditbackend: "LinuxAudit"
