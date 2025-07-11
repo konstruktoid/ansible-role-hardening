@@ -1,3 +1,6 @@
+#jinja2: lstrip_blocks: "True", trim_blocks: "True"
+{{ ansible_managed | comment }}
+
 Unattended-Upgrade::Allowed-Origins {
         {% if not automatic_updates.only_security %}
         "${distro_id}:${distro_codename}";
@@ -5,6 +8,10 @@ Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}-security";
         "${distro_id}ESMApps:${distro_codename}-apps-security";
         "${distro_id}ESM:${distro_codename}-infra-security";
+	{% for origin in automatic_updates.custom_origins %}
+	// {{ origin.description }}
+        "{{ origin.name }}:{{ origin.archive }}";
+	{% endfor %}
 };
 
 Unattended-Upgrade::Package-Blacklist {

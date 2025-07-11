@@ -80,6 +80,7 @@ automatic_updates:
   reboot: false # If True, it will reboot the system if needed.
   reboot_from_time: "2:00" # If system reboot is enabled, the variable sets the reboot time, with added random minutes from C(reboot_time_margin_mins).
   reboot_time_margin_mins: 20 # Add minutes to the reboot time, set using C(reboot_from_time).
+  custom_origins: '' # Add additional repositories to the automatic update task - this is a list with name, description and archive parameter - see README for an example.
 
 # PAM common-account template location.
 common_account_template: "etc/pam.d/common-account.j2"
