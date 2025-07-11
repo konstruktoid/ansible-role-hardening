@@ -1545,7 +1545,7 @@
 
     - name: Verify unattended-upgrades settings
       ansible.builtin.command:
-        cmd: grep -Eo '^{{ item }}$' /etc/apt/apt.conf.d/50unattended-upgrades
+        cmd: grep -Eo '^{{ item }}$' /etc/apt/apt.conf.d/52unattended-upgrades-local
       register: unattended_upgrades
       changed_when: false
       failed_when: unattended_upgrades.rc != 0
