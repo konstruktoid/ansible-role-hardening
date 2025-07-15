@@ -314,7 +314,7 @@ login_template: "etc/pam.d/login.j2"
 # Configure systemd-logind settings.
 logind:
   killuserprocesses: true # Configures whether the processes of a user should be killed when the user logs out.
-  killexcludeusers: ['root'] # A list of usernames that override the KillUserProcesses setting.
+  killexcludeusers: ["root"] # A list of usernames that override the KillUserProcesses setting.
   idleaction: "lock" # Configures the action to take when the system is idle.
   idleactionsec: "15min" # Configures the delay after which the action configured in C(IdleAction) is taken after the system is idle.
   removeipc: true # Controls whether System V and POSIX IPC objects belonging to the user shall be removed when the user fully logs out.
