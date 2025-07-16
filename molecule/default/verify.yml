@@ -32,12 +32,22 @@
       ansible.builtin.set_fact:
         packages_merged: "{{ packages_debian + packages_redhat + packages_ubuntu }}"
 
-    - name: Set reboot time as fact
-      ansible.builtin.set_fact:
-        reboot_hour: "{{ ((total_minutes | int) // 60) % 24 }}"
-        reboot_minute: "{{ (total_minutes | int) % 60 }}"
+    - name: Reboot time testing
       when:
         - ansible_os_family == "Debian"
+      block:
+        - name: Calculate random margin
+          ansible.builtin.set_fact:
+            random_margin: "{{ range(0, (reboot_time_margin_mins | int)) | random }}"
+
+        - name: Calculate total minutes for reboot
+          ansible.builtin.set_fact:
+            total_minutes: "{{ (reboot_base_time[0] | int) * 60 + (reboot_base_time[1] | int) + (random_margin | int) }}"
+
+        - name: Translates to hours, and minutes
+          ansible.builtin.set_fact:
+            reboot_hour: "{{ ((total_minutes | int) // 60) % 24 }}"
+            reboot_minute: "{{ (total_minutes | int) % 60 }}"
 
     - name: Set crypto-policies config as fact
       tags:
@@ -369,7 +379,7 @@
           - ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
           - ClientAliveInterval {{ sshd_client_alive_interval | int }}
           - Compression {{ 'yes' if (sshd_compression | bool) else 'no' }}
-          - "{{ 'DebianBanner ' + ('yes' if (sshd_debian_banner | bool) else 'no') if (ansible_facts.os_family == 'Debian')}}"
+          - "{{ 'DebianBanner ' + ('yes' if (sshd_debian_banner | bool) else 'no') if (ansible_os_family == 'Debian')}}"
           - GSSAPIAuthentication {{ 'yes' if (sshd_gssapi_authentication | bool) else 'no' }}
           - GSSAPICleanupCredentials yes
           - HostbasedAuthentication {{ 'yes' if (sshd_hostbased_authentication | bool) else 'no' }}
