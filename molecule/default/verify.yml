@@ -32,6 +32,13 @@
       ansible.builtin.set_fact:
         packages_merged: "{{ packages_debian + packages_redhat + packages_ubuntu }}"
 
+    - name: Set reboot time as fact
+      ansible.builtin.set_fact:
+        reboot_hour: "{{ ((total_minutes | int) // 60) % 24 }}"
+        reboot_minute: "{{ (total_minutes | int) % 60 }}"
+      when:
+        - ansible_os_family == "Debian"
+
     - name: Set crypto-policies config as fact
       tags:
         - fact
@@ -1543,19 +1550,40 @@
           with_items:
             - "{{ netplan_configuration.files }}"
 
-    - name: Verify unattended-upgrades settings
-      ansible.builtin.command:
-        cmd: grep -Eo '^{{ item }}$' /etc/apt/apt.conf.d/52unattended-upgrades-local
+    - name: Verify unattended-upgrades reboot settings
+      ansible.builtin.shell: |
+        set -o pipefail
+        apt-config dump | grep -Eo '^{{ item }}$'
+      args:
+        executable: /bin/bash
       register: unattended_upgrades
       changed_when: false
       failed_when: unattended_upgrades.rc != 0
       loop:
         - Unattended-Upgrade::Automatic-Reboot "true";
-        - Unattended-Upgrade::Automatic-Reboot-Time "02:00";
+        - Unattended-Upgrade::Automatic-Reboot-Time "{{ '%02d:%02d'|format((reboot_hour | int), (reboot_minute | int)) }}";
       when:
         - ansible_os_family == "Debian"
         - automatic_updates.enabled
         - automatic_updates.reboot
+
+    - name: Verify unattended-upgrades settings
+      ansible.builtin.shell: |
+        set -o pipefail
+        apt-config dump | grep -Eo '^{{ item }}$'
+      args:
+        executable: /bin/bash
+      register: unattended_upgrades
+      changed_when: false
+      failed_when: unattended_upgrades.rc != 0
+      loop:
+        - APT::Periodic::AutocleanInterval "7";
+        - APT::Periodic::Unattended-Upgrade "1";
+        - APT::Periodic::Update-Package-Lists "1";
+        - Unattended-Upgrade::.*-[s|S]ecurity";
+      when:
+        - ansible_os_family == "Debian"
+        - automatic_updates.enabled
 
     - name: Verify UFW
       become: true
