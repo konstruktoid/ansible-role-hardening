@@ -17,9 +17,22 @@ provisioner:
   log: true
   inventory:
     host_vars:
+      almalinux9:
+        disable_ipv6: true
+        disable_wireless: true
+        manage_auditd: false
+        manage_packages: false
+        manage_ssh: false
+        manage_suid_sgid_permissions: false
       bookworm:
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
+        automatic_updates:
+          enabled: true
+          only_security: true
+          reboot: false
+          reboot_from_time: "2:00"
+          reboot_time_margin_mins: 1
         disable_wireless: false
         sshd_admin_net:
           - 0.0.0.0/0
@@ -28,7 +41,13 @@ provisioner:
           - sudo
         sshd_update_moduli: true
         system_upgrade: false
-      jammy:
+      noble:
+        automatic_updates:
+          enabled: true
+          only_security: true
+          reboot: false
+          reboot_from_time: "2:00"
+          reboot_time_margin_mins: 1
         disable_ipv6: true
         disable_wireless: true
         manage_suid_sgid_permissions: false
@@ -48,13 +67,18 @@ provisioner:
               - AllowUsers testuser02
               - Banner none
 platforms:
+  - name: almalinux9
+    image: docker.io/almalinux:9
+    privileged: true
+    volume_mounts:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
   - name: bookworm
     image: docker.io/debian:bookworm
     privileged: true
     volume_mounts:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
-  - name: jammy
-    image: docker.io/ubuntu:jammy
+  - name: noble
+    image: docker.io/ubuntu:noble
     privileged: true
     volume_mounts:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
