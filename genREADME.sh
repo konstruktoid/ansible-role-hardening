@@ -18,7 +18,7 @@ and requires Ansible version ${ANSIBLE_V} or higher.
 The role supports the following operating systems:
 
 - [AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9)
-- [AlmaLinux 10](https://wiki.almalinux.org/release-notes/#almalinux-9)
+- [AlmaLinux 10](https://wiki.almalinux.org/release-notes/#almalinux-10)
 - [Debian 12 (Bookworm)](https://www.debian.org/releases/bookworm/)
 - [Ubuntu 22.04 (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/)
 - [Ubuntu 24.04 (Noble Numbat)](https://releases.ubuntu.com/noble/)
