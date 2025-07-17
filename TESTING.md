@@ -16,8 +16,9 @@ bento/ubuntu-22.04
 bento/ubuntu-24.04
 debian/bookworm64
 debian/testing64
+docker.io/almalinux:9
 docker.io/debian:bookworm
-docker.io/ubuntu:jammy
+docker.io/ubuntu:noble
 konstruktoid/ubuntu-25.04
 ```
 
