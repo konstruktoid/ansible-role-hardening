@@ -7,6 +7,10 @@ Unattended-Upgrade::Allowed-Origins {
         {% endif %}
         "${distro_id}ESMApps:${distro_codename}-apps-security";
         "${distro_id}ESM:${distro_codename}-infra-security";
+	{% for origin in automatic_updates.custom_origins -%}
+	// {{ origin.name}}
+        "{{ origin.origin }}:{{ origin.archive }}";
+	{% endfor -%}
 };
 
 Unattended-Upgrade::DevRelease "auto";
@@ -15,6 +19,10 @@ Unattended-Upgrade::Origins-Pattern {
         "origin=Debian,codename=${distro_codename},label=Debian";
         "origin=Debian,codename=${distro_codename},label=Debian-Security";
         "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
+	{% for origin in automatic_updates.custom_origins -%}
+	// {{ origin.name }}
+        "origin={{ origin.origin }},archive={{ origin.archive }}";
+	{% endfor -%}
 };
 {% endif %}
 
