@@ -1,10 +1,11 @@
 ---
 name: Molecule testing workflow
 on:
+  pull_request:
   push:
-  workflow_dispatch:
   schedule:
     - cron: "30 5 * * */3"
+  workflow_dispatch:
 permissions:
   contents: read
 
