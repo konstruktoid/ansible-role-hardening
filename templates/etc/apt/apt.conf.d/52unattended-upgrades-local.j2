@@ -1,39 +1,26 @@
+{% if not automatic_updates.only_security %}
 {% if ansible_distribution == "Ubuntu" %}
 Unattended-Upgrade::Allowed-Origins {
-        "${distro_id}:${distro_codename}";
-        "${distro_id}:${distro_codename}-security";
-        {% if not automatic_updates.only_security %}
         "${distro_id}:${distro_codename}-updates";
-        {% endif %}
-        "${distro_id}ESMApps:${distro_codename}-apps-security";
-        "${distro_id}ESM:${distro_codename}-infra-security";
-	{% for origin in automatic_updates.custom_origins -%}
-	// {{ origin.name}}
+	      {% for origin in automatic_updates.custom_origins -%}
+	      // {{ origin.name}}
         "{{ origin.origin }}:{{ origin.archive }}";
-	{% endfor -%}
+	      {% endfor -%}
 };
-
-Unattended-Upgrade::DevRelease "auto";
-{% else %}
+{% elif ansible_distribution == "Debian" %}
 Unattended-Upgrade::Origins-Pattern {
-        "origin=Debian,codename=${distro_codename},label=Debian";
-        "origin=Debian,codename=${distro_codename},label=Debian-Security";
-        "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
-	{% for origin in automatic_updates.custom_origins -%}
-	// {{ origin.name }}
+        "origin=Debian,codename=${distro_codename}-updates";
+        {% for origin in automatic_updates.custom_origins -%}
+        // {{ origin.name }}
         "origin={{ origin.origin }},archive={{ origin.archive }}";
-	{% endfor -%}
+	      {% endfor -%}
 };
 {% endif %}
-
-Unattended-Upgrade::Package-Blacklist {
-};
+{% endif %}
 
 {% if automatic_updates.reboot %}
 Unattended-Upgrade::Automatic-Reboot "true";
 Unattended-Upgrade::Automatic-Reboot-Time "{{ '%02d:%02d'|format((reboot_hour | int), (reboot_minute | int)) }}";
-{% else %}
-Unattended-Upgrade::Automatic-Reboot "false";
 {% endif %}
 Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
 Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
