@@ -2,10 +2,10 @@
 {% if ansible_distribution == "Ubuntu" %}
 Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}-updates";
-	      {% for origin in automatic_updates.custom_origins -%}
-	      // {{ origin.name}}
+	{% for origin in automatic_updates.custom_origins -%}
+	// {{ origin.name}}
         "{{ origin.origin }}:{{ origin.archive }}";
-	      {% endfor -%}
+	{% endfor -%}
 };
 {% elif ansible_distribution == "Debian" %}
 Unattended-Upgrade::Origins-Pattern {
@@ -13,7 +13,7 @@ Unattended-Upgrade::Origins-Pattern {
         {% for origin in automatic_updates.custom_origins -%}
         // {{ origin.name }}
         "origin={{ origin.origin }},archive={{ origin.archive }}";
-	      {% endfor -%}
+	{% endfor -%}
 };
 {% endif %}
 {% endif %}
