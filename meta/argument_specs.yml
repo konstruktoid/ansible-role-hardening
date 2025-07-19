@@ -132,6 +132,10 @@ argument_specs:
         description: "APT unattended-upgrades template location."
         type: "path"
         default: "etc/apt/apt.conf.d/52unattended-upgrades-local.j2"
+      unattended_upgrades_custom_origins_template:
+        description: "APT unattended-upgrades for custom origins template location."
+        type: "path"
+        default: "etc/apt/apt.conf.d/53unattended-upgrades-custom-origins.j2"
       user_conf_template:
         description: "systemd user.conf template location."
         type: "path"
