@@ -26,6 +26,7 @@ provisioner:
           reboot: false
           reboot_from_time: "2:00"
           reboot_time_margin_mins: 1
+          custom_origins: ''
         disable_wireless: false
         sshd_admin_net:
           - 0.0.0.0/0
@@ -41,6 +42,7 @@ provisioner:
           reboot: false
           reboot_from_time: "2:00"
           reboot_time_margin_mins: 1
+          custom_origins: ''
         disable_ipv6: true
         disable_wireless: true
         manage_suid_sgid_permissions: false
