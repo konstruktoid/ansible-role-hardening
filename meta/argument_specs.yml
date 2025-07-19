@@ -1499,7 +1499,7 @@ argument_specs:
             type: "list"
             options:
               name:
-                description: "Add name as description to 52-unattended-upgrade-local with // prefix. // Docker repository - e.g. Docker repository"
+                description: "Add name as description to 53-unattended-upgrade-custom-origins with // prefix. - e.g. Docker repository"
                 type: "str"
               origin:
                 description: "Origin - can be found with apt-cache policy o=Docker - e.g. Docker"
