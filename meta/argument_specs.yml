@@ -1472,6 +1472,7 @@ argument_specs:
           - reboot: false
           - reboot_from_time: "2:00"
           - reboot_time_margin_mins: 20
+          - custom_origins: ''
         description: "Configure automatic updates."
         options:
           enabled:
@@ -1489,6 +1490,19 @@ argument_specs:
           reboot_time_margin_mins:
             description: "Add minutes to the reboot time, set using C(reboot_from_time)."
             type: "int"
+          custom_origins:
+            description: "Add custom origins to unattended upgrades like e.g. Docker"
+            type: "list"
+            options:
+              name:
+                description: "Add name as description to 52-unattended-upgrade-local with // prefix. // Docker repository - e.g. Docker repository"
+                type: "str"
+              origin:
+                description: "Origin - can be found with apt-cache policy o=Docker - e.g. Docker"
+                type: "str"
+              archive:
+                description: "Archive - can be found with apt-cache policy a=bookworm - e.g. bookworm"
+                type: "str"
       manage_netplan:
         description: "If True, then any available netplan configuration files will have the permissions set to 0600."
         type: "bool"
