@@ -1,0 +1,10 @@
+{% if ansible_distribution == "Ubuntu" %}
+Unattended-Upgrade::Allowed-Origins {
+{% elif ansible_distribution == "Debian" %}
+Unattended-Upgrade::Origins-Pattern {
+{% endif %}
+        {% for origin in automatic_updates.custom_origins -%}
+	// {{ origin.name }}
+        "origin={{ origin.origin }},archive={{ origin.archive }}";
+	{% endfor -%}
+}
