@@ -114,3 +114,11 @@
         mode: "0644"
         owner: root
         group: root
+
+    - name: Configure unattended-upgrades for custom_origins
+      ansible.builtin.template:
+        src: "{{ unattended_upgrades_custom_origins_template }}"
+        dest: /etc/apt/apt.conf.d/53unattended-upgrades-custom-origins
+        mode: "0644"
+        owner: root
+        group: root
