@@ -122,3 +122,4 @@
         mode: "0644"
         owner: root
         group: root
+      when: automatic_updates.custom_origins != ''
