@@ -1495,18 +1495,9 @@ argument_specs:
             description: "Add minutes to the reboot time, set using C(reboot_from_time)."
             type: "int"
           custom_origins:
-            description: "Add custom origins to unattended upgrades like e.g. Docker"
+            description: "Add custom origins to unattended upgrades through a list of strings. For Debian it is \"origin=<ORIGIN>,archive=<ARCHIVE>\" (https://wiki.debian.org/UnattendedUpgrades) which should look like: - \"origin=Docker,archive=${distro_codename}\". For Ubuntu it is \"<ORIGIN>:<ARCHIVE>\" (https://documentation.ubuntu.com/server/how-to/software/automatic-updates/) which should look like: - \"Docker:${distro_codename}\". Values for the configuration can be found via apt-cache policy - e.g. for Docker on Debian 12 it is o=Docker,a=bookworm. For Ubuntu 24.04 it is o=Docker,a=noble."
             type: "list"
-            options:
-              name:
-                description: "Add name as description to 53-unattended-upgrade-custom-origins with // prefix. - e.g. Docker repository"
-                type: "str"
-              origin:
-                description: "Origin - can be found with apt-cache policy o=Docker - e.g. Docker"
-                type: "str"
-              archive:
-                description: "Archive - can be found with apt-cache policy a=bookworm - e.g. bookworm"
-                type: "str"
+            elements: "str"
       manage_netplan:
         description: "If True, then any available netplan configuration files will have the permissions set to 0600."
         type: "bool"
