@@ -232,7 +232,7 @@
     owner: root
     group: root
   when:
-    - sshd_trusted_user_ca_keys_base64
+    - sshd_trusted_user_ca_keys_base64 | length > 0
     - sshd_trusted_user_ca_keys_file
 
 - name: Configure sshd

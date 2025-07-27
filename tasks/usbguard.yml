@@ -153,7 +153,7 @@
         backrefs: true
 
     - name: Start and enable USBGuard
-      ansible.builtin.systemd:
+      ansible.builtin.systemd_service:
         name: usbguard
         enabled: true
         masked: false
@@ -193,6 +193,6 @@
             - "{{ usbguard_policy.stdout_lines }}"
 
         - name: Restart USBGuard
-          ansible.builtin.systemd:
+          ansible.builtin.systemd_service:
             name: usbguard
             state: restarted

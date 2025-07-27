@@ -36,7 +36,7 @@
 
 - name: Reload systemd
   become: true
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     daemon_reload: true
   when:
     - ansible_virtualization_type not in ["container", "docker", "podman"]
@@ -63,7 +63,7 @@
 
 - name: Enable aidecheck
   become: true
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     name: aidecheck.timer
     enabled: true
     state: started
@@ -72,7 +72,7 @@
 
 - name: Disable aidecheck
   become: true
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     name: aidecheck.timer
     state: stopped
     enabled: false
@@ -81,7 +81,7 @@
 
 - name: Mask aidecheck
   become: true
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     name: aidecheck.timer
     masked: true
     state: stopped
@@ -134,7 +134,7 @@
 
 - name: Mask apport
   become: true
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     name: apport.service
     masked: true
     enabled: false
