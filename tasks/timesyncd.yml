@@ -19,7 +19,7 @@
         - Reload systemd
 
     - name: Start timesyncd
-      ansible.builtin.systemd:
+      ansible.builtin.systemd_service:
         name: systemd-timesyncd
         enabled: true
         masked: false

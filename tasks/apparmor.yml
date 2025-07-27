@@ -55,7 +55,7 @@
         - get_apparmor_complaining.stdout != "0"
 
     - name: Enable apparmor
-      ansible.builtin.systemd:
+      ansible.builtin.systemd_service:
         name: apparmor
         enabled: true
         state: started

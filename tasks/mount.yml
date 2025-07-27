@@ -53,12 +53,12 @@
         state: absent
 
     - name: Unmask tmp.mount
-      ansible.builtin.systemd:
+      ansible.builtin.systemd_service:
         name: tmp.mount
         masked: false
 
     - name: Start tmp.mount
-      ansible.builtin.systemd:
+      ansible.builtin.systemd_service:
         name: tmp.mount
         daemon_reload: true
         state: started

@@ -88,7 +88,7 @@
 
     - name: Mask motdnews
       become: true
-      ansible.builtin.systemd:
+      ansible.builtin.systemd_service:
         name: "{{ item }}"
         masked: true
         enabled: false

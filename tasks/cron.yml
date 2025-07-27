@@ -31,7 +31,7 @@
         - /etc/cron.allow
 
     - name: Mask atd
-      ansible.builtin.systemd:
+      ansible.builtin.systemd_service:
         name: atd
         masked: true
         enabled: false

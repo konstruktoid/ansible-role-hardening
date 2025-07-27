@@ -259,12 +259,12 @@
         - ansible_virtualization_type not in ["container", "docker", "podman"]
       block:
         - name: Get Ctrl-Alt-Del target status
-          ansible.builtin.systemd:
+          ansible.builtin.systemd_service:
             name: ctrl-alt-del.target
           register: ctrl_alt_del_target
 
         - name: Verify Ctrl-Alt-Del target LoadState
-          ansible.builtin.systemd:
+          ansible.builtin.systemd_service:
             name: ctrl-alt-del.target
           register: ctrl_alt_del_target
           failed_when:

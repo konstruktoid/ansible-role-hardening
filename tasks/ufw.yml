@@ -75,7 +75,7 @@
     'disabled (routed)' not in ufw_status.stdout
   block:
     - name: Enable UFW service
-      ansible.builtin.systemd:
+      ansible.builtin.systemd_service:
         name: ufw
         enabled: true
         state: started

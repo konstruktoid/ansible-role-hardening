@@ -13,7 +13,7 @@
 
 - name: Disable systemd-journal-remote
   become: true
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     name: "{{ item }}"
     state: stopped
     enabled: false
