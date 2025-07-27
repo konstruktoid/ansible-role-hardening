@@ -52,7 +52,7 @@
 
 - name: Mask systemd debug-shell
   become: true
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     name: debug-shell.service
     masked: true
   when:

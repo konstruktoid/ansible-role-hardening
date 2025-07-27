@@ -1,6 +1,6 @@
 ---
 - name: Get ctrl-alt-del.target information
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     name: ctrl-alt-del.target
   register: ctrl_alt_del_target
 
@@ -17,12 +17,12 @@
 
 - name: Reload systemd
   become: true
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     daemon_reload: true
 
 - name: Disable systemd ctrl-alt-del
   become: true
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     name: ctrl-alt-del.target
     masked: true
     enabled: false

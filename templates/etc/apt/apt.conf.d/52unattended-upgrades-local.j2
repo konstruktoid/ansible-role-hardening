@@ -1,3 +1,4 @@
+#jinja2: trim_blocks: True, lstrip_blocks: True
 {% if not automatic_updates.only_security %}
 {% if ansible_distribution == "Ubuntu" %}
 Unattended-Upgrade::Allowed-Origins {

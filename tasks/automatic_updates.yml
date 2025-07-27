@@ -46,7 +46,7 @@
         create: true
 
     - name: Enable dnf-automatic timer
-      ansible.builtin.systemd:
+      ansible.builtin.systemd_service:
         name: dnf-automatic.timer
         enabled: true
         state: started

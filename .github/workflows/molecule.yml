@@ -34,5 +34,6 @@ jobs:
 
       - name: Run molecule
         run: |
+          ANSIBLE_ALLOW_BROKEN_CONDITIONALS=True \
           ANSIBLE_REMOTE_TMP="/var/tmp/${USER}/ansible" \
           molecule test -s docker
