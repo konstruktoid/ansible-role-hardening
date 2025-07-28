@@ -103,7 +103,7 @@
         shell: /bin/bash
         create_home: true
         generate_ssh_key: true
-        ssh_key_bits: "{{ sshd_required_rsa_size }}"
+        ssh_key_bits: "{{ sshd_required_rsa_size | int }}"
         ssh_key_file: .ssh/id_rsa
         ssh_key_type: rsa
       loop:
@@ -372,10 +372,19 @@
         - name: Set sshd_config_parameters
           ansible.builtin.set_fact:
             sshd_config_parameters:
-              - "{{ 'AcceptEnv ' + sshd_accept_env if sshd_accept_env | length > 0 else omit }}"
+              - >-
+                {%- if sshd_accept_env | length > 0 -%}
+                  AcceptEnv {{ sshd_accept_env }}
+                {%- endif -%}
               - AddressFamily {{ 'inet' if (disable_ipv6 | bool) else 'any' }}
-              - "{{ 'AllowGroups ' + sshd_allow_groups | join(' ') if sshd_allow_groups | length != 0 else omit }}"
-              - "{{ 'AllowUsers ' + sshd_allow_users | join(' ') if sshd_allow_users | length != 0 else omit }}"
+              - >-
+                {%- if sshd_allow_groups | length > 0 -%}
+                  {{ 'AllowGroups ' + sshd_allow_groups | join(' ') }}
+                {%- endif -%}
+              - >-
+                {%- if sshd_allow_users | length > 0 -%}
+                  {{ 'AllowUsers ' + sshd_allow_users | join(' ') }}
+                {%- endif -%}
               - AllowAgentForwarding {{ 'yes' if (sshd_allow_agent_forwarding | bool) else 'no' }}
               - >-
                 {%- if (ssh_installed_version is version('6.2', '>=')) -%}
@@ -391,18 +400,39 @@
                   AllowTcpForwarding {{ 'yes' if sshd_allow_tcp_forwarding | bool else 'no' }}
                 {%- endif -%}
                 {%- endif -%}
-              - "{{ 'AuthenticationMethods ' + sshd_authentication_methods if ssh_installed_version is version('6.2', '>=') else omit }}"
+              - >-
+                {%- if sshd_authentication_methods | length > 0 and ssh_installed_version is version('6.2', '>=') -%}
+                  AuthenticationMethods {{ sshd_authentication_methods }}
+                {%- endif -%}
               - Banner {{ sshd_banner if sshd_banner else 'none' }}
-              - "{{ 'CASignatureAlgorithms ' + sshd_ca_signature_algorithms | join(',') if (not crypto_policies_config or not set_crypto_policy) else omit }}"
-              - "{{ 'Ciphers ' + sshd_ciphers | join(',') if (not crypto_policies_config or not set_crypto_policy) else omit }}"
-              - ClientAliveCountMax {{ sshd_client_alive_count_max | int if sshd_client_alive_count_max else omit }}
-              - ClientAliveInterval {{ sshd_client_alive_interval | int  if sshd_client_alive_interval else omit }}
+              - >-
+                {%- if (not crypto_policies_config or not set_crypto_policy) -%}
+                  CASignatureAlgorithms {{ sshd_ca_signature_algorithms | join(',') }}
+                {%- endif -%}
+              - >-
+                {%- if (not crypto_policies_config or not set_crypto_policy) -%}
+                  Ciphers {{ sshd_ciphers | join(',') }}
+                {%- endif -%}
+              - >-
+                {%- if sshd_client_alive_count_max -%}
+                  ClientAliveCountMax {{ sshd_client_alive_count_max | int }}
+                {%- endif -%}
+              - >-
+                {%- if sshd_client_alive_interval -%}
+                  ClientAliveInterval {{ sshd_client_alive_interval | int }}
+                {%- endif -%}
               - Compression {{ 'yes' if (sshd_compression | bool) else 'no' }}
-              - "{{ 'DebianBanner ' + ('yes' if (sshd_debian_banner | bool) else 'no') if (ansible_os_family == 'Debian') else omit }}"
+              - >-
+                {%- if ansible_os_family == 'Debian' and sshd_debian_banner -%}
+                    DebianBanner ('yes' if (sshd_debian_banner | bool) else 'no')
+                {%- endif -%}
               - GSSAPIAuthentication {{ 'yes' if (sshd_gssapi_authentication | bool) else 'no' }}
               - GSSAPICleanupCredentials yes
               - HostbasedAuthentication {{ 'yes' if (sshd_hostbased_authentication | bool) else 'no' }}
-              - "{{ 'HostKeyAlgorithms ' + sshd_host_key_algorithms | join(',') if (not crypto_policies_config or not set_crypto_policy) else omit }}"
+              - >-
+                {%- if (not crypto_policies_config or not set_crypto_policy) -%}
+                  HostKeyAlgorithms {{ sshd_host_key_algorithms | join(',') }}
+                {%- endif -%}
               - IgnoreRhosts {{ 'yes' if (sshd_ignore_rhosts | bool) else 'no' }}
               - IgnoreUserKnownHosts {{ 'yes' if (sshd_ignore_user_known_hosts | bool) else 'no' }}
               - >-
@@ -412,13 +442,34 @@
                   ChallengeResponseAuthentication {{ 'yes' if (sshd_kbd_interactive_authentication | bool) else 'no' }}
                 {%- endif -%}
               - KerberosAuthentication {{ 'yes' if (sshd_kerberos_authentication | bool) else 'no' }}
-              - "{{ 'KexAlgorithms ' + sshd_kex_algorithms | join(',') if (not crypto_policies_config or not set_crypto_policy) else omit }}"
-              - "{{ 'LogLevel ' + sshd_log_level | upper if sshd_log_level | length > 0 else omit }}"
-              - LoginGraceTime {{ sshd_login_grace_time | int if sshd_login_grace_time else omit }}
-              - "{{ 'MACs ' + sshd_macs | join(',') if (not crypto_policies_config or not set_crypto_policy) else omit}}"
-              - MaxAuthTries {{ sshd_max_auth_tries | int if sshd_max_auth_tries else omit }}
-              - MaxSessions {{ sshd_max_sessions | int if sshd_max_sessions else omit }}
-              - MaxStartups {{ sshd_max_startups if sshd_max_startups else omit }}
+              - >-
+                {%- if (not crypto_policies_config or not set_crypto_policy) -%}
+                  KexAlgorithms {{ sshd_kex_algorithms | join(',') }}
+                {%- endif -%}
+              - >-
+                {%- if sshd_log_level | length > 0 -%}
+                  LogLevel {{ sshd_log_level | upper }}
+                {%- endif -%}
+              - >-
+                {%- if sshd_login_grace_time is not none -%}
+                  LoginGraceTime {{ sshd_login_grace_time | int }}
+                {%- endif -%}
+              - >-
+                {%- if (not crypto_policies_config or not set_crypto_policy) -%}
+                  MACs {{ sshd_macs | join(',') }}
+                {%- endif -%}
+              - >-
+                {%- if sshd_max_auth_tries -%}
+                  MaxAuthTries {{ sshd_max_auth_tries | int }}
+                {%- endif -%}
+              - >-
+                {%- if sshd_max_sessions -%}
+                  MaxSessions {{ sshd_max_sessions | int }}
+                {%- endif -%}
+              - >-
+                {% if sshd_max_startups -%}
+                  MaxStartups {{ sshd_max_startups }}
+                {%- endif -%}
               - PasswordAuthentication {{ 'yes' if (sshd_password_authentication | bool) else 'no' }}
               - PermitEmptyPasswords {{ 'yes' if (sshd_permit_empty_passwords | bool) else 'no' }}
               - PermitRootLogin {{ 'yes' if (sshd_permit_root_login | bool) else 'no' }}
@@ -426,16 +477,34 @@
               - PermitUserEnvironment {{ 'yes' if (sshd_permit_user_environment | bool) else 'no' }}
               - PrintLastLog {{ 'yes' if (sshd_print_last_log | bool) else 'no' }}
               - PrintMotd {{ 'yes' if (sshd_print_motd | bool) else 'no' }}
-              - "{{ 'Protocol 2' if ssh_installed_version is version('7.6', '<') else omit }}"
+              - >-
+                {%- if ssh_installed_version is version('7.6', '<') -%}
+                  Protocol 2
+                {%- endif -%}
               - PubkeyAuthentication yes
-              - "{{ 'RekeyLimit ' + sshd_rekey_limit if sshd_rekey_limit | length > 0 else omit }}"
-              - "{{ 'RequiredRSASize ' + (sshd_required_rsa_size | string) if (ssh_installed_version is version('9.1', '>') and (not crypto_policies_config or not set_crypto_policy)) else omit }}" # noqa: yaml[line-length]
+              - >-
+                {%- if sshd_rekey_limit | length > 0 -%}
+                  RekeyLimit {{ sshd_rekey_limit }}
+                {%- endif -%}
+              - >-
+                {%- if ssh_installed_version is version('9.1', '>') and (not crypto_policies_config or not set_crypto_policy) -%}
+                    RequiredRSASize {{ sshd_required_rsa_size | int }}
+                {%- endif -%}
               - StrictModes {{ 'yes' if (sshd_strict_modes | bool) else 'no' }}
-              - "{{ 'Subsystem sftp ' + sshd_sftp_subsystem if (sshd_sftp_enabled | bool) else omit }}"
-              - "{{ 'SyslogFacility ' + sshd_syslog_facility | upper if sshd_syslog_facility | length > 0 else omit }}"
+              - >-
+                {%- if sshd_sftp_subsystem | length > 0 and sshd_sftp_enabled -%}
+                  Subsystem sftp {{ sshd_sftp_subsystem }}
+                {%- endif -%}
+              - >-
+                {%- if sshd_syslog_facility | length > 0 -%}
+                  SyslogFacility {{ sshd_syslog_facility | upper }}
+                {%- endif -%}
               - TCPKeepAlive {{ 'yes' if (sshd_tcp_keep_alive | bool) else 'no' }}
               - UseDNS {{ 'yes' if (sshd_use_dns | bool) else 'no' }}
-              - "{{ 'UseLogin no' if ssh_installed_version is version('7.4', '<') else omit }}"
+              - >-
+                {%- if ssh_installed_version is version('7.4', '<') -%}
+                  UseLogin no
+                {%- endif -%}
               - UsePAM {{ 'yes' if sshd_use_pam | bool else 'no' }}
               - >-
                 {%- if ssh_installed_version is version('7.5', '<') -%}
@@ -520,6 +589,10 @@
             - listenaddress
             # rekeylimit: runtime returns values only in bytes and seconds, having to treat these values would be a lot of work.
             - rekeylimit
+
+        - name: Print sshd_config_parameters_runtime
+          ansible.builtin.debug:
+            msg: "{{ sshd_config_parameters_runtime }}"
 
         - name: Verify sshd runtime configuration
           become: true
@@ -1160,20 +1233,50 @@
     - name: Set faillock_parameters
       ansible.builtin.set_fact:
         faillock_parameters:
-          - "{{ 'dir=' + faillock.dir if faillock.dir | length > 0 else omit }}"
-          - "{{ 'audit' if faillock.audit | bool else omit }}"
-          - "{{ 'silent' if faillock.silent | bool else omit }}"
-          - "{{ 'no_log_info' if faillock.no_log_info | bool else omit }}"
-          - "{{ 'local_users_only' if faillock.local_users_only | bool else omit }}"
           - >-
-            {%- if (pam_version is version('1.5.1', '>=')) -%}
-              {{ 'nodelay' if faillock.nodelay | bool else omit }}
+            {%- if faillock.dir | length > 0 -%}
+              dir={{ faillock.dir }}
             {%- endif -%}
-          - deny={{ faillock.deny if faillock.deny else omit }}
-          - fail_interval={{ faillock.fail_interval if faillock.fail_interval else omit }}
-          - unlock_time={{ faillock.unlock_time if faillock.unlock_time else omit }}
-          - "{{ 'even_deny_root' if faillock.even_deny_root | bool else omit }}"
-          - root_unlock_time={{ faillock.root_unlock_time if faillock.root_unlock_time else omit }}
+          - >-
+            {%- if faillock.audit | bool -%}
+              audit
+            {%- endif -%}
+          - >-
+            {%- if faillock.silent | bool -%}
+              silent
+            {%- endif -%}
+          - >-
+            {%- if faillock.no_log_info | bool -%}
+              no_log_info
+            {%- endif -%}
+          - >-
+            {%- if faillock.local_users_only | bool -%}
+              local_users_only
+            {%- endif -%}
+          - >-
+            {%- if pam_version is version('1.5.1', '>=') and faillock.nodelay | bool -%}
+              nodelay
+            {%- endif -%}
+          - >-
+            {%- if faillock.deny -%}
+              deny={{ faillock.deny }}
+            {%- endif -%}
+          - >-
+            {%- if faillock.fail_interval -%}
+              fail_interval={{ faillock.fail_interval }}
+            {%- endif -%}
+          - >-
+            {%- if faillock.unlock_time -%}
+              unlock_time={{ faillock.unlock_time | int }}
+            {%- endif -%}
+          - >-
+            {%- if faillock.even_deny_root | bool -%}
+              even_deny_root
+            {%- endif -%}
+          - >-
+            {%- if faillock.root_unlock_time -%}
+              root_unlock_time={{ faillock.root_unlock_time | int }}
+            {%- endif -%}
           - >-
             {%- if faillock.admin_group | length > 0 -%}
               admin_group={{ faillock.admin_group }}

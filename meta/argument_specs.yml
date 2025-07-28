@@ -1736,8 +1736,8 @@ argument_specs:
         type: "bool"
         default: "True"
       session_timeout:
-        description: "Sets, in seconds, the TMOUT environment variable if systemd version is 252 or lower. If systemd version is higher than 252, the session_timeout
-          value will be set as StopIdleSessionSec."
+        description: "Sets, in seconds, the TMOUT environment variable if systemd version is 252 or lower. If version 252 or higher, the session_timeout value will
+          be set as StopIdleSessionSec."
         type: "int"
         default: 900
       umask_value:
