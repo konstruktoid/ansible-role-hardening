@@ -597,7 +597,7 @@ rkhunter_web_cmd: "curl -fsSL"
 # Set the file creation mode for rsyslog log files.
 rsyslog_filecreatemode: "0640"
 
-# Sets, in seconds, the TMOUT environment variable if systemd version is 252 or lower. If systemd version is higher than 252, the session_timeout value will be set as StopIdleSessionSec.
+# Sets, in seconds, the TMOUT environment variable if systemd version is 252 or lower. If version 252 or higher, the session_timeout value will be set as StopIdleSessionSec.
 session_timeout: 900
 
 # Set and use cryptographic policies if C(/etc/crypto-policies/config) exists and C(set_crypto_policy: true).
