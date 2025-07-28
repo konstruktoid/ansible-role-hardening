@@ -1,2 +1,3 @@
 defaults/main.yml yaml[line-length]
 meta/argument_specs.yml yaml[line-length]
+molecule/default/verify.yml yaml[line-length]

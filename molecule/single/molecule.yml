@@ -12,7 +12,7 @@ provisioner:
     defaults:
       callback_whitelist: profile_tasks
   env:
-    ANSIBLE_ROLES_PATH: ~/.cache/molecule/ansible-role-hardening/${MOLECULE_SCENARIO_NAME}/roles:${MOLECULE_PROJECT_DIRECTORY}/..:~/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles
+    ANSIBLE_ROLES_PATH: ${MOLECULE_PROJECT_DIRECTORY}/..:/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles
   playbooks:
     converge: ../default/converge.yml
     verify: ../default/verify.yml
