@@ -51,3 +51,63 @@ jobs:
       - name: Test upstream code
         run: |
           tox run -e docker-upstream
+
+  tox-vagrant:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Install system dependencies
+        run: |
+          curl -fsSL https://apt.releases.hashicorp.com/gpg |\
+            gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "Types: deb
+URIs: https://apt.releases.hashicorp.com
+Suites: $(lsb_release -cs)
+Components: main
+Architectures: $(dpkg --print-architecture)
+Signed-by: /usr/share/keyrings/hashicorp-archive-keyring.gpg" | sudo tee /etc/apt/sources.list.d/hashicorp.sources
+          sudo apt-get update
+          sudo apt-get install --yes vagrant virtualbox
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          uv tool install tox --with tox-uv
+
+      - name: Test stable releases using molecule-vagrant
+        run: |
+          tox run -e devel
+
+  tox-vagrant-upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Install system dependencies
+        run: |
+          curl -fsSL https://apt.releases.hashicorp.com/gpg |\
+            gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "Types: deb
+URIs: https://apt.releases.hashicorp.com
+Suites: $(lsb_release -cs)
+Components: main
+Architectures: $(dpkg --print-architecture)
+Signed-by: /usr/share/keyrings/hashicorp-archive-keyring.gpg" | sudo tee /etc/apt/sources.list.d/hashicorp.sources
+          sudo apt-get update
+          sudo apt-get install --yes vagrant virtualbox
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          uv tool install tox --with tox-uv
+
+      - name: Test upstream code using molecule-vagrant
+        run: |
+          tox run -e upstream
