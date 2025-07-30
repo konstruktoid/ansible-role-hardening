@@ -195,8 +195,8 @@ See [TESTING.md](TESTING.md).
 | aide_checksums | Modifies the AIDE `Checksums` variable. | sha512 |
 | aide_dir_exclusions | AIDE directories to exclude from checks. | ['/var/lib/docker', '/var/lib/lxcfs', '/var/lib/private/systemd', '/var/log/audit', '/var/log/journal'] |
 | manage_timesyncd | If True, manage systemd-timesyncd installation and configuration. | True |
-| fallback_ntp | A space-separated list of NTP server host names or IP addresses to be used as the fallback NTP servers. | ['ntp.netnod.se', 'ntp.ubuntu.com'] |
-| ntp | A space-separated list of NTP server host names or IP addresses to be used as the primary NTP servers. | ['2.pool.ntp.org', 'time.nist.gov'] |
+| fallback_ntp | A list of NTP server host names or IP addresses to be used as the fallback NTP servers. | ['ntp.netnod.se', 'ntp.ubuntu.com'] |
+| ntp | A list of NTP server host names or IP addresses to be used as the primary NTP servers. | ['2.pool.ntp.org', 'time.nist.gov'] |
 | manage_cron | If True, then `at` and `cron` will be restricted to the root user. | True |
 | manage_sudo | If True, then manage sudo configuration. | True |
 | manage_rkhunter | If True, manage rkhunter installation and configuration. | True |
@@ -367,7 +367,7 @@ See [TESTING.md](TESTING.md).
 | packages_redhat | Packages to install on Red Hat-based systems. | ['audispd-plugins', 'audit', 'cracklib', 'curl', 'gnupg2', 'openssh-server', 'needrestart', 'postfix', 'psacct', 'python3-dnf-plugin-post-transaction-actions', 'rsyslog', 'rsyslog-gnutls', 'systemd-journal-remote', 'vlock', 'words'] |
 | packages_ubuntu | Packages to install on Ubuntu-based systems. | ['fwupd', 'secureboot-db', 'snapd'] |
 | manage_logind | If True, then the systemd-logind service will be configured using the available template. | True |
-| logind | Configure systemd-logind settings. | [{'killuserprocesses': True}, {'killexcludeusers': ['root']}, {'idleaction': 'lock'}, {'idleactionsec': '15min'}, {'removeipc': True}] |
+| logind | Configure systemd-logind settings. | [{'killuserprocesses': True}, {'killexcludeusers': "['root']"}, {'idleaction': 'lock'}, {'idleactionsec': '15min'}, {'removeipc': True}] |
 | disable_wireless | If True, turn off all wireless interfaces. | False |
 | manage_auditd | If True, then the Linux Audit System will configured and enabled at boot using GRUB. | True |
 | auditd_apply_audit_rules | If True, the role applies the auditd rules from the included template file. | True |
@@ -992,6 +992,18 @@ Do you want to contribute? Great! Contributions are always welcome,
 no matter how large or small. If you found something odd, feel free to submit a
 issue, improve the code by creating a pull request, or by
 [sponsoring this project](https://github.com/sponsors/konstruktoid).
+
+### Guidelines
+
+The [argument_specs.yml](meta/argument_specs.yml) file is used to generate the
+documentation and defaults for this role, so please ensure that any changes
+made to the role are also reflected in the `argument_specs.yml` file.
+
+After making changes, run `bash genREADME.sh` to regenerate the defaults file,
+README and other documentation files.
+
+Last but not least, ensure that the role passes all tests by running
+`tox run -e devel,docker`.
 
 ## License
 

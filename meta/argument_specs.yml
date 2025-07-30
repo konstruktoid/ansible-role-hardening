@@ -338,12 +338,12 @@ argument_specs:
         type: "bool"
         default: "True"
       fallback_ntp:
-        description: "A space-separated list of NTP server host names or IP addresses to be used as the fallback NTP servers."
+        description: "A list of NTP server host names or IP addresses to be used as the fallback NTP servers."
         type: "list"
         elements: "str"
         default: "['ntp.netnod.se', 'ntp.ubuntu.com']"
       ntp:
-        description: "A space-separated list of NTP server host names or IP addresses to be used as the primary NTP servers."
+        description: "A list of NTP server host names or IP addresses to be used as the primary NTP servers."
         type: "list"
         elements: "str"
         default: "['2.pool.ntp.org', 'time.nist.gov']"
@@ -1571,7 +1571,7 @@ argument_specs:
         type: "dict"
         default:
           - killuserprocesses: true
-          - killexcludeusers: ["root"]
+          - killexcludeusers: "['root']"
           - idleaction: "lock"
           - idleactionsec: "15min"
           - removeipc: true
