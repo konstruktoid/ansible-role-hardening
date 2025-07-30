@@ -48,7 +48,8 @@ provisioner:
           reboot: true
           reboot_from_time: "2:00"
           reboot_time_margin_mins: 1
-          custom_origins: ''
+          custom_origins:
+            - "Docker:${distro_codename}"
         disable_wireless: true
         kernel_lockdown: true
         logind:
