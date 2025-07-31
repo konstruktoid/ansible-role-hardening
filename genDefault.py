@@ -51,6 +51,8 @@ def main():
                             subvalue_default = int(sv)
                         elif v["options"][sk]["type"] in ["str", "path"]:
                             subvalue_default = f'"{sv}"'
+                        elif v["options"][sk]["type"] in ["list"]:
+                            subvalue_default = f'{sv}'
 
                         print(
                             f"  {sk}: {subvalue_default} # {v['options'][sk]['description']}",

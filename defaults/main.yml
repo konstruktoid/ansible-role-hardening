@@ -154,7 +154,7 @@ faillock_conf_template: "etc/security/faillock.conf.j2"
 
 # A list of addresses to use as the fallback DNS servers.
 fallback_dns: ["1.0.0.2", "149.112.112.112"]
-# A space-separated list of NTP server host names or IP addresses to be used as the fallback NTP servers.
+# A list of NTP server host names or IP addresses to be used as the fallback NTP servers.
 fallback_ntp: ["ntp.netnod.se", "ntp.ubuntu.com"]
 # Filesystem kernel modules to block and blacklist.
 fs_modules_blocklist: ["cramfs", "freevxfs", "hfs", "hfsplus", "jffs2", "squashfs", "udf"]
@@ -463,7 +463,7 @@ motd_template: "etc/motd.j2"
 
 # Network kernel modules to block and blacklist.
 net_modules_blocklist: ["atm", "dccp", "sctp", "rds", "tipc"]
-# A space-separated list of NTP server host names or IP addresses to be used as the primary NTP servers.
+# A list of NTP server host names or IP addresses to be used as the primary NTP servers.
 ntp: ["2.pool.ntp.org", "time.nist.gov"]
 # Packages that will be removed from the system if they are installed.
 packages_blocklist:

@@ -182,6 +182,18 @@ no matter how large or small. If you found something odd, feel free to submit a
 issue, improve the code by creating a pull request, or by
 [sponsoring this project](https://github.com/sponsors/konstruktoid).
 
+### Guidelines
+
+The [argument_specs.yml](meta/argument_specs.yml) file is used to generate the
+documentation and defaults for this role, so please ensure that any changes
+made to the role are also reflected in the \`argument_specs.yml\` file.
+
+After making changes, run \`bash genREADME.sh\` to regenerate the defaults file,
+README and other documentation files.
+
+Last but not least, ensure that the role passes all tests by running
+\`tox run -e devel,docker\`.
+
 ## License
 
 Apache License Version 2.0
