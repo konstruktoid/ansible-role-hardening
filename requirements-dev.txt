@@ -4,6 +4,6 @@ ansible-lint
 jmespath
 molecule-plugins[docker]
 molecule-plugins[vagrant]
-molecule==25.1.0
+molecule==25.7.0
 passlib
 tox
