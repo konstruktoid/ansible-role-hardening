@@ -132,6 +132,10 @@ argument_specs:
         description: "APT unattended-upgrades template location."
         type: "path"
         default: "etc/apt/apt.conf.d/52unattended-upgrades-local.j2"
+      unattended_upgrades_custom_origins_template:
+        description: "APT unattended-upgrades for custom origins template location."
+        type: "path"
+        default: "etc/apt/apt.conf.d/53unattended-upgrades-custom-origins.j2"
       user_conf_template:
         description: "systemd user.conf template location."
         type: "path"
@@ -1472,6 +1476,7 @@ argument_specs:
           - reboot: false
           - reboot_from_time: "2:00"
           - reboot_time_margin_mins: 20
+          - custom_origins: ''
         description: "Configure automatic updates."
         options:
           enabled:
@@ -1489,6 +1494,10 @@ argument_specs:
           reboot_time_margin_mins:
             description: "Add minutes to the reboot time, set using C(reboot_from_time)."
             type: "int"
+          custom_origins:
+            description: "Add custom origins to unattended upgrades through a list of strings. For Debian it is \"origin=<ORIGIN>,archive=<ARCHIVE>\" (https://wiki.debian.org/UnattendedUpgrades) which should look like: - \"origin=Docker,archive=${distro_codename}\". For Ubuntu it is \"<ORIGIN>:<ARCHIVE>\" (https://documentation.ubuntu.com/server/how-to/software/automatic-updates/) which should look like: - \"Docker:${distro_codename}\". Values for the configuration can be found via apt-cache policy - e.g. for Docker on Debian 12 it is o=Docker,a=bookworm. For Ubuntu 24.04 it is o=Docker,a=noble."
+            type: "list"
+            elements: "str"
       manage_netplan:
         description: "If True, then any available netplan configuration files will have the permissions set to 0600."
         type: "bool"
