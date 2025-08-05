@@ -27,6 +27,14 @@ provisioner:
           - vagrant
           - sudo
       bookworm:
+        automatic_updates:
+          enabled: true
+          only_security: true
+          reboot: true
+          reboot_from_time: "2:00"
+          reboot_time_margin_mins: 1
+          custom_origins:
+            - "origin=Docker,archive=bookworm"
         allow_virtual_system_calls: false
         ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
@@ -49,7 +57,7 @@ provisioner:
           reboot_from_time: "2:00"
           reboot_time_margin_mins: 1
           custom_origins:
-            - "Docker:${distro_codename}"
+            - "Docker:noble"
         disable_wireless: true
         kernel_lockdown: true
         logind:
