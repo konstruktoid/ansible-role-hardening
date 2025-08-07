@@ -58,6 +58,9 @@
         masked: false
 
     - name: Start tmp.mount
+      environment:
+        TMP: /var/tmp
+        TMPDIR: /var/tmp
       ansible.builtin.systemd_service:
         name: tmp.mount
         daemon_reload: true
