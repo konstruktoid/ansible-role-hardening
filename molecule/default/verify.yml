@@ -1445,9 +1445,7 @@
 
         - name: Print password
           ansible.builtin.debug:
-            msg: "{{ password }}"
-          when:
-            - password
+            msg: "{{ password if password | type_debug == 'str' else 'No password set' }}"
 
     - name: Create test user
       become: true
@@ -1468,7 +1466,7 @@
 
     - name: Print test user
       ansible.builtin.debug:
-        msg: "{{ roletestuser_pass.stdout }}"
+        msg: "{{ roletestuser_pass.stdout if roletestuser_pass.rc == 0 else 'Test user not found' }}"
 
     - name: Stat ssh moduli
       ansible.builtin.stat:
@@ -1477,7 +1475,7 @@
 
     - name: Print ssh moduli checksum
       ansible.builtin.debug:
-        msg: "{{ ssh_moduli.stat.checksum }}"
+        msg: "{{ ssh_moduli.stat.checksum if ssh_moduli.stat.exists else 'SSH moduli not found' }}"
 
     - name: Verify TMOUT setting
       ansible.builtin.shell: |
