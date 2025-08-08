@@ -80,6 +80,7 @@ automatic_updates:
   reboot: false # If True, it will reboot the system if needed.
   reboot_from_time: "2:00" # If system reboot is enabled, the variable sets the reboot time, with added random minutes from C(reboot_time_margin_mins).
   reboot_time_margin_mins: 20 # Add minutes to the reboot time, set using C(reboot_from_time).
+  custom_origins: "" # Add custom origins to unattended upgrades through a list of strings. For Debian it is "origin=<ORIGIN>,archive=<ARCHIVE>". For Ubuntu it is "<ORIGIN>:<ARCHIVE>".
 
 # PAM common-account template location.
 common_account_template: "etc/pam.d/common-account.j2"
@@ -1280,6 +1281,9 @@ ufw_rate_limit: false
 
 # Sets the default umask value.
 umask_value: 77
+
+# APT unattended-upgrades for custom origins template location.
+unattended_upgrades_custom_origins_template: "etc/apt/apt.conf.d/53unattended-upgrades-custom-origins.j2"
 
 # APT unattended-upgrades template location.
 unattended_upgrades_template: "etc/apt/apt.conf.d/52unattended-upgrades-local.j2"
