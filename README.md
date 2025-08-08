@@ -181,6 +181,7 @@ See [TESTING.md](TESTING.md).
 | timesyncd_conf_template | systemd timesyncd.conf template location. | etc/systemd/timesyncd.conf.j2 |
 | tmp_mount_template | tmp.mount template location. | etc/systemd/tmp.mount.j2 |
 | unattended_upgrades_template | APT unattended-upgrades template location. | etc/apt/apt.conf.d/52unattended-upgrades-local.j2 |
+| unattended_upgrades_custom_origins_template | APT unattended-upgrades for custom origins template location. | etc/apt/apt.conf.d/53unattended-upgrades-custom-origins.j2 |
 | user_conf_template | systemd user.conf template location. | etc/systemd/user.conf.j2 |
 | useradd_template | useradd template location. | etc/default/useradd.j2 |
 | manage_pam | If True, manage PAM configuration files. | True |
@@ -351,7 +352,7 @@ See [TESTING.md](TESTING.md).
 | manage_mounts | If True, `/proc` will be mounted with the `nosuid,nodev,noexec,hidepid` options, `/dev/shm` will be mounted with the `nosuid,nodev,noexec` options and `/tmp` will be mounted as tmpfs with the `nosuid,nodev,noexec` options using the available template. | True |
 | hide_pid | This option controls who can access the information in `/proc/pid` directories | 2 |
 | process_group | Specifies the ID of a group whose members are authorized to learn process information otherwise prohibited by hidepid. | 0 |
-| automatic_updates | Configure automatic updates. | [{'enabled': True}, {'only_security': True}, {'reboot': False}, {'reboot_from_time': '2:00'}, {'reboot_time_margin_mins': 20}] |
+| automatic_updates | Configure automatic updates. | [{'enabled': True}, {'only_security': True}, {'reboot': False}, {'reboot_from_time': '2:00'}, {'reboot_time_margin_mins': 20}, {'custom_origins': ''}] |
 | manage_netplan | If True, then any available netplan configuration files will have the permissions set to 0600. | True |
 | manage_resolved | If True, then the systemd-resolved service will be installed and configured. | True |
 | dns | A list of addresses to use as system DNS servers. | ['1.1.1.2', '9.9.9.9'] |
@@ -557,6 +558,7 @@ See [TESTING.md](TESTING.md).
 | reboot | If True, it will reboot the system if needed. |  |
 | reboot_from_time | If system reboot is enabled, the variable sets the reboot time, with added random minutes from `reboot_time_margin_mins`. |  |
 | reboot_time_margin_mins | Add minutes to the reboot time, set using `reboot_from_time`. |  |
+| custom_origins | Add custom origins to unattended upgrades through a list of strings. For Debian it is "origin=<ORIGIN>,archive=<ARCHIVE>". For Ubuntu it is "<ORIGIN>:<ARCHIVE>". |  |
 
 #### Options for main > logind
 
