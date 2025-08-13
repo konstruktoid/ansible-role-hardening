@@ -37,6 +37,14 @@ provisioner:
           - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
+        automatic_updates:
+          enabled: true
+          only_security: true
+          reboot: true
+          reboot_from_time: "2:00"
+          reboot_time_margin_mins: 1
+          custom_origins:
+            - "Docker:plucky"
 platforms:
   - name: jammy
     box: bento/ubuntu-22.04
