@@ -1,9 +1,9 @@
 aar-doc
 git+https://github.com/ansible-community/ansible-lint.git
-https://github.com/ansible/ansible/archive/devel.tar.gz
+git+https://github.com/ansible/ansible.git
+git+https://github.com/ansible/molecule.git
 jmespath
 molecule-plugins[docker]@git+https://github.com/ansible-community/molecule-plugins.git
 molecule-plugins[vagrant]@git+https://github.com/ansible-community/molecule-plugins.git
-molecule==25.1.0
 passlib
 tox
