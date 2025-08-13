@@ -4,15 +4,24 @@
 # OpenSSH SSH client configuration files
 # See ssh_config(5) for more information
 
+{% if ssh_installed_version is version('9.0', '>=') and 'sntrup761x25519-sha512' not in sshd_kex_algorithms %}
+# See https://www.openssh.com/pq.html, and enable KexAlgorithms mlkem768x25519-sha256 or sntrup761x25519-sha512 if possible.
+{% endif %}
+
 {% if ssh_config_d.stat.exists and ssh_config_d.stat.isdir %}
 Include /etc/ssh/ssh_config.d/*.conf
 {%+ endif +%}
+
 Host *
 {% if not crypto_policies_config or not set_crypto_policy %}
     {{ 'Ciphers ' ~ sshd_ciphers | join(',') if sshd_ciphers }}
     {{ 'HostKeyAlgorithms ' ~ sshd_host_key_algorithms | join(',') if sshd_host_key_algorithms }}
     {{ 'KexAlgorithms ' ~ sshd_kex_algorithms | join(',') if sshd_kex_algorithms }}
     {{ 'MACs ' ~ sshd_macs | join(',') if sshd_macs }}
+    {% if ssh_installed_version is version('10.1', '>=') %}
+    WarnWeakCrypto yes
+    {% endif %}
+
 {% endif %}
     GSSAPIAuthentication {{ 'yes' if (sshd_gssapi_authentication | bool) else 'no' }}
     HashKnownHosts yes
