@@ -188,7 +188,7 @@ The [argument_specs.yml](meta/argument_specs.yml) file is used to generate the
 documentation and defaults for this role, so please ensure that any changes
 made to the role are also reflected in the \`argument_specs.yml\` file.
 
-After making changes, run \`bash genREADME.sh\` to regenerate the defaults file,
+After making changes, run \`bash generate_doc_defaults.sh\` to regenerate the defaults file,
 README and other documentation files.
 
 Last but not least, ensure that the role passes all tests by running
@@ -251,7 +251,7 @@ echo '```'
 
 aar-doc --output-template aar-doc_template.j2 "$(pwd)" markdown
 
-python3 genDefault.py meta/argument_specs.yml > defaults/main.yml || exit 1
+python3 generate_defaults.py meta/argument_specs.yml > defaults/main.yml || exit 1
 
 ansible-lint --fix . &>/dev/null
 ansible-lint --fix .

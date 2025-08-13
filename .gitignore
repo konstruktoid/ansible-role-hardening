@@ -6,6 +6,7 @@
 *suid.list
 .ansible
 .cache
+.env.yml
 .scannerwork
 .sonar
 .tox

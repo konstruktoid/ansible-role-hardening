@@ -2,8 +2,8 @@ aar-doc
 ansible
 ansible-lint
 jmespath
+molecule
 molecule-plugins[docker]
 molecule-plugins[vagrant]
-molecule==25.1.0
 passlib
 tox
