@@ -4,7 +4,7 @@
 # OpenSSH SSH daemon configuration file
 # See sshd_config(5) for more information
 
-{% if ssh_installed_version is version('9.0', '>=') and 'sntrup761x25519-sha512' not in sshd_kex_algorithms %}
+{% if ssh_installed_version is version('9.0', '>=') and sshd_kex_algorithms is not regex("sntrup761x25519-*") %}
 # See https://www.openssh.com/pq.html, and enable KexAlgorithms mlkem768x25519-sha256 or sntrup761x25519-sha512 if possible.
 {% endif %}
 
