@@ -30,12 +30,9 @@ provisioner:
         manage_suid_sgid_permissions: false
         system_upgrade: false
       testing:
-        ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
         kernel_lockdown: confidentiality
-        manage_apparmor: false
         manage_auditd: false
-        manage_compilers: false
         manage_suid_sgid_permissions: false
         sshd_admin_net:
           - 0.0.0.0/0
@@ -43,7 +40,15 @@ provisioner:
           - vagrant
           - sudo
         sshd_update_moduli: true
-        system_upgrade: false
+      trixie:
+        ansible_python_interpreter: /usr/bin/python3
+        manage_kernel: true
+        sshd_admin_net:
+          - 0.0.0.0/0
+        sshd_allow_groups:
+          - vagrant
+          - sudo
+        manage_suid_sgid_permissions: false
 platforms:
   - name: bookworm
     box: debian/bookworm64
@@ -52,6 +57,11 @@ platforms:
     memory: 1024
   - name: testing
     box: debian/testing64
+    instance_raw_config_args:
+      - vbguest.auto_update = false
+    memory: 1024
+  - name: trixie
+    box: bento/debian-13
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 1024

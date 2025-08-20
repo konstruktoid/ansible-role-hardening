@@ -26,7 +26,7 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
-      bookworm:
+      trixie:
         automatic_updates:
           enabled: true
           only_security: true
@@ -34,13 +34,11 @@ provisioner:
           reboot_from_time: "2:00"
           reboot_time_margin_mins: 1
           custom_origins:
-            - "origin=Docker,archive=bookworm"
+            - "origin=Docker,archive=trixie"
         allow_virtual_system_calls: false
-        ansible_become_pass: vagrant
         ansible_python_interpreter: /usr/bin/python3
         disable_wireless: false
         kernel_lockdown: confidentiality
-        manage_usbguard: false
         rkhunter_web_cmd: wget
         sshd_admin_net:
           - 0.0.0.0/0
@@ -54,7 +52,6 @@ provisioner:
           - "diffie-hellman-group18-sha512"
           - "ecdh-sha2-nistp521"
         sshd_update_moduli: true
-        system_upgrade: false
       noble:
         automatic_updates:
           enabled: true
@@ -94,8 +91,8 @@ platforms:
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 2048
-  - name: bookworm
-    box: debian/bookworm64
+  - name: trixie
+    box: bento/debian-13
     config_options:
       ssh.key_type: ed25519
     instance_raw_config_args:
