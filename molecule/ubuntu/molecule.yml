@@ -65,6 +65,7 @@ platforms:
     instance_raw_config_args:
       - vbguest.auto_update = false
     provider_raw_config_args:
+      - customize ["modifyvm", :id, "--cableconnected1", "on"]
       - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
       - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
     memory: 1024
@@ -76,6 +77,7 @@ platforms:
     instance_raw_config_args:
       - vbguest.auto_update = false
     provider_raw_config_args:
+      - customize ["modifyvm", :id, "--cableconnected1", "on"]
       - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
       - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
     memory: 1024
