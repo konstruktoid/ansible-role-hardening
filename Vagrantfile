@@ -30,8 +30,9 @@ Vagrant.configure("2") do |config|
   config.vbguest.installer_options = { allow_kernel_upgrade: false }
   config.vbguest.auto_update = false
   config.vm.provider "virtualbox" do |vb|
+    vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
     vb.customize ["modifyvm", :id, "--uart1", "0x3F8", "4"]
-    vb.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
+    vb.customize ["modifyvm", :id, "--uartmode1", "file", File::NULL]
     vb.memory = "2048"
   end
 
