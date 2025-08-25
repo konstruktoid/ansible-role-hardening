@@ -215,22 +215,30 @@
             cmd: |
               set -o pipefail
               auditctl -l | grep "^{{ item }}$"
+          register: auditd_rules
           changed_when: false
+          failed_when: auditd_rules.rc != 0
           args:
             executable: /bin/bash
           loop:
-            - "-w /sbin/auditctl -p x -k audittools"
-            - "-w /usr/bin/sudo -p x -k actions"
-            - "-w /etc/localtime -p wa -k localtime"
-            - "-w /var/lib/systemd/credential.secret -p wa -k systemd"
-            - "-w {{ sysctl_conf_dir }}/zz-ipv6-hardening.conf -p wa -k sysctl"
+            - "-a always,exit -F arch=b32 -S open -F dir=/etc -F success=0 -F key=access"
+            - "-a always,exit -F arch=b32 -S open -F dir=/tmp -F success=0 -F key=access"
+            - "-a always,exit -F arch=b32 -S open -F dir=/var -F success=0 -F key=access"
+            - "-a always,exit .* key=actions"
+            - "-a always,exit .* key=audispconfig"
+            - "-a always,exit .* key=audit_rules_usergroup_modification"
+            - "-a always,exit .* key=audit_time_rules"
+            - "-a always,exit .* key=cron"
+            - "-a always,exit .* path=/etc/ld.so.conf .* key=libpath"
 
         - name: Verify auditd settings
           ansible.builtin.shell:
             cmd: |
               set -o pipefail
               grep "^{{ item }}$" /etc/audit/audit.rules
+          register: auditd_settings
           changed_when: false
+          failed_when: auditd_settings.rc != 0
           args:
             executable: /bin/bash
           loop:

@@ -1,22 +1,10 @@
 ---
-- name: Restart Debian auditd
+- name: Enable auditd
   become: true
   ansible.builtin.service:
     name: auditd
-    state: restarted
+    enabled: true
   when:
-    - ansible_os_family == "Debian"
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
-
-# https://github.com/ansible/ansible/issues/22171
-- name: Restart RedHat auditd # noqa command-instead-of-module
-  become: true
-  ansible.builtin.command:
-    cmd: service auditd restart
-  register: service_auditd_restart
-  changed_when: service_auditd_restart.rc == 0
-  when:
-    - ansible_os_family == "RedHat"
     - ansible_virtualization_type not in ["container", "docker", "podman"]
 
 - name: Generate auditd rules
@@ -24,7 +12,8 @@
   ansible.builtin.command:
     cmd: augenrules
   register: augenrules_handler
-  changed_when: augenrules_handler.rc == 0
+  changed_when:
+    - augenrules_handler.rc == 0
 
 - name: Restart sysctl
   become: true

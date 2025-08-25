@@ -153,5 +153,4 @@
         - auditd_apply_audit_rules | bool
       notify:
         - Generate auditd rules
-        - Restart Debian auditd
-        - Restart RedHat auditd
+        - Enable auditd
