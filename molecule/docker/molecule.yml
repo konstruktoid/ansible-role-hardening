@@ -18,8 +18,8 @@ provisioner:
   inventory:
     host_vars:
       bookworm:
-        ansible_become_pass: vagrant
-        ansible_python_interpreter: /usr/bin/python3
+        ansible_facts.become_pass: vagrant
+        ansible_facts.python_interpreter: /usr/bin/python3
         automatic_updates:
           enabled: true
           only_security: true

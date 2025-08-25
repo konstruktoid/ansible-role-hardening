@@ -5,7 +5,7 @@
     name: auditd
     enabled: true
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Generate auditd rules
   become: true
@@ -21,14 +21,14 @@
     name: systemd-sysctl
     state: restarted
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Reload systemd
   become: true
   ansible.builtin.systemd_service:
     daemon_reload: true
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Run rkhunter propupd
   become: true
@@ -48,7 +48,7 @@
   failed_when:
     - rkhunter_update.rc == 1
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Enable aidecheck
   become: true
@@ -57,7 +57,7 @@
     enabled: true
     state: started
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Disable aidecheck
   become: true
@@ -66,7 +66,7 @@
     state: stopped
     enabled: false
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Mask aidecheck
   become: true
@@ -76,7 +76,7 @@
     state: stopped
     enabled: false
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Restart ssh service
   become: true
@@ -88,7 +88,7 @@
     - ssh_service is not success
     - not 'Could not find the requested service' in ssh_service.msg
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Restart sshd service
   become: true
@@ -100,7 +100,7 @@
     - sshd_service is not success
     - not 'Could not find the requested service' in sshd_service.msg
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Restart Postfix
   become: true
@@ -108,7 +108,7 @@
     name: postfix
     state: restarted
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Run apt-get autoremove
   become: true
@@ -129,14 +129,14 @@
     enabled: false
     state: stopped
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Run dnf autoremove
   become: true
   ansible.builtin.dnf:
     autoremove: true
   when:
-    - ansible_os_family == "RedHat"
+    - ansible_facts.os_family == "RedHat"
   tags:
     - dnf
     - packages
@@ -153,7 +153,7 @@
   register: update_debian_cracklib
   changed_when: update_debian_cracklib.rc == 0
   when:
-    - ansible_os_family == "Debian"
+    - ansible_facts.os_family == "Debian"
 
 - name: Update RedHat cracklib
   environment:
@@ -164,7 +164,7 @@
   register: update_redhat_cracklib
   changed_when: update_redhat_cracklib.rc == 0
   when:
-    - ansible_os_family == "RedHat"
+    - ansible_facts.os_family == "RedHat"
 
 - name: Update GRUB
   become: true
@@ -173,7 +173,7 @@
   register: update_grub
   changed_when: update_grub.rc == 0
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Update GRUB2
   become: true
@@ -182,7 +182,7 @@
   register: update_grub2
   changed_when: update_grub2.rc == 0
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Validate rsyslogd
   become: true

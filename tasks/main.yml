@@ -10,7 +10,7 @@
     file: resolvedconf.yml
   when:
     - manage_resolved
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
   tags:
     - dns
     - resolved
@@ -27,7 +27,7 @@
     file: ufw.yml
   when:
     - manage_ufw
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
   tags:
     - ufw
     - firewall
@@ -37,7 +37,7 @@
     file: sysctl.yml
   when:
     - manage_sysctl
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
   tags:
     - kernel
     - sysctl
@@ -72,7 +72,7 @@
     file: usbguard.yml
   when:
     - manage_usbguard
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
   tags:
     - usbguard
 
@@ -99,7 +99,7 @@
     file: timesyncd.yml
   when:
     - manage_timesyncd
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
   tags:
     - systemd
     - timesyncd
@@ -224,7 +224,7 @@
     file: ctrlaltdel.yml
   when:
     - disable_ctrlaltdel
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
   tags:
     - ctrl-alt-del
     - systemd
@@ -242,8 +242,8 @@
     file: apparmor.yml
   when:
     - manage_apparmor
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
-    - ansible_os_family == "Debian"
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.os_family == "Debian"
   tags:
     - apparmor
 
@@ -252,7 +252,7 @@
     file: disablewireless.yml
   when:
     - disable_wireless
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
   tags:
     - wireless
 
@@ -262,9 +262,9 @@
     file: aide.yml
   when: >
     manage_aide | bool and
-    (not (ansible_os_family == "Debian" and
-    (ansible_lsb.codename == "groovy" or
-    ansible_lsb.codename == "hirsute")))
+    (not (ansible_facts.os_family == "Debian" and
+    (ansible_facts.lsb.codename == "groovy" or
+    ansible_facts.lsb.codename == "hirsute")))
   tags:
     - aide
 
@@ -310,7 +310,7 @@
   ansible.builtin.import_tasks:
     file: logindconf.yml
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
     - manage_logind
   tags:
     - logind

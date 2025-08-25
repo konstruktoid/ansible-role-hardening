@@ -31,7 +31,7 @@
     state: present
     install_recommends: false
   when:
-    - ansible_os_family == "Debian"
+    - ansible_facts.os_family == "Debian"
 
 - name: RedHat family UFW installation
   become: true
@@ -40,7 +40,7 @@
     state: present
     update_cache: true
   when:
-    - ansible_os_family == "RedHat"
+    - ansible_facts.os_family == "RedHat"
 
 - name: Get available physical interfaces
   ansible.builtin.command:
@@ -80,7 +80,7 @@
         enabled: true
         state: started
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Set default deny
       community.general.ufw:

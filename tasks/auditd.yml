@@ -7,7 +7,7 @@
         name: initscripts
         state: present
       when:
-        - ansible_os_family == "RedHat"
+        - ansible_facts.os_family == "RedHat"
 
     - name: Configure Debian auditd GRUB cmdline
       ansible.builtin.lineinfile:
@@ -19,7 +19,7 @@
         owner: root
         group: root
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
       notify:
         - Update GRUB
 
@@ -30,8 +30,8 @@
       changed_when: grubby_update_kernel.rc != 0
       failed_when: grubby_update_kernel.rc != 0
       when:
-        - ansible_os_family == "RedHat"
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.os_family == "RedHat"
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Configure auditd action_mail_acct
       ansible.builtin.lineinfile:

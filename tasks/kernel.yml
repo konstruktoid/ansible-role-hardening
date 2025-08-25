@@ -13,7 +13,7 @@
         owner: root
         group: root
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
       notify:
         - Update GRUB
 
@@ -24,8 +24,8 @@
       changed_when: grubby_update_kernel.rc != 0
       failed_when: grubby_update_kernel.rc != 0
       when:
-        - ansible_os_family == "RedHat"
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.os_family == "RedHat"
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Configure page poisoning
       ansible.builtin.lineinfile:
@@ -38,7 +38,7 @@
         owner: root
         group: root
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
       notify:
         - Update GRUB
 
@@ -49,8 +49,8 @@
       changed_when: grubby_update_kernel.rc != 0
       failed_when: grubby_update_kernel.rc != 0
       when:
-        - ansible_os_family == "RedHat"
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.os_family == "RedHat"
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Configure page table isolation
       ansible.builtin.lineinfile:
@@ -63,7 +63,7 @@
         owner: root
         group: root
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
       notify:
         - Update GRUB
 
@@ -74,8 +74,8 @@
       changed_when: grubby_update_kernel.rc != 0
       failed_when: grubby_update_kernel.rc != 0
       when:
-        - ansible_os_family == "RedHat"
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.os_family == "RedHat"
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Configure SLUB debugger poisoning
       ansible.builtin.lineinfile:
@@ -88,7 +88,7 @@
         owner: root
         group: root
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
         - slub_debugger_poisoning
       notify:
         - Update GRUB
@@ -100,15 +100,15 @@
       changed_when: grubby_update_kernel.rc != 0
       failed_when: grubby_update_kernel.rc != 0
       when:
-        - ansible_os_family == "RedHat"
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.os_family == "RedHat"
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
         - slub_debugger_poisoning
 
     - name: Configure kernel lockdown
       when:
         - kernel_lockdown is defined
         - kernel_lockdown is not false
-        - ansible_kernel is version("5.4", ">=")
+        - ansible_facts.kernel is version("5.4", ">=")
       block:
         - name: Set kernel lockdown mode as fact
           ansible.builtin.set_fact:
@@ -132,7 +132,7 @@
             owner: root
             group: root
           when:
-            - ansible_os_family == "Debian"
+            - ansible_facts.os_family == "Debian"
           notify:
             - Update GRUB
 
@@ -143,5 +143,5 @@
           changed_when: grubby_kernel_lockdown.rc != 0
           failed_when: grubby_kernel_lockdown.rc != 0
           when:
-            - ansible_os_family == "RedHat"
-            - ansible_virtualization_type not in ["container", "docker", "podman"]
+            - ansible_facts.os_family == "RedHat"
+            - ansible_facts.virtualization_type not in ["container", "docker", "podman"]

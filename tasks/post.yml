@@ -16,7 +16,7 @@
 - name: Grub settings
   become: true
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
   block:
     - name: Stat RedHat auditd GRUB settings
       ansible.builtin.shell:
@@ -29,7 +29,7 @@
         executable: /bin/bash
       register: audit_grubenv
       when:
-        - ansible_os_family == "RedHat"
+        - ansible_facts.os_family == "RedHat"
 
     - name: Update grub2 if missing GRUB settings
       ansible.builtin.command:
@@ -38,9 +38,9 @@
       changed_when: update_grub_redhat.rc != 0
       failed_when: update_grub_redhat.rc != 0
       when:
-        - ansible_os_family == "RedHat"
+        - ansible_facts.os_family == "RedHat"
         - audit_grubenv.rc != 0
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Stat Debian auditd GRUB settings
       ansible.builtin.shell:
@@ -49,7 +49,7 @@
       failed_when: audit_grub_cfg.rc > 1
       register: audit_grub_cfg
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
 
     - name: Update GRUB if settings are missing
       ansible.builtin.command:
@@ -58,7 +58,7 @@
       changed_when: update_grub_debian.rc != 0
       failed_when: update_grub_debian.rc != 0
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
         - audit_grub_cfg.rc != 0
 
     - name: Find GRUB config files

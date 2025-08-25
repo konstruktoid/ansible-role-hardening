@@ -1,7 +1,7 @@
 ---
 - name: Manage apt esm, motd-news and Ubuntu PRO
   when:
-    - ansible_os_family == "Debian"
+    - ansible_facts.os_family == "Debian"
   block:
     - name: Stat /etc/default/motd-news
       ansible.builtin.stat:
@@ -101,4 +101,4 @@
         - motd-news.service
         - motd-news.timer
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]

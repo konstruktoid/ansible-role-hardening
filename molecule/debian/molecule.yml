@@ -20,7 +20,7 @@ provisioner:
   inventory:
     host_vars:
       bookworm:
-        ansible_python_interpreter: /usr/bin/python3
+        ansible_facts.python_interpreter: /usr/bin/python3
         manage_kernel: true
         sshd_admin_net:
           - 0.0.0.0/0
@@ -30,7 +30,7 @@ provisioner:
         manage_suid_sgid_permissions: false
         system_upgrade: false
       testing:
-        ansible_python_interpreter: /usr/bin/python3
+        ansible_facts.python_interpreter: /usr/bin/python3
         kernel_lockdown: confidentiality
         manage_auditd: false
         manage_suid_sgid_permissions: false
@@ -41,7 +41,7 @@ provisioner:
           - sudo
         sshd_update_moduli: true
       trixie:
-        ansible_python_interpreter: /usr/bin/python3
+        ansible_facts.python_interpreter: /usr/bin/python3
         manage_kernel: true
         sshd_admin_net:
           - 0.0.0.0/0

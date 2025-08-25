@@ -41,7 +41,7 @@
         - mask_atd is not success
         - not "Could not find the requested service" in mask_atd.msg
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Set cron permissions
       ansible.builtin.file:

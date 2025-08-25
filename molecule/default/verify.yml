@@ -5,7 +5,7 @@
   tasks:
     - name: Reboot and reconnect
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
       block:
         - name: Reboot host
           become: true
@@ -14,7 +14,7 @@
         - name: Wait for the host and reconnect
           ansible.builtin.wait_for:
             port: 22
-            host: "{{ (ansible_ssh_host | default(ansible_host)) | default(inventory_hostname) }}"
+            host: "{{ (ansible_facts.ssh_host | default(ansible_facts.host)) | default(inventory_hostname) }}"
             delay: 10
             timeout: 120
 
@@ -26,7 +26,7 @@
 
     - name: Include host vars
       ansible.builtin.include_vars:
-        file: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/inventory/host_vars/{{ ansible_hostname }}"
+        file: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/inventory/host_vars/{{ ansible_facts.hostname }}"
 
     - name: Merge package lists
       ansible.builtin.set_fact:
@@ -40,7 +40,7 @@
 
     - name: Reboot time testing
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
       block:
         - name: Set base time and margin for reboot calculation
           ansible.builtin.set_fact:
@@ -165,8 +165,8 @@
       changed_when: false
       failed_when: snapd_running.rc != 0
       when:
-        - ansible_distribution == "Ubuntu"
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.distribution == "Ubuntu"
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Verify rsyslog FileCreateMode
       become: true
@@ -181,12 +181,12 @@
       changed_when: false
       failed_when: rsyslog_filecreate.rc != 0
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Verify auditd
       become: true
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
         - manage_auditd
       block:
         - name: Verify auditd configuration
@@ -264,7 +264,7 @@
 
     - name: Verify Ctrl-Alt-Del
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
       block:
         - name: Get Ctrl-Alt-Del target status
           ansible.builtin.systemd_service:
@@ -431,7 +431,7 @@
                 {%- endif -%}
               - Compression {{ 'yes' if (sshd_compression | bool) else 'no' }}
               - >-
-                {%- if ansible_os_family == 'Debian' and sshd_debian_banner -%}
+                {%- if ansible_facts.os_family == 'Debian' and sshd_debian_banner -%}
                     DebianBanner ('yes' if (sshd_debian_banner | bool) else 'no')
                 {%- endif -%}
               - GSSAPIAuthentication {{ 'yes' if (sshd_gssapi_authentication | bool) else 'no' }}
@@ -641,8 +641,8 @@
         sysctl_settings: "{{ sysctl_settings | combine(apparmor_sysctl_settings) }}"
       when:
         - manage_apparmor
-        - ansible_os_family == "Debian"
-        - ansible_kernel is version("6.2", ">=")
+        - ansible_facts.distribution == "Ubuntu"
+        - ansible_facts.kernel is version("6.2", ">=")
 
     - name: Verify sysctl configuration
       become: true
@@ -656,7 +656,7 @@
       changed_when: false
       failed_when: sysctl_file_config.rc != 0
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Verify sysctl runtime configuration
       become: true
@@ -670,7 +670,7 @@
       changed_when: false
       failed_when: sysctl_runtime_config.rc != 0
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Get crypto-policies value
       environment:
@@ -685,7 +685,7 @@
 
     - name: Verify mounts
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
       block:
         - name: Verify noexec /dev/shm
           ansible.builtin.shell:
@@ -703,8 +703,6 @@
           register: proc_opts
           changed_when: false
           failed_when: proc_opts.rc != 0
-          tags:
-            - skip_ansible_lint
 
         - name: Verify /proc process group
           ansible.builtin.shell: |
@@ -717,8 +715,6 @@
           failed_when: proc_opts.rc != 0
           when:
             - process_group != 0
-          tags:
-            - skip_ansible_lint
 
         - name: Verify tmp.mount
           become: true
@@ -750,14 +746,14 @@
           ansible.builtin.set_fact:
             pam_version: "{{ ansible_facts.packages['libpam-modules'][0].version }}"
           when:
-            - ansible_os_family == "Debian"
+            - ansible_facts.os_family == "Debian"
             - "'libpam-modules' in ansible_facts.packages"
 
         - name: Get libpam version in RedHat family
           ansible.builtin.set_fact:
             pam_version: "{{ ansible_facts.packages['pam'][0].version }}"
           when:
-            - ansible_os_family == "RedHat"
+            - ansible_facts.os_family == "RedHat"
             - "'pam' in ansible_facts.packages"
 
     - name: Set hashing algorithm for password (yescrypt|sha512)
@@ -839,7 +835,7 @@
     - name: Verify GRUB settings
       become: true
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
       block:
         - name: Verify RedHat GRUB audit settings
           ansible.builtin.shell: |
@@ -849,7 +845,7 @@
           changed_when: false
           failed_when: audit_grubenv.rc != 0
           when:
-            - ansible_os_family == "RedHat"
+            - ansible_facts.os_family == "RedHat"
             - manage_auditd
 
         - name: Verify Debian audit GRUB settings
@@ -859,7 +855,7 @@
           changed_when: false
           failed_when: audit_grub_cfg.rc != 0
           when:
-            - ansible_os_family == "Debian"
+            - ansible_facts.os_family == "Debian"
             - manage_auditd
 
         - name: Verify RedHat GRUB IPv6 settings
@@ -871,7 +867,7 @@
           changed_when: false
           failed_when: audit_grubenv.rc != 0
           when:
-            - ansible_os_family == "RedHat"
+            - ansible_facts.os_family == "RedHat"
             - disable_ipv6
 
         - name: Verify Debian GRUB IPv6 settings
@@ -881,7 +877,7 @@
           changed_when: false
           failed_when: audit_grub_cfg.rc != 0
           when:
-            - ansible_os_family == "Debian"
+            - ansible_facts.os_family == "Debian"
             - disable_ipv6
 
         - name: Verify RedHat GRUB virtual system call settings
@@ -893,7 +889,7 @@
           changed_when: false
           failed_when: audit_grubenv.rc != 0
           when:
-            - ansible_os_family == "RedHat"
+            - ansible_facts.os_family == "RedHat"
             - not allow_virtual_system_calls
 
         - name: Verify Debian GRUB virtual system call settings
@@ -903,7 +899,7 @@
           changed_when: false
           failed_when: page_grub_cfg.rc != 0
           when:
-            - ansible_os_family == "Debian"
+            - ansible_facts.os_family == "Debian"
             - not allow_virtual_system_calls
 
         - name: Verify RedHat GRUB page poisoning settings
@@ -915,7 +911,7 @@
           changed_when: false
           failed_when: audit_grubenv.rc != 0
           when:
-            - ansible_os_family == "RedHat"
+            - ansible_facts.os_family == "RedHat"
             - enable_page_poisoning
 
         - name: Verify Debian GRUB page poisoning settings
@@ -925,7 +921,7 @@
           changed_when: false
           failed_when: page_grub_cfg.rc != 0
           when:
-            - ansible_os_family == "Debian"
+            - ansible_facts.os_family == "Debian"
             - enable_page_poisoning
 
         - name: Verify RedHat GRUB page table isolation settings
@@ -937,7 +933,7 @@
           changed_when: false
           failed_when: audit_grubenv.rc != 0
           when:
-            - ansible_os_family == "RedHat"
+            - ansible_facts.os_family == "RedHat"
 
         - name: Verify Debian GRUB page table isolation settings
           ansible.builtin.shell:
@@ -946,7 +942,7 @@
           changed_when: false
           failed_when: page_grub_cfg.rc != 0
           when:
-            - ansible_os_family == "Debian"
+            - ansible_facts.os_family == "Debian"
 
         - name: Verify RedHat GRUB SLUB debugger settings
           ansible.builtin.shell:
@@ -957,7 +953,7 @@
           changed_when: false
           failed_when: audit_grubenv.rc != 0
           when:
-            - ansible_os_family == "RedHat"
+            - ansible_facts.os_family == "RedHat"
             - slub_debugger_poisoning
 
         - name: Verify Debian GRUB SLUB debugger settings
@@ -967,13 +963,13 @@
           changed_when: false
           failed_when: page_grub_cfg.rc != 0
           when:
-            - ansible_os_family == "Debian"
+            - ansible_facts.os_family == "Debian"
             - slub_debugger_poisoning
 
     - name: IPv6 sysctl configuration
       become: true
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
       block:
         - name: Verify IPv6 sysctl configuration
           ansible.builtin.shell: |
@@ -1039,7 +1035,7 @@
         - DNSOverTLS={{ dns_over_tls }}
       when:
         - manage_resolved
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Verify systemd timesyncd.conf
       become: true
@@ -1053,7 +1049,7 @@
         - FallbackNTP={{ fallback_ntp | join(' ') }}
       when:
         - manage_timesyncd
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Stat /etc/default/motd-news
       ansible.builtin.stat:
@@ -1071,16 +1067,16 @@
       register: motdnews_service
       failed_when: motdnews_service is changed
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
         - motd_news.stat.exists
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Stat /usr/bin/pro
       ansible.builtin.stat:
         path: /usr/bin/pro
       register: ubuntu_advantage_pro
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
 
     - name: Verify that apt_news is disabled
       become: true
@@ -1093,7 +1089,7 @@
       changed_when: false
       failed_when: ubuntu_advantage_pro_state.rc != 0
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
         - ubuntu_advantage_pro.stat.exists
 
     - name: Stat apt ESM hook
@@ -1102,7 +1098,7 @@
       register: ubuntu_esm_hook
       failed_when: ubuntu_esm_hook.stat.exists
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
 
     - name: Verify apt settings
       ansible.builtin.shell: |
@@ -1114,13 +1110,13 @@
       args:
         executable: /bin/bash
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
       with_items:
         - "{{ apt_hardening_options }}"
 
     - name: Efi fact
       ansible.builtin.set_fact:
-        booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
+        booted_with_efi: "{{ ansible_facts.mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
 
     - name: Print packages
       ansible.builtin.debug:
@@ -1139,7 +1135,7 @@
           changed_when: update_debian_cracklib.rc == 0
           failed_when: update_debian_cracklib.rc != 0
           when:
-            - ansible_os_family == "Debian"
+            - ansible_facts.os_family == "Debian"
 
         - name: Update RedHat cracklib
           environment:
@@ -1151,7 +1147,7 @@
           changed_when: update_redhat_cracklib.rc == 0
           failed_when: update_redhat_cracklib.rc != 0
           when:
-            - ansible_os_family == "RedHat"
+            - ansible_facts.os_family == "RedHat"
 
         - name: Verify cracklib password list
           environment:
@@ -1323,7 +1319,7 @@
       failed_when: not 'disabled' in wireless_state.stdout
       when:
         - disable_wireless
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Verify AIDE configuration
       become: true
@@ -1332,7 +1328,7 @@
       block:
         - name: Get AIDE include config
           ansible.builtin.command:
-            cmd: grep -m1 -E "^@@(x_include|include) \/" "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+            cmd: grep -m1 -E "^@@(x_include|include) \/" "{{ '/etc/aide/aide.conf' if ansible_facts.os_family == 'Debian' else '/etc/aide.conf' }}"
           register: grep_aide_include
           changed_when: false
           failed_when: false
@@ -1358,7 +1354,7 @@
         - name: AIDE config check
           become: true
           ansible.builtin.command:
-            cmd: aide --config-check --config="{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+            cmd: aide --config-check --config="{{ '/etc/aide/aide.conf' if ansible_facts.os_family == 'Debian' else '/etc/aide.conf' }}"
           register: aide_config
           changed_when: false
           failed_when: aide_config.rc != 0
@@ -1366,7 +1362,7 @@
         - name: Verify AIDE settings
           ansible.builtin.shell: |
             set -o pipefail
-            grep "^{{ item }}$" "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+            grep "^{{ item }}$" "{{ '/etc/aide/aide.conf' if ansible_facts.os_family == 'Debian' else '/etc/aide.conf' }}"
           register: aide_settings
           changed_when: false
           failed_when: aide_settings.rc != 0
@@ -1421,8 +1417,8 @@
             name: mkpasswd
           when:
             - password_algorithm == "yescrypt"
-            - ansible_os_family == "RedHat"
-            - ansible_distribution_major_version | int >= 9
+            - ansible_facts.os_family == "RedHat"
+            - ansible_facts.distribution_major_version | int >= 9
 
         - name: Install mkpasswd Debian family
           become: true
@@ -1430,7 +1426,7 @@
             name: whois
           when:
             - password_algorithm == "yescrypt"
-            - ansible_os_family == "Debian"
+            - ansible_facts.os_family == "Debian"
 
         - name: Create yescrypt password hash
           ansible.builtin.shell: |
@@ -1502,8 +1498,8 @@
       changed_when: false
       failed_when: declare_tmout.rc != 0
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
-        - ansible_systemd.version | int < 252
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.systemd.version | int < 252
 
     - name: Assert compiler permissions
       when:
@@ -1566,7 +1562,7 @@
         - IdleActionSec={{ logind.idleactionsec }}
         - RemoveIPC={{ 'true' if logind.removeipc else 'false' }}
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
     - name: Verify StopIdleSessionSec setting
       ansible.builtin.shell: |
@@ -1580,8 +1576,8 @@
       with_items:
         - StopIdleSessionSec={{ session_timeout }}
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
-        - ansible_systemd.version | int >= 252
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.systemd.version | int >= 252
 
     - name: Verify journal permissions
       become: true
@@ -1594,7 +1590,7 @@
           failed_when:
             - journal_tmpfiles.rc != 0
           when:
-            - ansible_virtualization_type not in ["container", "docker", "podman"]
+            - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
         - name: Find journal directories
           become: true
@@ -1638,8 +1634,8 @@
 
     - name: Verify kernel lockdown
       when:
-        - ansible_kernel is version("5.4", ">=")
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.kernel is version("5.4", ">=")
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
       block:
         - name: Set kernel lockdown mode if defined
           ansible.builtin.set_fact:
@@ -1708,7 +1704,7 @@
         - Unattended-Upgrade::Automatic-Reboot "true";
         - Unattended-Upgrade::Automatic-Reboot-Time "02:00";
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
         - automatic_updates.enabled
         - automatic_updates.reboot
 
@@ -1727,14 +1723,14 @@
         - APT::Periodic::Update-Package-Lists "1";
         - Unattended-Upgrade::.*-[s|S]ecurity";
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
         - automatic_updates.enabled
 
     - name: Verify UFW
       become: true
       when:
         - manage_ufw
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
       block:
         - name: Get UFW status
           become: true

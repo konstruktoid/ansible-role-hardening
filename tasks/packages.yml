@@ -17,7 +17,7 @@
     install_recommends: false
     update_cache: true
   when:
-    - ansible_os_family == "Debian"
+    - ansible_facts.os_family == "Debian"
     - packages_debian | length > 0
   notify:
     - Run apt-get clean
@@ -31,7 +31,7 @@
     install_recommends: false
     update_cache: true
   when:
-    - ansible_distribution == "Ubuntu"
+    - ansible_facts.distribution == "Ubuntu"
     - packages_ubuntu | length > 0
   notify:
     - Run apt-get clean
@@ -44,7 +44,7 @@
     state: present
     install_recommends: false
   when:
-    - ansible_distribution == "Ubuntu"
+    - ansible_facts.distribution == "Ubuntu"
 
 - name: RedHat family package installation
   become: true
@@ -53,7 +53,7 @@
     state: present
     update_cache: true
   when:
-    - ansible_os_family == "RedHat"
+    - ansible_facts.os_family == "RedHat"
     - packages_redhat | length > 0
   notify:
     - Run dnf autoremove
@@ -69,7 +69,7 @@
     - apt_purge is not success
     - not "No package" in apt_purge.msg
   when:
-    - ansible_os_family == "Debian"
+    - ansible_facts.os_family == "Debian"
   notify:
     - Run apt-get clean
     - Run apt-get autoremove
@@ -86,8 +86,8 @@
       - virtualbox-guest-utils
   register: virtualbox_packages
   when:
-    - ansible_virtualization_type == "VirtualBox"
-    - ansible_distribution == "Ubuntu"
+    - ansible_facts.virtualization_type == "VirtualBox"
+    - ansible_facts.distribution == "Ubuntu"
   failed_when:
     - virtualbox_packages is not success
     - not "No package matching" in virtualbox_packages.msg
@@ -98,7 +98,7 @@
     name: open-vm-tools
     state: present
   when:
-    - ansible_virtualization_type == "VMware"
+    - ansible_facts.virtualization_type == "VMware"
 
 - name: QEMU package installation
   become: true
@@ -106,21 +106,21 @@
     name: qemu-guest-agent
     state: present
   when:
-    - ansible_system_vendor == "QEMU"
+    - ansible_facts.system_vendor == "QEMU"
 
 - name: Install and start rngd
   become: true
   when:
-    - ansible_flags is defined
-    - "'rdrand' in ansible_flags"
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.flags is defined
+    - "'rdrand' in ansible_facts.flags"
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
   block:
     - name: Install rngd
       ansible.builtin.package:
         name: "{{ item }}"
         state: present
       loop:
-        - "{{ 'rng-tools5' if (ansible_os_family == 'Debian') else 'rng-tools' }}"
+        - "{{ 'rng-tools5' if (ansible_facts.os_family == 'Debian') else 'rng-tools' }}"
 
     - name: Start and enable rngd service
       ansible.builtin.systemd_service:
@@ -155,14 +155,14 @@
     clean: true
   changed_when: false
   when:
-    - ansible_os_family == "Debian"
+    - ansible_facts.os_family == "Debian"
 
 - name: Run dnf autoremove
   become: true
   ansible.builtin.dnf:
     autoremove: true
   when:
-    - ansible_os_family == "RedHat"
+    - ansible_facts.os_family == "RedHat"
 
 - name: Populate package facts
   ansible.builtin.package_facts:

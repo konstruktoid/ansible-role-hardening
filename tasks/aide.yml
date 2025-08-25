@@ -8,14 +8,14 @@
         state: present
         install_recommends: false
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
 
     - name: RedHat family AIDE package installation
       ansible.builtin.dnf:
         name: aide
         state: present
       when:
-        - ansible_os_family == "RedHat"
+        - ansible_facts.os_family == "RedHat"
 
     - name: Stat AIDE cron.daily
       ansible.builtin.stat:
@@ -49,7 +49,7 @@
 
     - name: Configure AIDE checksums
       ansible.builtin.lineinfile:
-        path: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+        path: "{{ '/etc/aide/aide.conf' if ansible_facts.os_family == 'Debian' else '/etc/aide.conf' }}"
         state: present
         regexp: ^Checksums =
         line: Checksums = {{ aide_checksums }}
@@ -59,7 +59,7 @@
 
     - name: Get AIDE include config
       ansible.builtin.command:
-        cmd: grep -m1 -E "^@@(x_include|include) \/" "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+        cmd: grep -m1 -E "^@@(x_include|include) \/" "{{ '/etc/aide/aide.conf' if ansible_facts.os_family == 'Debian' else '/etc/aide.conf' }}"
       register: grep_aide_include
       changed_when: false
       failed_when: false
@@ -76,7 +76,7 @@
 
     - name: Add auditd tools
       ansible.builtin.lineinfile:
-        path: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+        path: "{{ '/etc/aide/aide.conf' if ansible_facts.os_family == 'Debian' else '/etc/aide.conf' }}"
         state: "{{ 'absent' if aide_config_d.stat.exists else 'present' }}"
         regexp: ^[# ]*{{ item }}
         line: "{{ item }} p+i+n+u+g+s+b+acl+xattrs+sha512"
@@ -98,7 +98,7 @@
 
     - name: Add AIDE dir exclusions
       ansible.builtin.lineinfile:
-        path: "{{ '/etc/aide/aide.conf' if ansible_os_family == 'Debian' else '/etc/aide.conf' }}"
+        path: "{{ '/etc/aide/aide.conf' if ansible_facts.os_family == 'Debian' else '/etc/aide.conf' }}"
         line: "!{{ item }}"
         state: "{{ 'absent' if aide_config_d.stat.exists else 'present' }}"
         mode: "0640"
@@ -152,7 +152,7 @@
         path: /var/lib/aide/aide.db
       register: ubuaidedb
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
 
     - name: Stat RedHat aide.db
       ansible.builtin.stat:
@@ -161,7 +161,7 @@
       changed_when: false
       failed_when: false
       when:
-        - ansible_os_family == "RedHat"
+        - ansible_facts.os_family == "RedHat"
 
     - name: Initialize RedHat AIDE
       ansible.builtin.command:
@@ -170,7 +170,7 @@
       changed_when: init_redhat_aide.rc != 0
       failed_when: init_redhat_aide.rc != 0
       when:
-        - ansible_os_family == "RedHat"
+        - ansible_facts.os_family == "RedHat"
         - not rhelaidedb.stat.exists
 
     - name: Stat RedHat aide.db.new.gz
@@ -180,7 +180,7 @@
       changed_when: false
       failed_when: false
       when:
-        - ansible_os_family == "RedHat"
+        - ansible_facts.os_family == "RedHat"
 
     - name: Copy RedHat AIDE database
       ansible.builtin.command:
@@ -189,7 +189,7 @@
       changed_when: cp_redhat_aide_db.rc != 0
       failed_when: cp_redhat_aide_db.rc != 0
       when:
-        - ansible_os_family == "RedHat"
+        - ansible_facts.os_family == "RedHat"
         - not rhelaidedbnew.stat.exists
 
     - name: Initialize Debian AIDE
@@ -199,5 +199,5 @@
       changed_when: init_debian_aide.rc != 0
       failed_when: init_debian_aide.rc != 0
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
         - not ubuaidedb.stat.exists

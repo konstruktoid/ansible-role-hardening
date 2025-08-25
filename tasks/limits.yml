@@ -34,4 +34,4 @@
     - kdump.service
     - kdump-tools.service
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]

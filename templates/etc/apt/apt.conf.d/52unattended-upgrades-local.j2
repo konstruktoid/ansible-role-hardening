@@ -1,10 +1,10 @@
 #jinja2: trim_blocks: True, lstrip_blocks: True
 {% if not automatic_updates.only_security %}
-{% if ansible_distribution == "Ubuntu" %}
+{% if ansible_facts.distribution == "Ubuntu" %}
 Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}-updates";
 };
-{% elif ansible_distribution == "Debian" %}
+{% elif ansible_facts.distribution == "Debian" %}
 Unattended-Upgrade::Origins-Pattern {
         "origin=Debian,codename=${distro_codename}-updates";
 };
