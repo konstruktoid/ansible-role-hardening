@@ -1165,25 +1165,32 @@
           changed_when: false
           failed_when: cracklib_passwords.rc != 0
           when:
-            - ansible_os_family == "Debian"
+            - ansible_facts.os_family == "Debian"
+
+    - name: Get all local user accounts
+      ansible.builtin.getent:
+        database: passwd
+      register: local_users
 
     - name: Verify username password list
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       ansible.builtin.shell: |
         set -o pipefail
-        grep "{{ ansible_user | default(lookup('ansible.builtin.env', 'USER')) }}" /usr/share/dict/passwords.local
+        grep "^{{ item }}$" /usr/share/dict/passwords.local
       args:
         executable: /bin/bash
       register: username_passwords
       changed_when: false
       failed_when: username_passwords.rc != 0
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
+      with_items:
+        - "{{ local_users.ansible_facts.getent_passwd | reject('search', '.*testuser.*') | list }}"
 
     - name: Kernel modules
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
       block:
         - name: Index blacklisted kernel modules
           environment:
