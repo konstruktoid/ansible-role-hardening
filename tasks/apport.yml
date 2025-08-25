@@ -13,7 +13,7 @@
   notify:
     - Mask apport
   when:
-    - ansible_os_family == "Debian"
+    - ansible_facts.os_family == "Debian"
   failed_when:
     - default_apport.rc is defined
     - default_apport.rc !=0

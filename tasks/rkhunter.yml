@@ -16,7 +16,7 @@
         owner: root
         group: root
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
       notify:
         - Run rkhunter propupd
         - Update rkhunter databases
@@ -93,4 +93,4 @@
         cmd: rkhunter --config-check --enable all --disable none
       changed_when: false
       when:
-        - ansible_virtualization_type not in ["container", "docker", "podman"]
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]

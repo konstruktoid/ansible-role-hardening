@@ -10,7 +10,7 @@
         state: present
         install_recommends: false
       when:
-        - ansible_os_family == "Debian"
+        - ansible_facts.os_family == "Debian"
 
     - name: Get WiFi state
       ansible.builtin.command:

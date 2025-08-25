@@ -26,7 +26,7 @@
     - mask_journal_remote is not success
     - not "Could not find the requested service" in mask_journal_remote.msg
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Stat journald tmpfiles configuration directory
   ansible.builtin.stat:

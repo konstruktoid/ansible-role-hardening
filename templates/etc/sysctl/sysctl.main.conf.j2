@@ -7,7 +7,7 @@
 {% endfor %}
 
 ### Generic sysctl hardening
-{% if (ansible_kernel is version("5", ">=")) %}
+{% if (ansible_facts.kernel is version("5", ">=")) %}
 dev.tty.ldisc_autoload = {{ sysctl_dev_tty_ldisc_autoload | int }}
 {% endif %}
 {% for key, value in generic_sysctl_settings.items() %}

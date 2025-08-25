@@ -2,7 +2,7 @@
 - name: Debian family pre tasks
   become: true
   when:
-    - ansible_os_family == "Debian"
+    - ansible_facts.os_family == "Debian"
   block:
     - name: Install python-pexpect
       ansible.builtin.apt:
@@ -10,7 +10,7 @@
         state: present
         update_cache: true
       when:
-        - ansible_python.version.major <= 2
+        - ansible_facts.python.version.major <= 2
 
     - name: Install python3-pexpect
       ansible.builtin.apt:
@@ -18,21 +18,21 @@
         state: present
         update_cache: true
       when:
-        - ansible_python.version.major >= 3
+        - ansible_facts.python.version.major >= 3
 
 - name: RedHat family pre tasks
   become: true
   when:
-    - ansible_os_family == "RedHat"
+    - ansible_facts.os_family == "RedHat"
   block:
     - name: Import necessary signing key
       ansible.builtin.rpm_key:
         state: present
-        key: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+        key: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_facts.distribution_major_version }}"
 
     - name: Install EPEL repository RPM
       ansible.builtin.dnf:
-        name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+        name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_facts.distribution_major_version }}.noarch.rpm"
         state: present
         update_cache: true
 
@@ -41,21 +41,21 @@
         name: python2-rpm
         state: present
       when:
-        - ansible_python.version.major <= 2
+        - ansible_facts.python.version.major <= 2
 
     - name: Install python3-rpm
       ansible.builtin.dnf:
         name: python3-rpm
         state: present
       when:
-        - ansible_python.version.major >= 3
+        - ansible_facts.python.version.major >= 3
 
     - name: Install python3-packaging
       ansible.builtin.dnf:
         name: python3-packaging
         state: present
       when:
-        - ansible_python.version.major >= 3
+        - ansible_facts.python.version.major >= 3
 
 - name: Install python3-passlib
   become: true
@@ -66,7 +66,7 @@
   failed_when:
     - python3_passlib.rc is defined
     - python3_passlib.rc != 0
-    - not ansible_distribution == "AlmaLinux"
+    - not ansible_facts.distribution == "AlmaLinux"
 
 - name: Install Python pip passlib
   become: true
@@ -86,4 +86,4 @@
 
 - name: EFI or UEFI booting check
   ansible.builtin.set_fact:
-    booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
+    booted_with_efi: "{{ ansible_facts.mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"

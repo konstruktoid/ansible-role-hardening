@@ -18,7 +18,7 @@
     state: present
     create: true
   when:
-    - ansible_os_family == "RedHat"
+    - ansible_facts.os_family == "RedHat"
     - sysconfig_prelink.stat.exists
 
 - name: Return to non-prelinked state

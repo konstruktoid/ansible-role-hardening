@@ -14,5 +14,5 @@
       notify:
         - Reboot node
       when:
-        - ansible_distribution == "Ubuntu"
+        - ansible_facts.distribution == "Ubuntu"
         - stat_reboot_required.stat.exists

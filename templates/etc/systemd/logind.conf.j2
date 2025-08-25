@@ -7,6 +7,6 @@ KillExcludeUsers={{ logind.killexcludeusers | join(' ') }}
 IdleAction={{ logind.idleaction }}
 IdleActionSec={{ logind.idleactionsec }}
 RemoveIPC={{ 'true' if logind.removeipc else 'false' }}
-{% if ansible_systemd.version | int >= 252 %}
+{% if ansible_facts.systemd.version | int >= 252 %}
 StopIdleSessionSec={{ session_timeout }}
 {% endif %}

@@ -3,6 +3,14 @@
   hosts: all
   any_errors_fatal: true
   tasks:
+    - name: Install OpenSSL on AlmaLinux
+      become: true
+      ansible.builtin.dnf:
+        name: openssl
+        state: present
+      when:
+        - ansible_facts.distribution == 'AlmaLinux'
+
     - name: Include Ansible role
       ansible.builtin.import_role:
         name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"

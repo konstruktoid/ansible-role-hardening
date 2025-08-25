@@ -22,7 +22,7 @@ LOG_UNKFAIL_ENAB no
 MAIL_DIR /var/mail
 PASS_MAX_DAYS {{ login_defs.pass_max_days }}
 PASS_MIN_DAYS {{ login_defs.pass_min_days }}
-{% if ansible_distribution == "CentOS" %}
+{% if ansible_facts.distribution == "CentOS" %}
 PASS_MIN_LEN {{ pwquality.minlen }}
 {% endif %}
 PASS_WARN_AGE {{ login_defs.pass_warn_age }}

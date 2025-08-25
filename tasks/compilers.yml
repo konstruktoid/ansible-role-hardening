@@ -29,11 +29,11 @@
   changed_when: dpkg_statoverride.rc != 0
   loop: "{{ compiler.files }}"
   when:
-    - ansible_os_family == 'Debian'
+    - ansible_facts.os_family == 'Debian'
 
 - name: Ensure restrict compilers access via DNF post-transaction-actions Plugin
   ansible.builtin.include_tasks:
     file: compilers_dnf_post_transaction_actions_plugin.yml
   loop: "{{ compiler.files | map(attribute='path') | unique }}"
   when:
-    - ansible_os_family == 'RedHat'
+    - ansible_facts.os_family == 'RedHat'

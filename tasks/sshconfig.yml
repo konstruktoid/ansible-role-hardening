@@ -3,7 +3,7 @@
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin/
   ansible.builtin.command:
-    cmd: "{{ 'ssh -V' if ansible_distribution == 'Debian' else 'sshd -V' }}"
+    cmd: "{{ 'ssh -V' if ansible_facts.distribution == 'Debian' else 'sshd -V' }}"
   changed_when: false
   failed_when: false
   check_mode: false
@@ -145,7 +145,7 @@
 
         mode: "{{ sshd_host_keys_mode }}"
         owner: "{{ sshd_host_keys_owner }}"
-        group: "{{ 'ssh_keys' if (ansible_os_family == 'RedHat' and ansible_distribution_major_version < '10') else sshd_host_keys_group }}"
+        group: "{{ 'ssh_keys' if (ansible_facts.os_family == 'RedHat' and ansible_facts.distribution_major_version < '10') else sshd_host_keys_group }}"
         regenerate: partial_idempotence
 
     - name: Generate SSH ECDSA keypair
@@ -156,7 +156,7 @@
         path: /etc/ssh/ssh_host_ecdsa_key
         mode: "{{ sshd_host_keys_mode }}"
         owner: "{{ sshd_host_keys_owner }}"
-        group: "{{ 'ssh_keys' if (ansible_os_family == 'RedHat' and ansible_distribution_major_version < '10') else sshd_host_keys_group }}"
+        group: "{{ 'ssh_keys' if (ansible_facts.os_family == 'RedHat' and ansible_facts.distribution_major_version < '10') else sshd_host_keys_group }}"
         regenerate: partial_idempotence
       when:
         - ssh_installed_version is version('6.0', '>=')
@@ -168,7 +168,7 @@
         path: /etc/ssh/ssh_host_ed25519_key
         mode: "{{ sshd_host_keys_mode }}"
         owner: "{{ sshd_host_keys_owner }}"
-        group: "{{ 'ssh_keys' if (ansible_os_family == 'RedHat' and ansible_distribution_major_version < '10') else sshd_host_keys_group }}"
+        group: "{{ 'ssh_keys' if (ansible_facts.os_family == 'RedHat' and ansible_facts.distribution_major_version < '10') else sshd_host_keys_group }}"
         regenerate: partial_idempotence
       when:
         - ssh_installed_version is version('6.5', '>=')

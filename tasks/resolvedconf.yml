@@ -15,7 +15,7 @@
     - apt_resolved is failed
     - not "'No package matching' in apt_resolved.msg"
   when:
-    - ansible_os_family == "Debian"
+    - ansible_facts.os_family == "Debian"
 
 - name: Install systemd-resolved
   become: true
@@ -24,7 +24,7 @@
     state: present
     update_cache: true
   when:
-    - ansible_os_family == "RedHat"
+    - ansible_facts.os_family == "RedHat"
 
 - name: Configure systemd resolved
   become: true
@@ -40,7 +40,7 @@
 - name: Ensure configuration is active
   become: true
   when:
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
     - resolved_conf is changed
   block:
     - name: Reload systemd

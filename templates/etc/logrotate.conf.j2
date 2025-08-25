@@ -3,7 +3,7 @@
 # CCE-80195-1
 
 daily
-{% if ansible_distribution == 'Ubuntu' %}
+{% if ansible_facts.distribution == 'Ubuntu' %}
 su root syslog
 {% endif %}
 rotate 7

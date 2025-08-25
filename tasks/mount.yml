@@ -45,7 +45,7 @@
   become: true
   when:
     - tmp_mount.stat.exists
-    - ansible_virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
   block:
     - name: Remove /tmp from fstab
       ansible.posix.mount:

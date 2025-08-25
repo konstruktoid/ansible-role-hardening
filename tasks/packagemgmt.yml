@@ -2,7 +2,7 @@
 - name: Apt configuration and upgrades
   become: true
   when:
-    - ansible_os_family == "Debian"
+    - ansible_facts.os_family == "Debian"
   tags:
     - apt
   block:
@@ -44,7 +44,7 @@
 - name: Dnf configuration
   become: true
   when:
-    - ansible_os_family == "RedHat"
+    - ansible_facts.os_family == "RedHat"
     - manage_package_managers
   tags:
     - dnf
@@ -58,7 +58,7 @@
         group: root
         state: link
       when:
-        - ansible_distribution == "Fedora"
+        - ansible_facts.distribution == "Fedora"
 
     - name: Set yum.conf gpgcheck
       ansible.builtin.lineinfile:
@@ -100,7 +100,7 @@
 - name: Enable dnf repositories and upgrades
   become: true
   when:
-    - ansible_os_family == "RedHat"
+    - ansible_facts.os_family == "RedHat"
   tags:
     - dnf
     - yum
