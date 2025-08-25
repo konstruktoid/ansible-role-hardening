@@ -36,7 +36,7 @@ provisioner:
           custom_origins:
             - "origin=Docker,archive=trixie"
         allow_virtual_system_calls: false
-        ansible_python_interpreter: /usr/bin/python3
+        ansible_facts.python_interpreter: /usr/bin/python3
         disable_wireless: false
         kernel_lockdown: confidentiality
         rkhunter_web_cmd: wget
