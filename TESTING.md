@@ -12,6 +12,7 @@ Before running any test:
 ```console
 almalinux/10-kitten-x86_64_v2
 bento/almalinux-9
+bento/debian-13
 bento/ubuntu-22.04
 bento/ubuntu-24.04
 debian/bookworm64
