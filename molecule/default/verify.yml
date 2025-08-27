@@ -1541,6 +1541,8 @@
       register: journald_conf
       changed_when: false
       failed_when: journald_conf.rc != 0
+      when:
+        - manage_journal
       with_items:
         - Storage={{ journald_storage }}
         - ForwardToSyslog={{ 'yes' if journald_forwardtosyslog else 'no' }}
