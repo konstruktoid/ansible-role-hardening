@@ -39,6 +39,7 @@ provisioner:
         ansible_facts.python_interpreter: /usr/bin/python3
         disable_wireless: false
         kernel_lockdown: confidentiality
+        manage_journal: false
         rkhunter_web_cmd: wget
         sshd_admin_net:
           - 0.0.0.0/0

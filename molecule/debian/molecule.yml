@@ -42,6 +42,7 @@ provisioner:
         sshd_update_moduli: true
       trixie:
         ansible_facts.python_interpreter: /usr/bin/python3
+        manage_journal: false
         manage_kernel: true
         sshd_admin_net:
           - 0.0.0.0/0
