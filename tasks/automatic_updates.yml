@@ -123,4 +123,5 @@
         owner: root
         group: root
       when:
+        - automatic_updates.custom_origins is defined
         - automatic_updates.custom_origins | length > 0
