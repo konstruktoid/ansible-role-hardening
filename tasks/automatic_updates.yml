@@ -125,3 +125,11 @@
       when:
         - automatic_updates.custom_origins is defined
         - automatic_updates.custom_origins | length > 0
+
+    - name: Restart unattended-upgrades to apply configuration changes and ensured it is enabled
+      ansible.builtin.systemd_service:
+        name: unattended-upgrades
+        state: restarted
+        enabled: true
+      when:
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
