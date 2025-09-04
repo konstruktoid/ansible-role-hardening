@@ -126,6 +126,12 @@
         - automatic_updates.custom_origins is defined
         - automatic_updates.custom_origins | length > 0
 
+    - name: Check if unattended-upgrades service exists and is enabled
+      ansible.builtin.systemd:
+        name: unattended-upgrades
+      register: unattended_upgrades_status
+      failed_when: false
+      
     - name: Restart unattended-upgrades to apply configuration changes and ensured it is enabled
       ansible.builtin.systemd_service:
         name: unattended-upgrades
@@ -133,3 +139,6 @@
         enabled: true
       when:
         - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
+        - unattended_upgrades_status.status is defined
+        - unattended_upgrades_status.status.LoadState == "loaded"
+        - unattended_upgrades_status.status.UnitFileState in ["enabled", "enabled-runtime"]
