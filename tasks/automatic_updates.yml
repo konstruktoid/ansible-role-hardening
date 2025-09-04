@@ -131,7 +131,7 @@
         name: unattended-upgrades
       register: unattended_upgrades_status
       failed_when: false
-      
+
     - name: Restart unattended-upgrades to apply configuration changes and ensured it is enabled
       ansible.builtin.systemd_service:
         name: unattended-upgrades
