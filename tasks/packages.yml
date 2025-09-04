@@ -1,13 +1,19 @@
 ---
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Intersect installed packages with blocklist
+  ansible.builtin.set_fact:
+    blocked_installed_packages: "{{ ansible_facts.packages.keys() | intersect(packages_blocklist) }}"
+
 - name: Generic package removal
   become: true
   ansible.builtin.package:
-    name: "{{ packages_blocklist }}"
+    name: "{{ item }}"
     state: absent
-  register: package_removal
-  failed_when:
-    - package_removal is not success
-    - not "No package" in package_removal.msg
+  loop: "{{ blocked_installed_packages }}"
+  when: blocked_installed_packages | length > 0
 
 - name: Debian family package installation
   become: true

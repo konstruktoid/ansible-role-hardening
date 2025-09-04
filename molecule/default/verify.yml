@@ -741,6 +741,7 @@
       block:
         - name: Gather package facts
           ansible.builtin.package_facts:
+            manager: auto
 
         - name: Get libpam version in Debian family
           ansible.builtin.set_fact:
@@ -1768,3 +1769,12 @@
               - "'443/tcp' in ufw_outgoing_rules.stdout"
               - "'853' in ufw_outgoing_rules.stdout"
             fail_msg: "Expected UFW outgoing rules not found"
+
+        - name: Intersect installed packages with blocklist
+          ansible.builtin.set_fact:
+            blocked_installed_packages: "{{ ansible_facts.packages.keys() | intersect(packages_blocklist) }}"
+
+        - name: Assert package removal
+          ansible.builtin.assert:
+            that:
+              - blocked_installed_packages | length == 0
