@@ -1553,8 +1553,8 @@ argument_specs:
         description: "Packages that will be removed from the system if they are installed."
         type: "list"
         elements: "str"
-        default: "['apport', 'autofs', 'avahi', 'beep', 'ftp', 'git', 'inetutils-telnet', 'pastebinit', 'popularity-contest', 'prelink', 'rpcbind', 'rsh', 'rsync',
-          'talk', 'telnet', 'tftp', 'tnftp', 'tuned', 'whoopsie', 'xinetd', 'yp-tools', 'ypbind']"
+        default: "['apport', 'autofs', 'avahi', 'beep', 'ftp', 'git', 'inetutils-telnet', 'pastebinit', 'popularity-contest', 'prelink', 'rpcbind', 'rsh', 'rsh-server',
+          'rsync', 'talk', 'telnet', 'telnet-server', 'tftp', 'tftpd', 'tnftp', 'tuned', 'vsftpd', 'whoopsie', 'xinetd', 'yp-tools', 'ypbind']"
       packages_debian:
         description: "Packages to install on Debian-based systems."
         type: "list"
