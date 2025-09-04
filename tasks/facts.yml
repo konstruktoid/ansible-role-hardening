@@ -54,6 +54,7 @@
   block:
     - name: Gather package facts
       ansible.builtin.package_facts:
+        manager: auto
 
     - name: Get libpam version in Debian family
       ansible.builtin.set_fact:
