@@ -1,24 +1,11 @@
 ---
-- name: Debian family pre tasks
-  become: true
+- name: Install python3-pexpect
+  ansible.builtin.apt:
+    name: python3-pexpect
+    state: present
+    update_cache: true
   when:
     - ansible_facts.os_family == "Debian"
-  block:
-    - name: Install python-pexpect
-      ansible.builtin.apt:
-        name: python-pexpect
-        state: present
-        update_cache: true
-      when:
-        - ansible_facts.python.version.major <= 2
-
-    - name: Install python3-pexpect
-      ansible.builtin.apt:
-        name: python3-pexpect
-        state: present
-        update_cache: true
-      when:
-        - ansible_facts.python.version.major >= 3
 
 - name: RedHat family pre tasks
   become: true
@@ -36,26 +23,15 @@
         state: present
         update_cache: true
 
-    - name: Install python2-rpm
-      ansible.builtin.dnf:
-        name: python2-rpm
-        state: present
-      when:
-        - ansible_facts.python.version.major <= 2
-
     - name: Install python3-rpm
       ansible.builtin.dnf:
         name: python3-rpm
         state: present
-      when:
-        - ansible_facts.python.version.major >= 3
 
     - name: Install python3-packaging
       ansible.builtin.dnf:
         name: python3-packaging
         state: present
-      when:
-        - ansible_facts.python.version.major >= 3
 
 - name: Install python3-passlib
   become: true
