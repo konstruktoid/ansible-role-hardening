@@ -1,5 +1,6 @@
 ---
 - name: Install python3-pexpect
+  become: true
   ansible.builtin.apt:
     name: python3-pexpect
     state: present
