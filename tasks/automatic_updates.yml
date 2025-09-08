@@ -114,6 +114,8 @@
         mode: "0644"
         owner: root
         group: root
+      notify:
+        - Restart unattended-upgrades
 
     - name: Configure unattended-upgrades for custom_origins
       ansible.builtin.template:
@@ -122,23 +124,24 @@
         mode: "0644"
         owner: root
         group: root
+      notify:
+        - Restart unattended-upgrades
       when:
         - automatic_updates.custom_origins is defined
         - automatic_updates.custom_origins | length > 0
 
-    - name: Check if unattended-upgrades service exists and is enabled
+    - name: Check if unattended-upgrades service exists
       ansible.builtin.systemd:
         name: unattended-upgrades
       register: unattended_upgrades_status
       failed_when: false
 
-    - name: Restart unattended-upgrades to apply configuration changes and ensured it is enabled
+    - name: Enable and start unattended-upgrades service
       ansible.builtin.systemd_service:
         name: unattended-upgrades
-        state: restarted
+        state: started
         enabled: true
       when:
         - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
         - unattended_upgrades_status.status is defined
         - unattended_upgrades_status.status.LoadState == "loaded"
-        - unattended_upgrades_status.status.UnitFileState in ["enabled", "enabled-runtime"]

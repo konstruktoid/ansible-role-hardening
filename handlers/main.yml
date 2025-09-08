@@ -190,3 +190,11 @@
     cmd: rsyslogd -N3 -f /etc/rsyslog.conf
   register: validate_rsyslogd
   changed_when: validate_rsyslogd.rc == 0
+
+- name: Restart unattended-upgrades
+  become: true
+  ansible.builtin.systemd_service:
+    name: unattended-upgrades
+    state: restarted
+  when:
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
