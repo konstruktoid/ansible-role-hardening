@@ -77,6 +77,8 @@
         group: root
         mode: "0644"
         create: true
+      notify:
+        - Restart unattended-upgrades
 
     - name: Configure unattended-upgrades upgrade intervall
       ansible.builtin.lineinfile:
@@ -88,6 +90,8 @@
         group: root
         mode: "0644"
         create: true
+      notify:
+        - Restart unattended-upgrades
 
     - name: Set base time and margin for reboot calculation
       ansible.builtin.set_fact:
