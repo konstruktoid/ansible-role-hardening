@@ -43,15 +43,14 @@
     - Run apt-get clean
     - Run apt-get autoremove
 
-- name: Debian family apt-config-auto-update package installation
+- name: Install unattended-upgrades support package
   become: true
   ansible.builtin.apt:
-    name: apt-config-auto-update
+    name: "{{ 'apt-config-auto-update' if (ansible_facts.distribution == 'Debian') else 'update-notifier-common' }}"
     state: present
     install_recommends: false
   when:
     - ansible_facts.os_family == "Debian"
-    - not (ansible_facts.distribution == "Ubuntu" and ansible_facts.distribution_major_version | int >= 24)
   notify:
     - Run apt-get clean
     - Run apt-get autoremove
