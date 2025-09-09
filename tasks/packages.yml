@@ -43,14 +43,17 @@
     - Run apt-get clean
     - Run apt-get autoremove
 
-- name: Ubuntu update-notifier-common package installation
+- name: Install unattended-upgrades support package
   become: true
   ansible.builtin.apt:
-    name: update-notifier-common
+    name: "{{ 'apt-config-auto-update' if (ansible_facts.distribution == 'Debian') else 'update-notifier-common' }}"
     state: present
     install_recommends: false
   when:
-    - ansible_facts.distribution == "Ubuntu"
+    - ansible_facts.os_family == "Debian"
+  notify:
+    - Run apt-get clean
+    - Run apt-get autoremove
 
 - name: RedHat family package installation
   become: true
