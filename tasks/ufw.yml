@@ -174,7 +174,7 @@
             ufw delete {{ item }}
           fi
       register: ufw_delete
-      changed_when: ufw_delete.rc != 0
+      changed_when: ufw_delete.rc == 0
       failed_when: ufw_delete.rc != 0
       when:
         - ufw_not_managed.stdout_lines | length > 0
