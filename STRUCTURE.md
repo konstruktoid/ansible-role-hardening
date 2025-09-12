@@ -29,7 +29,7 @@
 ├── meta
 │   ├── argument_specs.yml
 │   ├── main.yml
-│   └── requirements.yml -> ../requirements.yml
+│   └── requirements.yml
 ├── molecule
 │   ├── almalinux
 │   │   └── molecule.yml
