@@ -76,7 +76,7 @@
   block:
     - name: Allow sshd port from administrator networks
       community.general.ufw:
-        rule: allow
+        rule: "{{ 'limit' if ufw_rate_limit else 'allow' }}"
         from_ip: "{{ item.0 }}"
         to_port: "{{ item.1 | int }}"
         proto: tcp
