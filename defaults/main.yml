@@ -1283,7 +1283,7 @@ ufw_outgoing_traffic:
 ufw_rate_limit: false
 
 # Sets the default umask value.
-umask_value: 77
+umask_value: "077"
 
 # APT unattended-upgrades for custom origins template location.
 unattended_upgrades_custom_origins_template: "etc/apt/apt.conf.d/53unattended-upgrades-custom-origins.j2"
