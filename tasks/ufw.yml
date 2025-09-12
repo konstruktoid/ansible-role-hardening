@@ -80,7 +80,7 @@
 
     - name: Allow sshd port from administrator networks
       community.general.ufw:
-        rule: limit
+        rule: "{{ 'limit' if ufw_rate_limit else 'allow' }}"
         from_ip: "{{ item.0 }}"
         to_port: "{{ item.1 | int }}"
         proto: tcp
@@ -131,7 +131,6 @@
       loop: "{{ physical_interfaces.stdout_lines }}"
       when:
         - ufw_rate_limit
-
 
     - name: Allow outgoing specified ports
       community.general.ufw:
