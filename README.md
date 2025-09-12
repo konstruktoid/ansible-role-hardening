@@ -128,8 +128,8 @@ roles:
 ## Note regarding UFW firewall rules
 
 Instead of resetting `ufw` every run and by doing so causing network traffic
-disruption, the role deletes every `ufw` rule without
-`comment: ansible managed` task parameter and value.
+disruption, the role deletes every `ufw` rule that doesn't have a comment
+ending with `ansible managed`.
 
 The role also sets default deny policies, which means that firewall rules
 needs to be created for any additional ports except those specified in
