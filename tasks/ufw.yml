@@ -168,11 +168,14 @@
     - name: Delete unmanaged UFW rules
       ansible.builtin.shell:
         cmd: |
-          if echo "{{ item }}" | grep -q '^route'; then
+          set -o pipefail
+          if [[ "{{ item }}" == route* ]]; then
             ufw route delete {{ item | regex_replace('^route ', '') }}
           else
             ufw delete {{ item }}
           fi
+      args:
+        executable: /bin/bash
       register: ufw_delete
       changed_when: ufw_delete.rc == 0
       failed_when: ufw_delete.rc != 0
