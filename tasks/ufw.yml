@@ -166,8 +166,13 @@
         comment: ansible managed
 
     - name: Delete unmanaged UFW rules
-      ansible.builtin.command:
-        cmd: ufw delete {{ item }}
+      ansible.builtin.shell:
+        cmd: |
+          if echo "{{ item }}" | grep -q '^route'; then
+            ufw route delete {{ item | regex_replace('^route ', '') }}
+          else
+            ufw delete {{ item }}
+          fi
       register: ufw_delete
       changed_when: ufw_delete.rc != 0
       failed_when: ufw_delete.rc != 0
