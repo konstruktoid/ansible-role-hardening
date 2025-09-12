@@ -74,17 +74,22 @@
     'deny (outgoing)' not in ufw_status.stdout or
     'disabled (routed)' not in ufw_status.stdout
   block:
-    - name: Enable UFW service
-      ansible.builtin.systemd_service:
-        name: ufw
-        enabled: true
-        state: started
-      when:
-        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
+    - name: Enable UFW
+      community.general.ufw:
+        state: enabled
+
+    - name: Allow sshd port from administrator networks
+      community.general.ufw:
+        rule: limit
+        from_ip: "{{ item.0 }}"
+        to_port: "{{ item.1 | int }}"
+        proto: tcp
+        comment: ansible managed
+      loop: "{{ sshd_admin_net | product(sshd_ports) | list }}"
 
     - name: Set default deny
       community.general.ufw:
-        state: enabled
+        state: reloaded
         direction: "{{ item }}"
         default: deny
         log: true
@@ -93,6 +98,14 @@
       loop:
         - incoming
         - outgoing
+
+    - name: Enable UFW service
+      ansible.builtin.systemd_service:
+        name: ufw
+        enabled: true
+        state: started
+      when:
+        - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
 - name: Stat UFW rules
   become: true
@@ -119,14 +132,6 @@
       when:
         - ufw_rate_limit
 
-    - name: Allow sshd port from administrator networks
-      community.general.ufw:
-        rule: limit
-        from_ip: "{{ item.0 }}"
-        to_port: "{{ item.1 | int }}"
-        proto: tcp
-        comment: ansible managed
-      loop: "{{ sshd_admin_net | product(sshd_ports) | list }}"
 
     - name: Allow outgoing specified ports
       community.general.ufw:
