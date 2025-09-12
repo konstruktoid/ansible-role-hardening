@@ -74,7 +74,7 @@
     'deny (outgoing)' not in ufw_status.stdout or
     'disabled (routed)' not in ufw_status.stdout
   block:
-    - name: Allow sshd port from administrator networks (BEFORE enabling UFW)
+    - name: Allow sshd port from administrator networks
       community.general.ufw:
         rule: allow
         from_ip: "{{ item.0 }}"
@@ -96,7 +96,7 @@
         - incoming
         - outgoing
 
-    - name: Enable UFW service
+    - name: Enable and start the UFW service
       ansible.builtin.systemd_service:
         name: ufw
         enabled: true
