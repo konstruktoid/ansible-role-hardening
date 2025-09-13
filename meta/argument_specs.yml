@@ -212,13 +212,18 @@ argument_specs:
       login_defs:
         type: "dict"
         default:
+          - home_mode: "0700"
           - login_retries: 5
           - login_timeout: 60
           - pass_max_days: 60
           - pass_min_days: 1
           - pass_warn_age: 7
+          - usergroups_enabled: true
         description: "login.defs configuration options."
         options:
+          home_mode:
+            description: "The permissions assigned to a newly created user's home directory."
+            type: "int"
           login_retries:
             description: "Maximum number of login retries in case of bad password."
             type: "int"
@@ -235,6 +240,10 @@ argument_specs:
           pass_warn_age:
             description: "The number of days before password expiration that the user will be warned about the impending expiration."
             type: "int"
+          usergroups_enabled:
+            description: "If True, userdel will remove the user's group if it's empty, and useradd will create by default a group with the name of the user. It also
+              modifies the UMASK default value for private user groups."
+            type: "bool"
       password_remember:
         description: "The number of previous passwords to remember and not allow the user to reuse."
         type: "int"
@@ -1753,7 +1762,7 @@ argument_specs:
       umask_value:
         description: "Sets the default umask value."
         type: "int"
-        default: "077"
+        default: "0077"
       manage_kernel:
         description: "If True, then additional kernel settings will be configured."
         type: "bool"

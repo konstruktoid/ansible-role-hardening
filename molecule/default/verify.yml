@@ -789,6 +789,7 @@
       with_items:
         - ENCRYPT_METHOD {{ password_algorithm | upper }}
         - FAILLOG_ENAB yes
+        - HOME_MODE {{ login_defs.home_mode }}
         - LOG_OK_LOGINS yes
         - LOGIN_RETRIES {{ login_defs.login_retries }}
         - LOGIN_TIMEOUT {{ login_defs.login_timeout }}
@@ -801,6 +802,7 @@
         - SYSLOG_SG_ENAB yes
         - SYSLOG_SU_ENAB yes
         - UMASK {{ umask_value }}
+        - USERGROUPS_ENAB {{ 'yes' if login_defs.usergroups_enabled else 'no' }}
 
     - name: Set pwquality_parameters
       ansible.builtin.set_fact:

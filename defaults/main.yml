@@ -300,11 +300,13 @@ limits_conf_template: "etc/security/limits.conf.j2"
 
 # login.defs configuration options.
 login_defs:
+  home_mode: "0700" # The permissions assigned to a newly created user's home directory.
   login_retries: 5 # Maximum number of login retries in case of bad password.
   login_timeout: 60 # Max time in seconds for login.
   pass_max_days: 60 # The maximum number of days a password may be used. If the password is older than this, a password change will be forced.
   pass_min_days: 1 # The minimum number of days allowed between password changes. If a user tries to change their password before this time, the change will be denied.
   pass_warn_age: 7 # The number of days before password expiration that the user will be warned about the impending expiration.
+  usergroups_enabled: true # If True, userdel will remove the user's group if it's empty, and useradd will create by default a group with the name of the user. It also modifies the UMASK default value for private user groups.
 
 # /etc/login.defs template location.
 login_defs_template: "etc/login.defs.j2"
@@ -1283,7 +1285,7 @@ ufw_outgoing_traffic:
 ufw_rate_limit: false
 
 # Sets the default umask value.
-umask_value: "077"
+umask_value: "0077"
 
 # APT unattended-upgrades for custom origins template location.
 unattended_upgrades_custom_origins_template: "etc/apt/apt.conf.d/53unattended-upgrades-custom-origins.j2"

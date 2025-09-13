@@ -13,6 +13,7 @@ FAILLOG_ENAB yes
 FTMP_FILE /var/log/btmp
 GID_MAX 60000
 GID_MIN 1000
+HOME_MODE {{ login_defs.home_mode }}
 HUSHLOGIN_FILE .hushlogin
 KILLCHAR 025
 LOGIN_RETRIES {{ login_defs.login_retries }}
@@ -36,4 +37,4 @@ TTYPERM 0600
 UID_MAX 60000
 UID_MIN 1000
 UMASK {{ umask_value }}
-USERGROUPS_ENAB no
+USERGROUPS_ENAB {{ 'yes' if login_defs.usergroups_enabled else 'no' }}
