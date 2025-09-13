@@ -110,6 +110,20 @@
         - testuser01
         - testuser02
 
+    - name: Stat home directory
+      ansible.builtin.stat:
+        path: "/home/testuser01/"
+      register: home_dir
+
+    - name: Assert home directory permissions
+      ansible.builtin.assert:
+        that:
+          - home_dir.stat.mode == "0700"
+        success_msg: "{{ home_dir.stat.path }} has correct permissions: {{ home_dir.stat.mode }}"
+        fail_msg: "{{ home_dir.stat.path }} permissions are incorrect: {{ home_dir.stat.mode }}"
+      when:
+        - home_dir.stat.exists
+
     - name: Get installed sshd version
       environment:
         PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin/
@@ -1585,6 +1599,11 @@
     - name: Verify journal permissions
       become: true
       block:
+        - name: Stat /etc/tmpfiles.d/systemd.conf
+          ansible.builtin.stat:
+            path: /etc/tmpfiles.d/systemd.conf
+          register: journal_tmpfiles_stat
+
         - name: Verify tmpfiles settings
           ansible.builtin.shell:
             cmd: grep -E "^z /var/log/journal {{ journald_permissions }} {{ journald_user }} {{ journald_group }} - -$" /etc/tmpfiles.d/systemd.conf
@@ -1594,6 +1613,7 @@
             - journal_tmpfiles.rc != 0
           when:
             - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
+            - journal_tmpfiles_stat.stat.exists
 
         - name: Find journal directories
           become: true
@@ -1770,11 +1790,29 @@
               - "'853' in ufw_outgoing_rules.stdout"
             fail_msg: "Expected UFW outgoing rules not found"
 
-        - name: Intersect installed packages with blocklist
-          ansible.builtin.set_fact:
-            blocked_installed_packages: "{{ ansible_facts.packages.keys() | intersect(packages_blocklist) }}"
+        - name: Stat UFW rules
+          become: true
+          ansible.builtin.shell:
+            cmd: |
+              set -o pipefail
+              ufw show added | grep '^ufw' | grep -i -v "comment '.*ansible\smanaged'" | sed 's/ufw //g'
+          args:
+            executable: /bin/bash
+          changed_when: false
+          failed_when: ufw_not_managed.rc > 1
+          register: ufw_not_managed
 
-        - name: Assert package removal
+        - name: Assert UFW rules are managed
           ansible.builtin.assert:
             that:
-              - blocked_installed_packages | length == 0
+              - ufw_not_managed.stdout == ""
+            fail_msg: "There are UFW rules not managed by Ansible: {{ ufw_not_managed.stdout_lines }}"
+
+    - name: Intersect installed packages with blocklist
+      ansible.builtin.set_fact:
+        blocked_installed_packages: "{{ ansible_facts.packages.keys() | intersect(packages_blocklist) }}"
+
+    - name: Assert package removal
+      ansible.builtin.assert:
+        that:
+          - blocked_installed_packages | length == 0
