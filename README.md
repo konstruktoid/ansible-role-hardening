@@ -188,7 +188,7 @@ See [TESTING.md](TESTING.md).
 | manage_faillock | If True, enable and manage faillock. | True |
 | manage_pwquality | If True, enable and manage pwquality. | True |
 | faillock | Faillock configuration options. | [{'admin_group': ''}, {'audit': True}, {'deny': 5}, {'dir': '/var/run/faillock'}, {'even_deny_root': True}, {'fail_interval': 900}, {'local_users_only': True}, {'no_log_info': False}, {'nodelay': True}, {'root_unlock_time': 600}, {'silent': False}, {'unlock_time': 600}] |
-| login_defs | login.defs configuration options. | [{'login_retries': 5}, {'login_timeout': 60}, {'pass_max_days': 60}, {'pass_min_days': 1}, {'pass_warn_age': 7}] |
+| login_defs | login.defs configuration options. | [{'home_mode': '0700'}, {'login_retries': 5}, {'login_timeout': 60}, {'pass_max_days': 60}, {'pass_min_days': 1}, {'pass_warn_age': 7}, {'usergroups_enabled': True}] |
 | password_remember | The number of previous passwords to remember and not allow the user to reuse. | 24 |
 | pwquality | pwquality configuration options. | [{'dcredit': -1}, {'dictcheck': True}, {'dictpath': ''}, {'difok': 8}, {'enforce_for_root': True}, {'enforcing': True}, {'gecoscheck': True}, {'lcredit': -1}, {'local_users_only': True}, {'maxclassrepeat': 4}, {'maxrepeat': 3}, {'maxsequence': 3}, {'minclass': 4}, {'minlen': 15}, {'ocredit': -1}, {'retry': 3}, {'ucredit': -1}, {'usercheck': True}, {'usersubstr': 3}] |
 | disable_root_account | If True, disable the root account. | True |
@@ -388,7 +388,7 @@ See [TESTING.md](TESTING.md).
 | grub_audit_cmdline | Enable auditd in the GRUB command line. | audit=1 |
 | manage_systemd | If True, then the role will configure /etc/systemd/system.conf and /etc/systemd/user.conf using the available templates. | True |
 | session_timeout | Sets, in seconds, the TMOUT environment variable if systemd version is 252 or lower. If version 252 or higher, the session_timeout value will be set as StopIdleSessionSec. | 900 |
-| umask_value | Sets the default umask value. | 077 |
+| umask_value | Sets the default umask value. | 0077 |
 | manage_kernel | If True, then additional kernel settings will be configured. | True |
 | allow_virtual_system_calls | Allow virtual system calls (vsyscall). | True |
 | enable_page_poisoning | Enable kernel page poisoning. | True |
@@ -419,11 +419,13 @@ See [TESTING.md](TESTING.md).
 
 |Option|Description|Default|
 |---|---|---|
+| home_mode | The permissions assigned to a newly created user's home directory. |  |
 | login_retries | Maximum number of login retries in case of bad password. |  |
 | login_timeout | Max time in seconds for login. |  |
 | pass_max_days | The maximum number of days a password may be used. If the password is older than this, a password change will be forced. |  |
 | pass_min_days | The minimum number of days allowed between password changes. If a user tries to change their password before this time, the change will be denied. |  |
 | pass_warn_age | The number of days before password expiration that the user will be warned about the impending expiration. |  |
+| usergroups_enabled | If True, userdel will remove the user's group if it's empty, and useradd will create by default a group with the name of the user. It also modifies the UMASK default value for private user groups. |  |
 
 #### Options for main > pwquality
 

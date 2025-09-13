@@ -132,7 +132,7 @@
 
     - name: Run dnf upgrade
       ansible.builtin.dnf:
-        name: "*" # noqa package-latest
+        name: "*" # noqa: package-latest
         state: latest
         bugfix: true
         security: true

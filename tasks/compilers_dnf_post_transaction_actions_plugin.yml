@@ -6,7 +6,7 @@
   block:
     - name: Get package name rpm of binary file {{ item }}
       ansible.builtin.command:
-        cmd: rpm --query --queryformat='%{NAME}' --file {{ item }} # noqa command-instead-of-module
+        cmd: rpm --query --queryformat='%{NAME}' --file {{ item }} # noqa: command-instead-of-module
       register: compiler_package
       changed_when: compiler_package.rc != 0
       check_mode: false
