@@ -250,7 +250,8 @@
     (not sshd_config_d.stat.exists) or
     (grep_include.rc != 0)
   notify:
-    - Restart sshd service
+    - Disable ssh service
+    - Restart ssh socket
     - Restart ssh service
 
 - name: Configure sshd using sshd_config.d
@@ -268,7 +269,8 @@
     - sshd_config_d.stat.exists
     - grep_include.rc == 0
   notify:
-    - Restart sshd service
+    - Disable ssh service
+    - Restart ssh socket
     - Restart ssh service
 
 - name: Remove possible Subsystem duplicate
