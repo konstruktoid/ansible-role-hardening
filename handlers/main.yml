@@ -78,29 +78,34 @@
   when:
     - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
+- name: Restart ssh socket
+  become: true
+  ansible.builtin.service:
+    name: "{{ 'ssh.socket' if ansible_facts.os_family == 'Debian' else 'sshd.socket' }}"
+    state: restarted
+    enabled: true
+  when:
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.distribution == "Ubuntu"
+
 - name: Restart ssh service
   become: true
   ansible.builtin.service:
-    name: ssh
+    name: "{{ 'ssh.service' if ansible_facts.os_family == 'Debian' else 'sshd.service' }}"
     state: restarted
-  register: ssh_service
-  failed_when:
-    - ssh_service is not success
-    - not 'Could not find the requested service' in ssh_service.msg
+    enabled: true
   when:
     - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
-- name: Restart sshd service
+- name: Disable ssh service
   become: true
   ansible.builtin.service:
-    name: sshd
-    state: restarted
-  register: sshd_service
-  failed_when:
-    - sshd_service is not success
-    - not 'Could not find the requested service' in sshd_service.msg
+    name: "{{ 'ssh.service' if ansible_facts.os_family == 'Debian' else 'sshd.service' }}"
+    state: stopped
+    enabled: false
   when:
     - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.distribution == "Ubuntu"
 
 - name: Restart Postfix
   become: true

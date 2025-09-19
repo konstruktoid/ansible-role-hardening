@@ -11,6 +11,16 @@
       when:
         - ansible_facts.distribution == 'AlmaLinux'
 
+    - name: Install acl on Debian
+      become: true
+      ansible.builtin.apt:
+        name: acl
+        state: present
+        install_recommends: false
+        update_cache: true
+      when:
+        - ansible_facts.os_family == 'Debian'
+
     - name: Include Ansible role
       ansible.builtin.import_role:
         name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"

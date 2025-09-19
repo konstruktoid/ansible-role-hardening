@@ -17,7 +17,7 @@
   ansible.builtin.debug:
     msg: "{{ ssh_installed_version }}"
 
-- name: Ensure privilege separation directory exists
+- name: Ensure privilege separation directories exist
   become: true
   ansible.builtin.file:
     path: "{{ item.path }}"
@@ -25,6 +25,10 @@
     group: root
     state: directory
     mode: "{{ item.mode }}"
+  register: privsep_dir
+  changed_when:
+    - privsep_dir is changed
+    - not (item.path == '/run/sshd' and ansible_facts.distribution == 'Ubuntu')
   loop:
     - { path: /run/sshd, mode: "0755" }
     - { path: /usr/share/empty.sshd, mode: "0711" }
@@ -250,7 +254,8 @@
     (not sshd_config_d.stat.exists) or
     (grep_include.rc != 0)
   notify:
-    - Restart sshd service
+    - Disable ssh service
+    - Restart ssh socket
     - Restart ssh service
 
 - name: Configure sshd using sshd_config.d
@@ -268,7 +273,8 @@
     - sshd_config_d.stat.exists
     - grep_include.rc == 0
   notify:
-    - Restart sshd service
+    - Disable ssh service
+    - Restart ssh socket
     - Restart ssh service
 
 - name: Remove possible Subsystem duplicate
