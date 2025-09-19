@@ -99,7 +99,6 @@
       become: true
       ansible.builtin.user:
         name: "{{ item }}"
-        group: "{{ item }}"
         shell: /bin/bash
         create_home: true
         generate_ssh_key: true
@@ -118,9 +117,9 @@
     - name: Assert home directory permissions
       ansible.builtin.assert:
         that:
-          - home_dir.stat.mode == "0700"
+          - home_dir.stat.mode == login_defs.home_mode
         success_msg: "{{ home_dir.stat.path }} has correct permissions: {{ home_dir.stat.mode }}"
-        fail_msg: "{{ home_dir.stat.path }} permissions are incorrect: {{ home_dir.stat.mode }}"
+        fail_msg: "{{ home_dir.stat.path }} permissions are incorrect: {{ home_dir.stat.mode }}, expected {{ login_defs.home_mode }} or {{ umask_value }}"
       when:
         - home_dir.stat.exists
 
@@ -144,17 +143,23 @@
         - sshd
         - sshd_config
 
-    - name: Ensure privilege separation directory exists
+    - name: Ensure privilege separation directories exist
       become: true
       ansible.builtin.file:
-        path: /run/sshd
+        path: "{{ item.path }}"
         owner: root
         group: root
         state: directory
-        mode: "0755"
-      tags:
-        - sshd
-        - sshd_config
+        mode: "{{ item.mode }}"
+      register: privsep_dir
+      failed_when:
+        - privsep_dir is changed
+        - not (item.path == '/run/sshd' and ansible_facts.distribution == 'Ubuntu')
+      loop:
+        - { path: /run/sshd, mode: "0755" }
+        - { path: /usr/share/empty.sshd, mode: "0711" }
+        - { path: /var/empty, mode: "0755" }
+        - { path: /var/empty/sshd, mode: "0711" }
 
     - name: Stat IPv6 status
       become: true
