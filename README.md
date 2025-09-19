@@ -973,7 +973,22 @@ See [TESTING.md](TESTING.md).
 
 
 ## Dependencies
-None.
+
+This role requires the following Ansible collections to be installed:
+
+- `ansible.posix` (version 2.1.0 or higher)
+- `community.crypto` (version 3.0.3 or higher)
+- `community.general` (version 11.3.0 or higher)
+
+You can install them using:
+
+```bash
+ansible-galaxy collection install 'ansible.posix:>=2.1.0'
+ansible-galaxy collection install 'community.crypto:>=3.0.3'
+ansible-galaxy collection install 'community.general:>=11.3.0'
+```
+
+Or use a requirements file with `ansible-galaxy install -r requirements.yml`.
 
 
 ## Recommended Reading
