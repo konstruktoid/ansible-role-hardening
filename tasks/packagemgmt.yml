@@ -7,13 +7,13 @@
     - apt
   block:
     - name: Configure apt
-      ansible.builtin.lineinfile:
+      ansible.builtin.copy:
         dest: /etc/apt/apt.conf.d/98-hardening-ubuntu
         mode: "0644"
-        state: present
-        create: true
-        line: "{{ item }}"
-      loop: "{{ apt_hardening_options }}"
+        owner: root
+        group: root
+        content: |
+          {{ apt_hardening_options | join('\n') }}
       when:
         - manage_package_managers
 
