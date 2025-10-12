@@ -6,8 +6,6 @@ if [ -z "${ANSIBLE_V}" ]; then
   ANSIBLE_V="$(grep min_ansible_version meta/main.yml | awk '{print $NF}' | tr -d '\"')"
 fi
 
-cp -v ./requirements.yml ./meta/requirements.yml
-
 {
 echo "# Ansible Role for Server Hardening
 
