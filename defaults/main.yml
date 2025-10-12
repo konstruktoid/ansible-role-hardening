@@ -281,7 +281,7 @@ journald_system_max_use: ""
 journald_user: "root"
 
 # Configures kernel_lockdown.
-kernel_lockdown: "False"
+kernel_lockdown: false
 
 # Maximum number of open files, hard resource limit
 limit_nofile_hard: 1024
@@ -626,7 +626,7 @@ sshd_allow_agent_forwarding: false
 # If specified, login is allowed only for users whose primary group or supplementary group list matches one of the patterns.
 sshd_allow_groups: ["sudo"]
 # Specifies whether TCP forwarding is permitted.
-sshd_allow_tcp_forwarding: "False"
+sshd_allow_tcp_forwarding: false
 
 # If specified, login is allowed only for users whose user name matches one of the patterns.
 sshd_allow_users: []

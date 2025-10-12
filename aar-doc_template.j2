@@ -48,13 +48,3 @@ This entrypoint has no options.
 
 {%- endif -%}
 {% endfor %}
-
-## Dependencies
-
-{%- if ("dependencies" in metadata) and (metadata.dependencies | length > 0) %}
-{%- for dependency in metadata.dependencies %}
-- {{ dependency }}
-{%- endfor %}
-{%- else %}
-None.
-{%- endif %}
