@@ -160,7 +160,24 @@ See [TESTING.md](TESTING.md).
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 <!-- END_ANSIBLE_DOCS -->
-"
+
+## Dependencies
+
+This role requires the following Ansible collections to be installed:
+
+- \`ansible.posix\`
+- \`community.crypto\`
+- \`community.general\`
+
+You can install them using:
+
+\`\`\`bash
+ansible-galaxy collection install 'ansible.posix:>=2.1.0'
+ansible-galaxy collection install 'community.crypto:>=3.0.3'
+ansible-galaxy collection install 'community.general:>=11.3.0'
+\`\`\`
+
+Or use a requirements file with \`ansible-galaxy install -r requirements.yml\`."
 
 echo
 echo "## Recommended Reading
