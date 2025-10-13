@@ -4,6 +4,10 @@
   when:
     - manage_sudo
   block:
+    - name: Gather the package facts
+      ansible.builtin.package_facts:
+        manager: auto
+
     - name: Configure sudo use_pty
       ansible.builtin.lineinfile:
         line: Defaults use_pty
@@ -21,6 +25,8 @@
         state: present
         create: true
         validate: visudo -cf %s
+      when:
+        - not ansible_facts.packages['sudo-rs'] is defined
 
     - name: Configure sudo disable pwfeedback
       ansible.builtin.lineinfile:
@@ -71,6 +77,9 @@
         state: present
         create: true
         validate: visudo -cf %s
+      when:
+        - not ansible_facts.packages['sudo-rs'] is defined
+
 
     - name: Configure sudo user password for privilege escalation
       ansible.builtin.lineinfile:
@@ -82,8 +91,18 @@
         validate: visudo -cf %s
       loop:
         - "!rootpw"
-        - "!runaspw"
         - "!targetpw"
+
+    - name: Configure sudo user password for privilege escalation
+      ansible.builtin.lineinfile:
+        line: Defaults !runaspw
+        dest: /etc/sudoers.d/018_userpassword
+        mode: "0440"
+        state: present
+        create: true
+        validate: visudo -cf %s
+      when:
+        - not ansible_facts.packages['sudo-rs'] is defined
 
 - name: Create su group sugroup
   become: true
