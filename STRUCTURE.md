@@ -28,8 +28,7 @@
 │   └── main.yml
 ├── meta
 │   ├── argument_specs.yml
-│   ├── main.yml
-│   └── requirements.yml
+│   └── main.yml
 ├── molecule
 │   ├── almalinux
 │   │   └── molecule.yml
@@ -167,5 +166,5 @@
 │   └── test.yml
 └── tox.ini
 
-40 directories, 124 files
+40 directories, 123 files
 ```

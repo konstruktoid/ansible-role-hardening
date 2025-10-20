@@ -9,6 +9,22 @@
       when:
         - ansible_facts.os_family == "RedHat"
 
+    - name: Install audit-rules
+      ansible.builtin.package:
+        name: audit-rules
+        state: present
+      when:
+        - ansible_facts.distribution == "AlmaLinux"
+        - ansible_facts.distribution_major_version | int >= 10
+
+    - name: Ensure /etc/audit/rules.d exists
+      ansible.builtin.file:
+        path: /etc/audit/rules.d
+        state: directory
+        mode: "0755"
+        owner: root
+        group: root
+
     - name: Configure Debian auditd GRUB cmdline
       ansible.builtin.lineinfile:
         line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX {{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"

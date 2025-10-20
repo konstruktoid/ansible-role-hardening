@@ -6,8 +6,8 @@
 # Buffer Size
 -b 8192
 
-# Report errors
--c
+# {{ 'Ignore errors' if auditd_ignore_errors else 'Report errors' }}
+{{ '-i' if auditd_ignore_errors else '-c' }}
 
 # Failure Mode
 -f {{ auditd_mode | int }}
