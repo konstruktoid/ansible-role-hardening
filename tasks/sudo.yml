@@ -80,7 +80,6 @@
       when:
         - not ansible_facts.packages['sudo-rs'] is defined
 
-
     - name: Configure sudo user password for privilege escalation
       ansible.builtin.lineinfile:
         line: Defaults {{ item }}

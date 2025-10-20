@@ -230,6 +230,7 @@
             - space_left_action = {{ auditd_space_left_action }}
 
         - name: Verify auditd rules
+          become: true
           ansible.builtin.shell:
             cmd: |
               set -o pipefail
@@ -261,6 +262,7 @@
           args:
             executable: /bin/bash
           loop:
+            - "{{ '-i' if auditd_ignore_errors else '-c' }}"
             - "-f {{ auditd_mode | int }}"
             - "-e {{ auditd_enable_flag }}"
 

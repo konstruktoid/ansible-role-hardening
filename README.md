@@ -378,6 +378,7 @@ See [TESTING.md](TESTING.md).
 | auditd_disk_full_action | This parameter tells the system what action to take when the system has detected that the partition to which log files are written has become full. | suspend |
 | auditd_enable_flag | Set enabled flag for auditd service. | 2 |
 | auditd_flush | When to flush the audit records to disk. | incremental_async |
+| auditd_ignore_errors | If True, the audit daemon will ignore errors when reading rules from a file. | False |
 | auditd_max_log_file | This keyword specifies the maximum file size in megabytes. When this limit is reached, it will trigger a configurable action. | 20 |
 | auditd_max_log_file_action | This parameter tells the system what action to take when the system has detected that the max file size limit has been reached. | rotate |
 | auditd_mode | Set failure mode. | 1 |

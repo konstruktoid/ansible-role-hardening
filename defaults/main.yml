@@ -1,5 +1,4 @@
 ---
-
 # adduser.conf template location.
 adduser_conf_template: "etc/adduser.conf.j2"
 
@@ -54,6 +53,9 @@ auditd_enable_flag: 2
 
 # When to flush the audit records to disk.
 auditd_flush: "incremental_async"
+
+# If True, the audit daemon will ignore errors when reading rules from a file.
+auditd_ignore_errors: false
 
 # This keyword specifies the maximum file size in megabytes. When this limit is reached, it will trigger a configurable action.
 auditd_max_log_file: 20

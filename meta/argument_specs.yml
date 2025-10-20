@@ -1698,6 +1698,10 @@ argument_specs:
           - "incremental"
           - "none"
           - "sync"
+      auditd_ignore_errors:
+        description: "If True, the audit daemon will ignore errors when reading rules from a file."
+        type: "bool"
+        default: false
       auditd_max_log_file:
         description: "This keyword specifies the maximum file size in megabytes. When this limit is reached, it will trigger a configurable action."
         type: "int"
