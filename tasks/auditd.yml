@@ -28,6 +28,7 @@
     - name: Configure Debian auditd GRUB cmdline
       ansible.builtin.lineinfile:
         line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX {{ grub_audit_cmdline }} {{ grub_audit_backlog_cmdline }}"
+        regexp: "^GRUB_CMDLINE_LINUX="
         dest: /etc/default/grub.d/99-hardening-audit.cfg
         state: present
         create: true
