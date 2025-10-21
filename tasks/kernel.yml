@@ -124,8 +124,8 @@
         - name: Configure kernel lockdown mode
           ansible.builtin.lineinfile:
             line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX lockdown={{ kernel_lockdown | trim }}"
-            dest: /etc/default/grub.d/99-hardening-lockdown.cfg
             regexp: "^GRUB_CMDLINE_LINUX="
+            dest: /etc/default/grub.d/99-hardening-lockdown.cfg
             state: present
             create: true
             mode: "0640"

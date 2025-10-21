@@ -16,6 +16,7 @@
     - name: Set Debian family AppArmor grub cmdline
       ansible.builtin.lineinfile:
         line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX apparmor=1 security=apparmor"
+        regexp: "^GRUB_CMDLINE_LINUX="
         dest: /etc/default/grub.d/99-hardening-apparmor.cfg
         state: present
         create: true
