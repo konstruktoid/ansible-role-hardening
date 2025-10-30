@@ -3,17 +3,11 @@
 
 ```sh
 .
-├── CODEOWNERS
-├── LICENSE
-├── README.md
-├── SECURITY.md
-├── STRUCTURE.md
-├── TESTING.md
-├── Vagrantfile
 ├── aar-doc_template.j2
 ├── action-lint
 │   ├── Dockerfile
 │   └── entrypoint.sh
+├── CODEOWNERS
 ├── defaults
 │   └── main.yml
 ├── files
@@ -26,6 +20,7 @@
 ├── generate_molecule_env.sh
 ├── handlers
 │   └── main.yml
+├── LICENSE
 ├── meta
 │   ├── argument_specs.yml
 │   └── main.yml
@@ -47,11 +42,14 @@
 │   └── ubuntu
 │       └── molecule.yml
 ├── postChecks.sh
+├── README.md
 ├── renovate.json
 ├── requirements-dev.txt
 ├── requirements-upstream.txt
 ├── requirements.yml
 ├── runTests.sh
+├── SECURITY.md
+├── STRUCTURE.md
 ├── tasks
 │   ├── adduser.yml
 │   ├── aide.yml
@@ -59,8 +57,8 @@
 │   ├── apport.yml
 │   ├── auditd.yml
 │   ├── automatic_updates.yml
-│   ├── compilers.yml
 │   ├── compilers_dnf_post_transaction_actions_plugin.yml
+│   ├── compilers.yml
 │   ├── cron.yml
 │   ├── ctrlaltdel.yml
 │   ├── disablewireless.yml
@@ -71,8 +69,8 @@
 │   ├── ipv6.yml
 │   ├── issue.yml
 │   ├── journalconf.yml
-│   ├── kernel.yml
 │   ├── kernelmodules.yml
+│   ├── kernel.yml
 │   ├── limits.yml
 │   ├── lockroot.yml
 │   ├── logindconf.yml
@@ -85,10 +83,10 @@
 │   ├── packages.yml
 │   ├── password.yml
 │   ├── path.yml
-│   ├── post.yml
 │   ├── postfix.yml
-│   ├── pre.yml
+│   ├── post.yml
 │   ├── prelink.yml
+│   ├── pre.yml
 │   ├── resolvedconf.yml
 │   ├── rkhunter.yml
 │   ├── rootaccess.yml
@@ -160,11 +158,13 @@
 │       └── lib
 │           └── tmpfiles.d
 │               └── ssh.conf.j2
+├── TESTING.md
 ├── tests
 │   ├── debug_facts.yml
 │   ├── inventory
 │   └── test.yml
-└── tox.ini
+├── tox.ini
+└── Vagrantfile
 
 40 directories, 123 files
 ```

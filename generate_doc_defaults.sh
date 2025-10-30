@@ -53,7 +53,7 @@ this Ansible role is used for configuration.
 ---
 roles:
   - name: konstruktoid.hardening
-    version: v3.3.0
+    version: v4.3.0
     src: https://github.com/konstruktoid/ansible-role-hardening.git
     scm: git
 \`\`\`
@@ -115,7 +115,7 @@ roles:
           ansible.builtin.git:
             repo: https://github.com/konstruktoid/ansible-role-hardening
             dest: /etc/ansible/roles/konstruktoid.hardening
-            version: v3.3.0
+            version: v4.3.0
 
         - name: Remove git
           ansible.builtin.package:
@@ -167,15 +167,7 @@ This role requires the following Ansible collections to be installed:
 - \`community.crypto\`
 - \`community.general\`
 
-You can install them using:
-
-\`\`\`bash
-ansible-galaxy collection install 'ansible.posix:>=2.1.0'
-ansible-galaxy collection install 'community.crypto:>=3.0.3'
-ansible-galaxy collection install 'community.general:>=11.3.0'
-\`\`\`
-
-Or use a requirements file with \`ansible-galaxy install -r requirements.yml\`."
+Install using the requirements file with \`ansible-galaxy install -r requirements.yml\`."
 
 echo
 echo "## Recommended Reading
