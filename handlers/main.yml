@@ -43,8 +43,7 @@
     cmd: rkhunter --update
   register: rkhunter_update
   changed_when:
-    - rkhunter_update.rc == 0
-    - rkhunter_update.rc == 2
+    - rkhunter_update.rc == 0 or rkhunter_update.rc == 2
   failed_when:
     - rkhunter_update.rc == 1
   when:
