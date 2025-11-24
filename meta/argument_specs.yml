@@ -1037,9 +1037,10 @@ argument_specs:
           - kernel.randomize_va_space: 2
           - kernel.sysrq: 0
           - kernel.unprivileged_bpf_disabled: 1
+          - kernel.unprivileged_userns_clone: 0
           - kernel.yama.ptrace_scope: 2
           - net.core.bpf_jit_harden: 2
-          - user.max_user_namespaces: 62967
+          - user.max_user_namespaces: 0
         description: "Generic sysctl settings."
         options:
           fs.protected_fifos:
@@ -1127,8 +1128,14 @@ argument_specs:
               - 0
               - 1
               - 2
+          kernel.unprivileged_userns_clone:
+            description: "Controls whether unprivilegd users can create user namespaces."
+            type: "int"
+            choices:
+              - 0
+              - 1
           kernel.yama.ptrace_scope:
-            description: "Select the what processes can be debugged with ptrace."
+            description: "Select which processes can be debugged with ptrace."
             type: "int"
             default: 2
             choices:
