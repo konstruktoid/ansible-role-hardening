@@ -314,7 +314,7 @@ See [TESTING.md](TESTING.md).
 | sysctl_dev_tty_ldisc_autoload | If 0, restrict loading TTY line disciplines to the CAP_SYS_MODULE capability. | 0 |
 | apparmor_sysctl_settings | AppArmor sysctl settings. | [{'kernel.apparmor_display_secid_mode': 0}, {'kernel.apparmor_restrict_unprivileged_io_uring': 0}, {'kernel.apparmor_restrict_unprivileged_unconfined': 1}, {'kernel.apparmor_restrict_unprivileged_userns': 1}, {'kernel.apparmor_restrict_unprivileged_userns_complain': 0}, {'kernel.apparmor_restrict_unprivileged_userns_force': 0}, {'kernel.unprivileged_userns_apparmor_policy': 1}] |
 | conntrack_sysctl_settings | Connection tracking sysctl settings. | [{'net.netfilter.nf_conntrack_max': 2000000}, {'net.netfilter.nf_conntrack_tcp_loose': 0}] |
-| generic_sysctl_settings | Generic sysctl settings. | [{'fs.protected_fifos': 2}, {'fs.protected_regular': 2}, {'fs.protected_hardlinks': 1}, {'fs.protected_symlinks': 1}, {'fs.suid_dumpable': 0}, {'kernel.core_pattern': '|/bin/false'}, {'kernel.core_uses_pid': 1}, {'kernel.dmesg_restrict': 1}, {'kernel.kptr_restrict': 2}, {'kernel.panic': 60}, {'kernel.panic_on_oops': 1}, {'kernel.perf_event_paranoid': 2}, {'kernel.randomize_va_space': 2}, {'kernel.sysrq': 0}, {'kernel.unprivileged_bpf_disabled': 1}, {'kernel.yama.ptrace_scope': 2}, {'net.core.bpf_jit_harden': 2}, {'user.max_user_namespaces': 62967}] |
+| generic_sysctl_settings | Generic sysctl settings. | [{'fs.protected_fifos': 2}, {'fs.protected_regular': 2}, {'fs.protected_hardlinks': 1}, {'fs.protected_symlinks': 1}, {'fs.suid_dumpable': 0}, {'kernel.core_pattern': '|/bin/false'}, {'kernel.core_uses_pid': 1}, {'kernel.dmesg_restrict': 1}, {'kernel.kptr_restrict': 2}, {'kernel.panic': 60}, {'kernel.panic_on_oops': 1}, {'kernel.perf_event_paranoid': 2}, {'kernel.randomize_va_space': 2}, {'kernel.sysrq': 0}, {'kernel.unprivileged_bpf_disabled': 1}, {'kernel.unprivileged_userns_clone': 0}, {'kernel.yama.ptrace_scope': 2}, {'net.core.bpf_jit_harden': 2}, {'user.max_user_namespaces': 0}] |
 | ipv4_sysctl_settings | IPv4 sysctl settings. | [{'net.ipv4.conf.all.accept_redirects': 0}, {'net.ipv4.conf.all.accept_source_route': 0}, {'net.ipv4.conf.all.log_martians': 1}, {'net.ipv4.conf.all.rp_filter': 1}, {'net.ipv4.conf.all.secure_redirects': 1}, {'net.ipv4.conf.all.send_redirects': 0}, {'net.ipv4.conf.all.shared_media': 1}, {'net.ipv4.conf.default.accept_redirects': 0}, {'net.ipv4.conf.default.accept_source_route': 0}, {'net.ipv4.conf.default.log_martians': 1}, {'net.ipv4.conf.default.rp_filter': 1}, {'net.ipv4.conf.default.secure_redirects': 1}, {'net.ipv4.conf.default.send_redirects': 0}, {'net.ipv4.conf.default.shared_media': 1}, {'net.ipv4.icmp_echo_ignore_broadcasts': 1}, {'net.ipv4.icmp_ignore_bogus_error_responses': 1}, {'net.ipv4.ip_forward': 0}, {'net.ipv4.tcp_challenge_ack_limit': 2147483647}, {'net.ipv4.tcp_invalid_ratelimit': 500}, {'net.ipv4.tcp_max_syn_backlog': 20480}, {'net.ipv4.tcp_rfc1337': 1}, {'net.ipv4.tcp_syn_retries': 5}, {'net.ipv4.tcp_synack_retries': 5}, {'net.ipv4.tcp_syncookies': 1}, {'net.ipv4.tcp_timestamps': 1}] |
 | manage_usbguard | If True, manage `USBGuard` installation and configuration. | True |
 | usbguard_configuration_file | USBGuard configuration file path. | /etc/usbguard/usbguard-daemon.conf |
@@ -518,7 +518,8 @@ See [TESTING.md](TESTING.md).
 | kernel.randomize_va_space | Select the type of process address space randomization that is used in the system. |  |
 | kernel.sysrq | If 1, the magic SysRq key is enabled. |  |
 | kernel.unprivileged_bpf_disabled | Controls whether BPF programs are disabled for unprivileged users. |  |
-| kernel.yama.ptrace_scope | Select the what processes can be debugged with ptrace. | 2 |
+| kernel.unprivileged_userns_clone | Controls whether unprivilegd users can create user namespaces. |  |
+| kernel.yama.ptrace_scope | Select which processes can be debugged with ptrace. | 2 |
 | net.core.bpf_jit_harden | Level of hardening applied to the BPF JIT compiler. |  |
 | user.max_user_namespaces | The maximum number of user namespaces that can be created by a user. |  |
 
@@ -732,6 +733,13 @@ See [TESTING.md](TESTING.md).
 | 0 |
 | 1 |
 | 2 |
+
+#### Choices for main > generic_sysctl_settings > kernel.unprivileged_userns_clone
+
+|Choice|
+|---|
+| 0 |
+| 1 |
 
 #### Choices for main > generic_sysctl_settings > kernel.yama.ptrace_scope
 
