@@ -2,6 +2,8 @@
 - name: Include the konstruktoid.hardening role
   hosts: localhost
   any_errors_fatal: true
+  vars:
+    crypto_policy: "DEFAULT"
   tasks:
     - name: Import role
       ansible.builtin.import_role:

@@ -19,6 +19,7 @@ ln -sf /vagrant /usr/share/ansible/roles/konstruktoid.hardening
 sudo -u vagrant -i bash -c "curl -LsSf https://astral.sh/uv/install.sh | bash && \
   echo 'export PATH=/home/vagrant/.local/bin:$PATH' | tee -a /home/vagrant/.bashrc && \
   echo 'export VIRTUAL_ENV=/home/vagrant/.venv' | tee -a /home/vagrant/.bashrc && \
+  source /home/vagrant/.bashrc && \
   uv python install 3.12 && \
   uv tool install https://github.com/ansible/ansible/archive/devel.tar.gz && \
   uv tool install git+https://github.com/ansible-community/ansible-lint.git && \
@@ -41,6 +42,7 @@ Vagrant.configure("2") do |config|
     { name: "almalinux10", box: "almalinux/10-kitten-x86_64_v2", python: "/home/vagrant/.local/bin/python3.12" },
     { name: "bookworm", box: "debian/bookworm64", python: "/home/vagrant/.local/bin/python3.12" },
     { name: "noble", box: "bento/ubuntu-24.04", python: "/home/vagrant/.local/bin/python3.12" },
+    { name: "resolute", box: "konstruktoid/ubuntu-26.04", python: "/home/vagrant/.local/bin/python3.12" },
   ]
 
   hosts.each do |host|
