@@ -15,45 +15,61 @@
   loop: "{{ blocked_installed_packages }}"
   when: blocked_installed_packages | length > 0
 
-- name: Debian family package installation
+- name: Debian family package management
   become: true
-  ansible.builtin.apt:
-    name: "{{ packages_debian }}"
-    state: present
-    install_recommends: false
-    update_cache: true
+  environment:
+    DEBIAN_FRONTEND: noninteractive
   when:
     - ansible_facts.os_family == "Debian"
-    - packages_debian | length > 0
-  notify:
-    - Run apt-get clean
-    - Run apt-get autoremove
+  block:
+    - name: Debian family package installation
+      ansible.builtin.apt:
+        name: "{{ packages_debian }}"
+        state: present
+        install_recommends: false
+        update_cache: true
+      when:
+        - ansible_facts.os_family == "Debian"
+        - packages_debian | length > 0
+      notify:
+        - Run apt-get clean
+        - Run apt-get autoremove
 
-- name: Ubuntu package installation
-  become: true
-  ansible.builtin.apt:
-    name: "{{ packages_ubuntu }}"
-    state: present
-    install_recommends: false
-    update_cache: true
-  when:
-    - ansible_facts.distribution == "Ubuntu"
-    - packages_ubuntu | length > 0
-  notify:
-    - Run apt-get clean
-    - Run apt-get autoremove
+    - name: Ubuntu package installation
+      ansible.builtin.apt:
+        name: "{{ packages_ubuntu }}"
+        state: present
+        install_recommends: false
+        update_cache: true
+      when:
+        - ansible_facts.distribution == "Ubuntu"
+        - packages_ubuntu | length > 0
+      notify:
+        - Run apt-get clean
+        - Run apt-get autoremove
 
-- name: Install unattended-upgrades support package
-  become: true
-  ansible.builtin.apt:
-    name: "{{ 'apt-config-auto-update' if (ansible_facts.distribution == 'Debian') else 'update-notifier-common' }}"
-    state: present
-    install_recommends: false
-  when:
-    - ansible_facts.os_family == "Debian"
-  notify:
-    - Run apt-get clean
-    - Run apt-get autoremove
+    - name: Install unattended-upgrades support package
+      ansible.builtin.apt:
+        name: "{{ 'apt-config-auto-update' if (ansible_facts.distribution == 'Debian') else 'update-notifier-common' }}"
+        state: present
+        install_recommends: false
+      notify:
+        - Run apt-get clean
+        - Run apt-get autoremove
+
+    - name: Run apt purge
+      become: true
+      ansible.builtin.apt:
+        name: "{{ packages_blocklist }}"
+        state: absent
+        purge: true
+      register: apt_purge
+      failed_when:
+        - apt_purge is not success
+        - not "No package" in apt_purge.msg
+      notify:
+        - Run apt-get clean
+        - Run apt-get autoremove
 
 - name: RedHat family package installation
   become: true
@@ -66,22 +82,6 @@
     - packages_redhat | length > 0
   notify:
     - Run dnf autoremove
-
-- name: Run apt purge
-  become: true
-  ansible.builtin.apt:
-    name: "{{ packages_blocklist }}"
-    state: absent
-    purge: true
-  register: apt_purge
-  failed_when:
-    - apt_purge is not success
-    - not "No package" in apt_purge.msg
-  when:
-    - ansible_facts.os_family == "Debian"
-  notify:
-    - Run apt-get clean
-    - Run apt-get autoremove
 
 - name: VirtualBox guest packages installation
   become: true
