@@ -25,12 +25,9 @@ provisioner:
         sshd_allow_groups:
           - vagrant
           - sudo
-        system_upgrade: false
       almalinux10:
         crypto_policy: DEFAULT
         manage_rkhunter: false
-        manage_timesyncd: false
-        manage_ufw: false
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
