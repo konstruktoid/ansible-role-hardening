@@ -1,4 +1,16 @@
 ---
+- name: Install additional kernel modules
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop:
+    - kernel-modules-extra-{{ ansible_facts.kernel }}
+    - kernel-modules-extra
+  when:
+    - ansible_facts.os_family == "RedHat"
+
 - name: Add the nf_conntrack module
   become: true
   community.general.modprobe:
