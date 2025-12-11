@@ -114,12 +114,20 @@
         path: "/home/testuser01/"
       register: home_dir
 
+    - name: Set default directory permissions
+      ansible.builtin.set_fact:
+        dir_value: "0777"
+
+    - name: Calculate umask to dir permissions
+      ansible.builtin.set_fact:
+        umask_calc: "0{{ dir_value | int - umask_value | int }}"
+
     - name: Assert home directory permissions
       ansible.builtin.assert:
         that:
-          - home_dir.stat.mode == login_defs.home_mode
+          - home_dir.stat.mode | int == login_defs.home_mode | int or home_dir.stat.mode | int == umask_calc | int
         success_msg: "{{ home_dir.stat.path }} has correct permissions: {{ home_dir.stat.mode }}"
-        fail_msg: "{{ home_dir.stat.path }} permissions are incorrect: {{ home_dir.stat.mode }}, expected {{ login_defs.home_mode }} or {{ umask_value }}"
+        fail_msg: "{{ home_dir.stat.path }} permissions are incorrect: {{ home_dir.stat.mode }}, expected {{ login_defs.home_mode }} or {{ umask_calc }}"
       when:
         - home_dir.stat.exists
 
