@@ -13,14 +13,9 @@
   when:
     - ansible_facts.os_family == "RedHat"
   block:
-    - name: Import necessary signing key
-      ansible.builtin.rpm_key:
-        state: present
-        key: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_facts.distribution_major_version }}"
-
-    - name: Install EPEL repository RPM
+    - name: Install EPEL repository
       ansible.builtin.dnf:
-        name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_facts.distribution_major_version }}.noarch.rpm"
+        name: epel-release
         state: present
         update_cache: true
 
