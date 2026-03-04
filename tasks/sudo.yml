@@ -4,9 +4,19 @@
   when:
     - manage_sudo
   block:
-    - name: Gather the package facts
-      ansible.builtin.package_facts:
-        manager: auto
+    - name: Check sudo type
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          sudo --version | head -n 1
+      args:
+        executable: /bin/bash
+      register: sudo_type_check
+      changed_when: false
+
+    - name: Set fact for sudo type
+      ansible.builtin.set_fact:
+        sudo_rs_present: "{{ 'sudo-rs' in sudo_type_check.stderr }}"
 
     - name: Configure sudo use_pty
       ansible.builtin.lineinfile:
@@ -26,7 +36,7 @@
         create: true
         validate: visudo -cf %s
       when:
-        - not ansible_facts.packages['sudo-rs'] is defined
+        - not sudo_rs_present
 
     - name: Configure sudo disable pwfeedback
       ansible.builtin.lineinfile:
@@ -78,7 +88,7 @@
         create: true
         validate: visudo -cf %s
       when:
-        - not ansible_facts.packages['sudo-rs'] is defined
+        - not sudo_rs_present
 
     - name: Configure sudo user password for privilege escalation
       ansible.builtin.lineinfile:
@@ -101,7 +111,7 @@
         create: true
         validate: visudo -cf %s
       when:
-        - not ansible_facts.packages['sudo-rs'] is defined
+        - not sudo_rs_present
 
 - name: Create su group sugroup
   become: true

@@ -38,6 +38,17 @@
         name: openssh-server
         state: present
 
+    - name: Check sudo type
+      ansible.builtin.command:
+        cmd: |
+          sudo --version
+      register: sudo_type_check
+      changed_when: false
+
+    - name: Set fact for sudo type
+      ansible.builtin.set_fact:
+        sudo_rs_present: "{{ 'sudo-rs' in sudo_type_check.stderr }}"
+
     - name: Reboot time testing
       when:
         - ansible_facts.os_family == "Debian"
@@ -1249,7 +1260,7 @@
     - name: Verify sudo settings
       ansible.builtin.shell: |
         set -o pipefail
-        sudo -l | grep "{{ item }}"
+        sudo -l | grep -o "{{ item }}"
       register: sudo_settings
       changed_when: false
       failed_when: sudo_settings.rc != 0
@@ -1266,6 +1277,30 @@
         - "!rootpw"
         - "!runaspw"
         - "!targetpw"
+      when:
+        - manage_sudo
+        - not sudo_rs_present
+
+    - name: Verify sudo-rs settings
+      ansible.builtin.shell: |
+        set -o pipefail
+        sudo -l | grep -o "{{ item }}"
+      register: sudo_settings
+      changed_when: false
+      failed_when: sudo_settings.rc != 0
+      args:
+        executable: /bin/bash
+      with_items:
+        - use_pty
+        - "!pwfeedback"
+        - "!visiblepw"
+        - passwd_timeout=1
+        - timestamp_timeout=5
+        - "!rootpw"
+        - "!targetpw"
+      when:
+        - manage_sudo
+        - sudo_rs_present
 
     - name: Stat faillock.conf
       become: true
