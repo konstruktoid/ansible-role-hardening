@@ -16,7 +16,7 @@
 
     - name: Set fact for sudo type
       ansible.builtin.set_fact:
-        sudo_rs_present: "{{ 'sudo-rs' in sudo_type_check.stderr }}"
+        sudo_rs_present: "{{ 'sudo-rs' in sudo_type_check.stdout or 'sudo-rs' in sudo_type_check.stderr }}"
 
     - name: Configure sudo use_pty
       ansible.builtin.lineinfile:
