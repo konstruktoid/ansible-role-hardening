@@ -6,5 +6,5 @@
     crypto_policy: "DEFAULT"
   tasks:
     - name: Import role
-      ansible.builtin.import_role:
+      ansible.builtin.include_role:
         name: konstruktoid.hardening
