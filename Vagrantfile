@@ -18,8 +18,9 @@ ln -sf /vagrant /usr/share/ansible/roles/konstruktoid.hardening
 
 sudo -u vagrant -i bash -c "curl -LsSf https://astral.sh/uv/install.sh | bash && \
   echo 'export PATH=/home/vagrant/.local/bin:$PATH' | tee -a /home/vagrant/.bashrc && \
-  echo 'export VIRTUAL_ENV=/home/vagrant/.venv' | tee -a /home/vagrant/.bashrc && \
-  source /home/vagrant/.bashrc && \
+  echo 'export VIRTUAL_ENV=/home/vagrant/.venv' | tee -a /home/vagrant/.bashrc"
+
+sudo -u vagrant -i bash -c "source /home/vagrant/.bashrc && \
   uv python install 3.12 && \
   uv tool install https://github.com/ansible/ansible/archive/devel.tar.gz && \
   uv tool install git+https://github.com/ansible-community/ansible-lint.git && \
