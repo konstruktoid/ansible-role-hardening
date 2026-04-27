@@ -24,21 +24,8 @@ provisioner:
           - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
-      questing:
-        manage_auditd: false
-        sshd_admin_net:
-          - 0.0.0.0/0
-        sshd_allow_groups:
-          - vagrant
-        automatic_updates:
-          enabled: true
-          only_security: true
-          reboot: true
-          reboot_from_time: "2:00"
-          reboot_time_margin_mins: 1
-          custom_origins:
-            - "Docker:questing"
       resolute:
+        manage_aide: false # https://bugs.launchpad.net/ubuntu/+source/aide/+bug/2143361
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
@@ -47,17 +34,6 @@ provisioner:
 platforms:
   - name: noble
     box: bento/ubuntu-24.04
-    config_options:
-      vm.boot_timeout: 600
-      ssh.key_type: ed25519
-    instance_raw_config_args:
-      - vbguest.auto_update = false
-    provider_raw_config_args:
-      - customize ["modifyvm", :id, "--cableconnected1", "on"]
-      - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
-      - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
-  - name: questing
-    box: konstruktoid/ubuntu-25.10
     config_options:
       vm.boot_timeout: 600
       ssh.key_type: ed25519

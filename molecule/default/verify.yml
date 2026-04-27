@@ -47,7 +47,7 @@
 
     - name: Set fact for sudo type
       ansible.builtin.set_fact:
-        sudo_rs_present: "{{ 'sudo-rs' in sudo_type_check.stderr }}"
+        sudo_rs_present: "{{ 'sudo-rs' in sudo_type_check.stdout or 'sudo-rs' in sudo_type_check.stderr }}"
 
     - name: Reboot time testing
       when:
@@ -1282,9 +1282,10 @@
         - not sudo_rs_present
 
     - name: Verify sudo-rs settings
+      become: true
       ansible.builtin.shell: |
         set -o pipefail
-        sudo -l | grep -o "{{ item }}"
+        grep -Rh -vE '^#|^$' /etc/sudoers* /etc/sudoers.d/* | grep -o "{{ item }}"
       register: sudo_settings
       changed_when: false
       failed_when: sudo_settings.rc != 0
