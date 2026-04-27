@@ -58,7 +58,7 @@ roles:
   any_errors_fatal: true
   tasks:
     - name: Import the hardening role
-      ansible.builtin.import_role:
+      ansible.builtin.include_role:
         name: konstruktoid.hardening
       vars:
         kernel_lockdown: true
