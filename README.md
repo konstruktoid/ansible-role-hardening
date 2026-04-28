@@ -389,6 +389,7 @@ See [TESTING.md](TESTING.md).
 | grub_audit_cmdline | Enable auditd in the GRUB command line. | audit=1 |
 | manage_systemd | If True, then the role will configure /etc/systemd/system.conf and /etc/systemd/user.conf using the available templates. | True |
 | session_timeout | Sets, in seconds, the TMOUT environment variable if systemd version is 252 or lower. If version 252 or higher, the session_timeout value will be set as StopIdleSessionSec. | 900 |
+| manage_umask | If True, set the default umask value of the system to the value of the variable "umask_value" | True |
 | umask_value | Sets the default umask value. | 0077 |
 | manage_kernel | If True, then additional kernel settings will be configured. | True |
 | allow_virtual_system_calls | Allow virtual system calls (vsyscall). | True |

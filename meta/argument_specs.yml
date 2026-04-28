@@ -1770,6 +1770,10 @@ argument_specs:
           be set as StopIdleSessionSec."
         type: "int"
         default: 900
+      manage_umask:
+        description: "If True, set the default umask value of the system to the value of the variable  \"umask_value\""
+        type: "bool"
+        default: "True"
       umask_value:
         description: "Sets the default umask value."
         type: "int"

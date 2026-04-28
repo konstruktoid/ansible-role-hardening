@@ -439,6 +439,9 @@ manage_timesyncd: true
 # If True, manage C(UFW) installation and configuration.
 manage_ufw: true
 
+# If True, set the default umask value of the system to the value of the variable  "umask_value"
+manage_umask: true
+
 # If True, manage C(USBGuard) installation and configuration.
 manage_usbguard: true
 
