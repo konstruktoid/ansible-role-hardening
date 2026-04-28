@@ -295,6 +295,8 @@
 - name: Set umask
   ansible.builtin.import_tasks:
     file: umask.yml
+  when:
+    - manage_umask
   tags:
     - umask
 

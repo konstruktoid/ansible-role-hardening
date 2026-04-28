@@ -140,6 +140,7 @@
         success_msg: "{{ home_dir.stat.path }} has correct permissions: {{ home_dir.stat.mode }}"
         fail_msg: "{{ home_dir.stat.path }} permissions are incorrect: {{ home_dir.stat.mode }}, expected {{ login_defs.home_mode }} or {{ umask_calc }}"
       when:
+        - manage_umask
         - home_dir.stat.exists
 
     - name: Get installed sshd version
