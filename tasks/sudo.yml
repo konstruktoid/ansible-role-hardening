@@ -113,17 +113,15 @@
       when:
         - not sudo_rs_present
 
-- name: Create su group sugroup
-  become: true
-  ansible.builtin.group:
-    name: sugroup
-    state: present
+    - name: Create su group sugroup
+      ansible.builtin.group:
+        name: sugroup
+        state: present
 
-- name: Configure su group
-  become: true
-  ansible.builtin.lineinfile:
-    line: auth required pam_wheel.so use_uid group=sugroup
-    dest: /etc/pam.d/su
-    mode: "0644"
-    state: present
-    create: true
+    - name: Configure su group
+      ansible.builtin.lineinfile:
+        line: auth required pam_wheel.so use_uid group=sugroup
+        dest: /etc/pam.d/su
+        mode: "0644"
+        state: present
+        create: true
