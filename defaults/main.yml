@@ -450,6 +450,7 @@ manage_users: true
 
 # Misc kernel modules to block and blacklist.
 misc_modules_blocklist:
+  - "algif_aead"
   - "bluetooth"
   - "bnep"
   - "btusb"
