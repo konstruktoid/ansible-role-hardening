@@ -768,8 +768,7 @@ argument_specs:
         description: "Misc kernel modules to block and blacklist."
         type: "list"
         elements: "str"
-        default: "['algif_aead', 'bluetooth', 'bnep', 'btusb', 'can', 'cpia2', 'firewire-core', 'floppy', 'ksmbd', 'n_hdlc', 'net-pf-31', 'pcspkr', 'soundcore', 'thunderbolt',
-          'usb-midi', 'usb-storage', 'uvcvideo', 'v4l2_common']"
+        default: "['algif_aead', 'bluetooth', 'bnep', 'btusb', 'can', 'cpia2', 'esp4', 'esp6', 'firewire-core', 'floppy', 'ksmbd', 'n_hdlc', 'net-pf-31', 'pcspkr', 'rxrpc', 'soundcore', 'thunderbolt', 'usb-midi', 'usb-storage', 'uvcvideo', 'v4l2_common']"
       net_modules_blocklist:
         description: "Network kernel modules to block and blacklist."
         type: "list"
