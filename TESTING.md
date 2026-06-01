@@ -19,7 +19,7 @@ debian/bookworm64
 debian/testing64
 docker.io/debian:bookworm
 docker.io/ubuntu:noble
-konstruktoid/ubuntu-25.04
+konstruktoid/ubuntu-26.04
 ```
 
 If the [runTests.sh](runTests.sh) script is executed as `runTests.sh vagrant`,

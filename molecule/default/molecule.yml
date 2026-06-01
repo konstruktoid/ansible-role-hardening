@@ -19,12 +19,14 @@ provisioner:
       almalinux10:
         crypto_policy: DEFAULT
         manage_rkhunter: false
+        manage_ufw: false
         sshd_admin_net:
           - 0.0.0.0/0
         sshd_allow_groups:
           - vagrant
           - sudo
       trixie:
+        allow_virtual_system_calls: false
         automatic_updates:
           enabled: true
           only_security: true
@@ -33,8 +35,6 @@ provisioner:
           reboot_time_margin_mins: 1
           custom_origins:
             - "origin=Docker,archive=trixie"
-        allow_virtual_system_calls: false
-        ansible_facts.python_interpreter: /usr/bin/python3
         disable_wireless: false
         kernel_lockdown: confidentiality
         manage_journal: false
@@ -51,7 +51,8 @@ provisioner:
           - "diffie-hellman-group18-sha512"
           - "ecdh-sha2-nistp521"
         sshd_update_moduli: true
-      noble:
+        system_upgrade: false
+      resolute:
         automatic_updates:
           enabled: true
           only_security: true
@@ -59,7 +60,7 @@ provisioner:
           reboot_from_time: "2:00"
           reboot_time_margin_mins: 1
           custom_origins:
-            - "Docker:noble"
+            - "Docker:resolute"
         disable_wireless: true
         kernel_lockdown: true
         logind:
@@ -97,8 +98,8 @@ platforms:
     instance_raw_config_args:
       - vbguest.auto_update = false
     memory: 1024
-  - name: noble
-    box: bento/ubuntu-24.04
+  - name: resolute
+    box: konstruktoid/ubuntu-26.04
     config_options:
       vm.boot_timeout: 600
       ssh.key_type: ed25519
