@@ -41,7 +41,7 @@ Vagrant.configure("2") do |config|
   hosts = [
     { name: "almalinux9", box: "bento/almalinux-9", python: "/home/vagrant/.local/bin/python3.12" },
     { name: "almalinux10", box: "almalinux/10-kitten-x86_64_v2", python: "/home/vagrant/.local/bin/python3.12" },
-    { name: "bookworm", box: "debian/bookworm64", python: "/home/vagrant/.local/bin/python3.12" },
+    { name: "trixie", box: "debian/trixie64", python: "/home/vagrant/.local/bin/python3.12" },
     { name: "noble", box: "bento/ubuntu-24.04", python: "/home/vagrant/.local/bin/python3.12" },
     { name: "resolute", box: "konstruktoid/ubuntu-26.04", python: "/home/vagrant/.local/bin/python3.12" },
   ]

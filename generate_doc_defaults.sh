@@ -20,8 +20,9 @@ The role supports the following operating systems:
 - [AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9)
 - [AlmaLinux 10](https://wiki.almalinux.org/release-notes/#almalinux-10)
 - [Debian 12 (Bookworm)](https://www.debian.org/releases/bookworm/)
-- [Ubuntu 22.04 (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/)
+- [Debian 13 (trixie)](https://www.debian.org/releases/trixie/)
 - [Ubuntu 24.04 (Noble Numbat)](https://releases.ubuntu.com/noble/)
+- [Ubuntu 26.04 (Resolute Raccoon)](https://releases.ubuntu.com/resolute/)
 
 For those using AWS or Azure, there are also hardened Ubuntu Amazon
 Machine Images (AMIs) and Azure virtual machine images available.
@@ -53,7 +54,7 @@ this Ansible role is used for configuration.
 ---
 roles:
   - name: konstruktoid.hardening
-    version: v4.3.0
+    version: v4.4.0
     src: https://github.com/konstruktoid/ansible-role-hardening.git
     scm: git
 \`\`\`
