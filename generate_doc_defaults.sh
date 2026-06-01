@@ -54,7 +54,7 @@ this Ansible role is used for configuration.
 ---
 roles:
   - name: konstruktoid.hardening
-    version: v4.4.0
+    version: v4.6.0
     src: https://github.com/konstruktoid/ansible-role-hardening.git
     scm: git
 \`\`\`
