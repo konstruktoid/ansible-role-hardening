@@ -40,7 +40,6 @@
         name: "{{ packages_ubuntu }}"
         state: present
         install_recommends: false
-        update_cache: true
       when:
         - ansible_facts.distribution == "Ubuntu"
         - packages_ubuntu | length > 0

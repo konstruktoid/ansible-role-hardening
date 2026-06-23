@@ -1,0 +1,27 @@
+---
+- name: Destroy Vagrant instances
+  hosts: localhost
+  gather_facts: false
+  vars:
+    molecule_scenario_directory: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
+    instance_config_file: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
+  tasks:
+    - name: Destroy all VMs
+      ansible.builtin.command:
+        cmd: vagrant destroy --force
+        chdir: "{{ molecule_scenario_directory }}"
+      register: vagrant_destroy
+      changed_when: vagrant_destroy.rc == 0
+      failed_when:
+        - vagrant_destroy.rc != 0
+        - "'A Vagrant environment or target machine is required to run this' not in vagrant_destroy.stderr"
+
+    - name: Remove instance config
+      ansible.builtin.file:
+        path: "{{ instance_config_file }}"
+        state: absent
+
+    - name: Remove Vagrantfile
+      ansible.builtin.file:
+        path: "{{ molecule_scenario_directory }}/Vagrantfile"
+        state: absent
