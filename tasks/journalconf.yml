@@ -73,6 +73,12 @@
     state: present
     create: true
 
+- name: Ensure rsyslog is installed
+  become: true
+  ansible.builtin.package:
+    name: rsyslog
+    state: present
+
 - name: Stat rsyslog.conf
   become: true
   ansible.builtin.stat:
