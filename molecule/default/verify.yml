@@ -1484,7 +1484,7 @@
       block:
         - name: Install mkpasswd RedHat family
           become: true
-          ansible.builtin.dnf
+          ansible.builtin.dnf:
             name: mkpasswd
             disable_plugin:
               - needrestart
