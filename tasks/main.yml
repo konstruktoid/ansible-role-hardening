@@ -76,6 +76,10 @@
   tags:
     - usbguard
 
+- name: Configure package managers, update caches and install updates
+  ansible.builtin.import_tasks:
+    file: packagemgmt.yml
+
 - name: Configure systemd system and users
   ansible.builtin.import_tasks:
     file: systemdconf.yml
@@ -127,10 +131,6 @@
     - disable_prelink
   tags:
     - prelink
-
-- name: Configure package managers, update caches and install updates
-  ansible.builtin.import_tasks:
-    file: packagemgmt.yml
 
 - name: Configure automatic updates
   ansible.builtin.import_tasks:
@@ -284,14 +284,6 @@
   tags:
     - suid_sgid_permissions
 
-- name: Configure compiler permissions
-  ansible.builtin.import_tasks:
-    file: compilers.yml
-  when:
-    - manage_compilers
-  tags:
-    - compilers
-
 - name: Set umask
   ansible.builtin.import_tasks:
     file: umask.yml
@@ -325,6 +317,14 @@
     - manage_rkhunter
   tags:
     - rkhunter
+
+- name: Configure compiler permissions
+  ansible.builtin.import_tasks:
+    file: compilers.yml
+  when:
+    - manage_compilers
+  tags:
+    - compilers
 
 - name: Add issue message
   ansible.builtin.import_tasks:

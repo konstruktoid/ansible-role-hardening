@@ -14,6 +14,8 @@
       ansible.builtin.dnf:
         name: aide
         state: present
+        disable_plugin:
+          - needrestart
       when:
         - ansible_facts.os_family == "RedHat"
 

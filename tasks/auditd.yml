@@ -6,6 +6,8 @@
       ansible.builtin.package:
         name: initscripts
         state: present
+        disable_plugin:
+          - needrestart
       when:
         - ansible_facts.os_family == "RedHat"
 

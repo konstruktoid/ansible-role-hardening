@@ -692,7 +692,8 @@
         /lib/systemd/systemd-sysctl --cat-config | grep "^{{ item.key }}.*{{ item.value }}$"
       args:
         executable: /bin/bash
-      with_dict: "{{ sysctl_settings | dict2items | rejectattr('key', 'search', 'nf_conntrack') | rejectattr('key', 'search', 'unprivileged_userns_clone') | items2dict }}"
+      with_dict: "{{ sysctl_settings | dict2items | rejectattr('key', 'search', 'nf_conntrack') | rejectattr('key', 'search', 'unprivileged_userns_clone') | items2dict
+        }}"
       register: sysctl_file_config
       changed_when: false
       failed_when: sysctl_file_config.rc != 0
@@ -706,7 +707,8 @@
         sysctl -a | grep "^{{ item.key }}.*{{ item.value }}$"
       args:
         executable: /bin/bash
-      with_dict: "{{ sysctl_settings | dict2items | rejectattr('key', 'search', 'nf_conntrack') | rejectattr('key', 'search', 'unprivileged_userns_clone') | items2dict }}"
+      with_dict: "{{ sysctl_settings | dict2items | rejectattr('key', 'search', 'nf_conntrack') | rejectattr('key', 'search', 'unprivileged_userns_clone') | items2dict
+        }}"
       register: sysctl_runtime_config
       changed_when: false
       failed_when: sysctl_runtime_config.rc != 0
@@ -1482,8 +1484,10 @@
       block:
         - name: Install mkpasswd RedHat family
           become: true
-          ansible.builtin.package:
+          ansible.builtin.dnf
             name: mkpasswd
+            disable_plugin:
+              - needrestart
           when:
             - password_algorithm == "yescrypt"
             - ansible_facts.os_family == "RedHat"

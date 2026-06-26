@@ -28,10 +28,14 @@
   when:
     - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
-- name: Stat journald tmpfiles configuration directory
-  ansible.builtin.stat:
+- name: Ensure journald tmpfiles configuration directory exists
+  become: true
+  ansible.builtin.file:
     path: /etc/tmpfiles.d/
-  register: tmpfiles_d
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
 
 - name: Set restrictive permssions on journal files
   become: true
@@ -47,8 +51,6 @@
       z /var/log/journal {{ journald_permissions }} {{ journald_user }} {{ journald_group }} - -
       z /var/log/journal/%m {{ journald_permissions }} {{ journald_user }} {{ journald_group }} - -
       z /var/log/journal/%m/system.journal 0640 {{ journald_user }} {{ journald_group }} - -
-  when:
-    - tmpfiles_d.stat.exists
 
 - name: Configure logrotate(8)
   become: true
@@ -66,6 +68,8 @@
     line: /usr/sbin/logrotate /etc/logrotate.conf
     dest: /etc/cron.daily/logrotate
     mode: "0750"
+    owner: root
+    group: root
     state: present
     create: true
 
@@ -75,14 +79,27 @@
     path: /etc/rsyslog.conf
   register: rsyslogconf
 
-- name: Stat rsyslog.d
+- name: Ensure rsyslog.d directory exists
+  become: true
+  ansible.builtin.file:
+    path: /etc/rsyslog.d/
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+  when:
+    - rsyslogconf.stat.exists
+
+- name: Stat rsyslog.d directory
   become: true
   ansible.builtin.stat:
-    path: /etc/rsyslog.d
+    path: /etc/rsyslog.d/
   register: rsyslogd
 
 - name: Set rsyslog FileCreateMode
   become: true
+  when:
+    - rsyslogconf.stat.exists
   block:
     - name: Configure rsyslog.conf FileCreateMode
       ansible.builtin.lineinfile:
@@ -90,10 +107,10 @@
         line: $FileCreateMode {{ rsyslog_filecreatemode }}
         dest: /etc/rsyslog.conf
         mode: "0640"
+        owner: root
+        group: root
         state: present
         create: false
-      when:
-        - rsyslogconf.stat.exists
       notify:
         - Validate rsyslogd
 
@@ -103,6 +120,8 @@
         line: $FileCreateMode {{ rsyslog_filecreatemode }}
         dest: /etc/rsyslog.d/99-filecreatemode.conf
         mode: "0644"
+        owner: root
+        group: root
         state: present
         create: true
       when:

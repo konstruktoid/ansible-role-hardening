@@ -3,19 +3,6 @@ dependency:
   name: galaxy
 driver:
   name: default
-platforms:
-  - name: resolute
-    box: bento/ubuntu-26.04
-    memory: 1024
-    cpus: 1
-    provider_raw_config_args:
-      - customize ["modifyvm", :id, "--cableconnected1", "on"]
-      - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
-      - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
-  - name: trixie
-    box: bento/debian-13
-    memory: 1024
-    cpus: 1
 provisioner:
   name: ansible
   config_options:
@@ -27,9 +14,101 @@ provisioner:
   log: true
   inventory:
     host_vars:
-      resolute:
-      trixie:
+      almalinux10:
+        crypto_policy: DEFAULT
+        manage_rkhunter: false
+        manage_ufw: false
+        sshd_admin_net:
+          - 0.0.0.0/0
+        sshd_allow_groups:
+          - vagrant
+          - sudo
         system_upgrade: false
+      trixie:
+        allow_virtual_system_calls: false
+        automatic_updates:
+          enabled: true
+          only_security: true
+          reboot: true
+          reboot_from_time: "2:00"
+          reboot_time_margin_mins: 1
+          custom_origins:
+            - "origin=Docker,archive=trixie"
+        disable_wireless: false
+        kernel_lockdown: confidentiality
+        manage_journal: false
+        rkhunter_web_cmd: wget
+        sshd_admin_net:
+          - 0.0.0.0/0
+        sshd_allow_groups:
+          - vagrant
+          - sudo
+        sshd_kex_algorithms:
+          - "sntrup761x25519-sha512@openssh.com"
+          - "curve25519-sha256@libssh.org"
+          - "diffie-hellman-group16-sha512"
+          - "diffie-hellman-group18-sha512"
+          - "ecdh-sha2-nistp521"
+        sshd_update_moduli: true
+        system_upgrade: false
+      resolute:
+        automatic_updates:
+          enabled: true
+          only_security: true
+          reboot: true
+          reboot_from_time: "2:00"
+          reboot_time_margin_mins: 1
+          custom_origins:
+            - "Docker:resolute"
+        disable_wireless: true
+        kernel_lockdown: true
+        logind:
+          killuserprocesses: true
+          killexcludeusers:
+            - root
+            - vagrant
+          idleaction: lock
+          idleactionsec: 15min
+          removeipc: true
+        slub_debugger_poisoning: true
+        sshd_admin_net:
+          - 0.0.0.0/0
+        sshd_allow_groups:
+          - vagrant
+          - sudo
+        sshd_update_moduli: true
+        manage_suid_sgid_permissions: false
+        sysctl_conf_dir: /etc/sysctl.d
+        umask_value: "027"
+        ufw_rate_limit: true
+platforms:
+  - name: almalinux10
+    box: bento/almalinux-10
+    config_options:
+      vm.boot_timeout: 600
+      ssh.key_type: ed25519
+    instance_raw_config_args:
+      - vbguest.auto_update = false
+    memory: 2048
+  - name: trixie
+    box: bento/debian-13
+    config_options:
+      ssh.key_type: ed25519
+    instance_raw_config_args:
+      - vbguest.auto_update = false
+    memory: 1024
+  - name: resolute
+    box: bento/ubuntu-26.04
+    config_options:
+      vm.boot_timeout: 600
+      ssh.key_type: ed25519
+    instance_raw_config_args:
+      - vbguest.auto_update = false
+    provider_raw_config_args:
+      - customize ["modifyvm", :id, "--cableconnected1", "on"]
+      - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
+      - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
+    memory: 1024
 verifier:
   name: ansible
 scenario:

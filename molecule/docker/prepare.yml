@@ -15,3 +15,6 @@
       ansible.builtin.package:
         name: sudo
         update_cache: true
+
+    - name: Gather facts
+      ansible.builtin.gather_facts:

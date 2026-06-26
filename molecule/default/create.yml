@@ -12,13 +12,6 @@
         dest: "{{ molecule_scenario_directory }}/Vagrantfile"
         mode: "0644"
 
-    - name: Update Vagrant boxes
-      ansible.builtin.command:
-        cmd: vagrant box update
-        chdir: "{{ molecule_scenario_directory }}"
-      register: vagrant_box_update
-      changed_when: vagrant_box_update.rc == 0
-
     - name: Start Vagrant VMs
       ansible.builtin.command:
         cmd: vagrant up --no-provision
