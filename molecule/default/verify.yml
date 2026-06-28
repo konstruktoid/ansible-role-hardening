@@ -11,10 +11,8 @@
           become: true
           ansible.builtin.reboot:
 
-        - name: Wait for the host and reconnect
-          ansible.builtin.wait_for:
-            port: 22
-            host: "{{ (ansible_facts.ssh_host | default(ansible_facts.host)) | default(inventory_hostname) }}"
+        - name: Wait for host connection
+          ansible.builtin.wait_for_connection:
             delay: 10
             timeout: 120
 
