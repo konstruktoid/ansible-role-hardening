@@ -16,16 +16,6 @@
             delay: 10
             timeout: 120
 
-    - name: Include default vars
-      ansible.builtin.include_vars:
-        dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/defaults/"
-        extensions:
-          - yml
-
-    - name: Include host vars
-      ansible.builtin.include_vars:
-        file: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/inventory/host_vars/{{ ansible_facts.hostname }}"
-
     - name: Merge package lists
       ansible.builtin.set_fact:
         packages_merged: "{{ packages_debian + packages_redhat + packages_ubuntu }}"

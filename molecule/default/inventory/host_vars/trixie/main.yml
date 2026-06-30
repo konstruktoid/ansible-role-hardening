@@ -1,0 +1,27 @@
+---
+allow_virtual_system_calls: false
+automatic_updates:
+  enabled: true
+  only_security: true
+  reboot: true
+  reboot_from_time: "2:00"
+  reboot_time_margin_mins: 1
+  custom_origins:
+    - "origin=Docker,archive=trixie"
+disable_wireless: false
+kernel_lockdown: confidentiality
+manage_journal: false
+rkhunter_web_cmd: wget
+sshd_admin_net:
+  - 0.0.0.0/0
+sshd_allow_groups:
+  - vagrant
+  - sudo
+sshd_kex_algorithms:
+  - "sntrup761x25519-sha512@openssh.com"
+  - "curve25519-sha256@libssh.org"
+  - "diffie-hellman-group16-sha512"
+  - "diffie-hellman-group18-sha512"
+  - "ecdh-sha2-nistp521"
+sshd_update_moduli: true
+system_upgrade: false

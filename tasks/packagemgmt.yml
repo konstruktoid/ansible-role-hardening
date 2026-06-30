@@ -40,6 +40,8 @@
       notify:
         - Run apt-get clean
         - Run apt-get autoremove
+      tags:
+        - molecule-idempotence-notest
 
 - name: Stat yum.conf
   when:

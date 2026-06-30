@@ -1,4 +1,10 @@
 ---
+ansible:
+  executor:
+    backend: ansible-playbook
+    args:
+      ansible_playbook:
+        - --inventory=${MOLECULE_SCENARIO_DIRECTORY}/inventory/
 dependency:
   name: galaxy
 driver:
@@ -34,60 +40,7 @@ provisioner:
     ANSIBLE_ROLES_PATH: ${MOLECULE_PROJECT_DIRECTORY}/..:/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles
   log: true
   inventory:
-    host_vars:
-      almalinux10:
-        crypto_policy: DEFAULT
-        manage_rkhunter: false
-        manage_ufw: false
-        sshd_admin_net:
-          - 0.0.0.0/0
-        sshd_allow_groups:
-          - vagrant
-          - sudo
-      trixie:
-        ansible_facts.become_pass: vagrant
-        ansible_facts.python_interpreter: /usr/bin/python3
-        automatic_updates:
-          enabled: true
-          only_security: true
-          reboot: false
-          reboot_from_time: "2:00"
-          reboot_time_margin_mins: 1
-          custom_origins: ""
-        disable_wireless: false
-        sshd_admin_net:
-          - 0.0.0.0/0
-        sshd_allow_groups:
-          - vagrant
-          - sudo
-        sshd_update_moduli: true
-        system_upgrade: false
-      resolute:
-        automatic_updates:
-          enabled: true
-          only_security: true
-          reboot: false
-          reboot_from_time: "2:00"
-          reboot_time_margin_mins: 1
-          custom_origins: ""
-        disable_ipv6: true
-        disable_wireless: true
-        manage_suid_sgid_permissions: false
-        sshd_admin_net:
-          - 0.0.0.0/0
-        sshd_allow_groups:
-          - vagrant
-          - sudo
-        sshd_match_users:
-          - user: testuser01
-            rules:
-              - AllowUsers testuser01
-              - AuthenticationMethods password
-              - PasswordAuthentication yes
-          - user: testuser02
-            rules:
-              - AllowUsers testuser02
-              - Banner none
+    directory: ./inventory
 verifier:
   name: ansible
 scenario:
