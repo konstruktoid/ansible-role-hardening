@@ -1,0 +1,23 @@
+# -*- mode: ruby -*-
+# Managed by Molecule — do not edit manually
+# Scenario: {{ molecule_yml.scenario.name }}
+# Directory: {{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}
+
+Vagrant.configure("2") do |config|
+{% for platform in molecule_yml.platforms %}
+  config.vm.define "{{ platform.name }}" do |node|
+    node.vm.box = "{{ platform.box }}"
+    node.vm.box_check_update = false
+    node.ssh.key_type = "ed25519"
+
+    node.vm.provider "virtualbox" do |vb|
+      vb.memory = "{{ platform.memory | default(1024) }}"
+      vb.cpus   = {{ platform.cpus | default(1) }}
+      vb.linked_clone = true
+{% for arg in platform.provider_raw_config_args | default([]) %}
+      vb.{{ arg }}
+{% endfor %}
+    end
+  end
+{% endfor %}
+end

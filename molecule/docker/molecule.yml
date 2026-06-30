@@ -1,77 +1,46 @@
 ---
+ansible:
+  executor:
+    backend: ansible-playbook
+    args:
+      ansible_playbook:
+        - --inventory=${MOLECULE_SCENARIO_DIRECTORY}/inventory/
 dependency:
   name: galaxy
-  enabled: true
 driver:
-  name: docker
+  name: default
+platforms:
+  - name: almalinux10
+    image: docker.io/almalinux:10
+    command: sleep 1d
+    privileged: true
+    volumes:
+  - name: resolute
+    image: docker.io/ubuntu:resolute
+    command: sleep 1d
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  - name: trixie
+    image: docker.io/debian:trixie-slim
+    command: sleep 1d
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
 provisioner:
   name: ansible
+  playbooks:
+    converge: "../default/converge.yml"
+    verify: "../default/verify.yml"
   config_options:
     defaults:
       callback_whitelist: profile_tasks
+      interpreter_python: auto_silent
   env:
     ANSIBLE_ROLES_PATH: ${MOLECULE_PROJECT_DIRECTORY}/..:/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles
-  playbooks:
-    converge: ../default/converge.yml
-    verify: ../default/verify.yml
   log: true
   inventory:
-    host_vars:
-      bookworm:
-        ansible_facts.become_pass: vagrant
-        ansible_facts.python_interpreter: /usr/bin/python3
-        automatic_updates:
-          enabled: true
-          only_security: true
-          reboot: false
-          reboot_from_time: "2:00"
-          reboot_time_margin_mins: 1
-          custom_origins: ""
-        disable_wireless: false
-        sshd_admin_net:
-          - 0.0.0.0/0
-        sshd_allow_groups:
-          - vagrant
-          - sudo
-        sshd_update_moduli: true
-        system_upgrade: false
-      noble:
-        automatic_updates:
-          enabled: true
-          only_security: true
-          reboot: false
-          reboot_from_time: "2:00"
-          reboot_time_margin_mins: 1
-          custom_origins: ""
-        disable_ipv6: true
-        disable_wireless: true
-        manage_suid_sgid_permissions: false
-        sshd_admin_net:
-          - 0.0.0.0/0
-        sshd_allow_groups:
-          - vagrant
-          - sudo
-        sshd_match_users:
-          - user: testuser01
-            rules:
-              - AllowUsers testuser01
-              - AuthenticationMethods password
-              - PasswordAuthentication yes
-          - user: testuser02
-            rules:
-              - AllowUsers testuser02
-              - Banner none
-platforms:
-  - name: bookworm
-    image: docker.io/debian:bookworm
-    privileged: true
-    volume_mounts:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-  - name: noble
-    image: docker.io/ubuntu:noble
-    privileged: true
-    volume_mounts:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    directory: ./inventory
 verifier:
   name: ansible
 scenario:
@@ -80,24 +49,6 @@ scenario:
     - dependency
     - create
     - prepare
-  check_sequence:
-    - dependency
-    - cleanup
-    - destroy
-    - create
-    - prepare
-    - converge
-    - check
-    - destroy
-  converge_sequence:
-    - dependency
-    - create
-    - prepare
-    - converge
-  destroy_sequence:
-    - dependency
-    - cleanup
-    - destroy
   test_sequence:
     - dependency
     - cleanup
@@ -106,6 +57,8 @@ scenario:
     - create
     - prepare
     - converge
+    - idempotence
+    - side_effect
     - verify
     - cleanup
     - destroy

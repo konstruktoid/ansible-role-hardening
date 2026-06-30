@@ -1,0 +1,18 @@
+---
+ansible_become_pass: vagrant
+ansible_python_interpreter: /usr/bin/python3
+automatic_updates:
+  enabled: true
+  only_security: true
+  reboot: false
+  reboot_from_time: "2:00"
+  reboot_time_margin_mins: 1
+  custom_origins: ""
+disable_wireless: false
+sshd_admin_net:
+  - 0.0.0.0/0
+sshd_allow_groups:
+  - vagrant
+  - sudo
+sshd_update_moduli: true
+system_upgrade: false

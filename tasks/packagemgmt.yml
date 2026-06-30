@@ -40,12 +40,22 @@
       notify:
         - Run apt-get clean
         - Run apt-get autoremove
+      tags:
+        - molecule-idempotence-notest
+
+- name: Stat yum.conf
+  when:
+    - ansible_facts.os_family == "RedHat"
+  ansible.builtin.stat:
+    path: /etc/yum.conf
+  register: yum_conf
 
 - name: Dnf configuration
   become: true
   when:
     - ansible_facts.os_family == "RedHat"
     - manage_package_managers
+    - yum_conf.stat.exists
   tags:
     - dnf
     - yum
@@ -67,7 +77,6 @@
         dest: /etc/yum.conf
         mode: "0644"
         state: present
-        create: false
         backrefs: true
 
     - name: Set yum.conf clean_requirements

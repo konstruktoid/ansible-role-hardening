@@ -6,12 +6,12 @@ on:
   schedule:
     - cron: "30 5 * * */3"
   workflow_dispatch:
-permissions:
-  contents: read
-
+permissions: {}
 jobs:
   tox-docker:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
@@ -33,6 +33,8 @@ jobs:
 
   tox-docker-upstream:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4

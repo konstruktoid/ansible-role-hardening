@@ -1,0 +1,30 @@
+---
+automatic_updates:
+  enabled: true
+  only_security: true
+  reboot: true
+  reboot_from_time: "2:00"
+  reboot_time_margin_mins: 1
+  custom_origins:
+    - "Docker:resolute"
+disable_wireless: true
+kernel_lockdown: true
+logind:
+  killuserprocesses: true
+  killexcludeusers:
+    - root
+    - vagrant
+  idleaction: lock
+  idleactionsec: 15min
+  removeipc: true
+manage_suid_sgid_permissions: false
+slub_debugger_poisoning: true
+sshd_admin_net:
+  - 0.0.0.0/0
+sshd_allow_groups:
+  - vagrant
+  - sudo
+sshd_update_moduli: true
+sysctl_conf_dir: /etc/sysctl.d
+umask_value: "027"
+ufw_rate_limit: true

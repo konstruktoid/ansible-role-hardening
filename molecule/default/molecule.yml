@@ -1,90 +1,28 @@
 ---
+ansible:
+  executor:
+    backend: ansible-playbook
+    args:
+      ansible_playbook:
+        - --inventory=${MOLECULE_SCENARIO_DIRECTORY}/inventory/
 dependency:
   name: galaxy
-  enabled: true
 driver:
-  name: vagrant
-  provider:
-    name: virtualbox
+  name: default
 provisioner:
   name: ansible
   config_options:
     defaults:
       callback_whitelist: profile_tasks
+      interpreter_python: auto_silent
   env:
     ANSIBLE_ROLES_PATH: ${MOLECULE_PROJECT_DIRECTORY}/..:/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles
   log: true
   inventory:
-    host_vars:
-      almalinux10:
-        crypto_policy: DEFAULT
-        manage_rkhunter: false
-        manage_ufw: false
-        sshd_admin_net:
-          - 0.0.0.0/0
-        sshd_allow_groups:
-          - vagrant
-          - sudo
-      trixie:
-        allow_virtual_system_calls: false
-        automatic_updates:
-          enabled: true
-          only_security: true
-          reboot: true
-          reboot_from_time: "2:00"
-          reboot_time_margin_mins: 1
-          custom_origins:
-            - "origin=Docker,archive=trixie"
-        disable_wireless: false
-        kernel_lockdown: confidentiality
-        manage_journal: false
-        rkhunter_web_cmd: wget
-        sshd_admin_net:
-          - 0.0.0.0/0
-        sshd_allow_groups:
-          - vagrant
-          - sudo
-        sshd_kex_algorithms:
-          - "sntrup761x25519-sha512@openssh.com"
-          - "curve25519-sha256@libssh.org"
-          - "diffie-hellman-group16-sha512"
-          - "diffie-hellman-group18-sha512"
-          - "ecdh-sha2-nistp521"
-        sshd_update_moduli: true
-        system_upgrade: false
-      resolute:
-        automatic_updates:
-          enabled: true
-          only_security: true
-          reboot: true
-          reboot_from_time: "2:00"
-          reboot_time_margin_mins: 1
-          custom_origins:
-            - "Docker:resolute"
-        disable_wireless: true
-        kernel_lockdown: true
-        logind:
-          killuserprocesses: true
-          killexcludeusers:
-            - root
-            - vagrant
-          idleaction: lock
-          idleactionsec: 15min
-          removeipc: true
-        slub_debugger_poisoning: true
-        sshd_admin_net:
-          - 0.0.0.0/0
-        sshd_allow_groups:
-          - vagrant
-          - sudo
-        sshd_update_moduli: true
-        manage_suid_sgid_permissions: false
-        sysctl_conf_dir: /etc/sysctl.d
-        umask_value: "027"
-        ufw_rate_limit: true
+    directory: ./inventory
 platforms:
   - name: almalinux10
-    box: almalinux/10-kitten-x86_64_v2
+    box: bento/almalinux-10
     config_options:
       vm.boot_timeout: 600
       ssh.key_type: ed25519
@@ -99,7 +37,7 @@ platforms:
       - vbguest.auto_update = false
     memory: 1024
   - name: resolute
-    box: konstruktoid/ubuntu-26.04
+    box: bento/ubuntu-26.04
     config_options:
       vm.boot_timeout: 600
       ssh.key_type: ed25519
@@ -118,24 +56,6 @@ scenario:
     - dependency
     - create
     - prepare
-  check_sequence:
-    - dependency
-    - cleanup
-    - destroy
-    - create
-    - prepare
-    - converge
-    - check
-    - destroy
-  converge_sequence:
-    - dependency
-    - create
-    - prepare
-    - converge
-  destroy_sequence:
-    - dependency
-    - cleanup
-    - destroy
   test_sequence:
     - dependency
     - cleanup

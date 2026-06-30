@@ -1,0 +1,48 @@
+---
+- name: Create Vagrant instances
+  hosts: localhost
+  gather_facts: false
+  vars:
+    molecule_scenario_directory: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
+    instance_config_file: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
+  tasks:
+    - name: Write Vagrantfile from platforms config
+      ansible.builtin.template:
+        src: Vagrantfile.j2
+        dest: "{{ molecule_scenario_directory }}/Vagrantfile"
+        mode: "0644"
+
+    - name: Start Vagrant VMs
+      ansible.builtin.command:
+        cmd: vagrant up --no-provision
+        chdir: "{{ molecule_scenario_directory }}"
+      register: vagrant_up
+      changed_when: vagrant_up.rc == 0
+
+    - name: Collect SSH config for each platform
+      ansible.builtin.command:
+        cmd: "vagrant ssh-config {{ item.name }}"
+        chdir: "{{ molecule_scenario_directory }}"
+      register: ssh_configs
+      loop: "{{ molecule_yml.platforms }}"
+      changed_when: false
+
+    - name: Parse SSH config into instance config
+      ansible.builtin.set_fact:
+        instance_conf: >-
+          {{
+            instance_conf | default([]) + [{
+              'instance': item.item.name,
+              'address': item.stdout | regex_search('HostName (.+)', '\1') | first,
+              'user': item.stdout | regex_search('User (.+)', '\1') | first,
+              'port': item.stdout | regex_search('Port (.+)', '\1') | first,
+              'identity_file': item.stdout | regex_search('IdentityFile (.+)', '\1') | first
+            }]
+          }}
+      loop: "{{ ssh_configs.results }}"
+
+    - name: Write instance config for Molecule
+      ansible.builtin.copy:
+        content: "{{ instance_conf | to_json }}"
+        dest: "{{ instance_config_file }}"
+        mode: "0600"

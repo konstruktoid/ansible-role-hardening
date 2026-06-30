@@ -1,0 +1,20 @@
+---
+- name: Prepare
+  hosts: molecule
+  gather_facts: false
+  any_errors_fatal: true
+  tasks:
+    - name: Install Python 3
+      ansible.builtin.raw: >
+        test -x /usr/bin/python3 || \
+        DEBIAN_FRONTEND=noninteractive apt-get install --update -y python3 || \
+        microdnf install -y python3 python3-dnf
+      changed_when: false
+
+    - name: Install sudo
+      ansible.builtin.package:
+        name: sudo
+        update_cache: true
+
+    - name: Gather facts
+      ansible.builtin.gather_facts:

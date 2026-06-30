@@ -11,22 +11,10 @@
           become: true
           ansible.builtin.reboot:
 
-        - name: Wait for the host and reconnect
-          ansible.builtin.wait_for:
-            port: 22
-            host: "{{ (ansible_facts.ssh_host | default(ansible_facts.host)) | default(inventory_hostname) }}"
+        - name: Wait for host connection
+          ansible.builtin.wait_for_connection:
             delay: 10
             timeout: 120
-
-    - name: Include default vars
-      ansible.builtin.include_vars:
-        dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/defaults/"
-        extensions:
-          - yml
-
-    - name: Include host vars
-      ansible.builtin.include_vars:
-        file: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/inventory/host_vars/{{ ansible_facts.hostname }}"
 
     - name: Merge package lists
       ansible.builtin.set_fact:
@@ -692,7 +680,8 @@
         /lib/systemd/systemd-sysctl --cat-config | grep "^{{ item.key }}.*{{ item.value }}$"
       args:
         executable: /bin/bash
-      with_dict: "{{ sysctl_settings | dict2items | rejectattr('key', 'search', 'nf_conntrack') | rejectattr('key', 'search', 'unprivileged_userns_clone') | items2dict }}"
+      with_dict: "{{ sysctl_settings | dict2items | rejectattr('key', 'search', 'nf_conntrack') | rejectattr('key', 'search', 'unprivileged_userns_clone') | items2dict
+        }}"
       register: sysctl_file_config
       changed_when: false
       failed_when: sysctl_file_config.rc != 0
@@ -706,7 +695,8 @@
         sysctl -a | grep "^{{ item.key }}.*{{ item.value }}$"
       args:
         executable: /bin/bash
-      with_dict: "{{ sysctl_settings | dict2items | rejectattr('key', 'search', 'nf_conntrack') | rejectattr('key', 'search', 'unprivileged_userns_clone') | items2dict }}"
+      with_dict: "{{ sysctl_settings | dict2items | rejectattr('key', 'search', 'nf_conntrack') | rejectattr('key', 'search', 'unprivileged_userns_clone') | items2dict
+        }}"
       register: sysctl_runtime_config
       changed_when: false
       failed_when: sysctl_runtime_config.rc != 0
@@ -1482,8 +1472,10 @@
       block:
         - name: Install mkpasswd RedHat family
           become: true
-          ansible.builtin.package:
+          ansible.builtin.dnf:
             name: mkpasswd
+            disable_plugin:
+              - needrestart
           when:
             - password_algorithm == "yescrypt"
             - ansible_facts.os_family == "RedHat"

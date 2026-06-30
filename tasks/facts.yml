@@ -28,17 +28,6 @@
   ansible.builtin.set_fact:
     system_has_ipv6: "{{ stat_ipv6.stat.exists }}"
 
-- name: Set sysctl configuration directory as fact
-  block:
-    - name: Stat /usr/lib/sysctl.d/ exists
-      ansible.builtin.stat:
-        path: /usr/lib/sysctl.d/
-      register: usr_lib_sysctl_d
-
-    - name: Set sysctl fact
-      ansible.builtin.set_fact:
-        usr_lib_sysctl_d_dir: "{{ true if usr_lib_sysctl_d.stat.exists else false }}"
-
 - name: Set crypto-policies config as fact
   block:
     - name: Stat crypto-policies config

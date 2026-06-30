@@ -139,6 +139,9 @@
   become: true
   ansible.builtin.dnf:
     autoremove: true
+    disable_plugin:
+      - needrestart
+
   when:
     - ansible_facts.os_family == "RedHat"
   tags:
@@ -193,7 +196,10 @@
   ansible.builtin.command:
     cmd: rsyslogd -N3 -f /etc/rsyslog.conf
   register: validate_rsyslogd
-  changed_when: validate_rsyslogd.rc == 0
+  changed_when: false
+  failed_when: validate_rsyslogd.rc != 0
+  when:
+    - not (ansible_facts.virtualization_type in ["container", "docker", "podman"] and ansible_facts.os_family == "RedHat")
 
 - name: Restart unattended-upgrades
   become: true

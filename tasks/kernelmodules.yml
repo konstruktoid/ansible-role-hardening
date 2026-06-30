@@ -48,20 +48,15 @@
   with_items:
     - "{{ misc_modules_usbguard if manage_usbguard else misc_modules_blocklist }}"
 
-- name: Stat blacklisted kernel modules
-  environment:
-    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  ansible.builtin.shell:
-    cmd: |
-      set -o pipefail
-      /usr/sbin/modprobe -c | grep -o '^blacklist .*' | awk '{print $2}'
-  args:
-    executable: /bin/bash
-  changed_when: false
-  failed_when: modprobe_blacklist.rc != 0
-  register: modprobe_blacklist
+- name: Combine kernel modules
+  ansible.builtin.set_fact:
+    role_modules_blocklist: >-
+      {{ (fs_modules_blocklist
+          + net_modules_blocklist
+          + (misc_modules_usbguard if manage_usbguard else misc_modules_blocklist))
+         | unique }}
 
-- name: Block blacklisted kernel modules
+- name: Block kernel modules
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/modprobe.d/blacklist-blocked.conf
@@ -72,4 +67,4 @@
     state: present
     create: true
   with_items:
-    - "{{ modprobe_blacklist.stdout_lines | sort | unique }}"
+    - "{{ role_modules_blocklist | sort }}"
