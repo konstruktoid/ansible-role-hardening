@@ -194,7 +194,10 @@
 - name: Validate rsyslogd
   become: true
   ansible.builtin.command:
-    cmd: rsyslogd -N3 -f /etc/rsyslog.conf
+    cmd: >-
+      rsyslogd
+      {{ '-N1' if ansible_facts.os_family == 'RedHat' else '-N3' }}
+      -f /etc/rsyslog.conf
   register: validate_rsyslogd
   changed_when: false
   failed_when: validate_rsyslogd.rc != 0
