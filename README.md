@@ -36,6 +36,11 @@ this Ansible role is used for configuration.
 > `ansible-doc -t role` can be used to view the documentation for this role as
 > well.
 
+> **Note**
+> This role has been migrated to the
+> [ansible-collection-hardening](https://github.com/konstruktoid/ansible-collection-hardening)
+> collection, and switching to that is recommended for continued updates and support.
+
 
 ## Examples
 
