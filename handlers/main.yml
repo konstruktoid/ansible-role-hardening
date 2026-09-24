@@ -14,10 +14,10 @@
   when:
     - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
-- name: Send SIGHUP to auditd
+- name: Signal auditd to reload its configuration
   become: true
   ansible.builtin.command:
-    cmd: auditctl --signal hup
+    cmd: auditctl --signal reload
   register: auditd_reload_handler
   changed_when:
     - auditd_reload_handler.rc == 0
