@@ -1753,6 +1753,10 @@ argument_specs:
           - "single"
           - "suspend"
           - "syslog"
+      auditd_syslog_plugin:
+        description: "If True, the auditd syslog plugin is enabled and audit events are also sent to syslog. If False, the plugin is disabled."
+        type: "bool"
+        default: true
       grub_audit_backlog_cmdline:
         description: "Set the audit backlog limit in the GRUB command line."
         type: "str"
