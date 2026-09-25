@@ -7,6 +7,25 @@
   when:
     - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
 
+- name: Gather service facts for auditd reload
+  become: true
+  ansible.builtin.service_facts:
+  listen: Reload auditd
+  when:
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
+
+- name: Signal auditd to reload its configuration
+  become: true
+  ansible.builtin.command:
+    cmd: auditctl --signal reload
+  register: auditd_reload_handler
+  changed_when:
+    - auditd_reload_handler.rc == 0
+  listen: Reload auditd
+  when:
+    - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
+    - ansible_facts.services.get('auditd.service', {}).get('state') == 'running'
+
 - name: Generate auditd rules
   become: true
   ansible.builtin.command:

@@ -151,14 +151,16 @@
         state: present
         create: false
 
-    - name: Enable auditd syslog plugin
+    - name: Configure auditd syslog plugin
       ansible.builtin.lineinfile:
         dest: /etc/audit/plugins.d/syslog.conf
         regexp: ^active
-        line: active = yes
+        line: active = {{ 'yes' if auditd_syslog_plugin | bool else 'no' }}
         state: present
         mode: "0640"
         create: true
+      notify:
+        - Reload auditd
 
     - name: Add auditd rules
       ansible.builtin.template:

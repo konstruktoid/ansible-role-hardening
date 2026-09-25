@@ -390,6 +390,7 @@ See [TESTING.md](TESTING.md).
 | auditd_num_logs | Specifies the number of log files to keep if rotate is given as the max_log_file_action. | 5 |
 | auditd_space_left | If the free space in the filesystem containing log_file drops below this value (in megabytes), the audit daemon takes the action specified by space_left_action. | 75 |
 | auditd_space_left_action | This parameter tells the system what action to take when the system has detected that it is starting to get low on disk space. | email |
+| auditd_syslog_plugin | If True, the auditd syslog plugin is enabled and audit events are also sent to syslog. If False, the plugin is disabled. | True |
 | grub_audit_backlog_cmdline | Set the audit backlog limit in the GRUB command line. | audit_backlog_limit=8192 |
 | grub_audit_cmdline | Enable auditd in the GRUB command line. | audit=1 |
 | manage_systemd | If True, then the role will configure /etc/systemd/system.conf and /etc/systemd/user.conf using the available templates. | True |

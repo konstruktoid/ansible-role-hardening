@@ -75,6 +75,9 @@ auditd_space_left: 75
 # This parameter tells the system what action to take when the system has detected that it is starting to get low on disk space.
 auditd_space_left_action: "email"
 
+# If True, the auditd syslog plugin is enabled and audit events are also sent to syslog. If False, the plugin is disabled.
+auditd_syslog_plugin: true
+
 # Configure automatic updates.
 automatic_updates:
   enabled: true # If True, install and configure C(dnf-automatic) or C(unattended-upgrades), depending on the distribution.
