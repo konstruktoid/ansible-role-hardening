@@ -238,13 +238,15 @@
             - space_left_action = {{ auditd_space_left_action }}
 
         - name: Verify auditd syslog plugin configuration
-          ansible.builtin.lineinfile:
-            dest: /etc/audit/plugins.d/syslog.conf
-            line: "active = {{ 'yes' if auditd_syslog_plugin | bool else 'no' }}"
-            state: present
-          check_mode: true
-          register: auditd_syslog_plugin_conf
-          failed_when: auditd_syslog_plugin_conf is changed
+          ansible.builtin.shell:
+            cmd: |
+              set -o pipefail
+              grep -E '^[[:space:]]*active[[:space:]]*=' /etc/audit/plugins.d/syslog.conf | tail -n1 | awk -F= '{gsub(/[[:space:]]/, "", $2); print $2}'
+          args:
+            executable: /bin/bash
+          register: auditd_syslog_plugin_active
+          changed_when: false
+          failed_when: auditd_syslog_plugin_active.stdout != ('yes' if auditd_syslog_plugin | bool else 'no')
 
         - name: Verify auditd rules
           become: true
