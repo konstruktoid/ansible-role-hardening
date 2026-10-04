@@ -1,52 +1,73 @@
 ---
+# Loops over platforms so cleanup works without the dynamic inventory.
 - name: Destroy QEMU instances
-  hosts: molecule
+  hosts: localhost
   gather_facts: false
   tasks:
     - name: Read QEMU pidfile
-      delegate_to: localhost
       ansible.builtin.slurp:
-        src: "{{ molecule_ephemeral_directory }}/{{ inventory_hostname }}.pid"
-      register: qemu_pidfile
+        src: "{{ molecule_ephemeral_directory }}/{{ item.name }}.pid"
+      loop: "{{ molecule_yml.platforms }}"
+      loop_control:
+        label: "{{ item.name }}"
+      register: qemu_pidfiles
+      failed_when: false
+
+    # A stale pidfile may name a reused PID, so only signal QEMU processes.
+    - name: Read QEMU process name
+      ansible.builtin.slurp:
+        src: "/proc/{{ item.content | b64decode | trim }}/comm"
+      loop: "{{ qemu_pidfiles.results }}"
+      loop_control:
+        label: "{{ item.item.name }}"
+      when: item.content is defined
+      register: qemu_comms
       failed_when: false
 
     - name: Stop QEMU instance
-      delegate_to: localhost
       ansible.builtin.command:
-        cmd: "kill {{ qemu_pidfile.content | b64decode | trim }}"
-      when: qemu_pidfile.content is defined
+        cmd: "kill {{ item.item.content | b64decode | trim }}"
+      loop: "{{ qemu_comms.results }}"
+      loop_control:
+        label: "{{ item.item.item.name }}"
+      when:
+        - item.content is defined
+        - (item.content | b64decode | trim).startswith('qemu-system')
       changed_when: true
       failed_when: false
 
     - name: Wait for QEMU process to exit
-      delegate_to: localhost
       ansible.builtin.wait_for:
-        path: "/proc/{{ qemu_pidfile.content | b64decode | trim }}"
+        path: "/proc/{{ item.item.content | b64decode | trim }}"
         state: absent
         timeout: 30
-      when: qemu_pidfile.content is defined
+      loop: "{{ qemu_comms.results }}"
+      loop_control:
+        label: "{{ item.item.item.name }}"
+      when:
+        - item.content is defined
+        - (item.content | b64decode | trim).startswith('qemu-system')
       failed_when: false
 
+    # The serial console log is deliberately not removed here. It lives under
+    # molecule-logs/ and is the only evidence left when a guest panics or
+    # never reaches SSH.
     - name: Remove ephemeral instance files
-      delegate_to: localhost
       ansible.builtin.file:
-        path: "{{ molecule_ephemeral_directory }}/{{ inventory_hostname }}{{ item }}"
+        path: "{{ molecule_ephemeral_directory }}/{{ item.0.name }}{{ item.1 }}"
         state: absent
-      loop:
-        - ".pid"
-        - ".qcow2"
-        - "-OVMF_VARS.fd"
-        - "-seed.iso"
-        - "-user-data"
-        - "-meta-data"
-      # The serial console log is deliberately not removed here. It lives under
-      # molecule-logs/ and is the only evidence left when a guest panics or
-      # never reaches SSH.
+      loop: "{{ molecule_yml.platforms | product(qemu_instance_files) | list }}"
+      loop_control:
+        label: "{{ item.0.name }}{{ item.1 }}"
+      vars:
+        qemu_instance_files:
+          - ".pid"
+          - ".qcow2"
+          - "-OVMF_VARS.fd"
+          - "-seed.iso"
+          - "-user-data"
+          - "-meta-data"
 
-- name: Remove dynamic molecule inventory
-  hosts: localhost
-  gather_facts: false
-  tasks:
     - name: Remove dynamic inventory file
       ansible.builtin.file:
         path: "{{ molecule_ephemeral_directory }}/inventory/molecule_inventory.yml"
