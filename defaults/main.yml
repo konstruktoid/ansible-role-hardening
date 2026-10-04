@@ -33,6 +33,9 @@ apt_hardening_options:
   - 'APT::Sandbox::Seccomp "1";'
   - 'Unattended-Upgrade::Remove-Unused-Dependencies "true";'
   - 'Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";'
+
+# Debian releases where the seccomp sandbox of APT aborts the acquire methods, C(E:Method file has died unexpectedly!), and where C(APT::Sandbox::Seccomp) therefore is left out of C(apt_hardening_options).
+apt_seccomp_broken_releases: ["forky", "trixie"]
 # This option should contain a valid email address or alias.
 auditd_action_mail_acct: "root"
 

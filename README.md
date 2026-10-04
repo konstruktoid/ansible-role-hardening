@@ -11,13 +11,10 @@ security of servers running on AlmaLinux, Debian, or Ubuntu.
 It's [systemd](https://freedesktop.org/wiki/Software/systemd/) focused
 and requires Ansible version 2.18 or higher.
 
-The role supports the following operating systems:
+The role is tested against, and supports, the following operating systems:
 
-- [AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9)
 - [AlmaLinux 10](https://wiki.almalinux.org/release-notes/#almalinux-10)
-- [Debian 12 (Bookworm)](https://www.debian.org/releases/bookworm/)
 - [Debian 13 (trixie)](https://www.debian.org/releases/trixie/)
-- [Ubuntu 24.04 (Noble Numbat)](https://releases.ubuntu.com/noble/)
 - [Ubuntu 26.04 (Resolute Raccoon)](https://releases.ubuntu.com/resolute/)
 
 For those using AWS or Azure, there are also hardened Ubuntu Amazon
@@ -149,7 +146,8 @@ See [STRUCTURE.md](STRUCTURE.md) for tree of the role structure.
 
 ## Role testing
 
-See [TESTING.md](TESTING.md).
+The role is tested with Molecule, using QEMU virtual machines (`default`) and
+containers (`docker`), see [TESTING.md](TESTING.md).
 
 ## Role Arguments
 
@@ -353,6 +351,7 @@ See [TESTING.md](TESTING.md).
 | manage_postfix | If True, then the Postfix mail server will be configured if `/etc/postfix/main.cf` exists. | True |
 | manage_package_managers | If True, then `apt` and `dnf` will be configured to use for example GPG verification and clean requirements on remove. | True |
 | apt_hardening_options | Options used to configure the APT suite of tools. | [ 'Acquire::AllowDowngradeToInsecureRepositories "false";', 'Acquire::AllowInsecureRepositories "false";', 'Acquire::http::AllowRedirect "false";', 'APT::Get::AllowUnauthenticated "false";', 'APT::Get::AutomaticRemove "true";', 'APT::Install-Recommends "false";', 'APT::Install-Suggests "false";', 'APT::Periodic::AutocleanInterval "7";', 'APT::Sandbox::Seccomp "1";', 'Unattended-Upgrade::Remove-Unused-Dependencies "true";', 'Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";' ] |
+| apt_seccomp_broken_releases | Debian releases where the seccomp sandbox of APT aborts the acquire methods, `E:Method file has died unexpectedly!`, and where `APT::Sandbox::Seccomp` therefore is left out of `apt_hardening_options`. | ['forky', 'trixie'] |
 | manage_fstab | If True, then any floppy devices will be removed from `/etc/fstab`. | True |
 | manage_mounts | If True, `/proc` will be mounted with the `nosuid,nodev,noexec,hidepid` options, `/dev/shm` will be mounted with the `nosuid,nodev,noexec` options and `/tmp` will be mounted as tmpfs with the `nosuid,nodev,noexec` options using the available template. | True |
 | hide_pid | This option controls who can access the information in `/proc/pid` directories | 2 |

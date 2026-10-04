@@ -1,4 +1,6 @@
 ---
+# Ubuntu ships sudo-rs, which Ansible's sudo become plugin cannot parse, see ansible/ansible#85837.
+ansible_become_exe: sudo.ws
 automatic_updates:
   enabled: true
   only_security: true
@@ -13,7 +15,7 @@ logind:
   killuserprocesses: true
   killexcludeusers:
     - root
-    - vagrant
+    - ubuntu
   idleaction: lock
   idleactionsec: 15min
   removeipc: true
@@ -22,7 +24,6 @@ slub_debugger_poisoning: true
 sshd_admin_net:
   - 0.0.0.0/0
 sshd_allow_groups:
-  - vagrant
   - sudo
 sshd_update_moduli: true
 sysctl_conf_dir: /etc/sysctl.d

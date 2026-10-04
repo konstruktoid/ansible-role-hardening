@@ -15,7 +15,6 @@ rkhunter_web_cmd: wget
 sshd_admin_net:
   - 0.0.0.0/0
 sshd_allow_groups:
-  - vagrant
   - sudo
 sshd_kex_algorithms:
   - "sntrup761x25519-sha512@openssh.com"

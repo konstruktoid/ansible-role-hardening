@@ -1,0 +1,61 @@
+---
+- name: Destroy QEMU instances
+  hosts: molecule
+  gather_facts: false
+  tasks:
+    - name: Read QEMU pidfile
+      delegate_to: localhost
+      ansible.builtin.slurp:
+        src: "{{ molecule_ephemeral_directory }}/{{ inventory_hostname }}.pid"
+      register: qemu_pidfile
+      failed_when: false
+
+    - name: Stop QEMU instance
+      delegate_to: localhost
+      ansible.builtin.command:
+        cmd: "kill {{ qemu_pidfile.content | b64decode | trim }}"
+      when: qemu_pidfile.content is defined
+      changed_when: true
+      failed_when: false
+
+    - name: Wait for QEMU process to exit
+      delegate_to: localhost
+      ansible.builtin.wait_for:
+        path: "/proc/{{ qemu_pidfile.content | b64decode | trim }}"
+        state: absent
+        timeout: 30
+      when: qemu_pidfile.content is defined
+      failed_when: false
+
+    - name: Remove ephemeral instance files
+      delegate_to: localhost
+      ansible.builtin.file:
+        path: "{{ molecule_ephemeral_directory }}/{{ inventory_hostname }}{{ item }}"
+        state: absent
+      loop:
+        - ".pid"
+        - ".qcow2"
+        - "-OVMF_VARS.fd"
+        - "-seed.iso"
+        - "-user-data"
+        - "-meta-data"
+      # The serial console log is deliberately not removed here. It lives under
+      # molecule-logs/ and is the only evidence left when a guest panics or
+      # never reaches SSH.
+
+- name: Remove dynamic molecule inventory
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Remove dynamic inventory file
+      ansible.builtin.file:
+        path: "{{ molecule_ephemeral_directory }}/inventory/molecule_inventory.yml"
+        state: absent
+
+    - name: Remove ephemeral SSH keypair
+      ansible.builtin.file:
+        path: "{{ molecule_ephemeral_directory }}/{{ item }}"
+        state: absent
+      loop:
+        - ssh_key
+        - ssh_key.pub

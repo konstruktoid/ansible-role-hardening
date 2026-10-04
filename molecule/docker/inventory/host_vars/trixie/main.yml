@@ -1,5 +1,4 @@
 ---
-ansible_become_pass: vagrant
 ansible_python_interpreter: /usr/bin/python3
 automatic_updates:
   enabled: true
@@ -12,7 +11,6 @@ disable_wireless: false
 sshd_admin_net:
   - 0.0.0.0/0
 sshd_allow_groups:
-  - vagrant
   - sudo
 sshd_update_moduli: true
 system_upgrade: false

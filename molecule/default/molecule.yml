@@ -1,53 +1,59 @@
 ---
-ansible:
-  executor:
-    backend: ansible-playbook
-    args:
-      ansible_playbook:
-        - --inventory=${MOLECULE_SCENARIO_DIRECTORY}/inventory/
 dependency:
   name: galaxy
 driver:
   name: default
-provisioner:
-  name: ansible
-  config_options:
-    defaults:
-      callback_whitelist: profile_tasks
-      interpreter_python: auto_silent
-  env:
-    ANSIBLE_ROLES_PATH: ${MOLECULE_PROJECT_DIRECTORY}/..:/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles
-  log: true
-  inventory:
-    directory: ./inventory
+  ssh_connection_options:
+    - "-o StrictHostKeyChecking=no"
+    - "-o UserKnownHostsFile=/dev/null"
 platforms:
   - name: almalinux10
-    box: bento/almalinux-10
-    config_options:
-      vm.boot_timeout: 600
-      ssh.key_type: ed25519
-    instance_raw_config_args:
-      - vbguest.auto_update = false
+    image_url: "https://repo.almalinux.org/almalinux/10/cloud/x86_64/images/AlmaLinux-10-GenericCloud-latest.x86_64.qcow2"
+    ssh_user: almalinux
+    ssh_user_group: wheel
+    ssh_port: 22201
     memory: 2048
-  - name: trixie
-    box: bento/debian-13
-    config_options:
-      ssh.key_type: ed25519
-    instance_raw_config_args:
-      - vbguest.auto_update = false
-    memory: 1024
+    cpus: 2
   - name: resolute
-    box: bento/ubuntu-26.04
-    config_options:
-      vm.boot_timeout: 600
-      ssh.key_type: ed25519
-    instance_raw_config_args:
-      - vbguest.auto_update = false
-    provider_raw_config_args:
-      - customize ["modifyvm", :id, "--cableconnected1", "on"]
-      - customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
-      - customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
+    image_url: "https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-amd64.img"
+    ssh_user: ubuntu
+    ssh_user_group: sudo
+    ssh_port: 22202
     memory: 1024
+    cpus: 2
+  - name: trixie
+    image_url: "https://cloud.debian.org/images/cloud/trixie/latest/debian-13-generic-amd64.qcow2"
+    ssh_user: debian
+    ssh_user_group: sudo
+    ssh_port: 22203
+    memory: 1024
+    cpus: 2
+provisioner:
+  name: ansible
+  playbooks:
+    create: "../resources/create_qemu.yml"
+    destroy: "../resources/destroy_qemu.yml"
+    converge: "../resources/converge.yml"
+    prepare: "../resources/prepare.yml"
+    verify: "../resources/verify.yml"
+  config_options:
+    defaults:
+      callbacks_enabled: "ansible.posix.profile_tasks,community.general.log_plays"
+      # The plays run with strategy free, so hosts no longer report in step.
+      # Drop the skipped hosts from the terminal, they are the bulk of the
+      # interleaved noise, and keep a readable per host transcript on disk.
+      display_skipped_hosts: false
+      interpreter_python: "auto_silent"
+      timeout: 60
+    callback_log_plays:
+      log_folder: "${MOLECULE_PROJECT_DIRECTORY}/molecule-logs/${MOLECULE_SCENARIO_NAME}"
+  env:
+    ANSIBLE_ROLES_PATH: "${MOLECULE_PROJECT_DIRECTORY}/.."
+  log: true
+  inventory:
+    links:
+      group_vars: inventory/group_vars
+      host_vars: inventory/host_vars
 verifier:
   name: ansible
 scenario:

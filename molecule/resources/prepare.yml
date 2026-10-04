@@ -1,0 +1,25 @@
+---
+- name: Prepare
+  hosts: molecule
+  # Same reason as the converge play: the hosts do package manager
+  # specific work, so lock-step execution just makes them wait on each other.
+  strategy: free
+  gather_facts: false
+  any_errors_fatal: true
+  tasks:
+    - name: Install Python 3
+      ansible.builtin.raw: >
+        test -x /usr/bin/python3 || \
+        DEBIAN_FRONTEND=noninteractive apt-get install --update -y python3 python3-apt || \
+        dnf install -y python3 python3-dnf || microdnf install -y python3 python3-dnf
+      changed_when: false
+
+    - name: Install sudo
+      ansible.builtin.raw: >
+        command -v sudo || \
+        DEBIAN_FRONTEND=noninteractive apt-get install --update -y sudo || \
+        microdnf install -y sudo || dnf install -y sudo
+      changed_when: false
+
+    - name: Gather facts
+      ansible.builtin.gather_facts:

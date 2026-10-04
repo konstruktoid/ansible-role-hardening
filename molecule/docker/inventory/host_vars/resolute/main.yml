@@ -12,7 +12,6 @@ manage_suid_sgid_permissions: false
 sshd_admin_net:
   - 0.0.0.0/0
 sshd_allow_groups:
-  - vagrant
   - sudo
 sshd_match_users:
   - user: testuser01
