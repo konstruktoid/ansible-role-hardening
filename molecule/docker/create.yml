@@ -24,6 +24,10 @@
       loop_control:
         label: "{{ item.name }}"
 
+    - name: Print container details
+      ansible.builtin.debug:
+        msg: "{{ result.results }}"
+
     - name: Fail if container is not running
       when: >
         item.container.State.ExitCode != 0 or not item.container.State.Running

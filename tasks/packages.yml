@@ -160,9 +160,13 @@
     - "'rdrand' in ansible_facts.flags"
     - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
   block:
-    - name: Install rng-tools5
+    - name: Install rng-tools on Debian family
       ansible.builtin.apt:
-        name: rng-tools5
+        name: >-
+          {{ 'rng-tools5' if
+          (ansible_facts.distribution == 'Ubuntu' or
+          ansible_facts.distribution_release in ['bookworm', 'trixie'])
+          else 'rng-tools' }}
         state: present
       when:
         - ansible_facts.os_family == "Debian"

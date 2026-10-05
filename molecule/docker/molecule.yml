@@ -1,10 +1,4 @@
 ---
-ansible:
-  executor:
-    backend: ansible-playbook
-    args:
-      ansible_playbook:
-        - --inventory=${MOLECULE_SCENARIO_DIRECTORY}/inventory/
 dependency:
   name: galaxy
 driver:
@@ -14,6 +8,8 @@ platforms:
     image: docker.io/almalinux:10
     command: sleep 1d
     privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
   - name: resolute
     image: docker.io/ubuntu:resolute
     command: sleep 1d
@@ -29,17 +25,26 @@ platforms:
 provisioner:
   name: ansible
   playbooks:
-    converge: "../default/converge.yml"
-    verify: "../default/verify.yml"
+    converge: "../resources/converge.yml"
+    prepare: "../resources/prepare.yml"
+    verify: "../resources/verify.yml"
   config_options:
     defaults:
-      callback_whitelist: profile_tasks
-      interpreter_python: auto_silent
+      callbacks_enabled: "ansible.posix.profile_tasks,community.general.log_plays"
+      # The plays run with strategy free, so hosts no longer report in step.
+      # Drop the skipped hosts from the terminal, they are the bulk of the
+      # interleaved noise, and keep a readable per host transcript on disk.
+      display_skipped_hosts: false
+      interpreter_python: "auto_silent"
+    callback_log_plays:
+      log_folder: "${MOLECULE_PROJECT_DIRECTORY}/molecule-logs/${MOLECULE_SCENARIO_NAME}"
   env:
-    ANSIBLE_ROLES_PATH: ${MOLECULE_PROJECT_DIRECTORY}/..:/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles
+    ANSIBLE_ROLES_PATH: "${MOLECULE_PROJECT_DIRECTORY}/.."
   log: true
   inventory:
-    directory: ./inventory
+    links:
+      group_vars: inventory/group_vars
+      host_vars: inventory/host_vars
 verifier:
   name: ansible
 scenario:

@@ -27,6 +27,8 @@ apt_hardening_options:
   - 'APT::Sandbox::Seccomp "1";'
   - 'Unattended-Upgrade::Remove-Unused-Dependencies "true";'
   - 'Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";'
+apt_seccomp_broken_releases: ["forky", "trixie"]
+
 auditd_action_mail_acct: "root"
 
 auditd_admin_space_left_action: "suspend"
@@ -54,6 +56,8 @@ auditd_num_logs: 5
 auditd_space_left: 75
 
 auditd_space_left_action: "email"
+
+auditd_syslog_plugin: true
 
 automatic_updates:
   enabled: true

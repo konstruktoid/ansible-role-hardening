@@ -15,6 +15,8 @@
       ansible.builtin.package:
         name: audit-rules
         state: present
+        disable_plugin:
+          - needrestart
       when:
         - ansible_facts.distribution == "AlmaLinux"
         - ansible_facts.distribution_major_version | int >= 10

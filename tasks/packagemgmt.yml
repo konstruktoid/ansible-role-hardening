@@ -16,6 +16,17 @@
       loop: "{{ apt_hardening_options }}"
       when:
         - manage_package_managers
+        - item != 'APT::Sandbox::Seccomp "1";' or ansible_facts.distribution_release not in apt_seccomp_broken_releases
+
+    - name: Remove apt seccomp sandboxing on affected Debian releases
+      ansible.builtin.lineinfile:
+        dest: /etc/apt/apt.conf.d/98-hardening-ubuntu
+        mode: "0644"
+        line: 'APT::Sandbox::Seccomp "1";'
+        state: absent
+      when:
+        - manage_package_managers
+        - ansible_facts.distribution_release in apt_seccomp_broken_releases
 
     - name: Run apt update
       become: true

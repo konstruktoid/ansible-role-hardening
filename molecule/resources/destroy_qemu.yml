@@ -1,0 +1,87 @@
+---
+# Loops over platforms so cleanup works without the dynamic inventory.
+- name: Destroy QEMU instances
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Read QEMU pidfile
+      ansible.builtin.slurp:
+        src: "{{ molecule_ephemeral_directory }}/{{ item.name }}.pid"
+      loop: "{{ molecule_yml.platforms }}"
+      loop_control:
+        label: "{{ item.name }}"
+      register: qemu_pidfiles
+      failed_when: false
+
+    # A stale pidfile may name a reused PID, so only signal the QEMU process that owns this pidfile.
+    - name: Read QEMU process command line
+      ansible.builtin.slurp:
+        src: "/proc/{{ item.content | b64decode | trim }}/cmdline"
+      loop: "{{ qemu_pidfiles.results }}"
+      loop_control:
+        label: "{{ item.item.name }}"
+      when: item.content is defined
+      register: qemu_cmdlines
+      failed_when: false
+
+    - name: Select QEMU processes started by this scenario
+      ansible.builtin.set_fact:
+        qemu_pids: "{{ qemu_pids | default([]) + [item.item.content | b64decode | trim] }}"
+      loop: "{{ qemu_cmdlines.results }}"
+      loop_control:
+        label: "{{ item.item.item.name }}"
+      vars:
+        qemu_argv: "{{ item.content | default('') | b64decode | split('\x00') }}"
+        qemu_pidfile: "{{ molecule_ephemeral_directory }}/{{ item.item.item.name }}.pid"
+      when:
+        - item.content is defined
+        - (qemu_argv | first | basename).startswith('qemu-system')
+        - qemu_pidfile in qemu_argv
+        - qemu_argv[qemu_argv.index(qemu_pidfile) - 1] == '-pidfile'
+
+    - name: Stop QEMU instance
+      ansible.builtin.command:
+        cmd: "kill {{ item }}"
+      loop: "{{ qemu_pids | default([]) }}"
+      changed_when: true
+      failed_when: false
+
+    - name: Wait for QEMU process to exit
+      ansible.builtin.wait_for:
+        path: "/proc/{{ item }}"
+        state: absent
+        timeout: 30
+      loop: "{{ qemu_pids | default([]) }}"
+      failed_when: false
+
+    # The serial console log is deliberately not removed here. It lives under
+    # molecule-logs/ and is the only evidence left when a guest panics or
+    # never reaches SSH.
+    - name: Remove ephemeral instance files
+      ansible.builtin.file:
+        path: "{{ molecule_ephemeral_directory }}/{{ item.0.name }}{{ item.1 }}"
+        state: absent
+      loop: "{{ molecule_yml.platforms | product(qemu_instance_files) | list }}"
+      loop_control:
+        label: "{{ item.0.name }}{{ item.1 }}"
+      vars:
+        qemu_instance_files:
+          - ".pid"
+          - ".qcow2"
+          - "-OVMF_VARS.fd"
+          - "-seed.iso"
+          - "-user-data"
+          - "-meta-data"
+
+    - name: Remove dynamic inventory file
+      ansible.builtin.file:
+        path: "{{ molecule_ephemeral_directory }}/inventory/molecule_inventory.yml"
+        state: absent
+
+    - name: Remove ephemeral SSH keypair
+      ansible.builtin.file:
+        path: "{{ molecule_ephemeral_directory }}/{{ item }}"
+        state: absent
+      loop:
+        - ssh_key
+        - ssh_key.pub

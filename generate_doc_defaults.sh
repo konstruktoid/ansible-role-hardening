@@ -15,13 +15,10 @@ security of servers running on AlmaLinux, Debian, or Ubuntu.
 It's [systemd](https://freedesktop.org/wiki/Software/systemd/) focused
 and requires Ansible version ${ANSIBLE_V} or higher.
 
-The role supports the following operating systems:
+The role is tested against, and supports, the following operating systems:
 
-- [AlmaLinux 9](https://wiki.almalinux.org/release-notes/#almalinux-9)
 - [AlmaLinux 10](https://wiki.almalinux.org/release-notes/#almalinux-10)
-- [Debian 12 (Bookworm)](https://www.debian.org/releases/bookworm/)
 - [Debian 13 (trixie)](https://www.debian.org/releases/trixie/)
-- [Ubuntu 24.04 (Noble Numbat)](https://releases.ubuntu.com/noble/)
 - [Ubuntu 26.04 (Resolute Raccoon)](https://releases.ubuntu.com/resolute/)
 
 For those using AWS or Azure, there are also hardened Ubuntu Amazon
@@ -154,7 +151,8 @@ See [STRUCTURE.md](STRUCTURE.md) for tree of the role structure.
 
 ## Role testing
 
-See [TESTING.md](TESTING.md).
+The role is tested with Molecule, using QEMU virtual machines (\`default\`) and
+containers (\`docker\`), see [TESTING.md](TESTING.md).
 
 <!-- BEGIN_ANSIBLE_DOCS -->
 
@@ -217,30 +215,47 @@ Apache License Version 2.0
 echo "# Testing
 
 Before running any test:
-- ensure [Vagrant](https://www.vagrantup.com/),
-  [VirtualBox](https://www.virtualbox.org/) and/or
+- ensure [QEMU](https://www.qemu.org/), \`genisoimage\` and OVMF, and/or
   [Docker](https://www.docker.com/) is installed.
 - ensure all Python [requirements](./requirements-dev.txt) are installed.
 - ensure that the role is installed as \`konstruktoid.hardening\`
 
-## Distribution boxes used by Molecule and Vagrant
+## Scenarios
+
+- \`default\` (\`molecule/default\`) boots AlmaLinux 10, Debian trixie and Ubuntu
+  resolute cloud images directly under \`qemu-system-x86_64\`, with UEFI (OVMF)
+  and cloud-init seed ISOs built with \`genisoimage\`, instead of Vagrant. The
+  downloaded images are cached in \`~/.cache/molecule-qemu/images\`, and the
+  serial console of each guest is logged to \`molecule-logs/default/\`. KVM is
+  used when \`/dev/kvm\` is accessible, otherwise the guests fall back to slow
+  emulation. After \`molecule converge\`, use \`molecule login --host resolute\` to
+  open an SSH session to the Ubuntu guest.
+- \`docker\` (\`molecule/docker\`) runs the same three platforms as containers.
+  Tasks that need a real kernel or init system are skipped in containers.
+- \`molecule/resources\` holds the playbooks shared by both scenarios: \`converge.yml\`,
+  \`prepare.yml\`, \`verify.yml\`, and the QEMU \`create_qemu.yml\` and \`destroy_qemu.yml\`.
+  The role variables for each scenario are kept in its \`inventory\` directory.
+- Ubuntu ships \`sudo-rs\`, which the Ansible \`sudo\` become plugin cannot parse,
+  so \`ansible_become_exe\` is set to \`sudo.ws\` for resolute in the \`default\`
+  scenario, see [ansible/ansible#85837](https://github.com/ansible/ansible/issues/85837).
+- On Debian trixie and forky the seccomp sandbox of APT is left off, see
+  \`apt_seccomp_broken_releases\`.
+
+## Images used by Molecule
 "
 
 echo '```console'
-git grep -E 'box:|box =|image:' molecule/ | awk '{print $NF}' |\
+git grep -E 'image:|image_url:' molecule/ | awk '{print $NF}' |\
   tr -d '"' | sort | uniq
 echo '```'
 
 echo
-echo "If the [runTests.sh](runTests.sh) script is executed as \`runTests.sh vagrant\`,
-[Vagrant](https://www.vagrantup.com/ \"Vagrant\") will configure hosts and run the
-\`konstruktoid.hardening\` role, it will then run
-[Lynis](https://github.com/CISOfy/lynis/ \"Lynis\") and \`bats\` tests from the
-[konstruktoid/hardening](https://github.com/konstruktoid/hardening \"konstruktoid/hardening\")
-repository if the host is using [Ubuntu](https://ubuntu.com/ \"Ubuntu\")."
-
-echo
 echo "### tox environments
+
+\`tox -e <name>\` runs \`ansible-lint\` followed by \`molecule test\`. The \`default\`
+(QEMU) scenario is used by \`devel\` and \`upstream\`, the \`docker\` scenario by
+\`docker\` and \`docker-upstream\`. The \`upstream\` variants use unpinned upstream
+\`ansible-core\`, \`ansible-lint\` and \`molecule\`.
 "
 echo '```console'
 tox -l

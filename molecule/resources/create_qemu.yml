@@ -1,0 +1,245 @@
+---
+- name: Create
+  hosts: localhost
+  gather_facts: false
+  vars:
+    molecule_inventory:
+      all:
+        children:
+          molecule:
+            hosts: {}
+    molecule_instance_config: []
+    qemu_image_cache_dir: "{{ lookup('env', 'HOME') }}/.cache/molecule-qemu/images"
+    qemu_ssh_key_file: "{{ molecule_ephemeral_directory }}/ssh_key"
+    qemu_ovmf_code: "/usr/share/OVMF/OVMF_CODE_4M.fd"
+    qemu_ovmf_vars_template: "/usr/share/OVMF/OVMF_VARS_4M.fd"
+    qemu_disk_size: "10G"
+    qemu_host_cpus: "{{ lookup('pipe', 'nproc') | int }}"
+    # Upper bound for a single instance: leave one CPU to the host and split
+    # the rest evenly, so that a platform asking for more than the host can
+    # back, a CI runner has far fewer cores than a workstation, is capped
+    # instead of oversubscribing it.
+    qemu_instance_cpus: >-
+      {{ [1, ((qemu_host_cpus | int) - 1) // (molecule_yml.platforms | length)] | max }}
+    # Outside the ephemeral directory on purpose: molecule prunes that on
+    # destroy, and a guest that panics or never finishes booting leaves no
+    # other trace, the connection based logs need an instance to connect to.
+    qemu_console_log_dir: >-
+      {{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/molecule-logs/{{
+      lookup('env', 'MOLECULE_SCENARIO_NAME') }}
+  tasks:
+    - name: Ensure image cache directory exists
+      ansible.builtin.file:
+        path: "{{ qemu_image_cache_dir }}"
+        state: directory
+        mode: "0700"
+
+    - name: Ensure console log directory exists
+      ansible.builtin.file:
+        path: "{{ qemu_console_log_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Generate ephemeral SSH keypair
+      community.crypto.openssh_keypair:
+        path: "{{ qemu_ssh_key_file }}"
+        type: ed25519
+        comment: molecule-qemu
+        mode: "0600"
+      register: qemu_ssh_keypair
+
+    - name: Check for KVM support
+      ansible.builtin.stat:
+        path: /dev/kvm
+      register: qemu_kvm_stat
+
+    - name: Download base cloud images
+      ansible.builtin.get_url:
+        url: "{{ item.image_url }}"
+        dest: "{{ qemu_image_cache_dir }}/{{ item.name }}-base.qcow2"
+        mode: "0644"
+        timeout: 180
+        force: "{{ item.image_force | default(false) }}"
+      loop: "{{ molecule_yml.platforms }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Create per-instance overlay disks
+      ansible.builtin.command:
+        cmd: >-
+          qemu-img create -f qcow2 -F qcow2
+          -b {{ qemu_image_cache_dir }}/{{ item.name }}-base.qcow2
+          {{ molecule_ephemeral_directory }}/{{ item.name }}.qcow2
+        creates: "{{ molecule_ephemeral_directory }}/{{ item.name }}.qcow2"
+      loop: "{{ molecule_yml.platforms }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Resize per-instance overlay disks
+      ansible.builtin.command:
+        cmd: >-
+          qemu-img resize {{ molecule_ephemeral_directory }}/{{ item.name }}.qcow2
+          {{ qemu_disk_size }}
+      loop: "{{ molecule_yml.platforms }}"
+      loop_control:
+        label: "{{ item.name }}"
+      changed_when: true
+
+    - name: Write cloud-init user-data
+      ansible.builtin.copy:
+        dest: "{{ molecule_ephemeral_directory }}/{{ item.name }}-user-data"
+        mode: "0600"
+        content: |
+          #cloud-config
+          hostname: {{ item.name }}
+          fqdn: {{ item.name }}
+          # Without a local entry sudo's hostname lookup stalls for seconds.
+          bootcmd:
+            - [sh, -c, "grep -q ' {{ item.name }}$' /etc/hosts || echo '127.0.1.1 {{ item.name }} {{ item.name }}' >> /etc/hosts"]
+          users:
+            - name: {{ item.ssh_user }}
+              sudo: ALL=(ALL) NOPASSWD:ALL
+              groups: {{ item.ssh_user_group }}
+              shell: /bin/bash
+              lock_passwd: true
+              ssh_authorized_keys:
+                - {{ qemu_ssh_keypair.public_key }}
+          ssh_pwauth: false
+          disable_root: true
+      loop: "{{ molecule_yml.platforms }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Write cloud-init meta-data
+      ansible.builtin.copy:
+        dest: "{{ molecule_ephemeral_directory }}/{{ item.name }}-meta-data"
+        mode: "0600"
+        content: |
+          instance-id: {{ item.name }}
+          local-hostname: {{ item.name }}
+      loop: "{{ molecule_yml.platforms }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Build cloud-init seed images
+      ansible.builtin.command:
+        cmd: >-
+          genisoimage -output {{ molecule_ephemeral_directory }}/{{ item.name }}-seed.iso
+          -volid cidata -joliet -rock -graft-points
+          user-data={{ molecule_ephemeral_directory }}/{{ item.name }}-user-data
+          meta-data={{ molecule_ephemeral_directory }}/{{ item.name }}-meta-data
+        creates: "{{ molecule_ephemeral_directory }}/{{ item.name }}-seed.iso"
+      loop: "{{ molecule_yml.platforms }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Copy UEFI variable store per instance
+      ansible.builtin.copy:
+        src: "{{ qemu_ovmf_vars_template }}"
+        dest: "{{ molecule_ephemeral_directory }}/{{ item.name }}-OVMF_VARS.fd"
+        mode: "0644"
+        remote_src: true
+      loop: "{{ molecule_yml.platforms }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Boot QEMU instances
+      ansible.builtin.command:
+        cmd: >-
+          qemu-system-x86_64
+          {{ '-machine q35,accel=kvm -cpu host' if qemu_kvm_stat.stat.exists else '-machine q35 -cpu max' }}
+          -m {{ item.memory | default(1024) }}
+          -smp {{ [item.cpus | default(1) | int, qemu_instance_cpus | int] | min }}
+          -daemonize
+          -pidfile {{ molecule_ephemeral_directory }}/{{ item.name }}.pid
+          -drive if=pflash,format=raw,readonly=on,file={{ qemu_ovmf_code }}
+          -drive if=pflash,format=raw,file={{ molecule_ephemeral_directory }}/{{ item.name }}-OVMF_VARS.fd
+          -drive if=virtio,format=qcow2,file={{ molecule_ephemeral_directory }}/{{ item.name }}.qcow2
+          -cdrom {{ molecule_ephemeral_directory }}/{{ item.name }}-seed.iso
+          -netdev user,id=net0,hostfwd=tcp::{{ item.ssh_port }}-:22
+          -device virtio-net-pci,netdev=net0
+          -display none
+          -serial file:{{ qemu_console_log_dir }}/{{ item.name }}-console.log
+        creates: "{{ molecule_ephemeral_directory }}/{{ item.name }}.pid"
+      loop: "{{ molecule_yml.platforms }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Wait for SSH port to be reachable
+      ansible.builtin.wait_for:
+        host: 127.0.0.1
+        port: "{{ item.ssh_port }}"
+        timeout: 180
+      loop: "{{ molecule_yml.platforms }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Add instances to molecule inventory
+      vars:
+        inventory_partial_yaml: |
+          all:
+            children:
+              molecule:
+                hosts:
+                  "{{ item.name }}":
+                    ansible_host: 127.0.0.1
+                    ansible_port: {{ item.ssh_port }}
+                    ansible_user: {{ item.ssh_user }}
+                    ansible_ssh_private_key_file: {{ qemu_ssh_key_file }}
+                    ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+                    ansible_python_interpreter: auto_silent
+      ansible.builtin.set_fact:
+        molecule_inventory: >-
+          {{ molecule_inventory | combine(inventory_partial_yaml | from_yaml,
+          recursive=true) }}
+      loop: "{{ molecule_yml.platforms }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Build Molecule instance configuration
+      ansible.builtin.set_fact:
+        molecule_instance_config: >-
+          {{ molecule_instance_config + [{"instance": item.name, "address": "127.0.0.1",
+          "port": item.ssh_port, "user": item.ssh_user, "identity_file": qemu_ssh_key_file}] }}
+      loop: "{{ molecule_yml.platforms }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Write molecule inventory
+      ansible.builtin.copy:
+        content: "{{ molecule_inventory | to_yaml }}"
+        dest: "{{ molecule_ephemeral_directory }}/inventory/molecule_inventory.yml"
+        mode: "0600"
+
+    - name: Write Molecule instance configuration
+      ansible.builtin.copy:
+        content: "{{ molecule_instance_config | to_yaml }}"
+        dest: "{{ molecule_ephemeral_directory }}/instance_config.yml"
+        mode: "0600"
+
+    - name: Force inventory refresh
+      ansible.builtin.meta: refresh_inventory
+
+    - name: Fail if molecule group is missing
+      ansible.builtin.assert:
+        that: "'molecule' in groups"
+        fail_msg: "molecule group was not found inside inventory groups: {{ groups }}"
+      run_once: true
+
+- name: Validate inventory
+  hosts: molecule
+  gather_facts: false
+  tasks:
+    - name: Wait for SSH to accept connections
+      ansible.builtin.wait_for_connection:
+        timeout: 450
+
+    - name: Wait for cloud-init to finish
+      ansible.builtin.raw: cloud-init status --wait
+      become: false
+      changed_when: false
+      timeout: 300
+
+    - name: Check instance access
+      ansible.builtin.raw: /bin/true
+      changed_when: false

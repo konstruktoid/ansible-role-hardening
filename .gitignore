@@ -16,7 +16,6 @@ hosts
 .sonar
 *suid.list
 .tox
-.vagrant
-Vagrantfile
 .venv
 .yamllint
+molecule-logs

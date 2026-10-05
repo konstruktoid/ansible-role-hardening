@@ -25,23 +25,20 @@
 │   ├── argument_specs.yml
 │   └── main.yml
 ├── molecule
-│   ├── almalinux
-│   │   └── molecule.yml
-│   ├── custom
-│   │   └── molecule.yml
-│   ├── debian
-│   │   └── molecule.yml
-│   ├── default
-│   │   ├── converge.yml
-│   │   ├── molecule.yml
-│   │   └── verify.yml
-│   ├── docker
-│   │   └── molecule.yml
-│   ├── single
-│   │   └── molecule.yml
-│   └── ubuntu
-│       └── molecule.yml
-├── postChecks.sh
+│   ├── default
+│   │   ├── inventory
+│   │   └── molecule.yml
+│   ├── docker
+│   │   ├── create.yml
+│   │   ├── destroy.yml
+│   │   ├── inventory
+│   │   └── molecule.yml
+│   └── resources
+│       ├── converge.yml
+│       ├── create_qemu.yml
+│       ├── destroy_qemu.yml
+│       ├── prepare.yml
+│       └── verify.yml
 ├── README.md
 ├── renovate.json
 ├── requirements-dev.txt
@@ -163,8 +160,7 @@
 │   ├── debug_facts.yml
 │   ├── inventory
 │   └── test.yml
-├── tox.ini
-└── Vagrantfile
+└── tox.ini
 
 40 directories, 123 files
 ```

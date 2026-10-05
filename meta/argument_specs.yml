@@ -1463,6 +1463,13 @@ argument_specs:
           false\";', 'APT::Get::AllowUnauthenticated \"false\";', 'APT::Get::AutomaticRemove \"true\";', 'APT::Install-Recommends \"false\";', 'APT::Install-Suggests
           \"false\";', 'APT::Periodic::AutocleanInterval \"7\";', 'APT::Sandbox::Seccomp \"1\";', 'Unattended-Upgrade::Remove-Unused-Dependencies \"true\";', 'Unattended-Upgrade::Remove-Unused-Kernel-Packages
           \"true\";' ]"
+      apt_seccomp_broken_releases:
+        description: >-
+          Debian releases where the seccomp sandbox of APT aborts the acquire methods, C(E:Method file has died unexpectedly!),
+          and where C(APT::Sandbox::Seccomp) therefore is left out of C(apt_hardening_options).
+        type: "list"
+        elements: "str"
+        default: "[ 'forky', 'trixie' ]"
       manage_fstab:
         description: "If True, then any floppy devices will be removed from C(/etc/fstab)."
         type: "bool"

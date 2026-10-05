@@ -1156,6 +1156,7 @@
         executable: /bin/bash
       when:
         - ansible_facts.os_family == "Debian"
+        - item != 'APT::Sandbox::Seccomp "1";' or ansible_facts.distribution_release not in apt_seccomp_broken_releases
       with_items:
         - "{{ apt_hardening_options }}"
 
@@ -1233,31 +1234,22 @@
       when:
         - ansible_facts.virtualization_type not in ["container", "docker", "podman"]
       block:
-        - name: Index blacklisted kernel modules
+        - name: Verify blocked kernel modules
           environment:
             PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
           ansible.builtin.shell: |
             set -o pipefail
-            modprobe -c | grep -o '^blacklist .*' | awk '{print $2}'
-          args:
-            executable: /bin/bash
-          changed_when: false
-          failed_when: modprobe_blacklist.rc != 0
-          register: modprobe_blacklist
-
-        - name: Verify blocked blacklisted kernel modules
-          environment:
-            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-          ansible.builtin.shell: |
-            set -o pipefail
-            grep 'install {{ item }} /bin/true' /etc/modprobe.d/blacklist-blocked.conf
+            grep -F 'install {{ item }} /bin/true' /etc/modprobe.d/blacklist-blocked.conf
           args:
             executable: /bin/bash
           register: modprobe_blockblacklisted
           changed_when: false
           failed_when: modprobe_blockblacklisted.rc != 0
           with_items:
-            - "{{ modprobe_blacklist.stdout_lines | sort | unique }}"
+            - >-
+              {{ (fs_modules_blocklist + net_modules_blocklist +
+              (misc_modules_blocklist | reject('search', 'usb') | list
+              if manage_usbguard | bool else misc_modules_blocklist)) | sort | unique }}
 
     - name: Verify sudo settings
       ansible.builtin.shell: |
