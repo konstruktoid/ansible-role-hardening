@@ -517,7 +517,7 @@ argument_specs:
         description: "Specifies the host key algorithms that the server offers."
         type: "list"
         elements: "str"
-        default: "['ssh-ed25519-cert-v01@openssh.com', 'ssh-rsa-cert-v01@openssh.com', 'ssh-ed25519', 'ecdsa-sha2-nistp521-cert-v01@openssh.com', 'ecdsa-sha2-nistp384-cert-v01@openssh.com',
+        default: "['ssh-ed25519-cert-v01@openssh.com', 'rsa-sha2-512-cert-v01@openssh.com', 'ssh-ed25519', 'ecdsa-sha2-nistp521-cert-v01@openssh.com', 'ecdsa-sha2-nistp384-cert-v01@openssh.com',
           'ecdsa-sha2-nistp521', 'ecdsa-sha2-nistp384']"
       sshd_host_keys_files:
         description: "Specifies a file containing a private host key used by SSH. If empty C(RSA), C(ECDSA), and C(ED25519) will be used, if supported by the installed
@@ -558,7 +558,7 @@ argument_specs:
         description: "Specifies the available KEX (Key Exchange) algorithms."
         type: "list"
         elements: "str"
-        default: "['curve25519-sha256@libssh.org', 'diffie-hellman-group16-sha512', 'diffie-hellman-group18-sha512', 'ecdh-sha2-nistp521', 'ecdh-sha2-nistp384']"
+        default: "['mlkem768x25519-sha256', 'sntrup761x25519-sha512', 'curve25519-sha256', 'curve25519-sha256@libssh.org', 'ecdh-sha2-nistp521', 'ecdh-sha2-nistp384']"
       sshd_listen:
         description: "Specifies the addresses sshd should listen on."
         type: "list"

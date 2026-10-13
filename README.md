@@ -235,7 +235,7 @@ containers (`docker`), see [TESTING.md](TESTING.md).
 | sshd_deny_users | Login is disallowed for users whose user name matches one of the patterns. | [] |
 | sshd_gateway_ports | Specifies whether remote hosts are allowed to connect to ports forwarded for the client. | False |
 | sshd_gssapi_authentication | Specifies whether user authentication based on GSSAPI is allowed. | False |
-| sshd_host_key_algorithms | Specifies the host key algorithms that the server offers. | ['ssh-ed25519-cert-v01@openssh.com', 'ssh-rsa-cert-v01@openssh.com', 'ssh-ed25519', 'ecdsa-sha2-nistp521-cert-v01@openssh.com', 'ecdsa-sha2-nistp384-cert-v01@openssh.com', 'ecdsa-sha2-nistp521', 'ecdsa-sha2-nistp384'] |
+| sshd_host_key_algorithms | Specifies the host key algorithms that the server offers. | ['ssh-ed25519-cert-v01@openssh.com', 'rsa-sha2-512-cert-v01@openssh.com', 'ssh-ed25519', 'ecdsa-sha2-nistp521-cert-v01@openssh.com', 'ecdsa-sha2-nistp384-cert-v01@openssh.com', 'ecdsa-sha2-nistp521', 'ecdsa-sha2-nistp384'] |
 | sshd_host_keys_files | Specifies a file containing a private host key used by SSH. If empty `RSA`, `ECDSA`, and `ED25519` will be used, if supported by the installed sshd version. | [] |
 | sshd_host_keys_group | Owner group of the host keys. | root |
 | sshd_host_keys_mode | Host keys file mode. | 0600 |
@@ -244,7 +244,7 @@ containers (`docker`), see [TESTING.md](TESTING.md).
 | sshd_ignore_rhosts | Specifies that .rhosts and .shosts files will not be used in HostbasedAuthentication. | True |
 | sshd_ignore_user_known_hosts | Specifies whether sshd should ignore the user's ~/.ssh/known_hosts during HostbasedAuthentication and use only the system-wide known hosts file /etc/ssh/known_hosts. | True |
 | sshd_kerberos_authentication | Specifies whether the password provided by the user for PasswordAuthentication will be validated through the Kerberos KDC. | False |
-| sshd_kex_algorithms | Specifies the available KEX (Key Exchange) algorithms. | ['curve25519-sha256@libssh.org', 'diffie-hellman-group16-sha512', 'diffie-hellman-group18-sha512', 'ecdh-sha2-nistp521', 'ecdh-sha2-nistp384'] |
+| sshd_kex_algorithms | Specifies the available KEX (Key Exchange) algorithms. | ['mlkem768x25519-sha256', 'sntrup761x25519-sha512', 'curve25519-sha256', 'curve25519-sha256@libssh.org', 'ecdh-sha2-nistp521', 'ecdh-sha2-nistp384'] |
 | sshd_listen | Specifies the addresses sshd should listen on. | ['0.0.0.0'] |
 | sshd_log_level | Gives the verbosity level that is used when logging messages from sshd. | verbose |
 | sshd_login_grace_time | The server disconnects after this time if the user has not successfully logged in. | 20 |

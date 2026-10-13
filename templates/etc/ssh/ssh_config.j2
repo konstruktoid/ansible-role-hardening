@@ -4,7 +4,7 @@
 # OpenSSH SSH client configuration files
 # See ssh_config(5) for more information
 
-{% if ssh_installed_version is version('9.0', '>=') and sshd_kex_algorithms is not regex("sntrup761x25519-*") %}
+{% if ssh_installed_version is version('9.0', '>=') and sshd_kex_algorithms is not regex("(mlkem768x25519|sntrup761x25519)") %}
 # See https://www.openssh.com/pq.html, and enable KexAlgorithms mlkem768x25519-sha256 or sntrup761x25519-sha512 if possible.
 {% endif %}
 

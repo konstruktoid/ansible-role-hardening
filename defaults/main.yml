@@ -693,7 +693,7 @@ sshd_gssapi_authentication: false
 # Specifies the host key algorithms that the server offers.
 sshd_host_key_algorithms:
   - "ssh-ed25519-cert-v01@openssh.com"
-  - "ssh-rsa-cert-v01@openssh.com"
+  - "rsa-sha2-512-cert-v01@openssh.com"
   - "ssh-ed25519"
   - "ecdsa-sha2-nistp521-cert-v01@openssh.com"
   - "ecdsa-sha2-nistp384-cert-v01@openssh.com"
@@ -727,9 +727,10 @@ sshd_kerberos_authentication: false
 
 # Specifies the available KEX (Key Exchange) algorithms.
 sshd_kex_algorithms:
+  - "mlkem768x25519-sha256"
+  - "sntrup761x25519-sha512"
+  - "curve25519-sha256"
   - "curve25519-sha256@libssh.org"
-  - "diffie-hellman-group16-sha512"
-  - "diffie-hellman-group18-sha512"
   - "ecdh-sha2-nistp521"
   - "ecdh-sha2-nistp384"
 # Specifies the addresses sshd should listen on.
