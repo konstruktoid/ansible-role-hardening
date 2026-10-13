@@ -317,6 +317,11 @@
         path: /etc/ssh/ssh_config.d
       register: ssh_config_d
 
+    - name: Check if ssh client binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/ssh
+      register: ssh_client_bin
+
     - name: Configure ssh client
       become: true
       ansible.builtin.template:
@@ -326,3 +331,4 @@
         mode: "0644"
         owner: root
         group: root
+        validate: "{{ '/usr/bin/ssh -F %s -G localhost' if ssh_client_bin.stat.exists else '/usr/bin/true %s' }}"
