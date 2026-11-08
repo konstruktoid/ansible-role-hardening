@@ -1040,6 +1040,7 @@ argument_specs:
           - kernel.unprivileged_userns_clone: 0
           - kernel.yama.ptrace_scope: 2
           - net.core.bpf_jit_harden: 2
+          - net.mptcp.enabled: 0
           - user.max_user_namespaces: 0
         description: "Generic sysctl settings."
         options:
@@ -1150,6 +1151,12 @@ argument_specs:
               - 0
               - 1
               - 2
+          net.mptcp.enabled:
+            description: "If 0, sockets cannot be created with the Multipath TCP protocol."
+            type: "int"
+            choices:
+              - 0
+              - 1
           user.max_user_namespaces:
             description: "The maximum number of user namespaces that can be created by a user."
             type: "int"
