@@ -145,6 +145,22 @@ the \`sshd_ports\` and \`ufw_outgoing_traffic\` variables.
 See [ufw(8)](https://manpages.ubuntu.com/manpages/noble/en/man8/ufw.8.html)
 for more information.
 
+## Note regarding Multipath TCP (MPTCP)
+
+\`net.mptcp.enabled: 0\` in \`generic_sysctl_settings\` stops applications from
+opening Multipath TCP sockets. Programs that ask for MPTCP, such as Go listeners,
+are expected to fall back to plain TCP.
+
+It removes the MPTCP listener path used by the public exploit for CVE-2026-98432,
+but the advisories do not state that disabling MPTCP mitigates that flaw, so a
+patched kernel is still required.
+
+The setting is per network namespace and applies to the host namespace only.
+Namespaces created later, such as those of containers, start with the kernel
+default of \`1\`.
+
+Set \`net.mptcp.enabled: 1\` in \`generic_sysctl_settings\` on hosts that use MPTCP.
+
 ## Task Execution and Structure
 
 See [STRUCTURE.md](STRUCTURE.md) for tree of the role structure.
