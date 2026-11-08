@@ -161,8 +161,10 @@ default of `1`.
 Setting `generic_sysctl_settings` replaces the whole default mapping, so start from
 your existing effective mapping, or the role defaults if you have no override, and change
 only `net.mptcp.enabled`. A partial override drops the other generic hardening settings.
-An older override that omits `net.mptcp.enabled` leaves MPTCP enabled after an upgrade,
-so add `net.mptcp.enabled: 0` to it if you want MPTCP disabled.
+What an older override that omits `net.mptcp.enabled` gets depends on how overrides combine.
+With the default replacement, the role stops writing the key and MPTCP returns to the kernel
+default of `1` after a reboot. With `hash_behaviour=merge`, the override inherits the new
+default of `0`. Set `net.mptcp.enabled` explicitly to the value you want.
 
 Set `net.mptcp.enabled: 1` in `generic_sysctl_settings` on hosts that use MPTCP.
 
