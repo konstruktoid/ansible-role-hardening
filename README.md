@@ -148,7 +148,7 @@ may fail, so check application behavior before applying the setting.
 
 Listeners that are already open can keep accepting MPTCP connections, so stop and
 restart services that use MPTCP after applying the setting. If systemd owns the listener,
-stop both the service and its socket unit first.
+stop the socket unit before the service, then start the socket unit and the service again.
 
 It removes the MPTCP listener path used by the public exploit for CVE-2026-98432,
 but the advisories do not state that disabling MPTCP mitigates that flaw, so a
@@ -161,6 +161,8 @@ default of `1`.
 Setting `generic_sysctl_settings` replaces the whole default mapping, so start from
 your existing effective mapping, or the role defaults if you have no override, and change
 only `net.mptcp.enabled`. A partial override drops the other generic hardening settings.
+An older override that omits `net.mptcp.enabled` leaves MPTCP enabled after an upgrade,
+so add `net.mptcp.enabled: 0` to it if you want MPTCP disabled.
 
 Set `net.mptcp.enabled: 1` in `generic_sysctl_settings` on hosts that use MPTCP.
 
