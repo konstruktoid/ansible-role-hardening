@@ -148,8 +148,11 @@ for more information.
 ## Note regarding Multipath TCP (MPTCP)
 
 \`net.mptcp.enabled: 0\` in \`generic_sysctl_settings\` stops applications from
-opening Multipath TCP sockets. Programs that ask for MPTCP, such as Go listeners,
-are expected to fall back to plain TCP.
+opening new Multipath TCP sockets. Some programs fall back to plain TCP, but others
+may fail, so check application behavior before applying the setting.
+
+Listeners that are already open can keep accepting MPTCP connections, so restart
+services that use MPTCP after applying the setting.
 
 It removes the MPTCP listener path used by the public exploit for CVE-2026-98432,
 but the advisories do not state that disabling MPTCP mitigates that flaw, so a
@@ -158,6 +161,10 @@ patched kernel is still required.
 The setting is per network namespace and applies to the host namespace only.
 Namespaces created later, such as those of containers, start with the kernel
 default of \`1\`.
+
+Setting \`generic_sysctl_settings\` replaces the whole default mapping, so copy the full
+default mapping and change only \`net.mptcp.enabled\`. A partial override drops the other
+generic hardening settings.
 
 Set \`net.mptcp.enabled: 1\` in \`generic_sysctl_settings\` on hosts that use MPTCP.
 
